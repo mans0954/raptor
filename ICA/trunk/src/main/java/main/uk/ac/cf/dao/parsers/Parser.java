@@ -1,4 +1,4 @@
-package main.uk.ac.cf.parsers;
+package main.uk.ac.cf.dao.parsers;
 
 public interface Parser {
 	
