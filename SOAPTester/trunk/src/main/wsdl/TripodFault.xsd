@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://tripod.shef.ac.uk/TripodFault">
+    
+    <xs:element name="TripodServiceFault">
+	<xs:annotation>
+		<xs:documentation>The TripodServiceFault provides detailed fault description for exceptions caused by the individual Tripod services</xs:documentation>
+	</xs:annotation>
+ 
+    	<xs:complexType>
+    		<xs:sequence>
+    			<xs:element name="service">
+    				<xs:annotation>
+    					<xs:documentation>The service is a unique name for the Tripod service that generated this fault</xs:documentation>
+    				</xs:annotation>
+    				<xs:simpleType>
+    					<xs:restriction base="xs:string">
+    						<xs:enumeration value="SpatialLanguageService"/>
+    						<xs:enumeration value="ConceptOntologyService"/>
+    						<xs:enumeration value="TripodCaptionBuilder"/>
+    						<xs:enumeration value="ToponymOntologyService"/>
+    						<xs:enumeration value="WebKeywordConfidence"/>
+    						<xs:enumeration value="GeoRecommenderService"/>
+    						<xs:enumeration value="TripodImageService"/>
+    						<xs:enumeration value="HeatmapperService"/>
+    					</xs:restriction>
+    				</xs:simpleType>
+    			</xs:element>
+ 
+    			<xs:element name="level">
+    				<xs:annotation>
+    					<xs:documentation>The level indicates the type of fault that is being reported.
+    						An ERROR is any exception that causes processing in the service to abort and indicates a possible configuration error or bug.
+    						A FAILURE indicates that processing was successful, but that the service could not produce any output for the given input.
+    					</xs:documentation>
+    				</xs:annotation>
+    				<xs:simpleType>
+    					<xs:restriction base="xs:string">
+    						<xs:enumeration value="ERROR"/>
+    						<xs:enumeration value="FAILURE"/>
+    					</xs:restriction>
+    				</xs:simpleType>
+    			</xs:element>
+ 
+    			<xs:element name="code" type="xs:string">
+    				<xs:annotation>
+    					<xs:documentation>The code is a machine-readable error code for fault handling, it must be unique for the service</xs:documentation>
+    				</xs:annotation>
+    			</xs:element>
+ 
+    			<xs:element name="message" type="xs:string">
+    				<xs:annotation>
+    					<xs:documentation>The message is a descriptive, human-readable error message for display to an end-user</xs:documentation>
+    				</xs:annotation>
+    			</xs:element>
+ 
+    			<xs:element name="stack-trace" type="xs:string" minOccurs="0" maxOccurs="1">
+    				<xs:annotation>
+    					<xs:documentation>The optional stack-trace element contains the stack trace associated with this TripodFault</xs:documentation>
+    				</xs:annotation>
+    			</xs:element>
+    		</xs:sequence>
+    	</xs:complexType>
+    </xs:element>
+</xs:schema>
