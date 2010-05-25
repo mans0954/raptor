@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.4"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/axis2"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/soap.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/dbws.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/futils.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/jaxr-api.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/jaxrpc-api.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/JMXSoapAdapterShared.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/jws-api.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/mdds.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/orajaxr.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/orasaaj.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/orawsdl.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/orawsmetadata.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/orawsrm.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/relaxngDatatype.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/saaj-api.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/testpage.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/WebServicesAssembler.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsa.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsclient.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsdl.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsdl2ejb.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsif.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsm-handler.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wssecurity.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/wsserver.jar"/>
+	<classpathentry kind="lib" path="/Users/philsmart/Documents/Java/Servers/oc4j_extended_101350/webservices/lib/xsdlib.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
