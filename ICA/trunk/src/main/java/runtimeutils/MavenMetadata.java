@@ -25,7 +25,7 @@ public class MavenMetadata {
 		// {
 		// System.out.println( properties );
 		// }
-		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("META-INF/maven/ICA/ICA/pom.properties");
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("../META-INF/maven/ICA/ICA/pom.properties");
 		Properties properties = new Properties();
 
 		System.out.println("InputStream is: " + inputStream);

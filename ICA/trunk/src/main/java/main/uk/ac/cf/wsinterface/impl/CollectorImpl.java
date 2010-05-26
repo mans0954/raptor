@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import org.apache.log4j.Logger;
 import org.apache.maven.shared.runtime.MavenRuntimeException;
 
 import runtimeutils.MavenMetadata;
@@ -11,11 +12,16 @@ import runtimeutils.MavenMetadata;
 import main.uk.ac.cf.wsinterface.Collector;
 
 
+/**
+ * @author philsmart
+ * 
+ */
 @WebService(endpointInterface = "main.uk.ac.cf.wsinterface.Collector")
 public class CollectorImpl implements Collector{
+	Logger  logger = Logger.getLogger(this.getClass().getName());
 
 	public String getVersion() {
-		System.out.println("Getting Version for "+this);
+		logger.info("Getting Version for "+this);
 //		try {
 //			MavenMetadata mvn = new MavenMetadata();
 //			mvn.printProjects();
