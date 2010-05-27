@@ -17,11 +17,6 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 			<version>2.2.7</version>
 		</dependency>
-		<dependency>
-			<groupId>com.svnkit</groupId>
-			<artifactId>svnkit</artifactId>
-			<version>1.1.0</version>
-		</dependency>
 	</dependencies>
 
 	<scm>
@@ -61,11 +56,9 @@
 					<tagBase>
 						scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags
           </tagBase>
-					<providerImplementations>
-						<svn>svnkit</svn>
-					</providerImplementations>
+					
 				</configuration>
-				
+
 			</plugin>
 		</plugins>
 	</build>
