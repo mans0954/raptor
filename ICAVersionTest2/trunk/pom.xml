@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ICAVersionTest2</groupId>
 	<artifactId>ICAVersionTest2</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>war</packaging>
 	<name>Simple CXF project using spring configuration</name>
 	<dependencies>
@@ -19,8 +19,8 @@
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/trunk</developerConnection>
-		<url>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2</url>
+		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags/ICAVersionTest2-0.0.2</developerConnection>
+		<url>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags/ICAVersionTest2-0.0.2</url>
 	</scm>
 	<distributionManagement>
 		<repository>
