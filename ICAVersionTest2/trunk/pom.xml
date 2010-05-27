@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ICAVersionTest2</groupId>
 	<artifactId>ICAVersionTest2</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Simple CXF project using spring configuration</name>
 	<dependencies>
@@ -16,23 +17,12 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 			<version>2.2.7</version>
 		</dependency>
-		<dependency>
-			<groupId>com.svnkit</groupId>
-			<artifactId>svnkit</artifactId>
-			<version>1.1.0</version>
-		</dependency>
-		<dependency>
-
-						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
-						<artifactId>maven-scm-provider-svnjava</artifactId>
-						<version>1.10</version>
-					</dependency>
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags/ICAVersionTest2-0.0.1</developerConnection>
+		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/trunk</developerConnection>
 		<tag>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags</tag>
-		<url>scm:svn:scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags/ICAVersionTest2-0.0.1</url>
+		<url>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2</url>
 	</scm>
 	<build>
 		<pluginManagement>
@@ -63,12 +53,23 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0-beta-7</version>
 				<configuration>
+				<username>philsmart</username>
+          		<password>nv75hh</password>
 					<tagBase>
-						scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags
+						scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags
           </tagBase>
-					
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
 				</configuration>
-				
+				<dependencies>
+					<dependency>
+
+						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+						<artifactId>maven-scm-provider-svnjava</artifactId>
+						<version>1.10</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
