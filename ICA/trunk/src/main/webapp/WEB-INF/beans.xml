@@ -16,4 +16,19 @@
 	  implementor="main.uk.ac.cf.wsinterface.impl.CollectorImpl" 
 	  address="/Collector" />
 	  
+	  <bean id="idmProcessMailQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		
+		<property name="jobDetail"><ref local="ICAProcessJobDetail"/></property>
+		<property name="cronExpression">
+			<value>0 * * * * ?</value>
+		</property>
+	</bean>
+	<bean id="ICAProcessJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject"><ref bean="ICAProcess"/></property>
+		<property name="targetMethod"><value>capture</value></property>
+		<property name="concurrent"><value>false</value></property>
+	</bean>
+	<bean id="ICAProcess" class="main.uk.ac.cf.service.impl.ICAProcessImpl">
+	</bean>
+	  
 </beans>
