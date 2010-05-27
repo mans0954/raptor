@@ -1,4 +1,4 @@
-package main.uk.ac.cf.service;
+package main.local;
 
 import main.uk.ac.cf.wsinterface.impl.CollectorImpl;
 

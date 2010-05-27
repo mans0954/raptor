@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ICA</groupId>
 	<artifactId>ICA</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
 	<dependencies>
@@ -39,9 +38,9 @@
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
+		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/tags/ICA-0.0.1</developerConnection>
 		<tag>http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/tags</tag>
-		<url>http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA</url>
+		<url>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/tags/ICA-0.0.1</url>
 	</scm>
 	<distributionManagement>
 		<repository>
