@@ -54,7 +54,7 @@
 				<version>2.0-beta-7</version>
 				<configuration>
 					<tagBase>
-						scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags
+						scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICAVersionTest2/tags
           </tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
