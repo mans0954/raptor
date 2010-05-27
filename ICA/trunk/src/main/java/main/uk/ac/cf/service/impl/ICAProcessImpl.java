@@ -10,7 +10,7 @@ import main.uk.ac.cf.service.ICAProcess;
  */
 public class ICAProcessImpl implements ICAProcess{
 
-	public CaptureEngine engine;
+	private CaptureEngine engine;
 
 	/* (non-Javadoc)
 	 * @see main.uk.ac.cf.service.ICAProcess#capture()
@@ -19,6 +19,15 @@ public class ICAProcessImpl implements ICAProcess{
 		// TODO Auto-generated method stub
 		System.out.println("Running Capture");
 		
+	}
+
+	public void setEngine(CaptureEngine engine) {
+		System.out.println("Setting ICA CORE Engine");
+		this.engine = engine;
+	}
+
+	public CaptureEngine getEngine() {
+		return engine;
 	}
 	
 	
