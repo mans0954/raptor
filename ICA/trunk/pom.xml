@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ICA</groupId>
+	<groupId>RaptorSuite</groupId>
 	<artifactId>ICA</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -81,12 +81,20 @@
 		<url>http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA</url>
 	</scm>
 	<distributionManagement>
-		<repository>
+		<!--<repository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>local</id>
 			<name>IamCURepository</name>
 			<url>file:///Users/philsmart/Documents/Java/RaptorReleases/ICA</url>
 		</repository>
+		--><repository>
+			<id>raptor-release</id>
+    		<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+  		</repository>
+		<snapshotRepository>
+    		<id>raptor-snapshot</id>
+    		<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+  </snapshotRepository>
 	</distributionManagement>
 
 
