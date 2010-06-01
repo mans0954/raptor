@@ -13,5 +13,10 @@ public class ShibbolethLFP implements AuthenticationInput{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void preParse(){
+		
+	}
+	
 
 }
