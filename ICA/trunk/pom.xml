@@ -19,15 +19,15 @@
             </snapshots>
             <id>raptor-extras</id>
             <name>Iam Local Maven Repo</name>
-            <url>http://localhost:8080/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
             <layout>default</layout>
         </repository>
     </repositories>
 	<!--  done -->
 	
 	<dependencies>
-	<dependency>
-			<groupId>parser4j</groupId>
+		<dependency>
+			<groupId>parsers</groupId>
 				<artifactId>parser4j</artifactId>
 			<version>0.4</version>
 			</dependency>
