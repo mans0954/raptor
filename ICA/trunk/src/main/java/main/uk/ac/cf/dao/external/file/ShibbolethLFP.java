@@ -9,6 +9,9 @@ import main.uk.ac.cf.dao.external.AuthenticationInput;
  *
  */
 public class ShibbolethLFP implements AuthenticationInput{ 
+	private String logfile;
+	
+	
 	public void parse() {
 		// TODO Auto-generated method stub
 		
@@ -16,6 +19,14 @@ public class ShibbolethLFP implements AuthenticationInput{
 	
 	private void preParse(){
 		
+	}
+
+	private void setLogfile(String logfile) {
+		this.logfile = logfile;
+	}
+
+	private String getLogfile() {
+		return logfile;
 	}
 	
 
