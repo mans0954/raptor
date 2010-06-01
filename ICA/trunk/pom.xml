@@ -94,7 +94,7 @@
 		<snapshotRepository>
     		<id>raptor-snapshot</id>
     		<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
-  </snapshotRepository>
+  		</snapshotRepository>
 	</distributionManagement>
 
 
