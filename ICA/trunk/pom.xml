@@ -5,7 +5,32 @@
 	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
+	
+	
+	<!--  Adding extra repositories for Parse4J, which is hosted on Iam -->
+	<repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>raptor-extras</id>
+            <name>Iam Local Maven Repo</name>
+            <url>http://localhost:8080/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+	<!--  done -->
+	
 	<dependencies>
+	<dependency>
+			<groupId>parser4j</groupId>
+				<artifactId>parser4j</artifactId>
+			<version>0.4</version>
+			</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -43,6 +68,11 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>1.6</version>
 		</dependency>
 	</dependencies>
 

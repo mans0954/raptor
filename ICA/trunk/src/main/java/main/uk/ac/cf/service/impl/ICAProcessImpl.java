@@ -3,12 +3,16 @@ package main.uk.ac.cf.service.impl;
 import main.uk.ac.cf.engine.CaptureEngine;
 import main.uk.ac.cf.service.ICAProcess;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author philsmart
  *
  * main service suite for the ICA
  */
 public class ICAProcessImpl implements ICAProcess{
+	static Logger log = Logger.getLogger(ICAProcess.class);
+
 
 	private CaptureEngine engine;
 
@@ -17,12 +21,12 @@ public class ICAProcessImpl implements ICAProcess{
 	 */
 	public void capture() {
 		// TODO Auto-generated method stub
-		System.out.println("Running Capture");
+		log.info("Running Capture");
 		
 	}
 
 	public void setEngine(CaptureEngine engine) {
-		System.out.println("Setting ICA CORE Engine");
+		log.debug("Setting ICA CORE Engine");
 		this.engine = engine;
 	}
 
