@@ -32,12 +32,13 @@
 
 	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat">
 		<property name="headers">
-			<map>
-			<entry>
-				<key><value>1</value></key>
-				<value>eventTime</value>
-			</entry>
-			</map>
+			<list>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName"><value>eventTime</value></property>
+					<property name="fieldNo"><value>0</value></property>
+					<!--<property name="type"></property>
+				--></bean>
+			</list>
 		</property>
 		<property name="delimeter">
 			<value>|</value>
