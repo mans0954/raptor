@@ -6,6 +6,6 @@ public interface AuthenticationInput {
 
 
 
-	public void parse() throws IOException;
+	public void parse() throws Exception;
 
 }
