@@ -3,7 +3,7 @@
  */
 package main.uk.ac.cf.dao.external.format;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author philsmart
@@ -11,13 +11,13 @@ import java.util.Map;
  */
 public class LogFileFormat {
 	private String delimeter;
-	private Map headers;
+	private List<Header> headers;
 
-	public void setHeaders(Map headers) {
+	public void setHeaders(List headers) {
 		this.headers = headers;
 	}
 
-	public Map getHeaders() {
+	public List<Header> getHeaders() {
 		return headers;
 	}
 

@@ -6,10 +6,9 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
+import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
 import main.uk.ac.cf.model.AuthenticationEntry;
 
@@ -29,72 +28,64 @@ public class LogFileParser implements AuthenticationInput {
 	private LogFileFormat format;
 	private String logfile;
 
-	public void parse() throws Exception{
+	public void parse() throws Exception {
 
-		log.debug("parsing: "+logfile);
-		//Must use URL, as java.io does not work in a webapp
+		log.debug("parsing: " + logfile);
+		// Must use URL, as java.io does not work in a webapp
 
 		URL logfileURL = new URL(logfile);
 		URLConnection logfileconnection = logfileURL.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-        	//log.debug(inputLine);
-        	StrTokenizer tokenizer = new StrTokenizer(inputLine,format.getDelimeter());
-        	ArrayList<String> allvalues = new ArrayList();
-			while (tokenizer.hasNext()){
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				logfileconnection.getInputStream()));
+		String inputLine;
+		while ((inputLine = in.readLine()) != null) {
+			// log.debug(inputLine);
+			StrTokenizer tokenizer = new StrTokenizer(inputLine, format
+					.getDelimeter());
+			ArrayList<String> allvalues = new ArrayList();
+			while (tokenizer.hasNext()) {
 				Object next = tokenizer.next();
-				if (next instanceof String)allvalues.add((String)next);
-				else{
+				if (next instanceof String)
+					allvalues.add((String) next);
+				else {
 					log.error("input column was not a string");
 				}
 			}
-			//now pickout the headers with which to populate the class
+			// now pickout the headers with which to populate the class
 			AuthenticationEntry authE = new AuthenticationEntry();
 
-			Set keys = format.getHeaders().keySet();
-			Iterator iterator = keys.iterator();
-			while (iterator.hasNext()){
-				Object next = iterator.next();
-				if (next instanceof String){
-					try{
-						Integer fieldNo = Integer.parseInt((String)next);
-						if (!(fieldNo.intValue()>=allvalues.size())){
-							Object field = (Object)format.getHeaders().get(next);
-							String fieldS = (String)field;
-							String value = allvalues.get(fieldNo.intValue());
-							log.debug("Field: "+field+" value: "+value);
+			for (Header header : format.getHeaders()) {
 
-							//now use the field name, construct a setter and set the property
-							String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldS);
-							log.debug("methodname "+fieldAsMethod);
-							try {
-								Class id = authE.getClass();
-								Method method = id.getDeclaredMethod(fieldAsMethod, null);
-								method.invoke(authE, null);
+				try {
+					if (!(header.getFieldNo() >= allvalues.size())) {
+						String value = allvalues.get(header.getFieldNo());
+						log.debug("Field: " + header.getFieldName()	+ " value: " + value);
+						// now use the field name, construct a setter and set
+						// the property
+						String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(header.getFieldName());
+						log.debug("methodname " + fieldAsMethod);
+						try {
+							Class id = authE.getClass();
 
+							Method method = id.getDeclaredMethod(fieldAsMethod,	null);
+							method.invoke(authE, null);
 
-							} catch (Throwable e) {
-								log.error("Field name '"+fieldAsMethod+"' does not match internal model attribute");
+						} catch (Throwable e) {
+							log.error("Field name '"+ fieldAsMethod	+ "' does not match internal model attribute");
 
-							}
 						}
-						else{
-							log.error("trying to access field "+fieldNo.intValue()+", when only "+allvalues.size()+" fields in log file");
-						}
+					} else {
+						log.error("trying to access field "	+ header.getFieldNo() + ", when only "	+ allvalues.size() + " fields in log file");
 					}
-					catch(ClassCastException e){
-						log.error("Header Key is not an integer, needs to be an integer.");
-					}
+				} catch (ClassCastException e) {
+					log
+							.error("Header Key is not an integer, needs to be an integer.");
 				}
-				else{
-					log.error("Header map incorrect");
-				}
-
 			}
-        }
-        in.close();
 
+		}
+
+		in.close();
 
 		log.debug("done");
 
