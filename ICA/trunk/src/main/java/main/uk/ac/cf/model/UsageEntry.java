@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package main.uk.ac.cf.model;
 
@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
  *
  */
 public class UsageEntry extends Entry {
-	
-	private DateTime eventTime;
+
+
 
 }

@@ -24,7 +24,7 @@ public class CaptureEngine {
 
 	}
 
-	public void capturePerform() throws IOException{
+	public void capturePerform() throws Exception{
 		for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
 			log.info("Capturing from "+authI);
 			authI.parse();

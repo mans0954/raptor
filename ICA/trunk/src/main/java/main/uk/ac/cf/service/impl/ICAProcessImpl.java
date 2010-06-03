@@ -29,8 +29,10 @@ public class ICAProcessImpl implements ICAProcess {
 			engine.capturePerform();
 			long end = System.currentTimeMillis();
 			log.info("Capture Success, taking " + (end - start) + "ms");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO either throw as service output, or deal with here
+			log.error(e.getMessage());
+			e.printStackTrace();
 		}
 
 	}

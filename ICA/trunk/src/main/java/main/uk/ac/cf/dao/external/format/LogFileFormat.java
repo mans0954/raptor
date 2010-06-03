@@ -10,7 +10,7 @@ import java.util.Map;
  *
  */
 public class LogFileFormat {
-
+	private String delimeter;
 	private Map headers;
 
 	public void setHeaders(Map headers) {
@@ -19,6 +19,14 @@ public class LogFileFormat {
 
 	public Map getHeaders() {
 		return headers;
+	}
+
+	public void setDelimeter(String delimeter) {
+		this.delimeter = delimeter;
+	}
+
+	public String getDelimeter() {
+		return delimeter;
 	}
 
 }

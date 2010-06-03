@@ -1,34 +1,106 @@
 package main.uk.ac.cf.dao.external.file;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
+import main.uk.ac.cf.model.AuthenticationEntry;
 
+import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
+
+import runtimeutils.ReflectionHelper;
 
 /**
  * @author phil
  *
- *  This is the primary log file parser.
+ *         This is the primary log file parser.
  *
  */
-public class LogFileParser implements AuthenticationInput{
+public class LogFileParser implements AuthenticationInput {
 	static Logger log = Logger.getLogger(LogFileParser.class);
 	private LogFileFormat format;
 	private String logfile;
 
-
-	public void parse() throws IOException{
+	public void parse() throws Exception{
 
 		log.debug("parsing: "+logfile);
+		//Must use URL, as java.io does not work in a webapp
+
+		URL logfileURL = new URL(logfile);
+		URLConnection logfileconnection = logfileURL.openConnection();
+        BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+        	//log.debug(inputLine);
+        	StrTokenizer tokenizer = new StrTokenizer(inputLine,format.getDelimeter());
+        	ArrayList<String> allvalues = new ArrayList();
+			while (tokenizer.hasNext()){
+				Object next = tokenizer.next();
+				if (next instanceof String)allvalues.add((String)next);
+				else{
+					log.error("input column was not a string");
+				}
+			}
+			//now pickout the headers with which to populate the class
+			AuthenticationEntry authE = new AuthenticationEntry();
+
+			Set keys = format.getHeaders().keySet();
+			Iterator iterator = keys.iterator();
+			while (iterator.hasNext()){
+				Object next = iterator.next();
+				if (next instanceof String){
+					try{
+						Integer fieldNo = Integer.parseInt((String)next);
+						if (!(fieldNo.intValue()>=allvalues.size())){
+							Object field = (Object)format.getHeaders().get(next);
+							String fieldS = (String)field;
+							String value = allvalues.get(fieldNo.intValue());
+							log.debug("Field: "+field+" value: "+value);
+
+							//now use the field name, construct a setter and set the property
+							String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldS);
+							log.debug("methodname "+fieldAsMethod);
+							try {
+								Class id = authE.getClass();
+								Method method = id.getDeclaredMethod(fieldAsMethod, null);
+								method.invoke(authE, null);
+
+
+							} catch (Throwable e) {
+								log.error("Field name '"+fieldAsMethod+"' does not match internal model attribute");
+
+							}
+						}
+						else{
+							log.error("trying to access field "+fieldNo.intValue()+", when only "+allvalues.size()+" fields in log file");
+						}
+					}
+					catch(ClassCastException e){
+						log.error("Header Key is not an integer, needs to be an integer.");
+					}
+				}
+				else{
+					log.error("Header map incorrect");
+				}
+
+			}
+        }
+        in.close();
 
 
 		log.debug("done");
 
 	}
 
-	private void preParse(){
+	private void preParse() {
 
 	}
 
@@ -48,5 +120,11 @@ public class LogFileParser implements AuthenticationInput{
 		return format;
 	}
 
+	// public static void main(String args[]) throws IOException{
+	// LogFileParser lfp = new LogFileParser();
+	// lfp.setLogfile("/tmp/idp-access.log");
+	// lfp.setFormat(new LogFileFormat());
+	// lfp.parse();
+	// }
 
 }
