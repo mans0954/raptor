@@ -6,8 +6,9 @@
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
 	
+	<!--  todo, no username and password 2) fix snapshot and release copy errors, poss auth problems -->
 	
-	<!--  Adding extra repositories for Parse4J, which is hosted on Iam -->
+	<!--  Adding extra repositories for any other libs, which is hosted on Iam -->
 	<repositories>
         <repository>
             <releases>
@@ -77,8 +78,8 @@
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
-		<url>http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/ICA</url>
 	</scm>
 	<distributionManagement>
 		<!--<repository>
@@ -88,10 +89,12 @@
 			<url>file:///Users/philsmart/Documents/Java/RaptorReleases/ICA</url>
 		</repository>
 		--><repository>
+			<uniqueVersion>false</uniqueVersion>
 			<id>raptor-release</id>
     		<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
   		</repository>
 		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
     		<id>raptor-snapshot</id>
     		<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
   		</snapshotRepository>
@@ -161,7 +164,7 @@
 					<username>philsmart</username>
 					<password>nv75hh</password>
 					<tagBase>
-						http://philsmart:nv75hh@iam.cf.ac.uk/repos/RAPTOR/ICA/tags
+						http://iam.cf.ac.uk/repos/RAPTOR/ICA/tags
           			</tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
