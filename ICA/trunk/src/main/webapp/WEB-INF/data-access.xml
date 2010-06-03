@@ -8,12 +8,27 @@
 	<bean id="dataAccessRegister" class="main.uk.ac.cf.engine.DataAccessRegister">
 		<property name="authenticationModules">
 			<list>
-				<bean id="shibbolethLFP" class="main.uk.ac.cf.dao.external.file.ShibbolethLFP"/>
+				<bean id="shibbolethLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
+					<property name="logfile"><value>/Users/philsmart/Documents/DataSets/Logs/idp-access.log</value></property>
+					<property name="format"><ref bean="shibIDPAccessFileFormat"/></property>
+				</bean>
 			</list>
 		</property>
 	</bean>
 
-	
-	
-	
+
+	<!-- definition of the log file format, where some standard log file formats will be specified here
+	e.g. shib-access, W3C, apache, EZProxy etc
+	IMPORTANT, the headers must be a match for the internal model at the moment-->
+
+
+	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat"></bean>
+
+	<bean id="shibIDPAuditFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat"></bean>
+
+	<bean id="EZProxyFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat"></bean>
+
+	<bean id="W3CFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat"></bean>
+
+
 </beans>
