@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RaptorSuite</groupId>
 	<artifactId>ICA</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
 	
@@ -78,8 +78,8 @@
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/ICA</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/tags/ICA-0.0.2</developerConnection>
+		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/tags/ICA-0.0.2</url>
 	</scm>
 	<distributionManagement>
 		<!--<repository>
