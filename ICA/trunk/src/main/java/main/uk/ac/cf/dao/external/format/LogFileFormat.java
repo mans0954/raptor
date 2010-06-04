@@ -13,6 +13,7 @@ public class LogFileFormat {
 	private String delimeter;
 	private List<Header> headers;
 
+
 	public void setHeaders(List headers) {
 		this.headers = headers;
 	}

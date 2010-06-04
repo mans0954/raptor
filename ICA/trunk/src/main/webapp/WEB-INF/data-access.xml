@@ -29,15 +29,32 @@
 		the moment
 	-->
 
+	<!-- accepted types are DATE, STRING, INTEGER -->
 
-	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat">
+	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat" >
 		<property name="headers">
 			<list>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
 					<property name="fieldName"><value>eventTime</value></property>
 					<property name="fieldNo"><value>0</value></property>
-					<!--<property name="type"></property>
-				--></bean>
+					<property name="fieldType"><value>DATE</value></property>
+					<property name="dateTimeFormat"><value>yyyyMMdd'T'HHmmss</value></property> <!--  Atom (ISO 8601) -->
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName"><value>requestHost</value></property>
+					<property name="fieldNo"><value>1</value></property>
+					<property name="fieldType"><value>STRING</value></property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName"><value>serverHost</value></property>
+					<property name="fieldNo"><value>2</value></property>
+					<property name="fieldType"><value>STRING</value></property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName"><value>requestPath</value></property>
+					<property name="fieldNo"><value>3</value></property>
+					<property name="fieldType"><value>STRING</value></property>
+				</bean>
 			</list>
 		</property>
 		<property name="delimeter">
