@@ -14,6 +14,9 @@ import main.uk.ac.cf.model.AuthenticationEntry;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import runtimeutils.ReflectionHelper;
 
@@ -38,10 +41,10 @@ public class LogFileParser implements AuthenticationInput {
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				logfileconnection.getInputStream()));
 		String inputLine;
+		ArrayList<AuthenticationEntry> authenticationEntries = new ArrayList();
 		while ((inputLine = in.readLine()) != null) {
 			// log.debug(inputLine);
-			StrTokenizer tokenizer = new StrTokenizer(inputLine, format
-					.getDelimeter());
+			StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
 			ArrayList<String> allvalues = new ArrayList();
 			while (tokenizer.hasNext()) {
 				Object next = tokenizer.next();
@@ -59,30 +62,22 @@ public class LogFileParser implements AuthenticationInput {
 				try {
 					if (!(header.getFieldNo() >= allvalues.size())) {
 						String value = allvalues.get(header.getFieldNo());
-						log.debug("Field: " + header.getFieldName()	+ " value: " + value);
-						// now use the field name, construct a setter and set
-						// the property
-						String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(header.getFieldName());
-						log.debug("methodname " + fieldAsMethod);
-						try {
-							Class id = authE.getClass();
-
-							Method method = id.getDeclaredMethod(fieldAsMethod,	null);
-							method.invoke(authE, null);
-
-						} catch (Throwable e) {
-							log.error("Field name '"+ fieldAsMethod	+ "' does not match internal model attribute");
-
+						log.debug("Field: " + header.getFieldName()	+ " value: " + value+" Type:"+ header.getType());
+						switch (header.getType()){
+							case DATE:addDate(value, header.getDateTimeFormat(),header.getFieldName(),authE); break;
+							case STRING:addString(value,header.getFieldName(),authE);break;
+							case INTEGER:addInteger(value,header.getFieldName(),authE);break;
 						}
+
 					} else {
 						log.error("trying to access field "	+ header.getFieldNo() + ", when only "	+ allvalues.size() + " fields in log file");
 					}
 				} catch (ClassCastException e) {
-					log
-							.error("Header Key is not an integer, needs to be an integer.");
+					log.error("Header Key is not an integer, needs to be an integer.");
 				}
 			}
-
+			log.debug("AuthObject: "+authE);
+			authenticationEntries.add(authE);
 		}
 
 		in.close();
@@ -90,6 +85,62 @@ public class LogFileParser implements AuthenticationInput {
 		log.debug("done");
 
 	}
+
+	private void addDate(String value, String format, String fieldName, Object object){
+		try{
+			//first check the end of the date, if it has a Z it should have time zone information e.g. -0800 or +0500
+			//but if it ends in just Z, there is not valid timezone information supplied, so remove
+			if (value.endsWith("Z")) value = value.substring(0,value.length()-1);
+
+			DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
+			DateTime dt = dtf.parseDateTime(value.substring(0,value.length()));
+			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
+			setValueOnObject(fieldAsMethod, dt, object);
+		}
+		catch(Exception e){
+			log.error("Illegal Date Format For: "+value+" and format:"+format+" | "+e.getMessage());
+			//e.printStackTrace();
+		}
+
+	}
+	private void addString(String value,String fieldName, Object object){
+		try{
+			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
+			setValueOnObject(fieldAsMethod, value, object);
+		}
+		catch(Exception e){
+			log.error("Illegal String Value: "+value+" for field:"+fieldName+" | "+e.getMessage());
+			//e.printStackTrace();
+		}
+
+	}
+	private void addInteger(String value, String fieldName, Object object){
+		try{
+			Integer valueAsInt = new Integer(Integer.parseInt(value));
+			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
+			setValueOnObject(fieldAsMethod, value, object);
+		}
+		catch(Exception e){
+			log.error("Illegal Integer Value: "+value+" for field:"+fieldName+" | "+e.getMessage());
+			//e.printStackTrace();
+		}
+
+	}
+
+	private void setValueOnObject(String fieldname, Object param, Object object){
+		try {
+			Class id = object.getClass();
+			Method setter = id.getMethod(fieldname,new Class[]{param.getClass()});
+			setter.invoke(object, new Object[]{param});
+		} catch (Throwable e) {
+			log.error("Field name '"+ fieldname	+ "' does not match internal model attribute");
+			e.printStackTrace();
+			System.exit(1);
+
+		}
+	}
+
+
 
 	private void preParse() {
 

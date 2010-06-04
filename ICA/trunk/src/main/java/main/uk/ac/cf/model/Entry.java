@@ -11,6 +11,14 @@ import org.joda.time.DateTime;
  */
 public class Entry {
 	private DateTime eventTime;
+	private String requestHost;
+
+	public void setRequestHost(String requestHost) {
+		this.requestHost = requestHost;
+	}
+	public String getRequestHost() {
+		return requestHost;
+	}
 
 	public void setEventTime(DateTime eventTime) {
 		this.eventTime = eventTime;
