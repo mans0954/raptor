@@ -6,6 +6,14 @@
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
 
+	<licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
 	<!--  todo, no username and password 2) fix snapshot and release copy errors, poss auth problems -->
 
 	<!--  Adding extra repositories for any other libs, which is hosted on Iam -->
@@ -154,6 +162,11 @@
 						<path>/ICA2</path>
 					</configuration>
 				</plugin>
+				<plugin>
+          			<groupId>com.google.code.maven-license-plugin</groupId>
+          			<artifactId>maven-license-plugin</artifactId>
+          			<version>1.4.0</version>
+        	</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -178,6 +191,12 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+          		<groupId>com.google.code.maven-license-plugin</groupId>
+          		<artifactId>maven-license-plugin</artifactId>
+          		<version>1.4.0</version>
+        	</plugin>
+
 		</plugins>
 	</build>
 
