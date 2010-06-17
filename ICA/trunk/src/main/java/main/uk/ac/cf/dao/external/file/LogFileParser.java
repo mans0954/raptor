@@ -21,11 +21,13 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
 import main.uk.ac.cf.model.AuthenticationEntry;
+import main.uk.ac.cf.model.Entry;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
@@ -41,14 +43,14 @@ import runtimeutils.ReflectionHelper;
  *         This is the primary log file parser.
  *
  */
-public class LogFileParser implements AuthenticationInput {
+public class LogFileParser extends AuthenticationInput {
 	static Logger log = Logger.getLogger(LogFileParser.class);
 	private LogFileFormat format;
 	private String logfile;
 
 	public void parse() throws Exception {
-
-		log.debug("parsing: " + logfile);
+		System.out.println("parsing, low level message");
+		log.debug("parsing: " + logfile+" instance: "+this);
 		// Must use URL, as java.io does not work in a webapp
 
 		URL logfileURL = new URL(logfile);
@@ -56,7 +58,7 @@ public class LogFileParser implements AuthenticationInput {
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				logfileconnection.getInputStream()));
 		String inputLine;
-		ArrayList<AuthenticationEntry> authenticationEntries = new ArrayList();
+		List<Entry> authenticationEntries = new ArrayList();
 		while ((inputLine = in.readLine()) != null) {
 			// log.debug(inputLine);
 			StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
@@ -77,7 +79,7 @@ public class LogFileParser implements AuthenticationInput {
 				try {
 					if (!(header.getFieldNo() >= allvalues.size())) {
 						String value = allvalues.get(header.getFieldNo());
-						log.debug("Field: " + header.getFieldName()	+ " value: " + value+" Type:"+ header.getType());
+					//	log.debug("Field: " + header.getFieldName()	+ " value: " + value+" Type:"+ header.getType());
 						switch (header.getType()){
 							case DATE:addDate(value, header.getDateTimeFormat(),header.getFieldName(),authE); break;
 							case STRING:addString(value,header.getFieldName(),authE);break;
@@ -88,16 +90,18 @@ public class LogFileParser implements AuthenticationInput {
 						log.error("trying to access field "	+ header.getFieldNo() + ", when only "	+ allvalues.size() + " fields in log file");
 					}
 				} catch (ClassCastException e) {
-					log.error("Header Key is not an integer, needs to be an integer.");
+					log.error("Header key is not an integer, needs to be an integer (possibly look at data-access.xml).");
 				}
 			}
-			log.debug("AuthObject: "+authE);
-			authenticationEntries.add(authE);
+			/* do not add the object to the arrayList if is timestamp is older than the current latest entry
+			 * this should save heap space during operation*/
+			if (entryHandler.isNewerOrEqual(authE))authenticationEntries.add(authE);
 		}
 
 		in.close();
 
 		log.debug("done");
+		entryHandler.addEntries(authenticationEntries);
 
 	}
 

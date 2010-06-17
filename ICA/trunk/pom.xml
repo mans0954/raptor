@@ -41,11 +41,7 @@
 	<!--  done -->
 
 	<dependencies>
-		<dependency>
-			<groupId>parsers</groupId>
-			<artifactId>parser4j</artifactId>
-			<version>0.4</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>

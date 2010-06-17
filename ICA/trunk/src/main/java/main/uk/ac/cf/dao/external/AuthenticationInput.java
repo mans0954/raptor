@@ -15,12 +15,13 @@
  */
 package main.uk.ac.cf.dao.external;
 
-import java.io.IOException;
+import java.util.List;
 
-public interface AuthenticationInput {
+import main.uk.ac.cf.dao.RawData;
+
+public abstract class AuthenticationInput extends RawData{
 
 
 
-	public void parse() throws Exception;
 
 }

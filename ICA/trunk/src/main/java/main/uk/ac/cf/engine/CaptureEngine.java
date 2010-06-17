@@ -18,12 +18,11 @@
  */
 package main.uk.ac.cf.engine;
 
-import java.io.IOException;
-
-import org.apache.log4j.Logger;
+import java.util.List;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
-import main.uk.ac.cf.service.ICAProcess;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author philsmart
