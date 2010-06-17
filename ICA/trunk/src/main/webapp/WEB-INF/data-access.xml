@@ -28,7 +28,7 @@
 			<list>
 				<bean id="shibbolethLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///tmp/idp-access.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access.log
 						</value>
 					</property>
 					<property name="format">
