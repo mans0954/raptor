@@ -81,5 +81,13 @@ public class EntryHandler {
 		return false;
 	}
 
+	/**
+	 * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)
+	 */
+	public void endTransaction() {
+		latestEntryTime = new DateTime(latestEntryTime.getMillis()+1);
+
+	}
+
 
 }
