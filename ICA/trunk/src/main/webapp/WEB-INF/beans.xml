@@ -44,7 +44,7 @@
 			<ref local="ICAProcessJobDetail" />
 		</property>
 		<property name="repeatInterval" value="10000"/>
-		<property name="repeatCount" value="10"/>
+		<property name="repeatCount" value="1"/>
 	</bean>
 
 	<bean id="ICAProcessJobDetail"
