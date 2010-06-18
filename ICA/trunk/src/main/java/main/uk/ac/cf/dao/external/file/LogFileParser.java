@@ -103,6 +103,17 @@ public class LogFileParser extends AuthenticationInput {
 		log.debug("done");
 		entryHandler.addEntries(authenticationEntries);
 
+		/* this is important, after one complete transaction, we push the latestTime entry
+		 * by 1 millisecond, this stops the last entry of this transaction (n) being equal to
+		 * itself in the second (n+1) transaction and so on. HOWEVER, this behaviour will also
+		 * prevent a valid new entry in the n+1 transaction from being stored if it was
+		 * a unique entry but at the same time as the last entry of the n-1th transaction.
+		 * WE may therefore loose one or possibly two (more likely one) entry from the n+1
+		 * transactions - revise this. The good thing about this logic, is that we only need
+		 * to check timestamps to obtain psuedo-incremental updates (even though the entire
+		 * file is read in again, only newer entries are saved) */
+		entryHandler.endTransaction();
+
 	}
 
 	private void addDate(String value, String format, String fieldName, Object object){
