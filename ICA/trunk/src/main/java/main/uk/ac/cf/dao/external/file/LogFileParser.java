@@ -26,8 +26,8 @@ import java.util.List;
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
-import main.uk.ac.cf.model.AuthenticationEntry;
 import main.uk.ac.cf.model.Entry;
+import main.uk.ac.cf.model.ShibbolethEntry;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
@@ -47,6 +47,7 @@ public class LogFileParser extends AuthenticationInput {
 	static Logger log = Logger.getLogger(LogFileParser.class);
 	private LogFileFormat format;
 	private String logfile;
+	private String entryType;
 
 	public void parse() throws Exception {
 		System.out.println("parsing, low level message");
@@ -58,10 +59,11 @@ public class LogFileParser extends AuthenticationInput {
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				logfileconnection.getInputStream()));
 		String inputLine;
-		List<Entry> authenticationEntries = new ArrayList();
+		List<Entry> entries = new ArrayList();
 		while ((inputLine = in.readLine()) != null) {
 			// log.debug(inputLine);
 			StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
+			tokenizer.setIgnoreEmptyTokens(false);
 			ArrayList<String> allvalues = new ArrayList();
 			while (tokenizer.hasNext()) {
 				Object next = tokenizer.next();
@@ -71,9 +73,10 @@ public class LogFileParser extends AuthenticationInput {
 					log.error("input column was not a string");
 				}
 			}
-			// now pickout the headers with which to populate the class
-			AuthenticationEntry authE = new AuthenticationEntry();
+			/*first, dynamically construct the supplied entry class*/
+			Entry authE = (Entry)this.createObject(getEntryType());
 
+			/* now populate its fields */
 			for (Header header : format.getHeaders()) {
 
 				try {
@@ -87,7 +90,7 @@ public class LogFileParser extends AuthenticationInput {
 						}
 
 					} else {
-						log.error("trying to access field "	+ header.getFieldNo() + ", when only "	+ allvalues.size() + " fields in log file");
+						log.error("trying to access field "	+ header.getFieldNo() + ", when only "	+ allvalues.size() + " fields in log file \n --> "+inputLine);
 					}
 				} catch (ClassCastException e) {
 					log.error("Header key is not an integer, needs to be an integer (possibly look at data-access.xml).");
@@ -95,13 +98,13 @@ public class LogFileParser extends AuthenticationInput {
 			}
 			/* do not add the object to the arrayList if is timestamp is older than the current latest entry
 			 * this should save heap space during operation*/
-			if (entryHandler.isNewerOrEqual(authE))authenticationEntries.add(authE);
+			if (entryHandler.isNewerOrEqual(authE))entries.add(authE);
 		}
 
 		in.close();
 
 		log.debug("done");
-		entryHandler.addEntries(authenticationEntries);
+		entryHandler.addEntries(entries);
 
 		/* this is important, after one complete transaction, we push the latestTime entry
 		 * by 1 millisecond, this stops the last entry of this transaction (n) being equal to
@@ -165,7 +168,7 @@ public class LogFileParser extends AuthenticationInput {
 		} catch (Throwable e) {
 			log.error("Field name '"+ fieldname	+ "' does not match internal model attribute");
 			e.printStackTrace();
-			System.exit(1);
+			//System.exit(1);
 
 		}
 	}
@@ -190,6 +193,14 @@ public class LogFileParser extends AuthenticationInput {
 
 	public LogFileFormat getFormat() {
 		return format;
+	}
+
+	public void setEntryType(String entryType) {
+		this.entryType = entryType;
+	}
+
+	public String getEntryType() {
+		return entryType;
 	}
 
 	// public static void main(String args[]) throws IOException{

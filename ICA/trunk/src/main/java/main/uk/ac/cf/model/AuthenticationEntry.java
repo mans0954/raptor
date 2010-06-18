@@ -24,23 +24,14 @@ package main.uk.ac.cf.model;
  */
 public class AuthenticationEntry extends Entry{
 
-	private String serverHost;
-	private String requestPath;
+	private String authNMethod;
 
-	public void setServerHost(String serverHost) {
-		this.serverHost = serverHost;
+	public void setAuthNMethod(String authNMethod) {
+		this.authNMethod = authNMethod;
 	}
-	public String getServerHost() {
-		return serverHost;
-	}
-	public void setRequestPath(String requestPath) {
-		this.requestPath = requestPath;
-	}
-	public String getRequestPath() {
-		return requestPath;
+	public String getAuthNMethod() {
+		return authNMethod;
 	}
 
-	public String toString(){
-		return "["+this.getEventTime()+","+this.getRequestHost()+","+this.getServerHost()+"]";
-	}
+
 }

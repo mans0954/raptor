@@ -27,6 +27,7 @@ import org.joda.time.DateTime;
 public class Entry {
 	private DateTime eventTime;
 	private String requestHost;
+	private String serverHost;
 
 	public void setRequestHost(String requestHost) {
 		this.requestHost = requestHost;
@@ -41,5 +42,15 @@ public class Entry {
 
 	public DateTime getEventTime() {
 		return eventTime;
+	}
+	public void setServerHost(String serverHost) {
+		this.serverHost = serverHost;
+	}
+	public String getServerHost() {
+		return serverHost;
+	}
+
+	public String toString(){
+		return "["+this.getEventTime()+","+this.getRequestHost()+","+this.getServerHost()+"]";
 	}
 }
