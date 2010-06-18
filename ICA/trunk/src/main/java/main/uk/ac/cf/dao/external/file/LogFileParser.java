@@ -107,7 +107,7 @@ public class LogFileParser extends AuthenticationInput {
 		 * by 1 millisecond, this stops the last entry of this transaction (n) being equal to
 		 * itself in the second (n+1) transaction and so on. HOWEVER, this behaviour will also
 		 * prevent a valid new entry in the n+1 transaction from being stored if it was
-		 * a unique entry but at the same time as the last entry of the n-1th transaction.
+		 * a unique entry but at the same time as the last entry of the nth transaction.
 		 * WE may therefore loose one or possibly two (more likely one) entry from the n+1
 		 * transactions - revise this. The good thing about this logic, is that we only need
 		 * to check timestamps to obtain psuedo-incremental updates (even though the entire
