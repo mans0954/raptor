@@ -14,6 +14,7 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	private String responseBinding;
 	private String requestBinding;
 	private String principleName;
+	private String[] releasedAttributes;
 
 
 
@@ -56,6 +57,18 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	}
 	public String getPrincipleName() {
 		return principleName;
+	}
+	/**
+	 * @param releasedAttributes the releasedAttributes to set
+	 */
+	public void setReleasedAttributes(String[] releasedAttributes) {
+	    this.releasedAttributes = releasedAttributes;
+	}
+	/**
+	 * @return the releasedAttributes
+	 */
+	public String[] getReleasedAttributes() {
+	    return releasedAttributes;
 	}
 
 }
