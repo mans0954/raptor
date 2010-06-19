@@ -24,13 +24,14 @@ package main.uk.ac.cf.dao.external.format;
  */
 public class Header {
 
-	public enum Type {STRING, DATE, INTEGER}
+	public enum Type {STRING, DATE, INTEGER, STRINGLIST}
 
 	private String fieldName;
 	private int fieldNo;
 	private Type fieldType;
 	//only needed if the object type is a date
 	private String dateTimeFormat;
+	private String listDelimeter;
 
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
@@ -65,6 +66,18 @@ public class Header {
 	}
 	public String getDateTimeFormat() {
 		return dateTimeFormat;
+	}
+	/**
+	 * @param listDelimeter the listDelimeter to set
+	 */
+	public void setListDelimeter(String listDelimeter) {
+		this.listDelimeter = listDelimeter;
+	}
+	/**
+	 * @return the listDelimeter
+	 */
+	public String getListDelimeter() {
+		return listDelimeter;
 	}
 
 
