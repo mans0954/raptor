@@ -1,17 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RaptorSuite</groupId>
 	<artifactId>UA</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>Raptor Unit Aggregation Service</name>
 
 
 	<!--  set up of SCM and DM-->
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/UA/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/UA</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/UA/tags/UA-0.0.1</developerConnection>
+		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/UA/tags/UA-0.0.1</url>
 	</scm>
 	<distributionManagement>
 		<!--
