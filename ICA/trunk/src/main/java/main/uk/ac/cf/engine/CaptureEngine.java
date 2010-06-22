@@ -18,6 +18,7 @@
  */
 package main.uk.ac.cf.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
@@ -51,6 +52,22 @@ public class CaptureEngine {
 
 	public DataAccessRegister getAuthRegister() {
 		return authRegister;
+	}
+
+	/**
+	 * @return all authentication entries (all subtypes of the class AuthenticationEntry
+	 */
+	public List getAllAuthentications() {
+	    List allAuths = new ArrayList();
+	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
+		List authentications = authI.getAuthentications();
+		for (Object auth : authentications)allAuths.add(auth);
+	    }
+	    return allAuths;
+	}
+
+	public List getAllUages() {
+	    return null;
 	}
 
 }

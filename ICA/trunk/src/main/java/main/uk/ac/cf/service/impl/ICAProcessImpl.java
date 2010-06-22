@@ -16,6 +16,7 @@
 package main.uk.ac.cf.service.impl;
 
 import java.io.IOException;
+import java.util.List;
 
 import main.uk.ac.cf.engine.CaptureEngine;
 import main.uk.ac.cf.service.ICAProcess;
@@ -59,6 +60,21 @@ public class ICAProcessImpl implements ICAProcess {
 
 	public CaptureEngine getEngine() {
 		return engine;
+	}
+
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.service.ICAProcess#getAllAuthentications()
+	 */
+	public List getAllAuthentications() {
+	    return engine.getAllAuthentications();
+	}
+
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.service.ICAProcess#getAllUsages()
+	 */
+	public List getAllUsages() {
+	    // TODO Auto-generated method stub
+	    return null;
 	}
 
 }

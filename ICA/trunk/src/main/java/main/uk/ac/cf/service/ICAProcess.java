@@ -15,9 +15,21 @@
  */
 package main.uk.ac.cf.service;
 
+import java.util.List;
+
 public interface ICAProcess{
-	
+
 	public void capture();
-	
+
+	/**
+	 * @return the list of authentications, stored as types or subtypes of AuthenticationEntry's
+	 */
+	public List getAllAuthentications();
+
+	/**
+	 * @return the list of usages, stored as types or subtypes of UsageEntry's
+	 */
+	public List getAllUsages();
+
 
 }

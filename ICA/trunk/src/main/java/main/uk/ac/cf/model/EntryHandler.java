@@ -89,5 +89,13 @@ public class EntryHandler {
 
 	}
 
+	/**
+	 * @return the list of authentication or usage entries currently stored by the entry handler
+	 */
+	public List getEntries() {
+	    return entries;
+
+	}
+
 
 }
