@@ -3,4 +3,30 @@
   <groupId>RaptorSuite</groupId>
   <artifactId>InformationModel</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>joda-time</groupId>
+  		<artifactId>joda-time</artifactId>
+  		<version>1.6</version>
+  	</dependency>
+  </dependencies>
+
+  <!--  set up of SCM and DM-->
+	<scm>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/InformationModel/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/InformationModel</url>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-release</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-snapshot</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 </project>
