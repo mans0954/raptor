@@ -28,7 +28,7 @@
 			<list>
 				<bean id="shibbolethAccessLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///home/phil/Documents/DataSets/Logs/idp-access.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access.log
 						</value>
 					</property>
 					<property name="format">
@@ -38,7 +38,7 @@
 				</bean>
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///home/phil/Documents/DataSets/Logs/idp-audit.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit.log
 						</value>
 					</property>
 					<property name="format">
@@ -123,12 +123,12 @@
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
 					<property name="fieldName"><value>principleName</value></property>
-					<property name="fieldNo"><value>7</value></property>
+					<property name="fieldNo"><value>8</value></property>
 					<property name="fieldType"><value>STRING</value></property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
 					<property name="fieldName"><value>authNMethod</value></property>
-					<property name="fieldNo"><value>8</value></property>
+					<property name="fieldNo"><value>9</value></property>
 					<property name="fieldType"><value>STRING</value></property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">

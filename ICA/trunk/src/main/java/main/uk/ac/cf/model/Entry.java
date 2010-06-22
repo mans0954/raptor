@@ -18,6 +18,8 @@
  */
 package main.uk.ac.cf.model;
 
+import java.util.Date;
+
 import org.joda.time.DateTime;
 
 /**
@@ -25,32 +27,63 @@ import org.joda.time.DateTime;
  *
  */
 public class Entry {
-	private DateTime eventTime;
-	private String requestHost;
-	private String serverHost;
+    private DateTime eventTime;
+    private String requestHost;
+    private String serverHost;
 
-	public void setRequestHost(String requestHost) {
-		this.requestHost = requestHost;
-	}
-	public String getRequestHost() {
-		return requestHost;
-	}
+    public void setRequestHost(String requestHost) {
+	this.requestHost = requestHost;
+    }
 
-	public void setEventTime(DateTime eventTime) {
-		this.eventTime = eventTime;
-	}
+    public String getRequestHost() {
+	return requestHost;
+    }
 
-	public DateTime getEventTime() {
-		return eventTime;
-	}
-	public void setServerHost(String serverHost) {
-		this.serverHost = serverHost;
-	}
-	public String getServerHost() {
-		return serverHost;
-	}
+    public void setEventTime(DateTime eventTime) {
+	this.eventTime = eventTime;
+    }
 
-	public String toString(){
-		return "["+this.getEventTime()+","+this.getRequestHost()+","+this.getServerHost()+"]";
-	}
+    public DateTime getEventTime() {
+	return eventTime;
+    }
+
+    public void setServerHost(String serverHost) {
+	this.serverHost = serverHost;
+    }
+
+    public String getServerHost() {
+	return serverHost;
+    }
+
+    public String toString() {
+	return "[" + this.getEventTime() + "," + this.getRequestHost() + "," + this.getServerHost() + "]";
+    }
+
+    /**
+     * Only XML DATE or XML DATETIME objects can be sent through XML WS
+     * hence, the joda.DateTime property is ignored, instead a proxy
+     * getDate method is used to convert from DateTime to Date
+     * <p>
+     *
+     * @return a Date representation of the eventTime DateTime format
+     */
+    public Date getDate() {
+	Date now = new Date(eventTime.getMillis());
+	return now;
+
+    }
+
+    /**
+     * Only XML DATE or XML DATETIME objects can be sent through XML WS
+     * hence, the joda.DateTime property is ignored, instead a proxy
+     * setDate method is used to convert from the XML Date to the DateTime
+     * used by eventTime
+     * <p>
+     *
+     * @return a Date representation of the eventTime DateTime format
+     */
+    public void setDate(Date date) {
+	eventTime = new DateTime(date.getTime());
+
+    }
 }

@@ -24,19 +24,22 @@ import org.apache.maven.shared.runtime.MavenRuntimeException;
 
 import runtimeutils.MavenMetadata;
 
+import main.uk.ac.cf.service.ICAProcess;
 import main.uk.ac.cf.wsinterface.Collector;
 
 
 /**
  * @author philsmart
- * 
+ * This is the implementation of the service endpoint interface (SEI)
  */
-@WebService(endpointInterface = "main.uk.ac.cf.wsinterface.Collector")
+@WebService(endpointInterface = "main.uk.ac.cf.wsinterface.Collector",portName = "CollectorPortType")
 public class CollectorImpl implements Collector{
-	Logger  logger = Logger.getLogger(this.getClass().getName());
+   	Logger  logger = Logger.getLogger(this.getClass().getName());
+    	private ICAProcess processEngine;
+
 
 	public String getVersion() {
-		logger.info("Getting Version for "+this);
+		logger.info("Getting Version for "+this+" with engine: "+processEngine);
 //		try {
 //			MavenMetadata mvn = new MavenMetadata();
 //			mvn.printProjects();
@@ -46,8 +49,29 @@ public class CollectorImpl implements Collector{
 		return "Early Preview";
 	}
 
-	public List parse() {		
-		return null;
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.wsinterface.Collector#getAllAuthentications()
+	 */
+	public List getAllAuthentications() {
+	     return processEngine.getAllAuthentications();
 	}
+
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.wsinterface.Collector#getAllUsages()
+	 */
+	public List getAllUsages() {
+
+	    return processEngine.getAllUsages();
+	}
+
+	public void setProcessEngine(ICAProcess processEngine) {
+	    this.processEngine = processEngine;
+	}
+
+	public ICAProcess getProcessEngine() {
+	    return processEngine;
+	}
+
+
 
 }

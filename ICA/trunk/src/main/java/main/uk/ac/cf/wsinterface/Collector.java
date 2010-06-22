@@ -19,9 +19,14 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import main.uk.ac.cf.model.Entry;
+import main.uk.ac.cf.model.UsageEntry;
+
 @WebService
 public interface Collector {
 
 	String getVersion();
-	List parse();
+	/* for aegis we have to return the type of entry so the XSD can be constructed properly */
+	List<Entry> getAllAuthentications();
+	List<Entry> getAllUsages();
 }

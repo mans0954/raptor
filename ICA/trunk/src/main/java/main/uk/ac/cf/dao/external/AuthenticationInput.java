@@ -22,6 +22,12 @@ import main.uk.ac.cf.dao.RawData;
 public abstract class AuthenticationInput extends RawData{
 
 
+    public List getAuthentications() {
+	return entryHandler.getEntries();
+
+    }
+
+
 
 
 }
