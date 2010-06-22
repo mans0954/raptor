@@ -69,6 +69,11 @@
 			<artifactId>joda-time</artifactId>
 			<version>1.6</version>
 		</dependency>
+		<dependency>
+            <groupId>RaptorSuite</groupId>
+            <artifactId>InformationModel</artifactId>
+            <version>0.0.2</version>
+        </dependency>
 	</dependencies>
 
 
@@ -84,9 +89,35 @@
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
-			<id>raptor-extras</id>
+			<id>raptor-extras-repo</id>
 			<name>Iam Local Maven Repo</name>
 			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-snapshot-repo</id>
+			<name>Iam Local Maven Repo Snapshots</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-release-repo</id>
+			<name>Iam Local Maven Repo Releases</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
