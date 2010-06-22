@@ -24,7 +24,7 @@ package main.uk.ac.cf.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.uk.ac.cf.dao.external.file.LogFileParser;
+import uk.ac.cardiff.model.Entry;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -90,7 +90,7 @@ public class EntryHandler {
 	}
 
 	/**
-	 * @return the list of authentication or usage entries currently stored by the entry handler
+	 * @return the list of entries currently stored by the entry handler
 	 */
 	public List getEntries() {
 	    return entries;

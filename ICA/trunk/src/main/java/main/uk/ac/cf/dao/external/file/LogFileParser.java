@@ -21,14 +21,11 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
-import main.uk.ac.cf.model.Entry;
-import main.uk.ac.cf.model.ShibbolethEntry;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
@@ -37,12 +34,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import runtimeutils.ReflectionHelper;
+import uk.ac.cardiff.model.*;
+
 
 /**
  * @author phil
- * 
+ *
  *         This is the primary log file parser.
- * 
+ *
  */
 public class LogFileParser extends AuthenticationInput {
     static Logger log = Logger.getLogger(LogFileParser.class);
@@ -113,7 +112,7 @@ public class LogFileParser extends AuthenticationInput {
 	     */
 	    if (entryHandler.isNewerOrEqual(authE))
 		entries.add(authE);
-	   
+
 	}
 
 	in.close();
@@ -145,7 +144,7 @@ public class LogFileParser extends AuthenticationInput {
      */
     private void addStringList(String value, String fieldName, Object object, String delimeter) {
 	try {
-	    String[] splitValue = value.split(delimeter);	    
+	    String[] splitValue = value.split(delimeter);
 	    //for (String s : splitValue)log.debug(s);
 	    String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
 	    setValueOnObject(fieldAsMethod, splitValue, object);

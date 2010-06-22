@@ -8,10 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import main.uk.ac.cf.model.AuthenticationEntry;
-import main.uk.ac.cf.model.Entry;
-import main.uk.ac.cf.model.ShibbolethEntry;
-import main.uk.ac.cf.model.UsageEntry;
+import uk.ac.cardiff.model.AuthenticationEntry;
+import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.model.UsageEntry;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;

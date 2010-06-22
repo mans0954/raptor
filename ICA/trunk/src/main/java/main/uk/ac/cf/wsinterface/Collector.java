@@ -19,8 +19,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import main.uk.ac.cf.model.Entry;
-import main.uk.ac.cf.model.UsageEntry;
+import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.UsageEntry;
 
 @WebService
 public interface Collector {
