@@ -34,7 +34,7 @@
 					<property name="format">
 						<ref bean="shibIDPAccessFileFormat" />
 					</property>
-					<property name="entryType"><value>main.uk.ac.cf.model.ShibbolethEntry</value></property>
+					<property name="entryType"><value>uk.ac.cardiff.model.ShibbolethEntry</value></property>
 				</bean>
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
@@ -44,7 +44,7 @@
 					<property name="format">
 						<ref bean="shibIDPAuditFileFormat" />
 					</property>
-					<property name="entryType"><value>main.uk.ac.cf.model.ShibbolethEntry</value></property>
+					<property name="entryType"><value>uk.ac.cardiff.model.ShibbolethEntry</value></property>
 				</bean>
 			</list>
 		</property>

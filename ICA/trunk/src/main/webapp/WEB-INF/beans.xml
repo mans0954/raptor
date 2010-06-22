@@ -55,9 +55,9 @@
 					so we can output the generic Entry class in lists in the Collector Service Endpoint Class
 					but actually output any of its subclasses. Hence, this is a way of dealing with
 					inheritence in CXF and aegis -->
-						<value>main.uk.ac.cf.model.AuthenticationEntry</value>
-						<value>main.uk.ac.cf.model.ShibbolethEntry</value>
-						<value>main.uk.ac.cf.model.UsageEntry</value>
+						<value>uk.ac.cardiff.model.AuthenticationEntry</value>
+						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+						<value>uk.ac.cardiff.model.UsageEntry</value>
 					</list>
 				</entry>
 			</map>
