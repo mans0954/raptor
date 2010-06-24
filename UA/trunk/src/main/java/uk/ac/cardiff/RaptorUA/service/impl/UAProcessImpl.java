@@ -3,7 +3,11 @@
  */
 package uk.ac.cardiff.RaptorUA.service.impl;
 
-import uk.ac.cardiff.RaptorUA.model.UnitAggregatorEngine;
+
+
+import org.apache.log4j.Logger;
+
+import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.RaptorUA.service.UAProcess;
 
 /**
@@ -11,15 +15,24 @@ import uk.ac.cardiff.RaptorUA.service.UAProcess;
  *
  */
 public class UAProcessImpl implements UAProcess{
-
-    UnitAggregatorEngine aggregatorEngine;
+    static Logger log = Logger.getLogger(UAProcessImpl.class);
+    private UnitAggregatorEngine aggregatorEngine;
 
     /* (non-Javadoc)
      * @see uk.ac.cardiff.RaptorUA.service.UAProcess#poll()
      */
     public void poll() {
-	
+	log.info("Polling ICAs");
+	aggregatorEngine.poll();
 
+    }
+
+    public void setAggregatorEngine(UnitAggregatorEngine aggregatorEngine) {
+	this.aggregatorEngine = aggregatorEngine;
+    }
+
+    public UnitAggregatorEngine getAggregatorEngine() {
+	return aggregatorEngine;
     }
 
 }

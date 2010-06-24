@@ -30,6 +30,49 @@
 		address="/UnitAggregator" />
 
 
-	<!--<import resource="collector-registry.xml" />
+	<bean id="uaProcess" class="uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl">
+		<property name="aggregatorEngine"><ref bean="uaEngine"></ref></property>
+	</bean>
 
-	--></beans>
+	<bean name="uaEngine" class="uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine">
+		<property name="icaRegistry"><ref bean="icaRegistry"></ref></property>
+	</bean>
+
+	<!-- Polling trigger setup -->
+
+
+	<bean id="ICAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref local="UAProcessJobDetail" />
+		</property>
+		<property name="repeatInterval" value="10000" />
+		<property name="repeatCount" value="1" />
+	</bean>
+
+	<bean id="UAProcessJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="uaProcess" />
+		</property>
+		<property name="targetMethod">
+			<value>poll</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list><!--
+				<ref local="ICAProcessTrigger" />
+				-->
+				<ref local="ICAProcessQuickTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!--  DONE -->
+
+	<import resource="collector-registry.xml" />
+
+	</beans>
