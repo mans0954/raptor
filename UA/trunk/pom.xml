@@ -39,6 +39,11 @@
 			<version>2.2.7</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
 			<version>2.2.7</version>
@@ -74,6 +79,11 @@
             <artifactId>InformationModel</artifactId>
             <version>0.0.2</version>
         </dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-databinding-aegis</artifactId>
+			<version>2.2.9</version>
+		</dependency>
 	</dependencies>
 
 
