@@ -31,12 +31,12 @@ import org.apache.log4j.Logger;
  * Responsible for ALL low level capture operations
  */
 public class CaptureEngine {
-	static Logger log = Logger.getLogger(CaptureEngine.class);
+    	static Logger log = Logger.getLogger(CaptureEngine.class);
 
 	private DataAccessRegister authRegister;
 
 	public CaptureEngine(){
-
+	    	log.info("ICA Capture Engine is running...");
 	}
 
 	public void capturePerform() throws Exception{
