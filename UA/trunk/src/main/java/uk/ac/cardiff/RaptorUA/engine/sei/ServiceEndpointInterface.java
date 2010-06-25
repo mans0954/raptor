@@ -4,21 +4,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.namespace.QName;
-
-import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
-
-
-import main.uk.ac.cf.wsinterface.Collector;
-
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.log4j.Logger;
 
+import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
+import uk.ac.cardiff.sei.Collector;
 
 /**
  * @author philsmart
@@ -47,14 +42,12 @@ public class ServiceEndpointInterface {
 	factory.getServiceFactory().setDataBinding(databinding);
 
 	Collector client = (Collector) factory.create();
-	log.debug(client.getVersion());
+	log.debug("Accessing the ICA version "+client.getVersion());
 	List<Entry> auths = client.getAllAuthentications();
-	log.debug("Have "+auths.size());
-	for (Entry ent : auths){
-
-	    log.debug(ent+" "+ent.getClass());
-
-	}
+	log.debug("Retrieved "+auths.size()+" authentications");
+//	for (Entry ent : auths){//
+//	    log.debug(ent+" "+ent.getClass());//
+//	}
 	return auths;
     }
 
