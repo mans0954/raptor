@@ -5,6 +5,7 @@ package uk.ac.cardiff.RaptorUA.engine;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.cardiff.RaptorUA.model.EntryHandler;
 import uk.ac.cardiff.RaptorUA.model.ICAEntry;
 
 
@@ -17,10 +18,14 @@ import uk.ac.cardiff.RaptorUA.model.ICAEntry;
 public class UnitAggregatorEngine {
 
     private ICARegistry icaRegistry;
+    private EntryHandler entryHandler;
     static Logger log = Logger.getLogger(UnitAggregatorEngine.class);
 
     public UnitAggregatorEngine(){
-	log.info("Aggregator Engine is running...");
+	log.info("Setup Unit Aggregator Engine...");
+	entryHandler = new EntryHandler();
+	log.info("Unit Aggregator Engine is running...");
+
     }
 
     public void setIcaRegistry(ICARegistry icaRegistry) {
@@ -36,9 +41,17 @@ public class UnitAggregatorEngine {
      */
     public void poll() {
 	for (ICAEntry ica : icaRegistry.getICAEntries()){
-	    ica.getAllAuthentications();
+	    entryHandler.addEntries(ica.getAllAuthentications());
 	}
 
+    }
+
+    public void setEntryHandler(EntryHandler entryHandler) {
+	this.entryHandler = entryHandler;
+    }
+
+    public EntryHandler getEntryHandler() {
+	return entryHandler;
     }
 
 }
