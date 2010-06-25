@@ -3,18 +3,18 @@
  */
 package main.uk.ac.cf.wsinterface;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.cxf.aegis.databinding.AegisDatabinding;
+import org.apache.cxf.frontend.ClientProxyFactoryBean;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
-
-import org.apache.cxf.aegis.databinding.AegisDatabinding;
-import org.apache.cxf.frontend.ClientProxyFactoryBean;
+import uk.ac.cardiff.sei.Collector;
 
 /**
  * @author philsmart

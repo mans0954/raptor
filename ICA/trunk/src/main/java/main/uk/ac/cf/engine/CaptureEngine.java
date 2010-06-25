@@ -63,7 +63,22 @@ public class CaptureEngine {
 		List authentications = authI.getAuthentications();
 		for (Object auth : authentications)allAuths.add(auth);
 	    }
+	    retrieveTransactionFinished();
 	    return allAuths;
+	}
+
+	/**
+	 * This method removes all stored entries, in this way the ICA must only talk to
+	 * one UA, otherwise the operation is nonmonotoinc whereas it should be monotonic
+	 * remove this method if more sophisticated operation is desired.
+	 */
+	private void retrieveTransactionFinished() {
+	    log.debug("Retrieve Transaction Finished, entries are being removed...");
+	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
+		authI.removeAllEntries();
+	    }
+	    log.debug("Retrieve Transaction Finished, entries are being removed...done");
+
 	}
 
 	public List getAllUages() {

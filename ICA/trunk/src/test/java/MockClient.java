@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import main.uk.ac.cf.wsinterface.Collector;
-import main.uk.ac.cf.wsinterface.impl.CollectorImpl;
-
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+
+import uk.ac.cardiff.sei.Collector;
 
 
 public class MockClient {

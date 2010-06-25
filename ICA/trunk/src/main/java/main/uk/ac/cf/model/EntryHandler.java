@@ -97,5 +97,16 @@ public class EntryHandler {
 
 	}
 
+	/**
+	 *
+	 */
+	public void removeAllEntries() {
+	    /* remove all entries, but do not reset last entry, as this is still
+	     * used not to add previously parsed entries.
+	     */
+	    entries.clear();
+
+	}
+
 
 }

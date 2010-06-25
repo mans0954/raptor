@@ -25,21 +25,21 @@ import org.apache.maven.shared.runtime.MavenRuntimeException;
 import runtimeutils.MavenMetadata;
 
 import main.uk.ac.cf.service.ICAProcess;
-import main.uk.ac.cf.wsinterface.Collector;
+import uk.ac.cardiff.sei.Collector;
 
 
 /**
  * @author philsmart
  * This is the implementation of the service endpoint interface (SEI)
  */
-@WebService(endpointInterface = "main.uk.ac.cf.wsinterface.Collector",portName = "CollectorPortType")
+@WebService(endpointInterface = "uk.ac.cardiff.sei.Collector",portName = "CollectorPortType")
 public class CollectorImpl implements Collector{
    	Logger  logger = Logger.getLogger(this.getClass().getName());
     	private ICAProcess processEngine;
 
 
 	public String getVersion() {
-		logger.info("Getting Version for "+this+" with engine: "+processEngine);
+		//logger.info("Getting Version for "+this+" with engine: "+processEngine);
 //		try {
 //			MavenMetadata mvn = new MavenMetadata();
 //			mvn.printProjects();
