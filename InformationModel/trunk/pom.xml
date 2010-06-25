@@ -33,13 +33,15 @@
 	</distributionManagement>
 
 	<build>
+		<!--  the aegis file is needed to exclude the JODA Time attribute from the SOAP XML output -->
 		<resources>
 			<resource>
-				<directory>src/main/java/uk/ac/cardiff/model</directory>
+				<directory>src/main/java/</directory>
 				<includes>
-					<include>Entry.aegis.xml</include>
+					<include>uk/ac/cardiff/model/Entry.aegis.xml</include>
 				</includes>
 			</resource>
+		<!--  DONE -->
 		</resources>
 		<plugins>
 			<plugin>
