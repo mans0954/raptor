@@ -1,0 +1,9 @@
+
+
+<!--  this is important, we ignore the eventTime, instead passing the eventTime in a simpler Java Date
+property using the getDate and setDate methods -->
+<mappings xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<mapping>
+		<property name="eventTime" ignore="true"/>
+	</mapping>
+</mappings>
