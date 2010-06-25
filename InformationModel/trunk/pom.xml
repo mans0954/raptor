@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RaptorSuite</groupId>
 	<artifactId>InformationModel</artifactId>
@@ -32,28 +33,36 @@
 	</distributionManagement>
 
 	<build>
-	<plugins>
-		<plugin>
-			<artifactId>maven-release-plugin</artifactId>
-			<version>2.0</version>
-			<configuration>
-				<username>philsmart</username>
-				<password>nv75hh</password>
-				<tagBase>
-					http://iam.cf.ac.uk/repos/RAPTOR/InformationModel/tags
+		<resources>
+			<resource>
+				<directory>src/main/java/uk/ac/cardiff/model</directory>
+				<includes>
+					<include>Entry.aegis.xml</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<username>philsmart</username>
+					<password>nv75hh</password>
+					<tagBase>
+						http://iam.cf.ac.uk/repos/RAPTOR/InformationModel/tags
           			</tagBase>
-				<providerImplementations>
-					<svn>javasvn</svn>
-				</providerImplementations>
-			</configuration>
-			<dependencies>
-				<dependency>
-					<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
-					<artifactId>maven-scm-provider-svnjava</artifactId>
-					<version>1.10</version>
-				</dependency>
-			</dependencies>
-		</plugin>
-	</plugins>
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+						<artifactId>maven-scm-provider-svnjava</artifactId>
+						<version>1.10</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
 	</build>
 </project>
