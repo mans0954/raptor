@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RaptorSuite</groupId>
 	<artifactId>ServiceInterfaces</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>ServiceInterfaces</name>
 	<description>Service Interfaces to Raptor</description>
 
@@ -54,8 +53,8 @@
 	<!--  done -->
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/tags/ServiceInterfaces-0.0.1</developerConnection>
-		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/tags/ServiceInterfaces-0.0.1</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces</url>
 	</scm>
 	<distributionManagement>
 		<repository>
