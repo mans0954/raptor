@@ -127,6 +127,11 @@
             <artifactId>InformationModel</artifactId>
             <version>0.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>RaptorSuite</groupId>
+            <artifactId>ServiceInterfaces</artifactId>
+            <version>0.0.1</version>
+        </dependency>
 
 	</dependencies>
 

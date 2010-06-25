@@ -20,7 +20,6 @@ package main.uk.ac.cf.dao;
 
 import java.util.List;
 
-
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
@@ -32,32 +31,38 @@ import main.uk.ac.cf.model.EntryHandler;
  *
  */
 public abstract class RawData {
-	static Logger log = Logger.getLogger(RawData.class);
-	public EntryHandler entryHandler;
+    static Logger log = Logger.getLogger(RawData.class);
+    public EntryHandler entryHandler;
 
+    public abstract void parse() throws Exception;
 
+    public RawData() {
+	entryHandler = new EntryHandler();
+    }
 
-	public abstract void parse() throws Exception;
-
-	public RawData(){
-		entryHandler = new EntryHandler();
+    public Object createObject(String className) {
+	Object object = null;
+	try {
+	    Class classDefinition = Class.forName(className);
+	    object = classDefinition.newInstance();
+	    // this.setBeanProperty(object, "applicationContext",
+	    // this.getApplicationContext());
+	} catch (InstantiationException e) {
+	    log.warn(e);
+	} catch (IllegalAccessException e) {
+	    log.warn(e);
+	} catch (ClassNotFoundException e) {
+	    log.warn(e);
 	}
+	return object;
+    }
 
-	public Object createObject(String className) {
-	      Object object = null;
-	      try {
-	          Class classDefinition = Class.forName(className);
-	          object = classDefinition.newInstance();
-	          //this.setBeanProperty(object, "applicationContext", this.getApplicationContext());
-	      } catch (InstantiationException e) {
-	          log.warn(e);
-	      } catch (IllegalAccessException e) {
-	    	  log.warn(e);
-	      } catch (ClassNotFoundException e) {
-	    	  log.warn(e);
-	      }
-	      return object;
-	   }
+    /**
+     * removes all entries from the entry handler
+     */
+    public void removeAllEntries() {
+	entryHandler.removeAllEntries();
 
+    }
 
 }
