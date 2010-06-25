@@ -1,0 +1,104 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>RaptorSuite</groupId>
+  <artifactId>ServiceInterfaces</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>ServiceInterfaces</name>
+  <description>Service Interfaces to Raptor</description>
+
+  <!--
+		Adding extra repositories for any other libs, which is hosted on Iam
+	-->
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-extras-repo</id>
+			<name>Iam Local Maven Repo</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-snapshot-repo</id>
+			<name>Iam Local Maven Repo Snapshots</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-release-repo</id>
+			<name>Iam Local Maven Repo Releases</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	<!--  done -->
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>2.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>2.2.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.shared</groupId>
+			<artifactId>maven-runtime</artifactId>
+			<version>1.0-alpha-2</version>
+		</dependency>
+
+
+		<dependency>
+    	<groupId>org.apache.cxf</groupId>
+    		<artifactId>cxf-bundle-jaxrs</artifactId>
+    	<version>2.2.8</version>
+    	</dependency>
+    	<dependency>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+            <version>2.9.1</version>
+        </dependency>
+        <dependency>
+            <groupId>RaptorSuite</groupId>
+            <artifactId>InformationModel</artifactId>
+            <version>0.0.4</version>
+        </dependency>
+
+	</dependencies>
+</project>
