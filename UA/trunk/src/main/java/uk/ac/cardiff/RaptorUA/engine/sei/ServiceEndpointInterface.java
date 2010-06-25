@@ -51,6 +51,33 @@ public class ServiceEndpointInterface {
 	return auths;
     }
 
+    public static List getUsages(String endpoint){
+	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+	factory.setServiceClass(Collector.class);
+	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
+	AegisDatabinding databinding = new AegisDatabinding();
+
+
+        Set<String> overrides = new HashSet();
+        overrides.add(ShibbolethEntry.class.getName());
+        overrides.add(AuthenticationEntry.class.getName());
+        overrides.add(UsageEntry.class.getName());
+        databinding.setOverrideTypes(overrides);
+
+	factory.setAddress(endpoint);
+	//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
+	factory.getServiceFactory().setDataBinding(databinding);
+
+	Collector client = (Collector) factory.create();
+	log.debug("Accessing the ICA version "+client.getVersion());
+	List<Entry> auths = client.getAllUsages();
+	log.debug("Retrieved "+auths.size()+" usages");
+//	for (Entry ent : auths){//
+//	    log.debug(ent+" "+ent.getClass());//
+//	}
+	return auths;
+    }
+
     public static void main(String args[]){
 	ServiceEndpointInterface.getAuthentications("http://localhost:8080/ICA/Collector");
     }

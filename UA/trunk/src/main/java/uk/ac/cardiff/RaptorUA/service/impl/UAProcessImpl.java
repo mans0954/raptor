@@ -22,8 +22,9 @@ public class UAProcessImpl implements UAProcess{
      * @see uk.ac.cardiff.RaptorUA.service.UAProcess#poll()
      */
     public void poll() {
-	log.info("Polling ICAs");
+	log.info("Polling ICAs...");
 	aggregatorEngine.poll();
+	log.info("Done");
 
     }
 
