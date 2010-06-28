@@ -10,7 +10,7 @@ import javax.jws.WebService;
  *
  */
 
-@WebService(endpointInterface = "uk.ac.cardiff.raptormua.wsinterface.UnitAggregator")
+@WebService(endpointInterface = "uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator")
 public class UnitAggregatorImpl {
 
 }

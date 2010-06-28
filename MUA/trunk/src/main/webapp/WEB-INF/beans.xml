@@ -16,4 +16,6 @@
 	  implementor="uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator"
 	  address="/MUA" />
 
+	  <import resource="ua-registry.xml" />
+
 </beans>
