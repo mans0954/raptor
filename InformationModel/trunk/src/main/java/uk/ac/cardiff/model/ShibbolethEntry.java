@@ -74,7 +74,11 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	}
 
 	public String toString(){
-		return "["+requestPath+","+requestBinding+","+requestID+","+responseBinding+","+Arrays.asList(releasedAttributes)+"]";
+		if (releasedAttributes!=null || releasedAttributes.length>0)
+			return getClass().getName()+"@["+requestPath+","+requestBinding+","+requestID+","+responseBinding+","+Arrays.asList(releasedAttributes)+"]";
+		else
+			return getClass().getName()+"@["+requestPath+","+requestBinding+","+requestID+","+responseBinding+ "]";
+
 	}
 
 }
