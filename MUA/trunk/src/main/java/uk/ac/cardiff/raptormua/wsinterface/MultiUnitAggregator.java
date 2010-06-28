@@ -11,6 +11,8 @@ import javax.jws.WebService;
  */
 
 @WebService
-public class MultiUnitAggregator {
+public interface MultiUnitAggregator {
+
+	public String getVersion();
 
 }

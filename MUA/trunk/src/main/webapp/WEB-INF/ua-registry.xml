@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="uaRegistry" class="uk.ac.cardiff.raptormua.engine.UARegistry">
+		<property name ="UAEntries">
+			<list>
+				<bean id="cardiffShibUA" class="uk.ac.cardiff.raptormua.model.UAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:8080/UA/UnitAggregator</value></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>
