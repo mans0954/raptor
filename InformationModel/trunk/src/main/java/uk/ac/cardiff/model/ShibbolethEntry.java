@@ -3,6 +3,8 @@
  */
 package uk.ac.cardiff.model;
 
+import java.util.Arrays;
+
 /**
  * @author philsmart
  *
@@ -69,6 +71,10 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	 */
 	public String[] getReleasedAttributes() {
 	    return releasedAttributes;
+	}
+
+	public String toString(){
+		return "["+requestPath+","+requestBinding+","+requestID+","+responseBinding+","+Arrays.asList(releasedAttributes)+"]";
 	}
 
 }
