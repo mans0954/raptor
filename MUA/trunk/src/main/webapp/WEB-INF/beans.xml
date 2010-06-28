@@ -11,9 +11,9 @@
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<jaxws:endpoint 
-	  id="helloWorld" 
-	  implementor="RaptorSuite.MUA.HelloWorldImpl" 
-	  address="/HelloWorld" />
-	  
+	<jaxws:endpoint
+	  id="muaEndpoint"
+	  implementor="uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator"
+	  address="/MUA" />
+
 </beans>
