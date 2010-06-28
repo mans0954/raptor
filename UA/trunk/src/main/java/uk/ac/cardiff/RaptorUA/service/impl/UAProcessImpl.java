@@ -36,4 +36,12 @@ public class UAProcessImpl implements UAProcess{
 	return aggregatorEngine;
     }
 
+    /* (non-Javadoc)
+     * @see uk.ac.cardiff.RaptorUA.service.UAProcess#toStdOut()
+     */
+    public void toStdOut() {
+	aggregatorEngine.toStdOut();
+
+    }
+
 }

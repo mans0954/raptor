@@ -30,37 +30,15 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 
-public class EntryHandler {
-	static Logger log = Logger.getLogger(EntryHandler.class);
-
-	/* list of all entries stored by this EntryHanlder */
-	List<Entry> entries;
-
-	public EntryHandler(){
-		entries = new ArrayList<Entry>();
-	}
-
-	public void addEntries(List<Entry> entries){
-		log.info("Adding "+entries.size()+" entries to the UA");
-		for (Entry entry: entries){
-			this.entries.add(entry);
-		}
-		log.info("UA now has a total of "+this.entries.size()+" entries");
-	}
+public interface EntryHandler {
 
 
 
-	/**
-	 * @return the list of entries currently stored by the entry handler
-	 */
-	public List getEntries() {
-	    return entries;
+	public void addEntries(List<Entry> entries);
 
-	}
+	public List<Entry> getEntries();
 
-	public void setEntries(List<Entry> entries){
-	    this.entries = entries;
-	}
+	public void setEntries(List<Entry> entries);
 
 
 }
