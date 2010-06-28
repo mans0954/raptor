@@ -56,7 +56,7 @@ public class Entry {
     }
 
     public String toString() {
-	return "[" + this.getEventTime() + "," + this.getRequestHost() + "," + this.getServerHost() + "]";
+    	return getClass().getName()+"@[" + this.getEventTime() + "," + this.getRequestHost() + "," + this.getServerHost() + "]";
     }
 
     /**
