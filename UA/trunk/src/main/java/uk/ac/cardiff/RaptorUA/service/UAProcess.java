@@ -14,4 +14,10 @@ public interface UAProcess {
      */
     public void poll();
 
+
+    /*
+     * Sends all entries stored to the current logger
+     */
+    public void toStdOut();
+
 }

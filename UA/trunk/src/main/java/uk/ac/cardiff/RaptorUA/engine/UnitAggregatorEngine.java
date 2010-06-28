@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.RaptorUA.model.EntryHandler;
 import uk.ac.cardiff.RaptorUA.model.ICAEntry;
+import uk.ac.cardiff.RaptorUA.model.MemoryEntryHandler;
+import uk.ac.cardiff.model.Entry;
 
 
 
@@ -23,7 +25,7 @@ public class UnitAggregatorEngine {
 
     public UnitAggregatorEngine(){
 	log.info("Setup Unit Aggregator Engine...");
-	entryHandler = new EntryHandler();
+	entryHandler = new MemoryEntryHandler();
 	log.info("Unit Aggregator Engine is running...");
 
     }
@@ -43,6 +45,8 @@ public class UnitAggregatorEngine {
 	for (ICAEntry ica : icaRegistry.getICAEntries()){
 	    entryHandler.addEntries(ica.getAllAuthentications());
 	}
+	/* test output all entries*/
+	toStdOut();
 
     }
 
@@ -52,6 +56,16 @@ public class UnitAggregatorEngine {
 
     public EntryHandler getEntryHandler() {
 	return entryHandler;
+    }
+
+    /**
+     *
+     */
+    public void toStdOut() {
+	for (Entry entryObject : entryHandler.getEntries()){
+	    log.info("Stored Entry -- "+entryObject);
+	}
+
     }
 
 }
