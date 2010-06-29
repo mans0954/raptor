@@ -37,7 +37,7 @@
 
 	  <bean id="uaEndpointInterface" class="uk.ac.cardiff.RaptorUA.wsinterface.impl.UnitAggregatorImpl">
 		<property name="processService">
-			<ref bean="MUAProcess"></ref>
+			<ref bean="uaProcess"></ref>
 		</property>
 	</bean>
 

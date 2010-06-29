@@ -3,6 +3,8 @@
  */
 package uk.ac.cardiff.RaptorUA.engine;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.RaptorUA.model.EntryHandler;
@@ -71,6 +73,13 @@ public class UnitAggregatorEngine {
 	    count++;
 	}
 
+    }
+
+    /**
+     * @return
+     */
+    public List getAllAuthentications() {
+	return entryHandler.getEntries();
     }
 
 }

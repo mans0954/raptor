@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
+import uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl;
 import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
@@ -29,15 +31,17 @@ import uk.ac.cardiff.sei.UnitAggregator;
  *
  */
 
-@WebService(endpointInterface = "uk.ac.cardiff.RaptorUA.wsinterface.UnitAggregator")
+@WebService(endpointInterface = "uk.ac.cardiff.sei.UnitAggregator")
 public class UnitAggregatorImpl implements UnitAggregator{
+
+    private UAProcessImpl processService;
 
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.RaptorUA.wsinterface.UnitAggregator#getAllAuthentications()
 	 */
 	public List getAllAuthentications() {
 		// TODO Auto-generated method stub
-		return null;
+		return processService.getAllAuthentications();
 	}
 
 	/* (non-Javadoc)
@@ -46,5 +50,15 @@ public class UnitAggregatorImpl implements UnitAggregator{
 	public String getVersion() {
 		return "Alpha";
 	}
+
+	public void setProcessService(UAProcessImpl processService) {
+	    this.processService = processService;
+	}
+
+	public UAProcessImpl getProcessService() {
+	    return processService;
+	}
+
+
 
 }
