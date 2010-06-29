@@ -19,6 +19,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
+import uk.ac.cardiff.model.Entry;
+
 /**
  * @author philsmart
  *
@@ -28,7 +30,7 @@ import javax.jws.WebService;
 public interface UnitAggregator {
 
 	String getVersion();
-	List getAllAuthentications();
+	List<Entry> getAllAuthentications();
 
 
 }
