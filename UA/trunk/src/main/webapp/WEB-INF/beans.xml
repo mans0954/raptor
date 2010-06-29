@@ -25,9 +25,49 @@
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+
+	<!--  WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
 	<jaxws:endpoint id="UnitAggregatorEndpoint"
-		implementor="uk.ac.cardiff.RaptorUA.wsinterface.impl.UnitAggregatorImpl"
-		address="/UnitAggregator" />
+		implementor="#uaEndpointInterface"
+		address="/UnitAggregator" >
+	  	<jaxws:serviceFactory>
+			<ref bean='jaxws-and-aegis-service-factory' />
+		</jaxws:serviceFactory>
+	  </jaxws:endpoint>
+
+	  <bean id="uaEndpointInterface" class="uk.ac.cardiff.RaptorUA.wsinterface.impl.UnitAggregatorImpl">
+		<property name="processService">
+			<ref bean="MUAProcess"></ref>
+		</property>
+	</bean>
+
+	<bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding"
+		scope="prototype" />
+	<bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean"
+		scope="prototype">
+		<property name="dataBinding" ref="aegisBean" />
+		<property name="properties">
+			<map>
+				<entry key="writeXsiType">
+					<value type="java.lang.Boolean">true</value>
+				</entry>
+				<entry key="overrideTypesList">
+					<list>
+					<!--  THIS LIST IS IMPORTANT, it exposes these classes to the aegis XSD creator
+					so we can output the generic Entry class in lists in the Collector Service Endpoint Class
+					but actually output any of its subclasses. Hence, this is a way of dealing with
+					inheritence in CXF and aegis -->
+						<value>uk.ac.cardiff.model.AuthenticationEntry</value>
+						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+						<value>uk.ac.cardiff.model.UsageEntry</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!--  DONE -->
+
 
 
 	<bean id="uaProcess" class="uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl">

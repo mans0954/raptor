@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import uk.ac.cardiff.RaptorUA.wsinterface.UnitAggregator;
+import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
  * @author philsmart
