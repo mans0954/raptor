@@ -22,7 +22,7 @@ import uk.ac.cardiff.sei.Collector;
  *
  */
 public class ServiceEndpointInterface {
-    static Logger log = Logger.getLogger(UnitAggregatorEngine.class);
+    static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
 
     public static List getAuthentications(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
