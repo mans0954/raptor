@@ -5,6 +5,8 @@ package uk.ac.cardiff.RaptorUA.service.impl;
 
 
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
@@ -41,6 +43,14 @@ public class UAProcessImpl implements UAProcess{
      */
     public void toStdOut() {
 	aggregatorEngine.toStdOut();
+
+    }
+
+    /**
+     *
+     */
+    public List getAllAuthentications() {
+	return aggregatorEngine.getAllAuthentications();
 
     }
 
