@@ -21,7 +21,7 @@ public class UARegistry {
     }
 
     public void setUAEntries(List<UAEntry> UAEntries) {
-	System.out.println("Setting UAs");
+
 	for (UAEntry entry : UAEntries)
 	    log.info("Registering: " + entry.getClass());
 	this.UAEntries = UAEntries;

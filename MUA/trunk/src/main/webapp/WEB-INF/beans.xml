@@ -11,10 +11,109 @@
 	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
+
+	<!--  WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
 	<jaxws:endpoint
 	  id="muaEndpoint"
-	  implementor="uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator"
-	  address="/MUA" />
+	  implementor="#muaEndpointInterface"
+	  address="/MUA" >
+	  	<jaxws:serviceFactory>
+			<ref bean='jaxws-and-aegis-service-factory' />
+		</jaxws:serviceFactory>
+	  </jaxws:endpoint>
+
+	  <bean id="muaEndpointInterface" class="uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl">
+		<property name="processService">
+			<ref bean="MUAProcess"></ref>
+		</property>
+	</bean>
+
+	<bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding"
+		scope="prototype" />
+	<bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean"
+		scope="prototype">
+		<property name="dataBinding" ref="aegisBean" />
+		<property name="properties">
+			<map>
+				<entry key="writeXsiType">
+					<value type="java.lang.Boolean">true</value>
+				</entry>
+				<entry key="overrideTypesList">
+					<list>
+					<!--  THIS LIST IS IMPORTANT, it exposes these classes to the aegis XSD creator
+					so we can output the generic Entry class in lists in the Collector Service Endpoint Class
+					but actually output any of its subclasses. Hence, this is a way of dealing with
+					inheritence in CXF and aegis -->
+						<value>uk.ac.cardiff.model.AuthenticationEntry</value>
+						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+						<value>uk.ac.cardiff.model.UsageEntry</value>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!--  DONE -->
+
+
+
+
+	<bean id="MUAProcess" class="uk.ac.cardiff.raptormua.service.impl.MUAProcessImpl">
+		<property name="engine">
+			<ref bean="MUAEngine"></ref>
+		</property>
+	</bean>
+
+	<!--
+		this bean config kicks of the singleton engine instance which is then
+		used by all services of the MUA
+	-->
+	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
+		<property name="uaRegistry"><ref bean="uaRegistry"/></property>
+	</bean>
+
+	<!-- Polling trigger setup -->
+
+	<bean id="MUAProcessTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref local="MUAProcessJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 * * * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="MUAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref local="MUAProcessJobDetail" />
+		</property>
+		<property name="repeatInterval" value="10000" />
+		<property name="repeatCount" value="1" />
+	</bean>
+
+	<bean id="MUAProcessJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="MUAProcess" />
+		</property>
+		<property name="targetMethod">
+			<value>poll</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list><!--
+				<ref local="ICAProcessTrigger" />
+				-->
+				<ref local="MUAProcessQuickTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!--  DONE -->
 
 	  <import resource="ua-registry.xml" />
 

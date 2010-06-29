@@ -9,11 +9,10 @@ import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
-import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
-import uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator;
 import uk.ac.cardiff.sei.Collector;
+import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
  * @author philsmart
@@ -26,7 +25,7 @@ public class ServiceEndpointInterface {
 
     public static List getAuthentications(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	factory.setServiceClass(Collector.class);
+	factory.setServiceClass(UnitAggregator.class);
 	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
 	AegisDatabinding databinding = new AegisDatabinding();
 
@@ -41,7 +40,7 @@ public class ServiceEndpointInterface {
 	//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
 	factory.getServiceFactory().setDataBinding(databinding);
 
-	MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	UnitAggregator client = (UnitAggregator) factory.create();
 	log.debug("Accessing the UA version "+client.getVersion());
 //	List<Entry> auths = client.getAllAuthentications();
 //	log.debug("Retrieved "+auths.size()+" authentications");
@@ -53,7 +52,7 @@ public class ServiceEndpointInterface {
 
     public static List getUsages(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	factory.setServiceClass(Collector.class);
+	factory.setServiceClass(UnitAggregator.class);
 	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
 	AegisDatabinding databinding = new AegisDatabinding();
 
@@ -68,7 +67,7 @@ public class ServiceEndpointInterface {
 	//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
 	factory.getServiceFactory().setDataBinding(databinding);
 
-	Collector client = (Collector) factory.create();
+	UnitAggregator client = (UnitAggregator) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
 //	List<Entry> auths = client.getAllUsages();
 //	log.debug("Retrieved "+auths.size()+" usages");
