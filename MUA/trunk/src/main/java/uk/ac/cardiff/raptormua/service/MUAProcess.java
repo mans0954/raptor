@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package uk.ac.cardiff.raptormua.service;
 
@@ -9,4 +9,6 @@ package uk.ac.cardiff.raptormua.service;
  */
 public interface MUAProcess {
 
+
+	public void poll();
 }
