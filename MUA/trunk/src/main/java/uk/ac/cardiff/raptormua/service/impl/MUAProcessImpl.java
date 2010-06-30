@@ -34,4 +34,13 @@ public class MUAProcessImpl implements MUAProcess{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang.String)
+	 */
+	public void performStatistic(String statisticName) {
+		log.info("WS Call for perform statistic - "+statisticName);
+		engine.performStatistic(statisticName);
+
+	}
+
 }

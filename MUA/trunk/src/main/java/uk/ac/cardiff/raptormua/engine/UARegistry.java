@@ -22,9 +22,9 @@ public class UARegistry {
 
     public void setUAEntries(List<UAEntry> UAEntries) {
 
-	for (UAEntry entry : UAEntries)
-	    log.info("Registering: " + entry.getClass());
-	this.UAEntries = UAEntries;
+    	for (UAEntry entry : UAEntries)
+    		log.info("Registering: " + entry.getClass());
+		this.UAEntries = UAEntries;
     }
 
     public List<UAEntry> getUAEntries() {

@@ -70,6 +70,7 @@
 	-->
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
 		<property name="uaRegistry"><ref bean="uaRegistry"/></property>
+		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 	</bean>
 
 	<!-- Polling trigger setup -->
@@ -116,5 +117,6 @@
 	<!--  DONE -->
 
 	  <import resource="ua-registry.xml" />
+	  <import resource="statistical-units.xml" />
 
 </beans>

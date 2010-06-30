@@ -9,9 +9,9 @@ import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
+import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
-import uk.ac.cardiff.sei.Collector;
 import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
@@ -42,12 +42,12 @@ public class ServiceEndpointInterface {
 
 	UnitAggregator client = (UnitAggregator) factory.create();
 	log.debug("Accessing the UA version "+client.getVersion());
-//	List<Entry> auths = client.getAllAuthentications();
-//	log.debug("Retrieved "+auths.size()+" authentications");
+	List<Entry> auths = client.getAllAuthentications();
+	log.debug("Retrieved "+auths.size()+" authentications from the UA ["+endpoint+"]");
 //	for (Entry ent : auths){//
-//	    log.debug(ent+" "+ent.getClass());//
+//	    log.debug(ent.getEventTime()+" "+ent.getClass());//
 //	}
-	return null;
+	return auths;
     }
 
     public static List getUsages(String endpoint){

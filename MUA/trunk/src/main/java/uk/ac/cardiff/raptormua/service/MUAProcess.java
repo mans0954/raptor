@@ -11,4 +11,9 @@ public interface MUAProcess {
 
 
 	public void poll();
+
+	/**
+	 * @param statisticName
+	 */
+	public void performStatistic(String statisticName);
 }
