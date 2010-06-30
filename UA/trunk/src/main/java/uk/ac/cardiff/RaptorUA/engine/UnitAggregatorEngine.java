@@ -3,6 +3,7 @@
  */
 package uk.ac.cardiff.RaptorUA.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -79,7 +80,28 @@ public class UnitAggregatorEngine {
      * @return
      */
     public List getAllAuthentications() {
-	return entryHandler.getEntries();
+	ArrayList<Entry> returnedAuths = new ArrayList();
+	for (Entry entry : entryHandler.getEntries()) returnedAuths.add(entry);
+
+	/* is this the best way to stop duplicated being retrieved - NO
+	 * we will probably want to maintain the data in the UA*/
+	retrieveTransactionFinished();
+	return returnedAuths;
+
+
+
     }
+
+    /**
+	 * This method removes all stored entries, in this way the ICA must only talk to
+	 * one UA, otherwise the operation is nonmonotoinc whereas it should be monotonic
+	 * remove this method if more sophisticated operation is desired.
+	 */
+	private void retrieveTransactionFinished() {
+	    log.debug("Retrieve Transaction Finished, entries are being removed from the UA...");
+	    entryHandler.removeAllEntries();
+	    log.debug("Retrieve Transaction Finished, entries are being removed.from the UA..done");
+
+	}
 
 }

@@ -44,7 +44,7 @@ public class ServiceEndpointInterface {
 	Collector client = (Collector) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
 	List<Entry> auths = client.getAllAuthentications();
-	log.debug("Retrieved "+auths.size()+" authentications");
+	log.debug("Retrieved "+auths.size()+" authentications from the ICA ["+endpoint+"]");
 //	for (Entry ent : auths){//
 //	    log.debug(ent+" "+ent.getClass());//
 //	}

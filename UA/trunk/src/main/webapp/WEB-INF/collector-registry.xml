@@ -10,7 +10,7 @@
 		<property name ="ICAEntries">
 			<list>
 				<bean id="cardiffShibICA" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:8080/ICA/Collector</value></property>
+					<property name="serviceEndpoint"><value>http://localhost:8081/ICA/Collector</value></property>
 				</bean>
 			</list>
 		</property>
