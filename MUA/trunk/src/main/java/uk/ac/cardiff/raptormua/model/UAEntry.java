@@ -3,6 +3,10 @@
  */
 package uk.ac.cardiff.raptormua.model;
 
+import java.util.List;
+
+import uk.ac.cardiff.raptormua.engine.sei.ServiceEndpointInterface;
+
 /**
  * @author philsmart
  *
@@ -18,4 +22,9 @@ public class UAEntry {
 	public String getServiceEndpoint() {
 		return serviceEndpoint;
 	}
+
+	public List getAllAuthentications(){
+		return ServiceEndpointInterface.getAuthentications(serviceEndpoint);
+
+	    }
 }

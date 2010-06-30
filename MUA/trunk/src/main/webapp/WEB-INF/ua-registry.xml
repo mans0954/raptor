@@ -8,7 +8,7 @@
 		<property name ="UAEntries">
 			<list>
 				<bean id="cardiffShibUA" class="uk.ac.cardiff.raptormua.model.UAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:8080/UA/UnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>http://localhost:8081/UA/UnitAggregator</value></property>
 				</bean>
 			</list>
 		</property>

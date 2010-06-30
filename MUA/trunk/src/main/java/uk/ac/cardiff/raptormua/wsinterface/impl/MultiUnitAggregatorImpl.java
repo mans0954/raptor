@@ -6,14 +6,14 @@ package uk.ac.cardiff.raptormua.wsinterface.impl;
 import javax.jws.WebService;
 
 import uk.ac.cardiff.raptormua.service.MUAProcess;
-import uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator;
+import uk.ac.cardiff.sei.MultiUnitAggregator;
 
 /**
  * @author philsmart
  *
  */
 
-@WebService(endpointInterface = "uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator")
+@WebService(endpointInterface = "uk.ac.cardiff.sei.MultiUnitAggregator")
 public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 
 	private MUAProcess processService;
@@ -31,6 +31,14 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 
 	public MUAProcess getProcessService() {
 		return processService;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#performStatistic(java.lang.String)
+	 */
+	public void performStatistic(String statisticName) {
+		processService.performStatistic(statisticName);
+
 	}
 
 }
