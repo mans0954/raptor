@@ -40,5 +40,6 @@ public interface EntryHandler {
 
 	public void setEntries(List<Entry> entries);
 
+	public void removeAllEntries();
 
 }
