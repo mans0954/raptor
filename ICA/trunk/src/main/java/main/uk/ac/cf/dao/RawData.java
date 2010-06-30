@@ -18,13 +18,10 @@
  */
 package main.uk.ac.cf.dao;
 
-import java.util.List;
+import main.uk.ac.cf.model.EntryHandler;
+import main.uk.ac.cf.model.MemoryEntryHandler;
 
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-
-import main.uk.ac.cf.dao.external.file.LogFileParser;
-import main.uk.ac.cf.model.EntryHandler;
 
 /**
  * @author philsmart
@@ -37,7 +34,7 @@ public abstract class RawData {
     public abstract void parse() throws Exception;
 
     public RawData() {
-	entryHandler = new EntryHandler();
+	entryHandler = new MemoryEntryHandler();
     }
 
     public Object createObject(String className) {
