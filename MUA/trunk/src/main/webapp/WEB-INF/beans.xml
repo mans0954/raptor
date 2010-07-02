@@ -89,7 +89,7 @@
 			<ref local="MUAProcessJobDetail" />
 		</property>
 		<property name="repeatInterval" value="10000" />
-		<property name="repeatCount" value="1" />
+		<property name="repeatCount" value="0" />
 	</bean>
 
 	<bean id="MUAProcessJobDetail"

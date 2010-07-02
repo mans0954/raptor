@@ -77,6 +77,11 @@ public class StatisticsHandler {
 		}
 	    }
 
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
+		
+	}
+
 
 
 

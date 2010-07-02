@@ -23,11 +23,11 @@ import uk.ac.cardiff.sei.UnitAggregator;
 public class ServiceEndpointInterface {
     static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
 
-    public static List getAuthentications(String endpoint){
-	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	factory.setServiceClass(UnitAggregator.class);
-	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
-	AegisDatabinding databinding = new AegisDatabinding();
+	public static List getAuthentications(String endpoint){
+		ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+		factory.setServiceClass(UnitAggregator.class);
+		//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
+		AegisDatabinding databinding = new AegisDatabinding();
 
 
         Set<String> overrides = new HashSet();
@@ -36,25 +36,25 @@ public class ServiceEndpointInterface {
         overrides.add(UsageEntry.class.getName());
         databinding.setOverrideTypes(overrides);
 
-	factory.setAddress(endpoint);
-	//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
-	factory.getServiceFactory().setDataBinding(databinding);
-
-	UnitAggregator client = (UnitAggregator) factory.create();
-	log.debug("Accessing the UA version "+client.getVersion());
-	List<Entry> auths = client.getAllAuthentications();
-	log.debug("Retrieved "+auths.size()+" authentications from the UA ["+endpoint+"]");
-//	for (Entry ent : auths){//
-//	    log.debug(ent.getEventTime()+" "+ent.getClass());//
-//	}
-	return auths;
+		factory.setAddress(endpoint);
+		//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
+		factory.getServiceFactory().setDataBinding(databinding);
+	
+		UnitAggregator client = (UnitAggregator) factory.create();
+		log.debug("Accessing the UA version "+client.getVersion());
+		List<Entry> auths = client.getAllAuthentications();
+		log.debug("Retrieved "+auths.size()+" authentications from the UA ["+endpoint+"]");
+	//	for (Entry ent : auths){//
+	//	    log.debug(ent.getEventTime()+" "+ent.getClass());//
+	//	}
+		return auths;
     }
 
     public static List getUsages(String endpoint){
-	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	factory.setServiceClass(UnitAggregator.class);
-	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
-	AegisDatabinding databinding = new AegisDatabinding();
+		ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+		factory.setServiceClass(UnitAggregator.class);
+		//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
+		AegisDatabinding databinding = new AegisDatabinding();
 
 
         Set<String> overrides = new HashSet();
@@ -63,18 +63,18 @@ public class ServiceEndpointInterface {
         overrides.add(UsageEntry.class.getName());
         databinding.setOverrideTypes(overrides);
 
-	factory.setAddress(endpoint);
-	//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
-	factory.getServiceFactory().setDataBinding(databinding);
-
-	UnitAggregator client = (UnitAggregator) factory.create();
-	log.debug("Accessing the ICA version "+client.getVersion());
-//	List<Entry> auths = client.getAllUsages();
-//	log.debug("Retrieved "+auths.size()+" usages");
-//	for (Entry ent : auths){//
-//	    log.debug(ent+" "+ent.getClass());//
-//	}
-	return null;
+		factory.setAddress(endpoint);
+		//factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
+		factory.getServiceFactory().setDataBinding(databinding);
+	
+		UnitAggregator client = (UnitAggregator) factory.create();
+		log.debug("Accessing the ICA version "+client.getVersion());
+	//	List<Entry> auths = client.getAllUsages();
+	//	log.debug("Retrieved "+auths.size()+" usages");
+	//	for (Entry ent : auths){//
+	//	    log.debug(ent+" "+ent.getClass());//
+	//	}
+		return null;
     }
 
     public static void main(String args[]){

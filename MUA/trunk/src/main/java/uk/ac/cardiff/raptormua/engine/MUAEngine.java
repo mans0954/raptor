@@ -3,10 +3,14 @@
  */
 package uk.ac.cardiff.raptormua.engine;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+
 
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
+import uk.ac.cardiff.raptormua.model.MemoryEntryHandler;
 import uk.ac.cardiff.raptormua.model.UAEntry;
 
 /**
@@ -19,6 +23,12 @@ public class MUAEngine {
 	private UARegistry uaRegistry;
 	private EntryHandler entryHandler;
 	private StatisticsHandler statisticsHandler;
+	
+	public MUAEngine (){
+		log.info("Setup Multi-Unit Aggregator Engine...");
+		entryHandler = new MemoryEntryHandler();
+		log.info("Mulit-Unit Aggregator Engine is running...");
+	}
 
 	/**
 	 *
@@ -26,7 +36,9 @@ public class MUAEngine {
 	public void poll() {
 		log.info("MultiUnit Aggregator Polling Unit Aggregators");
 		for (UAEntry entry : uaRegistry.getUAEntries()){
-			entryHandler.addEntries(entry.getAllAuthentications());
+			List entries = entry.getAllAuthentications();
+			//log.debug("Setting: "+entries.size());
+			entryHandler.addEntries(entries);
 		}
 
 	}
@@ -51,6 +63,8 @@ public class MUAEngine {
 	 * @param statisticName
 	 */
 	public void performStatistic(String statisticName) {
+		/* set the current set of entries held by the MUA for processing*/	
+		statisticsHandler.setEntries(entryHandler.getEntries());
 		statisticsHandler.peformStatistic(statisticName);
 
 	}
