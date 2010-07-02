@@ -85,7 +85,7 @@ public class UnitAggregatorEngine {
 
 	/* is this the best way to stop duplicated being retrieved - NO
 	 * we will probably want to maintain the data in the UA*/
-	retrieveTransactionFinished();
+	//retrieveTransactionFinished();
 	return returnedAuths;
 
 
