@@ -3,33 +3,58 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <tr:document xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:c="http://java.sun.com/jstl/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
 
-<c:set var="contextPath" value="#{facesContext.externalContext.requestContextPath}" />
-<c:set var="spacer" value=" " />
-<head>
-<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
-<title>RaptorWeb<ui:insert name="title">Statistics Viewer</ui:insert></title>
-<link rel="stylesheet" type="text/css" media="screen" href="#{contextPath}/templates/raptor/css/main.css" />
-</head>
+	<c:set var="contextPath"
+		value="#{facesContext.externalContext.requestContextPath}" />
+	<c:set var="spacer" value=" " />
+	<head>
+	<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+	<title>RaptorWeb<ui:insert name="title">Statistics Viewer</ui:insert></title>
+	<!--<link rel="stylesheet" type="text/css" media="screen" href="#{contextPath}/templates/raptor/css/main.css" />-->
+	<link rel="stylesheet" type="text/css"
+		href="#{contextPath}/templates/raptor/css/2c-hd-ft-fixed-layout.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{contextPath}/templates/raptor/css/2c-hd-ft-fixed-presentation.css" />
+	</head>
 
 
 
-<table>
-	<tbody>
-		<tr>
+	<body>
+	<div id="outer">
+	<div id="hdr" align="center"><a
+		href="reports" title="Go to main page."><img
+		src="#{contextPath}/image/WebLogo.png" alt="" border="0" width="800" height="60" /></a></div>
+	<div id="bar"><span style="padding: 5px; font-size: 11px;">30
+	Dec 02</span></div>
 
-		</tr>
-		<tr>
-			<ui:insert name="content"/>
-			<td></td>
-		</tr>
-		<tr>
-			<td colspan="2"><ui:include src="footer.xhtml"/></td>
-		</tr>
-	</tbody>
-</table>
+
+	<div id="bodyblock" align="right">
+	<div id="l-col" align="center">
+	<h4 align="center">Menu</h4>
+	<a href="#">Graphs</a><br />
+	<a href="#">Setup</a><br />
+	<br />
+	</div>
+
+
+
+
+
+	<div id="cont">
+	<h3 align="center">Welcome To Raptor Web</h3>
+	<div align="center" style="color: red;">Version 0.1</div>
+	<p></p>
+	<ui:insert name="content" /></div>
+	</div>
+	<div id="ftr" align="center">Copyright (c) Cardiff University 2010</div>
+	</div>
+
+	</body>
+
+
+
 </tr:document>
