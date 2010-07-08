@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:tr="http://myfaces.apache.org/trinidad">
+
+	<ui:composition template="/templates/basic/basic.xhtml">
+	    <ui:define name="title">Demo SWF trinidad</ui:define>
+	    <ui:define name="servicioAct">Test SWF</ui:define>
+	    <ui:define name="content">
+	        <tr:form id="mainForm">
+	        	<tr:panelBox>
+	        		<tr:inputText label="Saludar a:" value="1"/>
+	        		<tr:commandButton text="Saludar" id="cmd1" partialSubmit="true"
+	        			actionListener="1"/>
+        			<tr:commandButton text="Enviar" id="cmd2" action="send"/>
+	        	</tr:panelBox>
+	        	<tr:outputText value="Hola!!! 1" partialTriggers="cmd1"/>
+	        	<tr:chooseColor id="cc0" colorData="#{requestContext.colorPalette.default49}"/>
+	        </tr:form>
+
+
+
+
+	    </ui:define>
+	</ui:composition>
+</jsp:root>

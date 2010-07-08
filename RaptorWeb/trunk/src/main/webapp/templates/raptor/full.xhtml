@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<tr:document xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:c="http://java.sun.com/jstl/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:tr="http://myfaces.apache.org/trinidad">
+
+<c:set var="contextPath" value="#{facesContext.externalContext.requestContextPath}" />
+<c:set var="spacer" value=" " />
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<title>RaptorWeb<ui:insert name="title">Statistics Viewer</ui:insert></title>
+<link rel="stylesheet" type="text/css" media="screen" href="#{contextPath}/templates/raptor/css/main.css" />
+</head>
+
+
+
+<table>
+	<tbody>
+		<tr>
+
+		</tr>
+		<tr>
+			<ui:insert name="content"/>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="2"><ui:include src="footer.xhtml"/></td>
+		</tr>
+	</tbody>
+</table>
+</tr:document>
