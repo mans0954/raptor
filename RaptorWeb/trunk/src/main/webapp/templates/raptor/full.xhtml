@@ -16,43 +16,29 @@
 	<title>RaptorWeb<ui:insert name="title">Statistics Viewer</ui:insert></title>
 	<!--<link rel="stylesheet" type="text/css" media="screen" href="#{contextPath}/templates/raptor/css/main.css" />-->
 	<link rel="stylesheet" type="text/css"
-		href="#{contextPath}/templates/raptor/css/2c-hd-ft-fixed-layout.css" />
-	<link rel="stylesheet" type="text/css"
-		href="#{contextPath}/templates/raptor/css/2c-hd-ft-fixed-presentation.css" />
+		href="#{contextPath}/templates/raptor/css/common.css" />
+
 	</head>
 
 
 
 	<body>
-	<div id="outer">
-	<div id="hdr" align="center"><a
-		href="reports" title="Go to main page."><img
-		src="#{contextPath}/image/WebLogo.png" alt="" border="0" width="800" height="60" /></a></div>
-	<div id="bar"><span style="padding: 5px; font-size: 11px;">30
-	Dec 02</span></div>
+	<div id="wrapper">
+	<div id="header"><a href="reports"><img
+		src="#{contextPath}/templates/raptor/images/logoRaptor.png" alt=""
+		class="logo" /></a></div>
+	<ul id="nav">
+		<li><a href="/">Graphs</a></li>
+		<li><a href="">Setup</a></li>
+	</ul>
+	<div id="content" class="clearfix">
 
-
-	<div id="bodyblock" align="right">
-	<div id="l-col" align="center">
-	<h4 align="center">Menu</h4>
-	<a href="#">Graphs</a><br />
-	<a href="#">Setup</a><br />
-	<br />
+	<div id="col_2"><ui:insert name="content" /></div>
 	</div>
-
-
-
-
-
-	<div id="cont">
-	<h3 align="center">Welcome To Raptor Web</h3>
-	<div align="center" style="color: red;">Version 0.1</div>
-	<p></p>
-	<ui:insert name="content" /></div>
+	<div id="footer"><small>All content copyright &copy; 2010
+	Cardiff Universoty, all rights reserved.<br />
+	</small></div>
 	</div>
-	<div id="ftr" align="center">Copyright (c) Cardiff University 2010</div>
-	</div>
-
 	</body>
 
 
