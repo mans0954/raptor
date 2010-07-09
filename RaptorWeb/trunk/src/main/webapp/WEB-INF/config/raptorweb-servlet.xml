@@ -13,9 +13,11 @@
 
 
 	--><!-- Imports the configurations of the different infrastructure systems of the application -->
-	 <!--<import resource="webmvc-config.xml" />-->
 	<import resource="webflow-config.xml" />
-	<!-- <import resource="security-config-passthrough-auth.xml" />  -->
+
+
+	<!--  Import the setup for the web interface -->
+	 <import resource="web-setup.xml" />
 
 
 
