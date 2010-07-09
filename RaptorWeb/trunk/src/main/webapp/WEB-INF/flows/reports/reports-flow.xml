@@ -4,7 +4,23 @@
 
 
  <view-state id="startReport" view ="startReport.jspx">
-	<!--<transition on="showStatistics" to="viewStatistics"/>-->
+	<transition on="graphTrans" to="graphicalReports"/>
+	<transition on="setupTrans" to="setupRaptorWeb"/>
+ </view-state>
+
+
+ <view-state id="graphicalReports" view ="graphicalReports.jspx">
+	<transition on="graphTrans" to="graphicalReports"/>
+	<transition on="setupTrans" to="setupRaptorWeb"/>
+
+
+ </view-state>
+
+  <view-state id="setupRaptorWeb" view ="setupRaptorWeb.jspx">
+	<transition on="graphTrans" to="graphicalReports"/>
+	<transition on="setupTrans" to="setupRaptorWeb"/>
+
+
  </view-state>
 
 
