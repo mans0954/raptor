@@ -3,6 +3,8 @@
  xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 
+
+
  <view-state id="startReport" view ="startReport.jspx">
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
@@ -16,9 +18,16 @@
 
  </view-state>
 
+
+
   <view-state id="setupRaptorWeb" view ="setupRaptorWeb.jspx">
+ 	 <!--  used to help with the setup configuration  -->
+  	<var name="setupmodel" class="uk.ac.cardiff.raptorweb.model.SetupModel" />
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
+	<transition on="getAggregatorCapabilities">
+		<evaluate expression="setupService.getCapabilities(setupmodel)"/>
+	</transition>
 
 
  </view-state>

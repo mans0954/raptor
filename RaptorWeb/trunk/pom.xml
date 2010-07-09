@@ -45,8 +45,51 @@
 			<url>http://repository.jboss.com/maven2/</url>
 			<layout>default</layout>
 		</repository>
+
+		<!--Adding extra repositories for any other libs, which is hosted on Iam-->
+
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-extras-repo</id>
+			<name>Iam Local Maven Repo</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-snapshot-repo</id>
+			<name>Iam Local Maven Repo Snapshots</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>raptor-release-repo</id>
+			<name>Iam Local Maven Repo Releases</name>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 	<!--  done -->
+
 
 	<build>
 		<plugins>
@@ -326,6 +369,38 @@
 	            </exclusion>
 	         </exclusions>
 	    </dependency>
+	    <!--  Other dependencies, mostly other Raptor dependencies and SOAP -->
+	    <dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>2.2.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>2.2.7</version>
+		</dependency>
+		<dependency>
+    	<groupId>org.apache.cxf</groupId>
+    		<artifactId>cxf-bundle-jaxrs</artifactId>
+    	<version>2.2.8</version>
+    	</dependency>
+		<dependency>
+			<groupId>RaptorSuite</groupId>
+			<artifactId>InformationModel</artifactId>
+			<version>0.0.6-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+            <groupId>RaptorSuite</groupId>
+            <artifactId>ServiceInterfaces</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.0</version>
+		</dependency>
+
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>

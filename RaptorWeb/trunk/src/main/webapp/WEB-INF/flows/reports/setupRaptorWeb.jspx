@@ -1,23 +1,74 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:h="http://java.sun.com/jsf/html"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad"
+	xmlns:c="http://java.sun.com/jstl/core">
 
 	<ui:composition template="/templates/raptor/full.xhtml">
 
-	    <ui:define name="content">
-	    <center> <h1> Raptor Web and Aggregator Setup</h1></center>
-	        <tr:form id="mainForm">
-	        	<tr:panelBox>
-				</tr:panelBox>
-	        </tr:form>
+		<ui:define name="content">
+			<tr:form id="mainForm">
+				<tr:panelTabbed position="above">
+					<tr:showDetailItem text="Aggregator Setup">
+						<tr:panelHeader text="Aggregators"/>
+
+						<tr:panelFormLayout rows="6" labelWidth="5%" >
+						<br/>
+						<tr:table value="#{setupService.attached}" bandingInterval="2" banding="row" var="attached" width="90%">
+							<tr:column>
+								<f:facet name="header">
+									<tr:outputText value="Aggregator Location" />
+								</f:facet>
+								<tr:outputText value="#{attached.serviceEndpoint}" />
+							</tr:column>
+							<tr:column align="center">
+								<f:facet name="header">
+									<tr:outputText value="Attached" />
+								</f:facet>
+								<tr:outputText value="#{attached.isAttached}" />
+							</tr:column>
+							<tr:column align="center">
+								<f:facet name="header">
+									<tr:outputText value="Actions" />
+								</f:facet>
+								<tr:commandLink text="Attach" />
+							</tr:column>
+							<tr:column >
+								<f:facet name="header">
+									<tr:outputText value="Statistical Capabilities" />
+								</f:facet>
+								<tr:commandLink action="getAggregatorCapabilities" text="Check Now" rendered="#{empty setupmodel.selectEndpointCapabilities.statisticalServices}">
+									<f:setPropertyActionListener value="#{attached}"
+									target="#{setupmodel.selectedEndpoint}" />
+								</tr:commandLink>
+								<tr:panelList rows="2" rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
+								<c:forEach var="item" items="#{setupmodel.selectEndpointCapabilities.statisticalServices}">
+                					<tr:outputText value="#{item}" text="#{item}"/>
+              					</c:forEach>
+
+
+								</tr:panelList>
+							</tr:column>
+						</tr:table>
+
+						</tr:panelFormLayout>
+
+					</tr:showDetailItem>
+					<tr:showDetailItem text="Preferences">
+						<tr:panelHeader text="User Preferences" />
+
+					</tr:showDetailItem>
+				</tr:panelTabbed>
+			</tr:form>
 
 
 
 
-	    </ui:define>
+
+
+		</ui:define>
 	</ui:composition>
 </jsp:root>

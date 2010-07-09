@@ -6,6 +6,29 @@
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 
+	<bean id="muaRegistry" class="uk.ac.cardiff.raptorweb.engine.MUARegistry">
+		<property name ="MUAEntries">
+			<list>
+				<bean id="cardiffShibMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="isAttached" value="true"></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
+		<property name="registry"><ref bean="muaRegistry"></ref></property>
+	</bean>
+
+	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
+		<property name="webEngine"><ref bean="webEngine"/></property>
+	</bean>
+
+	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
+		<property name="webEngine"><ref bean="webEngine"/></property>
+	</bean>
+
 
 
 
