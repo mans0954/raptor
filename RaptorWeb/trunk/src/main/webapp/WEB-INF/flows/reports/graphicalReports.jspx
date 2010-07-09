@@ -1,23 +1,59 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
-   xmlns:ui="http://java.sun.com/jsf/facelets"
-   xmlns:h="http://java.sun.com/jsf/html"
-   xmlns:f="http://java.sun.com/jsf/core"
-   xmlns:tr="http://myfaces.apache.org/trinidad">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
 
 	<ui:composition template="/templates/raptor/full.xhtml">
 
-	    <ui:define name="content">
-	    <center> <h1> Graphical Reports</h1></center>
-	        <tr:form id="mainForm">
-	        	<tr:panelBox>
-				</tr:panelBox>
-	        </tr:form>
+		<ui:define name="content">
+			<tr:form id="mainForm">
+				<tr:panelTabbed position="above">
+					<tr:showDetailItem text="Authentication Graphs">
+						<tr:panelHeader text="Authentication" />
 
 
 
 
-	    </ui:define>
+						<tr:panelFormLayout rows="6" labelWidth="40%">
+							<!-- A bunch of form components -->
+							<tr:inputText label="Text" />
+							<tr:inputFile label="File" />
+							<tr:inputListOfValues label="SelectInput" />
+							<tr:inputDate label="Date" />
+							<tr:inputText label="Attribute" />
+							<tr:inputText label="Attribute" />
+							<tr:inputText label="Attribute" />
+							<tr:inputText label="Attribute" />
+
+							<!-- Now, an example of panelLabelAndMessage for more complex content -->
+							<tr:panelLabelAndMessage label="Date Range">
+								<tr:panelHorizontalLayout>
+									<tr:inputDate simple="true" shortDesc="Start date" />
+									<tr:inputDate simple="true" shortDesc="End date" />
+								</tr:panelHorizontalLayout>
+							</tr:panelLabelAndMessage>
+							<f:facet name="footer">
+								<tr:panelButtonBar>
+									<tr:commandButton text="Button 1" />
+									<tr:commandButton text="Button 2" />
+								</tr:panelButtonBar>
+							</f:facet>
+						</tr:panelFormLayout>
+					</tr:showDetailItem>
+					<tr:showDetailItem text="Usage Graphs">
+						<tr:panelHeader text="Usage" />
+
+					</tr:showDetailItem>
+					<tr:showDetailItem text="Combined Graphs">
+						<tr:panelHeader text="Combined" />
+
+					</tr:showDetailItem>
+				</tr:panelTabbed>
+			</tr:form>
+
+		</ui:define>
 	</ui:composition>
 </jsp:root>
