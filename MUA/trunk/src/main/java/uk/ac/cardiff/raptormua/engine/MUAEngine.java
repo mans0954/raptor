@@ -3,15 +3,18 @@
  */
 package uk.ac.cardiff.raptormua.engine;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-
+import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
 import uk.ac.cardiff.raptormua.model.MemoryEntryHandler;
 import uk.ac.cardiff.raptormua.model.UAEntry;
+
 
 /**
  * @author philsmart
@@ -23,7 +26,7 @@ public class MUAEngine {
 	private UARegistry uaRegistry;
 	private EntryHandler entryHandler;
 	private StatisticsHandler statisticsHandler;
-	
+
 	public MUAEngine (){
 		log.info("Setup Multi-Unit Aggregator Engine...");
 		entryHandler = new MemoryEntryHandler();
@@ -63,10 +66,35 @@ public class MUAEngine {
 	 * @param statisticName
 	 */
 	public void performStatistic(String statisticName) {
-		/* set the current set of entries held by the MUA for processing*/	
+		/* set the current set of entries held by the MUA for processing*/
 		statisticsHandler.setEntries(entryHandler.getEntries());
 		statisticsHandler.peformStatistic(statisticName);
 
+	}
+
+	/**
+	 * @return
+	 */
+	public Capabilities getCapabilities() {
+		//* retrieve all registered stats from the stats handler*/
+		List<Statistic> su = statisticsHandler.getStatisticalUnits();
+		/* retrieve information about attached UA */
+		List<UAEntry> uaentries = uaRegistry.getUAEntries();
+
+		Capabilities capabilities = new Capabilities();
+
+		ArrayList<String> ua = new ArrayList();
+		for (UAEntry entry : uaentries)ua.add(entry.getServiceEndpoint());
+		capabilities.setAttached(ua);
+
+		ArrayList<String> stats = new ArrayList();
+		for (Statistic entry : su)stats.add(entry.getUnitName());
+		capabilities.setStatisticalServices(stats);
+
+
+
+
+		return capabilities;
 	}
 
 }

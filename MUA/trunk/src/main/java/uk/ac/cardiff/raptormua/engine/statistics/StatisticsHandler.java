@@ -67,7 +67,7 @@ public class StatisticsHandler {
 		    	paramC[i] = params[i].getClass();
 		    }
 		    Method setter = id.getMethod(fieldname, paramC);
-		    log.debug("Trying to Set :"+setter);
+		    //log.debug("Trying to Set :"+setter);
 		    setter.invoke(object, params);
 		} catch (Throwable e) {
 		    log.error("Field name '" + fieldname + "' does not match internal model attribute");
@@ -79,7 +79,7 @@ public class StatisticsHandler {
 
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
-		
+
 	}
 
 

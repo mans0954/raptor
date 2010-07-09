@@ -16,7 +16,7 @@
 	<jaxws:endpoint
 	  id="muaEndpoint"
 	  implementor="#muaEndpointInterface"
-	  address="/MUA" >
+	  address="/MultiUnitAggregator" >
 	  	<jaxws:serviceFactory>
 			<ref bean='jaxws-and-aegis-service-factory' />
 		</jaxws:serviceFactory>
