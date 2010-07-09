@@ -27,16 +27,17 @@
 	<div id="header"><a href="reports"><img
 		src="#{contextPath}/templates/raptor/images/logoRaptor.png" alt=""
 		class="logo" /></a></div>
-	<ul id="nav">
-		<li><a href="/">Graphs</a></li>
-		<li><a href="">Setup</a></li>
-	</ul>
-	<div id="content" class="clearfix">
 
+	<tr:form id="menuForm">
+	<ul id="nav">
+		<li><tr:commandLink text="Graphs" action="graphTrans"/></li>
+		<li><tr:commandLink text="Setup" action="setupTrans"/></li>
+	</ul>
+	</tr:form>
+	<div id="content" class="clearfix">
 	<div id="col_2"><ui:insert name="content" /></div>
 	</div>
-	<div id="footer"><small>All content copyright &copy; 2010
-	Cardiff Universoty, all rights reserved.<br />
+	<div id="footer"><small>All content copyright &copy; 2010 Cardiff University, all rights reserved.<br />
 	</small></div>
 	</div>
 	</body>
