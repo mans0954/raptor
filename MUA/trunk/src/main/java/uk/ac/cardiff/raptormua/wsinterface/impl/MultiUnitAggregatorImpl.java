@@ -5,6 +5,7 @@ package uk.ac.cardiff.raptormua.wsinterface.impl;
 
 import javax.jws.WebService;
 
+import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
 
@@ -39,6 +40,14 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	public void performStatistic(String statisticName) {
 		processService.performStatistic(statisticName);
 
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#getCapabilities()
+	 */
+	public Capabilities getCapabilities() {
+		// TODO Auto-generated method stub
+		return processService.getCapabilities();
 	}
 
 }
