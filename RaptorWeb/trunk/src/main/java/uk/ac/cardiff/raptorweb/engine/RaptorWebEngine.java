@@ -32,6 +32,19 @@ public class RaptorWebEngine {
 	public MUARegistry getRegistry() {
 		return registry;
 	}
+	
+	public List getStatisticalUnits(){
+		/* get the statistical methods from the currently attached MUA */
+		MUAEntry attached = null;
+		for (MUAEntry entry : registry.getUAEntries()){
+			if (entry.getIsAttached()){
+				attached = entry;
+			}
+		}
+		Capabilities capabilities = ServiceEndpointInterface.discoverMUACapabilities(attached.getServiceEndpoint());
+		if (!capabilities.isError()) return capabilities.getStatisticalServices();
+		return null;
+	}
 
 	/**
 	 * @param selectedEndpoint
@@ -39,6 +52,20 @@ public class RaptorWebEngine {
 	 */
 	public Capabilities getCapabilities(MUAEntry selectedEndpoint) {
 			return ServiceEndpointInterface.discoverMUACapabilities(selectedEndpoint.getServiceEndpoint());
+	}
+
+	public MUAEntry getCurrentlyAttached() {
+		for (MUAEntry entry : registry.getUAEntries()){
+			if (entry.getIsAttached()){
+				return entry;
+			}
+		}
+		return null;
+	}
+
+	public void invokeStatisticalModel(String selectedStatisticalUnit) {
+		
+		
 	}
 
 

@@ -43,6 +43,7 @@ public class ServiceEndpointInterface {
 			// log.debug(ent.getEventTime()+" "+ent.getClass());//
 			// }
 		} catch (Exception e) {
+			capabilities = new Capabilities();
 			capabilities.setError(true);
 			capabilities.setErrorMessage(e.getMessage());
 		}
