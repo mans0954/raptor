@@ -15,34 +15,32 @@
 						<tr:panelHeader text="Authentication" />
 
 
+						<br/>
 
-
-						<tr:panelFormLayout rows="6" labelWidth="40%">
-							<!-- A bunch of form components -->
-							<tr:inputText label="Text" />
-							<tr:inputFile label="File" />
-							<tr:inputListOfValues label="SelectInput" />
-							<tr:inputDate label="Date" />
-							<tr:inputText label="Attribute" />
-							<tr:inputText label="Attribute" />
-							<tr:inputText label="Attribute" />
-							<tr:inputText label="Attribute" />
-
-							<!-- Now, an example of panelLabelAndMessage for more complex content -->
-							<tr:panelLabelAndMessage label="Date Range">
-								<tr:panelHorizontalLayout>
-									<tr:inputDate simple="true" shortDesc="Start date" />
-									<tr:inputDate simple="true" shortDesc="End date" />
-								</tr:panelHorizontalLayout>
-							</tr:panelLabelAndMessage>
-							<f:facet name="footer">
-								<tr:panelButtonBar>
-									<tr:commandButton text="Button 1" />
-									<tr:commandButton text="Button 2" />
-								</tr:panelButtonBar>
-							</f:facet>
+						<tr:panelFormLayout rows="6" labelWidth="5%">
+							<tr:table value="#{graphService.statisticalUnits}" bandingInterval="2" banding="row" var="unit" width="90%">
+							 <f:facet name="header">
+     							 <tr:outputText value="#{graphService.currentlyAttached.serviceEndpoint}"/>
+   							 </f:facet>				
+							
+							<tr:column >
+							<tr:commandLink text="#{unit}" action="invokeStatisticalUnit">
+									<f:setPropertyActionListener value="#{unit}"
+									target="#{graphmodel.selectedStatisticalUnit}" />
+								</tr:commandLink>								
+								
+							</tr:column>							
+						</tr:table>
 						</tr:panelFormLayout>
+						
+						<tr:panelHeader text="Graphical Representation" />
+						
+						<tr:chart id="chart" verticalMajorSections="8" 
+         					 inlineStyle="width:680px; height:400px;"/>
 					</tr:showDetailItem>
+					
+					
+					
 					<tr:showDetailItem text="Usage Graphs">
 						<tr:panelHeader text="Usage" />
 

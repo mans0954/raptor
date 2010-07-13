@@ -16,7 +16,7 @@ public interface SetupService {
 
 	public List getStatisticalServices();
 
-	public List getChartData(String statisticalUnitName);
+	
 
 	/* performs the operation in place on the SetupModel */
 	public void getCapabilities(SetupModel model);

@@ -18,14 +18,7 @@ public class SetupServiceImpl implements SetupService{
 
 	private RaptorWebEngine webEngine;
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getChartData(java.lang.String)
-	 */
-	@Override
-	public List getChartData(String statisticalUnitName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getStatisticalServices()
