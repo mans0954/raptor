@@ -44,6 +44,9 @@
 									<f:setPropertyActionListener value="#{attached}"
 									target="#{setupmodel.selectedEndpoint}" />
 								</tr:commandLink>
+								<tr:panelList rows="2" rendered="#{setupmodel.selectEndpointCapabilities.error}">
+									<tr:outputText value="#{setupmodel.selectEndpointCapabilities.errorMessage}" text="#{setupmodel.selectEndpointCapabilities.errorMessage}"/>
+								</tr:panelList>
 								<tr:panelList rows="2" rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
 								<c:forEach var="item" items="#{setupmodel.selectEndpointCapabilities.statisticalServices}">
                 					<tr:outputText value="#{item}" text="#{item}"/>
