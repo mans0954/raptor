@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
@@ -65,10 +66,10 @@ public class MUAEngine {
 	/**
 	 * @param statisticName
 	 */
-	public void performStatistic(String statisticName) {
+	public AggregatorGraphModel performStatistic(String statisticName) {
 		/* set the current set of entries held by the MUA for processing*/
 		statisticsHandler.setEntries(entryHandler.getEntries());
-		statisticsHandler.peformStatistic(statisticName);
+		return statisticsHandler.peformStatistic(statisticName);
 
 	}
 

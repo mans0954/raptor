@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>RaptorSuite</groupId>
 			<artifactId>InformationModel</artifactId>
-			<version>0.0.6</version>
+			<version>0.0.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>
             <groupId>RaptorSuite</groupId>

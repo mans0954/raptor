@@ -3,8 +3,7 @@
  */
 package uk.ac.cardiff.raptormua.service;
 
-import java.util.List;
-
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 
 /**
@@ -19,7 +18,7 @@ public interface MUAProcess {
 	/**
 	 * @param statisticName
 	 */
-	public void performStatistic(String statisticName);
+	public AggregatorGraphModel performStatistic(String statisticName);
 
 	/**
 	 * @return

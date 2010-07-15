@@ -9,10 +9,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 
 /**
  * @author philsmart
- * Allows the storage of statistical units
+ * Allows the storage and invocation of statistical units
  */
 public class StatisticsHandler {
 	static Logger log = Logger.getLogger(StatisticsHandler.class);
@@ -31,50 +32,53 @@ public class StatisticsHandler {
 	/**
 	 * @param statisticName
 	 */
-	public void peformStatistic(String statisticName) {
+	public AggregatorGraphModel peformStatistic(String statisticName) {
 		for (Statistic statistic : statisticalUnits){
 			if (statistic.getUnitName().equals(statisticName)){
 				statistic.setEntries(entries);
-				invoke(statistic);
+				return invoke(statistic);
 			}
 		}
-
+		return null;
 	}
 
 	/**
 	 * @param statistic
 	 */
-	private void invoke(Statistic statistic) {
+	private AggregatorGraphModel invoke(Statistic statistic) {
 		try{
 			List<String> params = statistic.getMethodParams();
 			Object[] paramsO = new Object[params.size()];
 			for (int i=0; i < paramsO.length; i++){
 				paramsO[i] = params.get(i);
 			}
-			invoke(statistic.getMethodName(),paramsO,statistic);
+			return invoke(statistic.getMethodName(),paramsO,statistic);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		return null;
 
 	}
 
-	private void invoke(String fieldname, Object[] params, Object object) {
+	private AggregatorGraphModel invoke(String fieldname, Object[] params, Object object) {
 		try {
 		    Class id = object.getClass();
 		    Class[] paramC = new Class[params.length];
 		    for (int i=0; i < params.length;i++){
 		    	paramC[i] = params[i].getClass();
 		    }
-		    Method setter = id.getMethod(fieldname, paramC);
+		    Method statisticalMethod = id.getMethod(fieldname, paramC);
 		    //log.debug("Trying to Set :"+setter);
-		    setter.invoke(object, params);
+		    AggregatorGraphModel gmodel = (AggregatorGraphModel) statisticalMethod.invoke(object, params);
+		    return gmodel;
 		} catch (Throwable e) {
 		    log.error("Field name '" + fieldname + "' does not match internal model attribute");
 		    e.printStackTrace();
 		    // System.exit(1);
 
 		}
+		return null;
 	    }
 
 	public void setEntries(List<Entry> entries) {
