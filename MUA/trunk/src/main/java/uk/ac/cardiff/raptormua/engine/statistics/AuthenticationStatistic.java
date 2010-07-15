@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
@@ -19,7 +20,7 @@ public class AuthenticationStatistic extends Statistic{
 
 
 
-	public void countEntryPerInterval(String timeInterval) throws StatisticalUnitException{
+	public AggregatorGraphModel countEntryPerInterval(String timeInterval) throws StatisticalUnitException{
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
 		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
@@ -66,6 +67,15 @@ public class AuthenticationStatistic extends Statistic{
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
 		/* now do something with the reminder */
+
+		/* now construct the GraphModel */
+		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+		gmodel.addGroupLabel("Time Per Country");
+		for (Bucket bucket : buckets){
+			gmodel.addSeriesLabel(bucket.getStart()+"-"+bucket.getEnd());
+		}
+
+		return gmodel;
 
 	}
 
