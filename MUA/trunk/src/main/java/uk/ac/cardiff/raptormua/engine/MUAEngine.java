@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
@@ -88,8 +89,15 @@ public class MUAEngine {
 		for (UAEntry entry : uaentries)ua.add(entry.getServiceEndpoint());
 		capabilities.setAttached(ua);
 
-		ArrayList<String> stats = new ArrayList();
-		for (Statistic entry : su)stats.add(entry.getUnitName());
+		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
+		for (Statistic entry : su){
+			StatisticalUnitInformation information = new StatisticalUnitInformation();
+			information.setField(entry.getField());
+			information.setMethodName(entry.getMethodName());
+			information.setMethodParams(entry.getMethodParams());
+			information.setStatisticalUnitName(entry.getUnitName());
+			stats.add(information);
+		}
 		capabilities.setStatisticalServices(stats);
 
 
