@@ -5,8 +5,12 @@ package uk.ac.cardiff.raptorweb.engine;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
+import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
 
 /**
@@ -14,6 +18,7 @@ import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
  *
  */
 public class RaptorWebEngine {
+	static Logger log = Logger.getLogger(RaptorWebEngine.class);
 
 	private MUARegistry registry;
 
@@ -32,7 +37,7 @@ public class RaptorWebEngine {
 	public MUARegistry getRegistry() {
 		return registry;
 	}
-	
+
 	public List getStatisticalUnits(){
 		/* get the statistical methods from the currently attached MUA */
 		MUAEntry attached = null;
@@ -63,9 +68,10 @@ public class RaptorWebEngine {
 		return null;
 	}
 
-	public void invokeStatisticalModel(String selectedStatisticalUnit) {
-		
-		
+	public AggregatorGraphModel invokeStatisticalUnit(String selectedStatisticalUnit) {
+		AggregatorGraphModel gmodel = ServiceEndpointInterface.invokeStatisticalUnit(getCurrentlyAttached().getServiceEndpoint(),selectedStatisticalUnit);
+		return gmodel;
+
 	}
 
 

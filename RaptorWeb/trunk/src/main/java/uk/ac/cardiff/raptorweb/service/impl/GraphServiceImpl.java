@@ -5,9 +5,14 @@ package uk.ac.cardiff.raptorweb.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
+import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.service.GraphService;
 
 /**
@@ -15,6 +20,8 @@ import uk.ac.cardiff.raptorweb.service.GraphService;
  *
  */
 public class GraphServiceImpl implements GraphService{
+
+	static Logger log = Logger.getLogger(GraphServiceImpl.class);
 
 	private RaptorWebEngine webEngine;
 
@@ -25,15 +32,15 @@ public class GraphServiceImpl implements GraphService{
 	public RaptorWebEngine getWebEngine() {
 		return webEngine;
 	}
-	
+
 	public List getAttached(){
 		return webEngine.getAttached();
 	}
-	
+
 	public MUAEntry getCurrentlyAttached(){
 		return webEngine.getCurrentlyAttached();
 	}
-	
+
 	@Override
 	public List getStatisticalUnits(){
 		return webEngine.getStatisticalUnits();
@@ -45,10 +52,19 @@ public class GraphServiceImpl implements GraphService{
 		return null;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.GraphService#invokeStatisticalUnit(uk.ac.cardiff.raptorweb.model.GraphModel)
+	 * Adds the trinidad GraphModel into the Raptor Web Model
+	 */
 	@Override
 	public void invokeStatisticalUnit(GraphModel model) {
-		webEngine.invokeStatisticalModel(model.getSelectedStatisticalUnit());
-		
+		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
+		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
+		model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
+		model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
+		model.setGraphType("verticalBar");
+
 	}
 
 }

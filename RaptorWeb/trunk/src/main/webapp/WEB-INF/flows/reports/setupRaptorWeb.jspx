@@ -49,7 +49,7 @@
 								</tr:panelList>
 								<tr:panelList rows="2" rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
 								<c:forEach var="item" items="#{setupmodel.selectEndpointCapabilities.statisticalServices}">
-                					<tr:outputText value="#{item}" text="#{item}"/>
+                					<tr:outputText value="#{item.statisticalUnitName}" text="#{item.statisticalUnitName}"/>
               					</c:forEach>
 
 
@@ -59,8 +59,8 @@
 								<f:facet name="header">
 									<tr:outputText value="Online" />
 								</f:facet>
-								
-								<center>								
+
+								<center>
 								<tr:image source="/image/red-circle.gif"  shortDesc="help"  rendered="#{setupmodel.selectEndpointCapabilities.error}"/>
 								<tr:image source="/image/green-circle.png"  shortDesc="help"  rendered="#{!setupmodel.selectEndpointCapabilities.error}"/>
 								</center>
