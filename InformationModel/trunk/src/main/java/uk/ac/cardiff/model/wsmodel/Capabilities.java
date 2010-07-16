@@ -13,15 +13,15 @@ import java.util.List;
 public class Capabilities implements Serializable{
 
 	private List<String> attached;
-	private List<String> statisticalServices;
+	private List<StatisticalUnitInformation> statisticalServices;
 	private String errorMessage;
 	private boolean error;
-	
-	
-	public void setStatisticalServices(List<String> statisticalServices) {
+
+
+	public void setStatisticalServices(List<StatisticalUnitInformation> statisticalServices) {
 		this.statisticalServices = statisticalServices;
 	}
-	public List<String> getStatisticalServices() {
+	public List<StatisticalUnitInformation> getStatisticalServices() {
 		return statisticalServices;
 	}
 	public void setAttached(List<String> attached) {
