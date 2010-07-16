@@ -3,8 +3,13 @@
  */
 package uk.ac.cardiff.raptormua.engine.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
@@ -25,6 +30,12 @@ public class AuthenticationStatistic extends Statistic{
 		int timeIntervalInt = Integer.parseInt(timeInterval);
 		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
+
+		/* stop processing if there are no valid entries */
+		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
+			log.error("Not enough entries to perform statistic countEntryPerInterval");
+			return null;
+		}
 
 		/* divide the temporal extent into evenly sized buckets*/
 		DateTime start = startingTime();
@@ -70,9 +81,15 @@ public class AuthenticationStatistic extends Statistic{
 
 		/* now construct the GraphModel */
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-		gmodel.addGroupLabel("Time Per Country");
+		gmodel.addSeriesLabel("Number of Events per "+timeInterval+"ms");
+		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
 		for (Bucket bucket : buckets){
-			gmodel.addSeriesLabel(bucket.getStart()+"-"+bucket.getEnd());
+			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
+			List<Double> values = new ArrayList();
+			Double valueDouble = new Double(bucket.getFrequency());
+			values.add(valueDouble);
+			gmodel.addGroupValue(values);
 		}
 
 		return gmodel;

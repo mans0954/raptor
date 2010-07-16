@@ -18,7 +18,7 @@
 		<property name="methodName"><value>countEntryPerInterval</value></property>
 		<property name="methodParams">
 			<list>
-				<value>100000</value>
+				<value>7200000</value>
 			</list>
 		</property>
 	</bean>
