@@ -46,19 +46,32 @@ public class AuthenticationStatistic extends Statistic{
 		int numberOfBuckets = (int) (difference / timeIntervalInt);
 		long reminder = difference % timeIntervalInt;
 		log.debug("There are "+numberOfBuckets+" buckets, with reminder "+reminder+"ms");
+		
 		/* now create that many buckets of length timeIntervalInt*/
-		Bucket[] buckets = new Bucket[numberOfBuckets];
+		Bucket[] buckets = null;
+		if (reminder >0)buckets = new Bucket[numberOfBuckets+1]; //add 1 for the reminder
+		else buckets = new Bucket[numberOfBuckets];
 
 		buckets[0] = new Bucket();
 		buckets[0].setStart(start);
 		buckets[0].setEnd(new DateTime(start.getMillis()+timeIntervalInt));
-
+		DateTime endOfEvenBuckets = null;
 		for (int i=1 ; i < numberOfBuckets; i++){
 			Bucket buck = new Bucket();
 			buck.setStart(buckets[i-1].getEnd());
 			buck.setEnd(new DateTime(buckets[i-1].getEnd().getMillis()+timeIntervalInt));
 			buckets[i] = buck;
+			endOfEvenBuckets = buck.getEnd();
 		}
+		
+		if (reminder >0){
+			/* now do something with the reminder, create a bucket from the last entry, to the maximum temporal extent of all entries */
+			Bucket reminderBucket = new Bucket();
+			reminderBucket.setStart(endOfEvenBuckets);
+			reminderBucket.setEnd(end);
+			buckets[buckets.length-1] = reminderBucket;
+		}
+		
 
 		for (Entry entry : this.getAuthEntries()){
 
@@ -66,6 +79,10 @@ public class AuthenticationStatistic extends Statistic{
 				if (buckets[i].isInside(entry.getEventTime()))buckets[i].increment();
 			}
 		}
+		
+		
+		
+		
 
 		int testCount = 0;
 		for (Bucket bucket : buckets){
@@ -77,7 +94,7 @@ public class AuthenticationStatistic extends Statistic{
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-		/* now do something with the reminder */
+		
 
 		/* now construct the GraphModel */
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
