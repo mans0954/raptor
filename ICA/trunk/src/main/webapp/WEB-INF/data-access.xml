@@ -28,7 +28,7 @@
 			<list>
 				<bean id="shibbolethAccessLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access.log
+						<value>file:///home/phil/Documents/DataSets/Logs/idp-access.log
 						</value>
 					</property>
 					<property name="format">
@@ -38,7 +38,7 @@
 				</bean>
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit.log
+						<value>file:///home/phil/Documents/DataSets/Logs/idp-audit.log
 						</value>
 					</property>
 					<property name="format">
