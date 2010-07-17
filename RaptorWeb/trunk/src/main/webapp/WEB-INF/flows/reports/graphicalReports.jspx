@@ -54,13 +54,8 @@
 							<f:facet name="header">
      							 <tr:outputText value="Parameters"/>
    							 </f:facet>
-								<tr:panelList rows="2" >
-								<c:forEach var="param" items="#{unit.methodParams}">
-                					<tr:outputText value="#{param}"/>
-              					</c:forEach>
-								</tr:panelList>
-
-							</tr:column>
+								<tr:outputText value="#{unit.methodParams}"/>
+								</tr:column>
 						</tr:table>
 						</tr:panelFormLayout>
 

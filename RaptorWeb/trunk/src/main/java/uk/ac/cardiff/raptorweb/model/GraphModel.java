@@ -14,7 +14,6 @@ public class GraphModel implements Serializable{
 	private String selectedStatisticalUnit;
 	private RaptorGraphModel currentGraph;
 	private String graphType;
-
 	private RaptorTableChartModel currentTableGraph;
 
 	/**
