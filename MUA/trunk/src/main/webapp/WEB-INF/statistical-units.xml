@@ -8,17 +8,41 @@
 		<property name ="statisticalUnits">
 			<list>
 				<ref bean="authTimeBuckets" />
+				<ref bean="authTimeBucketsLargeInterval" />
+				<ref bean="groupBy" />
 			</list>
 		</property>
 	</bean>
 
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
 		<property name="unitName"><value>authTimeBuckets</value></property>
-		<property name="field"><value>eventTime</value></property>
+		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntryPerInterval</value></property>
 		<property name="methodParams">
 			<list>
 				<value>7200000</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="authTimeBucketsLargeInterval" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>authTimeBucketsLarge</value></property>
+		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>countEntryPerInterval</value></property>
+		<property name="methodParams">
+			<list>
+				<value>10000000</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>groupBy</value></property>
+		<property name="field"><value>requestHost</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>groupByFrequency</value></property>
+		<property name="methodParams">
+			<list>
+				<value>requestHost</value>
 			</list>
 		</property>
 	</bean>
