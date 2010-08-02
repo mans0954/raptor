@@ -22,6 +22,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
@@ -36,7 +38,6 @@ import org.joda.time.format.DateTimeFormatter;
 import runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.model.*;
 
-
 /**
  * @author phil
  *
@@ -48,6 +49,7 @@ public class LogFileParser extends AuthenticationInput {
     private LogFileFormat format;
     private String logfile;
     private String entryType;
+    private String[][] excludeEntries;
 
     public void parse() throws Exception {
 	System.out.println("parsing, low level message");
@@ -105,13 +107,36 @@ public class LogFileParser extends AuthenticationInput {
 		    log.error("Header key is not an integer, needs to be an integer (possibly look at data-access.xml).");
 		}
 	    }
-	    /*
-	     * do not add the object to the arrayList if is timestamp is older
-	     * than the current latest entry this should save heap space during
-	     * operation
-	     */
-	    if (entryHandler.isNewerOrEqual(authE))
-		entries.add(authE);
+
+	    /* now check its not in the exclusion list */
+	    boolean preventAdd = false;
+	    if (getExcludeEntries() != null && getExcludeEntries().length > 0) {
+
+		for (String[] ent : getExcludeEntries()) {
+		    String fieldname = ent[0];
+		    String value = ent[1];
+		    Object valueFromEntry = getValueFromObject(fieldname, authE);
+		    if (valueFromEntry instanceof String){
+			if (value.equals(((String)valueFromEntry))) {
+			    preventAdd = true;
+			}
+		    }
+
+		}
+	    }
+
+	    if (!preventAdd) {
+		/*
+		 * do not add the object to the arrayList if is timestamp is
+		 * older than the current latest entry this should save heap
+		 * space during operation
+		 */
+
+		if (entryHandler.isNewerOrEqual(authE)){
+		    entries.add(authE);
+		}
+	    }
+
 
 	}
 
@@ -145,7 +170,7 @@ public class LogFileParser extends AuthenticationInput {
     private void addStringList(String value, String fieldName, Object object, String delimeter) {
 	try {
 	    String[] splitValue = value.split(delimeter);
-	    //for (String s : splitValue)log.debug(s);
+	    // for (String s : splitValue)log.debug(s);
 	    String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
 	    setValueOnObject(fieldAsMethod, splitValue, object);
 	} catch (Exception e) {
@@ -156,11 +181,11 @@ public class LogFileParser extends AuthenticationInput {
 
     private void addDate(String value, String format, String fieldName, Object object) {
 	try {
-	    /* first check the end of the date, if it has a Z it should have
-	    * time zone information e.g. -0800 or +0500
-	    * but if it ends in just Z, there is not valid timezone information
-	    * supplied, so remove
-	    * */
+	    /*
+	     * first check the end of the date, if it has a Z it should have
+	     * time zone information e.g. -0800 or +0500 but if it ends in just
+	     * Z, there is not valid timezone information supplied, so remove
+	     */
 	    if (value.endsWith("Z"))
 		value = value.substring(0, value.length() - 1);
 
@@ -198,11 +223,28 @@ public class LogFileParser extends AuthenticationInput {
 
     }
 
+    private Object getValueFromObject(String fieldname, Object object) {
+	try {
+	    Class id = object.getClass();
+	    String fieldAsMethod = ReflectionHelper.prepareMethodNameGet(fieldname);
+	    Method getter = id.getMethod(fieldAsMethod, new Class[] {});
+	    // log.debug("Trying to Set :"+param)
+	    Object result = getter.invoke(object, new Object[] {});
+	    return result;
+	} catch (Throwable e) {
+	    log.error("Field name '" + fieldname + "' does not match internal model attribute");
+	    e.printStackTrace();
+	    // System.exit(1);
+
+	}
+	return null;
+    }
+
     private void setValueOnObject(String fieldname, Object param, Object object) {
 	try {
 	    Class id = object.getClass();
 	    Method setter = id.getMethod(fieldname, new Class[] { param.getClass() });
-	    //log.debug("Trying to Set :"+param)
+	    // log.debug("Trying to Set :"+param)
 	    setter.invoke(object, new Object[] { param });
 	} catch (Throwable e) {
 	    log.error("Field name '" + fieldname + "' does not match internal model attribute");
@@ -239,6 +281,16 @@ public class LogFileParser extends AuthenticationInput {
     public String getEntryType() {
 	return entryType;
     }
+
+    public void setExcludeEntries(String[][] excludeEntries) {
+	this.excludeEntries = excludeEntries;
+    }
+
+    public String[][] getExcludeEntries() {
+	return excludeEntries;
+    }
+
+
 
     // public static void main(String args[]) throws IOException{
     // LogFileParser lfp = new LogFileParser();

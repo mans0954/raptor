@@ -40,4 +40,23 @@ public class ReflectionHelper {
 
 	}
 
+	/**
+	 * @param fieldname
+	 * @return
+	 */
+	public static String prepareMethodNameGet(String method) {
+	    if (method.length() > 0) {
+		String name = "get";
+		// now capitalise the first letter of the method name
+		Character firstLetter = method.charAt(0);
+		firstLetter = Character.toUpperCase(firstLetter);
+		String newMethodName = method.substring(1, method.length());
+		name += firstLetter + newMethodName;
+		// System.out.println("method name: " + name);
+		return name;
+
+	}
+	return method;
+	}
+
 }

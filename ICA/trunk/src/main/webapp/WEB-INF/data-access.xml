@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+	<!--
 
-    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+		Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+		Licensed under the Apache License, Version 2.0 (the "License"); you
+		may not use this file except in compliance with the License. You may
+		obtain a copy of the License at
 
-            http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -28,23 +26,43 @@
 			<list>
 				<bean id="shibbolethAccessLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///home/phil/Documents/DataSets/Logs/idp-access.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access.log
 						</value>
 					</property>
 					<property name="format">
 						<ref bean="shibIDPAccessFileFormat" />
 					</property>
-					<property name="entryType"><value>uk.ac.cardiff.model.ShibbolethEntry</value></property>
+					<property name="entryType">
+						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+					</property>
 				</bean>
+
+				<!--
+					this entry parses the audit log, but only for AuthnRequest rows
+				-->
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///home/phil/Documents/DataSets/Logs/idp-audit.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit.log
 						</value>
 					</property>
 					<property name="format">
 						<ref bean="shibIDPAuditFileFormat" />
 					</property>
-					<property name="entryType"><value>uk.ac.cardiff.model.ShibbolethEntry</value></property>
+					<property name="entryType">
+						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+					</property>
+					<!--
+						exclude entries, is an OR list of <field name, field value> pairs
+						that are checked for when parsing , if oneof them exists, that entry is
+						ignored.
+					-->
+					<property name="excludeEntries">
+						<list>
+							<value>requestBinding,urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</value>
+							<value>requestBinding,urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding</value>
+							<value>requestBinding,urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</value>
+						</list>
+					</property>
 				</bean>
 			</list>
 		</property>
@@ -60,29 +78,55 @@
 
 	<!-- accepted types are DATE, STRING, INTEGER -->
 
-	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat" >
+	<bean id="shibIDPAccessFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat">
 		<property name="headers">
 			<list>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>eventTime</value></property>
-					<property name="fieldNo"><value>0</value></property>
-					<property name="fieldType"><value>DATE</value></property>
-					<property name="dateTimeFormat"><value>yyyyMMdd'T'HHmmss</value></property> <!--  Atom (ISO 8601) -->
+					<property name="fieldName">
+						<value>eventTime</value>
+					</property>
+					<property name="fieldNo">
+						<value>0</value>
+					</property>
+					<property name="fieldType">
+						<value>DATE</value>
+					</property>
+					<property name="dateTimeFormat">
+						<value>yyyyMMdd'T'HHmmss</value>
+					</property> <!--  Atom (ISO 8601) -->
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>requestHost</value></property>
-					<property name="fieldNo"><value>1</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>requestHost</value>
+					</property>
+					<property name="fieldNo">
+						<value>1</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>requestID</value></property>
-					<property name="fieldNo"><value>2</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>requestID</value>
+					</property>
+					<property name="fieldNo">
+						<value>2</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>requestPath</value></property>
-					<property name="fieldNo"><value>3</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>requestPath</value>
+					</property>
+					<property name="fieldNo">
+						<value>3</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 			</list>
 		</property>
@@ -92,50 +136,102 @@
 	</bean>
 
 	<bean id="shibIDPAuditFileFormat" class="main.uk.ac.cf.dao.external.format.LogFileFormat">
-	<property name="headers">
+		<property name="headers">
 			<list>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>eventTime</value></property>
-					<property name="fieldNo"><value>0</value></property>
-					<property name="fieldType"><value>DATE</value></property>
-					<property name="dateTimeFormat"><value>yyyyMMdd'T'HHmmss</value></property> <!--  Atom (ISO 8601) -->
+					<property name="fieldName">
+						<value>eventTime</value>
+					</property>
+					<property name="fieldNo">
+						<value>0</value>
+					</property>
+					<property name="fieldType">
+						<value>DATE</value>
+					</property>
+					<property name="dateTimeFormat">
+						<value>yyyyMMdd'T'HHmmss</value>
+					</property> <!--  Atom (ISO 8601) -->
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>requestBinding</value></property>
-					<property name="fieldNo"><value>1</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>requestBinding</value>
+					</property>
+					<property name="fieldNo">
+						<value>1</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>requestHost</value></property>
-					<property name="fieldNo"><value>3</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>requestHost</value>
+					</property>
+					<property name="fieldNo">
+						<value>3</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>messageProfileId</value></property>
-					<property name="fieldNo"><value>4</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>messageProfileId</value>
+					</property>
+					<property name="fieldNo">
+						<value>4</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>responseBinding</value></property>
-					<property name="fieldNo"><value>5</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>responseBinding</value>
+					</property>
+					<property name="fieldNo">
+						<value>5</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>principleName</value></property>
-					<property name="fieldNo"><value>8</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>principleName</value>
+					</property>
+					<property name="fieldNo">
+						<value>8</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>authNMethod</value></property>
-					<property name="fieldNo"><value>9</value></property>
-					<property name="fieldType"><value>STRING</value></property>
+					<property name="fieldName">
+						<value>authNMethod</value>
+					</property>
+					<property name="fieldNo">
+						<value>9</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
-					<property name="fieldName"><value>releasedAttributes</value></property>
-					<property name="fieldNo"><value>10</value></property>
-					<property name="fieldType"><value>STRINGLIST</value></property>
-					<property name="listDelimeter"><value>,</value></property>
+					<property name="fieldName">
+						<value>releasedAttributes</value>
+					</property>
+					<property name="fieldNo">
+						<value>10</value>
+					</property>
+					<property name="fieldType">
+						<value>STRINGLIST</value>
+					</property>
+					<property name="listDelimeter">
+						<value>,</value>
+					</property>
 				</bean>
 			</list>
 		</property>
