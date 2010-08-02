@@ -10,11 +10,14 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.util.ReflectionUtils;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
+import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
@@ -46,7 +49,7 @@ public class AuthenticationStatistic extends Statistic{
 		int numberOfBuckets = (int) (difference / timeIntervalInt);
 		long reminder = difference % timeIntervalInt;
 		log.debug("There are "+numberOfBuckets+" buckets, with reminder "+reminder+"ms");
-		
+
 		/* now create that many buckets of length timeIntervalInt*/
 		Bucket[] buckets = null;
 		if (reminder >0)buckets = new Bucket[numberOfBuckets+1]; //add 1 for the reminder
@@ -63,7 +66,7 @@ public class AuthenticationStatistic extends Statistic{
 			buckets[i] = buck;
 			endOfEvenBuckets = buck.getEnd();
 		}
-		
+
 		if (reminder >0){
 			/* now do something with the reminder, create a bucket from the last entry, to the maximum temporal extent of all entries */
 			Bucket reminderBucket = new Bucket();
@@ -71,7 +74,7 @@ public class AuthenticationStatistic extends Statistic{
 			reminderBucket.setEnd(end);
 			buckets[buckets.length-1] = reminderBucket;
 		}
-		
+
 
 		for (Entry entry : this.getAuthEntries()){
 
@@ -79,10 +82,7 @@ public class AuthenticationStatistic extends Statistic{
 				if (buckets[i].isInside(entry.getEventTime()))buckets[i].increment();
 			}
 		}
-		
-		
-		
-		
+
 
 		int testCount = 0;
 		for (Bucket bucket : buckets){
@@ -94,7 +94,7 @@ public class AuthenticationStatistic extends Statistic{
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-		
+
 
 		/* now construct the GraphModel */
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
@@ -105,6 +105,68 @@ public class AuthenticationStatistic extends Statistic{
 			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
 			List<Double> values = new ArrayList();
 			Double valueDouble = new Double(bucket.getFrequency());
+			values.add(valueDouble);
+			gmodel.addGroupValue(values);
+		}
+
+		return gmodel;
+
+	}
+
+	public AggregatorGraphModel groupByFrequency(String groupByField) throws StatisticalUnitException{
+		log.debug("Performing groupByFrequency Statistical Operation");
+
+		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
+		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
+
+		/* stop processing if there are no valid entries */
+		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
+			log.error("Not enough entries to perform statistic groupByFrequency");
+			return null;
+		}
+
+		/* create groups based on unique entries for the groupByField attribute*/
+		ArrayList<Group> groups = new ArrayList();
+		for (Entry entry : this.getAuthEntries()){
+			boolean oldGroup = false;
+			//String methodName = ReflectionHelper.prepareMethodNameGet(groupByField);
+			Object result = ReflectionHelper.getValueFromObject(groupByField, entry);
+			for (Group group : groups){
+				if (result instanceof String){
+					if (group.getGroupName().equals((String)result)){
+						group.increment();
+						oldGroup =true;
+					}
+				}
+			}
+			if (!oldGroup){
+				Group group = new Group();
+				group.setFrequency(1);
+				group.setGroupName((String)result);
+				groups.add(group);
+			}
+		}
+
+
+		/* test the accuracy of the result */
+		int testCount = 0;
+		for (Group group : groups){
+			testCount +=group.getFrequency();
+			log.debug(group.getGroupName()+" --> "+group.getFrequency());
+		}
+		/* test count should equal the number of entries unless there is a reminder as this has not been catered for yet.*/
+		log.debug("Entries: "+this.getAuthEntries().size()+", total in buckets: "+testCount);
+
+		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
+
+
+		/* now construct the GraphModel */
+		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+		gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
+		for (Group group : groups){
+			gmodel.addGroupLabel(group.getGroupName());
+			List<Double> values = new ArrayList();
+			Double valueDouble = new Double(group.getFrequency());
 			values.add(valueDouble);
 			gmodel.addGroupValue(values);
 		}
