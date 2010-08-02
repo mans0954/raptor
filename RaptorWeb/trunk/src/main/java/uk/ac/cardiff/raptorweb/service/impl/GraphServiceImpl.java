@@ -63,7 +63,7 @@ public class GraphServiceImpl implements GraphService{
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
 		model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
 		model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
-		model.setGraphType("verticalBar");
+		model.setGraphType("horizontalBar");
 
 	}
 

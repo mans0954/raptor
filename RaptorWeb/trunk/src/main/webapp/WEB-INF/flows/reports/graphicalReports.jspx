@@ -19,95 +19,111 @@
 						<tr:panelHeader text="Authentication" />
 
 
-						<br/>
+						<br />
 
 						<tr:panelFormLayout rows="6" labelWidth="5%">
-							<tr:table value="#{graphService.statisticalUnits}" bandingInterval="2" banding="row" var="unit" width="95%">
-							 <f:facet name="header">
-     							 <tr:outputText value="#{graphService.currentlyAttached.serviceEndpoint}"/>
-   							 </f:facet>
+							<tr:table value="#{graphService.statisticalUnits}"
+								bandingInterval="2" banding="row" var="unit" width="95%">
+								<f:facet name="header">
+									<tr:outputText
+										value="#{graphService.currentlyAttached.serviceEndpoint}" />
+								</f:facet>
 
-							<tr:column >
-							<f:facet name="header">
-     							 <tr:outputText value="Statistical Unit"/>
-   							 </f:facet>
-							<tr:commandLink text="#{unit.statisticalUnitName}" action="invokeStatisticalUnit">
-									<f:setPropertyActionListener value="#{unit.statisticalUnitName}"
-									target="#{graphmodel.selectedStatisticalUnit}" />
-								</tr:commandLink>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="Statistical Unit" />
+									</f:facet>
+									<tr:commandLink text="#{unit.statisticalUnitName}"
+										action="invokeStatisticalUnit">
+										<f:setPropertyActionListener
+											value="#{unit.statisticalUnitName}"
+											target="#{graphmodel.selectedStatisticalUnit}" />
+									</tr:commandLink>
 
-							</tr:column>
-							<tr:column >
-							<f:facet name="header">
-     							 <tr:outputText value="Method Name"/>
-   							 </f:facet>
-								<tr:outputText value="#{unit.methodName}"/>
-							</tr:column>
-							<tr:column >
-							<f:facet name="header">
-     							 <tr:outputText value="Operates On"/>
-   							 </f:facet>
-								<tr:outputText value="#{unit.field}"/>
-							</tr:column>
-							<tr:column >
-
-							<f:facet name="header">
-     							 <tr:outputText value="Parameters"/>
-   							 </f:facet>
-								<tr:outputText value="#{unit.methodParams}"/>
 								</tr:column>
-						</tr:table>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="Method Name" />
+									</f:facet>
+									<tr:outputText value="#{unit.methodName}" />
+								</tr:column>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="Operates On" />
+									</f:facet>
+									<tr:outputText value="#{unit.field}" />
+								</tr:column>
+								<tr:column>
+
+									<f:facet name="header">
+										<tr:outputText value="Parameters" />
+									</f:facet>
+									<tr:outputText value="#{unit.methodParams}" />
+								</tr:column>
+							</tr:table>
 						</tr:panelFormLayout>
 
 						<tr:panelHeader text="Graphical Representation" />
 						<tr:panelFormLayout rows="6" labelWidth="5%">
-						<br/>
-						<tr:panelGroupLayout layout="horizontal">
+							<br />
+							<tr:panelGroupLayout layout="horizontal">
 
-						<!--  verticalBar, horizontalBar, stackedVerticalBar, stackedHorizontalBar, pie, area, stackedArea, line, barLine, XYLine,
+								<!--  verticalBar, horizontalBar, stackedVerticalBar, stackedHorizontalBar, pie, area, stackedArea, line, barLine, XYLine,
 						scatterPlot, radar, radarArea, funnel, circularGauge, semiCircularGauge -->
-						<tr:selectOneChoice id="chartTypeSelector" value="#{graphmodel.graphType}" autoSubmit="true" partialSubmit="true" rendered="#{not empty graphmodel.currentGraph}">
-  							<f:selectItem itemLabel="verticalBar" itemValue="verticalBar"/>
-  							<f:selectItem itemLabel="horizontalBar" itemValue="horizontalBar"/>
-  							<f:selectItem itemLabel="stackedVerticalBar" itemValue="stackedVerticalBar"/>
-  							<f:selectItem itemLabel="pie" itemValue="pie"/>
-  							<f:selectItem itemLabel="area" itemValue="area"/>
-  							<f:selectItem itemLabel="stackedArea" itemValue="stackedArea"/>
-  							<f:selectItem itemLabel="line" itemValue="line"/>
-  							<f:selectItem itemLabel="barLine" itemValue="barLine"/>
-  							<f:selectItem itemLabel="XYLine" itemValue="XYLine"/>
-  							<f:selectItem itemLabel="radar" itemValue="radar"/>
-  							<f:selectItem itemLabel="radarArea" itemValue="radarArea"/>
-  							<f:selectItem itemLabel="funnel" itemValue="funnel"/>
-  							<f:selectItem itemLabel="circularGauge" itemValue="circularGauge"/>
-  							<f:selectItem itemLabel="semiCircularGauge" itemValue="semiCircularGauge"/>
+								<tr:selectOneChoice id="chartTypeSelector"
+									value="#{graphmodel.graphType}" autoSubmit="true"
+									partialSubmit="true"
+									rendered="#{not empty graphmodel.currentGraph}">
+									<f:selectItem itemLabel="verticalBar" itemValue="verticalBar" />
+									<f:selectItem itemLabel="horizontalBar"
+										itemValue="horizontalBar" />
+									<f:selectItem itemLabel="stackedVerticalBar"
+										itemValue="stackedVerticalBar" />
+									<f:selectItem itemLabel="pie" itemValue="pie" />
+									<f:selectItem itemLabel="area" itemValue="area" />
+									<f:selectItem itemLabel="stackedArea" itemValue="stackedArea" />
+									<f:selectItem itemLabel="line" itemValue="line" />
+									<f:selectItem itemLabel="barLine" itemValue="barLine" />
+									<f:selectItem itemLabel="XYLine" itemValue="XYLine" />
+									<f:selectItem itemLabel="radar" itemValue="radar" />
+									<f:selectItem itemLabel="radarArea" itemValue="radarArea" />
 
-						</tr:selectOneChoice>
-
+								</tr:selectOneChoice>
+								<h:outputText value="  " />
+								<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
+            						<h:outputText value=" New Window" />
+        						</h:outputLink>
 						</tr:panelGroupLayout>
 
-						<tr:chart id="chart" verticalMajorSections="8" value="#{graphmodel.currentGraph}" rendered="#{not empty graphmodel.currentGraph}"
-         					 inlineStyle="width:95%; height:500px;" type="#{graphmodel.graphType}" partialTriggers="changeChartTypeButton, chartTypeSelector"
-         					 perspective="true"/>
-         					 <br/>
-						<tr:table value="#{graphmodel.currentTableGraph.rows}" bandingInterval="2" banding="row" var="row" width="95%" rendered="#{not empty graphmodel.currentTableGraph}">
+							<tr:chart id="chart" verticalMajorSections="8"
+								value="#{graphmodel.currentGraph}"
+								rendered="#{not empty graphmodel.currentGraph}"
+								inlineStyle="width:95%; height:500px;"
+								type="#{graphmodel.graphType}"
+								partialTriggers="changeChartTypeButton, chartTypeSelector"
+								perspective="true" />
+							<br />
+							<tr:table value="#{graphmodel.currentTableGraph.rows}"
+								bandingInterval="2" banding="row" var="row" width="95%"
+								rendered="#{not empty graphmodel.currentTableGraph}">
 
-							<tr:column >
-							<f:facet name="header">
-     							 <tr:outputText value="Series"/>
-   							 </f:facet>
-							 <tr:outputText value="#{row.series}"> </tr:outputText>
-							</tr:column>
-							<tr:column align="center" >
-							<f:facet name="header">
-     							 <tr:outputText value="Value"/>
-   							 </f:facet>
-								<tr:outputText value="#{row.value}"/>
-							</tr:column>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="Series" />
+									</f:facet>
+									<tr:outputText value="#{row.series}">
+									</tr:outputText>
+								</tr:column>
+								<tr:column align="center">
+									<f:facet name="header">
+										<tr:outputText value="Value" />
+									</f:facet>
+									<tr:outputText value="#{row.value}" />
+								</tr:column>
 
-						</tr:table>
-						<br/>
-         			</tr:panelFormLayout>
+							</tr:table>
+							<br />
+						</tr:panelFormLayout>
 					</tr:showDetailItem>
 
 
