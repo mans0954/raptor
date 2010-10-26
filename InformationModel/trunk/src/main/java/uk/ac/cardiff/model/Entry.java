@@ -30,6 +30,8 @@ public class Entry {
     private DateTime eventTime;
     private String requestHost;
     private String serverHost;
+    private String requestHostFriendlyName;
+    private String serverHostFriendlyName;
 
     public void setRequestHost(String requestHost) {
 	this.requestHost = requestHost;
@@ -86,4 +88,20 @@ public class Entry {
 	eventTime = new DateTime(date.getTime());
 
     }
+
+	public void setRequestHostFriendlyName(String requestHostFriendlyName) {
+		this.requestHostFriendlyName = requestHostFriendlyName;
+	}
+
+	public String getRequestHostFriendlyName() {
+		return requestHostFriendlyName;
+	}
+
+	public void setServerHostFriendlyName(String serverHostFriendlyName) {
+		this.serverHostFriendlyName = serverHostFriendlyName;
+	}
+
+	public String getServerHostFriendlyName() {
+		return serverHostFriendlyName;
+	}
 }
