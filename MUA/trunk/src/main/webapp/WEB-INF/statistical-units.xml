@@ -4,29 +4,59 @@
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<!-- ALL statistical units defined must be added to the registrar of statistical units -->
 	<bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler">
 		<property name ="statisticalUnits">
 			<list>
 				<ref bean="authTimeBuckets" />
 				<ref bean="authTimeBucketsLargeInterval" />
 				<ref bean="groupBy" />
+				<ref bean="groupByNameFormatted"/>
+				<ref bean="authTimeBucketsCount"/>
 			</list>
 		</property>
 	</bean>
 
+
+	<!--  actual definitions of statistical units used to process the data within the MUA
+	This includes:
+		unitName - a text description of the statistic used for reference within the web UI
+		field - the name of the entry field that the statistic operates over
+		methodName - the name of the internal statistical method that you invoke (a list of these and their parameters is provided in statistics.html)
+		startTime - defines the temporal extent over which the statistic is invoked (if no start time is used, the starttime of the first entry is used instead)
+		endTime - defines the temporal extent over which the statistics is invoked (if no end time is used, the endtime of the last entry is used instead)
+		methodParams - the parameters you pass into the methodName (see statistics.html for a list of these methods and their parameters)
+		-->
+
+
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>authTimeBuckets</value></property>
+		<property name="unitName"><value>authentication events</value></property>
 		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntryPerInterval</value></property>
+		<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
+		<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
 		<property name="methodParams">
 			<list>
-				<value>7200000</value>
+				<value>300000</value>
+			</list>
+		</property>
+	</bean>
+
+		<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>authentication events over time</value></property>
+		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>countEntry</value></property>
+		<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
+		<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
+		<property name="methodParams">
+			<list>
+				<value>13</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean id="authTimeBucketsLargeInterval" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>authTimeBucketsLarge</value></property>
+		<property name="unitName"><value>authentication events large</value></property>
 		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntryPerInterval</value></property>
 		<property name="methodParams">
@@ -37,7 +67,7 @@
 	</bean>
 
 	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>groupBy</value></property>
+		<property name="unitName"><value>group by entity ID</value></property>
 		<property name="field"><value>requestHost</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>groupByFrequency</value></property>
 		<property name="methodParams">
@@ -46,5 +76,30 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>group by SAML Entity</value></property>
+		<property name="field"><value>requestHostFriendlyName</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>groupByFrequency</value></property>
+		<property name="seriesLabel"><value>Number of authentications per service provider</value></property>
+		<property name="methodParams">
+			<list>
+				<value>requestHostFriendlyName</value>
+			</list>
+		</property>
+		<property name="preprocessor"><ref bean="ShibbolethMetadataNameFormatter"></ref></property>
+	</bean>
+
+
+	<!--  Support statistical workflows -->
+
+	<bean id="SessionLinker" class = "uk.ac.cardiff.raptormua.engine.statistics.SessionLinker"/>
+
+	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.ShibbolethMetadataNameFormatter">
+		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
+		<property name="mapFieldName"><value>requestHost</value></property>
+		<property name="mapToFieldName"><value>requestHostFriendlyName</value></property>
+	</bean>
+
 
 </beans>

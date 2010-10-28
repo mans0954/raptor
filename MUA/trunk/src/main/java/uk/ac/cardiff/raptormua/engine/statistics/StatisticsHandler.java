@@ -35,6 +35,7 @@ public class StatisticsHandler {
 	public AggregatorGraphModel peformStatistic(String statisticName) {
 		for (Statistic statistic : statisticalUnits){
 			if (statistic.getUnitName().equals(statisticName)){
+				//on set entries, also perform preprocessing
 				statistic.setEntries(entries);
 				return invoke(statistic);
 			}
@@ -68,6 +69,7 @@ public class StatisticsHandler {
 		    for (int i=0; i < params.length;i++){
 		    	paramC[i] = params[i].getClass();
 		    }
+		    log.debug("Calling method: "+fieldname+ " on "+object);
 		    Method statisticalMethod = id.getMethod(fieldname, paramC);
 		    //log.debug("Trying to Set :"+setter);
 		    AggregatorGraphModel gmodel = (AggregatorGraphModel) statisticalMethod.invoke(object, params);

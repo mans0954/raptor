@@ -87,14 +87,14 @@ public class ReflectionHelper {
 	public static void setValueOnObject(String fieldname, Object param, Object object) {
 		try {
 			Class id = object.getClass();
-			Method setter = id.getMethod(fieldname, new Class[] { param
-					.getClass() });
+			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldname);
+			Method setter = id.getMethod(fieldAsMethod, new Class[] { param.getClass() });
 			// log.debug("Trying to Set :"+param)
 			setter.invoke(object, new Object[] { param });
 		} catch (Throwable e) {
 			log.error("Field name '" + fieldname
-					+ "' does not match internal model attribute");
-			e.printStackTrace();
+					+ "' does not match internal model attribute, or parameters are wrong");
+			//e.printStackTrace();
 			// System.exit(1);
 
 		}

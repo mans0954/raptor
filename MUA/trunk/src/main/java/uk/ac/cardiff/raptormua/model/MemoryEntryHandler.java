@@ -15,9 +15,11 @@ import uk.ac.cardiff.model.Entry;
  *
  */
 public class MemoryEntryHandler implements EntryHandler{
+
+	/* class level logger */
     static Logger log = Logger.getLogger(MemoryEntryHandler.class);
 
-	/* list of all entries stored by this EntryHanlder */
+	/* list of all entries stored by this EntryHandler */
 	List<Entry> entries;
 
 	public MemoryEntryHandler(){
