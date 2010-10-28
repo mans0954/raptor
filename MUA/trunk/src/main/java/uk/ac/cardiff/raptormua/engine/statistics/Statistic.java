@@ -3,10 +3,15 @@
  */
 package uk.ac.cardiff.raptormua.engine.statistics;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
  * @author philsmart
@@ -14,14 +19,35 @@ import uk.ac.cardiff.model.Entry;
  */
 public class Statistic {
 
+	static Logger log = Logger.getLogger(Statistic.class);
+
 	private List<Entry> entries;
 	private String field;
 	private String unitName;
 	private String methodName;
 	private List<String> methodParams;
 
+	/** add a preprocessing module to the statistical method */
+	private StatisticsPreProcessing preprocessor;
+
+
+	/**
+	 * <p> Always creates a copy of the entries, as the statisical method is
+	 * not safe, in that it may alter the state of the original data i.e. a
+	 * preprocessing method </p>
+	 *
+	 * @param authEntries
+	 */
 	public void setEntries(List<Entry> authEntries) {
-		this.entries = authEntries;
+		ArrayList<Entry> entriesCopy = EntryClone.cloneEntries((ArrayList<Entry>) authEntries);
+		if (preprocessor!=null)
+			try {
+				log.info("Invoking statistical preprocessor "+preprocessor.getClass());
+				entriesCopy = (ArrayList<Entry>) preprocessor.preProcess(entriesCopy);
+			} catch (PreprocessorException e) {
+				log.error("Could not preprocess entries "+preprocessor.getClass());
+			}
+		this.entries = entriesCopy;
 	}
 
 	public List<Entry> getAuthEntries() {
@@ -59,6 +85,15 @@ public class Statistic {
 	public String getUnitName() {
 		return unitName;
 	}
+
+	public void setPreprocessor(StatisticsPreProcessing preprocessor) {
+		this.preprocessor = preprocessor;
+	}
+
+	public StatisticsPreProcessing getPreprocessor() {
+		return preprocessor;
+	}
+
 
 
 }

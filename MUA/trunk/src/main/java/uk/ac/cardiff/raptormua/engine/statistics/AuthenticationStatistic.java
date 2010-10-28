@@ -4,6 +4,7 @@
 package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -27,8 +28,27 @@ public class AuthenticationStatistic extends Statistic{
 	static Logger log = Logger.getLogger(AuthenticationStatistic.class);
 
 
+	/* The textual description of the series, as attached to the x-axis*/
+	private String seriesLabel;
 
+	/*the start time from which to produce the starts, defining the temporal extent
+	 * If a starttime and endtime is not given, the entire temporal extent of the data series will be used
+	 */
+	private DateTime startTime;
+
+	/*the end time from which to produce the starts, defining the temporal extent */
+	private DateTime endTime;
+
+
+	/**
+	 *
+	 * @param timeInterval
+	 * @return
+	 * @throws StatisticalUnitException
+	 */
 	public AggregatorGraphModel countEntryPerInterval(String timeInterval) throws StatisticalUnitException{
+
+
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
 		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
@@ -67,11 +87,21 @@ public class AuthenticationStatistic extends Statistic{
 			endOfEvenBuckets = buck.getEnd();
 		}
 
+		/* there may only be a reminder if the time frame specified is not big enough to fit the interval specified,
+		 * in this case the endOfEvenBuckets has not been set, and it needs setting to the current starttime.
+		 */
+		boolean hasOnlyReminder = false;
+		if (endOfEvenBuckets==null){
+			hasOnlyReminder=true;
+			endOfEvenBuckets = start;
+		}
+
 		if (reminder >0){
 			/* now do something with the reminder, create a bucket from the last entry, to the maximum temporal extent of all entries */
 			Bucket reminderBucket = new Bucket();
 			reminderBucket.setStart(endOfEvenBuckets);
-			reminderBucket.setEnd(end);
+			if (!hasOnlyReminder)reminderBucket.setEnd(end);
+			else reminderBucket.setEnd(new DateTime(start.getMillis()+end.getMillis()));
 			buckets[buckets.length-1] = reminderBucket;
 		}
 
@@ -89,7 +119,8 @@ public class AuthenticationStatistic extends Statistic{
 			testCount +=bucket.getFrequency();
 			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getFrequency());
 		}
-		/* test count should equal the number of entries unless there is a reminder as this has not been catered for yet.*/
+		/* test count should equal the number of entries unless there is a reminder, or the specified
+		 * start time and endtime does not completely contain the entries.*/
 		log.debug("Entries: "+this.getAuthEntries().size()+", total in buckets: "+testCount);
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
@@ -113,7 +144,114 @@ public class AuthenticationStatistic extends Statistic{
 
 	}
 
+	/**
+	 *
+	 * @param timeInterval
+	 * @return
+	 * @throws StatisticalUnitException
+	 */
+	public AggregatorGraphModel countEntry(String numberOfIntervalsString) throws StatisticalUnitException{
+
+		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
+		log.debug("Performing countEntry Statistical Operation");
+
+		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
+		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
+
+		/* stop processing if there are no valid entries */
+		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
+			log.error("Not enough entries to perform statistic countEntryPerInterval");
+			return null;
+		}
+
+		/* divide the temporal extent into evenly sized buckets*/
+		DateTime start = startingTime();
+		DateTime end = endingTime();
+
+		long difference = end.getMillis() - start.getMillis();
+		log.debug("There is "+difference+"ms difference between start and end entries");
+		int timeIntervalsInMs = (int) (difference / numberOfIntervals);
+		long reminder = difference % numberOfIntervals;
+		log.debug("There are "+numberOfIntervals+" buckets, with reminder "+reminder+"ms");
+
+
+		/* now create that many buckets of length timeIntervalInt*/
+		Bucket[] buckets = null;
+		if (reminder >0)buckets = new Bucket[numberOfIntervals+1]; //add 1 for the reminder
+		else buckets = new Bucket[numberOfIntervals];
+
+		buckets[0] = new Bucket();
+		buckets[0].setStart(start);
+		buckets[0].setEnd(new DateTime(start.getMillis()+timeIntervalsInMs));
+		DateTime endOfEvenBuckets = null;
+		for (int i=1 ; i < numberOfIntervals; i++){
+			Bucket buck = new Bucket();
+			buck.setStart(buckets[i-1].getEnd());
+			buck.setEnd(new DateTime(buckets[i-1].getEnd().getMillis()+timeIntervalsInMs));
+			buckets[i] = buck;
+			endOfEvenBuckets = buck.getEnd();
+		}
+
+		/* there may only be a reminder if the time frame specified is not big enough to fit the interval specified,
+		 * in this case the endOfEvenBuckets has not been set, and it needs setting to the current starttime.
+		 */
+		boolean hasOnlyReminder = false;
+		if (endOfEvenBuckets==null){
+			hasOnlyReminder=true;
+			endOfEvenBuckets = start;
+		}
+
+		if (reminder >0){
+			/* now do something with the reminder, create a bucket from the last entry, to the maximum temporal extent of all entries */
+			Bucket reminderBucket = new Bucket();
+			reminderBucket.setStart(endOfEvenBuckets);
+			if (!hasOnlyReminder)reminderBucket.setEnd(end);
+			else reminderBucket.setEnd(new DateTime(start.getMillis()+end.getMillis()));
+			buckets[buckets.length-1] = reminderBucket;
+		}
+
+
+		for (Entry entry : this.getAuthEntries()){
+
+			for (int i=0 ; i < buckets.length; i++){
+				if (buckets[i].isInside(entry.getEventTime()))buckets[i].increment();
+			}
+		}
+
+
+		int testCount = 0;
+		for (Bucket bucket : buckets){
+			testCount +=bucket.getFrequency();
+			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getFrequency());
+		}
+		/* test count should equal the number of entries unless there is a reminder, or the specified
+		 * start time and endtime does not completely contain the entries.*/
+		log.debug("Entries: "+this.getAuthEntries().size()+", total in buckets: "+testCount);
+
+		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
+
+
+
+		/* now construct the GraphModel */
+		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+		gmodel.addSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
+		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+		for (Bucket bucket : buckets){
+			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
+			List<Double> values = new ArrayList();
+			Double valueDouble = new Double(bucket.getFrequency());
+			values.add(valueDouble);
+			gmodel.addGroupValue(values);
+		}
+
+		return gmodel;
+
+	}
+
 	public AggregatorGraphModel groupByFrequency(String groupByField) throws StatisticalUnitException{
+
+
 		log.debug("Performing groupByFrequency Statistical Operation");
 
 		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
@@ -162,7 +300,14 @@ public class AuthenticationStatistic extends Statistic{
 
 		/* now construct the GraphModel */
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-		gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
+
+		//add the series label or if none speicifed, add a defualt
+		if (seriesLabel!=null)
+			gmodel.addSeriesLabel(seriesLabel);
+		else
+			gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
+
+
 		for (Group group : groups){
 			gmodel.addGroupLabel(group.getGroupName());
 			List<Double> values = new ArrayList();
@@ -176,6 +321,7 @@ public class AuthenticationStatistic extends Statistic{
 	}
 
 	private DateTime startingTime(){
+		if (startTime!=null)return startTime;
 		DateTime start=null;
 		for (Entry entry : this.getAuthEntries() ){
 			if (start ==null)start = entry.getEventTime();
@@ -185,6 +331,7 @@ public class AuthenticationStatistic extends Statistic{
 	}
 
 	private DateTime endingTime(){
+		if (endTime!=null)return endTime;
 		DateTime end=null;
 		for (Entry entry : this.getAuthEntries() ){
 			if (end ==null)end = entry.getEventTime();
@@ -194,7 +341,60 @@ public class AuthenticationStatistic extends Statistic{
 		return end;
 	}
 
+	public void setSeriesLabel(String seriesLabel) {
+		this.seriesLabel = seriesLabel;
+	}
 
+	public String getSeriesLabel() {
+		return seriesLabel;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = formatDate(startTime, false);
+	}
+
+	public String getStartTime() {
+		return startTime.toString();
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = formatDate(endTime,true);
+	}
+
+	public String getEndTime() {
+		return endTime.toString();
+	}
+
+	/**
+	 * <p> </p>
+	 * @param date
+	 * @param isEndTime - if is endTime and only ddMMyyyy is given, then the endTime should be 23.59 as opposed to 00.00 as this is the end of the day
+	 * @return
+	 */
+	private DateTime formatDate(String date, boolean isEndTime){
+		/* this is not a nice hack, please tidy*/
+		log.debug("Date format being parsed "+date+" with "+date.length()+" characters");
+		if (date.length()==8){
+			//assume ddMMyyy
+			 String format = "ddMMyyyy";
+			 DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
+			 DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
+			 if (isEndTime){
+				 dt = new DateTime(dt.getMillis()+86340000); //where 86340000 is 23.59 hours
+			 }
+			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
+			 return dt;
+		}
+		else if(date.length()==15){
+			//assume yyyyMMdd'T'HHmmss
+			String format = "yyyyMMdd'T'HHmmss";
+			 DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
+			 DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
+			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
+			return dt;
+		}
+		return new DateTime();
+	}
 
 
 

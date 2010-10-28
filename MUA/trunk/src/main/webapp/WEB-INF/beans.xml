@@ -55,9 +55,6 @@
 
 	<!--  DONE -->
 
-
-
-
 	<bean id="MUAProcess" class="uk.ac.cardiff.raptormua.service.impl.MUAProcessImpl">
 		<property name="engine">
 			<ref bean="MUAEngine"></ref>
