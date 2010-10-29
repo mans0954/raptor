@@ -23,7 +23,7 @@ public class ICARegistry {
     }
 
     public void setICAEntries(List<ICAEntry> ICAEntries) {
-	System.out.println("Setting ICAs");
+	log.info("Setting ICAs");
 	for (ICAEntry entry : ICAEntries)
 	    log.info("Registering: " + entry.getClass());
 	this.ICAEntries = ICAEntries;
