@@ -102,9 +102,9 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessing{
 	 * @throws MetadataProviderException
 	 */
 	private String getOrganisationName(String entityID) throws MetadataProviderException, NullPointerException{
-		log.debug("Getting organisationName for "+entityID);
+		//log.debug("Getting organisationName for "+entityID);
 		OrganizationName org = (OrganizationName)provider.getEntityDescriptor(entityID).getOrganization().getOrganizationNames().get(0);
-		log.debug("Found organisationName '"+org.getName().getLocalString()+"'");
+		//log.debug("Found organisationName '"+org.getName().getLocalString()+"'");
 		return org.getName().getLocalString();
 	}
 
