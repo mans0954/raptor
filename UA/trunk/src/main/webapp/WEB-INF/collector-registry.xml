@@ -9,8 +9,11 @@
 	<bean id="icaRegistry" class="uk.ac.cardiff.RaptorUA.engine.ICARegistry">
 		<property name ="ICAEntries">
 			<list>
-				<bean id="cardiffShibICA" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:8081/ICA/Collector</value></property>
+				<bean id="cardiffShibICA-idp1" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:7080/ICA/Collector</value></property>
+				</bean>
+				<bean id="cardiffShibICA-idp2" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:6080/ICA/Collector</value></property>
 				</bean>
 			</list>
 		</property>
