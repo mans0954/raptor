@@ -13,6 +13,7 @@ import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
+import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.service.GraphService;
 
 /**
@@ -51,6 +52,23 @@ public class GraphServiceImpl implements GraphService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void generateExcelReport(GraphModel model, ReportModel report){
+		webEngine.generateReport(model,"excel", report);
+	}
+
+	public void generateCSVReport(GraphModel model, ReportModel report){
+		webEngine.generateReport(model,"csv", report);
+	}
+
+	/**
+	 * loads the reports from the download directory into the graphmodel
+	 * @param model
+	 */
+	public void loadSavedReports(ReportModel model){
+		webEngine.loadSavedReports(model);
+	}
+
 
 	/*
 	 * (non-Javadoc)

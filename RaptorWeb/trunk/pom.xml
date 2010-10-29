@@ -401,6 +401,11 @@
 			<version>1.8.0</version>
 		</dependency>
 
+        <dependency>
+        	<groupId>jexcelapi</groupId>
+        	<artifactId>jxl</artifactId>
+        	<version>2.6</version>
+        </dependency>
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>

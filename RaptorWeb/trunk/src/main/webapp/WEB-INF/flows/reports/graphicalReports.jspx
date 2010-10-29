@@ -16,7 +16,7 @@
 			<tr:form id="graphForm">
 				<tr:panelTabbed position="above">
 					<tr:showDetailItem text="Authentication Graphs">
-						<tr:panelHeader text="Authentication" />
+						<tr:panelHeader text="Available Authentication Statistics" />
 
 
 						<br />
@@ -31,7 +31,7 @@
 
 								<tr:column>
 									<f:facet name="header">
-										<tr:outputText value="Statistical Unit" />
+										<tr:outputText value="Statistical Unit Name" />
 									</f:facet>
 									<tr:commandLink text="#{unit.statisticalUnitName}"
 										action="invokeStatisticalUnit">
@@ -43,13 +43,26 @@
 								</tr:column>
 								<tr:column>
 									<f:facet name="header">
-										<tr:outputText value="Method Name" />
+										<tr:outputText value="Internal Method" />
 									</f:facet>
 									<tr:outputText value="#{unit.methodName}" />
 								</tr:column>
 								<tr:column>
 									<f:facet name="header">
-										<tr:outputText value="Operates On" />
+										<tr:outputText value="Start Time" />
+									</f:facet>
+									<tr:outputText value="#{unit.startTime}" />
+
+								</tr:column>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="End Time" />
+									</f:facet>
+									<tr:outputText value="#{unit.endTime}" />
+								</tr:column>
+								<tr:column>
+									<f:facet name="header">
+										<tr:outputText value="Field Name" />
 									</f:facet>
 									<tr:outputText value="#{unit.field}" />
 								</tr:column>
@@ -63,8 +76,8 @@
 							</tr:table>
 						</tr:panelFormLayout>
 
-						<tr:panelHeader text="Graphical Representation" />
-						<tr:panelFormLayout rows="6" labelWidth="5%">
+						<tr:panelHeader text="Report" />
+						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<br />
 							<tr:panelGroupLayout layout="horizontal">
 
@@ -90,19 +103,27 @@
 
 								</tr:selectOneChoice>
 								<h:outputText value="  " />
-								<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
+								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
             						<h:outputText value=" New Window" />
         						</h:outputLink>
-						</tr:panelGroupLayout>
+						-->
+							</tr:panelGroupLayout>
 
 							<tr:chart id="chart" verticalMajorSections="8"
 								value="#{graphmodel.currentGraph}"
 								rendered="#{not empty graphmodel.currentGraph}"
-								inlineStyle="width:95%; height:500px;"
+								inlineStyle="width:95%; height:700px;"
 								type="#{graphmodel.graphType}"
-								partialTriggers="changeChartTypeButton, chartTypeSelector"
-								perspective="true" />
+								partialTriggers="chartTypeSelector" perspective="true" />
 							<br />
+
+						</tr:panelFormLayout>
+
+
+						<!-- RESULTS TABLE AND DOWNLOAD OPTIONS -->
+						<!-- ________________________________ -->
+
+						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<tr:table value="#{graphmodel.currentTableGraph.rows}"
 								bandingInterval="2" banding="row" var="row" width="95%"
 								rendered="#{not empty graphmodel.currentTableGraph}">
@@ -123,7 +144,70 @@
 
 							</tr:table>
 							<br />
+
+							<tr:panelBox text="Download Options" background="light"
+								inlineStyle="width: 95%; height:100%;"
+								rendered="#{not empty graphmodel.currentTableGraph}"
+								partialTriggers="generateExcelReport">
+
+								<tr:panelBorderLayout>
+
+
+
+									<tr:panelGroupLayout id="reportTypePanel" layout="horizontal">
+										<tr:commandLink id="generateExcelReport"
+											action="generateExcelReport">
+											<!-- need to get the partialSubmit="true"> working for this action -->
+											<h:graphicImage value="/image/excel-icon.gif"
+												style="border:0">
+											</h:graphicImage>
+
+										</tr:commandLink>
+
+										<tr:commandLink action="generateCSVReport">
+											<h:graphicImage value="/image/csv-icon.png" style="border:0">
+											</h:graphicImage>
+										</tr:commandLink>
+									</tr:panelGroupLayout>
+
+
+
+									<tr:table value="#{reportmodel.reportsForDownload}"
+										bandingInterval="2" banding="row" var="row" width="95%"
+										rendered="#{not empty graphmodel.currentTableGraph}"
+										partialTriggers=":generateExcelReport">
+
+										<tr:column>
+											<f:facet name="header">
+												<tr:outputText value="Report Name" />
+											</f:facet>
+											<tr:outputText value="#{row.friendlyName} ">
+
+											</tr:outputText>
+										</tr:column>
+										<tr:column align="center">
+											<f:facet name="header">
+												<tr:outputText value="Download" />
+											</f:facet>
+											<a href="#{row.downloadPath}">download</a>
+										</tr:column>
+										<tr:column align="center">
+											<f:facet name="header">
+												<tr:outputText value="Remove" />
+											</f:facet>
+											<tr:outputText value="x" />
+										</tr:column>
+									</tr:table>
+
+								</tr:panelBorderLayout>
+							</tr:panelBox>
 						</tr:panelFormLayout>
+
+
+
+
+						<!-- DONE Results table and download options -->
+
 					</tr:showDetailItem>
 
 

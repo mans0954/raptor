@@ -19,6 +19,7 @@
 
 	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
 		<property name="registry"><ref bean="muaRegistry"></ref></property>
+		<property name="reportHandler"><ref bean="reportHandler"></ref></property>
 	</bean>
 
 	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
@@ -28,6 +29,24 @@
 	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
 	</bean>
+
+	<!--  SET UP the report generators -->
+	<bean name="reportHandler" class="uk.ac.cardiff.raptorweb.engine.reports.ReportHandler">
+		<property name ="reportConstructors">
+			<list>
+				<bean name="excelreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.ExcelReportGenerator">
+					<property name="saveDirectory"><value>/downloads/</value></property>
+					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+				</bean>
+				<bean name="csvreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.CSVReportGenerator">
+					<property name="saveDirectory"><value>/downloads/</value></property>
+					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
 
 
 
