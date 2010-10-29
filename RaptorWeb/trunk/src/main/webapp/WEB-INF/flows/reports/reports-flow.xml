@@ -5,6 +5,7 @@
 
  <var name="common" class="uk.ac.cardiff.raptorweb.model.CommonModel" />
 
+
  <view-state id="startReport" view ="startReport.jspx">
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
@@ -13,12 +14,26 @@
 
  <view-state id="graphicalReports" view ="graphicalReports.jspx">
  	<!-- the model for storing information about selected graphical components (could be setup in the model attribute of the view-state element) -->
- 	<var name="graphmodel" class="uk.ac.cardiff.raptorweb.model.GraphModel" />
- 	
+	<var name="graphmodel" class="uk.ac.cardiff.raptorweb.model.GraphModel" />
+	<var name="reportmodel" class="uk.ac.cardiff.raptorweb.model.ReportModel" />
+
+	<!--  we need to load these specific to a person and a role -->
+	<on-entry>
+            <evaluate expression="graphService.loadSavedReports(reportmodel)"/>
+    </on-entry>
+
  	<transition on="invokeStatisticalUnit">
  		<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)"/>
  	</transition>
- 	
+
+ 	 <transition on="generateExcelReport">
+ 		<evaluate expression="graphService.generateExcelReport(graphmodel,reportmodel)"/>
+ 	</transition>
+
+ 	<transition on="generateCSVReport">
+ 		<evaluate expression="graphService.generateCSVReport(graphmodel,reportmodel)"/>
+ 	</transition>
+
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
 

@@ -9,8 +9,12 @@ import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
+import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
+import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
+import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
 
 /**
@@ -21,6 +25,7 @@ public class RaptorWebEngine {
 	static Logger log = Logger.getLogger(RaptorWebEngine.class);
 
 	private MUARegistry registry;
+	private ReportHandler reportHandler;
 
 	/**
 	 * @return
@@ -73,6 +78,30 @@ public class RaptorWebEngine {
 		return gmodel;
 
 	}
+
+	/**
+	 * @param currentTableGraph
+	 */
+	public void generateReport(GraphModel model, String reportType, ReportModel report) {
+		reportHandler.generateReport(model, reportType,report);
+
+	}
+
+	public void setReportHandler(ReportHandler reportHandler) {
+		this.reportHandler = reportHandler;
+	}
+
+	public ReportHandler getReportHandler() {
+		return reportHandler;
+	}
+
+
+	public void loadSavedReports(ReportModel report) {
+		reportHandler.loadSavedReports(report);
+
+	}
+
+
 
 
 

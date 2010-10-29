@@ -1,6 +1,9 @@
 package uk.ac.cardiff.raptorweb.model;
 
+import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
@@ -16,12 +19,16 @@ public class GraphModel implements Serializable{
 	private String graphType;
 	private RaptorTableChartModel currentTableGraph;
 
+
+
 	/**
 	 * @param selectedStatisticalUnit the selectedStatisticalUnit to set
 	 */
 	public void setSelectedStatisticalUnit(String selectedStatisticalUnit) {
 		this.selectedStatisticalUnit = selectedStatisticalUnit;
 	}
+
+
 
 	/**
 	 * @return the selectedStatisticalUnit
@@ -59,6 +66,9 @@ public class GraphModel implements Serializable{
 	public RaptorTableChartModel getCurrentTableGraph() {
 		return currentTableGraph;
 	}
+
+
+
 
 
 }
