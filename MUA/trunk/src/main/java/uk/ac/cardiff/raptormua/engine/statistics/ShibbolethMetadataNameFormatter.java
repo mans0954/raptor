@@ -63,7 +63,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessing{
 	@Override
 	public List<Entry> preProcess(List<Entry> entries) throws PreprocessorException{
 		ArrayList<Entry> processedList = new ArrayList<Entry>();
-
+		log.debug("Entries into preprocessor: "+entries.size());
 		for (Entry entry : entries){
 			if (entry instanceof ShibbolethEntry){
 				ShibbolethEntry shibEntry = (ShibbolethEntry)entry;
@@ -74,8 +74,8 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessing{
 					try {
 						mapTo = getOrganisationName(resultAsString);
 					} catch (Exception e) {
-						//if the mapping fails, keep the original
-						processedList.add(entry);
+						//if the mapping fails, keep the original, so leave as original non mapped resultAsString
+						log.error("Failed to map "+resultAsString);
 					}
 					ReflectionHelper.setValueOnObject(getMapToFieldName(), mapTo, shibEntry);
 					processedList.add(shibEntry);
@@ -90,7 +90,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessing{
 			}
 
 		}
-
+		log.debug("Entries out of preprocessor: "+entries.size());
 		return processedList;
 	}
 
