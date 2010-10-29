@@ -23,10 +23,10 @@
 	<!--  List all the data access beans, used by the parser -->
 	<bean id="dataAccessRegister" class="main.uk.ac.cf.engine.DataAccessRegister">
 		<property name="authenticationModules">
-			<list>
+			<list><!--
 				<bean id="shibbolethAccessLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access-2010-10-24.idp1.log
 						</value>
 					</property>
 					<property name="format">
@@ -37,12 +37,12 @@
 					</property>
 				</bean>
 
-				<!--
+				--><!--
 					this entry parses the audit log, but only for AuthnRequest rows
 				-->
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-october.log
 						</value>
 					</property>
 					<property name="format">
