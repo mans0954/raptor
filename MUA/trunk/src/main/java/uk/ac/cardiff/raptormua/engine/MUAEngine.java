@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
@@ -98,6 +101,18 @@ public class MUAEngine {
 			information.setMethodName(entry.getMethodName());
 			information.setMethodParams(entry.getMethodParams());
 			information.setStatisticalUnitName(entry.getUnitName());
+
+			String format = "dd/MM/yyyy HH:mm:ss";
+			information.setDateFormat(format);
+			DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
+			if (entry.getStartTimeAsDate()!=null)
+				information.setStartTime(entry.getStartTimeAsDate().toString(dtf));
+			else
+				information.setStartTime("First Entry");
+			if (entry.getEndTimeAsDate()!=null)
+				information.setEndTime(entry.getEndTimeAsDate().toString(dtf));
+			else
+				information.setEndTime("Last Entry");
 			stats.add(information);
 		}
 		capabilities.setStatisticalServices(stats);

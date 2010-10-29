@@ -13,6 +13,8 @@
 				<ref bean="groupBy" />
 				<ref bean="groupByNameFormatted"/>
 				<ref bean="authTimeBucketsCount"/>
+				<ref bean="groupByProfile"/>
+				<ref bean="authTimeBucketsPerDay"/>
 			</list>
 		</property>
 	</bean>
@@ -30,7 +32,7 @@
 
 
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>authentication events</value></property>
+		<property name="unitName"><value>All Authentications In 5 minute Intervals</value></property>
 		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntryPerInterval</value></property>
 		<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
@@ -42,8 +44,8 @@
 		</property>
 	</bean>
 
-		<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>authentication events over time</value></property>
+	<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>All Authentications over time range</value></property>
 		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntry</value></property>
 		<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
@@ -56,18 +58,35 @@
 	</bean>
 
 	<bean id="authTimeBucketsLargeInterval" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>authentication events large</value></property>
+		<property name="unitName"><value>All Authentications In 60 minute Intervals</value></property>
 		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>countEntryPerInterval</value></property>
+		<property name="startTime"><value>20101010T000100</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
+		<property name="endTime"><value>20101010T235900</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
+
 		<property name="methodParams">
 			<list>
-				<value>10000000</value>
+				<value>3600000</value>
+			</list>
+		</property>
+	</bean>
+
+		<bean id="authTimeBucketsPerDay" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>All Authentications Per Day</value></property>
+		<property name="field"><value>eventTime</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>countEntryPerInterval</value></property>
+		<property name="startTime"><value>20101001T000100</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
+		<property name="endTime"><value>20101030T235900</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
+
+		<property name="methodParams">
+			<list>
+				<value>86400000</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>group by entity ID</value></property>
+		<property name="unitName"><value>SP Authentications by entityID</value></property>
 		<property name="field"><value>requestHost</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>groupByFrequency</value></property>
 		<property name="methodParams">
@@ -77,8 +96,19 @@
 		</property>
 	</bean>
 
+		<bean id="groupByProfile" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="unitName"><value>AuthnContext</value></property>
+		<property name="field"><value>authNMethod</value></property> <!-- NOT SURE IF THIS IS USED YET -->
+		<property name="methodName"><value>groupByFrequency</value></property>
+		<property name="methodParams">
+			<list>
+				<value>authNMethod</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
-		<property name="unitName"><value>group by SAML Entity</value></property>
+		<property name="unitName"><value>SP Authentications By Organisational Name</value></property>
 		<property name="field"><value>requestHostFriendlyName</value></property> <!-- NOT SURE IF THIS IS USED YET -->
 		<property name="methodName"><value>groupByFrequency</value></property>
 		<property name="seriesLabel"><value>Number of authentications per service provider</value></property>

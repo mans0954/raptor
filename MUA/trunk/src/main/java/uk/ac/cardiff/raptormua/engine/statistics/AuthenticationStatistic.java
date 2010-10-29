@@ -28,16 +28,6 @@ public class AuthenticationStatistic extends Statistic{
 	static Logger log = Logger.getLogger(AuthenticationStatistic.class);
 
 
-	/* The textual description of the series, as attached to the x-axis*/
-	private String seriesLabel;
-
-	/*the start time from which to produce the starts, defining the temporal extent
-	 * If a starttime and endtime is not given, the entire temporal extent of the data series will be used
-	 */
-	private DateTime startTime;
-
-	/*the end time from which to produce the starts, defining the temporal extent */
-	private DateTime endTime;
 
 
 	/**
@@ -302,8 +292,8 @@ public class AuthenticationStatistic extends Statistic{
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
 
 		//add the series label or if none speicifed, add a defualt
-		if (seriesLabel!=null)
-			gmodel.addSeriesLabel(seriesLabel);
+		if (getSeriesLabel()!=null)
+			gmodel.addSeriesLabel(getSeriesLabel());
 		else
 			gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
 
@@ -341,29 +331,7 @@ public class AuthenticationStatistic extends Statistic{
 		return end;
 	}
 
-	public void setSeriesLabel(String seriesLabel) {
-		this.seriesLabel = seriesLabel;
-	}
 
-	public String getSeriesLabel() {
-		return seriesLabel;
-	}
-
-	public void setStartTime(String startTime) {
-		this.startTime = formatDate(startTime, false);
-	}
-
-	public String getStartTime() {
-		return startTime.toString();
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = formatDate(endTime,true);
-	}
-
-	public String getEndTime() {
-		return endTime.toString();
-	}
 
 	/**
 	 * <p> </p>
