@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+         "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="uk.ac.cardiff.model.Entry" table="entry" dynamic-update="true" dynamic-insert="false">
+
+	<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="-1">
+			<generator class="native" >
+				<param name="sequence">entity_seq</param>
+    		</generator>
+	</id>
+
+ 	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="true" />
+	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="true" />
+	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="true" />
+	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="true" />
+	<property name="serverHostFriendlyName" type="string" update="true" insert="true"	column="serverHostFriendlyName"  not-null="true" />
+	</class>
+
+
+</hibernate-mapping>
