@@ -15,7 +15,7 @@
     	</generator>
 		</id>
 
- 	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true"	column="cn"  not-null="true" />
+ 	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="true" />
 	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="true" />
 	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="true" />
 	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="true" />
