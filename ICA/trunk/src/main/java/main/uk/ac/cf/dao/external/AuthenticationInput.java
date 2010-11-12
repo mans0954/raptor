@@ -23,7 +23,7 @@ public abstract class AuthenticationInput extends RawData{
 
 
     public List getAuthentications() {
-	return entryHandler.getEntries();
+	return getEntryHandler().getEntries();
 
     }
 

@@ -50,19 +50,29 @@ public class LogFileParser extends AuthenticationInput {
     private String logfile;
     private String entryType;
     private String[][] excludeEntries;
+    private int lastLineParsed;
+
+    public LogFileParser(){
+	lastLineParsed=0;
+    }
 
     public void parse() throws Exception {
 	System.out.println("parsing, low level message");
 	log.debug("parsing: " + logfile + " instance: " + this);
-	// Must use URL, as java.io does not work in a webapp
 
+
+
+	// Must use URL, as java.io does not work in a webapp
 	URL logfileURL = new URL(logfile);
 	URLConnection logfileconnection = logfileURL.openConnection();
 	BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
+	int lineCount=0;
 	String inputLine;
 	List<Entry> entries = new ArrayList();
 	while ((inputLine = in.readLine()) != null) {
 	    // log.debug(inputLine);
+	    lineCount++;
+
 	    StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
 	    tokenizer.setIgnoreEmptyTokens(false);
 	    ArrayList<String> allvalues = new ArrayList();
@@ -131,19 +141,31 @@ public class LogFileParser extends AuthenticationInput {
 		 * older than the current latest entry this should save heap
 		 * space during operation
 		 */
-
-		if (entryHandler.isNewerOrEqual(authE)){
+		boolean equal = getEntryHandler().isEqualTime(authE);
+		boolean after = getEntryHandler().isAfter(authE);
+		//log.debug("equal: "+equal+" after "+after);
+		if (equal && !(lineCount<=lastLineParsed)){
 		    entries.add(authE);
 		}
+		else if (after){
+		    entries.add(authE);
+		}
+		else{
+		    //do not add
+		}
+
 	    }
+
 
 
 	}
 
 	in.close();
 
-	log.debug("done");
-	entryHandler.addEntries(entries);
+	log.debug("done, walked "+lineCount+" lines");
+	getEntryHandler().addEntries(entries);
+
+	lastLineParsed = lineCount;
 
 	/*
 	 * this is important, after one complete transaction, we push the
@@ -158,7 +180,7 @@ public class LogFileParser extends AuthenticationInput {
 	 * psuedo-incremental updates (even though the entire file is read in
 	 * again, only newer entries are saved)
 	 */
-	entryHandler.endTransaction();
+	//entryHandler.endTransaction();
 
     }
 

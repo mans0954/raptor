@@ -29,12 +29,12 @@ import org.apache.log4j.Logger;
  */
 public abstract class RawData {
     static Logger log = Logger.getLogger(RawData.class);
-    public EntryHandler entryHandler;
+    private EntryHandler entryHandler;
 
     public abstract void parse() throws Exception;
 
     public RawData() {
-	entryHandler = new MemoryEntryHandler();
+	//setEntryHandler(new MemoryEntryHandler());
     }
 
     public Object createObject(String className) {
@@ -58,8 +58,16 @@ public abstract class RawData {
      * removes all entries from the entry handler
      */
     public void removeAllEntries() {
-	entryHandler.removeAllEntries();
+	getEntryHandler().removeAllEntries();
 
+    }
+
+    public void setEntryHandler(EntryHandler entryHandler) {
+	this.entryHandler = entryHandler;
+    }
+
+    public EntryHandler getEntryHandler() {
+	return entryHandler;
     }
 
 }

@@ -36,6 +36,9 @@ public class MemoryEntryHandler implements EntryHandler{
 	/* pointer to the last recorded entry, for incremental update*/
 	private DateTime latestEntryTime;
 
+	/* record of the last entry that was sent over SOAP*/
+	private DateTime lastPublishedEntryTime;
+
 	/* list of all entries stored by this EntryHanlder */
 	List<Entry> entries;
 
@@ -81,6 +84,42 @@ public class MemoryEntryHandler implements EntryHandler{
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
+	 */
+	@Override
+	public boolean isEqualTime(Entry authE) {
+	    if (latestEntryTime==null) return false;
+	    return authE.getEventTime().isEqual(latestEntryTime);
+	}
+
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.model.EntryHandler#isNewer(uk.ac.cardiff.model.Entry)
+	 */
+	@Override
+	public boolean isAfter(Entry authE) {
+	    if (latestEntryTime==null) return true;
+	    return authE.getEventTime().isAfter(latestEntryTime);
+	}
+
+	/*
+	 * <p> NOT USED - compares the entry parameter with the last entry stored in the memory handler,
+	 * this checks for similar entries when reparsing a file, where a new entry has the same time stamp
+	 * as the previous last entry, but is a different entry.
+	 *
+	 * For now, we check the fields in the Entry for equality. This method may not always work if none of the
+	 * generic entry fields are set by a particular log format
+	 * (non-Javadoc)
+	 * @see main.uk.ac.cf.model.EntryHandler#isDisjointFromLastEntry(uk.ac.cardiff.model.Entry)
+	 */
+	@Override
+	public boolean isDisjointFromLastEntry(Entry authE) {
+	    //TODO maybe remove this method.
+
+	    return true;
+	}
+
+
 	/**
 	 * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)
 	 */
@@ -107,6 +146,20 @@ public class MemoryEntryHandler implements EntryHandler{
 	    entries.clear();
 
 	}
+
+	public void setLastPublishedEntryTime(DateTime lastPublishedEntryTime) {
+	    this.lastPublishedEntryTime = lastPublishedEntryTime;
+	}
+
+	public DateTime getLastPublishedEntryTime() {
+	    return lastPublishedEntryTime;
+	}
+
+
+
+
+
+
 
 
 }

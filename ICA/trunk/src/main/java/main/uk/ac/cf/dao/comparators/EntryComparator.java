@@ -16,23 +16,35 @@
 /**
  *
  */
-package main.uk.ac.cf.dao.external;
+package main.uk.ac.cf.dao.comparators;
 
-import java.util.List;
+import java.util.Comparator;
 
-import main.uk.ac.cf.dao.RawData;
+import uk.ac.cardiff.model.Entry;
 
 /**
+ * Not enough to compare on in Entry, hence not used.
+ *
  * @author philsmart
  *
  */
-public abstract class UsageInput extends RawData{
+public class EntryComparator implements Comparator<Entry> {
+
+    /* (non-Javadoc)
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
+    @Override
+    public int compare(Entry entry1, Entry entry2) {
 
 
+	boolean requestHostEqual = entry1.getRequestHost().equals(entry2.getRequestHost());
+	boolean serverHostEqual = entry1.getServerHost().equals(entry2.getServerHost());
 
-    public List getUsages() {
-	return getEntryHandler().getEntries();
-
+	return 0;
     }
+
+
+
+
 
 }
