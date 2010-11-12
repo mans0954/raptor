@@ -25,6 +25,7 @@
 		<property name="authenticationModules">
 			<list><!--
 				<bean id="shibbolethAccessLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-access-2010-10-24.idp1.log
 						</value>
@@ -41,8 +42,9 @@
 					this entry parses the audit log, but only for AuthnRequest rows
 				-->
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-october.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt
 						</value>
 					</property>
 					<property name="format">
@@ -68,8 +70,13 @@
 		</property>
 	</bean>
 
+	<!-- Create the entry handler -->
+	<bean name="memoryEntryHandler" class="main.uk.ac.cf.model.MemoryEntryHandler"></bean>
+	<!--<bean name="persistantEntryHandler" class="main.uk.ac.cf.model.PersistantEntryHandler">
+		<property name="dataConnection"><ref bean="icaSessionFactory"></ref></property>
+	</bean>
 
-	<!--
+	--><!--
 		definition of the log file format, where some standard log file
 		formats will be specified here e.g. shib-access, W3C, apache, EZProxy
 		etc IMPORTANT, the headers must be a match for the internal model at

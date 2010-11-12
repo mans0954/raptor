@@ -16,23 +16,18 @@
 /**
  *
  */
-package main.uk.ac.cf.dao.external;
+package main.uk.ac.cf.dao.internal;
 
 import java.util.List;
 
-import main.uk.ac.cf.dao.RawData;
+import uk.ac.cardiff.model.Entry;
 
 /**
  * @author philsmart
  *
  */
-public abstract class UsageInput extends RawData{
+public interface ICADataConnection {
 
-
-
-    public List getUsages() {
-	return getEntryHandler().getEntries();
-
-    }
-
+	public List runQuery(String query, Object[] parameters);
+	public void save(Entry entry);
 }
