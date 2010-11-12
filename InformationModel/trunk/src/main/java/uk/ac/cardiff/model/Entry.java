@@ -27,6 +27,11 @@ import org.joda.time.DateTime;
  *
  */
 public class Entry {
+
+    /* used if a persistant db primary key is required*/
+    private long persistantId;
+
+    /* attributes generic to all entries in Raptor*/
     private DateTime eventTime;
     private String requestHost;
     private String serverHost;
@@ -103,5 +108,13 @@ public class Entry {
 
 	public String getServerHostFriendlyName() {
 		return serverHostFriendlyName;
+	}
+
+	public void setPersistantId(long persistantId) {
+	    this.persistantId = persistantId;
+	}
+
+	public long getPersistantId() {
+	    return persistantId;
 	}
 }
