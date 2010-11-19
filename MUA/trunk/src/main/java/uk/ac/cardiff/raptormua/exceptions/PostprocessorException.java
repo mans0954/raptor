@@ -15,14 +15,14 @@
  */
 package uk.ac.cardiff.raptormua.exceptions;
 
-public class StatisticalUnitException extends Exception{
+public class PostprocessorException extends Exception{
 
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = -4614661463043866258L;
-	
-	public StatisticalUnitException (String message){
+	private static final long serialVersionUID = -4614661463043866256L;
+
+	public PostprocessorException (String message){
 			super(message);
 	}
 

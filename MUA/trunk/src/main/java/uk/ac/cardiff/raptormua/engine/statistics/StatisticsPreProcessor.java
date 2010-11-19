@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptormua.exceptions;
+/**
+ *
+ */
+package uk.ac.cardiff.raptormua.engine.statistics;
 
-public class StatisticalUnitException extends Exception{
+import java.util.List;
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4614661463043866258L;
-	
-	public StatisticalUnitException (String message){
-			super(message);
-	}
+import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 
+/**
+ * @author philsmart
+ *
+ */
+public interface StatisticsPreProcessor {
+
+	public List<Entry> preProcess(List<Entry> entries) throws PreprocessorException;
 
 }

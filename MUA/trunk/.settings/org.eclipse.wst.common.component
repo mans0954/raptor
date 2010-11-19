@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/InformationModel/InformationModel">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ServiceInterfaces/ServiceInterfaces">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ServiceInterfaces/ServiceInterfaces">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/information-model/information-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="MUA"/>
