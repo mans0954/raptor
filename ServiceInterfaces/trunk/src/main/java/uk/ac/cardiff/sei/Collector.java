@@ -16,6 +16,7 @@
 package uk.ac.cardiff.sei;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebService;
 
@@ -27,6 +28,6 @@ public interface Collector {
 
 	String getVersion();
 	/* for aegis we have to return the type of entry so the XSD can be constructed properly */
-	List<Entry> getAllAuthentications();
-	List<Entry> getAllUsages();
+	Set<Entry> getAllAuthentications();
+	Set<Entry> getAllUsages();
 }
