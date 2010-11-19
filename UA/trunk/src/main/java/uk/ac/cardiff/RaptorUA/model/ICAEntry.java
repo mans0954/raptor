@@ -4,6 +4,7 @@
 package uk.ac.cardiff.RaptorUA.model;
 
 import java.util.List;
+import java.util.Set;
 
 import uk.ac.cardiff.RaptorUA.engine.sei.ServiceEndpointInterface;
 
@@ -23,12 +24,12 @@ public class ICAEntry {
 	return serviceEndpoint;
     }
 
-    public List getAllAuthentications(){
+    public Set getAllAuthentications(){
 	return ServiceEndpointInterface.getAuthentications(serviceEndpoint);
 
     }
 
-    public List getAllUsages(){
+    public Set getAllUsages(){
 
 	return null;
     }
