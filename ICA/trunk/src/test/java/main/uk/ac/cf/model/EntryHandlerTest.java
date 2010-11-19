@@ -90,6 +90,7 @@ public class EntryHandlerTest {
     @Test
     public void testHashSet(){
 
+
 	Set<Entry> entries = new LinkedHashSet<Entry>();
 
 	ShibbolethEntry entry = new ShibbolethEntry();
@@ -183,5 +184,7 @@ public class EntryHandlerTest {
 
 
     }
+
+
 
 }

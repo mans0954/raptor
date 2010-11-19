@@ -84,14 +84,18 @@ public class PersistantEntryHandler implements EntryHandler {
     }
 
     public void addEntry(Entry entry){
+	    //log.debug("Trying to add "+entry);
 	    boolean isAfter = isAfter(entry);
 	    boolean isEqual = isEqual(entry);
 	    if (isAfter){
+		//log.debug("Is After "+entry+"  with: "+getLatestEntryTime());
 		entries.add(entry);
 		updateLastEntry(entry);
 	    }
 	    if (isEqual){
-		boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(entry);
+		Integer hashcode = entry.hashCode();
+		//log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
+		boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
 		if (!isAlreadyInLatest){
 		    entries.add(entry);
 		    updateLastEntry(entry);
@@ -106,10 +110,10 @@ public class PersistantEntryHandler implements EntryHandler {
 	if (entryTime.isAfter(getLatestEntryTime())){
 	    setLatestEntryTime(entryTime);
 	    entryInformation.getLatestEqualEntries().clear();
-	    entryInformation.getLatestEqualEntries().add(entry);
+	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
 	}
 	if (entryTime.isEqual(getLatestEntryTime())){
-	    entryInformation.getLatestEqualEntries().add(entry);
+	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
 	}
     }
 

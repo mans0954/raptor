@@ -3,7 +3,9 @@
  */
 package main.uk.ac.cf.model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;
@@ -26,14 +28,12 @@ public class EntryMetadata {
     /* record of the last entry that was sent over SOAP */
     private DateTime lastPublishedEntryTime;
 
-    /* stores the set of latest unique entries. That is, those with the latest and same
-     *  DateTime, but different state (attribute values). This set is check when adding new
-     *  entries, and is not removed when records are removed. Will not typically hold many values
-     */
-    private Set<Entry> latestEqualEntries;
+    /* stores the list of latest unique entries as their hash code (for easy persisting). That is, those with the latest and same
+     *  DateTime, but different hashcode (attribute values). */
+    private List<Integer> latestEqualEntries;
 
     public EntryMetadata(){
-	latestEqualEntries = new LinkedHashSet<Entry>();
+	latestEqualEntries = new ArrayList<Integer>();
     }
 
     public void setLatestEntryTime(DateTime latestEntryTime) {
@@ -64,11 +64,11 @@ public class EntryMetadata {
 	return "["+persistantId+":"+latestEntryTime+","+lastPublishedEntryTime+"]";
     }
 
-    void setLatestEqualEntries(Set<Entry> latestEqualEntries) {
+    public void setLatestEqualEntries(List<Integer> latestEqualEntries) {
 	this.latestEqualEntries = latestEqualEntries;
     }
 
-    Set<Entry> getLatestEqualEntries() {
+    public List<Integer> getLatestEqualEntries() {
 	return latestEqualEntries;
     }
 
