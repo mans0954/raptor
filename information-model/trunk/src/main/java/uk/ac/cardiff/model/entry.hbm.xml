@@ -9,17 +9,41 @@
 	<class name="uk.ac.cardiff.model.Entry" table="entry" dynamic-update="true" dynamic-insert="false">
 
 	<id name="persistantId" column="persistantId" type="long"
-			unsaved-value="-1">
+			unsaved-value="null">
 			<generator class="native" >
-				<param name="sequence">entity_seq</param>
+				<param name="sequence">hib_entity_seq</param>
     		</generator>
 	</id>
 
- 	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="true" />
-	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="true" />
-	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="true" />
-	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="true" />
-	<property name="serverHostFriendlyName" type="string" update="true" insert="true"	column="serverHostFriendlyName"  not-null="true" />
+ 	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="false" />
+	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" />
+	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="false" />
+	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="false" />
+	<property name="serverHostFriendlyName" type="string" update="true" insert="true"	column="serverHostFriendlyName"  not-null="false" />
+
+	<joined-subclass name="uk.ac.cardiff.model.AuthenticationEntry"  table="authenticationEntry">
+      		<key column="id"/>
+      <property name="authNMethod" column="authNMethod" type="string" />
+
+
+      	<joined-subclass name="uk.ac.cardiff.model.ShibbolethEntry"  table="shibbolethEntry">
+          	 <key column="id"/>
+
+      		<property name="requestPath" column="requestPath" type="string" />
+      		<property name="requestID" column="requestID" type="string" />
+      		<property name="messageProfileId" column="messageProfileId" type="string" />
+      		<property name="responseBinding" column="responseBinding" type="string" />
+      		<property name="requestBinding" column="requestBinding" type="string" />
+      		<property name="principleName" column="principleName" type="string" />
+			<property name="releasedAttributes" column="releasedAttributes" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+
+
+
+    	</joined-subclass>
+
+    </joined-subclass>
+
+
 	</class>
 
 
