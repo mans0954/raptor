@@ -6,6 +6,7 @@ package uk.ac.cardiff.RaptorUA.service.impl;
 
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -49,7 +50,7 @@ public class UAProcessImpl implements UAProcess{
     /**
      *
      */
-    public List getAllAuthentications() {
+    public Set getAllAuthentications() {
 	return aggregatorEngine.getAllAuthentications();
 
     }

@@ -23,6 +23,7 @@ package uk.ac.cardiff.RaptorUA.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 
@@ -34,11 +35,11 @@ public interface EntryHandler {
 
 
 
-	public void addEntries(List<Entry> entries);
+	public void addEntries(Set<Entry> entries);
 
-	public List<Entry> getEntries();
+	public Set<Entry> getEntries();
 
-	public void setEntries(List<Entry> entries);
+	public void setEntries(Set<Entry> entries);
 
 	public void removeAllEntries();
 

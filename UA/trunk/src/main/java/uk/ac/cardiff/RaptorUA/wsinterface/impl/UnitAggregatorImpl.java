@@ -19,6 +19,7 @@
 package uk.ac.cardiff.RaptorUA.wsinterface.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebService;
 
@@ -39,7 +40,7 @@ public class UnitAggregatorImpl implements UnitAggregator{
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.RaptorUA.wsinterface.UnitAggregator#getAllAuthentications()
 	 */
-	public List getAllAuthentications() {
+	public Set getAllAuthentications() {
 		// TODO Auto-generated method stub
 		return processService.getAllAuthentications();
 	}

@@ -4,7 +4,9 @@
 package uk.ac.cardiff.RaptorUA.engine;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -79,8 +81,8 @@ public class UnitAggregatorEngine {
     /**
      * @return
      */
-    public List getAllAuthentications() {
-	ArrayList<Entry> returnedAuths = new ArrayList();
+    public Set getAllAuthentications() {
+	LinkedHashSet<Entry> returnedAuths = new LinkedHashSet();
 	for (Entry entry : entryHandler.getEntries()) returnedAuths.add(entry);
 
 	/* is this the best way to stop duplicated being retrieved - NO

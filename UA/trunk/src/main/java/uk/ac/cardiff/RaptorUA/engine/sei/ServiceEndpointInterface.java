@@ -24,7 +24,7 @@ import uk.ac.cardiff.sei.Collector;
 public class ServiceEndpointInterface {
     static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
 
-    public static List getAuthentications(String endpoint){
+    public static Set getAuthentications(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
 	factory.setServiceClass(Collector.class);
 	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
@@ -43,7 +43,7 @@ public class ServiceEndpointInterface {
 
 	Collector client = (Collector) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
-	List<Entry> auths = client.getAllAuthentications();
+	Set<Entry> auths = client.getAllAuthentications();
 	log.debug("Retrieved "+auths.size()+" authentications from the ICA ["+endpoint+"]");
 //	for (Entry ent : auths){//
 //	    log.debug(ent+" "+ent.getClass());//
@@ -51,7 +51,7 @@ public class ServiceEndpointInterface {
 	return auths;
     }
 
-    public static List getUsages(String endpoint){
+    public static Set getUsages(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
 	factory.setServiceClass(Collector.class);
 	//factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
@@ -70,7 +70,7 @@ public class ServiceEndpointInterface {
 
 	Collector client = (Collector) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
-	List<Entry> auths = client.getAllUsages();
+	Set<Entry> auths = client.getAllUsages();
 	log.debug("Retrieved "+auths.size()+" usages");
 //	for (Entry ent : auths){//
 //	    log.debug(ent+" "+ent.getClass());//

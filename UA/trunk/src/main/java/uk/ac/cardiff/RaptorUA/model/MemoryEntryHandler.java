@@ -4,7 +4,9 @@
 package uk.ac.cardiff.RaptorUA.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -17,14 +19,14 @@ import uk.ac.cardiff.model.Entry;
 public class MemoryEntryHandler implements EntryHandler{
     static Logger log = Logger.getLogger(EntryHandler.class);
 
-	/* list of all entries stored by this EntryHanlder */
-	List<Entry> entries;
+	/* set of all entries stored by this EntryHanlder */
+	Set<Entry> entries;
 
 	public MemoryEntryHandler(){
-		entries = new ArrayList<Entry>();
+		entries = new LinkedHashSet<Entry>();
 	}
 
-	public void addEntries(List<Entry> entries){
+	public void addEntries(Set<Entry> entries){
 		log.info("Adding "+entries.size()+" entries to the UA");
 		for (Entry entry: entries){
 			this.entries.add(entry);
@@ -37,12 +39,12 @@ public class MemoryEntryHandler implements EntryHandler{
 	/**
 	 * @return the list of entries currently stored by the entry handler
 	 */
-	public List getEntries() {
+	public Set getEntries() {
 	    return entries;
 
 	}
 
-	public void setEntries(List<Entry> entries){
+	public void setEntries(Set<Entry> entries){
 	    this.entries = entries;
 	}
 
