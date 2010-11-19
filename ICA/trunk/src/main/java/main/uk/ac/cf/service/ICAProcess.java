@@ -16,6 +16,7 @@
 package main.uk.ac.cf.service;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ICAProcess{
 
@@ -24,12 +25,12 @@ public interface ICAProcess{
 	/**
 	 * @return the list of authentications, stored as types or subtypes of AuthenticationEntry's
 	 */
-	public List getAllAuthentications();
+	public Set getAllAuthentications();
 
 	/**
 	 * @return the list of usages, stored as types or subtypes of UsageEntry's
 	 */
-	public List getAllUsages();
+	public Set getAllUsages();
 
 
 }

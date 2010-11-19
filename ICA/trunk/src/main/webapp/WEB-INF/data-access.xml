@@ -39,10 +39,13 @@
 				</bean>
 
 				--><!--
-					this entry parses the audit log, but only for AuthnRequest rows
+					this entry parses the audit log, but only for AuthnRequest rows. If persist is true, you need to supply
+					a valid dataConnection. Persist in this context is only the persistance of enough state information that
+					it can pick up where it left off in the even of a failure
 				-->
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+					<!--<property name="parsingSupport"><ref bean="persistentParserConfig"></ref></property>-->
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt
 						</value>
@@ -72,11 +75,11 @@
 
 	<!-- Create the entry handler -->
 	<bean name="memoryEntryHandler" class="main.uk.ac.cf.model.MemoryEntryHandler"></bean>
-	<!--<bean name="persistantEntryHandler" class="main.uk.ac.cf.model.PersistantEntryHandler">
-		<property name="dataConnection"><ref bean="icaSessionFactory"></ref></property>
+	<bean name="persistantEntryHandler" class="main.uk.ac.cf.model.PersistantEntryHandler">
+		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
-	--><!--
+	<!--
 		definition of the log file format, where some standard log file
 		formats will be specified here e.g. shib-access, W3C, apache, EZProxy
 		etc IMPORTANT, the headers must be a match for the internal model at

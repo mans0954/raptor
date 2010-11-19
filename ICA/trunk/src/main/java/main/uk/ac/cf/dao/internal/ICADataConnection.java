@@ -18,6 +18,7 @@
  */
 package main.uk.ac.cf.dao.internal;
 
+import java.util.Collection;
 import java.util.List;
 
 import uk.ac.cardiff.model.Entry;
@@ -29,5 +30,11 @@ import uk.ac.cardiff.model.Entry;
 public interface ICADataConnection {
 
 	public List runQuery(String query, Object[] parameters);
-	public void save(Entry entry);
+	public Object runQueryUnique(String query, Object[] parameters);
+	public void save(Object object);
+	public void deleteAllEntries(Collection entries);
+	public void saveAll(Collection collection);
+
+
+
 }

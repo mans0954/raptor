@@ -21,19 +21,24 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
+import main.uk.ac.cf.dao.internal.ICADataConnection;
+import main.uk.ac.cf.model.PersistentParserSupport;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.model.*;
@@ -50,16 +55,14 @@ public class LogFileParser extends AuthenticationInput {
     private String logfile;
     private String entryType;
     private String[][] excludeEntries;
-    private int lastLineParsed;
+
 
     public LogFileParser(){
-	lastLineParsed=0;
+
     }
 
     public void parse() throws Exception {
-	System.out.println("parsing, low level message");
-	log.debug("parsing: " + logfile + " instance: " + this);
-
+	log.info("parsing: " + logfile + " instance: " + this);
 
 
 	// Must use URL, as java.io does not work in a webapp
@@ -68,7 +71,9 @@ public class LogFileParser extends AuthenticationInput {
 	BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
 	int lineCount=0;
 	String inputLine;
-	List<Entry> entries = new ArrayList();
+
+	//Set<Entry> entries = new LinkedHashSet<Entry>();
+
 	while ((inputLine = in.readLine()) != null) {
 	    // log.debug(inputLine);
 	    lineCount++;
@@ -141,19 +146,7 @@ public class LogFileParser extends AuthenticationInput {
 		 * older than the current latest entry this should save heap
 		 * space during operation
 		 */
-		boolean equal = getEntryHandler().isEqualTime(authE);
-		boolean after = getEntryHandler().isAfter(authE);
-		//log.debug("equal: "+equal+" after "+after);
-		if (equal && !(lineCount<=lastLineParsed)){
-		    entries.add(authE);
-		}
-		else if (after){
-		    entries.add(authE);
-		}
-		else{
-		    //do not add
-		}
-
+		getEntryHandler().addEntry(authE);
 	    }
 
 
@@ -163,9 +156,9 @@ public class LogFileParser extends AuthenticationInput {
 	in.close();
 
 	log.debug("done, walked "+lineCount+" lines");
-	getEntryHandler().addEntries(entries);
-
-	lastLineParsed = lineCount;
+	//getEntryHandler().addEntries(entries.);
+	log.debug("Currently has: "+getEntryHandler().getEntries().size()+" entries, latestEntry: "+getEntryHandler().getLatestEntryTime());
+	getEntryHandler().endTransaction();
 
 	/*
 	 * this is important, after one complete transaction, we push the
@@ -311,6 +304,10 @@ public class LogFileParser extends AuthenticationInput {
     public String[][] getExcludeEntries() {
 	return excludeEntries;
     }
+
+
+
+
 
 
 

@@ -16,6 +16,7 @@
 package main.uk.ac.cf.wsinterface.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebService;
 
@@ -46,20 +47,20 @@ public class CollectorImpl implements Collector{
 //		} catch (MavenRuntimeException e) {
 //			System.out.println("ERROR: "+e.getMessage());
 //		}
-		return "Early Preview";
+		return "Alpha";
 	}
 
 	/* (non-Javadoc)
 	 * @see main.uk.ac.cf.wsinterface.Collector#getAllAuthentications()
 	 */
-	public List getAllAuthentications() {
+	public Set getAllAuthentications() {
 	     return processEngine.getAllAuthentications();
 	}
 
 	/* (non-Javadoc)
 	 * @see main.uk.ac.cf.wsinterface.Collector#getAllUsages()
 	 */
-	public List getAllUsages() {
+	public Set getAllUsages() {
 
 	    return processEngine.getAllUsages();
 	}

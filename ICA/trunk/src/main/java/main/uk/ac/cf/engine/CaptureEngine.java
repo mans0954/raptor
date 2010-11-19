@@ -19,7 +19,9 @@
 package main.uk.ac.cf.engine;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 
@@ -57,10 +59,10 @@ public class CaptureEngine {
 	/**
 	 * @return all authentication entries (all subtypes of the class AuthenticationEntry
 	 */
-	public List getAllAuthentications() {
-	    List allAuths = new ArrayList();
+	public Set getAllAuthentications() {
+	    Set allAuths = new LinkedHashSet();
 	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
-		List authentications = authI.getAuthentications();
+		Set authentications = authI.getAuthentications();
 		for (Object auth : authentications)allAuths.add(auth);
 	    }
 	    retrieveTransactionFinished();

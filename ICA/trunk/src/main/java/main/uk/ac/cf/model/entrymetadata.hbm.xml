@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+         "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="main.uk.ac.cf.model.EntryMetadata" table="entrymetadata"
+		dynamic-update="false" dynamic-insert="true">
+
+		<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">hib_entrymetadata_seq</param>
+			</generator>
+		</id>
+
+		<property name="latestEntryTime"
+			type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true"
+			insert="true" column="latestEntryTime" not-null="false" />
+
+		<property name="lastPublishedEntryTime"
+			type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true"
+			insert="true" column="lastPublishedEntryTime" not-null="false" />
+
+		<set name="latestEqualEntries" lazy="false">
+			<key column="entryNo" not-null="false" />
+			<one-to-many class="uk.ac.cardiff.model.Entry" />
+		</set>
+
+
+	</class>
+
+
+</hibernate-mapping>
