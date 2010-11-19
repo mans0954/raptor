@@ -19,7 +19,9 @@
 package uk.ac.cardiff.raptormua.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -32,16 +34,16 @@ import uk.ac.cardiff.model.Entry;
 public class MemoryEntryHandler implements EntryHandler{
 
 	/* class level logger */
-    static Logger log = Logger.getLogger(MemoryEntryHandler.class);
+    	static Logger log = Logger.getLogger(MemoryEntryHandler.class);
 
 	/* list of all entries stored by this EntryHandler */
-	List<Entry> entries;
+    	Set<Entry> entries;
 
 	public MemoryEntryHandler(){
-		entries = new ArrayList<Entry>();
+		entries = new LinkedHashSet<Entry>();
 	}
 
-	public void addEntries(List<Entry> entries){
+	public void addEntries(Set<Entry> entries){
 		log.info("Adding "+entries.size()+" entries to the MUA");
 		for (Entry entry: entries){
 			this.entries.add(entry);
@@ -54,12 +56,12 @@ public class MemoryEntryHandler implements EntryHandler{
 	/**
 	 * @return the list of entries currently stored by the entry handler
 	 */
-	public List getEntries() {
+	public Set getEntries() {
 	    return entries;
 
 	}
 
-	public void setEntries(List<Entry> entries){
+	public void setEntries(Set<Entry> entries){
 	    this.entries = entries;
 	}
 }

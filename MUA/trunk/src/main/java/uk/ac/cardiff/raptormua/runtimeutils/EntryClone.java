@@ -18,8 +18,9 @@
  */
 package uk.ac.cardiff.raptormua.runtimeutils;
 
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 
@@ -29,8 +30,8 @@ import uk.ac.cardiff.model.Entry;
  */
 public class EntryClone {
 
-	public static ArrayList<Entry> cloneEntries(ArrayList<Entry> entries){
-		return (ArrayList<Entry>) entries.clone();
+	public static Set<Entry> cloneEntries(LinkedHashSet<Entry> entries){
+		return (LinkedHashSet<Entry>) entries.clone();
 	}
 
 }

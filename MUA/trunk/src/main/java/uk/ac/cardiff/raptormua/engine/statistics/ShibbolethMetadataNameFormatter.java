@@ -20,7 +20,8 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.opensaml.DefaultBootstrap;
@@ -78,8 +79,8 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor{
 	 * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPreProcessing#preProcess(java.util.List)
 	 */
 	@Override
-	public List<Entry> preProcess(List<Entry> entries) throws PreprocessorException{
-		ArrayList<Entry> processedList = new ArrayList<Entry>();
+	public Set<Entry> preProcess(Set<Entry> entries) throws PreprocessorException{
+		LinkedHashSet<Entry> processedList = new LinkedHashSet<Entry>();
 		log.debug("Entries into preprocessor: "+entries.size());
 		for (Entry entry : entries){
 			if (entry instanceof ShibbolethEntry){
