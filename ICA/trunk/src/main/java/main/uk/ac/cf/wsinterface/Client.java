@@ -56,7 +56,7 @@ public class Client {
 
 	Collector client = (Collector) factory.create();
 	System.out.println(client.getVersion());
-	List<Entry> auths = client.getAllAuthentications();
+	Set<Entry> auths = client.getAllAuthentications();
 	System.out.println("Have "+auths.size());
 	for (Entry ent : auths){
 

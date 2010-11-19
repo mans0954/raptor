@@ -66,6 +66,31 @@
 	</repositories>
 	<!--  done -->
 
+
+
+	<scm>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/ICA</url>
+	</scm>
+	<distributionManagement>
+		<!--
+			<repository> <uniqueVersion>false</uniqueVersion> <id>local</id>
+			<name>IamCURepository</name>
+			<url>file:///Users/philsmart/Documents/Java/RaptorReleases/ICA</url>
+			</repository>
+		-->
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-release</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-snapshot</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
@@ -76,6 +101,12 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<version>2.2.7</version>
+			<exclusions>
+                 <exclusion>
+                     <groupId>asm</groupId>
+                     <artifactId>asm</artifactId>
+                 </exclusion>
+             </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -132,44 +163,18 @@
 			<version>2.9.1</version>
 		</dependency>
 
+		<!--  includes the information-model -->
 		<dependency>
 			<groupId>RaptorSuite</groupId>
 			<artifactId>ServiceInterfaces</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
-			<groupId>uk.ac.cardiff.raptor</groupId>
-			<artifactId>information-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.0-801.jdbc4</version>
 		</dependency>
-
-
-
 	</dependencies>
-
-	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ICA/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/ICA</url>
-	</scm>
-	<distributionManagement>
-		<!--
-			<repository> <uniqueVersion>false</uniqueVersion> <id>local</id>
-			<name>IamCURepository</name>
-			<url>file:///Users/philsmart/Documents/Java/RaptorReleases/ICA</url>
-			</repository>
-		-->
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>raptor-release</id>
-			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
-		</repository>
-		<snapshotRepository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>raptor-snapshot</id>
-			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 
 	<build>

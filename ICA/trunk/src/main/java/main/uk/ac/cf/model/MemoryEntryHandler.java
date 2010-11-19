@@ -15,14 +15,18 @@
  *
  *
  * @author philsmart
- * {@literal} this class manages interaction with the internal model of the ICA
+ * {@literal} this class manages interaction with the internal model of the ICA. The class
+ * is responsible for making sure duplicate entries, and entries older than the latest
+ * are not added to the entry set
  *
  */
 
 package main.uk.ac.cf.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 
@@ -39,18 +43,24 @@ public class MemoryEntryHandler implements EntryHandler{
 	/* record of the last entry that was sent over SOAP*/
 	private DateTime lastPublishedEntryTime;
 
-	/* list of all entries stored by this EntryHanlder */
-	List<Entry> entries;
+	/* set of all entries stored by this EntryHandler */
+	Set<Entry> entries;
+
+	/* stores the set of latest unique entries. That is, those with the latest and same
+	 *  DateTime, but different state (attribute values). This set is check when adding new
+	 *  entries, and is not removed when records are removed.
+	 */
+	Set<Entry> latestEqualEntries;
 
 	public MemoryEntryHandler(){
-		entries = new ArrayList<Entry>();
+		entries = new LinkedHashSet<Entry>();
+		latestEqualEntries = new LinkedHashSet<Entry>();
 	}
 
-	public void addEntries(List<Entry> entries){
+	public void addEntries(Set<Entry> entries){
 		log.debug("Current: "+this.entries.size()+" in: "+entries.size());
 
 		for (Entry entry: entries){
-			/* this check is done again, just in case it was not properly handled by the parsing agent*/
 			if (isNewerOrEqual(entry))this.entries.add(entry);
 		//	else {log.debug("entry: "+entry.getEventTime()+" latest: "+latestEntryTime+" isafter: "+entry.getEventTime().isAfter(latestEntryTime));}
 			updateLastEntry(entry);
@@ -59,10 +69,45 @@ public class MemoryEntryHandler implements EntryHandler{
 		log.debug("Total No. of Entries "+this.entries.size()+" Latest Entry at: "+getLatestEntryTime());
 	}
 
+
+	/**
+	 * If newer entry, just add to the set.
+	 * If equal, first check the <code>latestEqualEntries</code> set,
+	 * if contained in this set, then it has already been added. If not
+	 * add. Importantly, we do not just add to the entries set (which would
+	 * not allow duplicates) because the set is cleared when information is sent
+	 * to the UA.
+	 */
+	public void addEntry(Entry entry){
+	    boolean isAfter = isAfter(entry);
+	    boolean isEqual = isEqual(entry);
+	    if (isAfter){
+		entries.add(entry);
+		updateLastEntry(entry);
+	    }
+	    else if (isEqual){
+		//log.debug("Is Equal Time: "+entry);
+		boolean isAlreadyInLatest = latestEqualEntries.contains(entry);
+		//log.debug("Has matched: "+isAlreadyInLatest+" from: "+latestEqualEntries.size()+" entries");
+		if (!isAlreadyInLatest){
+		    entries.add(entry);
+		    updateLastEntry(entry);
+		}
+	    }
+
+	}
+
 	private void updateLastEntry(Entry entry){
 		DateTime entryTime = entry.getEventTime();
 		if (getLatestEntryTime()==null)setLatestEntryTime(entryTime);
-		if (entryTime.isAfter(getLatestEntryTime()))setLatestEntryTime(entryTime);
+		if (entryTime.isAfter(getLatestEntryTime())){
+		    setLatestEntryTime(entryTime);
+		    latestEqualEntries.clear();
+		    latestEqualEntries.add(entry);
+		}
+		if (entryTime.isEqual(getLatestEntryTime())){
+		    latestEqualEntries.add(entry);
+		}
 	}
 
 	public void setLatestEntryTime(DateTime latestEntryTime) {
@@ -78,7 +123,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * @return
 	 */
 	public boolean isNewerOrEqual(Entry authE) {
-		// TODO Auto-generated method stub
+
 		if (latestEntryTime==null) return true;
 		if (!authE.getEventTime().isBefore(latestEntryTime)) return true;
 		return false;
@@ -88,7 +133,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * @see main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
 	 */
 	@Override
-	public boolean isEqualTime(Entry authE) {
+	public boolean isEqual(Entry authE) {
 	    if (latestEntryTime==null) return false;
 	    return authE.getEventTime().isEqual(latestEntryTime);
 	}
@@ -102,24 +147,6 @@ public class MemoryEntryHandler implements EntryHandler{
 	    return authE.getEventTime().isAfter(latestEntryTime);
 	}
 
-	/*
-	 * <p> NOT USED - compares the entry parameter with the last entry stored in the memory handler,
-	 * this checks for similar entries when reparsing a file, where a new entry has the same time stamp
-	 * as the previous last entry, but is a different entry.
-	 *
-	 * For now, we check the fields in the Entry for equality. This method may not always work if none of the
-	 * generic entry fields are set by a particular log format
-	 * (non-Javadoc)
-	 * @see main.uk.ac.cf.model.EntryHandler#isDisjointFromLastEntry(uk.ac.cardiff.model.Entry)
-	 */
-	@Override
-	public boolean isDisjointFromLastEntry(Entry authE) {
-	    //TODO maybe remove this method.
-
-	    return true;
-	}
-
-
 	/**
 	 * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)
 	 */
@@ -131,7 +158,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	/**
 	 * @return the list of entries currently stored by the entry handler
 	 */
-	public List getEntries() {
+	public Set getEntries() {
 	    return entries;
 
 	}
@@ -145,6 +172,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	     */
 	    entries.clear();
 
+
 	}
 
 	public void setLastPublishedEntryTime(DateTime lastPublishedEntryTime) {
@@ -154,6 +182,9 @@ public class MemoryEntryHandler implements EntryHandler{
 	public DateTime getLastPublishedEntryTime() {
 	    return lastPublishedEntryTime;
 	}
+
+
+
 
 
 

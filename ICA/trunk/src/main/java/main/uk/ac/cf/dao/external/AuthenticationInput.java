@@ -16,13 +16,14 @@
 package main.uk.ac.cf.dao.external;
 
 import java.util.List;
+import java.util.Set;
 
 import main.uk.ac.cf.dao.RawData;
 
 public abstract class AuthenticationInput extends RawData{
 
 
-    public List getAuthentications() {
+    public Set getAuthentications() {
 	return getEntryHandler().getEntries();
 
     }

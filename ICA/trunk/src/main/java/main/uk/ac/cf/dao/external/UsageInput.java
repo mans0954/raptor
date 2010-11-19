@@ -19,6 +19,7 @@
 package main.uk.ac.cf.dao.external;
 
 import java.util.List;
+import java.util.Set;
 
 import main.uk.ac.cf.dao.RawData;
 
@@ -30,7 +31,7 @@ public abstract class UsageInput extends RawData{
 
 
 
-    public List getUsages() {
+    public Set getUsages() {
 	return getEntryHandler().getEntries();
 
     }
