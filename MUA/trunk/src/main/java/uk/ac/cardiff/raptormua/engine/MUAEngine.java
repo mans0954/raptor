@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptormua.engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -61,7 +62,7 @@ public class MUAEngine {
 	public void poll() {
 		log.info("MultiUnit Aggregator Polling Unit Aggregators");
 		for (UAEntry entry : uaRegistry.getUAEntries()){
-			List entries = entry.getAllAuthentications();
+		    	Set entries = entry.getAllAuthentications();
 			//log.debug("Setting: "+entries.size());
 			entryHandler.addEntries(entries);
 		}

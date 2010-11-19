@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptormua.model;
 
 import java.util.List;
+import java.util.Set;
 
 import uk.ac.cardiff.raptormua.engine.sei.ServiceEndpointInterface;
 
@@ -38,7 +39,7 @@ public class UAEntry {
 		return serviceEndpoint;
 	}
 
-	public List getAllAuthentications(){
+	public Set getAllAuthentications(){
 		return ServiceEndpointInterface.getAuthentications(serviceEndpoint);
 
 	    }

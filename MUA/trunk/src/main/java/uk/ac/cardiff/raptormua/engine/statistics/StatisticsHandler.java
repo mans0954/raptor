@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -34,7 +35,7 @@ public class StatisticsHandler {
 	static Logger log = Logger.getLogger(StatisticsHandler.class);
 
 	private List<Statistic> statisticalUnits;
-	private List<Entry> entries;
+	private Set<Entry> entries;
 
 	public void setStatisticalUnits(List<Statistic> statisticalUnits) {
 		this.statisticalUnits = statisticalUnits;
@@ -110,7 +111,7 @@ public class StatisticsHandler {
 		return null;
 	    }
 
-	public void setEntries(List<Entry> entries) {
+	public void setEntries(Set<Entry> entries) {
 		this.entries = entries;
 
 	}

@@ -20,13 +20,14 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
@@ -44,7 +45,7 @@ public class Statistic {
 
 	static Logger log = Logger.getLogger(Statistic.class);
 
-	private List<Entry> entries;
+	private Set<Entry> entries;
 	private String field;
 	private String unitName;
 	private String methodName;
@@ -78,12 +79,12 @@ public class Statistic {
 	 *
 	 * @param authEntries
 	 */
-	public void setEntries(List<Entry> authEntries) {
-		ArrayList<Entry> entriesCopy = EntryClone.cloneEntries((ArrayList<Entry>) authEntries);
+	public void setEntries(Set<Entry> authEntries) {
+	    	Set<Entry> entriesCopy = EntryClone.cloneEntries(((LinkedHashSet<Entry>) authEntries));
 		if (preprocessor!=null)
 			try {
 				log.info("Invoking statistical preprocessor "+preprocessor.getClass());
-				entriesCopy = (ArrayList<Entry>) preprocessor.preProcess(entriesCopy);
+				entriesCopy = (Set<Entry>) preprocessor.preProcess(entriesCopy);
 			} catch (PreprocessorException e) {
 				log.error("Could not preprocess entries "+preprocessor.getClass());
 			}
@@ -181,7 +182,7 @@ public class Statistic {
 	}
 
 
-	public List<Entry> getAuthEntries() {
+	public Set<Entry> getAuthEntries() {
 		return entries;
 	}
 

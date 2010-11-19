@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class SessionLinker implements StatisticsPreProcessor{
 	 * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPreProcessing#preProcess(java.util.List)
 	 */
 	@Override
-	public List<Entry> preProcess(List<Entry> entries) {
+	public Set<Entry> preProcess(Set<Entry> entries) {
 		log.info("Preprocessing with "+this.getClass());
 
 		return entries;
