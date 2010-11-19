@@ -16,6 +16,7 @@
 package uk.ac.cardiff.sei;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.jws.WebService;
 
@@ -30,7 +31,7 @@ import uk.ac.cardiff.model.Entry;
 public interface UnitAggregator {
 
 	String getVersion();
-	List<Entry> getAllAuthentications();
+	Set<Entry> getAllAuthentications();
 
 
 }

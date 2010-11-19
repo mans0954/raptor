@@ -112,9 +112,9 @@
 			<version>2.9.1</version>
 		</dependency>
 		<dependency>
-			<groupId>RaptorSuite</groupId>
-			<artifactId>InformationModel</artifactId>
-			<version>0.0.7-SNAPSHOT</version>
+			<groupId>uk.ac.cardiff.raptor</groupId>
+			<artifactId>information-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
