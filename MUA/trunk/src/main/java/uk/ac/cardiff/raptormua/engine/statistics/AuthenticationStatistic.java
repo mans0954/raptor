@@ -1,4 +1,19 @@
 /**
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
  *
  */
 package uk.ac.cardiff.raptormua.engine.statistics;
@@ -31,12 +46,12 @@ public class AuthenticationStatistic extends Statistic{
 
 
 	/**
-	 *
+	 * <p> returns false if semantic error with the entries, throws an exception on code failure </p>
 	 * @param timeInterval
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
-	public AggregatorGraphModel countEntryPerInterval(String timeInterval) throws StatisticalUnitException{
+	public Boolean countEntryPerInterval(String timeInterval) throws StatisticalUnitException{
 
 
 		log.debug("Performing countEntryPerInterval Statistical Operation");
@@ -47,7 +62,7 @@ public class AuthenticationStatistic extends Statistic{
 		/* stop processing if there are no valid entries */
 		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
 			log.error("Not enough entries to perform statistic countEntryPerInterval");
-			return null;
+			return false;
 		}
 
 		/* divide the temporal extent into evenly sized buckets*/
@@ -104,10 +119,10 @@ public class AuthenticationStatistic extends Statistic{
 		}
 
 
-		int testCount = 0;
+		long testCount = 0;
 		for (Bucket bucket : buckets){
-			testCount +=bucket.getFrequency();
-			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getFrequency());
+			testCount +=bucket.getValue();
+			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getValue());
 		}
 		/* test count should equal the number of entries unless there is a reminder, or the specified
 		 * start time and endtime does not completely contain the entries.*/
@@ -115,32 +130,28 @@ public class AuthenticationStatistic extends Statistic{
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
+		observations = buckets;
 
+//		/* now construct the GraphModel */
+//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+//		gmodel.addSeriesLabel("Number of Events per "+timeInterval+"ms");
+//		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+//		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+//		for (Bucket bucket : buckets){
+//			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
+//			List<Double> values = new ArrayList();
+//			Double valueDouble = new Double(bucket.getValue());
+//			values.add(valueDouble);
+//			gmodel.addGroupValue(values);
+//		}
 
-		/* now construct the GraphModel */
-		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-		gmodel.addSeriesLabel("Number of Events per "+timeInterval+"ms");
-		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-		for (Bucket bucket : buckets){
-			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
-			List<Double> values = new ArrayList();
-			Double valueDouble = new Double(bucket.getFrequency());
-			values.add(valueDouble);
-			gmodel.addGroupValue(values);
-		}
-
-		return gmodel;
+		//finished successfully, no exception thrown
+		return true;
 
 	}
 
-	/**
-	 *
-	 * @param timeInterval
-	 * @return
-	 * @throws StatisticalUnitException
-	 */
-	public AggregatorGraphModel countEntry(String numberOfIntervalsString) throws StatisticalUnitException{
+
+	public Boolean countEntry(String numberOfIntervalsString) throws StatisticalUnitException{
 
 		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
 		log.debug("Performing countEntry Statistical Operation");
@@ -151,7 +162,7 @@ public class AuthenticationStatistic extends Statistic{
 		/* stop processing if there are no valid entries */
 		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
 			log.error("Not enough entries to perform statistic countEntryPerInterval");
-			return null;
+			return false;
 		}
 
 		/* divide the temporal extent into evenly sized buckets*/
@@ -211,8 +222,8 @@ public class AuthenticationStatistic extends Statistic{
 
 		int testCount = 0;
 		for (Bucket bucket : buckets){
-			testCount +=bucket.getFrequency();
-			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getFrequency());
+			testCount +=bucket.getValue();
+			log.debug(bucket.getStart()+"-"+bucket.getEnd()+" --> "+bucket.getValue());
 		}
 		/* test count should equal the number of entries unless there is a reminder, or the specified
 		 * start time and endtime does not completely contain the entries.*/
@@ -220,26 +231,29 @@ public class AuthenticationStatistic extends Statistic{
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
+		setSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
+
+		observations = buckets;
 
 
-		/* now construct the GraphModel */
-		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-		gmodel.addSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
-		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-		for (Bucket bucket : buckets){
-			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
-			List<Double> values = new ArrayList();
-			Double valueDouble = new Double(bucket.getFrequency());
-			values.add(valueDouble);
-			gmodel.addGroupValue(values);
-		}
+//		/* now construct the GraphModel */
+//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+//		gmodel.addSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
+//		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+//		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+//		for (Bucket bucket : buckets){
+//			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
+//			List<Double> values = new ArrayList();
+//			Double valueDouble = new Double(bucket.getValue());
+//			values.add(valueDouble);
+//			gmodel.addGroupValue(values);
+//		}
 
-		return gmodel;
+		return true;
 
 	}
 
-	public AggregatorGraphModel groupByFrequency(String groupByField) throws StatisticalUnitException{
+	public Boolean groupByFrequency(String groupByField) throws StatisticalUnitException{
 
 
 		log.debug("Performing groupByFrequency Statistical Operation");
@@ -250,7 +264,7 @@ public class AuthenticationStatistic extends Statistic{
 		/* stop processing if there are no valid entries */
 		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
 			log.error("Not enough entries to perform statistic groupByFrequency");
-			return null;
+			return false;
 		}
 
 		/* create groups based on unique entries for the groupByField attribute*/
@@ -269,7 +283,7 @@ public class AuthenticationStatistic extends Statistic{
 			}
 			if (!oldGroup){
 				Group group = new Group();
-				group.setFrequency(1);
+				group.setValue(1);
 				group.setGroupName((String)result);
 				groups.add(group);
 			}
@@ -279,34 +293,41 @@ public class AuthenticationStatistic extends Statistic{
 		/* test the accuracy of the result */
 		int testCount = 0;
 		for (Group group : groups){
-			testCount +=group.getFrequency();
-			log.debug(group.getGroupName()+" --> "+group.getFrequency());
+			testCount +=group.getValue();
+			log.debug(group.getGroupName()+" --> "+group.getValue());
 		}
 		/* test count should equal the number of entries unless there is a reminder as this has not been catered for yet.*/
 		log.debug("Entries: "+this.getAuthEntries().size()+", total in buckets: "+testCount);
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
+		//add the series label or if none specified, add a default
+		if (getSeriesLabel()==null)
+			setSeriesLabel("Number of Events Grouped By "+groupByField);
 
-		/* now construct the GraphModel */
-		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-
-		//add the series label or if none speicifed, add a defualt
-		if (getSeriesLabel()!=null)
-			gmodel.addSeriesLabel(getSeriesLabel());
-		else
-			gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
+		observations = groups.toArray(new Group[0]);
 
 
-		for (Group group : groups){
-			gmodel.addGroupLabel(group.getGroupName());
-			List<Double> values = new ArrayList();
-			Double valueDouble = new Double(group.getFrequency());
-			values.add(valueDouble);
-			gmodel.addGroupValue(values);
-		}
+//		/* now construct the GraphModel */
+//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+//
+//		//add the series label or if none speicifed, add a defualt
+//		if (getSeriesLabel()!=null)
+//			gmodel.addSeriesLabel(getSeriesLabel());
+//		else
+//			gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
+//
+//
+//		for (Group group : groups){
+//			gmodel.addGroupLabel(group.getGroupName());
+//			List<Double> values = new ArrayList();
+//			Double valueDouble = new Double(group.getValue());
+//			values.add(valueDouble);
+//			gmodel.addGroupValue(values);
+//		}
 
-		return gmodel;
+		//finished successfully, no exception thrown
+		return true;
 
 	}
 

@@ -1,4 +1,19 @@
 /**
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/**
  *
  */
 package uk.ac.cardiff.raptormua.engine.statistics;
@@ -13,6 +28,11 @@ import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
+import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
@@ -41,9 +61,15 @@ public class Statistic {
 	/*the end time from which to produce the starts, defining the temporal extent */
 	protected DateTime endTime;
 
-	/** add a preprocessing module to the statistical method */
-	private StatisticsPreProcessing preprocessor;
+	/* add a preprocessing module to the statistical method */
+	private StatisticsPreProcessor preprocessor;
 
+	private List<StatisticsPostProcessor> postprocessor;
+
+	/*each statistical method produces objects which are stored in this array variable ready for postprocessing
+	 * or construction of an <code>AggregatorGraphModel</code>
+	 */
+	protected Observation[] observations;
 
 	/**
 	 * <p> Always creates a copy of the entries, as the statisical method is
@@ -96,6 +122,64 @@ public class Statistic {
 		return new DateTime();
 	}
 
+	/**
+	 * <p> construct a graph model from the data observations and groupings stored in the
+	 * buckets </p>
+	 * @return
+	 */
+	public AggregatorGraphModel constructGraphModel(){
+		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+
+		log.debug("Observations type "+observations);
+
+		if (observations instanceof Group[]){
+			log.info("Constructing graph model for Group type");
+			Group[] groups = (Group[]) observations;
+
+			gmodel.addSeriesLabel(getSeriesLabel());
+			for (Group group : groups){
+				gmodel.addGroupLabel(group.getGroupName());
+				List<Double> values = new ArrayList();
+				Double valueDouble = new Double(group.getValue());
+				values.add(valueDouble);
+				gmodel.addGroupValue(values);
+			}
+		}
+		else if (observations instanceof Bucket[]){
+			log.info("Constructing graph model for Bucket type");
+			Bucket[] buckets = (Bucket[])observations;
+
+			gmodel.addSeriesLabel(getSeriesLabel());
+			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+			for (Bucket bucket : buckets){
+				gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
+				List<Double> values = new ArrayList();
+				Double valueDouble = new Double(bucket.getValue());
+				values.add(valueDouble);
+				gmodel.addGroupValue(values);
+			}
+		}
+
+		return gmodel;
+	}
+
+	/**
+	 * <p> pre processing effects the entries that go into the statistical unit
+	 * post processing effects the observations that result form the statistical unit </p>
+	 */
+	public void postProcess() {
+		try {
+			if (getPostprocessor()!=null){
+				for (StatisticsPostProcessor post : postprocessor)
+					post.postProcess(observations);
+
+			}
+		} catch (PostprocessorException e) {
+			log.error("Could not post process entries, using "+getPostprocessor().getClass());
+		}
+	}
+
 
 	public List<Entry> getAuthEntries() {
 		return entries;
@@ -133,11 +217,11 @@ public class Statistic {
 		return unitName;
 	}
 
-	public void setPreprocessor(StatisticsPreProcessing preprocessor) {
+	public void setPreprocessor(StatisticsPreProcessor preprocessor) {
 		this.preprocessor = preprocessor;
 	}
 
-	public StatisticsPreProcessing getPreprocessor() {
+	public StatisticsPreProcessor getPreprocessor() {
 		return preprocessor;
 	}
 
@@ -177,6 +261,22 @@ public class Statistic {
 	public DateTime getEndTimeAsDate() {
 		return endTime;
 	}
+
+
+
+	public List<StatisticsPostProcessor> getPostprocessor() {
+		return postprocessor;
+	}
+
+
+	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
+		this.postprocessor = postprocessor;
+	}
+
+
+
+
+
 
 
 
