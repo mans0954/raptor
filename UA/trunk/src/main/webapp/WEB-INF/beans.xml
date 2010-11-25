@@ -113,6 +113,43 @@
 	</bean>
 	<!--  DONE -->
 
+	<!--  HIBERNATE DAO -->
+	<bean id="icaSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource"><ref local="icaDatasource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> <!-- database type -->
+				<prop key="hibernate.show_sql">false</prop>  <!-- outputs the SQL queries used to the standard logger -->
+			  <prop key="hibernate.hbm2ddl.auto">create</prop> <!-- update changes the db if mapping changes, creates the db if none exists, in production do not use any of these
+-->
+				<prop key="hibernate.c3p0.minPoolSize">5</prop> <!-- IMPORTANT this then uses the c3po pooling which is better than hibs implementation for production systems
+-->
+   				<prop key="hibernate.c3p0.maxPoolSize">20</prop>
+   				<prop key="hibernate.c3p0.timeout">600</prop>
+   				<prop key="hibernate.c3p0.max_statement">50</prop>
+			</props>
+		</property>
+		<!--  OR mapping files. -->
+		<property name="mappingResources">
+			<list>
+				<value>uk/ac/cardiff/model/entry.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+		<!--
+		Set Up Basic Apache DataSource for accessing the hibernate database
+	-->
+	<bean id="icaDatasource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost/ica" />
+		<property name="username" value="postgres" />
+		<property name="password" value="" /> <!--  no password, bad idea! -->
+	</bean>
+
+
 	<import resource="collector-registry.xml" />
 
 	</beans>
