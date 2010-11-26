@@ -35,9 +35,20 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<version>2.2.7</version>
+			<exclusions>
+                 <exclusion>
+                     <groupId>asm</groupId>
+                     <artifactId>asm</artifactId>
+                 </exclusion>
+             </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -76,11 +87,6 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-			<groupId>RaptorSuite</groupId>
-			<artifactId>InformationModel</artifactId>
-			<version>0.0.7-SNAPSHOT</version>
-		</dependency>
-		<dependency>
             <groupId>RaptorSuite</groupId>
             <artifactId>ServiceInterfaces</artifactId>
             <version>0.0.2-SNAPSHOT</version>
@@ -89,6 +95,11 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-databinding-aegis</artifactId>
 			<version>2.2.9</version>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.0-801.jdbc4</version>
 		</dependency>
 	</dependencies>
 

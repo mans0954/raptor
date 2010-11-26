@@ -58,4 +58,16 @@ public class MemoryEntryHandler implements EntryHandler{
 	    entries.clear();
 
 	}
+
+	/*
+	 * <p> nothing to do in a memory handler after each transaction
+	 *
+	 * (non-Javadoc)
+	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#endTransaction()
+	 */
+	@Override
+	public void endTransaction() {
+
+
+	}
 }

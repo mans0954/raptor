@@ -27,6 +27,8 @@ public class UnitAggregatorEngine {
 
     private ICARegistry icaRegistry;
     private EntryHandler entryHandler;
+
+    /* class logger */
     static Logger log = Logger.getLogger(UnitAggregatorEngine.class);
 
     public UnitAggregatorEngine(){
@@ -44,15 +46,14 @@ public class UnitAggregatorEngine {
 	return icaRegistry;
     }
 
-    /**
-     *
-     */
+
     public void poll() {
 	for (ICAEntry ica : icaRegistry.getICAEntries()){
 	    entryHandler.addEntries(ica.getAllAuthentications());
 	}
+	entryHandler.endTransaction();
 	/* test output all entries*/
-	toStdOut();
+	//toStdOut();
 
     }
 

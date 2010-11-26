@@ -76,6 +76,13 @@
 
 	<bean name="uaEngine" class="uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine">
 		<property name="icaRegistry"><ref bean="icaRegistry"></ref></property>
+		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+	</bean>
+
+	<!-- Create the entry handler -->
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.RaptorUA.model.MemoryEntryHandler"></bean>
+	<bean name="persistantEntryHandler" class="uk.ac.cardiff.RaptorUA.model.PersistantEntryHandler">
+		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
 	<!-- Polling trigger setup -->
@@ -114,8 +121,8 @@
 	<!--  DONE -->
 
 	<!--  HIBERNATE DAO -->
-	<bean id="icaSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="dataSource"><ref local="icaDatasource" />
+	<bean id="uaSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource"><ref local="uaDatasource" />
 		</property>
 		<property name="hibernateProperties">
 			<props>
@@ -141,12 +148,16 @@
 		<!--
 		Set Up Basic Apache DataSource for accessing the hibernate database
 	-->
-	<bean id="icaDatasource" class="org.apache.commons.dbcp.BasicDataSource"
+	<bean id="uaDatasource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />
-		<property name="url" value="jdbc:postgresql://localhost/ica" />
+		<property name="url" value="jdbc:postgresql://localhost/ua" />
 		<property name="username" value="postgres" />
 		<property name="password" value="" /> <!--  no password, bad idea! -->
+	</bean>
+
+	<bean name="dataConnectionImpl" class="uk.ac.cardiff.RaptorUA.dao.UADataConnectionImpl">
+		<property name="sessionFactory" ref="uaSessionFactory" />
 	</bean>
 
 
