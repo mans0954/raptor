@@ -12,10 +12,10 @@
 				<bean id="cardiffShibICA-idp1" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
 					<property name="serviceEndpoint"><value>http://localhost:7080/ICA/Collector</value></property>
 				</bean>
-				<bean id="cardiffShibICA-idp2" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
+				<!--<bean id="cardiffShibICA-idp2" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
 					<property name="serviceEndpoint"><value>http://localhost:6080/ICA/Collector</value></property>
 				</bean>
-			</list>
+			--></list>
 		</property>
 	</bean>
 

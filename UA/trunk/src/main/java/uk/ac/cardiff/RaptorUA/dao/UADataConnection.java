@@ -12,40 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *
- * @author philsmart
- * {@literal} this class manages interaction with the internal model of the ICA
+ */
+/**
  *
  */
+package uk.ac.cardiff.RaptorUA.dao;
 
-package uk.ac.cardiff.RaptorUA.model;
-
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
+/**
+ * @author philsmart
+ *
+ */
+public interface UADataConnection {
+
+	public List runQuery(String query, Object[] parameters);
+	public Object runQueryUnique(String query, Object[] parameters);
+	public void save(Object object);
+	public void deleteAllEntries(Collection entries);
+	public void saveAll(Collection collection);
 
 
-public interface EntryHandler {
-
-
-
-	public void addEntries(Set<Entry> entries);
-
-	public Set<Entry> getEntries();
-
-	public void setEntries(Set<Entry> entries);
-
-	public void removeAllEntries();
-
-	/**
-	 *
-	 */
-	public void endTransaction();
 
 }
