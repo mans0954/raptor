@@ -19,6 +19,7 @@
 package main.uk.ac.cf.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,6 +61,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	//convert to set from list, maybe expensive
 	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
 	entries = new LinkedHashSet<Entry>(entriesAsList);
+
     }
 
     /*
