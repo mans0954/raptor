@@ -84,7 +84,9 @@ public class UAProcessImpl implements UAProcess {
 	try {
 	    if (lockR.tryLock(getTimeout, TimeUnit.MILLISECONDS)) {
 		try {
+		    log.debug("Retreiving all authentications form UA");
 		    authentications = aggregatorEngine.getAllAuthentications();
+		    log.debug("Retreiving all authentications form UA...done");
 		} finally {
 		    lockR.unlock();
 		}
