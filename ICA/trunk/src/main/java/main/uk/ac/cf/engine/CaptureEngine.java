@@ -65,7 +65,7 @@ public class CaptureEngine {
 		Set authentications = authI.getAuthentications();
 		for (Object auth : authentications)allAuths.add(auth);
 	    }
-	    retrieveTransactionFinished();
+	   // retrieveTransactionFinished();
 	    return allAuths;
 	}
 
