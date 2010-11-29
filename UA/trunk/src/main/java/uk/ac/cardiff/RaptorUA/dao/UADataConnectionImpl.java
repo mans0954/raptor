@@ -64,7 +64,7 @@ public class UADataConnectionImpl implements UADataConnection{
      */
     @Override
     public void saveAll(Collection collection) {
-	//log.debug("Saving..."+entry);
+	//log.debug("Saving...");
 	hibernateTemplate.saveOrUpdateAll(collection);
 	//hibernateTemplate.flush();
 

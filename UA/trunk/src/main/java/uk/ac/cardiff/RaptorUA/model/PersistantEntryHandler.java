@@ -52,6 +52,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	this.setDataConnection(dataConnection);
 
 	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
+	log.info("UA has loaded "+entriesAsList.size()+" entries from DB backed cache");
 	entries = new LinkedHashSet<Entry>(entriesAsList);
     }
 
@@ -83,7 +84,9 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public void endTransaction() {
+	log.debug("Saving transaction for UA");
 	dataConnection.saveAll(entries);
+	log.debug("Saving transaction for UA...Done");
 
     }
 
