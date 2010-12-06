@@ -11,79 +11,48 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import uk.ac.cardiff.model.StatisticParameters;
+
 /**
- * This class only represents information, the dattypes are strings, and the strings maybe formatted
- * As a result, this class is only for human consumption (or presentation to the user)
+ * This class only represents information, the dattypes are strings, and the strings maybe formatted As a result, this class is only for human consumption (or
+ * presentation to the user)
+ *
  * @author philsmart
  *
  */
-public class StatisticalUnitInformation implements Serializable{
+public class StatisticalUnitInformation implements Serializable {
 
-	private String statisticalUnitName;
-	private String methodName;
-	private List<String> methodParams;
-	private String field;
-	private String startTime;
-	private String endTime;
-	private String dateFormat;
+    /* generated serial UID for this class */
+    private static final long serialVersionUID = 4580271084108294958L;
 
+    private StatisticParameters statisticParameters;
 
-	public void setStatisticalUnitName(String statisticalUnitName) {
-		this.statisticalUnitName = statisticalUnitName;
-	}
-	public String getStatisticalUnitName() {
-		return statisticalUnitName;
-	}
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
-	}
-	public String getMethodName() {
-		return methodName;
-	}
-	public void setMethodParams(List<String> methodParams) {
-		this.methodParams = methodParams;
-	}
-	public List<String> getMethodParams() {
-		return methodParams;
-	}
-	public void setField(String field) {
-		this.field = field;
-	}
-	public String getField() {
-		return field;
-	}
-	public void setStartTime(String startTime) {
-		this.startTime = startTime;
-	}
-	public String getStartTime() {
-		return startTime;
-	}
-	public void setEndTime(String endTime) {
-		this.endTime = endTime;
-	}
-	public String getEndTime() {
-		return endTime;
-	}
+    /* both these are simple string values (representing names) for the time being*/
+    private List<String> preprocessors;
+    private List<String> postprocessors;
 
-//	public Date getStartTimeAsDate(){
-//		DateTimeFormatter dtf = DateTimeFormat.forPattern(getDateFormat());
-//		DateTime startTimeAsDate = dtf.parseDateTime(startTime);
-//		return new Date(startTimeAsDate.getMillis());
-//	}
-//
-//	public Date getEndTimeAsDate(){
-//		DateTimeFormatter dtf = DateTimeFormat.forPattern(getDateFormat());
-//		DateTime endTimeAsDate = dtf.parseDateTime(endTime);
-//		return new Date(endTimeAsDate.getMillis());
-//	}
+    public void setStatisticParameters(StatisticParameters statisticParameters) {
+	this.statisticParameters = statisticParameters;
+    }
 
+    public StatisticParameters getStatisticParameters() {
+	return statisticParameters;
+    }
 
+    public void setPreprocessors(List<String> preprocessors) {
+	this.preprocessors = preprocessors;
+    }
 
-	public void setDateFormat(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-	public String getDateFormat() {
-		return dateFormat;
-	}
+    public List<String> getPreprocessors() {
+	return preprocessors;
+    }
+
+    public void setPostprocessors(List<String> postprocessors) {
+	this.postprocessors = postprocessors;
+    }
+
+    public List<String> getPostprocessors() {
+	return postprocessors;
+    }
 
 }
