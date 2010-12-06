@@ -65,9 +65,10 @@ public class Statistic {
 	/* add a preprocessing module to the statistical method */
 	private StatisticsPreProcessor preprocessor;
 
+	/* add a postprocessing module to the statistical method */
 	private List<StatisticsPostProcessor> postprocessor;
 
-	/*each statistical method produces objects which are stored in this array variable ready for postprocessing
+	/*each statistical method produces objects (observations) which are stored in this array variable ready for postprocessing
 	 * or construction of an <code>AggregatorGraphModel</code>
 	 */
 	protected Observation[] observations;

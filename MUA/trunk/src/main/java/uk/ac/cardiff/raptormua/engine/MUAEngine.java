@@ -52,7 +52,6 @@ public class MUAEngine {
 
 	public MUAEngine (){
 		log.info("Setup Multi-Unit Aggregator Engine...");
-		entryHandler = new MemoryEntryHandler();
 		log.info("Mulit-Unit Aggregator Engine is running...");
 	}
 
@@ -64,8 +63,9 @@ public class MUAEngine {
 		for (UAEntry entry : uaRegistry.getUAEntries()){
 		    	Set entries = entry.getAllAuthentications();
 			//log.debug("Setting: "+entries.size());
-			entryHandler.addEntries(entries);
+			getEntryHandler().addEntries(entries);
 		}
+		getEntryHandler().endTransaction();
 
 	}
 
@@ -90,7 +90,7 @@ public class MUAEngine {
 	 */
 	public AggregatorGraphModel performStatistic(String statisticName) {
 		/* set the current set of entries held by the MUA for processing*/
-		statisticsHandler.setEntries(entryHandler.getEntries());
+		statisticsHandler.setEntries(getEntryHandler().getEntries());
 		return statisticsHandler.peformStatistic(statisticName);
 
 	}
@@ -137,6 +137,14 @@ public class MUAEngine {
 
 
 		return capabilities;
+	}
+
+	public void setEntryHandler(EntryHandler entryHandler) {
+	    this.entryHandler = entryHandler;
+	}
+
+	public EntryHandler getEntryHandler() {
+	    return entryHandler;
 	}
 
 }
