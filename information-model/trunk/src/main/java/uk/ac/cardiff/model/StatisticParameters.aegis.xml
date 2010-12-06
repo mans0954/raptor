@@ -4,7 +4,7 @@
 property using the getDate and setDate methods -->
 <mappings xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<mapping>
-		<property name="eventTime" ignore="true"/>
-		<property name="persistantId" ignore="true"/>
+		<property name="getEndTime" ignore="true"/>
+		<property name="getStartTime" ignore="true"/>
 	</mapping>
 </mappings>
