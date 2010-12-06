@@ -64,4 +64,22 @@ public class MemoryEntryHandler implements EntryHandler{
 	public void setEntries(Set<Entry> entries){
 	    this.entries = entries;
 	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#endTransaction()
+	 */
+	@Override
+	public void endTransaction() {
+	    // TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#removeAllEntries()
+	 */
+	@Override
+	public void removeAllEntries() {
+	    // TODO Auto-generated method stub
+
+	}
 }

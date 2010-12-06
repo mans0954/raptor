@@ -16,8 +16,11 @@
 package uk.ac.cardiff.raptormua.engine.sei;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.ws.soap.SOAPFaultException;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
@@ -39,29 +42,36 @@ public class ServiceEndpointInterface {
     static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
 
     public static Set getAuthentications(String endpoint) {
-	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	factory.setServiceClass(UnitAggregator.class);
-	// factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
-	AegisDatabinding databinding = new AegisDatabinding();
+	try{
+        	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+        	factory.setServiceClass(UnitAggregator.class);
+        	// factory.setServiceName(new QName("http://impl.wsinterface.cf.ac.uk.main/", "CollectorImplService"));
+        	AegisDatabinding databinding = new AegisDatabinding();
 
-	Set<String> overrides = new HashSet();
-	overrides.add(ShibbolethEntry.class.getName());
-	overrides.add(AuthenticationEntry.class.getName());
-	overrides.add(UsageEntry.class.getName());
-	databinding.setOverrideTypes(overrides);
+        	Set<String> overrides = new HashSet();
+        	overrides.add(ShibbolethEntry.class.getName());
+        	overrides.add(AuthenticationEntry.class.getName());
+        	overrides.add(UsageEntry.class.getName());
+        	databinding.setOverrideTypes(overrides);
 
-	factory.setAddress(endpoint);
-	// factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
-	factory.getServiceFactory().setDataBinding(databinding);
+        	factory.setAddress(endpoint);
+        	// factory.setWsdlLocation("http://localhost:8080/ICA/Collector?wsdl");
+        	factory.getServiceFactory().setDataBinding(databinding);
 
-	UnitAggregator client = (UnitAggregator) factory.create();
-	log.debug("Accessing the UA version " + client.getVersion());
-	Set<Entry> auths = client.getAllAuthentications();
-	log.debug("Retrieved " + auths.size() + " authentications from the UA [" + endpoint + "]");
-	// for (Entry ent : auths){//
-	// log.debug(ent.getEventTime()+" "+ent.getClass());//
-	// }
-	return auths;
+        	UnitAggregator client = (UnitAggregator) factory.create();
+
+        	log.debug("Accessing the UA version " + client.getVersion());
+        	Set<Entry> auths = client.getAllAuthentications();
+        	log.debug("Retrieved " + auths.size() + " authentications from the UA [" + endpoint + "]");
+
+        	return auths;
+	}
+	catch(Exception sfe){
+	    log.error("Endpoint ["+endpoint+"] is not responding to hails");
+	}
+
+	//return empty set if failed
+	return new LinkedHashSet();
     }
 
     public static Set getUsages(String endpoint) {
@@ -82,11 +92,7 @@ public class ServiceEndpointInterface {
 
 	UnitAggregator client = (UnitAggregator) factory.create();
 	log.debug("Accessing the ICA version " + client.getVersion());
-	// List<Entry> auths = client.getAllUsages();
-	// log.debug("Retrieved "+auths.size()+" usages");
-	// for (Entry ent : auths){//
-	// log.debug(ent+" "+ent.getClass());//
-	// }
+
 	return null;
     }
 

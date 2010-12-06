@@ -63,7 +63,7 @@ public class MUAProcessImpl implements MUAProcess{
 	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
 	 */
 	public Capabilities getCapabilities() {
-		log.info("WS call for getting capabilities");
+		log.info("WS call for get capabilities");
 		return engine.getCapabilities();
 	}
 

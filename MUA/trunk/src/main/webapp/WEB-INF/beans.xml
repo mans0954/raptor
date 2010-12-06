@@ -37,6 +37,13 @@
 	  	<jaxws:serviceFactory>
 			<ref bean='jaxws-and-aegis-service-factory' />
 		</jaxws:serviceFactory>
+
+			<!-- output all CXF intercepter chain messages to a logging class, rather than the stdOUT, DOES not work -->
+		<jaxws:properties>
+			<entry key="org.apache.cxf.logging.FaultLogger">
+				<bean class="uk.ac.cardiff.raptorcommon.loggers.SOAPFaultLogger"/>
+			</entry>
+		</jaxws:properties>
 	  </jaxws:endpoint>
 
 	  <bean id="muaEndpointInterface" class="uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl">
@@ -86,6 +93,13 @@
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
 		<property name="uaRegistry"><ref bean="uaRegistry"/></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
+		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+	</bean>
+
+	<!-- Create the entry handler -->
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptormua.model.MemoryEntryHandler"></bean>
+	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptormua.model.PersistantEntryHandler">
+		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
 	<!-- Polling trigger setup -->
@@ -131,6 +145,7 @@
 	</bean>
 	<!--  DONE -->
 
+	  <import resource="dao-beans.xml"/>
 	  <import resource="ua-registry.xml" />
 	  <import resource="statistical-units.xml" />
 

@@ -10,6 +10,9 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/information-model/information-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-common/raptor-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="MUA"/>
         <property name="java-output-path" value="/MUA/target/classes"/>
     </wb-module>
