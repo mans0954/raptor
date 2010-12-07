@@ -386,11 +386,6 @@
     	<version>2.2.8</version>
     	</dependency>
 		<dependency>
-			<groupId>RaptorSuite</groupId>
-			<artifactId>InformationModel</artifactId>
-			<version>0.0.7-SNAPSHOT</version>
-		</dependency>
-		<dependency>
             <groupId>RaptorSuite</groupId>
             <artifactId>ServiceInterfaces</artifactId>
             <version>0.0.2-SNAPSHOT</version>

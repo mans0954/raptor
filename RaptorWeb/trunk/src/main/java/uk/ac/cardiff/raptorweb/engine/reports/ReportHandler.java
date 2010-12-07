@@ -65,6 +65,9 @@ public class ReportHandler {
 			catch (IOException e) {
 				log.error("Could not read any file for ReportConstructor "+reportConstructor+" -> "+e.getMessage());
 			}
+			catch (NullPointerException e) {
+				log.error("Could not read any file for ReportConstructor "+reportConstructor+" -> "+e.getMessage());
+			}
 
 		}
 	}
