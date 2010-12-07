@@ -47,6 +47,7 @@ public class ServiceEndpointInterface {
 			capabilities = new Capabilities();
 			capabilities.setError(true);
 			capabilities.setErrorMessage(e.getMessage());
+			e.printStackTrace();
 		}
 		return capabilities;
 
@@ -55,8 +56,7 @@ public class ServiceEndpointInterface {
 
 
 	public static void main(String args[]) {
-		ServiceEndpointInterface
-				.discoverMUACapabilities("http://localhost:8080/MUA/MultiUnitAggregator");
+		ServiceEndpointInterface.discoverMUACapabilities("http://localhost:8080/MUA/MultiUnitAggregator");
 		// ServiceEndpointInterface.getAuthentications("http://localhost:8081/UA/UnitAggregator");
 	}
 

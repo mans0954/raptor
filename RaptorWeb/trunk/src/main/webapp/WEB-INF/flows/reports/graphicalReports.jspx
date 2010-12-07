@@ -33,10 +33,10 @@
 									<f:facet name="header">
 										<tr:outputText value="Statistical Unit Name" />
 									</f:facet>
-									<tr:commandLink text="#{unit.statisticalUnitName}"
+									<tr:commandLink text="#{unit.statisticParameters.unitName}"
 										action="invokeStatisticalUnit">
 										<f:setPropertyActionListener
-											value="#{unit.statisticalUnitName}"
+											value="#{unit}"
 											target="#{graphmodel.selectedStatisticalUnit}" />
 									</tr:commandLink>
 
@@ -45,33 +45,46 @@
 									<f:facet name="header">
 										<tr:outputText value="Internal Method" />
 									</f:facet>
-									<tr:outputText value="#{unit.methodName}" />
+									<tr:outputText value="#{unit.statisticParameters.methodName}" />
 								</tr:column>
 								<tr:column>
 									<f:facet name="header">
 										<tr:outputText value="Start Time" />
 									</f:facet>
-									<tr:outputText value="#{unit.startTime}" />
-
+									<tr:outputText value="#{unit.statisticParameters.startTimeAsFormattedString}" />
 								</tr:column>
 								<tr:column>
 									<f:facet name="header">
 										<tr:outputText value="End Time" />
 									</f:facet>
-									<tr:outputText value="#{unit.endTime}" />
+									<tr:outputText value="#{unit.statisticParameters.endTimeAsFormattedString}" />
 								</tr:column>
 								<tr:column>
 									<f:facet name="header">
 										<tr:outputText value="Field Name" />
 									</f:facet>
-									<tr:outputText value="#{unit.field}" />
+									<tr:outputText value="#{unit.statisticParameters.field}" />
 								</tr:column>
 								<tr:column>
 
 									<f:facet name="header">
 										<tr:outputText value="Parameters" />
 									</f:facet>
-									<tr:outputText value="#{unit.methodParams}" />
+									<tr:outputText value="#{unit.statisticParameters.methodParams}" />
+								</tr:column>
+								<tr:column>
+
+									<f:facet name="header">
+										<tr:outputText value="Preprocessors" />
+									</f:facet>
+									<tr:outputText value="#{unit.preProcessorsAsString}" />
+								</tr:column>
+								<tr:column>
+
+									<f:facet name="header">
+										<tr:outputText value="Postprocessors" />
+									</f:facet>
+									<tr:outputText value="#{unit.postProcessorsAsString}" />
 								</tr:column>
 							</tr:table>
 						</tr:panelFormLayout>

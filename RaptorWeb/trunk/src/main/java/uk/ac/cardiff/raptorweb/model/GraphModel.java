@@ -9,22 +9,24 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+
 
 
 public class GraphModel implements Serializable{
 	static Logger log = Logger.getLogger(GraphModel.class);
 
-	private String selectedStatisticalUnit;
+	//private String selectedStatisticalUnit;
 	private RaptorGraphModel currentGraph;
 	private String graphType;
 	private RaptorTableChartModel currentTableGraph;
-
+	private StatisticalUnitInformation selectedStatisticalUnit;
 
 
 	/**
 	 * @param selectedStatisticalUnit the selectedStatisticalUnit to set
 	 */
-	public void setSelectedStatisticalUnit(String selectedStatisticalUnit) {
+	public void setSelectedStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
 		this.selectedStatisticalUnit = selectedStatisticalUnit;
 	}
 
@@ -33,7 +35,7 @@ public class GraphModel implements Serializable{
 	/**
 	 * @return the selectedStatisticalUnit
 	 */
-	public String getSelectedStatisticalUnit() {
+	public StatisticalUnitInformation getSelectedStatisticalUnit() {
 		return selectedStatisticalUnit;
 	}
 
