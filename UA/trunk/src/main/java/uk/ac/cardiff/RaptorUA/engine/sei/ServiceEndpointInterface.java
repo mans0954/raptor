@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
+import org.apache.cxf.interceptor.Fault;
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
