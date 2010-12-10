@@ -33,7 +33,6 @@ public class UnitAggregatorEngine {
 
     public UnitAggregatorEngine(){
 	log.info("Setup Unit Aggregator Engine...");
-	entryHandler = new MemoryEntryHandler();
 	log.info("Unit Aggregator Engine is running...");
 
     }
