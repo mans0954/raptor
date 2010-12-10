@@ -101,11 +101,7 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-jaxrs</artifactId>
-			<version>2.2.8</version>
-		</dependency>
+
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
