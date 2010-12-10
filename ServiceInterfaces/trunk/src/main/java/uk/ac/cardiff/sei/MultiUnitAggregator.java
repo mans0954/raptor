@@ -10,6 +10,7 @@ import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
  * @author philsmart
@@ -23,6 +24,8 @@ public interface MultiUnitAggregator {
 
 
 	public Capabilities getCapabilities();
+
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
 
 	public AggregatorGraphModel invokeStatisticalUnit(String statisticName);
 
