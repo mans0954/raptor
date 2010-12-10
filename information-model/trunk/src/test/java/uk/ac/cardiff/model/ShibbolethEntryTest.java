@@ -6,11 +6,12 @@ package uk.ac.cardiff.model;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author philsmart
@@ -18,7 +19,7 @@ import org.junit.Test;
  */
 public class ShibbolethEntryTest {
 
-    static Logger log = Logger.getLogger(ShibbolethEntryTest.class);
+    static Logger log = LoggerFactory.getLogger(ShibbolethEntryTest.class);
 
     @Test
     public void testHashCodeEqual(){

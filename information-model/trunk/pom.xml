@@ -22,17 +22,17 @@
 			<artifactId>joda-time-hibernate</artifactId>
 			<version>1.2</version>
 		</dependency>
-				<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-			<scope>provided</scope>
-		</dependency>
+
 
 				<dependency>
 					<groupId>junit</groupId>
 					<artifactId>junit</artifactId>
 					<version>4.8.2</version>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j13</artifactId>
+					<version>1.0.1</version>
 				</dependency>
   </dependencies>
 
@@ -65,6 +65,8 @@
 				<includes>
 					<include>uk/ac/cardiff/model/Entry.aegis.xml</include>
 					<include>uk/ac/cardiff/model/entry.hbm.xml</include>
+					<include>uk/ac/cardiff/model/StatisticParameter.aegis.xml</include>
+					<include>uk/ac/cardiff/model/wsmodel/StatisticalUnitInformation.aegis.xml</include>
 				</includes>
 			</resource>
 			<!--  DONE -->
