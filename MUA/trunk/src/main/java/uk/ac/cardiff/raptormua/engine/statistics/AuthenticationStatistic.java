@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
 import uk.ac.cardiff.model.Entry;
@@ -40,7 +41,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
  *
  */
 public class AuthenticationStatistic extends Statistic{
-	static Logger log = Logger.getLogger(AuthenticationStatistic.class);
+	static Logger log = LoggerFactory.getLogger(AuthenticationStatistic.class);
 
 
 
@@ -56,8 +57,8 @@ public class AuthenticationStatistic extends Statistic{
 
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
-		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
-		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
+		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
+		if (this.getAuthEntries()!=null)log.debug("Working off {} entries",this.getAuthEntries().size());
 
 		/* stop processing if there are no valid entries */
 		if (this.getAuthEntries()==null || this.getAuthEntries().size()==0){
@@ -132,19 +133,6 @@ public class AuthenticationStatistic extends Statistic{
 
 		observations = buckets;
 
-//		/* now construct the GraphModel */
-//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-//		gmodel.addSeriesLabel("Number of Events per "+timeInterval+"ms");
-//		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-//		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-//		for (Bucket bucket : buckets){
-//			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
-//			List<Double> values = new ArrayList();
-//			Double valueDouble = new Double(bucket.getValue());
-//			values.add(valueDouble);
-//			gmodel.addGroupValue(values);
-//		}
-
 		//finished successfully, no exception thrown
 		return true;
 
@@ -156,7 +144,7 @@ public class AuthenticationStatistic extends Statistic{
 		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
 		log.debug("Performing countEntry Statistical Operation");
 
-		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
+		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
 
 		/* stop processing if there are no valid entries */
@@ -231,23 +219,10 @@ public class AuthenticationStatistic extends Statistic{
 
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-		setSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
+		statisticParameters.setSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
 
 		observations = buckets;
 
-
-//		/* now construct the GraphModel */
-//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-//		gmodel.addSeriesLabel("Number of Events per "+timeIntervalsInMs+"ms");
-//		DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-//		DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-//		for (Bucket bucket : buckets){
-//			gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
-//			List<Double> values = new ArrayList();
-//			Double valueDouble = new Double(bucket.getValue());
-//			values.add(valueDouble);
-//			gmodel.addGroupValue(values);
-//		}
 
 		return true;
 
@@ -258,7 +233,7 @@ public class AuthenticationStatistic extends Statistic{
 
 		log.debug("Performing groupByFrequency Statistical Operation");
 
-		log.debug("Params for method:  "+this.getField()+", "+this.getMethodName()+", "+this.getUnitName());
+		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
 
 		/* stop processing if there are no valid entries */
@@ -302,29 +277,11 @@ public class AuthenticationStatistic extends Statistic{
 		if (this.getAuthEntries().size()!=testCount)log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
 		//add the series label or if none specified, add a default
-		if (getSeriesLabel()==null)
-			setSeriesLabel("Number of Events Grouped By "+groupByField);
+		if (statisticParameters.getSeriesLabel()==null)
+		    statisticParameters.setSeriesLabel("Number of Events Grouped By "+groupByField);
 
 		observations = groups.toArray(new Group[0]);
 
-
-//		/* now construct the GraphModel */
-//		AggregatorGraphModel gmodel = new AggregatorGraphModel();
-//
-//		//add the series label or if none speicifed, add a defualt
-//		if (getSeriesLabel()!=null)
-//			gmodel.addSeriesLabel(getSeriesLabel());
-//		else
-//			gmodel.addSeriesLabel("Number of Events Grouped By "+groupByField);
-//
-//
-//		for (Group group : groups){
-//			gmodel.addGroupLabel(group.getGroupName());
-//			List<Double> values = new ArrayList();
-//			Double valueDouble = new Double(group.getValue());
-//			values.add(valueDouble);
-//			gmodel.addGroupValue(values);
-//		}
 
 		//finished successfully, no exception thrown
 		return true;
@@ -332,7 +289,7 @@ public class AuthenticationStatistic extends Statistic{
 	}
 
 	private DateTime startingTime(){
-		if (startTime!=null)return startTime;
+		if (statisticParameters.getStartTimeAsDate()!=null)return statisticParameters.getStartTimeAsDate();
 		DateTime start=null;
 		for (Entry entry : this.getAuthEntries() ){
 			if (start ==null)start = entry.getEventTime();
@@ -342,7 +299,7 @@ public class AuthenticationStatistic extends Statistic{
 	}
 
 	private DateTime endingTime(){
-		if (endTime!=null)return endTime;
+		if (statisticParameters.getEndTimeAsDate()!=null)return statisticParameters.getEndTimeAsDate();
 		DateTime end=null;
 		for (Entry entry : this.getAuthEntries() ){
 			if (end ==null)end = entry.getEventTime();
@@ -371,7 +328,7 @@ public class AuthenticationStatistic extends Statistic{
 			 if (isEndTime){
 				 dt = new DateTime(dt.getMillis()+86340000); //where 86340000 is 23.59 hours
 			 }
-			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
+			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+statisticParameters.getUnitName());
 			 return dt;
 		}
 		else if(date.length()==15){
@@ -379,7 +336,7 @@ public class AuthenticationStatistic extends Statistic{
 			String format = "yyyyMMdd'T'HHmmss";
 			 DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
 			 DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
-			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
+			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+statisticParameters.getUnitName());
 			return dt;
 		}
 		return new DateTime();

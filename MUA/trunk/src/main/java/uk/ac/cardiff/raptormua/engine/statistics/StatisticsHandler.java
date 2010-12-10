@@ -22,17 +22,19 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
  * @author philsmart
  * Allows the storage and invocation of statistical units
  */
 public class StatisticsHandler {
-	static Logger log = Logger.getLogger(StatisticsHandler.class);
+	static Logger log = LoggerFactory.getLogger(StatisticsHandler.class);
 
 	private List<Statistic> statisticalUnits;
 	private Set<Entry> entries;
@@ -50,7 +52,7 @@ public class StatisticsHandler {
 	 */
 	public AggregatorGraphModel peformStatistic(String statisticName) {
 		for (Statistic statistic : statisticalUnits){
-			if (statistic.getUnitName().equals(statisticName)){
+			if (statistic.getStatisticParameters().getUnitName().equals(statisticName)){
 				return performStatiticalPipeline(statistic);
 			}
 		}
@@ -75,12 +77,12 @@ public class StatisticsHandler {
 	 */
 	private Boolean invoke(Statistic statistic) {
 		try{
-			List<String> params = statistic.getMethodParams();
+			List<String> params = statistic.getStatisticParameters().getMethodParams();
 			Object[] paramsO = new Object[params.size()];
 			for (int i=0; i < paramsO.length; i++){
 				paramsO[i] = params.get(i);
 			}
-			return invoke(statistic.getMethodName(),paramsO,statistic);
+			return invoke(statistic.getStatisticParameters().getMethodName(),paramsO,statistic);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -114,6 +116,36 @@ public class StatisticsHandler {
 	public void setEntries(Set<Entry> entries) {
 		this.entries = entries;
 
+	}
+
+	/**
+	 * updates a statistical unit based on the values in the <code>statisticalUnitInformation</code> parameter
+	 * Not a very good primary key (unit name) should be something else
+	 *
+	 * @param statisticalUnitInformation
+	 */
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	    log.info("Updating statistical unit {} ",statisticalUnitInformation.getStatisticParameters().getUnitName());
+	    Statistic toUpdate = null;
+	    for (Statistic statistic : statisticalUnits){
+		if (statistic.getStatisticParameters().getUnitName().equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
+		    toUpdate = statistic;
+	    }
+	    log.debug("Found Statistic {} to update",toUpdate);
+	    update(toUpdate, statisticalUnitInformation);
+
+	}
+
+
+	/**
+	 * Only currently updates certain values, these will need to be completed in the future
+	 *
+	 * @param statistic
+	 * @param statisticalUnitInformation
+	 */
+	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation){
+	    statistic.getStatisticParameters().setEndTime(statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate());
+	    statistic.getStatisticParameters().setStartTime(statisticalUnitInformation.getStatisticParameters().getStartTimeAsDate());
 	}
 
 

@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptormua.service;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
  * @author philsmart
@@ -39,4 +40,9 @@ public interface MUAProcess {
 	 * @return
 	 */
 	public Capabilities getCapabilities();
+
+	/**
+	 * @param statisticalUnitInformation
+	 */
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
 }

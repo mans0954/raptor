@@ -18,10 +18,13 @@
  */
 package uk.ac.cardiff.raptormua.service.impl;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
@@ -30,7 +33,7 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
  *
  */
 public class MUAProcessImpl implements MUAProcess{
-	static Logger log = Logger.getLogger(MUAProcessImpl.class);
+	static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
 	private MUAEngine engine;
 
@@ -54,7 +57,7 @@ public class MUAProcessImpl implements MUAProcess{
 	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang.String)
 	 */
 	public AggregatorGraphModel performStatistic(String statisticName) {
-		log.info("WS Call for perform statistic - "+statisticName);
+		log.info("WebSservice call for perform statistic {} ",statisticName);
 		return engine.performStatistic(statisticName);
 
 	}
@@ -63,8 +66,18 @@ public class MUAProcessImpl implements MUAProcess{
 	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
 	 */
 	public Capabilities getCapabilities() {
-		log.info("WS call for get capabilities");
+		log.info("WebSservice call for get capabilities");
 		return engine.getCapabilities();
 	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#setStatisticalUnit(uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation)
+	 */
+	@Override
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	    engine.updateStatisticalUnit(statisticalUnitInformation);
+
+	}
+
 
 }

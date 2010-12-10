@@ -29,6 +29,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
@@ -46,21 +47,8 @@ public class Statistic {
 	static Logger log = Logger.getLogger(Statistic.class);
 
 	private Set<Entry> entries;
-	private String field;
-	private String unitName;
-	private String methodName;
-	private List<String> methodParams;
 
-	/* The textual description of the series, as attached to the x-axis*/
-	private String seriesLabel;
-
-	/*the start time from which to produce the starts, defining the temporal extent
-	 * If a starttime and endtime is not given, the entire temporal extent of the data series will be used
-	 */
-	protected DateTime startTime;
-
-	/*the end time from which to produce the starts, defining the temporal extent */
-	protected DateTime endTime;
+	protected StatisticParameters statisticParameters;
 
 	/* add a preprocessing module to the statistical method */
 	private StatisticsPreProcessor preprocessor;
@@ -94,37 +82,6 @@ public class Statistic {
 
 
 	/**
-	 * <p> </p>
-	 * @param date
-	 * @param isEndTime - if is endTime and only ddMMyyyy is given, then the endTime should be 23.59 as opposed to 00.00 as this is the end of the day
-	 * @return
-	 */
-	private DateTime formatDate(String date, boolean isEndTime){
-		/* this is not a nice hack, please tidy*/
-		log.debug("Date format being parsed "+date+" with "+date.length()+" characters");
-		if (date.length()==8){
-			//assume ddMMyyy
-			 String format = "ddMMyyyy";
-			 DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
-			 DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
-			 if (isEndTime){
-				 dt = new DateTime(dt.getMillis()+86340000); //where 86340000 is 23.59 hours
-			 }
-			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
-			 return dt;
-		}
-		else if(date.length()==15){
-			//assume yyyyMMdd'T'HHmmss
-			String format = "yyyyMMdd'T'HHmmss";
-			 DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
-			 DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
-			 log.debug("time set to "+dt.getDayOfMonth()+"th "+dt.getMonthOfYear()+" "+dt.getYear()+" "+dt.getHourOfDay()+":"+dt.getMinuteOfHour()+":"+dt.getSecondOfMinute()+" for "+this.getUnitName());
-			return dt;
-		}
-		return new DateTime();
-	}
-
-	/**
 	 * <p> construct a graph model from the data observations and groupings stored in the
 	 * buckets </p>
 	 * @return
@@ -138,7 +95,7 @@ public class Statistic {
 			log.info("Constructing graph model for Group type");
 			Group[] groups = (Group[]) observations;
 
-			gmodel.addSeriesLabel(getSeriesLabel());
+			gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
 			for (Group group : groups){
 				gmodel.addGroupLabel(group.getGroupName());
 				List<Double> values = new ArrayList();
@@ -151,7 +108,7 @@ public class Statistic {
 			log.info("Constructing graph model for Bucket type");
 			Bucket[] buckets = (Bucket[])observations;
 
-			gmodel.addSeriesLabel(getSeriesLabel());
+			gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
 			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
 			for (Bucket bucket : buckets){
@@ -188,35 +145,7 @@ public class Statistic {
 	}
 
 	public void setField(String field) {
-		this.field = field;
-	}
 
-	public String getField() {
-		return field;
-	}
-
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
-	}
-
-	public String getMethodName() {
-		return methodName;
-	}
-
-	public void setMethodParams(List<String> methodParams) {
-		this.methodParams = methodParams;
-	}
-
-	public List<String> getMethodParams() {
-		return methodParams;
-	}
-
-	public void setUnitName(String unitName) {
-		this.unitName = unitName;
-	}
-
-	public String getUnitName() {
-		return unitName;
 	}
 
 	public void setPreprocessor(StatisticsPreProcessor preprocessor) {
@@ -227,44 +156,6 @@ public class Statistic {
 		return preprocessor;
 	}
 
-	public void setSeriesLabel(String seriesLabel) {
-		this.seriesLabel = seriesLabel;
-	}
-
-	public String getSeriesLabel() {
-		return seriesLabel;
-	}
-
-
-	public void setStartTime(String startTime) {
-		this.startTime = formatDate(startTime, false);
-	}
-
-	public String getStartTime() {
-		return startTime.toString();
-	}
-
-	public void setEndTime(String endTime) {
-		this.endTime = formatDate(endTime,true);
-	}
-
-	public String getEndTime() {
-		return endTime.toString();
-	}
-
-
-	/**
-	 * @return
-	 */
-	public DateTime getStartTimeAsDate() {
-		return startTime;
-	}
-
-	public DateTime getEndTimeAsDate() {
-		return endTime;
-	}
-
-
 
 	public List<StatisticsPostProcessor> getPostprocessor() {
 		return postprocessor;
@@ -273,6 +164,16 @@ public class Statistic {
 
 	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
 		this.postprocessor = postprocessor;
+	}
+
+
+	public void setStatisticParameters(StatisticParameters statisticParameters) {
+	    this.statisticParameters = statisticParameters;
+	}
+
+
+	public StatisticParameters getStatisticParameters() {
+	    return statisticParameters;
 	}
 
 
