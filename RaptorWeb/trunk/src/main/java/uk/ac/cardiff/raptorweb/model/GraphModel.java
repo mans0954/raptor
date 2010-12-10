@@ -23,6 +23,7 @@ public class GraphModel implements Serializable{
 	private StatisticalUnitInformation selectedStatisticalUnit;
 
 
+
 	/**
 	 * @param selectedStatisticalUnit the selectedStatisticalUnit to set
 	 */

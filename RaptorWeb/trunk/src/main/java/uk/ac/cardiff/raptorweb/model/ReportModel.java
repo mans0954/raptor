@@ -14,7 +14,11 @@ import java.util.List;
  */
 public class ReportModel implements Serializable{
 
+
+    	private static final long serialVersionUID = -8181099012470152241L;
+
 	private List<DownloadFile> reportsForDownload;
+	private DownloadFile selectedDownloadFile;
 
 	/**
 	 *
@@ -33,5 +37,27 @@ public class ReportModel implements Serializable{
 	public List<DownloadFile> getReportsForDownload(){
 		return reportsForDownload;
 	}
+
+
+	public void setSelectedDownloadFile(DownloadFile selectedDownloadFile) {
+	    this.selectedDownloadFile = selectedDownloadFile;
+	}
+
+
+	public DownloadFile getSelectedDownloadFile() {
+	    return selectedDownloadFile;
+	}
+
+
+	/**
+	 * Removes the selectedDownloadFile form the <code>reportsForDownload</code> list
+	 */
+	public void removeSelectedDownloadFile() {
+	    if (reportsForDownload!=null)reportsForDownload.remove(selectedDownloadFile);
+
+	}
+
+
+
 
 }

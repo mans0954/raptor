@@ -7,9 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
+import uk.ac.cardiff.raptorweb.model.DownloadFile;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
 
@@ -19,7 +22,7 @@ import uk.ac.cardiff.raptorweb.model.ReportModel;
  */
 public class ReportHandler {
 
-	static Logger log = Logger.getLogger(ReportHandler.class);
+	static Logger log = LoggerFactory.getLogger(ReportHandler.class);
 
 	private List<ReportConstructor> reportConstructors;
 
@@ -70,6 +73,17 @@ public class ReportHandler {
 			}
 
 		}
+	}
+
+	/**
+	 * @param selectDownloadFile
+	 */
+	public void removeReport(ReportModel model) {
+	    log.debug("Removing {} report from filesystem ",model.getSelectedDownloadFile().getFile());
+	    boolean wasDeleted=model.getSelectedDownloadFile().getFile().delete();
+	    log.debug("file was removed {}",wasDeleted);
+	    model.removeSelectedDownloadFile();
+
 	}
 
 

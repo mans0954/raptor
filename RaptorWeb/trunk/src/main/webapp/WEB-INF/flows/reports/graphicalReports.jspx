@@ -8,22 +8,95 @@
 	xmlns:c="http://java.sun.com/jstl/core">
 
 	<ui:composition template="/templates/raptor/full.xhtml">
-
 		<ui:define name="content">
 
 
 
 			<tr:form id="graphForm">
-				<tr:panelTabbed position="above">
-					<tr:showDetailItem text="Authentication Graphs">
-						<tr:panelHeader text="Available Authentication Statistics" />
 
 
-						<br />
+				<tr:panelBorderLayout>
 
-						<tr:panelFormLayout rows="6" labelWidth="5%">
+					<f:facet name="start">
+						<tr:panelCaptionGroup
+							inlineStyle="border-style: hidden;background-color:#EEE9E8; height:1500px; width=500px">
+							<tr:panelHeader text="Statistics" />
+							<br />
+							<!-- force the packing algorithm on the start facet to consider this output text, to maintain a minumum size -->
+							<tr:outputText value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" inlineStyle="color:#EEE9E8;" />
 							<tr:table value="#{graphService.statisticalUnits}"
-								bandingInterval="2" banding="row" var="unit" width="95%">
+								bandingInterval="2" banding="row" var="unit" width="95%"
+								labelWidth="5%" inlineStyle="border-style: hidden;" rendered="#{not empty graphService.statisticalUnits}">
+
+								<f:facet name="detailStamp">
+									<tr:panelFormLayout rows="8" labelWidth="5%">
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Method Name:"
+												inlineStyle="font-weight: bold;" />
+											<tr:outputText value="#{unit.statisticParameters.methodName}" />
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal"  rendered="#{not empty unit.statisticParameters.startTimeAsJavaDate}">
+										<tr:outputText value="Start Time:"
+												inlineStyle="font-weight: bold;" />
+										<tr:inputNumberSpinbox autoSubmit="true" label="Hour:" value="#{unit.statisticParameters.startTimeHour}" minimum="00" maximum="23" simple="true"/>
+										<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:" value="#{unit.statisticParameters.startTimeMinute}" minimum="00" maximum="59" simple="true"/>
+										<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:" value="#{unit.statisticParameters.startTimeSecond}" minimum="00" maximum="59" simple="true"/>
+										<tr:inputDate id="startTimeDate" autoSubmit="true"
+											value="#{unit.statisticParameters.startTimeAsJavaDate}">
+											<f:convertDateTime dateStyle="short" />
+										</tr:inputDate>
+
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal" rendered="#{not empty unit.statisticParameters.endTimeAsJavaDate}">
+										<tr:outputText value="End Time:"
+												inlineStyle="font-weight: bold;" />
+										<tr:inputNumberSpinbox autoSubmit="true" label="Hour:" value="#{unit.statisticParameters.endTimeHour}" minimum="00" maximum="23" simple="true"/>
+										<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:" value="#{unit.statisticParameters.endTimeMinute}" minimum="00" maximum="59" simple="true"/>
+										<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:" value="#{unit.statisticParameters.endTimeSecond}" minimum="00" maximum="59" simple="true"/>
+										<tr:inputDate id="endTimeDate" autoSubmit="true"
+											value="#{unit.statisticParameters.endTimeAsJavaDate}">
+											<f:convertDateTime dateStyle="short" />
+										</tr:inputDate>
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Field:" inlineStyle="font-weight: bold;" />
+											<tr:outputText value="#{unit.statisticParameters.field}" />
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Parameters:"
+												inlineStyle="font-weight: bold;" />
+											<tr:outputText
+												value="#{unit.statisticParameters.methodParams}" />
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Preprocessors:"
+												inlineStyle="font-weight: bold;" />
+											<tr:outputText value="#{unit.preProcessorsAsString}" />
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Postprocessors:"
+												inlineStyle="font-weight: bold;" />
+											<tr:outputText value="#{unit.postProcessorsAsString}" />
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:commandButton partialSubmit="true" text="Update" action="updateMUAStatistic">
+												<f:setPropertyActionListener value="#{unit}"
+														target="#{graphmodel.selectedStatisticalUnit}" />
+											</tr:commandButton>
+										</tr:panelGroupLayout>
+
+
+
+									</tr:panelFormLayout>
+								</f:facet>
+
 								<f:facet name="header">
 									<tr:outputText
 										value="#{graphService.currentlyAttached.serviceEndpoint}" />
@@ -31,65 +104,84 @@
 
 								<tr:column>
 									<f:facet name="header">
-										<tr:outputText value="Statistical Unit Name" />
+										<tr:outputText value="Statistic" />
 									</f:facet>
 									<tr:commandLink text="#{unit.statisticParameters.unitName}"
 										action="invokeStatisticalUnit">
-										<f:setPropertyActionListener
-											value="#{unit}"
+										<f:setPropertyActionListener value="#{unit}"
 											target="#{graphmodel.selectedStatisticalUnit}" />
 									</tr:commandLink>
 
 								</tr:column>
-								<tr:column>
-									<f:facet name="header">
-										<tr:outputText value="Internal Method" />
-									</f:facet>
-									<tr:outputText value="#{unit.statisticParameters.methodName}" />
-								</tr:column>
-								<tr:column>
-									<f:facet name="header">
-										<tr:outputText value="Start Time" />
-									</f:facet>
-									<tr:outputText value="#{unit.statisticParameters.startTimeAsFormattedString}" />
-								</tr:column>
-								<tr:column>
-									<f:facet name="header">
-										<tr:outputText value="End Time" />
-									</f:facet>
-									<tr:outputText value="#{unit.statisticParameters.endTimeAsFormattedString}" />
-								</tr:column>
-								<tr:column>
-									<f:facet name="header">
-										<tr:outputText value="Field Name" />
-									</f:facet>
-									<tr:outputText value="#{unit.statisticParameters.field}" />
-								</tr:column>
-								<tr:column>
-
-									<f:facet name="header">
-										<tr:outputText value="Parameters" />
-									</f:facet>
-									<tr:outputText value="#{unit.statisticParameters.methodParams}" />
-								</tr:column>
-								<tr:column>
-
-									<f:facet name="header">
-										<tr:outputText value="Preprocessors" />
-									</f:facet>
-									<tr:outputText value="#{unit.preProcessorsAsString}" />
-								</tr:column>
-								<tr:column>
-
-									<f:facet name="header">
-										<tr:outputText value="Postprocessors" />
-									</f:facet>
-									<tr:outputText value="#{unit.postProcessorsAsString}" />
-								</tr:column>
 							</tr:table>
-						</tr:panelFormLayout>
+							<br></br>
+							<tr:panelHeader text="Download Options" />
 
-						<tr:panelHeader text="Report" />
+
+							<tr:panelBorderLayout>
+
+								<tr:panelGroupLayout id="reportTypePanel" layout="horizontal"
+									labelWidth="3%">
+									<tr:commandLink id="generateExcelReport"
+										action="generateExcelReport">
+										<!-- need to get the partialSubmit="true"> working for this action -->
+										<h:graphicImage value="/image/excel-icon.gif" style="border:0">
+										</h:graphicImage>
+
+									</tr:commandLink>
+
+									<tr:commandLink action="generateCSVReport">
+										<h:graphicImage value="/image/csv-icon.png" style="border:0">
+										</h:graphicImage>
+									</tr:commandLink>
+								</tr:panelGroupLayout>
+
+
+
+								<tr:table id="reportDownloadTable" value="#{reportmodel.reportsForDownload}"
+									bandingInterval="2" banding="row" var="row"
+									rendered="#{not empty reportmodel.reportsForDownload}"
+									partialTriggers=":generateExcelReport :reportDownloadTable:removeReportCommandLink" width="95%"
+									labelWidth="5%">
+
+									<tr:column>
+										<f:facet name="header">
+											<tr:outputText value="Report Name" />
+										</f:facet>
+										<tr:outputText value="#{row.friendlyName} ">
+
+										</tr:outputText>
+									</tr:column>
+									<tr:column align="center">
+										<f:facet name="header">
+											<tr:outputText value="Download" />
+										</f:facet>
+										<a href="#{row.downloadPath}">download</a>
+									</tr:column>
+									<tr:column align="center">
+										<f:facet name="header">
+											<tr:outputText value="Remove" />
+										</f:facet>
+										<tr:commandLink id="removeReportCommandLink" text="x" action="removeReport" partialSubmit="true" >
+										<f:setPropertyActionListener value="#{row}"
+											target="#{reportmodel.selectedDownloadFile}" />
+										</tr:commandLink>
+
+									</tr:column>
+								</tr:table>
+
+							</tr:panelBorderLayout>
+
+						</tr:panelCaptionGroup>
+
+					</f:facet>
+
+
+
+
+					<tr:panelCaptionGroup
+						inlineStyle="border-style: hidden; width:100%;">
+
 						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<br />
 							<tr:panelGroupLayout layout="horizontal">
@@ -122,12 +214,13 @@
 						-->
 							</tr:panelGroupLayout>
 
-							<tr:chart id="chart" verticalMajorSections="8"
+							<tr:chart id="chart" verticalMajorSections="15"
 								value="#{graphmodel.currentGraph}"
 								rendered="#{not empty graphmodel.currentGraph}"
 								inlineStyle="width:95%; height:700px;"
 								type="#{graphmodel.graphType}"
-								partialTriggers="chartTypeSelector" perspective="true" />
+								partialTriggers="chartTypeSelector" perspective="true"
+								width="95%" animationDuration="500"/>
 							<br />
 
 						</tr:panelFormLayout>
@@ -139,7 +232,7 @@
 						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<tr:table value="#{graphmodel.currentTableGraph.rows}"
 								bandingInterval="2" banding="row" var="row" width="95%"
-								rendered="#{not empty graphmodel.currentTableGraph}">
+								rendered="#{not empty graphmodel.currentTableGraph}" >
 
 								<tr:column>
 									<f:facet name="header">
@@ -158,83 +251,19 @@
 							</tr:table>
 							<br />
 
-							<tr:panelBox text="Download Options" background="light"
-								inlineStyle="width: 95%; height:100%;"
-								rendered="#{not empty graphmodel.currentTableGraph}"
-								partialTriggers="generateExcelReport">
 
-								<tr:panelBorderLayout>
-
-
-
-									<tr:panelGroupLayout id="reportTypePanel" layout="horizontal">
-										<tr:commandLink id="generateExcelReport"
-											action="generateExcelReport">
-											<!-- need to get the partialSubmit="true"> working for this action -->
-											<h:graphicImage value="/image/excel-icon.gif"
-												style="border:0">
-											</h:graphicImage>
-
-										</tr:commandLink>
-
-										<tr:commandLink action="generateCSVReport">
-											<h:graphicImage value="/image/csv-icon.png" style="border:0">
-											</h:graphicImage>
-										</tr:commandLink>
-									</tr:panelGroupLayout>
-
-
-
-									<tr:table value="#{reportmodel.reportsForDownload}"
-										bandingInterval="2" banding="row" var="row" width="95%"
-										rendered="#{not empty graphmodel.currentTableGraph}"
-										partialTriggers=":generateExcelReport">
-
-										<tr:column>
-											<f:facet name="header">
-												<tr:outputText value="Report Name" />
-											</f:facet>
-											<tr:outputText value="#{row.friendlyName} ">
-
-											</tr:outputText>
-										</tr:column>
-										<tr:column align="center">
-											<f:facet name="header">
-												<tr:outputText value="Download" />
-											</f:facet>
-											<a href="#{row.downloadPath}">download</a>
-										</tr:column>
-										<tr:column align="center">
-											<f:facet name="header">
-												<tr:outputText value="Remove" />
-											</f:facet>
-											<tr:outputText value="x" />
-										</tr:column>
-									</tr:table>
-
-								</tr:panelBorderLayout>
-							</tr:panelBox>
 						</tr:panelFormLayout>
+					</tr:panelCaptionGroup>
 
 
+					<!-- DONE Results table and download options -->
 
 
-						<!-- DONE Results table and download options -->
+				</tr:panelBorderLayout>
 
-					</tr:showDetailItem>
-
-
-
-					<tr:showDetailItem text="Usage Graphs">
-						<tr:panelHeader text="Usage" />
-
-					</tr:showDetailItem>
-					<tr:showDetailItem text="Combined Graphs">
-						<tr:panelHeader text="Combined" />
-
-					</tr:showDetailItem>
-				</tr:panelTabbed>
 			</tr:form>
+
+
 
 		</ui:define>
 	</ui:composition>

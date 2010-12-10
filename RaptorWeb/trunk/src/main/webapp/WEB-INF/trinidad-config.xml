@@ -16,7 +16,7 @@
     KIND, either express or implied.  See the License for the
     specific language governing permissions and limitations
     under the License.
-	   
+
 -->
 <trinidad-config xmlns="http://myfaces.apache.org/trinidad/config">
   <debug-output>true</debug-output>
@@ -27,10 +27,10 @@
   <!-- you can use EL to get the skin. This allows the skin to change between
        requests. -->
 
-  <skin-family>suede</skin-family>  
+  <skin-family>casablanca</skin-family>
 
   <!--
   <output-mode>portlet</output-mode>
   -->
-   
+
 </trinidad-config>

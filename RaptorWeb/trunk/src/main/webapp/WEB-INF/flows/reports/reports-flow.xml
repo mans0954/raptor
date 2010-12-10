@@ -26,6 +26,15 @@
  		<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)"/>
  	</transition>
 
+	<transition on="updateMUAStatistic">
+ 		<evaluate expression="graphService.updateMUAStatistic(graphmodel)"/>
+ 		<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)"/>
+ 	</transition>
+
+ 	<transition on="removeReport">
+		<evaluate expression="graphService.removeReport(reportmodel)"/>
+ 	</transition>
+
  	 <transition on="generateExcelReport">
  		<evaluate expression="graphService.generateExcelReport(graphmodel,reportmodel)"/>
  	</transition>
