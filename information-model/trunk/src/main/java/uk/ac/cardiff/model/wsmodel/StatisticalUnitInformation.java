@@ -55,4 +55,34 @@ public class StatisticalUnitInformation implements Serializable {
 	return postprocessors;
     }
 
+    /**
+     * human consumable output method for array of preprocessors
+     * @return
+     */
+    public String getPreProcessorsAsString(){
+	StringBuilder output = new StringBuilder();
+	int count=0;
+	for (String preprocessor : preprocessors){
+	    output.append(preprocessor);
+	    if (count < preprocessors.size()-1)output.append(", ");
+	    count++;
+	}
+	return output.toString();
+    }
+
+    /**
+     * human consumable output method for array of postprocessors
+     * @return
+     */
+    public String getPostProcessorsAsString(){
+	StringBuilder output = new StringBuilder();
+	int count=0;
+	for (String postprocessor : postprocessors){
+	    output.append(postprocessor);
+	    if (count < postprocessors.size()-1)output.append(", ");
+	    count++;
+	}
+	return output.toString();
+    }
+
 }
