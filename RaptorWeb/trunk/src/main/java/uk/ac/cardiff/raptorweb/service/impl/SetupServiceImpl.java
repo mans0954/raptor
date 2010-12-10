@@ -29,6 +29,9 @@ public class SetupServiceImpl implements SetupService{
 		return null;
 	}
 
+	public void setAttachedEndpoint(SetupModel model){
+	    webEngine.setAttached(model.getSelectedEndpoint());
+	}
 
 
 	public List getAttached(){

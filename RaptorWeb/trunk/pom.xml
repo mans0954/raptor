@@ -404,7 +404,7 @@
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>
-		<trinidad.version>1.2.10</trinidad.version>
+		<trinidad.version>1.2.13</trinidad.version>
 		<spring.version>2.5.4</spring.version>
 		<webflow.version>2.0.5.RELEASE</webflow.version>
 	</properties>

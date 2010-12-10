@@ -6,7 +6,8 @@ import java.util.Set;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
@@ -14,6 +15,7 @@ import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
 import uk.ac.cardiff.sei.UnitAggregator;
 
@@ -25,7 +27,7 @@ import uk.ac.cardiff.sei.UnitAggregator;
  *
  */
 public class ServiceEndpointInterface {
-	static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
+	static Logger log = LoggerFactory.getLogger(ServiceEndpointInterface.class);
 
 	public static Capabilities discoverMUACapabilities(String endpoint) {
 		Capabilities capabilities = null;
@@ -43,6 +45,30 @@ public class ServiceEndpointInterface {
 			// for (Entry ent : auths){//
 			// log.debug(ent.getEventTime()+" "+ent.getClass());//
 			// }
+		} catch (Exception e) {
+			capabilities = new Capabilities();
+			capabilities.setError(true);
+			capabilities.setErrorMessage(e.getMessage());
+			//e.printStackTrace();
+		}
+		return capabilities;
+
+	}
+
+	public static Capabilities updateStatisticalUnit(String endpoint, StatisticalUnitInformation statisticalUnitInformation) {
+		Capabilities capabilities = null;
+		try {
+			ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+			factory.setServiceClass(MultiUnitAggregator.class);
+			AegisDatabinding databinding = new AegisDatabinding();
+			factory.setAddress(endpoint);
+			factory.getServiceFactory().setDataBinding(databinding);
+
+			MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+			log.debug("Accessing the MUA version {}", client.getVersion());
+			log.debug("Updating statistic {} from the MUA {}", statisticalUnitInformation.getStatisticParameters().getUnitName(),endpoint);
+			client.updateStatisticalUnit(statisticalUnitInformation);
+
 		} catch (Exception e) {
 			capabilities = new Capabilities();
 			capabilities.setError(true);

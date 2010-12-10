@@ -26,4 +26,8 @@ public interface GraphService {
 	public void generateCSVReport(GraphModel model, ReportModel report);
 
 	public void loadSavedReports(ReportModel model);
+
+	public void updateMUAStatistic(GraphModel model);
+
+	public void removeReport(ReportModel model);
 }

@@ -16,14 +16,14 @@
     KIND, either express or implied.  See the License for the
     specific language governing permissions and limitations
     under the License.
-	   
+
 -->
 <skins xmlns="http://myfaces.apache.org/trinidad/skin">
     <skin>
-        <id>suede.desktop</id>
-        <family>suede</family>
+        <id>casablanca</id>
+        <family>casablanca</family>
         <render-kit-id>org.apache.myfaces.trinidad.desktop</render-kit-id>
-        <style-sheet-name>skins/suede/suede.css</style-sheet-name>
+        <style-sheet-name>skins/casablanca/casablancaSkin.css</style-sheet-name>
     </skin>
 
 </skins>

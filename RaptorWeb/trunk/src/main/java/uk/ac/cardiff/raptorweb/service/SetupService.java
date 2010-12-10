@@ -16,7 +16,7 @@ public interface SetupService {
 
 	public List getStatisticalServices();
 
-	
+	public void setAttachedEndpoint(SetupModel model);
 
 	/* performs the operation in place on the SetupModel */
 	public void getCapabilities(SetupModel model);

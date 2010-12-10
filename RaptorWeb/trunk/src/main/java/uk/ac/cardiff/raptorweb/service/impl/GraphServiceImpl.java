@@ -85,4 +85,18 @@ public class GraphServiceImpl implements GraphService{
 
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.GraphService#updateMUAStatistic(uk.ac.cardiff.raptorweb.model.GraphModel)
+	 */
+	@Override
+	public void updateMUAStatistic(GraphModel model) {
+	    webEngine.updateMUAStatistic(model);
+
+	}
+
+	public void removeReport(ReportModel model){
+	    webEngine.removeReport(model);
+	}
+
+
 }
