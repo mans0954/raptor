@@ -26,6 +26,7 @@ import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptormua.runtimeutils.SDMXHandler;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
@@ -76,6 +77,15 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	@Override
 	public MessageType getExampleSDMX() {
 		return SDMXHandler.createSDMXMessage();
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#setStatisticalUnit(uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation)
+	 */
+	@Override
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	    processService.updateStatisticalUnit(statisticalUnitInformation);
+
 	}
 
 }
