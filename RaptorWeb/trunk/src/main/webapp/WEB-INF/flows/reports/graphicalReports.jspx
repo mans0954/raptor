@@ -99,7 +99,7 @@
 
 								<f:facet name="header">
 									<tr:outputText
-										value="#{graphService.currentlyAttached.serviceEndpoint}" />
+										value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
 								</f:facet>
 
 								<tr:column>

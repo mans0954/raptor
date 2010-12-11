@@ -5,6 +5,7 @@ package uk.ac.cardiff.raptorweb.service;
 
 import java.util.List;
 
+import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
@@ -30,4 +31,6 @@ public interface GraphService {
 	public void updateMUAStatistic(GraphModel model);
 
 	public void removeReport(ReportModel model);
+	
+	public Capabilities getAttachedCapabilities();
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
@@ -96,6 +97,11 @@ public class GraphServiceImpl implements GraphService{
 
 	public void removeReport(ReportModel model){
 	    webEngine.removeReport(model);
+	}
+
+	@Override
+	public Capabilities getAttachedCapabilities() {
+	    return webEngine.getAttachedCapabilities();
 	}
 
 
