@@ -6,6 +6,8 @@ package uk.ac.cardiff.model.wsmodel;
 import java.io.Serializable;
 import java.util.List;
 
+import uk.ac.cardiff.model.MUAMetadata;
+
 /**
  * @author philsmart
  *
@@ -16,6 +18,7 @@ public class Capabilities implements Serializable{
 	private List<StatisticalUnitInformation> statisticalServices;
 	private String errorMessage;
 	private boolean error;
+	private MUAMetadata muaMetadata;
 
 
 	public void setStatisticalServices(List<StatisticalUnitInformation> statisticalServices) {
@@ -53,6 +56,18 @@ public class Capabilities implements Serializable{
 	 */
 	public boolean isError() {
 		return error;
+	}
+	/**
+	 * @param muaMetadata the muaMetadata to set
+	 */
+	public void setMuaMetadata(MUAMetadata muaMetadata) {
+	    this.muaMetadata = muaMetadata;
+	}
+	/**
+	 * @return the muaMetadata
+	 */
+	public MUAMetadata getMuaMetadata() {
+	    return muaMetadata;
 	}
 
 }
