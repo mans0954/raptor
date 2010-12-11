@@ -26,6 +26,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.MUAMetadata;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -45,6 +46,9 @@ public class MUAEngine {
     private UARegistry uaRegistry;
     private EntryHandler entryHandler;
     private StatisticsHandler statisticsHandler;
+    
+    /* holds metadata about the <code>MUAEngine</code> e.g. name etc.*/
+    private MUAMetadata muaMetadata;
 
     public MUAEngine() {
 	log.info("Setup Multi-Unit Aggregator Engine...");
@@ -148,5 +152,19 @@ public class MUAEngine {
 	statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
 
     }
+
+	/**
+	 * @param muaMetadata the muaMetadata to set
+	 */
+	public void setMuaMetadata(MUAMetadata muaMetadata) {
+		this.muaMetadata = muaMetadata;
+	}
+
+	/**
+	 * @return the muaMetadata
+	 */
+	public MUAMetadata getMuaMetadata() {
+		return muaMetadata;
+	}
 
 }
