@@ -105,6 +105,8 @@ public class MUAEngine {
 	List<UAEntry> uaentries = uaRegistry.getUAEntries();
 
 	Capabilities capabilities = new Capabilities();
+	
+	capabilities.setMuaMetadata(muaMetadata);
 
 	ArrayList<String> ua = new ArrayList();
 	for (UAEntry entry : uaentries)
