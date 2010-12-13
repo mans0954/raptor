@@ -1,6 +1,8 @@
 package uk.ac.cardiff.model;
 
-public class MUAMetadata {
+import java.io.Serializable;
+
+public class MUAMetadata implements Serializable{
 
 	private String muaName;
 	private String organisationName;
@@ -41,5 +43,5 @@ public class MUAMetadata {
 	public String getContactEmail() {
 		return contactEmail;
 	}
-	
+
 }
