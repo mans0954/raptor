@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>RaptorSuite</groupId>
-	<artifactId>ICA</artifactId>
+	<groupId>uk.ac.cardiff.raptor</groupId>
+	<artifactId>ica</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Raptor InformationCollectorAgent using CXF SOAP</name>
@@ -165,9 +165,9 @@
 
 		<!--  includes the information-model -->
 		<dependency>
-			<groupId>RaptorSuite</groupId>
-			<artifactId>ServiceInterfaces</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>service-interfaces</artifactId>
+            <version>0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>postgresql</groupId>
