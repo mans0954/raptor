@@ -87,9 +87,9 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-            <groupId>RaptorSuite</groupId>
-            <artifactId>ServiceInterfaces</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>service-interfaces</artifactId>
+            <version>0.2</version>
         </dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
