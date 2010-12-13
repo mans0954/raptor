@@ -11,9 +11,9 @@
 		<url>http://iam.cf.ac.uk/hudson/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/Web/tags/raptor-web-0.2</connection>
-		<developerConnection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/Web/tags/raptor-web-0.2</developerConnection>
-		<url>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/Web/tags/raptor-web-0.2</url>
+		<connection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags/raptor-web-0.2</connection>
+		<developerConnection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags/raptor-web-0.2</developerConnection>
+		<url>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags/raptor-web-0.2</url>
 	</scm>
 
 	<!--  Adding extra repositories for Richfaces and EL -->
@@ -106,13 +106,25 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-					<tagBase>svn+ssh://iam.cf.ac.uk/repos/RAPTOR/Web/tags</tagBase>
-					<scmCommentPrefix>[sandbox] release:</scmCommentPrefix>
+					<username>philsmart</username>
+					<password>nv75hh</password>
+					<tagBase>
+						http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags
+          			</tagBase>
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+						<artifactId>maven-scm-provider-svnjava</artifactId>
+						<version>1.10</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
