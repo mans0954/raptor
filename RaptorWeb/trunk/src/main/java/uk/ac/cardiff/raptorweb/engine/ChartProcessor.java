@@ -40,13 +40,13 @@ public class ChartProcessor {
 		RaptorTableChartModel tableModel = new RaptorTableChartModel();
 
 		for (int i=0; i < gmodel.getGroupLabels().size(); i++){
-			Row row = new Row();
+			Row<Double> row = new Row<Double>();
 			row.setSeries(gmodel.getGroupLabels().get(i));
 			/* important, as currently we only operate with one group, the second
 			 * list of Doubles in the YValues will only have a List of size 1, which
 			 * is assumed here, hence get(0).
 			 */
-			row.setValue(Double.toString(gmodel.getYValues().get(i).get(0)));
+			row.setValue(gmodel.getYValues().get(i).get(0));
 			tableModel.addRow(row);
 		}
 

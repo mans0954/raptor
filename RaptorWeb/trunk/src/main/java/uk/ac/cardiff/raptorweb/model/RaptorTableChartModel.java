@@ -16,6 +16,9 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
  */
 public class RaptorTableChartModel implements Serializable{
 
+    /* generated serialID */
+    private static final long serialVersionUID = 1765790673328864045L;
+
 	private List<Row> rows;
 
 	public RaptorTableChartModel(){

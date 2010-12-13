@@ -46,13 +46,13 @@ public class ExcelReportGenerator extends ReportConstructor {
 	String relativePath = null;
 	try {
 	    File dir = saveDirectory.getFile();
-	    log.debug("File exists: " + dir.exists());
+	    log.debug("Save Directory exists: " + dir.exists());
 	    if (!dir.exists())
 		dir.mkdir();
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + model.getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-report" + dateFormat.format(date) + ".xls");
+	    dir = new File(dir.getAbsoluteFile() + "/" + model.getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
 	    WorkbookSettings ws = new WorkbookSettings();
 	    ws.setLocale(new Locale("en", "EN"));
 	    WritableWorkbook workbook = Workbook.createWorkbook(dir, ws);
@@ -77,10 +77,10 @@ public class ExcelReportGenerator extends ReportConstructor {
 	    WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.FLOAT);
 
 	    int lineCount = 1;
-	    for (Row row : model.getCurrentTableGraph().getRows()) {
+	    for (Row<Double> row : model.getCurrentTableGraph().getRows()) {
 		Label l = new Label(0, lineCount, row.getSeries(), cf);
 		s.addCell(l);
-		Double value = Double.parseDouble(row.getValue());
+		Double value = row.getValue();
 		Number l2 = new Number(1, lineCount, value.intValue(), cf2);
 		s.addCell(l2);
 		lineCount++;

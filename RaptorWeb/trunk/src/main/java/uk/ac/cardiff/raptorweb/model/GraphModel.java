@@ -18,11 +18,21 @@ public class GraphModel implements Serializable{
 
 	//private String selectedStatisticalUnit;
 	private RaptorGraphModel currentGraph;
-	private String graphType;
+	private ChartOptions chartOptions;
 	private RaptorTableChartModel currentTableGraph;
 	private StatisticalUnitInformation selectedStatisticalUnit;
 
 
+	/**
+	 * Set some sensible defaults for this graphs models chart options
+	 */
+	public GraphModel(){
+	    chartOptions = new ChartOptions();
+	    chartOptions.setPerspective("true");
+	    chartOptions.setGraphType("horizontalBar");
+	    chartOptions.setxMajorGridCount(-1);
+	    chartOptions.setyMajorGridCount(-1);
+	}
 
 	/**
 	 * @param selectedStatisticalUnit the selectedStatisticalUnit to set
@@ -48,19 +58,13 @@ public class GraphModel implements Serializable{
 
 	}
 
+	/**
+	 *
+	 * @return the <code>RaptorGraphMode</code> associated with this graph view
+	 */
 	public RaptorGraphModel getCurrentGraph() {
 		return currentGraph;
 	}
-
-	public void setGraphType(String type) {
-		log.debug("Setting graph type: "+type);
-		this.graphType = type;
-	}
-
-	public String getGraphType() {
-		return graphType;
-	}
-
 
 	public void setCurrentTableGraph(RaptorTableChartModel currentTableGraph) {
 		this.currentTableGraph = currentTableGraph;
@@ -68,6 +72,18 @@ public class GraphModel implements Serializable{
 
 	public RaptorTableChartModel getCurrentTableGraph() {
 		return currentTableGraph;
+	}
+
+
+
+	public void setChartOptions(ChartOptions chartOptions) {
+	    this.chartOptions = chartOptions;
+	}
+
+
+
+	public ChartOptions getChartOptions() {
+	    return chartOptions;
 	}
 
 

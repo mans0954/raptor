@@ -23,10 +23,16 @@
 							<tr:panelHeader text="Statistics" />
 							<br />
 							<!-- force the packing algorithm on the start facet to consider this output text, to maintain a minumum size -->
-							<tr:outputText value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" inlineStyle="color:#EEE9E8;" />
+							<tr:outputText  value="No Attached Aggregator"  inlineStyle="color:rgb(0,0,0);" rendered="#{empty graphService.statisticalUnits}"/>
+
+							<tr:outputText
+								value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+								inlineStyle="color:#EEE9E8;" />
+
 							<tr:table value="#{graphService.statisticalUnits}"
 								bandingInterval="2" banding="row" var="unit" width="95%"
-								labelWidth="5%" inlineStyle="border-style: hidden;" rendered="#{not empty graphService.statisticalUnits}">
+								labelWidth="5%" inlineStyle="border-style: hidden;"
+								rendered="#{not empty graphService.statisticalUnits}">
 
 								<f:facet name="detailStamp">
 									<tr:panelFormLayout rows="8" labelWidth="5%">
@@ -36,41 +42,69 @@
 											<tr:outputText value="#{unit.statisticParameters.methodName}" />
 										</tr:panelGroupLayout>
 
-										<tr:panelGroupLayout layout="horizontal"  rendered="#{not empty unit.statisticParameters.startTimeAsJavaDate}">
-										<tr:outputText value="Start Time:"
+										<tr:panelGroupLayout layout="horizontal"
+											rendered="#{not empty unit.statisticParameters.startTimeAsJavaDate}">
+											<tr:outputText value="Start Time:"
 												inlineStyle="font-weight: bold;" />
-										<tr:inputNumberSpinbox autoSubmit="true" label="Hour:" value="#{unit.statisticParameters.startTimeHour}" minimum="00" maximum="23" simple="true"/>
-										<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:" value="#{unit.statisticParameters.startTimeMinute}" minimum="00" maximum="59" simple="true"/>
-										<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:" value="#{unit.statisticParameters.startTimeSecond}" minimum="00" maximum="59" simple="true"/>
-										<tr:inputDate id="startTimeDate" autoSubmit="true"
-											value="#{unit.statisticParameters.startTimeAsJavaDate}">
-											<f:convertDateTime dateStyle="short" />
-										</tr:inputDate>
+											<tr:inputNumberSpinbox autoSubmit="true" label="Hour:"
+												value="#{unit.statisticParameters.startTimeHour}"
+												minimum="00" maximum="23" simple="true" />
+											<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:"
+												value="#{unit.statisticParameters.startTimeMinute}"
+												minimum="00" maximum="59" simple="true" />
+											<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:"
+												value="#{unit.statisticParameters.startTimeSecond}"
+												minimum="00" maximum="59" simple="true" />
+											<tr:inputDate id="startTimeDate" autoSubmit="true"
+												value="#{unit.statisticParameters.startTimeAsJavaDate}">
+												<f:convertDateTime dateStyle="short" />
+											</tr:inputDate>
 
 										</tr:panelGroupLayout>
 
-										<tr:panelGroupLayout layout="horizontal" rendered="#{not empty unit.statisticParameters.endTimeAsJavaDate}">
-										<tr:outputText value="End Time:"
+										<tr:panelGroupLayout layout="horizontal"
+											rendered="#{not empty unit.statisticParameters.endTimeAsJavaDate}">
+											<tr:outputText value="End Time:"
 												inlineStyle="font-weight: bold;" />
-										<tr:inputNumberSpinbox autoSubmit="true" label="Hour:" value="#{unit.statisticParameters.endTimeHour}" minimum="00" maximum="23" simple="true"/>
-										<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:" value="#{unit.statisticParameters.endTimeMinute}" minimum="00" maximum="59" simple="true"/>
-										<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:" value="#{unit.statisticParameters.endTimeSecond}" minimum="00" maximum="59" simple="true"/>
-										<tr:inputDate id="endTimeDate" autoSubmit="true"
-											value="#{unit.statisticParameters.endTimeAsJavaDate}">
-											<f:convertDateTime dateStyle="short" />
-										</tr:inputDate>
+											<tr:inputNumberSpinbox autoSubmit="true" label="Hour:"
+												value="#{unit.statisticParameters.endTimeHour}" minimum="00"
+												maximum="23" simple="true" />
+											<tr:inputNumberSpinbox autoSubmit="true" label="Minutes:"
+												value="#{unit.statisticParameters.endTimeMinute}"
+												minimum="00" maximum="59" simple="true" />
+											<tr:inputNumberSpinbox autoSubmit="true" label="Seconds:"
+												value="#{unit.statisticParameters.endTimeSecond}"
+												minimum="00" maximum="59" simple="true" />
+											<tr:inputDate id="endTimeDate" autoSubmit="true"
+												value="#{unit.statisticParameters.endTimeAsJavaDate}">
+												<f:convertDateTime dateStyle="short" />
+											</tr:inputDate>
 										</tr:panelGroupLayout>
 
-										<tr:panelGroupLayout layout="horizontal">
-											<tr:outputText value="Field:" inlineStyle="font-weight: bold;" />
+										<!--<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Field:"
+												inlineStyle="font-weight: bold;" />
 											<tr:outputText value="#{unit.statisticParameters.field}" />
 										</tr:panelGroupLayout>
 
+										-->
 										<tr:panelGroupLayout layout="horizontal">
 											<tr:outputText value="Parameters:"
 												inlineStyle="font-weight: bold;" />
-											<tr:outputText
-												value="#{unit.statisticParameters.methodParams}" />
+											<tr:table value="#{unit.statisticParameters.methodParams}"
+												var="parameter" width="95%" labelWidth="5%"
+												inlineStyle="border-style: hidden;"
+												rendered="#{not empty unit.statisticParameters.methodParams}">
+												<tr:column inlineStyle="border-style: hidden;">
+													<tr:inputText value="#{parameter.parameter}"/>
+												</tr:column>
+											</tr:table>
+										</tr:panelGroupLayout>
+
+										<tr:panelGroupLayout layout="horizontal">
+											<tr:outputText value="Series Label:"
+												inlineStyle="font-weight: bold;" />
+											<tr:inputText value="#{unit.statisticParameters.seriesLabel}" />
 										</tr:panelGroupLayout>
 
 										<tr:panelGroupLayout layout="horizontal">
@@ -86,9 +120,10 @@
 										</tr:panelGroupLayout>
 
 										<tr:panelGroupLayout layout="horizontal">
-											<tr:commandButton partialSubmit="true" text="Update" action="updateMUAStatistic">
+											<tr:commandButton partialSubmit="true" text="Update"
+												action="updateMUAStatistic">
 												<f:setPropertyActionListener value="#{unit}"
-														target="#{graphmodel.selectedStatisticalUnit}" />
+													target="#{graphmodel.selectedStatisticalUnit}" />
 											</tr:commandButton>
 										</tr:panelGroupLayout>
 
@@ -98,8 +133,16 @@
 								</f:facet>
 
 								<f:facet name="header">
-									<tr:outputText
-										value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
+									<tr:showDetailHeader
+										text="#{graphService.attachedCapabilities.muaMetadata.muaName}"
+										id="showDetail1">
+										<tr:outputDocument
+											value="Organisation Name: #{graphService.attachedCapabilities.muaMetadata.organisationName}" />
+										<tr:outputDocument
+											value="Contact: #{graphService.attachedCapabilities.muaMetadata.contactEmail}" />
+										<tr:outputDocument
+											value="Endpoint: #{graphService.currentlyAttached.serviceEndpoint}" />
+									</tr:showDetailHeader>
 								</f:facet>
 
 								<tr:column>
@@ -138,11 +181,12 @@
 
 
 
-								<tr:table id="reportDownloadTable" value="#{reportmodel.reportsForDownload}"
-									bandingInterval="2" banding="row" var="row"
+								<tr:table id="reportDownloadTable"
+									value="#{reportmodel.reportsForDownload}" bandingInterval="2"
+									banding="row" var="row"
 									rendered="#{not empty reportmodel.reportsForDownload}"
-									partialTriggers=":generateExcelReport :reportDownloadTable:removeReportCommandLink" width="95%"
-									labelWidth="5%">
+									partialTriggers=":generateExcelReport :reportDownloadTable:removeReportCommandLink"
+									width="95%" labelWidth="5%">
 
 									<tr:column>
 										<f:facet name="header">
@@ -162,9 +206,10 @@
 										<f:facet name="header">
 											<tr:outputText value="Remove" />
 										</f:facet>
-										<tr:commandLink id="removeReportCommandLink" text="x" action="removeReport" partialSubmit="true" >
-										<f:setPropertyActionListener value="#{row}"
-											target="#{reportmodel.selectedDownloadFile}" />
+										<tr:commandLink id="removeReportCommandLink" text="x"
+											action="removeReport" partialSubmit="true">
+											<f:setPropertyActionListener value="#{row}"
+												target="#{reportmodel.selectedDownloadFile}" />
 										</tr:commandLink>
 
 									</tr:column>
@@ -177,10 +222,12 @@
 					</f:facet>
 
 
-
+					<!--  MAIN GRAPH AREA                                -->
 
 					<tr:panelCaptionGroup
 						inlineStyle="border-style: hidden; width:100%;">
+
+
 
 						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<br />
@@ -188,8 +235,9 @@
 
 								<!--  verticalBar, horizontalBar, stackedVerticalBar, stackedHorizontalBar, pie, area, stackedArea, line, barLine, XYLine,
 						scatterPlot, radar, radarArea, funnel, circularGauge, semiCircularGauge -->
+								<tr:outputText value="Type" rendered="#{not empty graphmodel.currentGraph}"/>
 								<tr:selectOneChoice id="chartTypeSelector"
-									value="#{graphmodel.graphType}" autoSubmit="true"
+									value="#{graphmodel.chartOptions.graphType}" autoSubmit="true"
 									partialSubmit="true"
 									rendered="#{not empty graphmodel.currentGraph}">
 									<f:selectItem itemLabel="verticalBar" itemValue="verticalBar" />
@@ -207,6 +255,39 @@
 									<f:selectItem itemLabel="radarArea" itemValue="radarArea" />
 
 								</tr:selectOneChoice>
+								<tr:outputText value=" Perspective" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:selectOneChoice id="chartPerspectiveSelector"
+									value="#{graphmodel.chartOptions.perspective}" autoSubmit="true"
+									partialSubmit="true" shortDesc="Perspective"
+									rendered="#{not empty graphmodel.currentGraph}">
+									<f:selectItem itemLabel="on" itemValue="true" />
+									<f:selectItem itemLabel="off" itemValue="false" />
+								</tr:selectOneChoice>
+								<tr:outputText value=" XMajorGridCount" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:selectOneChoice id="chartXMajorGridCountSelector"
+									value="#{graphmodel.chartOptions.xMajorGridCount}" autoSubmit="true"
+									partialSubmit="true" shortDesc="XMajorGridCount"
+									rendered="#{not empty graphmodel.currentGraph}">
+									<f:selectItem itemLabel="auto" itemValue="-1" />
+									<f:selectItem itemLabel="off" itemValue="0" />
+									<f:selectItem itemLabel="5" itemValue="5" />
+									<f:selectItem itemLabel="10" itemValue="10" />
+									<f:selectItem itemLabel="15" itemValue="15" />
+									<f:selectItem itemLabel="20" itemValue="20" />
+								</tr:selectOneChoice>
+								<tr:outputText value=" YMajorGridCount" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:selectOneChoice id="chartYMajorGridCountSelector"
+									value="#{graphmodel.chartOptions.yMajorGridCount}" autoSubmit="true"
+									partialSubmit="true" shortDesc="YMajorGridCount"
+									rendered="#{not empty graphmodel.currentGraph}">
+									<f:selectItem itemLabel="auto" itemValue="-1" />
+									<f:selectItem itemLabel="off" itemValue="0" />
+									<f:selectItem itemLabel="5" itemValue="5" />
+									<f:selectItem itemLabel="10" itemValue="10" />
+									<f:selectItem itemLabel="15" itemValue="15" />
+									<f:selectItem itemLabel="20" itemValue="20" />
+								</tr:selectOneChoice>
+
 								<h:outputText value="  " />
 								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
             						<h:outputText value=" New Window" />
@@ -217,10 +298,13 @@
 							<tr:chart id="chart" verticalMajorSections="15"
 								value="#{graphmodel.currentGraph}"
 								rendered="#{not empty graphmodel.currentGraph}"
-								inlineStyle="width:95%; height:700px;"
-								type="#{graphmodel.graphType}"
-								partialTriggers="chartTypeSelector" perspective="true"
-								width="95%" animationDuration="500"/>
+								inlineStyle="width:95%; height:700px; border-style: hidden;"
+								type="#{graphmodel.chartOptions.graphType}"
+								partialTriggers=":chartTypeSelector :chartPerspectiveSelector :chartXMajorGridCountSelector :chartYMajorGridCountSelector"
+								width="95%" animationDuration="0"
+								XMajorGridLineCount="#{graphmodel.chartOptions.xMajorGridCount}"
+								YMajorGridLineCount="#{graphmodel.chartOptions.yMajorGridCount}"
+								perspective="#{graphmodel.chartOptions.perspective}"/>
 							<br />
 
 						</tr:panelFormLayout>
@@ -232,16 +316,16 @@
 						<tr:panelFormLayout rows="7" labelWidth="5%">
 							<tr:table value="#{graphmodel.currentTableGraph.rows}"
 								bandingInterval="2" banding="row" var="row" width="95%"
-								rendered="#{not empty graphmodel.currentTableGraph}" >
+								rendered="#{not empty graphmodel.currentTableGraph}">
 
-								<tr:column>
+								<tr:column sortProperty="series" sortable="true" >
 									<f:facet name="header">
 										<tr:outputText value="Series" />
 									</f:facet>
 									<tr:outputText value="#{row.series}">
 									</tr:outputText>
 								</tr:column>
-								<tr:column align="center">
+								<tr:column align="center" sortProperty="value" sortable="true">
 									<f:facet name="header">
 										<tr:outputText value="Value" />
 									</f:facet>

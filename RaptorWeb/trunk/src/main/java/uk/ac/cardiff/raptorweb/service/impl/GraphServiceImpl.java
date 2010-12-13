@@ -80,9 +80,15 @@ public class GraphServiceImpl implements GraphService{
 	public void invokeStatisticalUnit(GraphModel model) {
 		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
-		model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
-		model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
-		model.setGraphType("horizontalBar");
+		if (gmodel!=null){
+		    model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
+		    model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
+		}
+		else{
+		    model.setCurrentTableGraph(null);
+		    model.setCurrentGraph(null);
+		}
+
 
 	}
 

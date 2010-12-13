@@ -47,9 +47,9 @@
 								<tr:panelList rows="2" rendered="#{setupmodel.selectEndpointCapabilities.error}">
 									<tr:outputText value="ERROR: #{setupmodel.selectEndpointCapabilities.errorMessage}" text="#{setupmodel.selectEndpointCapabilities.errorMessage}"/>
 								</tr:panelList>
-								<tr:panelList rows="2" rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
+								<tr:panelList rows="10" rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
 								<c:forEach var="item" items="#{setupmodel.selectEndpointCapabilities.statisticalServices}">
-                					<tr:outputText value="#{item.statisticalUnitName}" text="#{item.statisticalUnitName}"/>
+                					<tr:outputText value="* #{item.statisticParameters.unitName}" text="#{item.statisticParameters.unitName}"/>
               					</c:forEach>
 
 
