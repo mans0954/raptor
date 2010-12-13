@@ -48,7 +48,7 @@ public class AuthenticationStatistic extends Statistic{
 
 	/**
 	 * <p> returns false if semantic error with the entries, throws an exception on code failure </p>
-	 * @param timeInterval
+	 * @param timeInterval - assumes a String representing minutes
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
@@ -57,7 +57,9 @@ public class AuthenticationStatistic extends Statistic{
 
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
-		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
+		//convert minutes to ms for the procedure
+		timeIntervalInt = timeIntervalInt * 60*1000;
+		log.debug("Params for method:  "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off {} entries",this.getAuthEntries().size());
 
 		/* stop processing if there are no valid entries */
@@ -113,7 +115,6 @@ public class AuthenticationStatistic extends Statistic{
 
 
 		for (Entry entry : this.getAuthEntries()){
-
 			for (int i=0 ; i < buckets.length; i++){
 				if (buckets[i].isInside(entry.getEventTime()))buckets[i].increment();
 			}
@@ -144,7 +145,7 @@ public class AuthenticationStatistic extends Statistic{
 		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
 		log.debug("Performing countEntry Statistical Operation");
 
-		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
+		log.debug("Params for method:  "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
 
 		/* stop processing if there are no valid entries */
@@ -233,7 +234,7 @@ public class AuthenticationStatistic extends Statistic{
 
 		log.debug("Performing groupByFrequency Statistical Operation");
 
-		log.debug("Params for method:  "+statisticParameters.getField()+", "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
+		log.debug("Params for method:  "+statisticParameters.getMethodName()+", "+statisticParameters.getUnitName());
 		if (this.getAuthEntries()!=null)log.debug("Working off "+this.getAuthEntries().size()+" entries");
 
 		/* stop processing if there are no valid entries */
