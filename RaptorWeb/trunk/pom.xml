@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-web</artifactId>
 	<name>Raptor</name>
-	<version>0.2</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://iam.cf.ac.uk</url>
 	<ciManagement>
@@ -11,9 +12,9 @@
 		<url>http://iam.cf.ac.uk/hudson/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/MUA/tags/raptor-web-0.2</connection>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/MUA/tags/raptor-web-0.2</developerConnection>
-		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/MUA/tags/raptor-web-0.2</url>
+		<connection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</connection>
+		<developerConnection>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</developerConnection>
+		<url>scm:svn:svn+ssh://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</url>
 	</scm>
 
 	<!--  Adding extra repositories for Richfaces and EL -->
@@ -111,7 +112,7 @@
 					<username>philsmart</username>
 					<password>nv75hh</password>
 					<tagBase>
-						http://iam.cf.ac.uk/repos/RAPTOR/MUA/tags
+						http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags
           			</tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
