@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 
 /**
  * @author philsmart
@@ -33,10 +34,10 @@ public class StatisticParameters implements Serializable{
 
     private static final String outputDateFormat ="dd/MM/yyyy HH:mm:ss";;
 
-    private String field;
     private String unitName;
+    /* the name of the method to be invoked*/
     private String methodName;
-    private List<String> methodParams;
+    private List<MethodParameter> methodParams;
 
     /* The textual description of the series, as attached to the x-axis */
     private String seriesLabel;
@@ -56,14 +57,6 @@ public class StatisticParameters implements Serializable{
     private Date endTimeJava;
 
 
-    public void setField(String field) {
-	this.field = field;
-    }
-
-    public String getField() {
-	return field;
-    }
-
     public void setUnitName(String unitName) {
 	log.debug("Setting unit name: "+unitName);
 	this.unitName = unitName;
@@ -81,11 +74,11 @@ public class StatisticParameters implements Serializable{
 	return methodName;
     }
 
-    public void setMethodParams(List<String> methodParams) {
+    public void setMethodParams(List<MethodParameter> methodParams) {
 	this.methodParams = methodParams;
     }
 
-    public List<String> getMethodParams() {
+    public List<MethodParameter> getMethodParams() {
 	return methodParams;
     }
 
