@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
@@ -77,10 +78,10 @@ public class StatisticsHandler {
 	 */
 	private Boolean invoke(Statistic statistic) {
 		try{
-			List<String> params = statistic.getStatisticParameters().getMethodParams();
+			List<MethodParameter> params = statistic.getStatisticParameters().getMethodParams();
 			Object[] paramsO = new Object[params.size()];
 			for (int i=0; i < paramsO.length; i++){
-				paramsO[i] = params.get(i);
+				paramsO[i] = params.get(i).getParameter();
 			}
 			return invoke(statistic.getStatisticParameters().getMethodName(),paramsO,statistic);
 		}
@@ -146,6 +147,8 @@ public class StatisticsHandler {
 	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation){
 	    statistic.getStatisticParameters().setEndTime(statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate());
 	    statistic.getStatisticParameters().setStartTime(statisticalUnitInformation.getStatisticParameters().getStartTimeAsDate());
+	    statistic.getStatisticParameters().setMethodParams(statisticalUnitInformation.getStatisticParameters().getMethodParams());
+	    statistic.getStatisticParameters().setSeriesLabel(statisticalUnitInformation.getStatisticParameters().getSeriesLabel());
 	}
 
 
