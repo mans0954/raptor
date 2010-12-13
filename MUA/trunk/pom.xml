@@ -93,12 +93,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		<!--<dependency>
   			<groupId>uk.ac.cardiff.raptor</groupId>
   			<artifactId>raptor-common</artifactId>
   			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
+		--><dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-databinding-aegis</artifactId>
 			<version>2.2.9</version>
