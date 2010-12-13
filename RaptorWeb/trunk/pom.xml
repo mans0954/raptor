@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-web</artifactId>
 	<name>Raptor</name>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://iam.cf.ac.uk</url>
 	<ciManagement>
@@ -14,6 +15,18 @@
 		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</developerConnection>
 		<url>http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb</url>
 	</scm>
+	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-release</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>raptor-snapshot</id>
+			<url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<!--  Adding extra repositories for Richfaces and EL -->
 	<repositories>
