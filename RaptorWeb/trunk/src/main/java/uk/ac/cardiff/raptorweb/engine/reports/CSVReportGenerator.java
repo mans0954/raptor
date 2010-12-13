@@ -49,12 +49,12 @@ public class CSVReportGenerator extends ReportConstructor{
 		String relativePath = null;
 		try {
 			File dir = saveDirectory.getFile();
-			log.debug("File exists: "+dir.exists());
+			log.debug("Save Directory exists: "+dir.exists());
 			if (!dir.exists())dir.mkdir();
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 			java.util.Date date = new java.util.Date();
-			dir = new File(dir.getAbsoluteFile() + "/"+model.getSelectedStatisticalUnit().getStatisticParameters().getMethodName().replaceAll(" ","")+"-report"+ dateFormat.format(date) + ".csv");
+			dir = new File(dir.getAbsoluteFile() + "/"+model.getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "")+"-"+ dateFormat.format(date) + ".csv");
 
 
 			StringBuilder fieldnames = new StringBuilder();

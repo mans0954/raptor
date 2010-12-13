@@ -9,10 +9,10 @@ import java.io.Serializable;
  * @author philsmart
  *
  */
-public class Row implements Serializable{
+public class Row<T> implements Serializable{
 
 	private String series;
-	private String value;
+	private T value;
 
 	public void setSeries(String series) {
 		this.series = series;
@@ -20,11 +20,12 @@ public class Row implements Serializable{
 	public String getSeries() {
 		return series;
 	}
-	public void setValue(String value) {
+	public void setValue(T value) {
 		this.value = value;
 	}
-	public String getValue() {
+	public T getValue() {
 		return value;
 	}
+
 
 }

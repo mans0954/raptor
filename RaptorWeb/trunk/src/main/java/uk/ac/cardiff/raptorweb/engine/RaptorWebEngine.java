@@ -78,8 +78,8 @@ public class RaptorWebEngine {
 	    }
 
 	    Capabilities capabilities = ServiceEndpointInterface.discoverMUACapabilities(attached.getServiceEndpoint());
-	    log.debug("Has retrieved {} statistics", capabilities.getStatisticalServices().size());
 	    if (!capabilities.isError()){
+		log.debug("Has retrieved {} statistics", capabilities.getStatisticalServices().size());
 		attachedMUA = attached;
 		currentlyAttachedCapabilities=capabilities;
 		return capabilities.getStatisticalServices();
