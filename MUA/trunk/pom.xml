@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>RaptorSuite</groupId>
-	<artifactId>MUA</artifactId>
+	<groupId>uk.ac.cardiff.raptor</groupId>
+	<artifactId>mua</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>Raptor Multi-Unit Aggregator</name>
@@ -83,9 +83,9 @@
 			<version>1.6</version>
 		</dependency>
 		<dependency>
-			<groupId>RaptorSuite</groupId>
-			<artifactId>ServiceInterfaces</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>service-interfaces</artifactId>
+            <version>0.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>xalan</artifactId>
