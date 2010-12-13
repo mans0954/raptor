@@ -3,7 +3,7 @@
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-web</artifactId>
 	<name>Raptor</name>
-	<version>0.2</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<url>http://iam.cf.ac.uk</url>
 	<ciManagement>
@@ -11,8 +11,8 @@
 		<url>http://iam.cf.ac.uk/hudson/</url>
 	</ciManagement>
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags/raptor-web-0.2</developerConnection>
-		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags/raptor-web-0.2</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb</url>
 	</scm>
 	<distributionManagement>
 		<repository>
