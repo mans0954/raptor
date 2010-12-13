@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RaptorSuite</groupId>
 	<artifactId>ServiceInterfaces</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<name>ServiceInterfaces</name>
 	<description>Service Interfaces to Raptor</description>
 
@@ -53,8 +53,8 @@
 	<!--  done -->
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/tags/ServiceInterfaces-0.2</developerConnection>
+		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/tags/ServiceInterfaces-0.2</url>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -110,7 +110,7 @@
 		<dependency>
 			<groupId>uk.ac.cardiff.raptor</groupId>
 			<artifactId>information-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.2</version>
 		</dependency>
 
 	</dependencies>
