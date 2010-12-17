@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.raptormua.service;
 
+import uk.ac.cardiff.model.AdministrativeFunction;
+import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -45,4 +47,9 @@ public interface MUAProcess {
 	 * @param statisticalUnitInformation
 	 */
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
+
+	/**
+	 * @param function
+	 */
+	public boolean performAdministrativeFunction(AdministrativeFunction function);
 }

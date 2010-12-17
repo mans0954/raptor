@@ -26,6 +26,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.MUAMetadata;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
@@ -46,7 +47,7 @@ public class MUAEngine {
     private UARegistry uaRegistry;
     private EntryHandler entryHandler;
     private StatisticsHandler statisticsHandler;
-    
+
     /* holds metadata about the <code>MUAEngine</code> e.g. name etc.*/
     private MUAMetadata muaMetadata;
 
@@ -105,7 +106,7 @@ public class MUAEngine {
 	List<UAEntry> uaentries = uaRegistry.getUAEntries();
 
 	Capabilities capabilities = new Capabilities();
-	
+
 	capabilities.setMuaMetadata(muaMetadata);
 
 	ArrayList<String> ua = new ArrayList();
@@ -167,6 +168,17 @@ public class MUAEngine {
 	 */
 	public MUAMetadata getMuaMetadata() {
 		return muaMetadata;
+	}
+
+	/**
+	 * @param function
+	 * @return
+	 */
+	public boolean performAdministrativeFunction(AdministrativeFunction function) {
+	    switch (function.getAdministrativeFunction()){
+		case REMOVEALL: entryHandler.removeAllEntries(); break;
+	    }
+	    return true;
 	}
 
 }

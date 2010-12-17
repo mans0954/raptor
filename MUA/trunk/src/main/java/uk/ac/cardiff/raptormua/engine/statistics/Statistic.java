@@ -39,148 +39,139 @@ import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
- * @author philsmart
- * Holds a statistics unit or one statistics operation on one piece of data
+ * @author philsmart Holds a statistics unit or one statistics operation on one piece of data
  */
 public class Statistic {
 
-	static Logger log = Logger.getLogger(Statistic.class);
+    static Logger log = Logger.getLogger(Statistic.class);
 
-	private Set<Entry> entries;
+    private Set<Entry> entries;
 
-	protected StatisticParameters statisticParameters;
+    protected StatisticParameters statisticParameters;
 
-	/* add a preprocessing module to the statistical method */
-	private StatisticsPreProcessor preprocessor;
+    /* add a preprocessing module to the statistical method */
+    private StatisticsPreProcessor preprocessor;
 
-	/* add a postprocessing module to the statistical method */
-	private List<StatisticsPostProcessor> postprocessor;
+    /* add a postprocessing module to the statistical method */
+    private List<StatisticsPostProcessor> postprocessor;
 
-	/*each statistical method produces objects (observations) which are stored in this array variable ready for postprocessing
-	 * or construction of an <code>AggregatorGraphModel</code>
-	 */
-	protected Observation[] observations;
+    /*
+     * each statistical method produces objects (observations) which are stored in this array variable ready for postprocessing or construction of an
+     * <code>AggregatorGraphModel</code>
+     */
+    protected Observation[] observations;
 
-	/**
-	 * <p> Always creates a copy of the entries, as the statisical method is
-	 * not safe, in that it may alter the state of the original data i.e. a
-	 * preprocessing method </p>
-	 *
-	 * @param authEntries
-	 */
-	public void setEntries(Set<Entry> authEntries) {
-	    	Set<Entry> entriesCopy = EntryClone.cloneEntries(((LinkedHashSet<Entry>) authEntries));
-		if (preprocessor!=null)
-			try {
-				log.info("Invoking statistical preprocessor "+preprocessor.getClass());
-				entriesCopy = (Set<Entry>) preprocessor.preProcess(entriesCopy);
-			} catch (PreprocessorException e) {
-				log.error("Could not preprocess entries "+preprocessor.getClass());
-			}
-		this.entries = entriesCopy;
+    /**
+     * <p>
+     * Always creates a copy of the entries, as the statisical method is not safe, in that it may alter the state of the original data i.e. a preprocessing
+     * method
+     * </p>
+     *
+     * @param authEntries
+     */
+    public void setEntries(Set<Entry> authEntries) {
+	//TODO switch to deep copy library
+	Set<Entry> entriesCopy = EntryClone.cloneEntries(((LinkedHashSet<Entry>) authEntries));
+	if (preprocessor != null)
+	    try {
+		log.info("Invoking statistical preprocessor " + preprocessor.getClass());
+		entriesCopy = (Set<Entry>) preprocessor.preProcess(entriesCopy);
+	    } catch (PreprocessorException e) {
+		log.error("Could not preprocess entries " + preprocessor.getClass());
+	    }
+	this.entries = entriesCopy;
+    }
+
+    /**
+     * <p>
+     * construct a graph model from the data observations and groupings stored in the buckets
+     * </p>
+     *
+     * @return
+     */
+    public AggregatorGraphModel constructGraphModel() {
+	AggregatorGraphModel gmodel = new AggregatorGraphModel();
+
+	log.debug("Observations type " + observations);
+
+	if (observations instanceof Group[]) {
+	    log.info("Constructing graph model for Group type");
+	    Group[] groups = (Group[]) observations;
+
+	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
+	    for (Group group : groups) {
+		gmodel.addGroupLabel(group.getGroupName());
+		List<Double> values = new ArrayList();
+		Double valueDouble = new Double(group.getValue());
+		values.add(valueDouble);
+		gmodel.addGroupValue(values);
+	    }
+	} else if (observations instanceof Bucket[]) {
+	    log.info("Constructing graph model for Bucket type");
+	    Bucket[] buckets = (Bucket[]) observations;
+
+	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
+	    DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+	    DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+	    for (Bucket bucket : buckets) {
+		gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
+		List<Double> values = new ArrayList();
+		Double valueDouble = new Double(bucket.getValue());
+		values.add(valueDouble);
+		gmodel.addGroupValue(values);
+	    }
 	}
 
+	return gmodel;
+    }
 
-	/**
-	 * <p> construct a graph model from the data observations and groupings stored in the
-	 * buckets </p>
-	 * @return
-	 */
-	public AggregatorGraphModel constructGraphModel(){
-		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+    /**
+     * <p>
+     * pre processing effects the entries that go into the statistical unit post processing effects the observations that result form the statistical unit
+     * </p>
+     */
+    public void postProcess() {
+	try {
+	    if (getPostprocessor() != null) {
+		for (StatisticsPostProcessor post : postprocessor)
+		    post.postProcess(observations);
 
-		log.debug("Observations type "+observations);
-
-		if (observations instanceof Group[]){
-			log.info("Constructing graph model for Group type");
-			Group[] groups = (Group[]) observations;
-
-			gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
-			for (Group group : groups){
-				gmodel.addGroupLabel(group.getGroupName());
-				List<Double> values = new ArrayList();
-				Double valueDouble = new Double(group.getValue());
-				values.add(valueDouble);
-				gmodel.addGroupValue(values);
-			}
-		}
-		else if (observations instanceof Bucket[]){
-			log.info("Constructing graph model for Bucket type");
-			Bucket[] buckets = (Bucket[])observations;
-
-			gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
-			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-			for (Bucket bucket : buckets){
-				gmodel.addGroupLabel(startParser.print(bucket.getStart())+"-"+endParser.print(bucket.getEnd()));
-				List<Double> values = new ArrayList();
-				Double valueDouble = new Double(bucket.getValue());
-				values.add(valueDouble);
-				gmodel.addGroupValue(values);
-			}
-		}
-
-		return gmodel;
+	    }
+	} catch (PostprocessorException e) {
+	    log.error("Could not post process entries, using " + getPostprocessor().getClass());
 	}
+    }
 
-	/**
-	 * <p> pre processing effects the entries that go into the statistical unit
-	 * post processing effects the observations that result form the statistical unit </p>
-	 */
-	public void postProcess() {
-		try {
-			if (getPostprocessor()!=null){
-				for (StatisticsPostProcessor post : postprocessor)
-					post.postProcess(observations);
+    public Set<Entry> getAuthEntries() {
+	return entries;
+    }
 
-			}
-		} catch (PostprocessorException e) {
-			log.error("Could not post process entries, using "+getPostprocessor().getClass());
-		}
-	}
+    public void setField(String field) {
 
+    }
 
-	public Set<Entry> getAuthEntries() {
-		return entries;
-	}
+    public void setPreprocessor(StatisticsPreProcessor preprocessor) {
+	this.preprocessor = preprocessor;
+    }
 
-	public void setField(String field) {
+    public StatisticsPreProcessor getPreprocessor() {
+	return preprocessor;
+    }
 
-	}
+    public List<StatisticsPostProcessor> getPostprocessor() {
+	return postprocessor;
+    }
 
-	public void setPreprocessor(StatisticsPreProcessor preprocessor) {
-		this.preprocessor = preprocessor;
-	}
+    public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
+	this.postprocessor = postprocessor;
+    }
 
-	public StatisticsPreProcessor getPreprocessor() {
-		return preprocessor;
-	}
+    public void setStatisticParameters(StatisticParameters statisticParameters) {
+	this.statisticParameters = statisticParameters;
+    }
 
-
-	public List<StatisticsPostProcessor> getPostprocessor() {
-		return postprocessor;
-	}
-
-
-	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
-		this.postprocessor = postprocessor;
-	}
-
-
-	public void setStatisticParameters(StatisticParameters statisticParameters) {
-	    this.statisticParameters = statisticParameters;
-	}
-
-
-	public StatisticParameters getStatisticParameters() {
-	    return statisticParameters;
-	}
-
-
-
-
-
-
-
+    public StatisticParameters getStatisticParameters() {
+	return statisticParameters;
+    }
 
 }
