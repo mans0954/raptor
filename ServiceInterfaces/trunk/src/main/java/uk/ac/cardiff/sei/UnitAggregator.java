@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.jws.WebService;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
  * @author philsmart
@@ -32,6 +33,7 @@ public interface UnitAggregator {
 
 	String getVersion();
 	Set<Entry> getAllAuthentications();
+	void addAuthentications(ICAEntryPush pushed);
 
 
 }
