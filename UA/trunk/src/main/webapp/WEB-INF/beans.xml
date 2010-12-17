@@ -114,8 +114,8 @@
 			<list><!--
 				<ref local="ICAProcessTrigger" />
 				-->
-				<ref local="ICAProcessQuickTrigger" />
-			</list>
+				<!--<ref local="ICAProcessQuickTrigger" />
+			--></list>
 		</property>
 	</bean>
 	<!--  DONE -->

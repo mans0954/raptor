@@ -25,6 +25,8 @@ import javax.jws.WebService;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl;
+import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
@@ -58,6 +60,12 @@ public class UnitAggregatorImpl implements UnitAggregator{
 
 	public UAProcessImpl getProcessService() {
 	    return processService;
+	}
+
+	@Override
+	public void addAuthentications(ICAEntryPush pushed) {
+	    processService.addAuthentications(pushed);
+
 	}
 
 
