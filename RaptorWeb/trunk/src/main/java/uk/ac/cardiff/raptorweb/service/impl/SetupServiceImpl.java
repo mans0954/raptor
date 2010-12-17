@@ -7,6 +7,7 @@ import java.util.List;
 
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
+import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.SetupModel;
 import uk.ac.cardiff.raptorweb.service.SetupService;
 
@@ -52,6 +53,30 @@ public class SetupServiceImpl implements SetupService{
 	@Override
 	public void getCapabilities(SetupModel model) {
 		model.setSelectEndpointCapabilities(webEngine.getCapabilities(model.getSelectedEndpoint()));
+	}
+
+	public void deleteAllEntriesFromAttachedMUA(SetupModel model){
+	    	webEngine.deleteAllEntriesFromAttachedMUA(model);
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.SetupService#hasAttached()
+	 */
+	@Override
+	public boolean getHasAttached() {
+	    return webEngine.hasAttached();
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getAttachedCapabilities()
+	 */
+	@Override
+	public Capabilities getAttachedCapabilities() {
+	    return webEngine.getAttachedCapabilities();
+	}
+
+	public MUAEntry getCurrentlyAttached(){
+		return webEngine.getCurrentlyAttached();
 	}
 
 }

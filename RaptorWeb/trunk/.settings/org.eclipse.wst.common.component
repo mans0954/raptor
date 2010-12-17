@@ -5,6 +5,9 @@
         --><wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ServiceInterfaces/ServiceInterfaces">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/information-model/information-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>

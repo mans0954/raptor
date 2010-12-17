@@ -21,7 +21,7 @@ public class SetupModel implements Serializable{
 
 	private MUAEntry selectedEndpoint;
 	private Capabilities selectEndpointCapabilities;
-
+	private String processingResult;
 
 
 	public void setSelectEndpointCapabilities(Capabilities selectEndpointCapabilities) {
@@ -31,11 +31,18 @@ public class SetupModel implements Serializable{
 		return selectEndpointCapabilities;
 	}
 	public void setSelectedEndpoint(MUAEntry selectedEndpoint) {
-		log.debug("Setting Selected Endpoint..."+selectedEndpoint);
 		this.selectedEndpoint = selectedEndpoint;
 	}
 	public MUAEntry getSelectedEndpoint() {
 		return selectedEndpoint;
 	}
+	public void setProcessingResult(String processingResult) {
+	    this.processingResult = processingResult;
+	}
+	public String getProcessingResult() {
+	    return processingResult;
+	}
+
+
 
 }
