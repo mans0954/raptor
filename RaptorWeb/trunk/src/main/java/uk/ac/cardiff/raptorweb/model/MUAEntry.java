@@ -30,4 +30,13 @@ public class MUAEntry implements Serializable{
 		return isAttached;
 	}
 
+	public String toString(){
+	    StringBuilder result = new StringBuilder();
+	    result.append(this.getClass().getName());
+	    result.append("Object{");
+	    result.append(serviceEndpoint);
+	    result.append("}");
+	    return result.toString();
+	}
+
 }

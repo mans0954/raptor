@@ -20,10 +20,27 @@
 					<f:facet name="start">
 						<tr:panelCaptionGroup
 							inlineStyle="border-style: hidden;background-color:#EEE9E8; height:1500px; width=500px">
-							<tr:panelHeader text="Statistics" />
-							<br />
+
+							<tr:panelGroupLayout layout="horizontal">
+								<tr:panelHeader text="Statistics" />
+								<tr:spacer width="5px" />
+								<tr:statusIndicator />
+								<tr:spacer width="5px" />
+								<tr:statusIndicator>
+									<f:facet name="busy">
+										<tr:outputText value="Processing Request, Please Wait..." />
+									</f:facet>
+									<f:facet name="ready">
+										<tr:outputText value="#{graphmodel.processingResult}" />
+									</f:facet>
+								</tr:statusIndicator>
+							</tr:panelGroupLayout>
+
+							<tr:spacer height="5px" />
 							<!-- force the packing algorithm on the start facet to consider this output text, to maintain a minumum size -->
-							<tr:outputText  value="No Attached Aggregator"  inlineStyle="color:rgb(0,0,0);" rendered="#{empty graphService.statisticalUnits}"/>
+							<tr:outputText value="No Attached Aggregator"
+								inlineStyle="color:rgb(0,0,0);"
+								rendered="#{empty graphService.statisticalUnits}" />
 
 							<tr:outputText
 								value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -96,7 +113,7 @@
 												inlineStyle="border-style: hidden;"
 												rendered="#{not empty unit.statisticParameters.methodParams}">
 												<tr:column inlineStyle="border-style: hidden;">
-													<tr:inputText value="#{parameter.parameter}"/>
+													<tr:inputText value="#{parameter.parameter}" />
 												</tr:column>
 											</tr:table>
 										</tr:panelGroupLayout>
@@ -150,7 +167,7 @@
 										<tr:outputText value="Statistic" />
 									</f:facet>
 									<tr:commandLink text="#{unit.statisticParameters.unitName}"
-										action="invokeStatisticalUnit">
+										action="invokeStatisticalUnit" partialSubmit="true">
 										<f:setPropertyActionListener value="#{unit}"
 											target="#{graphmodel.selectedStatisticalUnit}" />
 									</tr:commandLink>
@@ -235,7 +252,8 @@
 
 								<!--  verticalBar, horizontalBar, stackedVerticalBar, stackedHorizontalBar, pie, area, stackedArea, line, barLine, XYLine,
 						scatterPlot, radar, radarArea, funnel, circularGauge, semiCircularGauge -->
-								<tr:outputText value="Type" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:outputText value="Type"
+									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartTypeSelector"
 									value="#{graphmodel.chartOptions.graphType}" autoSubmit="true"
 									partialSubmit="true"
@@ -255,18 +273,21 @@
 									<f:selectItem itemLabel="radarArea" itemValue="radarArea" />
 
 								</tr:selectOneChoice>
-								<tr:outputText value=" Perspective" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:outputText value=" Perspective"
+									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartPerspectiveSelector"
-									value="#{graphmodel.chartOptions.perspective}" autoSubmit="true"
-									partialSubmit="true" shortDesc="Perspective"
+									value="#{graphmodel.chartOptions.perspective}"
+									autoSubmit="true" partialSubmit="true" shortDesc="Perspective"
 									rendered="#{not empty graphmodel.currentGraph}">
 									<f:selectItem itemLabel="on" itemValue="true" />
 									<f:selectItem itemLabel="off" itemValue="false" />
 								</tr:selectOneChoice>
-								<tr:outputText value=" XMajorGridCount" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:outputText value=" XMajorGridCount"
+									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartXMajorGridCountSelector"
-									value="#{graphmodel.chartOptions.xMajorGridCount}" autoSubmit="true"
-									partialSubmit="true" shortDesc="XMajorGridCount"
+									value="#{graphmodel.chartOptions.xMajorGridCount}"
+									autoSubmit="true" partialSubmit="true"
+									shortDesc="XMajorGridCount"
 									rendered="#{not empty graphmodel.currentGraph}">
 									<f:selectItem itemLabel="auto" itemValue="-1" />
 									<f:selectItem itemLabel="off" itemValue="0" />
@@ -275,10 +296,12 @@
 									<f:selectItem itemLabel="15" itemValue="15" />
 									<f:selectItem itemLabel="20" itemValue="20" />
 								</tr:selectOneChoice>
-								<tr:outputText value=" YMajorGridCount" rendered="#{not empty graphmodel.currentGraph}"/>
+								<tr:outputText value=" YMajorGridCount"
+									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartYMajorGridCountSelector"
-									value="#{graphmodel.chartOptions.yMajorGridCount}" autoSubmit="true"
-									partialSubmit="true" shortDesc="YMajorGridCount"
+									value="#{graphmodel.chartOptions.yMajorGridCount}"
+									autoSubmit="true" partialSubmit="true"
+									shortDesc="YMajorGridCount"
 									rendered="#{not empty graphmodel.currentGraph}">
 									<f:selectItem itemLabel="auto" itemValue="-1" />
 									<f:selectItem itemLabel="off" itemValue="0" />
@@ -304,7 +327,8 @@
 								width="95%" animationDuration="0"
 								XMajorGridLineCount="#{graphmodel.chartOptions.xMajorGridCount}"
 								YMajorGridLineCount="#{graphmodel.chartOptions.yMajorGridCount}"
-								perspective="#{graphmodel.chartOptions.perspective}"/>
+								perspective="#{graphmodel.chartOptions.perspective}"
+								maxPrecision="2" />
 							<br />
 
 						</tr:panelFormLayout>
@@ -318,7 +342,7 @@
 								bandingInterval="2" banding="row" var="row" width="95%"
 								rendered="#{not empty graphmodel.currentTableGraph}">
 
-								<tr:column sortProperty="series" sortable="true" >
+								<tr:column sortProperty="series" sortable="true">
 									<f:facet name="header">
 										<tr:outputText value="Series" />
 									</f:facet>

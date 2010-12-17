@@ -43,6 +43,8 @@
  		<evaluate expression="graphService.generateCSVReport(graphmodel,reportmodel)"/>
  	</transition>
 
+
+
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
 
@@ -56,9 +58,19 @@
   	<var name="setupmodel" class="uk.ac.cardiff.raptorweb.model.SetupModel" />
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
+
 	<transition on="getAggregatorCapabilities">
 		<evaluate expression="setupService.getCapabilities(setupmodel)"/>
 	</transition>
+
+	<transition on="deleteAllEntriesFromAttachedMUA">
+ 		<evaluate expression="setupService.deleteAllEntriesFromAttachedMUA(setupmodel)"/>
+ 	</transition>
+
+ 	<transition on="attachMUA">
+ 		<evaluate expression="setupService.setAttachedEndpoint(setupmodel)"/>
+ 	</transition>
+
 
 
  </view-state>

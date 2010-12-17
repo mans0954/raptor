@@ -5,7 +5,8 @@ package uk.ac.cardiff.raptorweb.service.impl;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
@@ -23,7 +24,7 @@ import uk.ac.cardiff.raptorweb.service.GraphService;
  */
 public class GraphServiceImpl implements GraphService{
 
-	static Logger log = Logger.getLogger(GraphServiceImpl.class);
+	static Logger log = LoggerFactory.getLogger(GraphServiceImpl.class);
 
 	private RaptorWebEngine webEngine;
 
@@ -83,10 +84,13 @@ public class GraphServiceImpl implements GraphService{
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
 		    model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
+		    model.setProcessingResult("Done");
 		}
 		else{
+		    log.error("Chart model come back from the MUA as null");
 		    model.setCurrentTableGraph(null);
 		    model.setCurrentGraph(null);
+		    model.setProcessingResult("The statistic failed to produce a graphable result");
 		}
 
 

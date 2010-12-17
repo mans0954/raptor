@@ -9,6 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.AdministrativeFunction;
+import uk.ac.cardiff.model.WebMetadata;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -18,6 +20,7 @@ import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.SetupModel;
 import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
 
 /**
@@ -36,6 +39,9 @@ public class RaptorWebEngine {
     /* holds the capabilities and statistical information for the currently attached MUA */
     private Capabilities currentlyAttachedCapabilities;
 
+    /* holds basic metadata about this particular RaptorWeb engine instance*/
+    private WebMetadata webMetadata;
+
     /**
      * @return
      */
@@ -46,6 +52,9 @@ public class RaptorWebEngine {
 
     public void setRegistry(MUARegistry registry) {
 	this.registry = registry;
+	for (MUAEntry entry : registry.getUAEntries()){
+	    if (entry.getIsAttached()) setAttached(entry);
+	}
     }
 
     public MUARegistry getRegistry() {
@@ -53,6 +62,7 @@ public class RaptorWebEngine {
     }
 
     public void setAttached(MUAEntry entry) {
+	log.info("Attaching {} and retrieving abilities",entry);
 	this.attachedMUA = entry;
 	currentlyAttachedCapabilities = ServiceEndpointInterface.discoverMUACapabilities(attachedMUA.getServiceEndpoint());
     }
@@ -155,6 +165,36 @@ public class RaptorWebEngine {
 
     public Capabilities getAttachedCapabilities() {
 	return currentlyAttachedCapabilities;
+    }
+
+    /**
+     * @param model
+     */
+    public void deleteAllEntriesFromAttachedMUA(SetupModel model) {
+	log.info("Deleting all entries from MUA [{}]",attachedMUA.getServiceEndpoint());
+	AdministrativeFunction function = new AdministrativeFunction();
+	function.setAdministrativeFunction(AdministrativeFunction.AdministrativeFunctionType.REMOVEALL);
+	if (webMetadata!=null)function.setRequester(webMetadata.getWebName());
+	else function.setRequester("UNKNOWN");
+	boolean success = ServiceEndpointInterface.invokeAdministrativeFunction(attachedMUA.getServiceEndpoint(), function);
+	log.debug("Removal successfull {}",success);
+	if (!success) model.setProcessingResult("ERROR: Entries did not remove");
+	else if (success) model.setProcessingResult("Operation Successful");
+    }
+
+    public void setWebMetadata(WebMetadata webMetadata) {
+	this.webMetadata = webMetadata;
+    }
+
+    public WebMetadata getWebMetadata() {
+	return webMetadata;
+    }
+
+    /**
+     * @return
+     */
+    public boolean hasAttached() {
+	return (attachedMUA!=null) ? true : false;
     }
 
 }

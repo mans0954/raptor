@@ -20,6 +20,14 @@
 	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
 		<property name="registry"><ref bean="muaRegistry"></ref></property>
 		<property name="reportHandler"><ref bean="reportHandler"></ref></property>
+		<property name="webMetadata"><ref bean="webMetadata"></ref></property>
+	</bean>
+
+	<!-- MUA Metadata -->
+	<bean id="webMetadata" class="uk.ac.cardiff.model.WebMetadata">
+		<property name="webName"><value>Cardiff University's RaptorWeb Instance</value></property>
+		<property name="organisationName"><value>Cardiff University</value></property>
+		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
 	</bean>
 
 	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">

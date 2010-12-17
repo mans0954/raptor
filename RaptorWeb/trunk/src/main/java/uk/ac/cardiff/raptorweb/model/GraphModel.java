@@ -21,6 +21,7 @@ public class GraphModel implements Serializable{
 	private ChartOptions chartOptions;
 	private RaptorTableChartModel currentTableGraph;
 	private StatisticalUnitInformation selectedStatisticalUnit;
+	private String processingResult;
 
 
 	/**
@@ -84,6 +85,14 @@ public class GraphModel implements Serializable{
 
 	public ChartOptions getChartOptions() {
 	    return chartOptions;
+	}
+
+	public void setProcessingResult(String processingResult) {
+	    this.processingResult = processingResult;
+	}
+
+	public String getProcessingResult() {
+	    return processingResult;
 	}
 
 
