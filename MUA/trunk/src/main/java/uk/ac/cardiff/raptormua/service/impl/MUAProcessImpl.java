@@ -22,6 +22,8 @@ package uk.ac.cardiff.raptormua.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.AdministrativeFunction;
+import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -77,6 +79,15 @@ public class MUAProcessImpl implements MUAProcess{
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
 	    engine.updateStatisticalUnit(statisticalUnitInformation);
 
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#performAdministrativeFunction(uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
+	 */
+	@Override
+	public boolean performAdministrativeFunction(AdministrativeFunction function) {
+	   log.info("Performing administrative function {}, request orginates from {}",function.getAdministrativeFunction(),function.getRequester());
+	   return engine.performAdministrativeFunction(function);
 	}
 
 

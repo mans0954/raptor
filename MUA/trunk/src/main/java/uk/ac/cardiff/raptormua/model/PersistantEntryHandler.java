@@ -107,7 +107,7 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public void removeAllEntries() {
-
+	log.debug("Removing all entries from this entry handler");
 	dataConnection.deleteAllEntries(entries);
 	entries.clear();
 	//entryInformation.setLatestEntryTime(null);
