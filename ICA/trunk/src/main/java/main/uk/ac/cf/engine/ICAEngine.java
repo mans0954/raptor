@@ -25,25 +25,30 @@ import java.util.Set;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.ac.cardiff.model.ICAMetadata;
 
 /**
  * @author philsmart
  *
  * Responsible for ALL low level capture operations
  */
-public class CaptureEngine {
-    	static Logger log = Logger.getLogger(CaptureEngine.class);
+public class ICAEngine {
+    	static Logger log = LoggerFactory.getLogger(ICAEngine.class);
 
 	private DataAccessRegister authRegister;
+	private UARegistry uaRegistry;
+	private ICAMetadata icaMetadata;
 
-	public CaptureEngine(){
+	public ICAEngine(){
 	    	log.info("ICA Capture Engine is running...");
 	}
 
 	public void capturePerform() throws Exception{
 		for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
-			log.info("Capturing from "+authI);
+			log.info("Capturing from {}",authI);
 			authI.parse();
 		}
 	}
@@ -85,6 +90,33 @@ public class CaptureEngine {
 
 	public List getAllUages() {
 	    return null;
+	}
+
+	/**
+	 * sends all authentication parsing modules to the release engine
+	 * @return
+	 */
+	public boolean release() {
+	    EntryReleaseEngine entryReleaseEngine = new EntryReleaseEngine();
+	    boolean success = entryReleaseEngine.release(uaRegistry, authRegister.getAuthenticationModules(), getIcaMetadata());
+	    if (success) retrieveTransactionFinished();
+	    return success;
+	}
+
+	public void setUaRegistry(UARegistry uaRegistry) {
+	    this.uaRegistry = uaRegistry;
+	}
+
+	public UARegistry getUaRegistry() {
+	    return uaRegistry;
+	}
+
+	public void setIcaMetadata(ICAMetadata icaMetaData) {
+	    this.icaMetadata = icaMetaData;
+	}
+
+	public ICAMetadata getIcaMetadata() {
+	    return icaMetadata;
 	}
 
 }

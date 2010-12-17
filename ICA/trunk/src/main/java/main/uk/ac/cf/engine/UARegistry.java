@@ -13,45 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
-package main.uk.ac.cf.model;
+
+package main.uk.ac.cf.engine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import org.joda.time.DateTime;
 
-import uk.ac.cardiff.model.Entry;
+
+import main.uk.ac.cf.model.UAEntry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @author philsmart
- *
+ * @author philsmart handles the list of attached ICAs as injected by Spring
  */
-public interface EntryHandler {
+public class UARegistry {
+    static Logger log = LoggerFactory.getLogger(UARegistry.class);
 
+    private List<UAEntry> ICAEntries;
 
-	public void addEntries(Set<Entry> entries);
+    public UARegistry() {
+	setUAEntries(new ArrayList<UAEntry>());
+    }
 
-	public void addEntry(Entry entry);
+    public void setUAEntries(List<UAEntry> ICAEntries) {
+	log.info("Setting UAs");
+	for (UAEntry entry : ICAEntries)
+	    log.info("Registering: {}", entry.getClass());
+	this.ICAEntries = ICAEntries;
+    }
 
-	public boolean isNewerOrEqual(Entry authE);
-
-	public Set<Entry> getEntries();
-
-	public void removeAllEntries();
-
-	public void endTransaction();
-
-	public boolean isEqual(Entry authE);
-
-	public boolean isAfter(Entry authE);
-
-	public void setLatestEntryTime(DateTime latestEntryTime);
-
-	public DateTime getLatestEntryTime();
-
-
+    public List<UAEntry> getUAEntries() {
+	return ICAEntries;
+    }
 }
