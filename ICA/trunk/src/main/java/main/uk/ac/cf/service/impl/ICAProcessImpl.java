@@ -23,10 +23,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import main.uk.ac.cf.engine.CaptureEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.uk.ac.cf.engine.ICAEngine;
 import main.uk.ac.cf.service.ICAProcess;
 
-import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.model.Entry;
 
@@ -36,9 +38,9 @@ import uk.ac.cardiff.model.Entry;
  *         main service suite for the ICA
  */
 public class ICAProcessImpl implements ICAProcess {
-    static Logger log = Logger.getLogger(ICAProcess.class);
+    static Logger log = LoggerFactory.getLogger(ICAProcess.class);
 
-    private CaptureEngine engine;
+    private ICAEngine engine;
 
     /* how long any retrieve method should wait before it returns an empt set*/
     private final int getTimeout =10000;
@@ -65,7 +67,10 @@ public class ICAProcessImpl implements ICAProcess {
 		long start = System.currentTimeMillis();
 		engine.capturePerform();
 		long end = System.currentTimeMillis();
-		log.info("Capture Success, taking " + (end - start) + "ms");
+		log.info("Capture Success, taking {} ms",(end - start));
+		log.info("Running Entry Release");
+		boolean released = engine.release();
+		log.info("Entries released to all listening UAs {}",released);
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
 		log.error(e.getMessage());
@@ -77,12 +82,12 @@ public class ICAProcessImpl implements ICAProcess {
 
     }
 
-    public void setEngine(CaptureEngine engine) {
+    public void setEngine(ICAEngine engine) {
 	log.debug("Setting ICA CORE Engine");
 	this.engine = engine;
     }
 
-    public CaptureEngine getEngine() {
+    public ICAEngine getEngine() {
 	return engine;
     }
 

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>ica</artifactId>
@@ -101,11 +102,11 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<version>2.2.7</version>
 			<exclusions>
-                 <exclusion>
-                     <groupId>asm</groupId>
-                     <artifactId>asm</artifactId>
-                 </exclusion>
-             </exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -164,19 +165,42 @@
 
 		<!--  includes the information-model -->
 		<dependency>
-            <groupId>uk.ac.cardiff.raptor</groupId>
-            <artifactId>service-interfaces</artifactId>
-            <version>0.2</version>
+			<groupId>uk.ac.cardiff.raptor</groupId>
+			<artifactId>service-interfaces</artifactId>
+			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.0-801.jdbc4</version>
 		</dependency>
+
+		<!-- Deep clone library -->
+		<dependency>
+			<groupId>clonable</groupId>
+			<artifactId>cloning</artifactId>
+			<version>1.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>clonable</groupId>
+			<artifactId>objenesis</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/java/</directory>
+				<includes>
+					<include>main/uk/ac/cf/model/entrymetadata.hbm.xml</include>
+					<include>main/uk/ac/cf/model/parsersupport.hbm.xml</include>
+				</includes>
+			</resource>
+			<!--  DONE -->
+		</resources>
 		<pluginManagement>
 			<plugins>
 

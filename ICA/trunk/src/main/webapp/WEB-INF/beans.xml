@@ -69,16 +69,9 @@
 
 	<!-- Polling trigger setup -->
 
-	<!--<bean id="ICAProcessTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail">
-			<ref local="ICAProcessJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 * * * * ?</value>
-		</property>
-	</bean>
 
-	--><bean id="ICAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+
+	<bean id="ICAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail">
 			<ref local="ICAProcessJobDetail" />
 		</property>
@@ -121,16 +114,27 @@
 		this bean config kicks of the singleton engine instance which is then
 		used by all services of the ICA
 	-->
-	<bean id="CaptureEngine" class="main.uk.ac.cf.engine.CaptureEngine">
-		<property name="authRegister">
-			<ref bean="dataAccessRegister"></ref>
-		</property>
+	<bean id="CaptureEngine" class="main.uk.ac.cf.engine.ICAEngine">
+		<property name="authRegister"><ref bean="dataAccessRegister"></ref></property>
+		<property name="uaRegistry"><ref bean="uaRegistry"></ref></property>
+		<property name="icaMetadata"><ref bean="ICAMetadata"></ref></property>
+
 	</bean>
+
+	<!-- ICA Metadata -->
+	<bean id="ICAMetadata" class="uk.ac.cardiff.model.ICAMetadata">
+		<property name="icaName"><value>IdP1 Shibboleth Log File Parser</value></property>
+		<property name="organisationName"><value>Cardiff University</value></property>
+		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
+	</bean>
+
+
 
 
 
 
 	<import resource="dao-beans.xml"/>
 	<import resource="data-access.xml" />
+	<import resource="ua-registry.xml" />
 
 </beans>
