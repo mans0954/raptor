@@ -65,7 +65,7 @@
 				<includes>
 					<include>uk/ac/cardiff/model/Entry.aegis.xml</include>
 					<include>uk/ac/cardiff/model/entry.hbm.xml</include>
-					<include>uk/ac/cardiff/model/StatisticParameter.aegis.xml</include>
+					<include>uk/ac/cardiff/model/StatisticParameters.aegis.xml</include>
 					<include>uk/ac/cardiff/model/wsmodel/StatisticalUnitInformation.aegis.xml</include>
 				</includes>
 			</resource>
