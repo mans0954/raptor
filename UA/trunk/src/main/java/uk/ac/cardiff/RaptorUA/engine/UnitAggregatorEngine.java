@@ -23,13 +23,16 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import uk.ac.cardiff.RaptorUA.model.EntryHandler;
 import uk.ac.cardiff.RaptorUA.model.ICAEntry;
 import uk.ac.cardiff.RaptorUA.model.MemoryEntryHandler;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 
 
@@ -44,7 +47,7 @@ public class UnitAggregatorEngine {
     private EntryHandler entryHandler;
 
     /* class logger */
-    static Logger log = Logger.getLogger(UnitAggregatorEngine.class);
+    static Logger log = LoggerFactory.getLogger(UnitAggregatorEngine.class);
 
     public UnitAggregatorEngine(){
 	log.info("Setup Unit Aggregator Engine...");
@@ -120,5 +123,15 @@ public class UnitAggregatorEngine {
 	    log.debug("Retrieve Transaction Finished, entries are being removed.from the UA..done");
 
 	}
+
+    /**
+     * @param pushed
+     */
+    public void addAuthentications(ICAEntryPush pushed) {
+	log.info("Committing {} entries to the entryHandler",pushed.getEntries().size());
+	entryHandler.addEntries(pushed.getEntries());
+	log.info("EntryHandler now contains {} entries",entryHandler.getEntries().size());
+
+    }
 
 }

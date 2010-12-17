@@ -25,11 +25,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.RaptorUA.service.UAProcess;
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
  * @author philsmart
@@ -38,7 +40,7 @@ import uk.ac.cardiff.model.Entry;
 public class UAProcessImpl implements UAProcess {
 
     /* class logger */
-    static Logger log = Logger.getLogger(UAProcessImpl.class);
+    static Logger log = LoggerFactory.getLogger(UAProcessImpl.class);
 
     /* the central point or engine for this Unit Aggregator */
     private UnitAggregatorEngine aggregatorEngine;
@@ -114,6 +116,26 @@ public class UAProcessImpl implements UAProcess {
 	}
 	return authentications;
 
+    }
+
+    /**
+     * @param entries
+     */
+    public void addAuthentications(ICAEntryPush pushed) {
+	log.debug("UA has received {} entries from {}",pushed.getEntries().size(),pushed.getIcaMetaData().getIcaName());
+	if (lockR.tryLock()) {
+	    try {
+		log.info("Adding pushedd Entries to UA...");
+		aggregatorEngine.addAuthentications(pushed);
+		log.info("Done");
+	    } catch (Exception e) {
+		// TODO either throw as service output, or deal with here
+		log.error(e.getMessage());
+		e.printStackTrace();
+	    } finally {
+		lockR.unlock();
+	    }
+	}
     }
 
 }
