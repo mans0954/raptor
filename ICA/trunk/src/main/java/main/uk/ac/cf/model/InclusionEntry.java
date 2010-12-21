@@ -7,7 +7,7 @@ package main.uk.ac.cf.model;
  * @author philsmart
  *
  */
-public abstract class ExclusionEntry implements EntryFilter{
+public abstract class InclusionEntry implements EntryFilter{
 
     private String fieldName;
     private String match;
@@ -18,10 +18,10 @@ public abstract class ExclusionEntry implements EntryFilter{
     public String getFieldName() {
 	return fieldName;
     }
-    public void setMatchString(String matchString) {
-	this.match = matchString;
+    public void setMatch(String match) {
+	this.match = match;
     }
-    public String getMatchString() {
+    public String getMatch() {
 	return match;
     }
 
