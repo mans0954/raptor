@@ -20,24 +20,18 @@ import java.util.Set;
 
 import main.uk.ac.cf.dao.RawData;
 import main.uk.ac.cf.model.ExclusionList;
+import main.uk.ac.cf.model.IncusionList;
 
 public abstract class AuthenticationInput extends RawData{
 
-    private String[][] excludeEntries;
+
     private ExclusionList exclusionList;
+    private IncusionList inclusionList;
 
 
     public Set getAuthentications() {
 	return getEntryHandler().getEntries();
 
-    }
-
-    public void setExcludeEntries(String[][] excludeEntries) {
-	this.excludeEntries = excludeEntries;
-    }
-
-    public String[][] getExcludeEntries() {
-	return excludeEntries;
     }
 
     public void setExclusionList(ExclusionList exclusionList) {
@@ -46,6 +40,16 @@ public abstract class AuthenticationInput extends RawData{
 
     public ExclusionList getExclusionList() {
 	return exclusionList;
+    }
+
+
+    public void setInclusionList(IncusionList inclusionList) {
+	this.inclusionList = inclusionList;
+    }
+
+
+    public IncusionList getInclusionList() {
+	return inclusionList;
     }
 
 

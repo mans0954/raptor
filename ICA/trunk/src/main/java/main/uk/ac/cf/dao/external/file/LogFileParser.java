@@ -32,6 +32,7 @@ import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
 import main.uk.ac.cf.dao.internal.ICADataConnection;
 import main.uk.ac.cf.model.ExclusionEntry;
+import main.uk.ac.cf.model.InclusionEntry;
 import main.uk.ac.cf.model.PersistentParserSupport;
 
 import org.apache.commons.lang.text.StrTokenizer;
@@ -121,32 +122,31 @@ public class LogFileParser extends AuthenticationInput {
 		}
 	    }
 
-	    /* now check its not in the exclusion list */
-	    boolean preventAdd = false;
-	    // if (getExcludeEntries() != null && getExcludeEntries().length >
-	    // 0) {
-	    //
-	    // for (String[] ent : getExcludeEntries()) {
-	    // String fieldname = ent[0];
-	    // String value = ent[1];
-	    // Object valueFromEntry = getValueFromObject(fieldname, authE);
-	    // if (valueFromEntry instanceof String){
-	    // if (value.equals(((String)valueFromEntry))) {
-	    // preventAdd = true;
-	    // }
-	    // }
-	    //
-	    // }
-	    // }
-	    if (getExclusionList() != null) {
-		ExclusionEntry[] exclusionEntries = getExclusionList().getExclusionEntries();
-		for (ExclusionEntry exclusion : exclusionEntries){
-		    String fieldname = exclusion.getFieldName();
-		    String value =exclusion.getMatchString();
+	    /* check its IN the inclusion list */
+	    boolean shouldBeIncluded = false;
+	    if (getInclusionList()!=null){
+		for (InclusionEntry inclusion : getInclusionList().getInclusionEntries()){
+		    String fieldname = inclusion.getFieldName();
 		    Object valueFromEntry = getValueFromObject(fieldname, authE);
 		    if (valueFromEntry instanceof String) {
-			if (value.equals(((String) valueFromEntry))) {
-			    preventAdd = true;
+			String valueFromEntryString = (String)valueFromEntry;
+			if (inclusion.filter(valueFromEntryString)){
+			    shouldBeIncluded = true;
+			}
+		    }
+		}
+	    }
+
+	    /* now check its not in the exclusion list */
+	    boolean preventAdd = false;
+	    if (getExclusionList() != null) {
+		for (ExclusionEntry exclusion : getExclusionList().getExclusionEntries()){
+		    String fieldname = exclusion.getFieldName();
+		    Object valueFromEntry = getValueFromObject(fieldname, authE);
+		    if (valueFromEntry instanceof String) {
+			String valueFromEntryString = (String)valueFromEntry;
+			if (exclusion.filter(valueFromEntryString)){
+			    preventAdd=true;
 			}
 		    }
 		}

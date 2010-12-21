@@ -56,20 +56,10 @@
 					<property name="entryType">
 						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
 					</property>
-					<!--
-						exclude entries, is an OR list of <field name, field value> pairs
-						that are checked for when parsing , if oneof them exists, that entry is
-						ignored.
-					-->
-					<property name="excludeEntries">
-						<list>
-							<value>requestBinding,urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST</value>
-							<value>requestBinding,urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding</value>
-							<value>requestBinding,urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</value>
-						</list>
-					</property>
 
-					<property name="exclusionList">
+					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser
+					 all other fields are ignored, this is run before the exclusion list-->
+					<!--<property name="exclusionList">
 							<bean class="main.uk.ac.cf.model.ExclusionList">
 								<property name="exclusionEntries">
 									<list>
@@ -85,9 +75,33 @@
 											<property name ="fieldName" value="requestBinding"/>
 											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
 										</bean>
-
 									</list>
+								</property>
+							</bean>
+					</property>
 
+					--><!--
+						exclude entries, is an OR list of <field name, field value> pairs
+						that are checked for when parsing , if oneof them exists, that entry is
+						ignored.
+					-->
+					<property name="exclusionList">
+							<bean class="main.uk.ac.cf.model.ExclusionList">
+								<property name="exclusionEntries">
+									<list>
+										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+										</bean>
+										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
+										</bean>
+										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+										</bean>
+									</list>
 								</property>
 							</bean>
 					</property>
