@@ -11,7 +11,11 @@ public class RegexInclusionEntry extends InclusionEntry{
 
     private String regexMatch;
 
-    /* (non-Javadoc)
+    /*
+     * Constructs a regex from the <code>match</code> string, and checks if this regex is
+     * contained in the input <code>value</code>
+     *
+     * (non-Javadoc)
      * @see main.uk.ac.cf.model.EntryFilter#filter(java.lang.String)
      */
     @Override
