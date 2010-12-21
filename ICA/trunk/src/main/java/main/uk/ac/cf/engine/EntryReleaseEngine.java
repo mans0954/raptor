@@ -62,7 +62,17 @@ public class EntryReleaseEngine {
 
     }
 
+    /**
+     * Filters the attributes from the entries being pushed to the input <code>uaEntry</code>.
+     * If no filter policy has been defined, no work is done, and the input <code>allEntries</code>
+     * is returned without modification
+     *
+     * @param uaEntry
+     * @param allEntries
+     * @return
+     */
     private Set<Entry> filterAttributes(UAEntry uaEntry, Set<Entry> allEntries){
+	if (uaEntry.getAttributeFilterPolicy()==null) return allEntries;
 	return AtrributeFilterEngine.filter(uaEntry.getAttributeFilterPolicy(), allEntries);
     }
 

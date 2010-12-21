@@ -31,6 +31,7 @@ import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
 import main.uk.ac.cf.dao.external.format.LogFileFormat;
 import main.uk.ac.cf.dao.internal.ICADataConnection;
+import main.uk.ac.cf.model.ExclusionEntry;
 import main.uk.ac.cf.model.PersistentParserSupport;
 
 import org.apache.commons.lang.text.StrTokenizer;
@@ -54,25 +55,22 @@ public class LogFileParser extends AuthenticationInput {
     private LogFileFormat format;
     private String logfile;
     private String entryType;
-    private String[][] excludeEntries;
 
-
-    public LogFileParser(){
+    public LogFileParser() {
 
     }
 
     public void parse() throws Exception {
 	log.info("parsing: " + logfile + " instance: " + this);
 
-
 	// Must use URL, as java.io does not work in a webapp
 	URL logfileURL = new URL(logfile);
 	URLConnection logfileconnection = logfileURL.openConnection();
 	BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
-	int lineCount=0;
+	int lineCount = 0;
 	String inputLine;
 
-	//Set<Entry> entries = new LinkedHashSet<Entry>();
+	// Set<Entry> entries = new LinkedHashSet<Entry>();
 
 	while ((inputLine = in.readLine()) != null) {
 	    // log.debug(inputLine);
@@ -125,18 +123,32 @@ public class LogFileParser extends AuthenticationInput {
 
 	    /* now check its not in the exclusion list */
 	    boolean preventAdd = false;
-	    if (getExcludeEntries() != null && getExcludeEntries().length > 0) {
-
-		for (String[] ent : getExcludeEntries()) {
-		    String fieldname = ent[0];
-		    String value = ent[1];
+	    // if (getExcludeEntries() != null && getExcludeEntries().length >
+	    // 0) {
+	    //
+	    // for (String[] ent : getExcludeEntries()) {
+	    // String fieldname = ent[0];
+	    // String value = ent[1];
+	    // Object valueFromEntry = getValueFromObject(fieldname, authE);
+	    // if (valueFromEntry instanceof String){
+	    // if (value.equals(((String)valueFromEntry))) {
+	    // preventAdd = true;
+	    // }
+	    // }
+	    //
+	    // }
+	    // }
+	    if (getExclusionList() != null) {
+		ExclusionEntry[] exclusionEntries = getExclusionList().getExclusionEntries();
+		for (ExclusionEntry exclusion : exclusionEntries){
+		    String fieldname = exclusion.getFieldName();
+		    String value =exclusion.getMatchString();
 		    Object valueFromEntry = getValueFromObject(fieldname, authE);
-		    if (valueFromEntry instanceof String){
-			if (value.equals(((String)valueFromEntry))) {
+		    if (valueFromEntry instanceof String) {
+			if (value.equals(((String) valueFromEntry))) {
 			    preventAdd = true;
 			}
 		    }
-
 		}
 	    }
 
@@ -149,15 +161,13 @@ public class LogFileParser extends AuthenticationInput {
 		getEntryHandler().addEntry(authE);
 	    }
 
-
-
 	}
 
 	in.close();
 
-	log.debug("done, walked "+lineCount+" lines");
-	//getEntryHandler().addEntries(entries.);
-	log.debug("Currently has: "+getEntryHandler().getEntries().size()+" entries, latestEntry: "+getEntryHandler().getLatestEntryTime());
+	log.debug("done, walked " + lineCount + " lines");
+	// getEntryHandler().addEntries(entries.);
+	log.debug("Currently has: " + getEntryHandler().getEntries().size() + " entries, latestEntry: " + getEntryHandler().getLatestEntryTime());
 	getEntryHandler().endTransaction();
 
 	/*
@@ -173,7 +183,7 @@ public class LogFileParser extends AuthenticationInput {
 	 * psuedo-incremental updates (even though the entire file is read in
 	 * again, only newer entries are saved)
 	 */
-	//entryHandler.endTransaction();
+	// entryHandler.endTransaction();
 
     }
 
@@ -296,20 +306,6 @@ public class LogFileParser extends AuthenticationInput {
     public String getEntryType() {
 	return entryType;
     }
-
-    public void setExcludeEntries(String[][] excludeEntries) {
-	this.excludeEntries = excludeEntries;
-    }
-
-    public String[][] getExcludeEntries() {
-	return excludeEntries;
-    }
-
-
-
-
-
-
 
     // public static void main(String args[]) throws IOException{
     // LogFileParser lfp = new LogFileParser();

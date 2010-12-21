@@ -19,13 +19,33 @@ import java.util.List;
 import java.util.Set;
 
 import main.uk.ac.cf.dao.RawData;
+import main.uk.ac.cf.model.ExclusionList;
 
 public abstract class AuthenticationInput extends RawData{
+
+    private String[][] excludeEntries;
+    private ExclusionList exclusionList;
 
 
     public Set getAuthentications() {
 	return getEntryHandler().getEntries();
 
+    }
+
+    public void setExcludeEntries(String[][] excludeEntries) {
+	this.excludeEntries = excludeEntries;
+    }
+
+    public String[][] getExcludeEntries() {
+	return excludeEntries;
+    }
+
+    public void setExclusionList(ExclusionList exclusionList) {
+	this.exclusionList = exclusionList;
+    }
+
+    public ExclusionList getExclusionList() {
+	return exclusionList;
     }
 
 

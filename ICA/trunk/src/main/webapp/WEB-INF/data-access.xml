@@ -68,6 +68,29 @@
 							<value>requestBinding,urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect</value>
 						</list>
 					</property>
+
+					<property name="exclusionList">
+							<bean class="main.uk.ac.cf.model.ExclusionList">
+								<property name="exclusionEntries">
+									<list>
+										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+										</bean>
+										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
+										</bean>
+										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
+											<property name ="fieldName" value="requestBinding"/>
+											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+										</bean>
+
+									</list>
+
+								</property>
+							</bean>
+					</property>
 				</bean>
 			</list>
 		</property>
