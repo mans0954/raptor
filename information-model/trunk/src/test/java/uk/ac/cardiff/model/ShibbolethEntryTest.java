@@ -32,7 +32,7 @@ public class ShibbolethEntryTest {
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	entry.setRequestHostFriendlyName("");
-	entry.setRequestID("");
+	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
@@ -51,7 +51,7 @@ public class ShibbolethEntryTest {
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	equalEntry.setRequestHostFriendlyName("");
-	equalEntry.setRequestID("");
+	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
@@ -81,7 +81,7 @@ public class ShibbolethEntryTest {
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	entry.setRequestHostFriendlyName("");
-	entry.setRequestID("");
+	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
@@ -100,7 +100,7 @@ public class ShibbolethEntryTest {
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	equalEntry.setRequestHostFriendlyName("");
-	equalEntry.setRequestID("");
+	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
@@ -130,7 +130,7 @@ public class ShibbolethEntryTest {
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	entry.setRequestHostFriendlyName("");
-	entry.setRequestID("");
+	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
@@ -149,7 +149,7 @@ public class ShibbolethEntryTest {
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation"}); //removed eduPersonEntitlement
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
 	equalEntry.setRequestHostFriendlyName("");
-	equalEntry.setRequestID("");
+	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");

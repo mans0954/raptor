@@ -30,14 +30,15 @@
           	 <key column="id"/>
 
       		<property name="requestPath" column="requestPath" type="string" />
-      		<property name="requestID" column="requestID" type="string" />
+      		<property name="requestId" column="requestID" type="string" />
       		<property name="messageProfileId" column="messageProfileId" type="string" />
       		<property name="responseBinding" column="responseBinding" type="string" />
       		<property name="requestBinding" column="requestBinding" type="string" />
       		<property name="principleName" column="principleName" type="string" />
 			<property name="releasedAttributes" column="releasedAttributes" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
-
-
+			<property name="assertionId" column="assertionId" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+			<property name="nameIdentifier" column="nameIdentifier" type="string" />
+			<property name="responseId" column="responseId" type="string" />
 
     	</joined-subclass>
 
