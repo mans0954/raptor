@@ -26,8 +26,9 @@ import java.util.Set;
 
 import main.uk.ac.cf.dao.internal.ICADataConnection;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import uk.ac.cardiff.model.Entry;
@@ -39,7 +40,7 @@ import uk.ac.cardiff.model.Entry;
 public class PersistantEntryHandler implements EntryHandler {
 
     /* class logger */
-    static Logger log = Logger.getLogger(PersistantEntryHandler.class);
+    static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
     /* information about entries, e.g. last entry */
     private EntryMetadata entryInformation;
@@ -94,15 +95,19 @@ public class PersistantEntryHandler implements EntryHandler {
 		entries.add(entry);
 		updateLastEntry(entry);
 	    }
-	    if (isEqual){
+	    else if (isEqual){
 		Integer hashcode = entry.hashCode();
 		//log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
 		boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
+		if (isAlreadyInLatest){
+		    log.error("Duplicated entries found\n{}",entry);
+		}
 		if (!isAlreadyInLatest){
 		    entries.add(entry);
 		    updateLastEntry(entry);
 		}
 	    }
+
 
 	}
 
@@ -126,8 +131,11 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public void endTransaction() {
+	log.debug("Saving entries to persitant storage...");
 	dataConnection.saveAll(entries);
 	dataConnection.save(entryInformation);
+	log.debug("Saving entries to persitant storage...done");
+	System.exit(1);
 
     }
 

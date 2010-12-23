@@ -3,6 +3,9 @@
  */
 package main.uk.ac.cf.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author philsmart
  *
@@ -20,7 +23,9 @@ public class RegexInclusionEntry extends InclusionEntry{
      */
     @Override
     public boolean filter(String value) {
-	return true;
+	Pattern p = Pattern.compile(this.getMatch());
+	Matcher m = p.matcher(value);
+	return m.find();
     }
 
     public void setRegexMatch(String regexMatch) {
@@ -30,6 +35,8 @@ public class RegexInclusionEntry extends InclusionEntry{
     public String getRegexMatch() {
 	return regexMatch;
     }
+
+
 
 
 

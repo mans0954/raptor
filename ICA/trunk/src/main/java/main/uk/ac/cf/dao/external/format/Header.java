@@ -29,8 +29,11 @@ public class Header {
 	private String fieldName;
 	private int fieldNo;
 	private Type fieldType;
+
 	//only needed if the object type is a date
 	private String dateTimeFormat;
+	private String timeZone;
+
 	private String listDelimeter;
 
 	public void setFieldName(String fieldName) {
@@ -78,6 +81,18 @@ public class Header {
 	 */
 	public String getListDelimeter() {
 		return listDelimeter;
+	}
+	public void setTimeZone(String timeZone) {
+	    this.timeZone = timeZone;
+	}
+
+	/**
+	 * Gets the timezone, if none specified, UTC is the default
+	 * @return
+	 */
+	public String getTimeZone() {
+	    if (timeZone==null)return "UTC";
+	    return timeZone;
 	}
 
 

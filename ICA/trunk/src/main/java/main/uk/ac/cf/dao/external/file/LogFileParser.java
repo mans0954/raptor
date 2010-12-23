@@ -16,6 +16,9 @@
 package main.uk.ac.cf.dao.external.file;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -26,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
+import java.io.BufferedInputStream;
 
 import main.uk.ac.cf.dao.external.AuthenticationInput;
 import main.uk.ac.cf.dao.external.format.Header;
@@ -36,10 +41,12 @@ import main.uk.ac.cf.model.InclusionEntry;
 import main.uk.ac.cf.model.PersistentParserSupport;
 
 import org.apache.commons.lang.text.StrTokenizer;
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import runtimeutils.ReflectionHelper;
@@ -52,7 +59,7 @@ import uk.ac.cardiff.model.*;
  *
  */
 public class LogFileParser extends AuthenticationInput {
-    static Logger log = Logger.getLogger(LogFileParser.class);
+    static Logger log = LoggerFactory.getLogger(LogFileParser.class);
     private LogFileFormat format;
     private String logfile;
     private String entryType;
@@ -62,7 +69,7 @@ public class LogFileParser extends AuthenticationInput {
     }
 
     public void parse() throws Exception {
-	log.info("parsing: " + logfile + " instance: " + this);
+	log.info("parsing: {} instance: {}",logfile, this);
 
 	// Must use URL, as java.io does not work in a webapp
 	URL logfileURL = new URL(logfile);
@@ -71,11 +78,14 @@ public class LogFileParser extends AuthenticationInput {
 	int lineCount = 0;
 	String inputLine;
 
-	// Set<Entry> entries = new LinkedHashSet<Entry>();
+	int totalNoLines =count(logfileURL);
 
+	log.debug("Parsing file with {} lines",totalNoLines);
 	while ((inputLine = in.readLine()) != null) {
 	    // log.debug(inputLine);
 	    lineCount++;
+	    double linePercentage = (((double)lineCount/(double)totalNoLines)*100);
+	    if (linePercentage%25>=0 && linePercentage%25<=0.0001) log.debug("Complete {}%",linePercentage);
 
 	    StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
 	    tokenizer.setIgnoreEmptyTokens(false);
@@ -101,7 +111,7 @@ public class LogFileParser extends AuthenticationInput {
 			// " value: " + value+" Type:"+ header.getType());
 			switch (header.getType()) {
 			case DATE:
-			    addDate(value, header.getDateTimeFormat(), header.getFieldName(), authE);
+			    addDate(value, header.getDateTimeFormat(), header.getTimeZone(),header.getFieldName(), authE);
 			    break;
 			case STRING:
 			    addString(value, header.getFieldName(), authE);
@@ -131,10 +141,15 @@ public class LogFileParser extends AuthenticationInput {
 		    if (valueFromEntry instanceof String) {
 			String valueFromEntryString = (String)valueFromEntry;
 			if (inclusion.filter(valueFromEntryString)){
+			    //log.debug("entry [{}] had match true",valueFromEntryString);
 			    shouldBeIncluded = true;
 			}
 		    }
 		}
+	    }
+	    else{
+		//no inclusion list, assume all
+		shouldBeIncluded = true;
 	    }
 
 	    /* now check its not in the exclusion list */
@@ -152,12 +167,13 @@ public class LogFileParser extends AuthenticationInput {
 		}
 	    }
 
-	    if (!preventAdd) {
+	    if (shouldBeIncluded && !preventAdd) {
 		/*
 		 * do not add the object to the arrayList if is timestamp is
 		 * older than the current latest entry this should save heap
 		 * space during operation
 		 */
+
 		getEntryHandler().addEntry(authE);
 	    }
 
@@ -188,6 +204,29 @@ public class LogFileParser extends AuthenticationInput {
     }
 
     /**
+     * Fast method for finding the number of lines in a logfile
+     *
+     * @param logfileURL
+     * @return
+     * @throws IOException
+     */
+    private int count(URL logfileURL) throws IOException {
+
+	    URLConnection logfileconnection = logfileURL.openConnection();
+	    InputStream is = new BufferedInputStream(logfileconnection.getInputStream());
+	    byte[] c = new byte[1024];
+	    int count = 0;
+	    int readChars = 0;
+	    while ((readChars = is.read(c)) != -1) {
+	        for (int i = 0; i < readChars; ++i) {
+	            if (c[i] == '\n')
+	                ++count;
+	        }
+	    }
+	    return count;
+    }
+
+    /**
      * @param value
      * @param fieldName
      * @param authE
@@ -204,7 +243,7 @@ public class LogFileParser extends AuthenticationInput {
 	}
     }
 
-    private void addDate(String value, String format, String fieldName, Object object) {
+    private void addDate(String value, String format, String timezone, String fieldName, Object object) {
 	try {
 	    /*
 	     * first check the end of the date, if it has a Z it should have
@@ -215,6 +254,7 @@ public class LogFileParser extends AuthenticationInput {
 		value = value.substring(0, value.length() - 1);
 
 	    DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
+	    dtf = dtf.withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone(timezone)));
 	    DateTime dt = dtf.parseDateTime(value.substring(0, value.length()));
 	    String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
 	    setValueOnObject(fieldAsMethod, dt, object);

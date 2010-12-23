@@ -18,10 +18,10 @@ public abstract class ExclusionEntry implements EntryFilter{
     public String getFieldName() {
 	return fieldName;
     }
-    public void setMatchString(String matchString) {
+    public void setMatch(String matchString) {
 	this.match = matchString;
     }
-    public String getMatchString() {
+    public String getMatch() {
 	return match;
     }
 

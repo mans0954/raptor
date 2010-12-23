@@ -75,7 +75,7 @@
 		<property name="jobDetail">
 			<ref local="ICAProcessJobDetail" />
 		</property>
-		<property name="repeatInterval" value="15000" />
+		<property name="repeatInterval" value="30000" />
 		<!-- <property name="repeatCount" value="0" />-->
 	</bean>
 
