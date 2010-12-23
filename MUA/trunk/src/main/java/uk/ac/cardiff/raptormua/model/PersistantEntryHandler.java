@@ -51,7 +51,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
     public PersistantEntryHandler(MUADataConnection dataConnection) {
 	this.setDataConnection(dataConnection);
-
+	log.info("Loading entries from main datastore");
 	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
 	log.info("MUA has loaded "+entriesAsList.size()+" entries from main datastore");
 	entries = new LinkedHashSet<Entry>(entriesAsList);
