@@ -93,7 +93,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor{
 						mapTo = getOrganisationName(resultAsString);
 					} catch (Exception e) {
 						//if the mapping fails, keep the original, so leave as original non mapped resultAsString
-						log.error("Failed to map "+resultAsString);
+						//log.error("Failed to map "+resultAsString);
 					}
 					ReflectionHelper.setValueOnObject(getMapToFieldName(), mapTo, shibEntry);
 					processedList.add(shibEntry);
