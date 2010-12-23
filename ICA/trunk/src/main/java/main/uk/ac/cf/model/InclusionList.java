@@ -7,7 +7,7 @@ package main.uk.ac.cf.model;
  * @author philsmart
  *
  */
-public class IncusionList {
+public class InclusionList {
 
     private InclusionEntry[] inclusionEntries;
 

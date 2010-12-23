@@ -14,7 +14,7 @@ public class ExactMatchExclusionEntry extends ExclusionEntry{
      */
     @Override
     public boolean filter(String value) {
-	return (value.equals(this.getMatchString())) ? true : false;
+	return (value.equals(this.getMatch())) ? true : false;
     }
 
 }

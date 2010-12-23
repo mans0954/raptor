@@ -47,7 +47,7 @@
 					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 					<!--<property name="parsingSupport"><ref bean="persistentParserConfig"></ref></property>-->
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-2010-10-20.idp1.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-sorted.log
 						</value>
 					</property>
 					<property name="format">
@@ -59,53 +59,45 @@
 
 					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser
 					 all other fields are ignored, this is run before the exclusion list-->
-					<!--<property name="exclusionList">
-							<bean class="main.uk.ac.cf.model.ExclusionList">
-								<property name="exclusionEntries">
+					<property name="inclusionList">
+							<bean class="main.uk.ac.cf.model.InclusionList">
+								<property name="inclusionEntries">
 									<list>
-										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
-										</bean>
-										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
-										</bean>
-										<bean class ="main.uk.ac.cf.model.ExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+										<bean class ="main.uk.ac.cf.model.RegexInclusionEntry">
+											<property name ="fieldName" value="messageProfileId"/>
+											<property name="match" value=":sso"/>
 										</bean>
 									</list>
 								</property>
 							</bean>
 					</property>
 
-					--><!--
+					<!--
 						exclude entries, is an OR list of <field name, field value> pairs
 						that are checked for when parsing , if oneof them exists, that entry is
 						ignored.
 					-->
-					<property name="exclusionList">
+					<!--<property name="exclusionList">
 							<bean class="main.uk.ac.cf.model.ExclusionList">
 								<property name="exclusionEntries">
 									<list>
 										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
 										</bean>
 										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
+											<property name="match" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
 										</bean>
 										<bean class ="main.uk.ac.cf.model.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
-											<property name="matchString" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
+											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
 										</bean>
 									</list>
 								</property>
 							</bean>
 					</property>
-				</bean>
+				--></bean>
 			</list>
 		</property>
 	</bean>
@@ -212,6 +204,17 @@
 				</bean>
 				<bean class="main.uk.ac.cf.dao.external.format.Header">
 					<property name="fieldName">
+						<value>requestId</value>
+					</property>
+					<property name="fieldNo">
+						<value>2</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName">
 						<value>requestHost</value>
 					</property>
 					<property name="fieldNo">
@@ -238,7 +241,18 @@
 						<value>responseBinding</value>
 					</property>
 					<property name="fieldNo">
-						<value>5</value>
+						<value>6</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName">
+						<value>responseId</value>
+					</property>
+					<property name="fieldNo">
+						<value>7</value>
 					</property>
 					<property name="fieldType">
 						<value>STRING</value>
@@ -272,6 +286,31 @@
 					</property>
 					<property name="fieldNo">
 						<value>10</value>
+					</property>
+					<property name="fieldType">
+						<value>STRINGLIST</value>
+					</property>
+					<property name="listDelimeter">
+						<value>,</value>
+					</property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName">
+						<value>nameIdentifier</value>
+					</property>
+					<property name="fieldNo">
+						<value>9</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="main.uk.ac.cf.dao.external.format.Header">
+					<property name="fieldName">
+						<value>assertionId</value>
+					</property>
+					<property name="fieldNo">
+						<value>12</value>
 					</property>
 					<property name="fieldType">
 						<value>STRINGLIST</value>

@@ -30,12 +30,13 @@ import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class MemoryEntryHandler implements EntryHandler{
-	static Logger log = Logger.getLogger(MemoryEntryHandler.class);
+	static Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
 
 	/* pointer to the last recorded entry, for incremental update*/
 	private DateTime latestEntryTime;
@@ -89,6 +90,9 @@ public class MemoryEntryHandler implements EntryHandler{
 		//log.debug("Is Equal Time: "+entry);
 		boolean isAlreadyInLatest = latestEqualEntries.contains(entry);
 		//log.debug("Has matched: "+isAlreadyInLatest+" from: "+latestEqualEntries.size()+" entries");
+		if (isAlreadyInLatest){
+		    log.error("Duplicated entries found\n{}",entry);
+		}
 		if (!isAlreadyInLatest){
 		    entries.add(entry);
 		    updateLastEntry(entry);
