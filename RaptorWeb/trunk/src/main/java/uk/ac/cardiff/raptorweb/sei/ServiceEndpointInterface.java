@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
+import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
+import org.apache.cxf.jaxrs.client.Client;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +34,15 @@ import uk.ac.cardiff.sei.UnitAggregator;
 public class ServiceEndpointInterface {
     static Logger log = LoggerFactory.getLogger(ServiceEndpointInterface.class);
 
+    /**
+     * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator.
+     * This method uses a hard set connection timeout of 5 seconds, and a receive timeout of
+     * 20 seconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent
+     * inside small XML documents.
+     * 
+     * @param endpoint
+     * @return
+     */
     public static Capabilities discoverMUACapabilities(String endpoint) {
 	Capabilities capabilities = null;
 	try {
@@ -38,8 +51,14 @@ public class ServiceEndpointInterface {
 	    AegisDatabinding databinding = new AegisDatabinding();
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
-
+	    
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	    httpClientPolicy.setConnectionTimeout(5);
+	    httpClientPolicy.setReceiveTimeout(20);
+	    httpConduit.setClient(httpClientPolicy);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    capabilities = client.getCapabilities();
 	    log.debug("Retrieved capabilities from the MUA [" + endpoint + "]");
@@ -50,12 +69,21 @@ public class ServiceEndpointInterface {
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
-	    e.printStackTrace();
+	    log.error("Error retrieving capabilities from MUA [{}], {}",endpoint,e);
 	}
 	return capabilities;
 
     }
 
+    /**
+     * This method sends a <code>StatisticalUnitInformaiton</code> instance to the MultiUnitAggregator <code>endpoint</code>
+     * The <code>StatisicalUnitInformation</code> instance encapsulates the parameters for a single statistical unit.
+     * Allowing the values to be sent back and changed on the MultiUnitAggregator
+     * 
+     * @param endpoint
+     * @param statisticalUnitInformation
+     * @return
+     */
     public static Capabilities updateStatisticalUnit(String endpoint, StatisticalUnitInformation statisticalUnitInformation) {
 	Capabilities capabilities = null;
 	try {
@@ -80,10 +108,6 @@ public class ServiceEndpointInterface {
 
     }
 
-    public static void main(String args[]) {
-	ServiceEndpointInterface.discoverMUACapabilities("http://localhost:8080/MUA/MultiUnitAggregator");
-	// ServiceEndpointInterface.getAuthentications("http://localhost:8081/UA/UnitAggregator");
-    }
 
     /**
      * @param selectedStatisticalUnit
@@ -95,15 +119,10 @@ public class ServiceEndpointInterface {
 	    AegisDatabinding databinding = new AegisDatabinding();
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
-
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-	    // client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    AggregatorGraphModel gmodel = client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint + "]");
-	    // for (Entry ent : auths){//
-	    // log.debug(ent.getEventTime()+" "+ent.getClass());//
-	    // }
 	    return gmodel;
 	} catch (Exception e) {
 	    log.error("Problem trying to invoke statistical unit " + selectedStatisticalUnit + " on MUA -> " + e.getMessage());
