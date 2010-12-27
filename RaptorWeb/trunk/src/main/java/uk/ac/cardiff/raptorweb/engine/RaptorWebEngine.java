@@ -30,7 +30,10 @@ import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
 public class RaptorWebEngine {
     static Logger log = LoggerFactory.getLogger(RaptorWebEngine.class);
 
+    /* the registry which holds information about all MUAs injected from the xml file*/
     private MUARegistry registry;
+    
+    /* constructs downloadable reports from that currently displayed*/
     private ReportHandler reportHandler;
 
     /* holds the currently attached MUA */
