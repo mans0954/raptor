@@ -84,9 +84,8 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    if ( this == obj ) return true;
 	    if((obj == null) || (obj.getClass() != this.getClass()))
 		return false;
-
 	    ShibbolethEntry that = (ShibbolethEntry)obj;
-	    return
+	    boolean areEqual =
 	      EqualsUtil.areEqual(this.getEventTime(), that.getEventTime()) &&
 	      EqualsUtil.areEqual(this.getAuthNMethod(), that.getAuthNMethod()) &&
 	      EqualsUtil.areEqual(this.getRequestHost(), that.getRequestHost()) &&
@@ -103,6 +102,8 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	      EqualsUtil.areEqual(this.getResponseId(), that.getResponseId()) &&
 	      Arrays.equals(this.getAssertionId(), that.getAssertionId()) &&
 	      Arrays.equals(this.getReleasedAttributes(), that.getReleasedAttributes());
+
+	    return areEqual;
 	}
 
 
