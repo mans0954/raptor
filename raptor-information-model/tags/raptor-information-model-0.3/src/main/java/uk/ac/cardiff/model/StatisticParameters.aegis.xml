@@ -1,0 +1,19 @@
+
+
+<!--  this is important, we ignore the eventTime, instead passing the eventTime in a simpler Java Date
+property using the getDate and setDate methods -->
+<mappings xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<mapping>
+		<property name="endTimeAsDate" ignore="true"/>
+		<property name="startTimeAsDate" ignore="true"/>
+		<property name="endTimeAsFormattedString" ignore="true"/>
+		<property name="startTimeAsFormattedString" ignore="true"/>
+		<property name="startTimeAsJavaDate" ignore="true"/>
+		<property name="endTimeHour" ignore="true"/>
+		<property name="endTimeMinute" ignore="true"/>
+		<property name="endTimeSecond" ignore="true"/>
+		<property name="startTimeHour" ignore="true"/>
+		<property name="startTimeMinute" ignore="true"/>
+		<property name="startTimeSecond" ignore="true"/>
+	</mapping>
+</mappings>
