@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
-	<artifactId>service-interfaces</artifactId>
+	<artifactId>raptor-serviceinterfaces</artifactId>
 	<version>0.3-SNAPSHOT</version>
 	<name>ServiceInterfaces</name>
 	<description>Service Interfaces to Raptor</description>
@@ -53,8 +53,8 @@
 	<!--  done -->
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-serviceinterfaces/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-serviceinterfaces</url>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -109,7 +109,7 @@
 		</dependency>
 		<dependency>
 			<groupId>uk.ac.cardiff.raptor</groupId>
-			<artifactId>information-model</artifactId>
+			<artifactId>raptor-information-model</artifactId>
 			<version>0.3-SNAPSHOT</version>
 		</dependency>
 
@@ -123,7 +123,7 @@
 					<username>philsmart</username>
 					<password>nv75hh</password>
 					<tagBase>
-						http://iam.cf.ac.uk/repos/RAPTOR/ServiceInterfaces/tags
+						http://iam.cf.ac.uk/repos/RAPTOR/raptor-serviceinterfaces/tags
           			</tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
