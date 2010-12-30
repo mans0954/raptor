@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+	<bean id="muaRegistry" class="uk.ac.cardiff.raptorweb.engine.MUARegistry">
+		<property name ="MUAEntries">
+			<list>
+				<bean id="cardiffShibMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="isAttached" value="true"></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
+		<property name="registry"><ref bean="muaRegistry"></ref></property>
+		<property name="reportHandler"><ref bean="reportHandler"></ref></property>
+		<property name="webMetadata"><ref bean="webMetadata"></ref></property>
+	</bean>
+
+	<!-- MUA Metadata -->
+	<bean id="webMetadata" class="uk.ac.cardiff.model.WebMetadata">
+		<property name="webName"><value>Cardiff University's RaptorWeb Instance</value></property>
+		<property name="organisationName"><value>Cardiff University</value></property>
+		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
+	</bean>
+
+	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
+		<property name="webEngine"><ref bean="webEngine"/></property>
+	</bean>
+
+	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
+		<property name="webEngine"><ref bean="webEngine"/></property>
+	</bean>
+
+	<!--  SET UP the report generators -->
+	<bean name="reportHandler" class="uk.ac.cardiff.raptorweb.engine.reports.ReportHandler">
+		<property name ="reportConstructors">
+			<list>
+				<bean name="excelreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.ExcelReportGenerator">
+					<property name="saveDirectory"><value>/downloads/</value></property>
+					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+				</bean>
+				<bean name="csvreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.CSVReportGenerator">
+					<property name="saveDirectory"><value>/downloads/</value></property>
+					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
+
+
+
+
+
+</beans>
