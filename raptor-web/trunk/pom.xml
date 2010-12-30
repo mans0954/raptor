@@ -11,8 +11,8 @@
 		<url>http://iam.cf.ac.uk/hudson/</url>
 	</ciManagement>
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-web/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-web</url>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -122,7 +122,7 @@
 					<username>philsmart</username>
 					<password>nv75hh</password>
 					<tagBase>
-						http://iam.cf.ac.uk/repos/RAPTOR/RaptorWeb/tags
+						http://iam.cf.ac.uk/repos/RAPTOR/raptor-web/tags
           			</tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
