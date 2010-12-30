@@ -6,11 +6,5 @@
    xmlns:f="http://java.sun.com/jsf/core"
    xmlns:tr="http://myfaces.apache.org/trinidad">
     
-	<ui:composition template="/templates/basic/basic.xhtml">
-	    <ui:define name="title">#{messages.titulo_app}</ui:define>
-	    <ui:define name="servicioAct">#{messages.titulo_app}</ui:define>
-	    <ui:define name="content">
-	        <h2>Hola !! #{modelBean.nombre}</h2>
-	    </ui:define>
-	</ui:composition>
+
 </jsp:root>
