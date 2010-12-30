@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.ac.cardiff.raptor</groupId>
-  <artifactId>information-model</artifactId>
+  <artifactId>raptor-information-model</artifactId>
   <version>0.3-SNAPSHOT</version>
 
   <dependencies>
@@ -37,8 +37,8 @@
   </dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/information-model/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/information-model</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model</url>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -87,7 +87,7 @@
 					<username>philsmart</username>
 					<password>nv75hh</password>
 					<tagBase>
-						http://iam.cf.ac.uk/repos/RAPTOR/information-model/tags
+						http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/tags
           			</tagBase>
 					<providerImplementations>
 						<svn>javasvn</svn>
