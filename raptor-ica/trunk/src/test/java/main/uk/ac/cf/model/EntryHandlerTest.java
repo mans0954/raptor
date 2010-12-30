@@ -103,7 +103,7 @@ public class EntryHandlerTest {
     @Test
     public void testHashSet(){
 
-
+	System.out.println("Testing HashSet");
 	Set<Entry> entries = new LinkedHashSet<Entry>();
 
 	ShibbolethEntry entry = new ShibbolethEntry();
@@ -123,6 +123,11 @@ public class EntryHandlerTest {
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
 	entry.setServerHostFriendlyName("");
+	entry.setPersistantId(new Long(10));
+	entry.setAssertionId(new String[]{"10"});
+	entry.setResponseId("10");
+	entry.setRequestBinding("");
+	entry.setNameIdentifier("20");
 
 
 	ShibbolethEntry equalEntry = new ShibbolethEntry();
@@ -141,10 +146,16 @@ public class EntryHandlerTest {
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
 	equalEntry.setServerHostFriendlyName("");
+	equalEntry.setPersistantId(new Long(10));
+	equalEntry.setAssertionId(new String[]{"10"});
+	equalEntry.setResponseId("10");
+	equalEntry.setRequestBinding("");
+	equalEntry.setNameIdentifier("20");;
 
-
+	System.out.println("testHashSet: Hash for entry = "+entry.hashCode());
 	entries.add(entry);
 	System.out.println("testHashSet: Set has "+entries.size()+" should be 1");
+	System.out.println("testHashSet: Has for equalEntry = "+equalEntry.hashCode());
 	entries.add(equalEntry);
 	System.out.println("testHashSet: Set has "+entries.size()+" should be 1");
 	assertTrue(entries.size()==1);
