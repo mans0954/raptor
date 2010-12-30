@@ -421,7 +421,7 @@
     	</dependency>
 		<dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
-            <artifactId>service-interfaces</artifactId>
+            <artifactId>raptor-serviceinterfaces</artifactId>
             <version>0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
