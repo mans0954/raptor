@@ -67,10 +67,10 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor{
 			loadSAMLMetadata();
 		} catch (MetadataProviderException e) {
 			log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file "+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (ConfigurationException e) {
 			log.error("Error parsing SAML metadata file "+e.getMessage());
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
