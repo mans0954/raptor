@@ -95,7 +95,7 @@
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
 		<property name="uaRegistry"><ref bean="uaRegistry"/></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
-		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+		<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 	</bean>
 	
