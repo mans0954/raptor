@@ -23,7 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import uk.ac.cardiff.model.Entry;
 
@@ -34,21 +36,27 @@ import uk.ac.cardiff.model.Entry;
 public class MemoryEntryHandler implements EntryHandler{
 
 	/* class level logger */
-    	static Logger log = Logger.getLogger(MemoryEntryHandler.class);
+    	static Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
 
 	/* list of all entries stored by this EntryHandler */
     	Set<Entry> entries;
 
 	public MemoryEntryHandler(){
-		entries = new LinkedHashSet<Entry>();
+		
 	}
 
 	public void addEntries(Set<Entry> entries){
-		log.info("Adding "+entries.size()+" entries to the MUA");
+		log.info("Adding {} entries to the MUA",entries.size());
 		for (Entry entry: entries){
 			this.entries.add(entry);
 		}
 		log.info("MUA now has a total of "+this.entries.size()+" entries");
+	}
+	
+	public void initialise(){
+		log.info("Memory entry handler [{}] initialising",this);
+		entries = new LinkedHashSet<Entry>();
+		log.info("Memory entry handler [{}] started",this);
 	}
 
 
