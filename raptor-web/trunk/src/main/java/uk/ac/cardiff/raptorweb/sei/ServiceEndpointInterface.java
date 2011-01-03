@@ -70,6 +70,7 @@ public class ServiceEndpointInterface {
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
 	    log.error("Error retrieving capabilities from MUA [{}], {}",endpoint,e);
+	    e.printStackTrace();
 	}
 	return capabilities;
 

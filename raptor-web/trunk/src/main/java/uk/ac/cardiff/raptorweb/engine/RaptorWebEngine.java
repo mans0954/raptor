@@ -153,7 +153,6 @@ public class RaptorWebEngine {
      */
     public void updateMUAStatistic(GraphModel model) {
 	log.debug("Updating statistic {} ",model.getSelectedStatisticalUnit().getStatisticParameters().getUnitName());
-	log.debug("With start date: {} and end date: {}" ,model.getSelectedStatisticalUnit().getStatisticParameters().getStartTimeAsDate(),model.getSelectedStatisticalUnit().getStatisticParameters().getEndTimeAsDate());
 	ServiceEndpointInterface.updateStatisticalUnit(attachedMUA.getServiceEndpoint(),model.getSelectedStatisticalUnit());
     }
 
