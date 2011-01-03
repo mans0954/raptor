@@ -45,6 +45,8 @@ public interface EntryHandler {
 	public void removeAllEntries();
 
 	public void endTransaction();
+	
+	public void initialise();
 
 
 

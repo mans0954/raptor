@@ -23,116 +23,120 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.raptormua.dao.MUADataConnection;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class PersistantEntryHandler implements EntryHandler {
 
-    /* class logger */
-    static Logger log = Logger.getLogger(PersistantEntryHandler.class);
+	/* class logger */
+	static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
+	/* data connection used to persist entries */
+	private MUADataConnection dataConnection;
 
-    /* data connection used to persist entries */
-    private MUADataConnection dataConnection;
+	/* set of all entries stored by this EntryHandler */
+	Set<Entry> entries;
 
-    /* set of all entries stored by this EntryHandler */
-    Set<Entry> entries;
-
-
-
-    public PersistantEntryHandler(MUADataConnection dataConnection) {
-	this.setDataConnection(dataConnection);
-	log.info("Loading entries from main datastore");
-	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
-	log.info("MUA has loaded "+entriesAsList.size()+" entries from main datastore");
-	entries = new LinkedHashSet<Entry>(entriesAsList);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
-     */
-    @Override
-    public void addEntries(Set<Entry> entries) {
-	log.debug("Current: " + this.getEntries().size() + " in: " + entries.size());
-
-	for (Entry entry : entries) {
-		this.getEntries().add(entry);
+	public PersistantEntryHandler(MUADataConnection dataConnection) {
+		this.setDataConnection(dataConnection);
+		
 	}
-	log.debug("Total No. of Entries " + this.getEntries().size());
+	
+	/**
+	 * Initialises the entry handler. In particular, loads all entries from the main
+	 * datastore, through the <code>dataConnection</code> instance.
+	 */
+	public void initialise(){
+		log.info("Persistant entry handler [{}] initialising",this);
+		log.info("Loading entries from main datastore");
+		List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
+		log.info("MUA has loaded " + entriesAsList.size() + " entries from main datastore");
+		entries = new LinkedHashSet<Entry>(entriesAsList);
+		log.info("Persistant entry handler [{}] started",this);
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
+	 */
+	@Override
+	public void addEntries(Set<Entry> entries) {
+		log.debug("Current: " + this.getEntries().size() + " in: " + entries.size());
 
-    public void addEntry(Entry entry){
-	    entries.add(entry);
+		for (Entry entry : entries) {
+			this.getEntries().add(entry);
+		}
+		log.debug("Total No. of Entries " + this.getEntries().size());
 
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
-     */
-    @Override
-    public void endTransaction() {
-	log.debug("Saving transaction for MUA");
-	dataConnection.saveAll(entries);
-	log.debug("Saving transaction for MUA...Done");
-    }
+	public void addEntry(Entry entry) {
+		entries.add(entry);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#getEntries()
-     */
-    @Override
-    public Set getEntries() {
-	return entries;
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
-     */
-    @Override
-    public void removeAllEntries() {
-	log.debug("Removing all entries from this entry handler");
-	dataConnection.deleteAllEntries(entries);
-	entries.clear();
-	//entryInformation.setLatestEntryTime(null);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
+	 */
+	@Override
+	public void endTransaction() {
+		log.debug("Saving transaction for MUA");
+		dataConnection.saveAll(entries);
+		log.debug("Saving transaction for MUA...Done");
+	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
+	 */
+	@Override
+	public Set getEntries() {
+		return entries;
+	}
 
-    public void setDataConnection(MUADataConnection dataConnection) {
-	this.dataConnection = dataConnection;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
+	 */
+	@Override
+	public void removeAllEntries() {
+		log.debug("Removing all entries from this entry handler");
+		dataConnection.deleteAllEntries(entries);
+		entries.clear();
+		// entryInformation.setLatestEntryTime(null);
+	}
 
-    public MUADataConnection getDataConnection() {
-	return dataConnection;
-    }
+	public void setDataConnection(MUADataConnection dataConnection) {
+		this.dataConnection = dataConnection;
+	}
 
-    /* (non-Javadoc)
-     * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
-     */
-    @Override
-    public void setEntries(Set<Entry> entries) {
-	// TODO Auto-generated method stub
+	public MUADataConnection getDataConnection() {
+		return dataConnection;
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
+	 */
+	@Override
+	public void setEntries(Set<Entry> entries) {
+		// TODO Auto-generated method stub
 
-
-
-
+	}
 
 }
