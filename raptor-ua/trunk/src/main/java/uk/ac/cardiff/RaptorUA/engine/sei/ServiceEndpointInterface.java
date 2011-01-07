@@ -22,14 +22,19 @@ import java.util.Set;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.interceptor.Fault;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.model.AuthenticationEntry;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
+import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 import uk.ac.cardiff.sei.Collector;
+import uk.ac.cardiff.sei.MultiUnitAggregator;
+import uk.ac.cardiff.sei.UnitAggregator;
 
 /**
  * @author philsmart
@@ -38,7 +43,7 @@ import uk.ac.cardiff.sei.Collector;
  *
  */
 public class ServiceEndpointInterface {
-    static Logger log = Logger.getLogger(ServiceEndpointInterface.class);
+    static Logger log = LoggerFactory.getLogger(ServiceEndpointInterface.class);
 
     public static Set getAuthentications(String endpoint){
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
@@ -65,6 +70,34 @@ public class ServiceEndpointInterface {
 //	    log.debug(ent+" "+ent.getClass());//
 //	}
 	return auths;
+    }
+
+    public static boolean sendAuthentications(UAEntryPush pushed, String endpoint) {
+	try {
+	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+	    factory.setServiceClass(MultiUnitAggregator.class);
+	    AegisDatabinding databinding = new AegisDatabinding();
+
+	    Set<String> overrides = new HashSet();
+	    overrides.add(ShibbolethEntry.class.getName());
+	    overrides.add(AuthenticationEntry.class.getName());
+	    overrides.add(UsageEntry.class.getName());
+	    databinding.setOverrideTypes(overrides);
+
+	    factory.setAddress(endpoint);
+	    factory.getServiceFactory().setDataBinding(databinding);
+
+	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	    log.debug("Accessing the MUA version " + client.getVersion());
+	    client.addAuthentications(pushed);
+	    log.debug("Sent {} authentications", pushed.getEntries().size());
+	    return true;
+	} catch (Exception e) {
+	    log.error("Could not send to {} ",endpoint,e);
+	    //e.printStackTrace();
+	    return false;
+	}
+
     }
 
     public static Set getUsages(String endpoint){

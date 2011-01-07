@@ -75,8 +75,16 @@
 	</bean>
 
 	<bean name="uaEngine" class="uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine">
-		<property name="icaRegistry"><ref bean="icaRegistry"></ref></property>
+		<property name="muaRegistry"><ref bean="muaRegistry"></ref></property>
 		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+		<property name="uaMetadata"><ref bean="UAMetadata"></ref></property>
+	</bean>
+
+	<!-- MUA Metadata -->
+	<bean id="UAMetadata" class="uk.ac.cardiff.model.UAMetadata">
+		<property name="uaName"><value>Cardiff University's UA</value></property>
+		<property name="organisationName"><value>Cardiff University</value></property>
+		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
 	</bean>
 
 	<!-- Create the entry handler -->
@@ -121,6 +129,6 @@
 	<!--  DONE -->
 
 	<import resource="dao-beans.xml"/>
-	<import resource="collector-registry.xml" />
+	<import resource="mua-registry.xml" />
 
 	</beans>
