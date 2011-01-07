@@ -11,7 +11,9 @@ import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 
 /**
  * @author philsmart
@@ -35,5 +37,7 @@ public interface MultiUnitAggregator {
 	public MessageType getExampleSDMX();
 
 	public boolean performAdministrativeFunction(AdministrativeFunction function);
+
+	void addAuthentications(UAEntryPush pushed);
 
 }
