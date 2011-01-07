@@ -60,14 +60,6 @@ public class AuthenticationStatistic extends Statistic {
 	// convert minutes to ms for the procedure
 	timeIntervalInt = timeIntervalInt * 60 * 1000;
 	log.debug("Params for method:  " + statisticParameters.getMethodName() + ", " + statisticParameters.getUnitName());
-	if (this.getAuthEntries() != null)
-	    log.debug("Working off {} entries", this.getAuthEntries().size());
-
-	/* stop processing if there are no valid entries */
-	if (this.getAuthEntries() == null || this.getAuthEntries().size() == 0) {
-	    log.error("Not enough entries to perform statistic countEntryPerInterval");
-	    return false;
-	}
 
 	/* divide the temporal extent into evenly sized buckets */
 	DateTime start = startingTime();
@@ -119,25 +111,22 @@ public class AuthenticationStatistic extends Statistic {
 	    buckets[buckets.length - 1] = reminderBucket;
 	}
 
-	for (Entry entry : this.getAuthEntries()) {
-	    for (int i = 0; i < buckets.length; i++) {
-		if (buckets[i].isInside(entry.getEventTime()))
-		    buckets[i].increment();
-	    }
-	}
-
 	long testCount = 0;
 	for (Bucket bucket : buckets) {
+	    // SQL between is >= start && <= end. We want, >= start && < end, so must exclude equals end
+	    Integer count = (Integer) this.getEntryHandler().queryUnique("select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '" + bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')");// new
+																												       // Object[]{start,end});
+	    bucket.setValue(count);
 	    testCount += bucket.getValue();
-	    log.debug(bucket.getStart() + "-" + bucket.getEnd() + " --> " + bucket.getValue());
 	}
+
 	/*
 	 * test count should equal the number of entries unless there is a reminder, or the specified start time and endtime does not completely contain the
 	 * entries.
 	 */
-	log.debug("Entries: " + this.getAuthEntries().size() + ", total in buckets: " + testCount);
+	log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
 
-	if (this.getAuthEntries().size() != testCount)
+	if (this.getEntryHandler().getNumberOfEntries() != testCount)
 	    log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
 	observations = buckets;
@@ -153,14 +142,6 @@ public class AuthenticationStatistic extends Statistic {
 	log.debug("Performing countEntry Statistical Operation");
 
 	log.debug("Params for method:  " + statisticParameters.getMethodName() + ", " + statisticParameters.getUnitName());
-	if (this.getAuthEntries() != null)
-	    log.debug("Working off " + this.getAuthEntries().size() + " entries");
-
-	/* stop processing if there are no valid entries */
-	if (this.getAuthEntries() == null || this.getAuthEntries().size() == 0) {
-	    log.error("Not enough entries to perform statistic countEntryPerInterval");
-	    return false;
-	}
 
 	/* divide the temporal extent into evenly sized buckets */
 	DateTime start = startingTime();
@@ -212,26 +193,22 @@ public class AuthenticationStatistic extends Statistic {
 	    buckets[buckets.length - 1] = reminderBucket;
 	}
 
-	for (Entry entry : this.getAuthEntries()) {
-
-	    for (int i = 0; i < buckets.length; i++) {
-		if (buckets[i].isInside(entry.getEventTime()))
-		    buckets[i].increment();
-	    }
-	}
-
-	int testCount = 0;
+	long testCount = 0;
 	for (Bucket bucket : buckets) {
+	    // SQL between is >= start && <= end. We want, >= start && < end, so must exclude equals end
+	    Integer count = (Integer) this.getEntryHandler().queryUnique("select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '" + bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')");// new
+																												       // Object[]{start,end});
+	    bucket.setValue(count);
 	    testCount += bucket.getValue();
-	    log.debug(bucket.getStart() + "-" + bucket.getEnd() + " --> " + bucket.getValue());
 	}
+
 	/*
 	 * test count should equal the number of entries unless there is a reminder, or the specified start time and endtime does not completely contain the
 	 * entries.
 	 */
-	log.debug("Entries: " + this.getAuthEntries().size() + ", total in buckets: " + testCount);
+	log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
 
-	if (this.getAuthEntries().size() != testCount)
+	if (this.getEntryHandler().getNumberOfEntries() != testCount)
 	    log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
 	statisticParameters.setSeriesLabel("Number of Events per " + timeIntervalsInMs + "ms");
@@ -243,11 +220,9 @@ public class AuthenticationStatistic extends Statistic {
     }
 
     /**
-     * Perform the groupByField statistic. This statistic counts the frequency that each distinct
-     * value of the given <code>groupByField</code> occurs in the entry set. It is the responsibility
-     * of this method to throw a <code>StatisticalUnitException</code> if the code logic fails, or
-     * return false if the statistic functioned correctly, but there are no valid observations, or true if the statistic
-     * succeeds and there are valid observations.
+     * Perform the groupByField statistic. This statistic counts the frequency that each distinct value of the given <code>groupByField</code> occurs in the
+     * entry set. It is the responsibility of this method to throw a <code>StatisticalUnitException</code> if the code logic fails, or return false if the
+     * statistic functioned correctly, but there are no valid observations, or true if the statistic succeeds and there are valid observations.
      *
      *
      * @param groupByField
@@ -257,51 +232,35 @@ public class AuthenticationStatistic extends Statistic {
     public Boolean groupByFrequency(String groupByField) throws StatisticalUnitException {
 	log.debug("Performing groupByFrequency Statistical Operation");
 	log.debug("Params for method:  {},{}", statisticParameters.getMethodName(), statisticParameters.getUnitName());
+	log.debug("Grouping field: {}", groupByField);
 
-	if (this.getAuthEntries() != null)
-	    log.debug("Working off " + this.getAuthEntries().size() + " entries");
+	DateTime start = startingTime();
+	DateTime end = endingTime();
 
-	/* stop processing if there are no valid entries */
-	if (this.getAuthEntries() == null || this.getAuthEntries().size() == 0) {
-	    log.error("Not enough entries to perform statistic groupByFrequency");
-	    return false;
-	}
-
-	/* create groups based on unique entries for the groupByField attribute */
+//	List results = getEntryHandler().query("select principalName,count(*) from Entry group by (principalName)");
+//
 	ArrayList<Group> groups = new ArrayList();
-	for (Entry entry : this.getAuthEntries()) {
-	    boolean oldGroup = false;
-	    // String methodName = ReflectionHelper.prepareMethodNameGet(groupByField);
-	    Object result = ReflectionHelper.getValueFromObject(groupByField, entry);
-	    if (result != null) {
-		for (Group group : groups) {
-		    if (result instanceof String) {
-			if (group.getGroupName().equals((String) result)) {
-			    group.increment();
-			    oldGroup = true;
-			}
-		    }
-		}
-		if (!oldGroup) {
-		    Group group = new Group();
-		    group.setValue(1);
-		    group.setGroupName((String) result);
-		    groups.add(group);
-		}
-	    }
-	}
+	int testCount =0;
+//	for (Object result : results) {
+//	    	Object[] resultAsArray = (Object[])result;
+//		Group group = new Group();
+//		group.setValue((Integer)resultAsArray[1]);
+//		group.setGroupName((String) resultAsArray[0]);
+//		groups.add(group);
+//		testCount+=group.getValue();
+//	}
 
-	/* test the accuracy of the result */
-	int testCount = 0;
-	for (Group group : groups) {
-	    testCount += group.getValue();
-	    log.debug(group.getGroupName() + " --> " + group.getValue());
+	List results = getEntryHandler().query("select persistantId from Entry");
+	log.debug("Has {} ids",results.size());
+	for (Object result : results){
+	    Long id = (Long)result;
+	    List<Entry> entriesAsList = getEntryHandler().query("from Entry where persistantId=1");
+	  //  log.debug("Have {}",entriesAsList.size());
 	}
+	log.debug("Finished");
+
 	/* test count should equal the number of entries unless there is a reminder as this has not been catered for yet. */
-	log.debug("Entries: " + this.getAuthEntries().size() + ", total in buckets: " + testCount);
-
-	if (this.getAuthEntries().size() != testCount)
-	    log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
+	log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
 	// add the series label or if none specified, add a default
 	if (statisticParameters.getSeriesLabel() == null)
@@ -309,7 +268,8 @@ public class AuthenticationStatistic extends Statistic {
 
 	observations = groups.toArray(new Group[0]);
 
-	if (observations.length==0)return false;
+	if (observations.length == 0)
+	    return false;
 	// finished successfully, no exception thrown
 	return true;
 
@@ -318,27 +278,14 @@ public class AuthenticationStatistic extends Statistic {
     private DateTime startingTime() {
 	if (statisticParameters.getStartTimeAsDate() != null)
 	    return statisticParameters.getStartTimeAsDate();
-	DateTime start = null;
-	for (Entry entry : this.getAuthEntries()) {
-	    if (start == null)
-		start = entry.getEventTime();
-	    if (entry.getEventTime().isBefore(start))
-		start = entry.getEventTime();
-	}
+	DateTime start = (DateTime) this.getEntryHandler().queryUnique("select min(eventTime) from Entry");
 	return start;
     }
 
     private DateTime endingTime() {
 	if (statisticParameters.getEndTimeAsDate() != null)
 	    return statisticParameters.getEndTimeAsDate();
-	DateTime end = null;
-	for (Entry entry : this.getAuthEntries()) {
-	    if (end == null)
-		end = entry.getEventTime();
-	    // log.debug("end "+end+" current "+entry.getEventTime()+" after :"+entry.getEventTime().isAfter(end));
-	    if (entry.getEventTime().isAfter(end))
-		end = entry.getEventTime();
-	}
+	DateTime end = (DateTime) this.getEntryHandler().queryUnique("select max(eventTime) from Entry");
 	return end;
     }
 

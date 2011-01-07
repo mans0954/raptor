@@ -21,9 +21,12 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.model.EntryHandler;
 
 /**
  * @author philsmart
@@ -31,15 +34,13 @@ import uk.ac.cardiff.model.Entry;
  */
 public class SessionLinker implements StatisticsPreProcessor{
 
-	static Logger log = Logger.getLogger(SessionLinker.class);
+	static Logger log = LoggerFactory.getLogger(SessionLinker.class);
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPreProcessing#preProcess(java.util.List)
 	 */
 	@Override
-	public Set<Entry> preProcess(Set<Entry> entries) {
-		log.info("Preprocessing with "+this.getClass());
-
-		return entries;
+	public void preProcess(EntryHandler entryHandler) throws PreprocessorException{
+	    log.info("Preprocessing with "+this.getClass());
 	}
 
 

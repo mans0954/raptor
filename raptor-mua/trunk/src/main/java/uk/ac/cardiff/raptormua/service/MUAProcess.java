@@ -23,6 +23,7 @@ import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 
 /**
  * @author philsmart
@@ -52,4 +53,9 @@ public interface MUAProcess {
 	 * @param function
 	 */
 	public boolean performAdministrativeFunction(AdministrativeFunction function);
+
+	/**
+	 * @param pushed
+	 */
+	public void addAuthentications(UAEntryPush pushed);
 }

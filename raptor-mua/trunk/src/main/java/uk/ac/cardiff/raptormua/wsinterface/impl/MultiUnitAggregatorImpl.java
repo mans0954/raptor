@@ -29,6 +29,7 @@ import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 import uk.ac.cardiff.raptormua.runtimeutils.SDMXHandler;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
@@ -96,6 +97,15 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	@Override
 	public boolean performAdministrativeFunction(AdministrativeFunction function) {
 	    return processService.performAdministrativeFunction(function);
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#addAuthentications(uk.ac.cardiff.model.wsmodel.UAEntryPush)
+	 */
+	@Override
+	public void addAuthentications(UAEntryPush pushed) {
+	    processService.addAuthentications(pushed);
+
 	}
 
 }

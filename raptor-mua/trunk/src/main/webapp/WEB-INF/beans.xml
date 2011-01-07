@@ -38,7 +38,7 @@
 			<ref bean='jaxws-and-aegis-service-factory' />
 		</jaxws:serviceFactory>
 
-			<!-- output all CXF intercepter chain messages to a logging class, rather than the stdOUT, DOES not work 
+			<!-- output all CXF intercepter chain messages to a logging class, rather than the stdOUT, DOES not work
 		<jaxws:properties>
 			<entry key="org.apache.cxf.logging.FaultLogger">
 				<bean class="uk.ac.cardiff.raptorcommon.loggers.SOAPFaultLogger"/>
@@ -85,8 +85,8 @@
 			<ref bean="MUAEngine"></ref>
 		</property>
 	</bean>
-	
-	
+
+
 
 	<!--
 		this bean config kicks of the singleton engine instance which is then
@@ -95,10 +95,10 @@
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
 		<property name="uaRegistry"><ref bean="uaRegistry"/></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
-		<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 	</bean>
-	
+
 	<!-- MUA Metadata -->
 	<bean id="MUAMetadata" class="uk.ac.cardiff.model.MUAMetadata">
 		<property name="muaName"><value>Cardiff University's MUA</value></property>
@@ -148,8 +148,8 @@
 		<property name="triggers">
 			<list><!--
 				<ref local="ICAProcessTrigger" />
-				-->
-				<ref local="MUAProcessQuickTrigger" />
+
+				<ref local="MUAProcessQuickTrigger" />-->
 			</list>
 		</property>
 	</bean>
