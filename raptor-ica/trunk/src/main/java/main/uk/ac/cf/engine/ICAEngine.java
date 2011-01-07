@@ -80,11 +80,11 @@ public class ICAEngine {
 	 * remove this method if more sophisticated operation is desired.
 	 */
 	private void retrieveTransactionFinished() {
-	    log.debug("Retrieve Transaction Finished, entries are being removed...");
+	    log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...");
 	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
 		authI.removeAllEntries();
 	    }
-	    log.debug("Retrieve Transaction Finished, entries are being removed...done");
+	    log.debug("Retrieve Transaction Finished, entries are being removed form the ICA...done");
 
 	}
 

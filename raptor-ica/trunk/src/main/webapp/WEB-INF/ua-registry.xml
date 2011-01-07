@@ -40,7 +40,7 @@
 	<!--  policy for release of entries to the UA -->
 
 	<bean id="genericPushPolicy" class="main.uk.ac.cf.model.PushPolicy">
-		<property name="pushOnOrAfterNoEntries"><value>20</value></property>
+		<property name="pushOnOrAfterNoEntries"><value>10</value></property>
 	</bean>
 
 	<!-- Attribute filter policies -->
