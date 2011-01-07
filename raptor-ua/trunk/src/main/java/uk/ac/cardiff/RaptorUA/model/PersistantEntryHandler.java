@@ -64,7 +64,6 @@ public class PersistantEntryHandler implements EntryHandler {
     @Override
     public void addEntries(Set<Entry> entries) {
 	log.debug("Current: " + this.getEntries().size() + " in: " + entries.size());
-
 	for (Entry entry : entries) {
 		this.getEntries().add(entry);
 	}

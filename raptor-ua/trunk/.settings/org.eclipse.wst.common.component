@@ -4,6 +4,12 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-serviceinterfaces/raptor-serviceinterfaces">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-information-model/raptor-information-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="UA"/>
         <property name="java-output-path" value="/UA/target/classes"/>
     </wb-module>

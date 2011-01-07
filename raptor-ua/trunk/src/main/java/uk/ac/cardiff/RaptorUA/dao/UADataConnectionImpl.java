@@ -101,7 +101,7 @@ public class UADataConnectionImpl implements UADataConnection{
 	this.hibernateTemplate = new HibernateTemplate(sessionFactory);
     }
 
-    /* <p> import, here we load all entries to bind them in hibernate
+    /* <p> import, here we load all entries to bind them in hibernate (make them persistent)
      * then we delete them. Not sure if all these entries are loaded
      * then delete if lazy loading is false.</p>
      * (non-Javadoc)
@@ -110,8 +110,6 @@ public class UADataConnectionImpl implements UADataConnection{
     @Override
     public void deleteAllEntries(Collection entries) {
 	hibernateTemplate.deleteAll(entries);
-
-
     }
 
 

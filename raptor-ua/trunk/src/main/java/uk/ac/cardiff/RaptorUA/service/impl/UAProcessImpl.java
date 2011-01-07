@@ -43,7 +43,7 @@ public class UAProcessImpl implements UAProcess {
     static Logger log = LoggerFactory.getLogger(UAProcessImpl.class);
 
     /* the central point or engine for this Unit Aggregator */
-    private UnitAggregatorEngine aggregatorEngine;
+    private UnitAggregatorEngine engine;
 
     /* how long any retrieve method should wait before it returns an empt set*/
     private final int getTimeout =10000;
@@ -62,7 +62,7 @@ public class UAProcessImpl implements UAProcess {
 	if (lockR.tryLock()) {
 	    try {
 		log.info("Polling ICAs...");
-		aggregatorEngine.poll();
+		engine.poll();
 		log.info("Done");
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
@@ -76,11 +76,11 @@ public class UAProcessImpl implements UAProcess {
     }
 
     public void setAggregatorEngine(UnitAggregatorEngine aggregatorEngine) {
-	this.aggregatorEngine = aggregatorEngine;
+	this.engine = aggregatorEngine;
     }
 
     public UnitAggregatorEngine getAggregatorEngine() {
-	return aggregatorEngine;
+	return engine;
     }
 
     /*
@@ -89,7 +89,7 @@ public class UAProcessImpl implements UAProcess {
      * @see uk.ac.cardiff.RaptorUA.service.UAProcess#toStdOut()
      */
     public void toStdOut() {
-	aggregatorEngine.toStdOut();
+	engine.toStdOut();
 
     }
 
@@ -102,7 +102,7 @@ public class UAProcessImpl implements UAProcess {
 	    if (lockR.tryLock(getTimeout, TimeUnit.MILLISECONDS)) {
 		try {
 		    log.debug("Retreiving all authentications form UA");
-		    authentications = aggregatorEngine.getAllAuthentications();
+		    authentications = engine.getAllAuthentications();
 		    log.debug("Retreiving all authentications form UA...done");
 		} finally {
 		    lockR.unlock();
@@ -122,12 +122,14 @@ public class UAProcessImpl implements UAProcess {
      * @param entries
      */
     public void addAuthentications(ICAEntryPush pushed) {
-	log.debug("UA has received {} entries from {}",pushed.getEntries().size(),pushed.getIcaMetaData().getIcaName());
+	log.debug("UA has received {} entries from {}",pushed.getEntries().size(),pushed.getIcaMetaData().getIcaName()+"----");
 	if (lockR.tryLock()) {
 	    try {
 		log.info("Adding pushedd Entries to UA...");
-		aggregatorEngine.addAuthentications(pushed);
+		engine.addAuthentications(pushed);
 		log.info("Done");
+		boolean released = engine.release();
+		log.info("Entries released to all listening MUAs {}",released);
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
 		log.error(e.getMessage());
@@ -136,6 +138,7 @@ public class UAProcessImpl implements UAProcess {
 		lockR.unlock();
 	    }
 	}
+	log.debug("Added all authentications to the UA------");
     }
 
 }

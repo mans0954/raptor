@@ -23,17 +23,19 @@
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="icaRegistry" class="uk.ac.cardiff.RaptorUA.engine.ICARegistry">
-		<property name ="ICAEntries">
+	<bean id="muaRegistry" class="uk.ac.cardiff.RaptorUA.engine.MUARegistry">
+		<property name ="MUAEntries">
 			<list>
-				<bean id="cardiffShibICA-idp1" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:7080/ICA/Collector</value></property>
+				<bean id="cardiffMUA" class="uk.ac.cardiff.RaptorUA.model.MUAEntry">
+					<property name="serviceEndpoint"><value>http://localhost:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
 				</bean>
-				<!--<bean id="cardiffShibICA-idp2" class="uk.ac.cardiff.RaptorUA.model.ICAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:6080/ICA/Collector</value></property>
-				</bean>
-			--></list>
+			</list>
 		</property>
+	</bean>
+
+	<bean id="genericPushPolicy" class="uk.ac.cardiff.RaptorUA.model.PushPolicy">
+		<property name="pushOnOrAfterNoEntries"><value>20</value></property>
 	</bean>
 
 </beans>
