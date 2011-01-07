@@ -9,7 +9,7 @@ package uk.ac.cardiff.model;
  */
 public class UAMetadata {
 
-    private String icaName;
+    private String uaName;
     private String organisationName;
     private String contactEmail;
 
@@ -27,11 +27,11 @@ public class UAMetadata {
     public String getContactEmail() {
 	return contactEmail;
     }
-    public void setIcaName(String icaName) {
-	this.icaName = icaName;
+    public void setUaName(String uaName) {
+	this.uaName = uaName;
     }
-    public String getIcaName() {
-	return icaName;
+    public String getUaName() {
+	return uaName;
     }
 
 }
