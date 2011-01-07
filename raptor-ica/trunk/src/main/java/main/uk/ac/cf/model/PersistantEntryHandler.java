@@ -135,7 +135,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	dataConnection.saveAll(entries);
 	dataConnection.save(entryInformation);
 	log.debug("Saving entries to persitant storage...done");
-	System.exit(1);
+
 
     }
 
