@@ -28,7 +28,7 @@ public class ReadWriteTester {
 	LogFileWriter writer = new LogFileWriter(100);
 	writer.start();
 
-	NumberOfLogEntriesWritter counter = new NumberOfLogEntriesWritter(500,"file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt");
+	NumberOfLogEntriesWritter counter = new NumberOfLogEntriesWritter(1000,"file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt");
 	counter.start();
 
 	//LogFileReader reader = new LogFileReader(1, "file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt");
