@@ -39,7 +39,7 @@ public class ServiceEndpointInterface {
      * This method uses a hard set connection timeout of 5 seconds, and a receive timeout of
      * 20 seconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent
      * inside small XML documents.
-     * 
+     *
      * @param endpoint
      * @return
      */
@@ -51,7 +51,7 @@ public class ServiceEndpointInterface {
 	    AegisDatabinding databinding = new AegisDatabinding();
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
-	    
+
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
 	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
 	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
@@ -70,7 +70,7 @@ public class ServiceEndpointInterface {
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
 	    log.error("Error retrieving capabilities from MUA [{}], {}",endpoint,e);
-	  //  e.printStackTrace();
+	    e.printStackTrace();
 	}
 	return capabilities;
 
@@ -80,7 +80,7 @@ public class ServiceEndpointInterface {
      * This method sends a <code>StatisticalUnitInformaiton</code> instance to the MultiUnitAggregator <code>endpoint</code>
      * The <code>StatisicalUnitInformation</code> instance encapsulates the parameters for a single statistical unit.
      * Allowing the values to be sent back and changed on the MultiUnitAggregator
-     * 
+     *
      * @param endpoint
      * @param statisticalUnitInformation
      * @return
