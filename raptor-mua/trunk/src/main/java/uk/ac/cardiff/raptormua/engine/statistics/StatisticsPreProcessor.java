@@ -23,6 +23,7 @@ import java.util.Set;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.model.EntryHandler;
 
 /**
  * @author philsmart
@@ -30,7 +31,12 @@ import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
  */
 public interface StatisticsPreProcessor {
 
-	public Set<Entry> preProcess(Set<Entry> entries) throws PreprocessorException;
+	/**
+	 * @param entryHandler
+	 * @throws PreprocessorException
+	 */
+	void preProcess(EntryHandler entryHandler) throws PreprocessorException;
+
 
 
 }

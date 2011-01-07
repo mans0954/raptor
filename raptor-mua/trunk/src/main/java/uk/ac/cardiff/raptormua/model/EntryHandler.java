@@ -35,18 +35,65 @@ public interface EntryHandler {
 
 
 
-
+    	/**
+    	 *
+    	 * @param entries
+    	 */
 	public void addEntries(Set<Entry> entries);
 
+	/**
+	 *
+	 * @return
+	 */
 	public Set<Entry> getEntries();
 
+	/**
+	 *
+	 * @param entries
+	 */
 	public void setEntries(Set<Entry> entries);
 
+	/**
+	 *
+	 */
 	public void removeAllEntries();
 
+	/**
+	 *
+	 */
 	public void endTransaction();
-	
+
+	/**
+	 *
+	 */
 	public void initialise();
+
+	/**
+	 *
+	 * @param query
+	 * @return
+	 */
+	public List query(String query);
+
+	/**
+	 *
+	 * @param query
+	 * @return
+	 */
+	public Object queryUnique(String query);
+
+	/**
+	 *
+	 * @return
+	 */
+	public int getNumberOfEntries();
+
+	/**
+	 * @param query
+	 * @param parameters
+	 * @return
+	 */
+	Object queryUnique(String query, Object[] parameters);
 
 
 

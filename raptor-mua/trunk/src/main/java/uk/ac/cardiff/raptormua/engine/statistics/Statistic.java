@@ -36,6 +36,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.model.EntryHandler;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
@@ -45,7 +46,7 @@ public class Statistic {
 
     static Logger log = Logger.getLogger(Statistic.class);
 
-    private Set<Entry> entries;
+    private EntryHandler entryHandler;
 
     protected StatisticParameters statisticParameters;
 
@@ -61,26 +62,17 @@ public class Statistic {
      */
     protected Observation[] observations;
 
-    /**
-     * <p>
-     * Always creates a copy of the entries, as the statisical method is not safe, in that it may alter the state of the original data i.e. a preprocessing
-     * method
-     * </p>
-     *
-     * @param authEntries
-     */
-    public void setEntries(Set<Entry> authEntries) {
-	//TODO switch to deep copy library
-	Set<Entry> entriesCopy = EntryClone.cloneEntries(((LinkedHashSet<Entry>) authEntries));
+    public void setEntryHandler(EntryHandler entryHandler) {
 	if (preprocessor != null)
 	    try {
 		log.info("Invoking statistical preprocessor " + preprocessor.getClass());
-		entriesCopy = (Set<Entry>) preprocessor.preProcess(entriesCopy);
+		preprocessor.preProcess(entryHandler);
 	    } catch (PreprocessorException e) {
 		log.error("Could not preprocess entries " + preprocessor.getClass());
 	    }
-	this.entries = entriesCopy;
+	this.entryHandler = entryHandler;
     }
+
 
     /**
      * <p>
@@ -142,10 +134,6 @@ public class Statistic {
 	}
     }
 
-    public Set<Entry> getAuthEntries() {
-	return entries;
-    }
-
     public void setField(String field) {
 
     }
@@ -172,6 +160,11 @@ public class Statistic {
 
     public StatisticParameters getStatisticParameters() {
 	return statisticParameters;
+    }
+
+
+    public EntryHandler getEntryHandler() {
+	return entryHandler;
     }
 
 }

@@ -54,8 +54,8 @@
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="unitName"><value>All Authentications In 5 minute Intervals</value></property>
 					<property name="methodName"><value>countEntryPerInterval</value></property>
-					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
-					<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
+					<property name="startTime"><value>20101020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+					<property name="endTime"><value>20101020T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="seriesLabel"><value>Number of authentications per 5 minute intervals</value></property>
 					<property name="methodParams">
 						<list>
@@ -110,10 +110,10 @@
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="unitName"><value>All Authentications Per Day</value></property>
-					<property name="methodName"><value>countEntryPerInterval</value></property>
-					<property name="startTime"><value>20101001T000100</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
-					<property name="endTime"><value>20101030T235900</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
-					<property name="seriesLabel"><value>Number of Authentications Day</value></property>
+					<property name="methodName"><value>countEntryPerInterval</value></property><!--
+					<property name="startTime"><value>20101001T000100</value></property>   presently only ddMMyyy or yyyyMMdd'T'HHmmss
+					<property name="endTime"><value>20101030T235900</value></property>   presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z
+					--><property name="seriesLabel"><value>Number of Authentications Day</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">

@@ -42,7 +42,7 @@ public class MemoryEntryHandler implements EntryHandler{
     	Set<Entry> entries;
 
 	public MemoryEntryHandler(){
-		
+
 	}
 
 	public void addEntries(Set<Entry> entries){
@@ -52,7 +52,7 @@ public class MemoryEntryHandler implements EntryHandler{
 		}
 		log.info("MUA now has a total of "+this.entries.size()+" entries");
 	}
-	
+
 	public void initialise(){
 		log.info("Memory entry handler [{}] initialising",this);
 		entries = new LinkedHashSet<Entry>();
@@ -89,5 +89,40 @@ public class MemoryEntryHandler implements EntryHandler{
 	public void removeAllEntries() {
 	    // TODO Auto-generated method stub
 
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#query(java.lang.String)
+	 */
+	@Override
+	public List query(String query) {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
+	 */
+	@Override
+	public Object queryUnique(String query) {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#getNumberOfEntries()
+	 */
+	@Override
+	public int getNumberOfEntries() {
+	   return entries.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String, java.lang.Object[])
+	 */
+	@Override
+	public Object queryUnique(String query, Object[] parameters) {
+	    // TODO Auto-generated method stub
+	    return null;
 	}
 }
