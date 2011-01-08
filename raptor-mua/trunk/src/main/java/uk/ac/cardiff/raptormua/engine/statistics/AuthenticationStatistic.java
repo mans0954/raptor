@@ -59,7 +59,7 @@ public class AuthenticationStatistic extends Statistic {
 	int timeIntervalInt = Integer.parseInt(timeInterval);
 	// convert minutes to ms for the procedure
 	timeIntervalInt = timeIntervalInt * 60 * 1000;
-	log.debug("Params for method:  " + statisticParameters.getMethodName() + ", " + statisticParameters.getUnitName());
+	log.debug("Params for method:  {}, {}",statisticParameters.getMethodName(), statisticParameters.getUnitName());
 
 	/* divide the temporal extent into evenly sized buckets */
 	DateTime start = startingTime();
