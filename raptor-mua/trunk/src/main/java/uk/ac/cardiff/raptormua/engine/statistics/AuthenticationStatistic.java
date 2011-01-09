@@ -236,28 +236,20 @@ public class AuthenticationStatistic extends Statistic {
 
 	DateTime start = startingTime();
 	DateTime end = endingTime();
+	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+	List results = getEntryHandler().query("select "+groupByField+",count(*) from "+tableName+" group by ("+groupByField+")");
 
-//	List results = getEntryHandler().query("select principalName,count(*) from Entry group by (principalName)");
-//
 	ArrayList<Group> groups = new ArrayList();
 	int testCount =0;
-//	for (Object result : results) {
-//	    	Object[] resultAsArray = (Object[])result;
-//		Group group = new Group();
-//		group.setValue((Integer)resultAsArray[1]);
-//		group.setGroupName((String) resultAsArray[0]);
-//		groups.add(group);
-//		testCount+=group.getValue();
-//	}
-
-	List results = getEntryHandler().query("select persistantId from Entry");
-	log.debug("Has {} ids",results.size());
-	for (Object result : results){
-	    Long id = (Long)result;
-	    List<Entry> entriesAsList = getEntryHandler().query("from Entry where persistantId=1");
-	  //  log.debug("Have {}",entriesAsList.size());
+	for (Object result : results) {
+	    	Object[] resultAsArray = (Object[])result;
+		Group group = new Group();
+		group.setValue((Integer)resultAsArray[1]);
+		group.setGroupName((String) resultAsArray[0]);
+		groups.add(group);
+		testCount+=group.getValue();
 	}
-	log.debug("Finished");
+
 
 	/* test count should equal the number of entries unless there is a reminder as this has not been catered for yet. */
 	log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
