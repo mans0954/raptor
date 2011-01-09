@@ -47,8 +47,8 @@
 
 
 									<tr:table value="#{graphService.statisticalUnits}"
-										bandingInterval="2" banding="row" var="unit" width="95%"
-										labelWidth="5%" inlineStyle="border-style: hidden;"
+										bandingInterval="2" banding="row" var="unit" width="100%"
+										labelWidth="0%" inlineStyle="border-style: hidden;"
 										rendered="#{not empty graphService.statisticalUnits}">
 
 										<f:facet name="detailStamp">

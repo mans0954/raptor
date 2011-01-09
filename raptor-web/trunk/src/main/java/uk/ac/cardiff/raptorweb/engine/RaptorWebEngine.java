@@ -71,25 +71,28 @@ public class RaptorWebEngine {
     }
 
     /**
-     * returns the list of statistical units from the attached MUA. If no
-     * MUA has been attached through the web interface, it chooses the
-     * attached MUA that was loaded with <code>isAttached value="true"</code>
+     * returns the list of statistical units from the attached MUA as stored in the
+     * currentlyAttachedCapabilities. If no currentlyAttachedCapabilities exists, hence
+     * no MUA has been sucessfully queried, it chooses either the current MUA <code>attachedMUA</code> 
+     * or the MUA that was loaded with <code>isAttached value="true"</code>
      * from the XML configuration.
      *
      * @return List of statistical units, as <code>StatisticalUnitInformation</code>
      */
     public List getStatisticalUnits() {
 	/* get the statistical methods from the currently attached MUA */
-	if (attachedMUA != null) {
+	if (currentlyAttachedCapabilities!=null && currentlyAttachedCapabilities.isError()==false){
 	    return currentlyAttachedCapabilities.getStatisticalServices();
 	} else {
 	    MUAEntry attached = null;
+	    if (attachedMUA!=null){
+		attached =attachedMUA;
+	    }	    
 	    for (MUAEntry entry : registry.getUAEntries()) {
 		if (entry.getIsAttached()) {
 		    attached = entry;
 		}
 	    }
-
 	    Capabilities capabilities = ServiceEndpointInterface.discoverMUACapabilities(attached.getServiceEndpoint());
 	    if (!capabilities.isError()){
 		log.debug("Has retrieved {} statistics", capabilities.getStatisticalServices().size());
