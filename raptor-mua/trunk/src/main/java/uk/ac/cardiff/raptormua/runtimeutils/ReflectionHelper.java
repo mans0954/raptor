@@ -19,14 +19,16 @@
 package uk.ac.cardiff.raptormua.runtimeutils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import org.apache.log4j.Logger;
-
-
 
 import sun.misc.Launcher;
 
@@ -38,110 +40,180 @@ public class ReflectionHelper {
 	static Logger log = Logger.getLogger(ReflectionHelper.class);
 
 	/**
-	 * This method finds the simple name of the class in the uk.ac.cardiff.model package
-	 * that contains the <code>fieldName</code>.
+	 * This method finds the simple name of the class in the uk.ac.cardiff.model
+	 * package that contains the <code>fieldName</code>.
 	 * 
 	 * @param fieldName
 	 * @return
 	 */
 	public static String findEntrySubclassForMethod(String fieldName) {
 		String forPckgName = "uk.ac.cardiff.model";
-		Object[] subclasses = subclasses(forPckgName);
-		
-		//now test for method
-		Object objectWithMethod=null;
-		for (Object object : subclasses){
-			if (hasField(object,fieldName)){
-				objectWithMethod= object;
+		String jarFile = getJARFilePath(forPckgName);
+		jarFile = jarFile.replace("file:", "");
+		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
+		ArrayList allclasses = new ArrayList();
+		for (String classname : classes) {
+			try {
+				Object o = Class.forName(classname.replace(".class", "")).newInstance();
+				if (o instanceof uk.ac.cardiff.model.Entry) {
+				    //log.debug("Found classname: "+classname.replace(".class", ""));
+					allclasses.add(o);
+				}
+			} catch (ClassNotFoundException cnfex) {
+				log.error(cnfex);
+			} catch (InstantiationException iex) {
+				// We try to instantiate an interface
+				// or an object that does not have a
+				// default constructor
+			} catch (IllegalAccessException iaex) {
+				// The class is not public
 			}
 		}
-		if (objectWithMethod!=null){
-			log.debug("Object "+objectWithMethod.getClass().getName()+" has method "+fieldName+" returning simple name "+objectWithMethod.getClass().getSimpleName());
+		
+		Object objectWithMethod = null;
+		for (Object object : allclasses) {
+			if (hasField(object, fieldName)) {
+				objectWithMethod = object;
+			}
+		}
+		if (objectWithMethod != null) {
+			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName
+					+ " returning simple name " + objectWithMethod.getClass().getSimpleName());
 			return objectWithMethod.getClass().getSimpleName();
 		}
+
 		return null;
 
 	}
 
 	/**
-	 * Code taken and adapted from the JWhich project. Finds all subclasses of the
-	 * uk.ac.cardiff.model.Entry class in the package <code>pckgname</code>
+	 * Gets the name, as a string, of the JAR file that contains the package <code>pckgname</code>
+	 * @param pckgname
+	 * @return
+	 */
+	private static String getJARFilePath(String pckgname) {
+		String name = new String(pckgname);
+		if (!name.startsWith("/")) {
+			name = "/" + name;
+		}
+		name = name.replace('.', '/');
+		// Get a File object for the package
+		log.debug("package name: " + name);
+		URL url = ReflectionHelper.class.getResource(name);
+		log.debug("URL: " + url.getPath().substring(0, url.getPath().indexOf('!')));
+		if (url != null && url.getPath().contains("!"))
+			return url.getPath().substring(0, url.getPath().indexOf('!'));
+		else if (url != null)
+			return url.getPath();
+		else
+			return null;
+	}
+
+	/**
+	 * Gets the names of the classes, as strings, in the jar <code>jarName</code> and package
+	 * <code>packageName</code>
+	 * 
+	 * @param jarName
+	 * @param packageName
+	 * @return
+	 */
+	public static List<String> getClasseNamesInPackageJAR(String jarName, String packageName) {
+		ArrayList<String> classes = new ArrayList<String>();
+		packageName = packageName.replaceAll("\\.", "/");
+		try {
+			JarInputStream jarFile = new JarInputStream(new FileInputStream(jarName));
+			JarEntry jarEntry;
+			while (true) {
+				jarEntry = jarFile.getNextJarEntry();
+				if (jarEntry == null) {
+					break;
+				}
+				if ((jarEntry.getName().startsWith(packageName)) && (jarEntry.getName().endsWith(".class"))) {
+					classes.add(jarEntry.getName().replaceAll("/", "\\."));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return classes;
+	}
+
+	/**
+	 * Code taken and adapted from the JWhich project. Finds all subclasses of
+	 * the uk.ac.cardiff.model.Entry class in the package <code>pckgname</code> if they
+	 * exist outside any JAR libraries, use <code>getClasseNamesInPackageJAR</code>
 	 * 
 	 * @param pckgname
 	 * @return
 	 */
-	private static Object[] subclasses(String pckgname) {
+	private static Object[] subclassesInDirectory(String pckgname) {
 		ArrayList<Object> allclasses = new ArrayList();
-		
+
 		String name = new String(pckgname);
-        if (!name.startsWith("/")) {
-            name = "/" + name;
-        }        
-        name = name.replace('.','/');
-        
-        // Get a File object for the package
-        URL url = Launcher.class.getResource(name);
-		
+		if (!name.startsWith("/")) {
+			name = "/" + name;
+		}
+		name = name.replace('.', '/');
+
+		// Get a File object for the package
+		log.debug("package name: " + name);
+		URL url = ReflectionHelper.class.getResource(name);
+		log.debug("URL: " + url);
 		File directory = new File(url.getFile());
-        // New code
-        // ======
-        if (directory.exists()) {
-            // Get the list of the files contained in the package
-            String [] files = directory.list();
-            for (int i=0;i<files.length;i++) {
-                 
-                // we are only interested in .class files
-                if (files[i].endsWith(".class")) {
-                    // removes the .class extension
-                    String classname = files[i].substring(0,files[i].length()-6);
-                    try {
-                    	
-                        // Try to create an instance of the object
-                        Object o = Class.forName(pckgname+"."+classname).newInstance();
-                        if (o instanceof uk.ac.cardiff.model.Entry) {
-                           // log.debug("Found classname: "+classname);
-                            allclasses.add(o);
-                        }
-                    } catch (ClassNotFoundException cnfex) {
-                        log.error(cnfex);
-                    } catch (InstantiationException iex) {
-                        // We try to instantiate an interface
-                        // or an object that does not have a 
-                        // default constructor
-                    } catch (IllegalAccessException iaex) {
-                        // The class is not public
-                    }
-                }
-            }
-        }
-        return allclasses.toArray();
+
+		// New code
+		// ======
+		if (directory.exists()) {
+			// Get the list of the files contained in the package
+			String[] files = directory.list();
+			for (int i = 0; i < files.length; i++) {
+
+				// we are only interested in .class files
+				if (files[i].endsWith(".class")) {
+					// removes the .class extension
+					String classname = files[i].substring(0, files[i].length() - 6);
+					try {
+						log.debug("classname: " + classname);
+						// Try to create an instance of the object
+						Object o = Class.forName(pckgname + "." + classname).newInstance();
+						if (o instanceof uk.ac.cardiff.model.Entry) {
+							// log.debug("Found classname: "+classname);
+							allclasses.add(o);
+						}
+					} catch (ClassNotFoundException cnfex) {
+						log.error(cnfex);
+					} catch (InstantiationException iex) {
+						// We try to instantiate an interface
+						// or an object that does not have a
+						// default constructor
+					} catch (IllegalAccessException iaex) {
+						// The class is not public
+					}
+				}
+			}
+		}
+		return allclasses.toArray();
 	}
 
-	
+	/**
+	 * Checks whether the Object <code>object</code> has the field <code>fieldName</code>
+	 * 
+	 * @param object
+	 * @param fieldName
+	 * @return
+	 */
 	private static Boolean hasField(Object object, String fieldName) {
 		try {
-		   Field[] fields = object.getClass().getDeclaredFields();
-		   for (Field field : fields)
-			   if (field.getName().equals(fieldName))return true;		  
-		  
+			Field[] fields = object.getClass().getDeclaredFields();
+			for (Field field : fields)
+				if (field.getName().equals(fieldName))
+					return true;
+
 		} catch (Exception e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 		return false;
 
-	    }
-
-	public static void find(String tosubclassname) {
-		try {
-			Class tosubclass = Class.forName(tosubclassname);
-			Package[] pcks = Package.getPackages();
-			for (int i = 0; i < pcks.length; i++) {
-				// find(pcks[i].getName(),tosubclass);
-				System.out.println(pcks[i].getName());
-			}
-		} catch (ClassNotFoundException ex) {
-			System.err.println("Class " + tosubclassname + " not found!");
-		}
 	}
 
 	public static String prepareMethodNameSet(String method) {
