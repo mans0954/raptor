@@ -295,6 +295,10 @@ public class StatisticParameters implements Serializable{
 	this.type = StatisticType.USER;
     }
 
+    public void setType(StatisticType type) {
+	this.type = type;
+    }
+
     public StatisticType getType() {
 	return type;
     }
