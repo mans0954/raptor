@@ -12,6 +12,9 @@
             <evaluate expression="startService.generateStatistics(startmodel)"/>
     </on-entry>
 
+	<transition on="refreshStartStats">
+		<evaluate expression="startService.generateStatistics(setupmodel)"/>
+	</transition>
 
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
