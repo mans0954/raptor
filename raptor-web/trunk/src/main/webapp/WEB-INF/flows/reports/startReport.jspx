@@ -25,14 +25,18 @@
 
 				</f:facet>
 				<f:facet name="left">
+					<tr:form>
 					<h:panelGrid width="100%"
 						style="height: 100%; text-align: center;">
+						<!-- poll component, which triggers the stats updates -->
+						<tr:poll pollInterval="2000" id="statsupdate" action="refreshStartStats"/>
 						<tr:spacer height="20px" />
 						 <tr:panelBox text="At a Glance" >
 							<tr:panelFormLayout>
 								<tr:outputText value="Number of Authentications" inlineStyle="font-size:120%;font-weight: bold"/>
 								<tr:spacer height="7px"/>
-								<tr:outputText value="#{startmodel.numberOfAuthenticationsPer}" inlineStyle="font-size:270%;font-weight: bold" />
+								<tr:outputText value="#{startmodel.numberOfAuthenticationsPerFormatted}" 
+									 partialTriggers=":statsupdate" inlineStyle="font-size:270%;font-weight: bold" />
 								<tr:spacer height="20px" />
 								<tr:outputText value="Number of Unique Users" inlineStyle="font-size:120%;font-weight: bold"/>
 								<tr:spacer height="7px"/>
@@ -44,6 +48,7 @@
 								inlineStyle="opacity:0.0;color:#EEE9E8;" />
 						</tr:panelBox>
 					</h:panelGrid>
+					</tr:form>
 				</f:facet>
 				<f:facet name="right">
 					<h:panelGrid width="100%"

@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
+import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.StartModel;
 import uk.ac.cardiff.raptorweb.service.StartService;
 
@@ -38,10 +40,8 @@ public class StartServiceImpl implements StartService{
 	log.debug("Found {} statistics",statisticalUnits.size());
 	//check for one named numberOfAuthenticationsPer, hence the MUA must support this
 	StatisticalUnitInformation unitInformation = null;
-	for (StatisticalUnitInformation unit : statisticalUnits){
-	    log.debug("Statistic Type is {}",unit.getStatisticParameters().getType());
+	for (StatisticalUnitInformation unit : statisticalUnits){	    
 	    if (unit.getStatisticParameters().getType()==StatisticParameters.StatisticType.SYSTEM){
-		log.debug("Have SYSTEM level statistic {}",unit);
 		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPer"))
 		    unitInformation = unit;
 	    }
@@ -49,9 +49,16 @@ public class StartServiceImpl implements StartService{
 	log.debug("Using statistic {} to find number of authentications per",unitInformation);
 	if (unitInformation!=null){
 	    AggregatorGraphModel numberOfAuthentications = webEngine.invokeStatisticalUnit(unitInformation);
-	    startmodel.setNumberOfAuthenticationsPer(10);
+	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfAuthentications);
+	    //should only have one result
+	    if (table.getRows().size()==1){		
+		if (table.getRows().get(0).getValue() instanceof Double){
+		    startmodel.setNumberOfAuthenticationsPer(((Double)table.getRows().get(0).getValue()));
+		}
+	    }	
+	    
 	}
-	startmodel.setNumberOfAuthenticationsPer(0);
+	
     }
 
     private List getStatisticalUnits(){

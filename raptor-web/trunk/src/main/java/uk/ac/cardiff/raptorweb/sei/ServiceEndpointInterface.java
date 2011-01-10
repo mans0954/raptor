@@ -36,7 +36,7 @@ public class ServiceEndpointInterface {
 
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator.
-     * This method uses a hard set connection timeout of 5 seconds, and a receive timeout of
+     * This method uses a hard set connection timeout of 10 seconds, and a receive timeout of
      * 20 seconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent
      * inside small XML documents.
      *
@@ -56,7 +56,7 @@ public class ServiceEndpointInterface {
 	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
 	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
 	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(5);
+	    httpClientPolicy.setConnectionTimeout(10);
 	    httpClientPolicy.setReceiveTimeout(20);
 	    httpConduit.setClient(httpClientPolicy);
 	    log.debug("Accessing the MUA version " + client.getVersion());
