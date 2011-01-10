@@ -56,6 +56,10 @@ public class StatisticParameters implements Serializable{
     private Date startTimeJava;
     private Date endTimeJava;
 
+    /* either system or user types */
+    private enum StatisticType {USER,SYSTEM};
+    private StatisticType type;
+
 
     public void setUnitName(String unitName) {
 	log.debug("Setting unit name: "+unitName);
@@ -281,6 +285,18 @@ public class StatisticParameters implements Serializable{
     }
     public int getStartTimeSecond(){
 	return startTime.getSecondOfMinute();
+    }
+
+    public void setType(String type) {
+	for (StatisticType thisType : StatisticType.values()){
+	    if (type.toString().equals(type))this.type=thisType;
+	}
+	//set default
+	this.type = StatisticType.USER;
+    }
+
+    public StatisticType getType() {
+	return type;
     }
 
 
