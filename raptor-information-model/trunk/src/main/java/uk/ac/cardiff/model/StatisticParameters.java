@@ -57,7 +57,7 @@ public class StatisticParameters implements Serializable{
     private Date endTimeJava;
 
     /* either system or user types */
-    private enum StatisticType {USER,SYSTEM};
+    public enum StatisticType {USER,SYSTEM};
     private StatisticType type;
 
 
@@ -287,9 +287,10 @@ public class StatisticParameters implements Serializable{
 	return startTime.getSecondOfMinute();
     }
 
-    public void setType(String type) {
+    public void setStatisticType(String type) {
+	type = type.toUpperCase();
 	for (StatisticType thisType : StatisticType.values()){
-	    if (type.toString().equals(type))this.type=thisType;
+	    if (thisType.toString().equals(type))this.type=thisType;
 	}
 	//set default
 	this.type = StatisticType.USER;
