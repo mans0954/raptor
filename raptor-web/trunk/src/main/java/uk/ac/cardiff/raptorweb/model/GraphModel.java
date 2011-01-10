@@ -29,10 +29,11 @@ public class GraphModel implements Serializable{
 	 */
 	public GraphModel(){
 	    chartOptions = new ChartOptions();
-	    chartOptions.setPerspective("true");
+	    chartOptions.setPerspective("false");
 	    chartOptions.setGraphType("horizontalBar");
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
+	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
 	}
 
 	/**

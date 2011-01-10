@@ -30,15 +30,26 @@
 
 	<tr:form id="menuForm">
 	<ul id="nav">
+		<li><tr:commandLink text="Home" action="homeTrans"/></li>
 		<li><tr:commandLink text="Graphs" action="graphTrans"/></li>
 		<li><tr:commandLink text="Setup" action="setupTrans"/></li>
+		<li><tr:commandLink text="About" action="aboutTrans"/></li>
 	</ul>
 	</tr:form>
 	<div id="content" class="clearfix">
 	<div id="col_2"><ui:insert name="content" /></div>
 	</div>
-	<div id="footer"><small>All content copyright &copy; 2010 Cardiff University, all rights reserved.<br />
-	</small></div>
+	<div id="footer">
+	<center>
+		<tr:panelGroupLayout layout="horizontal">
+			<h:graphicImage value="/image/cu-logo.jpg"  width="32px"/>
+			<tr:spacer width="20px"/>
+			<tr:outputText value="All content copyright 2010 Cardiff University, all rights reserved." inlineStyle="font-size:80%"/>
+			<tr:spacer width="20px"/>
+			<h:graphicImage value="/image/jisc-logo.png"  width="35px"/>
+		</tr:panelGroupLayout>
+	</center>
+	</div>
 	</div>
 
 
