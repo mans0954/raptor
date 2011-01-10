@@ -227,7 +227,7 @@
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>Number of authentications per interval</value></property>
+					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
 					<property name="methodName"><value>countEntry</value></property>
 					<property name="seriesLabel"><value>Number of authentications per</value></property>
 					<property name="methodParams">

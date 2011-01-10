@@ -38,6 +38,8 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
+ * 
+ * TODO need to include where filter parameters for most these methods
  *
  */
 public class AuthenticationStatistic extends Statistic {
@@ -140,7 +142,6 @@ public class AuthenticationStatistic extends Statistic {
 
 	int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
 	log.debug("Performing countEntry Statistical Operation");
-
 	log.debug("Params for method:  " + statisticParameters.getMethodName() + ", " + statisticParameters.getUnitName());
 
 	/* divide the temporal extent into evenly sized buckets */
@@ -149,7 +150,7 @@ public class AuthenticationStatistic extends Statistic {
 
 	long difference = end.getMillis() - start.getMillis();
 	log.debug("There is " + difference + "ms difference between start and end entries");
-	int timeIntervalsInMs = (int) (difference / numberOfIntervals);
+	long timeIntervalsInMs = (long) (difference / numberOfIntervals);
 	long reminder = difference % numberOfIntervals;
 	log.debug("There are " + numberOfIntervals + " buckets, with reminder " + reminder + "ms");
 
@@ -163,6 +164,7 @@ public class AuthenticationStatistic extends Statistic {
 	buckets[0] = new Bucket();
 	buckets[0].setStart(start);
 	buckets[0].setEnd(new DateTime(start.getMillis() + timeIntervalsInMs));
+	log.debug("Start time {} end time {}",buckets[0].getStart(),buckets[0].getEnd());
 	DateTime endOfEvenBuckets = null;
 	for (int i = 1; i < numberOfIntervals; i++) {
 	    Bucket buck = new Bucket();
