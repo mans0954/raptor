@@ -288,9 +288,12 @@ public class StatisticParameters implements Serializable{
     }
 
     public void setStatisticType(String type) {
-	type = type.toUpperCase();
+	type = type.toUpperCase(); 
 	for (StatisticType thisType : StatisticType.values()){
-	    if (thisType.toString().equals(type))this.type=thisType;
+	    if (thisType.toString().equals(type)){
+		this.type=thisType;
+		return;
+	    }
 	}
 	//set default
 	this.type = StatisticType.USER;
