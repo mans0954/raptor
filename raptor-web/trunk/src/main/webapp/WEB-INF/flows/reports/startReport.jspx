@@ -9,46 +9,62 @@
 	<ui:composition template="/templates/raptor/full.xhtml">
 
 		<ui:define name="content">
+			<tr:spacer height="10px" />
+			<tr:panelBorderLayout >
+				<f:facet name="top">
+					<tr:panelGroupLayout layout="horizontal" >
+						<tr:selectOneChoice id="quickStatsRangeSelector" value="today"
+							autoSubmit="true" partialSubmit="true"
+							shortDesc="quickStatsRangeSelector" >
+							<f:selectItem itemLabel="Today" itemValue="today" />
+							<f:selectItem itemLabel="Last Week" itemValue="lastWeek" />
+							<f:selectItem itemLabel="Last Month" itemValue="lastMonth" />
+							<f:selectItem itemLabel="Last Year" itemValue="lastYear" />
+						</tr:selectOneChoice>
+					</tr:panelGroupLayout>
+
+				</f:facet>
+				<f:facet name="left">
+					<h:panelGrid width="100%"
+						style="height: 100%; text-align: center;">
+						<tr:spacer height="20px" />
+						 <tr:panelBox text="At a Glance" >
+							<tr:panelFormLayout>
+								<tr:outputText value="Number of Authentications" inlineStyle="font-size:120%;font-weight: bold"/>
+								<tr:spacer height="7px"/>
+								<tr:outputText value="#{startmodel.numberOfAuthenticationsPer}" inlineStyle="font-size:270%;font-weight: bold" />
+								<tr:spacer height="20px" />
+								<tr:outputText value="Number of Unique Users" inlineStyle="font-size:120%;font-weight: bold"/>
+								<tr:spacer height="7px"/>
+								<tr:outputText value="10,2343" inlineStyle="font-size:270%;font-weight: bold"/>
+
+							</tr:panelFormLayout>
+							<tr:outputText
+								value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+								inlineStyle="opacity:0.0;color:#EEE9E8;" />
+						</tr:panelBox>
+					</h:panelGrid>
+				</f:facet>
+				<f:facet name="right">
+					<h:panelGrid width="100%"
+						style="height: 100%; text-align: center;">
+						<tr:panelBox text="Resource Popularity" inlineStyle="width: 25%;">
+							<tr:panelFormLayout>
+								<tr:inputText label="Field A" />
+								<tr:inputText label="Field B" />
+							</tr:panelFormLayout>
+						</tr:panelBox>
+					</h:panelGrid>
+				</f:facet>
 
 
-			<f:verbatim>
-			<br/>
-				<center><h1 style="font-size:300%">Raptor</h1></center>
-				<br/>
-				<p style="padding-left: 20pt;padding-right: 30pt; font-size:150%">
-					The RAPTOR project (Retreival, Analysis, and Presentation Toolkit for usage of Online Resources) is a JISC
-					funded project creating software to help analyse usage statistics for electronic resource management
-				</p>
-				<br/>
-				<br/>
-				<center><h2 style="font-size:200%">Project Aims</h2></center>
-				<br/>
-				<ul style="padding-left: 20pt;padding-right: 60pt; font-size:150%">
-					<li>1. Understand institutional and national accounting and
-					reporting requirements around statistics of e-resource access via
-					Shibboleth and Ezproxy.</li>
+				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
 
-					<li>2. Build a free-to-use, open source software toolkit which
-					aims to present statistical accounting information about e-resource
-					usage to non-technical users, and makes basic aggregated usage
-					information available to external organisations.</li>
-
-					<li>3. To implement the RAPTOR software toolkit through a process
-					of a quickly developed initial release and subsequent regular
-					updates during the lifetime of the project, through a group of
-					around 8-10 pilot institutions, using their feedback regarding both
-					bugs and desired features to inform the regular updates.</li>
-				</ul>
+				</h:panelGrid>
+			</tr:panelBorderLayout>
 
 
-			</f:verbatim>
-			<br/>
-			<center>
-			<tr:panelGroupLayout layout="horizontal">
-				<h:graphicImage value="/image/jisc-logo.png"  width="131px"/>
-				<h:graphicImage value="/image/cu-logo.jpg"  width="100px"/>
-			</tr:panelGroupLayout>
-			</center>
+
 
 		</ui:define>
 	</ui:composition>

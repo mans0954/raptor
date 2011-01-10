@@ -12,6 +12,7 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
+import uk.ac.cardiff.raptorweb.model.ChartOptions;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
@@ -85,6 +86,14 @@ public class GraphServiceImpl implements GraphService{
 		    model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
 		    model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
 		    model.setProcessingResult("Done");
+		    //auto select chart heights based on heuristic
+		    if (model.getCurrentTableGraph().getRows().size()<50)
+			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.SMALL);
+		    else if (model.getCurrentTableGraph().getRows().size()<100)
+			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.MEDIUM);
+		    else
+			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.LARGE);
+
 		}
 		else{
 		    log.error("Chart model come back from the MUA as null");

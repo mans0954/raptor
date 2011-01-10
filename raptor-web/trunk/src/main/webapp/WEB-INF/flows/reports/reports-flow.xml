@@ -7,10 +7,23 @@
 
 
  <view-state id="startReport" view ="startReport.jspx">
+ 	<var name="startmodel" class="uk.ac.cardiff.raptorweb.model.StartModel" />
+ 	<on-entry>
+            <evaluate expression="startService.generateStatistics(startmodel)"/>
+    </on-entry>
+
+
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
+	<transition on="aboutTrans" to="about"/>
+	<transition on="homeTrans" to="startReport"/>
  </view-state>
 
+ <view-state id="about" view ="about.jspx">
+ 	<transition on="graphTrans" to="graphicalReports"/>
+	<transition on="setupTrans" to="setupRaptorWeb"/>
+	<transition on="aboutTrans" to="about"/>
+ </view-state>
 
  <view-state id="graphicalReports" view ="graphicalReports.jspx">
  	<!-- the model for storing information about selected graphical components (could be setup in the model attribute of the view-state element) -->
@@ -47,6 +60,8 @@
 
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
+	<transition on="aboutTrans" to="about"/>
+	<transition on="homeTrans" to="startReport"/>
 
 
  </view-state>
@@ -58,6 +73,8 @@
   	<var name="setupmodel" class="uk.ac.cardiff.raptorweb.model.SetupModel" />
 	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
+	<transition on="aboutTrans" to="about"/>
+	<transition on="homeTrans" to="startReport"/>
 
 	<transition on="getAggregatorCapabilities">
 		<evaluate expression="setupService.getCapabilities(setupmodel)"/>

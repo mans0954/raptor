@@ -20,7 +20,7 @@
 					<f:facet name="start">
 
 						<tr:panelBox text="Control Panel">
-						
+
 						<tr:panelGroupLayout layout="horizontal">
 								<tr:spacer width="5px" />
 								<tr:statusIndicator />
@@ -34,7 +34,7 @@
 									</f:facet>
 								</tr:statusIndicator>
 							</tr:panelGroupLayout>
-							
+
 							<tr:spacer height="10px" />
 
 							<tr:panelAccordion discloseMany="true">
@@ -285,6 +285,7 @@
 									<f:selectItem itemLabel="radarArea" itemValue="radarArea" />
 
 								</tr:selectOneChoice>
+								<tr:spacer width="10px" />
 								<tr:outputText value=" Perspective"
 									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartPerspectiveSelector"
@@ -294,6 +295,7 @@
 									<f:selectItem itemLabel="on" itemValue="true" />
 									<f:selectItem itemLabel="off" itemValue="false" />
 								</tr:selectOneChoice>
+								<tr:spacer width="10px" />
 								<tr:outputText value=" XMajorGridCount"
 									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartXMajorGridCountSelector"
@@ -308,6 +310,7 @@
 									<f:selectItem itemLabel="15" itemValue="15" />
 									<f:selectItem itemLabel="20" itemValue="20" />
 								</tr:selectOneChoice>
+								<tr:spacer width="10px" />
 								<tr:outputText value=" YMajorGridCount"
 									rendered="#{not empty graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartYMajorGridCountSelector"
@@ -322,6 +325,18 @@
 									<f:selectItem itemLabel="15" itemValue="15" />
 									<f:selectItem itemLabel="20" itemValue="20" />
 								</tr:selectOneChoice>
+								<tr:spacer width="10px" />
+								<tr:outputText value=" Chart Display Height"
+									rendered="#{not empty graphmodel.currentGraph}" />
+								<tr:selectOneChoice id="chartHeightSelector"
+									value="#{graphmodel.chartOptions.chartHeight}"
+									autoSubmit="true" partialSubmit="true"
+									shortDesc="YMajorGridCount"
+									rendered="#{not empty graphmodel.currentGraph}">
+									<f:selectItem itemLabel="small" itemValue="700" />
+									<f:selectItem itemLabel="medium" itemValue="1100" />
+									<f:selectItem itemLabel="large" itemValue="1700" />
+								</tr:selectOneChoice>
 
 								<h:outputText value="  " />
 								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
@@ -333,9 +348,9 @@
 							<tr:chart id="chart" verticalMajorSections="15"
 								value="#{graphmodel.currentGraph}"
 								rendered="#{not empty graphmodel.currentGraph}"
-								inlineStyle="width:95%; height:700px; border-style: hidden;"
+								inlineStyle="width:95%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
 								type="#{graphmodel.chartOptions.graphType}"
-								partialTriggers=":chartTypeSelector :chartPerspectiveSelector :chartXMajorGridCountSelector :chartYMajorGridCountSelector"
+								partialTriggers=":chartTypeSelector :chartPerspectiveSelector :chartXMajorGridCountSelector :chartYMajorGridCountSelector :chartHeightSelector"
 								width="95%" animationDuration="0"
 								XMajorGridLineCount="#{graphmodel.chartOptions.xMajorGridCount}"
 								YMajorGridLineCount="#{graphmodel.chartOptions.yMajorGridCount}"

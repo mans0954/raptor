@@ -34,6 +34,10 @@
 		<property name="webEngine"><ref bean="webEngine"/></property>
 	</bean>
 
+	<bean id="startService" class="uk.ac.cardiff.raptorweb.service.impl.StartServiceImpl">
+		<property name="webEngine"><ref bean="webEngine"/></property>
+	</bean>
+
 	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
 	</bean>

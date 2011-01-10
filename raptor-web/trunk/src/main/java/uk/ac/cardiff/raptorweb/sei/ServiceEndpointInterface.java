@@ -61,10 +61,7 @@ public class ServiceEndpointInterface {
 	    httpConduit.setClient(httpClientPolicy);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    capabilities = client.getCapabilities();
-	    log.debug("Retrieved capabilities from the MUA [" + endpoint + "]");
-	    // for (Entry ent : auths){//
-	    // log.debug(ent.getEventTime()+" "+ent.getClass());//
-	    // }
+	    log.debug("Retrieved capabilities from the MUA [{}]",endpoint);
 	} catch (Exception e) {
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
