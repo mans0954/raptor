@@ -22,46 +22,71 @@ import uk.ac.cardiff.raptorweb.service.StartService;
  * @author philsmart
  *
  */
-public class StartServiceImpl implements StartService{
+public class StartServiceImpl implements StartService {
 
     static Logger log = LoggerFactory.getLogger(StartServiceImpl.class);
-
 
     private RaptorWebEngine webEngine;
 
     /**
-     * Adds the following statistical information from the attached MUA:
-     * 1. Number of authentications per <RANGE>
+     * Adds the following statistical information from the attached MUA: 1. Number of authentications per <RANGE>
      */
     @Override
     public void generateStatistics(StartModel startmodel) {
-	//get all the stats
+	// get all the stats
 	List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
-	log.debug("Found {} statistics",statisticalUnits.size());
-	//check for one named numberOfAuthenticationsPer, hence the MUA must support this
-	StatisticalUnitInformation unitInformation = null;
-	for (StatisticalUnitInformation unit : statisticalUnits){	    
-	    if (unit.getStatisticParameters().getType()==StatisticParameters.StatisticType.SYSTEM){
+	log.debug("Found {} statistics", statisticalUnits.size());
+	// check for statistical units named numberOfAuthenticationsPer, numberOfUnqiueUsersPer, hence the MUA must support this
+	StatisticalUnitInformation numberOfAuthenticationsPerUnitInformation = null;
+	StatisticalUnitInformation numberOfUniqueUsersPerUnitInformation = null;
+	StatisticalUnitInformation topFiveResources = null;
+	for (StatisticalUnitInformation unit : statisticalUnits) {
+	    if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
 		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPer"))
-		    unitInformation = unit;
+		    numberOfAuthenticationsPerUnitInformation = unit;
+		if (unit.getStatisticParameters().getUnitName().equals("numberOfUnqiueUsersPer"))
+		    numberOfUniqueUsersPerUnitInformation = unit;
+		if (unit.getStatisticParameters().getUnitName().equals("top5Resources"))
+		    topFiveResources = unit;
 	    }
 	}
-	log.debug("Using statistic {} to find number of authentications per",unitInformation);
-	if (unitInformation!=null){
-	    AggregatorGraphModel numberOfAuthentications = webEngine.invokeStatisticalUnit(unitInformation);
+	log.debug("Using statistic {} to find number of authentications per", numberOfAuthenticationsPerUnitInformation);
+	log.debug("Using statistic {} to find number of unique users per", numberOfUniqueUsersPerUnitInformation);
+	log.debug("Using statistic {} to find number top five resources", topFiveResources);
+
+	if (numberOfAuthenticationsPerUnitInformation != null) {
+	    AggregatorGraphModel numberOfAuthentications = webEngine.invokeStatisticalUnit(numberOfAuthenticationsPerUnitInformation);
 	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfAuthentications);
-	    //should only have one result
-	    if (table.getRows().size()==1){		
-		if (table.getRows().get(0).getValue() instanceof Double){
-		    startmodel.setNumberOfAuthenticationsPer(((Double)table.getRows().get(0).getValue()));
+	    // should only have one result
+	    if (table.getRows().size() == 1) {
+		if (table.getRows().get(0).getValue() instanceof Double) {
+		    startmodel.setNumberOfAuthenticationsPer(((Double) table.getRows().get(0).getValue()));
 		}
-	    }	
-	    
+	    }
 	}
-	
+
+	if (numberOfUniqueUsersPerUnitInformation != null) {
+	    AggregatorGraphModel numberOfUniqueUsers = webEngine.invokeStatisticalUnit(numberOfUniqueUsersPerUnitInformation);
+	    if (numberOfUniqueUsers != null) {
+		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfUniqueUsers);
+		// each result shows one distinct value, so number of results show number of distinct values
+		log.debug("Number of rows: {}",table.getRows().size());
+		if (table.getRows() != null) {
+		    startmodel.setNumberOfUniqueAuthenticationsPer(table.getRows().size());
+		}
+	    }
+
+	}
+
+	if (topFiveResources != null) {
+	    AggregatorGraphModel topFiveResourcesModel = webEngine.invokeStatisticalUnit(topFiveResources);
+	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
+	    startmodel.setTopFiveResouces(table);
+	}
+
     }
 
-    private List getStatisticalUnits(){
+    private List getStatisticalUnits() {
 	return webEngine.getStatisticalUnits();
     }
 
