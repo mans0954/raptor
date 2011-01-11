@@ -31,5 +31,5 @@ import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
  */
 public interface StatisticsPostProcessor {
 
-	public void postProcess(Observation[] observations) throws PostprocessorException;
+	public Observation[] postProcess(Observation[] observations) throws PostprocessorException;
 }

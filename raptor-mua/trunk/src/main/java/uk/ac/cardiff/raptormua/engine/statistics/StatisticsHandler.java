@@ -112,7 +112,6 @@ public class StatisticsHandler {
 	    Method statisticalMethod = id.getMethod(fieldname, paramC);
 	    // log.debug("Trying to Set :"+setter);
 	    Boolean success = (Boolean) statisticalMethod.invoke(object, params);
-	    // AggregatorGraphModel gmodel = (AggregatorGraphModel) statisticalMethod.invoke(object, params);
 	    return success;
 	} catch (Throwable e) {
 	    log.error("Field name '" + fieldname + "' does not match internal model attribute");

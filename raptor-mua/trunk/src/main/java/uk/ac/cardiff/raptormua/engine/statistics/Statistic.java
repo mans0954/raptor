@@ -23,10 +23,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.StatisticParameters;
@@ -44,7 +45,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
  */
 public class Statistic {
 
-    static Logger log = Logger.getLogger(Statistic.class);
+    static Logger log = LoggerFactory.getLogger(Statistic.class);
 
     private EntryHandler entryHandler;
 
@@ -125,9 +126,9 @@ public class Statistic {
     public void postProcess() {
 	try {
 	    if (getPostprocessor() != null) {
-		for (StatisticsPostProcessor post : postprocessor)
-		    post.postProcess(observations);
-
+		for (StatisticsPostProcessor post : postprocessor){
+		    observations = post.postProcess(observations);
+		}
 	    }
 	} catch (PostprocessorException e) {
 	    log.error("Could not post process entries, using " + getPostprocessor().getClass());

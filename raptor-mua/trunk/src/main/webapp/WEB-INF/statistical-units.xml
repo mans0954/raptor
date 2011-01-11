@@ -34,6 +34,8 @@
 				<ref bean="authTimeBucketsPerDay"/>
 				<ref bean="groupByNameFormattedNormalisedPercentage"/>
 				<ref bean="numberOfAuthenticationsPer"/>
+				<ref bean="numberOfUniqueUsersPer"/>
+				<ref bean="top5Resources"/>
 			</list>
 		</property>
 	</bean>
@@ -220,10 +222,18 @@
 		<property name="mapToFieldName"><value>requestHostFriendlyName</value></property>
 	</bean>
 
+	<bean id="sort" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
+		<property name="ascending"><value>false</value></property>
+	</bean>
+
+	<bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.CutRowsPostProcessor">
+		<property name="numberOfRowsToKeep"><value>5</value></property>
+	</bean>
+
 
 	<!--  System level statistics that must be present for RaptorWeb to work -->
 
-		<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
@@ -238,6 +248,49 @@
 						</list>
 					</property>
 			</bean>
+		</property>
+	</bean>
+
+	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="statisticParameters">
+			<bean class="uk.ac.cardiff.model.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
+					<property name="methodName"><value>groupBy</value></property>
+					<property name="seriesLabel"><value>Number of authentications per</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="parameter"><value>principleName</value></property>
+							</bean>
+						</list>
+					</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="statisticParameters">
+			<bean class="uk.ac.cardiff.model.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+					<property name="unitName"><value>top5Resources</value></property>
+					<property name="methodName"><value>groupByFrequency</value></property>
+					<property name="seriesLabel"><value>Top 5 Resources</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="parameter"><value>requestHost</value></property>
+							</bean>
+						</list>
+					</property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sort"/>
+				<ref bean="cut"/>
+			</list>
 		</property>
 	</bean>
 

@@ -33,7 +33,7 @@ import uk.ac.cardiff.raptormua.dao.MUADataConnection;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class PersistantEntryHandler implements EntryHandler {
 
@@ -79,17 +79,18 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#query(java.lang.String)
 	 */
 	@Override
 	public List query(String query) {
+	    	log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQuery(query, null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
@@ -101,7 +102,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
@@ -112,7 +113,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
@@ -129,7 +130,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
 	 */
 	@Override
@@ -141,7 +142,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
 	 */
 	@Override
@@ -151,7 +152,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
 	 */
 	@Override
@@ -172,7 +173,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
 	 */
 	@Override
@@ -183,7 +184,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#getNumberOfEntries()
 	 */
 	@Override
