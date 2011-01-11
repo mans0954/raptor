@@ -36,6 +36,7 @@
 				<ref bean="numberOfAuthenticationsPer"/>
 				<ref bean="numberOfUniqueUsersPer"/>
 				<ref bean="top5Resources"/>
+				<ref bean="bottom5Resources"/>
 			</list>
 		</property>
 	</bean>
@@ -222,8 +223,12 @@
 		<property name="mapToFieldName"><value>requestHostFriendlyName</value></property>
 	</bean>
 
-	<bean id="sort" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
+	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
 		<property name="ascending"><value>false</value></property>
+	</bean>
+	
+	<bean id="sortAsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
+		<property name="ascending"><value>true</value></property>
 	</bean>
 
 	<bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.CutRowsPostProcessor">
@@ -288,7 +293,32 @@
 		</property>
 		<property name="postprocessor">
 			<list>
-				<ref bean="sort"/>
+				<ref bean="sortDsc"/>
+				<ref bean="cut"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="statisticParameters">
+			<bean class="uk.ac.cardiff.model.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+					<property name="unitName"><value>bottom5Resources</value></property>
+					<property name="methodName"><value>groupByFrequency</value></property>
+					<property name="seriesLabel"><value>Bottom 5 Resources</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="parameter"><value>requestHost</value></property>
+							</bean>
+						</list>
+					</property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sortAsc"/>
 				<ref bean="cut"/>
 			</list>
 		</property>
