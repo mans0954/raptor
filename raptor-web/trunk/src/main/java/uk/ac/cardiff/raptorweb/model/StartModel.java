@@ -23,6 +23,8 @@ public class StartModel implements Serializable{
 	static Logger log = LoggerFactory.getLogger(StartModel.class);
 
 	private double numberOfAuthenticationsPer;
+	private double numberOfUniqueAuthenticationsPer;
+	private RaptorTableChartModel topFiveResouces;
 
 	public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
 	    this.numberOfAuthenticationsPer = numberOfAuthenticationsPer;
@@ -31,12 +33,11 @@ public class StartModel implements Serializable{
 	public double getNumberOfAuthenticationsPer() {
 	    return numberOfAuthenticationsPer;
 	}
-	
+
 	public String getNumberOfAuthenticationsPerFormatted(){
-	    log.debug("Getting authentications");
 	    return formatDoubleWithCommas(numberOfAuthenticationsPer);
 	}
-	
+
 	private String formatDoubleWithCommas(double number){
 	    DecimalFormat df = new DecimalFormat();
 	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
@@ -44,6 +45,26 @@ public class StartModel implements Serializable{
 	    df.setDecimalFormatSymbols(dfs);
 	    String formattedNumber = df.format((int)number);
 	    return formattedNumber;
+	}
+
+	public void setNumberOfUniqueAuthenticationsPer(double numberOfUniqueAuthenticationsPer) {
+	    this.numberOfUniqueAuthenticationsPer = numberOfUniqueAuthenticationsPer;
+	}
+
+	public double getNumberOfUniqueAuthenticationsPer() {
+	    return numberOfUniqueAuthenticationsPer;
+	}
+
+	public String getNumberOfUniqueAuthenticationsPerFormatted() {
+	    return formatDoubleWithCommas(numberOfUniqueAuthenticationsPer);
+	}
+
+	public void setTopFiveResouces(RaptorTableChartModel topFiveResouces) {
+	    this.topFiveResouces = topFiveResouces;
+	}
+
+	public RaptorTableChartModel getTopFiveResouces() {
+	    return topFiveResouces;
 	}
 
 
