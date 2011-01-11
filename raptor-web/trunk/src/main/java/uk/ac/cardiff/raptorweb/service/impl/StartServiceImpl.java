@@ -40,6 +40,7 @@ public class StartServiceImpl implements StartService {
 	StatisticalUnitInformation numberOfAuthenticationsPerUnitInformation = null;
 	StatisticalUnitInformation numberOfUniqueUsersPerUnitInformation = null;
 	StatisticalUnitInformation topFiveResources = null;
+	StatisticalUnitInformation bottomFiveResources = null;
 	for (StatisticalUnitInformation unit : statisticalUnits) {
 	    if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
 		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPer"))
@@ -48,11 +49,14 @@ public class StartServiceImpl implements StartService {
 		    numberOfUniqueUsersPerUnitInformation = unit;
 		if (unit.getStatisticParameters().getUnitName().equals("top5Resources"))
 		    topFiveResources = unit;
+		if (unit.getStatisticParameters().getUnitName().equals("bottom5Resources"))
+		    bottomFiveResources = unit;
 	    }
 	}
 	log.debug("Using statistic {} to find number of authentications per", numberOfAuthenticationsPerUnitInformation);
 	log.debug("Using statistic {} to find number of unique users per", numberOfUniqueUsersPerUnitInformation);
 	log.debug("Using statistic {} to find number top five resources", topFiveResources);
+	log.debug("Using statistic {} to find number bottom five resources", topFiveResources);
 
 	if (numberOfAuthenticationsPerUnitInformation != null) {
 	    AggregatorGraphModel numberOfAuthentications = webEngine.invokeStatisticalUnit(numberOfAuthenticationsPerUnitInformation);
@@ -82,6 +86,12 @@ public class StartServiceImpl implements StartService {
 	    AggregatorGraphModel topFiveResourcesModel = webEngine.invokeStatisticalUnit(topFiveResources);
 	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
 	    startmodel.setTopFiveResouces(table);
+	}
+	
+	if (bottomFiveResources != null) {
+	    AggregatorGraphModel bottomFiveResourcesModel = webEngine.invokeStatisticalUnit(bottomFiveResources);
+	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(bottomFiveResourcesModel);
+	    startmodel.setBottomFiveResouces(table);
 	}
 
     }

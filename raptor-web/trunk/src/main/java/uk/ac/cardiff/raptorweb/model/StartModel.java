@@ -25,6 +25,7 @@ public class StartModel implements Serializable{
 	private double numberOfAuthenticationsPer;
 	private double numberOfUniqueAuthenticationsPer;
 	private RaptorTableChartModel topFiveResouces;
+	private RaptorTableChartModel bottomFiveResouces;
 
 	public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
 	    this.numberOfAuthenticationsPer = numberOfAuthenticationsPer;
@@ -65,6 +66,14 @@ public class StartModel implements Serializable{
 
 	public RaptorTableChartModel getTopFiveResouces() {
 	    return topFiveResouces;
+	}
+
+	public void setBottomFiveResouces(RaptorTableChartModel bottomFiveResouces) {
+	    this.bottomFiveResouces = bottomFiveResouces;
+	}
+
+	public RaptorTableChartModel getBottomFiveResouces() {
+	    return bottomFiveResouces;
 	}
 
 
