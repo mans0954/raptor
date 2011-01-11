@@ -38,7 +38,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- * 
+ *
  * TODO need to include where filter parameters for most these methods
  *
  */
@@ -239,6 +239,7 @@ public class AuthenticationStatistic extends Statistic {
 	DateTime start = startingTime();
 	DateTime end = endingTime();
 	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+	log.debug("Select {}, tableName {}",groupByField,tableName);
 	List results = getEntryHandler().query("select "+groupByField+",count(*) from "+tableName+" group by ("+groupByField+")");
 
 	ArrayList<Group> groups = new ArrayList();
@@ -259,6 +260,50 @@ public class AuthenticationStatistic extends Statistic {
 	// add the series label or if none specified, add a default
 	if (statisticParameters.getSeriesLabel() == null)
 	    statisticParameters.setSeriesLabel("Number of Events Grouped By " + groupByField);
+
+	observations = groups.toArray(new Group[0]);
+
+	if (observations.length == 0)
+	    return false;
+	// finished successfully, no exception thrown
+	return true;
+
+    }
+
+    /**
+     * Perform the groupByField statistic. This statistic returns a list of distinct values of the given <code>groupByField</code> field. In
+     * contrast to the <code>groupByFrequency</code> method, it does not count the occurrence that each distinct value occurs.
+     *  It is the responsibility of this method to throw a <code>StatisticalUnitException</code> if the code logic fails, or return false if the
+     * statistic functioned correctly, but there are no valid observations, or true if the statistic succeeds and there are valid observations.
+     *
+     * @param groupByField
+     * @return
+     * @throws StatisticalUnitException
+     */
+    public Boolean groupBy(String groupByField) throws StatisticalUnitException {
+	log.debug("Performing groupByFrequency Statistical Operation");
+	log.debug("Params for method:  {},{}", statisticParameters.getMethodName(), statisticParameters.getUnitName());
+	log.debug("Grouping field: {}", groupByField);
+
+	DateTime start = startingTime();
+	DateTime end = endingTime();
+	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+	log.debug("Select {}, tableName {}",groupByField,tableName);
+	List results = getEntryHandler().query("select "+groupByField+" from "+tableName+" group by ("+groupByField+")");
+
+	ArrayList<Group> groups = new ArrayList();
+	for (Object result : results) {
+	    	Object resultAsArray = (Object)result;
+		Group group = new Group();
+		group.setValue(0);
+		group.setGroupName((String) resultAsArray);
+		groups.add(group);
+
+	}
+
+	// add the series label or if none specified, add a default
+	if (statisticParameters.getSeriesLabel() == null)
+	    statisticParameters.setSeriesLabel("Distinct Values " + groupByField);
 
 	observations = groups.toArray(new Group[0]);
 
