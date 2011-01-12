@@ -108,4 +108,9 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 
 	}
 
+	@Override
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+		return processService.updateAndInvokeStatisticalUnit(statisticalUnitInformation);
+	}
+
 }

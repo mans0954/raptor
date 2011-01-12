@@ -38,6 +38,8 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
  *
  */
 public class MUAProcessImpl implements MUAProcess {
+	
+	/* class logger */
     static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
     private MUAEngine engine;
@@ -176,5 +178,24 @@ public class MUAProcessImpl implements MUAProcess {
 	}
 
     }
+
+	@Override
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+		if (lockR.tryLock()) {
+		    try {
+		    	log.info("Webservice call to update and perform statistic {}",statisticalUnitInformation.getStatisticParameters().getUnitName());
+		    	engine.updateStatisticalUnit(statisticalUnitInformation);
+				return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
+		    } catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+		    } finally {
+		    	lockR.unlock();
+		    }
+		}
+		return null;
+		
+	}
 
 }
