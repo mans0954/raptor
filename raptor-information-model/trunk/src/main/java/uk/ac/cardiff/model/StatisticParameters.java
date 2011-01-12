@@ -41,6 +41,8 @@ public class StatisticParameters implements Serializable{
 
     /* The textual description of the series, as attached to the x-axis */
     private String seriesLabel;
+    /* A formatted textual description of the series, typically formatted by the logic of the authentication statistic*/
+    private String SeriesLabelFormatted;
 
     /*
      * the start time from which to produce the starts, defining the temporal extent If a starttime and endtime is not given, the entire temporal extent of the
@@ -288,7 +290,7 @@ public class StatisticParameters implements Serializable{
     }
 
     public void setStatisticType(String type) {
-	type = type.toUpperCase(); 
+	type = type.toUpperCase();
 	for (StatisticType thisType : StatisticType.values()){
 	    if (thisType.toString().equals(type)){
 		this.type=thisType;
@@ -306,6 +308,15 @@ public class StatisticParameters implements Serializable{
     public StatisticType getType() {
 	return type;
     }
+
+    public void setSeriesLabelFormatted(String seriesLabelFormatted) {
+	SeriesLabelFormatted = seriesLabelFormatted;
+    }
+
+    public String getSeriesLabelFormatted() {
+	return SeriesLabelFormatted;
+    }
+
 
 
 
