@@ -26,6 +26,8 @@ public class StartModel implements Serializable{
 	private double numberOfUniqueAuthenticationsPer;
 	private RaptorTableChartModel topFiveResouces;
 	private RaptorTableChartModel bottomFiveResouces;
+	private RaptorGraphModel headlineGraph;
+	private Capabilities attachedMUACapabilities;
 
 	public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
 	    this.numberOfAuthenticationsPer = numberOfAuthenticationsPer;
@@ -74,6 +76,22 @@ public class StartModel implements Serializable{
 
 	public RaptorTableChartModel getBottomFiveResouces() {
 	    return bottomFiveResouces;
+	}
+
+	public void setHeadlineGraph(RaptorGraphModel headlineGraph) {
+	    this.headlineGraph = headlineGraph;
+	}
+
+	public RaptorGraphModel getHeadlineGraph() {
+	    return headlineGraph;
+	}
+
+	public void setAttachedMUACapabilities(Capabilities attachedMUACapabilities) {
+	    this.attachedMUACapabilities = attachedMUACapabilities;
+	}
+
+	public Capabilities getAttachedMUACapabilities() {
+	    return attachedMUACapabilities;
 	}
 
 

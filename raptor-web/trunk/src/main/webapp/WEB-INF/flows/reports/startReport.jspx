@@ -10,12 +10,17 @@
 
 		<ui:define name="content">
 			<tr:spacer height="10px" />
-			<tr:panelBorderLayout >
+			<tr:panelBorderLayout>
 				<f:facet name="top">
-					<tr:panelGroupLayout layout="horizontal" >
+					<tr:panelGroupLayout layout="horizontal">
+						<tr:spacer width="20px" />
+						<tr:outputText inlineStyle="font-size:150%"
+						value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, Show statistics for: "/>
+						<tr:spacer width="5px" />
+
 						<tr:selectOneChoice id="quickStatsRangeSelector" value="today"
 							autoSubmit="true" partialSubmit="true"
-							shortDesc="quickStatsRangeSelector" >
+							shortDesc="quickStatsRangeSelector">
 							<f:selectItem itemLabel="Today" itemValue="today" />
 							<f:selectItem itemLabel="Last Week" itemValue="lastWeek" />
 							<f:selectItem itemLabel="Last Month" itemValue="lastMonth" />
@@ -25,41 +30,59 @@
 
 				</f:facet>
 				<f:facet name="left">
-					<tr:form>
-					<h:panelGrid width="100%"
-						style="height: 100%; text-align: center;">
-						<!-- poll component, which triggers the stats updates -->
-						<!--<tr:poll pollInterval="100000" id="statsupdate" action="refreshStartStats"/>-->
-						<tr:spacer height="20px" />
-						 <tr:panelBox text="At a Glance" >
-							<tr:panelFormLayout>
-								<tr:outputText value="Number of Authentications" inlineStyle="font-size:120%;font-weight: bold"/>
-								<tr:spacer height="7px"/>
-								<tr:outputText value="#{startmodel.numberOfAuthenticationsPerFormatted}"
-									 partialTriggers=":statsupdate" inlineStyle="font-size:270%;font-weight: bold" />
-								<tr:spacer height="20px" />
-								<tr:outputText value="Number of Unique Users" inlineStyle="font-size:120%;font-weight: bold"/>
-								<tr:spacer height="7px"/>
-								<tr:outputText value="#{startmodel.numberOfUniqueAuthenticationsPerFormatted}" inlineStyle="font-size:270%;font-weight: bold"/>
 
-							</tr:panelFormLayout>
-							<tr:outputText
-								value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-								inlineStyle="opacity:0.0;color:#EEE9E8;" />
-						</tr:panelBox>
-					</h:panelGrid>
-					</tr:form>
 				</f:facet>
+
 				<f:facet name="right">
-					<h:panelGrid width="100%"
-						style="height: 100%; ">
-						<tr:panelBox text="Resource Popularity">
+
+				</f:facet>
+
+				<f:facet name="bottom">
+					<h:panelGrid width="100%" style="height: 100%; text-align: center;">
+						<tr:spacer height="20px" />
+						<tr:panelHeader text="Number of authentications"/>
+						<tr:spacer height="15px" />
+						<tr:chart id="chart" verticalMajorSections="15"
+							value="#{startmodel.headlineGraph}"
+							rendered="#{not empty startmodel.headlineGraph}"
+							inlineStyle="width:100%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
+							type="stackedArea" partialTriggers="" width="100%" animationDuration="0"
+							perspective="#{graphmodel.chartOptions.perspective}"
+							maxPrecision="2" />
+					</h:panelGrid>
+				</f:facet>
+
+				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
+						<tr:spacer height="10px" />
+						<tr:panelHeader text="At a glance"/>
+						<tr:spacer height="15px" />
+						<tr:panelGroupLayout layout="horizontal"  width="100%">
+							<tr:spacer width="60px" />
+
 							<tr:panelFormLayout>
-								<tr:table value="#{startmodel.topFiveResouces.rows}"
+								<tr:outputText value="Number of Authentications"
+									inlineStyle="font-size:120%;font-weight: bold" />
+								<tr:spacer height="7px" />
+								<tr:outputText
+									value="#{startmodel.numberOfAuthenticationsPerFormatted}"
+									partialTriggers=":statsupdate"
+									inlineStyle="font-size:270%;font-weight: bold" />
+								<tr:spacer height="20px" />
+								<tr:outputText value="Number of Unique Users"
+									inlineStyle="font-size:120%;font-weight: bold" />
+								<tr:spacer height="7px" />
+								<tr:outputText
+									value="#{startmodel.numberOfUniqueAuthenticationsPerFormatted}"
+									inlineStyle="font-size:270%;font-weight: bold" />
+							</tr:panelFormLayout>
+
+							<tr:spacer width="30px" />
+
+							<tr:table value="#{startmodel.topFiveResouces.rows}"
 								bandingInterval="2" banding="row" var="row" width="100%"
 								rendered="#{not empty startmodel.topFiveResouces}">
 								<f:facet name="header">
-										<tr:outputText value="Top 5 Resources" />
+									<tr:outputText value="Top 5 eResources" />
 								</f:facet>
 								<tr:column>
 									<f:facet name="header">
@@ -74,13 +97,15 @@
 									</f:facet>
 									<tr:outputText value="#{row.value}" />
 								</tr:column>
-
 							</tr:table>
+
+							<tr:spacer width="15px" />
+
 							<tr:table value="#{startmodel.bottomFiveResouces.rows}"
 								bandingInterval="2" banding="row" var="row" width="100%"
 								rendered="#{not empty startmodel.bottomFiveResouces}">
 								<f:facet name="header">
-										<tr:outputText value="Bottom 5 eResources" />
+									<tr:outputText value="Bottom 5 eResources" />
 								</f:facet>
 								<tr:column>
 									<f:facet name="header">
@@ -97,16 +122,11 @@
 								</tr:column>
 
 							</tr:table>
-							</tr:panelFormLayout>
-							<tr:outputText
-								value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+						</tr:panelGroupLayout>
+						<!--<tr:outputText
+								value="aaaaaaaaaaaaaaaaaaaaaaaaa"
 								inlineStyle="opacity:0.0;color:#EEE9E8;" />
-						</tr:panelBox>
-					</h:panelGrid>
-				</f:facet>
-
-
-				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
+						-->
 
 				</h:panelGrid>
 			</tr:panelBorderLayout>
