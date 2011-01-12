@@ -37,6 +37,7 @@
 				<ref bean="numberOfUniqueUsersPer"/>
 				<ref bean="top5Resources"/>
 				<ref bean="bottom5Resources"/>
+				<ref bean="numberOfAuthenticationsPerIntervalNumber"/>
 			</list>
 		</property>
 	</bean>
@@ -226,7 +227,7 @@
 	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
 		<property name="ascending"><value>false</value></property>
 	</bean>
-	
+
 	<bean id="sortAsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
 		<property name="ascending"><value>true</value></property>
 	</bean>
@@ -244,7 +245,7 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
 					<property name="methodName"><value>countEntry</value></property>
-					<property name="seriesLabel"><value>Number of authentications per</value></property>
+					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -262,11 +263,29 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
 					<property name="methodName"><value>groupBy</value></property>
-					<property name="seriesLabel"><value>Number of authentications per</value></property>
+					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
 								<property name="parameter"><value>principleName</value></property>
+							</bean>
+						</list>
+					</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="statisticParameters">
+			<bean class="uk.ac.cardiff.model.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
+					<property name="methodName"><value>countEntry</value></property>
+					<property name="seriesLabel"><value>Number of authentications</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="parameter"><value>40</value></property>
 							</bean>
 						</list>
 					</property>
@@ -298,7 +317,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">

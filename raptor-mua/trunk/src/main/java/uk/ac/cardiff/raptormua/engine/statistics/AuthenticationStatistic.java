@@ -131,6 +131,12 @@ public class AuthenticationStatistic extends Statistic {
 	if (this.getEntryHandler().getNumberOfEntries() != testCount)
 	    log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
+	if (statisticParameters.getSeriesLabel() == null)
+	    statisticParameters.setSeriesLabelFormatted("Number of Events per " + timeInterval+" minutes");
+	else{
+	    statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel()+" (every "+timeInterval+" minutes)");
+	}
+
 	observations = buckets;
 
 	// finished successfully, no exception thrown
@@ -210,10 +216,17 @@ public class AuthenticationStatistic extends Statistic {
 	 */
 	log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
 
+	double timeIntervalInHours = ((((timeIntervalsInMs/1000)/60)/60));
+	double timeIntervalInDays = ((((timeIntervalsInMs/1000)/60)/60)/24);
+
 	if (this.getEntryHandler().getNumberOfEntries() != testCount)
 	    log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-	statisticParameters.setSeriesLabel("Number of Events per " + timeIntervalsInMs + "ms");
+	if (statisticParameters.getSeriesLabel() == null)
+	    statisticParameters.setSeriesLabelFormatted("Number of Events per " + timeIntervalInDays+" days");
+	else{
+	    statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel()+" (every "+timeIntervalInDays+" days)");
+	}
 
 	observations = buckets;
 
@@ -259,7 +272,10 @@ public class AuthenticationStatistic extends Statistic {
 
 	// add the series label or if none specified, add a default
 	if (statisticParameters.getSeriesLabel() == null)
-	    statisticParameters.setSeriesLabel("Number of Events Grouped By " + groupByField);
+	    statisticParameters.setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
+	else{
+	    statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel());
+	}
 
 	observations = groups.toArray(new Group[0]);
 

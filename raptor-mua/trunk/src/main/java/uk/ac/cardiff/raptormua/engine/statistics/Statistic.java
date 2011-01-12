@@ -91,7 +91,7 @@ public class Statistic {
 	    log.info("Constructing graph model for Group type");
 	    Group[] groups = (Group[]) observations;
 
-	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
+	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabelFormatted());
 	    for (Group group : groups) {
 		gmodel.addGroupLabel(group.getGroupName());
 		List<Double> values = new ArrayList();
@@ -103,7 +103,7 @@ public class Statistic {
 	    log.info("Constructing graph model for Bucket type");
 	    Bucket[] buckets = (Bucket[]) observations;
 
-	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabel());
+	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabelFormatted());
 	    DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 	    DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
 	    for (Bucket bucket : buckets) {
