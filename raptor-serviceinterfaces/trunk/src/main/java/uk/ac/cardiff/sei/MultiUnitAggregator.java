@@ -31,6 +31,16 @@ public interface MultiUnitAggregator {
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
 
 	public AggregatorGraphModel invokeStatisticalUnit(String statisticName);
+	
+	/**
+	 * A single shot interface that both updates and then performs a statistic (returning the result)
+	 * in one go. This is useful if you want to perform both operations while there is a lock on the class
+	 * so as other operations do not take place between update and invoke.
+	 * 
+	 * @param statisticalUnitInformation
+	 * @return
+	 */
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
 
 	//public void setParametersForStatisticalUnit(String dummy);
 
@@ -38,6 +48,6 @@ public interface MultiUnitAggregator {
 
 	public boolean performAdministrativeFunction(AdministrativeFunction function);
 
-	void addAuthentications(UAEntryPush pushed);
+	public void addAuthentications(UAEntryPush pushed);
 
 }
