@@ -31,7 +31,9 @@ import uk.ac.cardiff.model.wsmodel.UAEntryPush;
  */
 public interface MUAProcess {
 
-
+	/**
+	 * 
+	 */
 	public void poll();
 
 	/**
@@ -58,4 +60,11 @@ public interface MUAProcess {
 	 * @param pushed
 	 */
 	public void addAuthentications(UAEntryPush pushed);
+
+	/**
+	 * 
+	 * @param statisticalUnitInformation
+	 * @return
+	 */
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
 }

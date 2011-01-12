@@ -253,7 +253,7 @@ public class AuthenticationStatistic extends Statistic {
 	DateTime end = endingTime();
 	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
 	log.debug("Select {}, tableName {}",groupByField,tableName);
-	List results = getEntryHandler().query("select "+groupByField+",count(*) from "+tableName+" group by ("+groupByField+")");
+	List results = getEntryHandler().query("select "+groupByField+",count(*) from "+tableName+" where (eventTime between '" + start + "' and '" + end + "') group by ("+groupByField+")");
 
 	ArrayList<Group> groups = new ArrayList();
 	int testCount =0;
@@ -305,7 +305,7 @@ public class AuthenticationStatistic extends Statistic {
 	DateTime end = endingTime();
 	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
 	log.debug("Select {}, tableName {}",groupByField,tableName);
-	List results = getEntryHandler().query("select "+groupByField+" from "+tableName+" group by ("+groupByField+")");
+	List results = getEntryHandler().query("select "+groupByField+" from "+tableName+" where (eventTime between '" + start + "' and '" + end + "') group by ("+groupByField+")");
 
 	ArrayList<Group> groups = new ArrayList();
 	for (Object result : results) {
