@@ -154,4 +154,22 @@ public class ServiceEndpointInterface {
 
     }
 
+    public static AggregatorGraphModel updateAndinvokeStatisticalUnit(String serviceEndpoint, StatisticalUnitInformation statisticalUnit) {
+	try {
+	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+	    factory.setServiceClass(MultiUnitAggregator.class);
+	    AegisDatabinding databinding = new AegisDatabinding();
+	    factory.setAddress(serviceEndpoint);
+	    factory.getServiceFactory().setDataBinding(databinding);
+	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	    log.debug("Accessing the MUA version " + client.getVersion());
+	    AggregatorGraphModel gmodel = client.updateAndInvokeStatisticalUnit(statisticalUnit);
+	    log.debug("Retrieved Graph Model from the MUA [" + serviceEndpoint + "]");
+	    return gmodel;
+	} catch (Exception e) {
+	    log.error("Problem trying to update and invoke statistical unit {} on MUA with error {}",statisticalUnit.getStatisticParameters().getUnitName(), e.getMessage());
+	}
+	return null;
+    }
+
 }

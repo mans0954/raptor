@@ -129,6 +129,12 @@ public class RaptorWebEngine {
 	return gmodel;
 
     }
+    
+    public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
+	AggregatorGraphModel gmodel = ServiceEndpointInterface.updateAndinvokeStatisticalUnit(getCurrentlyAttached().getServiceEndpoint(), selectedStatisticalUnit);
+	return gmodel;
+
+    }
 
     /**
      * @param currentTableGraph

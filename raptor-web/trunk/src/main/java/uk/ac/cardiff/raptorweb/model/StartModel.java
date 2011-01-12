@@ -28,6 +28,14 @@ public class StartModel implements Serializable{
 	private RaptorTableChartModel bottomFiveResouces;
 	private RaptorGraphModel headlineGraph;
 	private Capabilities attachedMUACapabilities;
+	private TimeRange statsRangeSelector;	
+	
+	/* only updated on the UI, hence sensible default*/
+	public enum TimeRange{TODAY,LASTWEEK,LASTMONTH,LASTYEAR}
+	
+	public StartModel(){
+	    statsRangeSelector = TimeRange.LASTYEAR;
+	}
 
 	public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
 	    this.numberOfAuthenticationsPer = numberOfAuthenticationsPer;
@@ -83,6 +91,7 @@ public class StartModel implements Serializable{
 	}
 
 	public RaptorGraphModel getHeadlineGraph() {
+	    log.debug("getting headline graph");
 	    return headlineGraph;
 	}
 
@@ -92,6 +101,15 @@ public class StartModel implements Serializable{
 
 	public Capabilities getAttachedMUACapabilities() {
 	    return attachedMUACapabilities;
+	}
+
+	
+	public void setStatsRangeSelector(TimeRange timeRange){
+	    this.statsRangeSelector = timeRange;
+	}
+
+	public TimeRange getStatsRangeSelector() {
+	    return statsRangeSelector;
 	}
 
 
