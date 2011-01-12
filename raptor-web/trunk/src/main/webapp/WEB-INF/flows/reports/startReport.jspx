@@ -7,24 +7,24 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad">
 
 	<ui:composition template="/templates/raptor/full.xhtml">
-
 		<ui:define name="content">
+		<tr:form>
 			<tr:spacer height="10px" />
 			<tr:panelBorderLayout>
 				<f:facet name="top">
 					<tr:panelGroupLayout layout="horizontal">
 						<tr:spacer width="20px" />
 						<tr:outputText inlineStyle="font-size:150%"
-						value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, Show statistics for: "/>
+						value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: "/>
 						<tr:spacer width="5px" />
 
-						<tr:selectOneChoice id="quickStatsRangeSelector" value="today"
+						<tr:selectOneChoice id="quickStatsRangeSelector" value="#{startmodel.statsRangeSelector}"
 							autoSubmit="true" partialSubmit="true"
 							shortDesc="quickStatsRangeSelector">
-							<f:selectItem itemLabel="Today" itemValue="today" />
-							<f:selectItem itemLabel="Last Week" itemValue="lastWeek" />
-							<f:selectItem itemLabel="Last Month" itemValue="lastMonth" />
-							<f:selectItem itemLabel="Last Year" itemValue="lastYear" />
+							<f:selectItem itemLabel="Today" itemValue="TODAY" />
+							<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
+							<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
+							<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
 						</tr:selectOneChoice>
 					</tr:panelGroupLayout>
 
@@ -46,7 +46,7 @@
 							value="#{startmodel.headlineGraph}"
 							rendered="#{not empty startmodel.headlineGraph}"
 							inlineStyle="width:100%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
-							type="stackedArea" partialTriggers="" width="100%" animationDuration="0"
+							type="stackedArea" partialTriggers=":quickStatsRangeSelector" width="100%" animationDuration="0"
 							perspective="#{graphmodel.chartOptions.perspective}"
 							maxPrecision="2" />
 					</h:panelGrid>
@@ -65,7 +65,7 @@
 								<tr:spacer height="7px" />
 								<tr:outputText
 									value="#{startmodel.numberOfAuthenticationsPerFormatted}"
-									partialTriggers=":statsupdate"
+									partialTriggers=":quickStatsRangeSelector"
 									inlineStyle="font-size:270%;font-weight: bold" />
 								<tr:spacer height="20px" />
 								<tr:outputText value="Number of Unique Users"
@@ -129,11 +129,12 @@
 						-->
 
 				</h:panelGrid>
+				
 			</tr:panelBorderLayout>
 
 
 
-
+ 			</tr:form>
 		</ui:define>
 	</ui:composition>
 </jsp:root>
