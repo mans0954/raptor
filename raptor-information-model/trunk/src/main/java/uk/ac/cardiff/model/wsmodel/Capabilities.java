@@ -4,9 +4,11 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.cardiff.model.MUAMetadata;
+import uk.ac.cardiff.model.StatisticParameters.StatisticType;
 
 /**
  * @author philsmart
@@ -24,9 +26,14 @@ public class Capabilities implements Serializable{
 	public void setStatisticalServices(List<StatisticalUnitInformation> statisticalServices) {
 		this.statisticalServices = statisticalServices;
 	}
+	/**
+	 * Returns all configured statistical units
+	 * @return
+	 */
 	public List<StatisticalUnitInformation> getStatisticalServices() {
 		return statisticalServices;
 	}
+	
 	public void setAttached(List<String> attached) {
 		this.attached = attached;
 	}
