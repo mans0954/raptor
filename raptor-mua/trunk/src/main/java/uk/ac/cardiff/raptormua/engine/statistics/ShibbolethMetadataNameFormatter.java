@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.saml2.metadata.OrganizationName;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
@@ -31,10 +30,15 @@ import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool; //import org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
+import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
@@ -43,7 +47,7 @@ import uk.ac.cardiff.raptormua.model.EntryHandler;
  * @author philsmart
  *
  */
-public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor {
+public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor {
 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
@@ -52,10 +56,8 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor {
     private FilesystemMetadataProvider provider;
 
     /* class logger */
-    static Logger log = Logger.getLogger(ShibbolethMetadataNameFormatter.class);
+    static Logger log = LoggerFactory.getLogger(ShibbolethMetadataNameFormatter.class);
 
-    private String mapFieldName;
-    private String mapToFieldName;
     /** this is not a proper URI at the moment, just a UNC path */
     private String SAMLMetadataURI;
 
@@ -71,41 +73,30 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor {
 	    // e.printStackTrace();
 	}
     }
+    
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPreProcessing#preProcess(java.util.List)
-     */
-    @Override
-    public void preProcess(EntryHandler entryHandler) throws PreprocessorException {
-	log.debug("Entries into preprocessor: " + entryHandler.getNumberOfEntries());
-//	for (Entry entry : entries) {
-//	    if (entry instanceof ShibbolethEntry) {
-//		ShibbolethEntry shibEntry = (ShibbolethEntry) entry;
-//		Object result = ReflectionHelper.getValueFromObject(getMapFieldName(), shibEntry);
-//		if (result instanceof String) {
-//		    String resultAsString = (String) result;
-//		    String mapTo = resultAsString;
-//		    try {
-//			mapTo = getOrganisationName(resultAsString);
-//		    } catch (Exception e) {
-//			// if the mapping fails, keep the original, so leave as original non mapped resultAsString
-//			// log.error("Failed to map "+resultAsString);
-//		    }
-//		    ReflectionHelper.setValueOnObject(getMapToFieldName(), mapTo, shibEntry);
-//		    processedList.add(shibEntry);
-//		} else {
-//		    throw new PreprocessorException("Not a valid field for preprocessing, " + getMapFieldName());
-//		}
-//	    } else {
-//		// just add it to the return list
-//		processedList.add(entry);
-//	    }
-
-//	}
-
-    }
+	@Override
+	public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
+		log.debug("Entries into postprocessor: {}",observations.length);
+		for (Observation obs : observations) {
+		    if (obs instanceof Group) {
+		    	Group obsG = (Group)obs;
+		    	String oldName = obsG.getGroupName();
+		    	String mapTo = null;
+			    try {
+			    	mapTo = getOrganisationName(oldName);
+			    } catch (Exception e) {
+				// if the mapping fails, keep the original, so leave as original non mapped resultAsString
+				// log.error("Failed to map "+resultAsString);
+			    }
+			    if (mapTo!=null)
+			    	obsG.setGroupName(mapTo);
+			    
+		    }
+		
+		}
+		return observations;
+	}
 
     /**
      * This method returns the organizational name of the entityID passed into it from the SAML metadata This will fail if the organizational name is not the
@@ -134,29 +125,6 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor {
 	log.debug("Loaded SAML metatada " + provider + " into " + this.getClass());
     }
 
-    /**
-     *
-     * @param changeFieldName
-     */
-    public void setMapFieldName(String changeFieldName) {
-	this.mapFieldName = changeFieldName;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getMapFieldName() {
-	return mapFieldName;
-    }
-
-    public void setMapToFieldName(String mapToFieldName) {
-	this.mapToFieldName = mapToFieldName;
-    }
-
-    public String getMapToFieldName() {
-	return mapToFieldName;
-    }
 
     public void setSAMLMetadataURI(String sAMLMetadataURI) {
 	SAMLMetadataURI = sAMLMetadataURI;
@@ -165,5 +133,6 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPreProcessor {
     public String getSAMLMetadataURI() {
 	return SAMLMetadataURI;
     }
+
 
 }

@@ -258,7 +258,7 @@ public class AuthenticationStatistic extends Statistic {
 	ArrayList<Group> groups = new ArrayList();
 	int testCount =0;
 	for (Object result : results) {
-	    	Object[] resultAsArray = (Object[])result;
+	    Object[] resultAsArray = (Object[])result;
 		Group group = new Group();
 		group.setValue((Integer)resultAsArray[1]);
 		group.setGroupName((String) resultAsArray[0]);
