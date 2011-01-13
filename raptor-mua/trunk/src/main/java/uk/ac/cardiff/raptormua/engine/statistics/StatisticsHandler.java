@@ -55,7 +55,7 @@ public class StatisticsHandler {
     public AggregatorGraphModel peformStatistic(String statisticName) {
 	for (Statistic statistic : statisticalUnits) {
 	    if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
-		return performStatiticalPipeline(statistic);
+		return performStatiticalPipeline(statistic); 
 	    }
 	}
 	return null;

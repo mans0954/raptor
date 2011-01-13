@@ -180,13 +180,17 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHostFriendlyName</value></property>
+								<property name="parameter"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
 			</bean>
 		</property>
-		<property name="preprocessor"><ref bean="ShibbolethMetadataNameFormatter"></ref></property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="ShibbolethMetadataNameFormatter"></ref>
+			</list>
+		</property>
 	</bean>
 
 	<bean id="groupByNameFormattedNormalisedPercentage" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
@@ -199,14 +203,18 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHostFriendlyName</value></property>
+								<property name="parameter"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
 			</bean>
 		</property>
-		<property name="preprocessor"><ref bean="ShibbolethMetadataNameFormatter"></ref></property>
-		<property name="postprocessor"><ref bean="percentagePost"></ref></property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="ShibbolethMetadataNameFormatter"></ref>
+				<ref bean="percentagePost"></ref>
+			</list>
+		</property>
 	</bean>
 
 
@@ -219,9 +227,7 @@
 	</bean>
 
 	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.ShibbolethMetadataNameFormatter">
-		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
-		<property name="mapFieldName"><value>requestHost</value></property>
-		<property name="mapToFieldName"><value>requestHostFriendlyName</value></property>
+		<constructor-arg index="0"><value>/home/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
 	</bean>
 
 	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
@@ -314,6 +320,7 @@
 			<list>
 				<ref bean="sortDsc"/>
 				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
 			</list>
 		</property>
 	</bean>
@@ -339,6 +346,7 @@
 			<list>
 				<ref bean="sortAsc"/>
 				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
 			</list>
 		</property>
 	</bean>
