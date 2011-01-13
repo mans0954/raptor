@@ -4,6 +4,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:tr="http://myfaces.apache.org/trinidad">
 
 	<ui:composition template="/templates/raptor/full.xhtml">
@@ -39,14 +40,14 @@
 
 				<f:facet name="bottom">
 					<h:panelGrid width="100%" style="height: 100%; text-align: center;">
-						<tr:spacer height="20px" />
-						<tr:panelHeader text="Number of authentications"/>
 						<tr:spacer height="15px" />
+						<tr:panelHeader text="Number of authentications"/>
+						<tr:spacer height="10px" />
 						<tr:chart id="chart" verticalMajorSections="15"
 							value="#{startmodel.headlineGraph}"
 							rendered="#{not empty startmodel.headlineGraph}"
 							inlineStyle="width:100%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
-							type="stackedArea" partialTriggers=":quickStatsRangeSelector" width="100%" animationDuration="0"
+							type="stackedArea" partialTriggers=":quickStatsRangeSelector" width="98%" animationDuration="0"
 							perspective="#{graphmodel.chartOptions.perspective}"
 							maxPrecision="2" />
 					</h:panelGrid>
@@ -55,7 +56,7 @@
 				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
 						<tr:spacer height="10px" />
 						<tr:panelHeader text="At a glance"/>
-						<tr:spacer height="15px" />
+						<tr:spacer height="7px" />
 						<tr:panelGroupLayout layout="horizontal"  width="100%">
 							<tr:spacer width="60px" />
 
@@ -129,7 +130,7 @@
 						-->
 
 				</h:panelGrid>
-				
+
 			</tr:panelBorderLayout>
 
 
