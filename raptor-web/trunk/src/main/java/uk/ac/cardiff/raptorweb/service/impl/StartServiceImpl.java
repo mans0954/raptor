@@ -38,9 +38,15 @@ public class StartServiceImpl implements StartService {
      */
     @Override
     public void generateStatistics(StartModel startmodel) {
+	long currentTimeInMS = System.currentTimeMillis();
 	//decide dates to use
-	DateTime currentDateTime = new DateTime(System.currentTimeMillis());
+	DateTime currentDateTime = new DateTime(currentTimeInMS);
 	//log.debug("Time now: "+currentDateTime);
+	DateTime today = new DateTime(currentTimeInMS);
+	today = today.minusHours(today.getHourOfDay());
+	today = today.minusMinutes(today.getMinuteOfHour());
+	today = today.minusSeconds(today.getSecondOfMinute());
+	//log.debug("Today starts at {} ",today);
 	DateTime oneMonthPrevious = currentDateTime.minusMonths(1);
 	//log.debug("One Month Previos {}",oneMonthPrevious);
 	DateTime oneYearPrevious = currentDateTime.minusYears(1);
@@ -52,7 +58,7 @@ public class StartServiceImpl implements StartService {
 	if (startmodel.getStatsRangeSelector()==StartModel.TimeRange.LASTWEEK)
 	    chosenStartTime = oneWeekPrevious;
 	if (startmodel.getStatsRangeSelector()==StartModel.TimeRange.TODAY)
-	    chosenStartTime = oneMonthPrevious;
+	    chosenStartTime = today;
 	if (startmodel.getStatsRangeSelector()==StartModel.TimeRange.LASTYEAR)
 	    chosenStartTime = oneYearPrevious;
 	
@@ -89,12 +95,17 @@ public class StartServiceImpl implements StartService {
 	    numberOfAuthenticationsPerUnitInformation.getStatisticParameters().setEndTime(currentDateTime);
 	    numberOfAuthenticationsPerUnitInformation.getStatisticParameters().setStartTime(chosenStartTime);
 	    AggregatorGraphModel numberOfAuthentications = webEngine.updateAndInvokeStatisticalUnit(numberOfAuthenticationsPerUnitInformation);
-	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfAuthentications);
-	    // should only have one result
-	    if (table.getRows().size() == 1) {
-		if (table.getRows().get(0).getValue() instanceof Double) {
-		    startmodel.setNumberOfAuthenticationsPer(((Double) table.getRows().get(0).getValue()));
-		}
+	    if (numberOfAuthentications!=null){
+        	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfAuthentications);
+        	    // should only have one result
+        	    if (table.getRows().size() == 1) {
+        		if (table.getRows().get(0).getValue() instanceof Double) {
+        		    startmodel.setNumberOfAuthenticationsPer(((Double) table.getRows().get(0).getValue()));
+        		}
+        	    }
+	    }
+	    else{
+		startmodel.setNumberOfAuthenticationsPer(0);
 	    }
 	}
 
@@ -102,13 +113,18 @@ public class StartServiceImpl implements StartService {
 	    numberOfUniqueUsersPerUnitInformation.getStatisticParameters().setEndTime(currentDateTime);
 	    numberOfUniqueUsersPerUnitInformation.getStatisticParameters().setStartTime(chosenStartTime);
 	    AggregatorGraphModel numberOfUniqueUsers = webEngine.updateAndInvokeStatisticalUnit(numberOfUniqueUsersPerUnitInformation);
-	    if (numberOfUniqueUsers != null) {
-		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfUniqueUsers);
-		// each result shows one distinct value, so number of results show number of distinct values
-		log.debug("Number of rows: {}",table.getRows().size());
-		if (table.getRows() != null) {
-		    startmodel.setNumberOfUniqueAuthenticationsPer(table.getRows().size());
-		}
+	    if (numberOfUniqueUsers!=null){
+        	    if (numberOfUniqueUsers != null) {
+        		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfUniqueUsers);
+        		// each result shows one distinct value, so number of results show number of distinct values
+        		log.debug("Number of rows: {}",table.getRows().size());
+        		if (table.getRows() != null) {
+        		    startmodel.setNumberOfUniqueAuthenticationsPer(table.getRows().size());
+        		}
+        	    }
+	    }
+	    else{
+		startmodel.setNumberOfUniqueAuthenticationsPer(0);
 	    }
 
 	}
@@ -117,30 +133,42 @@ public class StartServiceImpl implements StartService {
 	    topFiveResources.getStatisticParameters().setEndTime(currentDateTime);
 	    topFiveResources.getStatisticParameters().setStartTime(chosenStartTime);	  
 	    AggregatorGraphModel topFiveResourcesModel = webEngine.updateAndInvokeStatisticalUnit(topFiveResources);
-	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
-	    startmodel.setTopFiveResouces(table);
+	    if (topFiveResourcesModel!=null){
+		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
+		startmodel.setTopFiveResouces(table);
+	    }
+	    else
+		startmodel.setTopFiveResouces(null);
 	}
 
 	if (bottomFiveResources != null) {
 	    bottomFiveResources.getStatisticParameters().setEndTime(currentDateTime);
 	    bottomFiveResources.getStatisticParameters().setStartTime(chosenStartTime);
 	    AggregatorGraphModel bottomFiveResourcesModel = webEngine.updateAndInvokeStatisticalUnit(bottomFiveResources);
-	    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(bottomFiveResourcesModel);
-	    startmodel.setBottomFiveResouces(table);
+	    if (bottomFiveResourcesModel!=null){
+		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(bottomFiveResourcesModel);
+		startmodel.setBottomFiveResouces(table);
+	    }
+	    else
+		startmodel.setBottomFiveResouces(null);
+	    
 	}
 
 	if (numberOfAuthenticationsPerIntervalNumber != null) {
 	    numberOfAuthenticationsPerIntervalNumber.getStatisticParameters().setEndTime(currentDateTime);
 	    numberOfAuthenticationsPerIntervalNumber.getStatisticParameters().setStartTime(chosenStartTime);
 	    AggregatorGraphModel numberOfAuthenticationsPerIntervalNumberModel = webEngine.updateAndInvokeStatisticalUnit(numberOfAuthenticationsPerIntervalNumber);
-	    RaptorGraphModel graph = ChartProcessor.constructRaptorGraphModel(numberOfAuthenticationsPerIntervalNumberModel);
-	    //blank some of the labels for display reasons
-	    for (int i =0; i < graph.getGroupLabels().size();i++){
-		if (i%10!=0)
-		    graph.getGroupLabels().set(i,new String(""));
+	    if (numberOfAuthenticationsPerIntervalNumberModel!=null){
+        	    RaptorGraphModel graph = ChartProcessor.constructRaptorGraphModel(numberOfAuthenticationsPerIntervalNumberModel);
+        	    //blank some of the labels for display reasons
+        	    for (int i =0; i < graph.getGroupLabels().size();i++){
+        		if (i%10!=0)
+        		    graph.getGroupLabels().set(i,new String(""));
+        	    }		
+        	    startmodel.setHeadlineGraph(graph);
 	    }
-		
-	    startmodel.setHeadlineGraph(graph);
+	    else
+		startmodel.setHeadlineGraph(null);
 	}
 
 	Capabilities capabilities = getAttachedCapabilities();

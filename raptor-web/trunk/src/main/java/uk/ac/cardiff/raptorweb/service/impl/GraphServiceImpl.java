@@ -3,13 +3,16 @@
  */
 package uk.ac.cardiff.raptorweb.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;
@@ -45,9 +48,17 @@ public class GraphServiceImpl implements GraphService{
 		return webEngine.getCurrentlyAttached();
 	}
 
-	@Override
+	/**
+	 * Only retrieves USER level units from those retrieved by the MUA
+	 */
 	public List getStatisticalUnits(){
-		return webEngine.getStatisticalUnits();
+		List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
+		List<StatisticalUnitInformation> userUnits = new ArrayList<StatisticalUnitInformation>();		
+		for (StatisticalUnitInformation unit : units){
+			if (unit.getStatisticParameters().getType()==StatisticType.USER)
+			    userUnits.add(unit);
+		 }
+		return userUnits;
 	}
 
 	@Override
