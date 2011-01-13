@@ -20,13 +20,14 @@
 						<tr:spacer width="5px" />
 
 						<tr:selectOneChoice id="quickStatsRangeSelector" value="#{startmodel.statsRangeSelector}"
-							autoSubmit="true" partialSubmit="true"
+							autoSubmit="true"
 							shortDesc="quickStatsRangeSelector">
 							<f:selectItem itemLabel="Today" itemValue="TODAY" />
 							<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
 							<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
 							<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
 						</tr:selectOneChoice>
+						<tr:commandButton id="startStatsUpdateButton" text="Update"  action="refreshStartStats" immediate="true" />
 					</tr:panelGroupLayout>
 
 				</f:facet>
@@ -46,9 +47,9 @@
 						<tr:chart id="chart" verticalMajorSections="15"
 							value="#{startmodel.headlineGraph}"
 							rendered="#{not empty startmodel.headlineGraph}"
-							inlineStyle="width:100%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
-							type="stackedArea" partialTriggers=":quickStatsRangeSelector" width="98%" animationDuration="0"
-							perspective="#{graphmodel.chartOptions.perspective}"
+							inlineStyle="width:100%; height:270px; border-style: hidden;"
+							type="stackedArea" width="98%" animationDuration="400"
+							perspective="false"
 							maxPrecision="2" />
 					</h:panelGrid>
 				</f:facet>

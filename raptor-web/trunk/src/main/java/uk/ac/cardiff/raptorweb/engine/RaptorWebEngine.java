@@ -71,9 +71,9 @@ public class RaptorWebEngine {
     }
 
     /**
-     * returns the list of statistical units from the attached MUA as stored in the
+     * Returns the list of USER level statistical units from the attached MUA as stored in the
      * currentlyAttachedCapabilities. If no currentlyAttachedCapabilities exists, hence
-     * no MUA has been sucessfully queried, it chooses either the current MUA <code>attachedMUA</code> 
+     * no MUA has been successfully queried, it chooses either the current MUA <code>attachedMUA</code> 
      * or the MUA that was loaded with <code>isAttached value="true"</code>
      * from the XML configuration.
      *
