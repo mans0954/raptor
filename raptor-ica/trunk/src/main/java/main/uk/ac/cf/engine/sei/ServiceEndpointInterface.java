@@ -66,7 +66,7 @@ public class ServiceEndpointInterface {
 	    return true;
 	} catch (Exception e) {
 	    log.error("Could not send to {} ",endpoint,e);
-	    e.printStackTrace();
+	   // e.printStackTrace();
 	    return false;
 	}
 
