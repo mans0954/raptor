@@ -99,9 +99,6 @@
 			<artifactId>maven-runtime</artifactId>
 			<version>1.0-alpha-2</version>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
