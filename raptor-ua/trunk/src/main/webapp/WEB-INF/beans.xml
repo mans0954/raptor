@@ -76,7 +76,7 @@
 
 	<bean name="uaEngine" class="uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine">
 		<property name="muaRegistry"><ref bean="muaRegistry"></ref></property>
-		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+		<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 		<property name="uaMetadata"><ref bean="UAMetadata"></ref></property>
 	</bean>
 

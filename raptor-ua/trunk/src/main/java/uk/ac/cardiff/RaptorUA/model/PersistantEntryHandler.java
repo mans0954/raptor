@@ -23,8 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import uk.ac.cardiff.RaptorUA.dao.UADataConnection;
@@ -37,8 +38,7 @@ import uk.ac.cardiff.model.Entry;
 public class PersistantEntryHandler implements EntryHandler {
 
     /* class logger */
-    static Logger log = Logger.getLogger(PersistantEntryHandler.class);
-
+    static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
     /* data connection used to persist entries */
     private UADataConnection dataConnection;
@@ -46,14 +46,23 @@ public class PersistantEntryHandler implements EntryHandler {
     /* set of all entries stored by this EntryHandler */
     Set<Entry> entries;
 
-
-
     public PersistantEntryHandler(UADataConnection dataConnection) {
 	this.setDataConnection(dataConnection);
 
+
+    }
+
+    /**
+     * Initialises the entry handler. In particular, loads all entries from the main datastore, through the <code>dataConnection</code> instance.
+     */
+    public void initialise() {
+	log.info("Persistant entry handler [{}] initialising", this);
+	Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
+	log.info("Persistent data store has {} entries", rowCount);
 	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
-	log.info("UA has loaded "+entriesAsList.size()+" entries from DB backed cache");
+	log.info("UA has loaded " + entriesAsList.size() + " entries from DB backed cache");
 	entries = new LinkedHashSet<Entry>(entriesAsList);
+	log.info("Persistant entry handler [{}] started", this);
     }
 
     /*
@@ -65,14 +74,14 @@ public class PersistantEntryHandler implements EntryHandler {
     public void addEntries(Set<Entry> entries) {
 	log.debug("Current: " + this.getEntries().size() + " in: " + entries.size());
 	for (Entry entry : entries) {
-		this.getEntries().add(entry);
+	    this.getEntries().add(entry);
 	}
 	log.debug("Total No. of Entries " + this.getEntries().size());
 
     }
 
-    public void addEntry(Entry entry){
-	    entries.add(entry);
+    public void addEntry(Entry entry) {
+	entries.add(entry);
 
     }
 
@@ -109,9 +118,8 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	dataConnection.deleteAllEntries(entries);
 	entries.clear();
-	//entryInformation.setLatestEntryTime(null);
+	// entryInformation.setLatestEntryTime(null);
     }
-
 
     public void setDataConnection(UADataConnection dataConnection) {
 	this.dataConnection = dataConnection;
@@ -121,7 +129,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	return dataConnection;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
      */
     @Override
@@ -129,9 +139,5 @@ public class PersistantEntryHandler implements EntryHandler {
 	// TODO Auto-generated method stub
 
     }
-
-
-
-
 
 }

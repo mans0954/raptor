@@ -75,6 +75,7 @@ public class UnitAggregatorEngine {
 
     public void setEntryHandler(EntryHandler entryHandler) {
 	this.entryHandler = entryHandler;
+	entryHandler.initialise();
     }
 
     public EntryHandler getEntryHandler() {
