@@ -19,9 +19,10 @@ package uk.ac.cardiff.RaptorUA.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.RaptorUA.model.ICAEntry;
 
@@ -29,7 +30,7 @@ import uk.ac.cardiff.RaptorUA.model.ICAEntry;
  * @author philsmart handles the list of attached ICAs as injected by Spring
  */
 public class ICARegistry {
-    static Logger log = Logger.getLogger(ICARegistry.class);
+    static Logger log = LoggerFactory.getLogger(ICARegistry.class);
 
     private List<ICAEntry> ICAEntries;
 

@@ -23,7 +23,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import uk.ac.cardiff.model.Entry;
 
@@ -32,7 +34,7 @@ import uk.ac.cardiff.model.Entry;
  *
  */
 public class MemoryEntryHandler implements EntryHandler{
-    static Logger log = Logger.getLogger(EntryHandler.class);
+    static Logger log = LoggerFactory.getLogger(EntryHandler.class);
 
 	/* set of all entries stored by this EntryHanlder */
 	Set<Entry> entries;
