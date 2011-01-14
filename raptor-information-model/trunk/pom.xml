@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>uk.ac.cardiff.raptor</groupId>
-  <artifactId>raptor-information-model</artifactId>
-  <version>0.4-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>uk.ac.cardiff.raptor</groupId>
+	<artifactId>raptor-information-model</artifactId>
+	<version>0.4-SNAPSHOT</version>
 
-  <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -22,19 +23,17 @@
 			<artifactId>joda-time-hibernate</artifactId>
 			<version>1.2</version>
 		</dependency>
-
-
-				<dependency>
-					<groupId>junit</groupId>
-					<artifactId>junit</artifactId>
-					<version>4.8.2</version>
-				</dependency>
-				<dependency>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-					<version>1.6.1</version>
-				</dependency>
-  </dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+	</dependencies>
 
 	<scm>
 		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/trunk</developerConnection>
