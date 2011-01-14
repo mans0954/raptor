@@ -9,56 +9,60 @@
 
 	<ui:composition template="/templates/raptor/full.xhtml">
 		<ui:define name="content">
-		<tr:form>
-			<tr:spacer height="10px" />
-			<tr:panelBorderLayout>
-				<f:facet name="top">
-					<tr:panelGroupLayout layout="horizontal">
-						<tr:spacer width="20px" />
-						<tr:outputText inlineStyle="font-size:150%"
-						value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: "/>
-						<tr:spacer width="5px" />
+			<tr:form>
+				<tr:spacer height="10px" />
+				<tr:panelBorderLayout>
+					<f:facet name="top">
+						<tr:panelGroupLayout layout="horizontal">
+							<tr:spacer width="20px" />
 
-						<tr:selectOneChoice id="quickStatsRangeSelector" value="#{startmodel.statsRangeSelector}"
-							autoSubmit="true"
-							shortDesc="quickStatsRangeSelector">
-							<f:selectItem itemLabel="Today" itemValue="TODAY" />
-							<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
-							<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
-							<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
-						</tr:selectOneChoice>
-						<tr:commandButton id="startStatsUpdateButton" text="Update"  action="refreshStartStats" immediate="true" />
-					</tr:panelGroupLayout>
+							<!--<tr:statusIndicator/> not doing a PPR on this page, so this will not work-->
 
-				</f:facet>
-				<f:facet name="left">
+							<tr:outputText inlineStyle="font-size:150%"
+								value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
+							<tr:spacer width="5px" />
 
-				</f:facet>
+							<tr:selectOneChoice id="quickStatsRangeSelector"
+								value="#{startmodel.statsRangeSelector}" autoSubmit="true"
+								shortDesc="quickStatsRangeSelector">
+								<f:selectItem itemLabel="Today" itemValue="TODAY" />
+								<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
+								<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
+								<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
+							</tr:selectOneChoice>
+							<tr:commandButton id="startStatsUpdateButton" text="Update"
+								action="refreshStartStats" immediate="true" />
+						</tr:panelGroupLayout>
 
-				<f:facet name="right">
+					</f:facet>
+					<f:facet name="left">
 
-				</f:facet>
+					</f:facet>
 
-				<f:facet name="bottom">
+					<f:facet name="right">
+
+					</f:facet>
+
+					<f:facet name="bottom">
+						<h:panelGrid width="100%"
+							style="height: 100%; text-align: center;">
+							<tr:spacer height="15px" />
+							<tr:panelHeader text="Number of authentications" />
+							<tr:spacer height="10px" />
+							<tr:chart id="chart" verticalMajorSections="15"
+								value="#{startmodel.headlineGraph}"
+								rendered="#{not empty startmodel.headlineGraph}"
+								inlineStyle="width:100%; height:270px; border-style: hidden;"
+								type="stackedArea" width="98%" animationDuration="400"
+								perspective="false" maxPrecision="2" />
+						</h:panelGrid>
+					</f:facet>
+
 					<h:panelGrid width="100%" style="height: 100%; text-align: center;">
-						<tr:spacer height="15px" />
-						<tr:panelHeader text="Number of authentications"/>
 						<tr:spacer height="10px" />
-						<tr:chart id="chart" verticalMajorSections="15"
-							value="#{startmodel.headlineGraph}"
-							rendered="#{not empty startmodel.headlineGraph}"
-							inlineStyle="width:100%; height:270px; border-style: hidden;"
-							type="stackedArea" width="98%" animationDuration="400"
-							perspective="false"
-							maxPrecision="2" />
-					</h:panelGrid>
-				</f:facet>
-
-				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
-						<tr:spacer height="10px" />
-						<tr:panelHeader text="At a glance"/>
+						<tr:panelHeader text="At a glance" />
 						<tr:spacer height="7px" />
-						<tr:panelGroupLayout layout="horizontal"  width="100%">
+						<tr:panelGroupLayout layout="horizontal" width="100%">
 							<tr:spacer width="60px" />
 
 							<tr:panelFormLayout>
@@ -130,13 +134,13 @@
 								inlineStyle="opacity:0.0;color:#EEE9E8;" />
 						-->
 
-				</h:panelGrid>
+					</h:panelGrid>
 
-			</tr:panelBorderLayout>
+				</tr:panelBorderLayout>
 
 
 
- 			</tr:form>
+			</tr:form>
 		</ui:define>
 	</ui:composition>
 </jsp:root>
