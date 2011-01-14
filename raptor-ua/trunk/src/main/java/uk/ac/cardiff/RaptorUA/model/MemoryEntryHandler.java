@@ -85,4 +85,13 @@ public class MemoryEntryHandler implements EntryHandler{
 
 
 	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#initialise()
+	 */
+	@Override
+	public void initialise() {
+	    // TODO Auto-generated method stub
+
+	}
 }
