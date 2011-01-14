@@ -50,19 +50,29 @@ public class PersistantEntryHandler implements EntryHandler {
     /* set of all entries stored by this EntryHandler */
     Set<Entry> entries;
 
-
-
     public PersistantEntryHandler(ICADataConnection dataConnection) {
-	//entries = new ArrayList<Entry>();
+	// entries = new ArrayList<Entry>();
 	this.setDataConnection(dataConnection);
-	entryInformation = (EntryMetadata)dataConnection.runQueryUnique("from EntryMetadata", null);
-	log.debug("Have saved entryInformaiton: "+entryInformation);
-	if (entryInformation==null)entryInformation = new EntryMetadata();
-	log.debug("Entry Information "+entryInformation.getLatestEqualEntries());
-	//convert to set from list, maybe expensive
+
+    }
+
+    /**
+     * Initialises the entry handler. In particular, loads all entries from the
+     * main datastore, through the <code>dataConnection</code> instance.
+     */
+    public void initialise() {
+	log.info("Persistant entry handler [{}] initialising", this);
+	Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
+	log.info("Persistent data store has {} entries", rowCount);
+	entryInformation = (EntryMetadata) dataConnection.runQueryUnique("from EntryMetadata", null);
+	log.debug("Have saved entryInformaiton: " + entryInformation);
+	if (entryInformation == null)
+	    entryInformation = new EntryMetadata();
+	log.debug("Entry Information " + entryInformation.getLatestEqualEntries());
+	// convert to set from list, maybe expensive
 	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
 	entries = new LinkedHashSet<Entry>(entriesAsList);
-
+	log.info("Persistant entry handler [{}] started", this);
     }
 
     /*
@@ -72,7 +82,8 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public void addEntries(Set<Entry> entries) {
-//	Object currentEntries = dataConnection.runQueryUnique("select count(*) from Entry", null);
+	// Object currentEntries =
+	// dataConnection.runQueryUnique("select count(*) from Entry", null);
 	log.debug("Current: " + entries.size() + " in: " + entries.size());
 
 	for (Entry entry : entries) {
@@ -86,40 +97,39 @@ public class PersistantEntryHandler implements EntryHandler {
 
     }
 
-    public void addEntry(Entry entry){
-	    //log.debug("Trying to add "+entry);
-	    boolean isAfter = isAfter(entry);
-	    boolean isEqual = isEqual(entry);
-	    if (isAfter){
-		//log.debug("Is After "+entry+"  with: "+getLatestEntryTime());
+    public void addEntry(Entry entry) {
+	// log.debug("Trying to add "+entry);
+	boolean isAfter = isAfter(entry);
+	boolean isEqual = isEqual(entry);
+	if (isAfter) {
+	    // log.debug("Is After "+entry+"  with: "+getLatestEntryTime());
+	    entries.add(entry);
+	    updateLastEntry(entry);
+	} else if (isEqual) {
+	    Integer hashcode = entry.hashCode();
+	    // log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
+	    boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
+	    if (isAlreadyInLatest) {
+		log.error("Duplicated entries found\n{}", entry);
+	    }
+	    if (!isAlreadyInLatest) {
 		entries.add(entry);
 		updateLastEntry(entry);
 	    }
-	    else if (isEqual){
-		Integer hashcode = entry.hashCode();
-		//log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
-		boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
-		if (isAlreadyInLatest){
-		    log.error("Duplicated entries found\n{}",entry);
-		}
-		if (!isAlreadyInLatest){
-		    entries.add(entry);
-		    updateLastEntry(entry);
-		}
-	    }
-
-
 	}
+
+    }
 
     private void updateLastEntry(Entry entry) {
 	DateTime entryTime = entry.getEventTime();
-	if (entryInformation.getLatestEntryTime()==null)entryInformation.setLatestEntryTime(entryTime);
-	if (entryTime.isAfter(getLatestEntryTime())){
+	if (entryInformation.getLatestEntryTime() == null)
+	    entryInformation.setLatestEntryTime(entryTime);
+	if (entryTime.isAfter(getLatestEntryTime())) {
 	    setLatestEntryTime(entryTime);
 	    entryInformation.getLatestEqualEntries().clear();
 	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
 	}
-	if (entryTime.isEqual(getLatestEntryTime())){
+	if (entryTime.isEqual(getLatestEntryTime())) {
 	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
 	}
     }
@@ -136,7 +146,6 @@ public class PersistantEntryHandler implements EntryHandler {
 	dataConnection.save(entryInformation);
 	log.debug("Saving entries to persitant storage...done");
 
-
     }
 
     /*
@@ -149,7 +158,6 @@ public class PersistantEntryHandler implements EntryHandler {
 	return entries;
     }
 
-
     /*
      * (non-Javadoc)
      *
@@ -157,8 +165,9 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public boolean isAfter(Entry authE) {
-	 if (entryInformation.getLatestEntryTime()==null) return true;
-	    return authE.getEventTime().isAfter(entryInformation.getLatestEntryTime());
+	if (entryInformation.getLatestEntryTime() == null)
+	    return true;
+	return authE.getEventTime().isAfter(entryInformation.getLatestEntryTime());
     }
 
     /*
@@ -169,8 +178,9 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public boolean isEqual(Entry authE) {
-	if (entryInformation.getLatestEntryTime()==null) return false;
-	    return authE.getEventTime().isEqual(entryInformation.getLatestEntryTime());
+	if (entryInformation.getLatestEntryTime() == null)
+	    return false;
+	return authE.getEventTime().isEqual(entryInformation.getLatestEntryTime());
     }
 
     /*
@@ -182,8 +192,10 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     @Override
     public boolean isNewerOrEqual(Entry authE) {
-	if (entryInformation.getLatestEntryTime()==null) return true;
-	if (!authE.getEventTime().isBefore(entryInformation.getLatestEntryTime())) return true;
+	if (entryInformation.getLatestEntryTime() == null)
+	    return true;
+	if (!authE.getEventTime().isBefore(entryInformation.getLatestEntryTime()))
+	    return true;
 	return false;
     }
 
@@ -197,20 +209,20 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	dataConnection.deleteAllEntries(entries);
 	entries.clear();
-	//entryInformation.setLatestEntryTime(null);
+	// entryInformation.setLatestEntryTime(null);
     }
 
-
-//    /**
-//     * <p> Sets the latest time entry on the class, also saves it to the data store
-//     * to achieve persistence </p>
-//     *
-//     * @param latestEntryTime
-//     */
-//    public void setLatestEntryTime(DateTime latestEntryTime) {
-//	entryInformation.setLatestEntryTime(latestEntryTime);
-//	//dataConnection.save(entryInformation);
-//    }
+    // /**
+    // * <p> Sets the latest time entry on the class, also saves it to the data
+    // store
+    // * to achieve persistence </p>
+    // *
+    // * @param latestEntryTime
+    // */
+    // public void setLatestEntryTime(DateTime latestEntryTime) {
+    // entryInformation.setLatestEntryTime(latestEntryTime);
+    // //dataConnection.save(entryInformation);
+    // }
 
     public void setDataConnection(ICADataConnection dataConnection) {
 	this.dataConnection = dataConnection;
@@ -228,7 +240,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	return entryInformation;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see main.uk.ac.cf.model.EntryHandler#getLatestEntryTime()
      */
     @Override
@@ -236,17 +250,17 @@ public class PersistantEntryHandler implements EntryHandler {
 	return entryInformation.getLatestEntryTime();
     }
 
-    /* (non-Javadoc)
-     * @see main.uk.ac.cf.model.EntryHandler#setLatestEntryTime(org.joda.time.DateTime)
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * main.uk.ac.cf.model.EntryHandler#setLatestEntryTime(org.joda.time.DateTime
+     * )
      */
     @Override
     public void setLatestEntryTime(DateTime latestEntryTime) {
 	entryInformation.setLatestEntryTime(latestEntryTime);
 
     }
-
-
-
-
 
 }
