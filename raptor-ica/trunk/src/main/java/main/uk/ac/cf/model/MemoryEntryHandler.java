@@ -187,6 +187,15 @@ public class MemoryEntryHandler implements EntryHandler{
 	    return lastPublishedEntryTime;
 	}
 
+	/* (non-Javadoc)
+	 * @see main.uk.ac.cf.model.EntryHandler#initialise()
+	 */
+	@Override
+	public void initialise() {
+	    // TODO Auto-generated method stub
+
+	}
+
 
 
 

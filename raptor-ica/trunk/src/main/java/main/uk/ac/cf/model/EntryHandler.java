@@ -53,5 +53,7 @@ public interface EntryHandler {
 
 	public DateTime getLatestEntryTime();
 
+	public void initialise();
+
 
 }
