@@ -32,9 +32,9 @@ if [ -z "$JAVA_HOME" ]; then                               # if JAVA_HOME is und
 
 scriptFile=$(readlink -fn $(type -p $0))                   # the absolute, dereferenced path of this script file
 scriptDir=$(dirname $scriptFile)                           # absolute path of the script directory
-applDir="/usr/local/raptor/raptor-ica/"                                       # home directory of the service application
-serviceName="Raptorica"                    # service name
-serviceNameLo="raptorica"                  # service name with the first letter in lowercase
+applDir="/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/"                                       # home directory of the service application
+serviceName="RaptorICA"                    # service name
+serviceNameLo="raptorICA"                  # service name with the first letter in lowercase
 serviceUser="root"                                          # OS user name for the service
 serviceUserHome="$applDir"                                 # home directory of the service user
 serviceGroup="root"                                    # OS group name for the service
@@ -42,10 +42,9 @@ serviceLogFile="/var/log/$serviceNameLo.log"               # log file for StdOut
 maxShutdownTime=15                                         # maximum number of seconds to wait for the daemon to terminate normally
 pidFile="/var/run/$serviceNameLo.pid"                      # name of PID file (PID = process ID number)
 javaCommand="java"                                         # name of the Java launcher without the path
-javaExe="$JAVA_HOME/bin/$javaCommand"                      # file name of the Java application launcher executable
+javaExe="/usr/local/java/jre1.6.0_23/bin/$javaCommand"                      # file name of the Java application launcher executable
 
-
-javaArgs="-Xmx64M -jar"
+javaArgs="-Xmx128M -jar -DconfigurationFiles=/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/conf/beans.xml raptor-ica-embedded-0.0.1-SNAPSHOT.jar"
       # arguments for Java launcher
 javaCommandLine="$javaExe $javaArgs"                       # command line to start the Java service application
 javaCommandLineKeyword="com.sharemail.cfdev.idmpublicinterfaces.init.ApplicationInit"                    # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others
@@ -90,8 +89,10 @@ function startServiceProcess {
    makeFileWritable $pidFile || return 1
    makeFileWritable $serviceLogFile || return 1
    cmd="nohup $javaCommandLine >>$serviceLogFile 2>&1 & echo \$! >$pidFile"
+   echo $cmd
+   echo "\n"
    echo $javaCommandLine
-   sudo -u $serviceUser $SHELL -c "$cmd" || return 1
+   $SHELL -c "$cmd" || return 1
    sleep 0.1
    pid="$(<$pidFile)"
    if checkProcessIsRunning $pid; then :; else
@@ -128,7 +129,7 @@ function runInConsoleMode {
    getServicePID
    if [ $? -eq 0 ]; then echo "$serviceName is already running"; return 1; fi
    cd $applDir || return 1
-   sudo -u $serviceUser $javaCommandLine || return 1
+   $javaCommandLine || return 1
    if [ $? -eq 0 ]; then return 1; fi
    return 0; }
 

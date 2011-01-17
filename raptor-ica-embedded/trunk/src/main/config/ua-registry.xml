@@ -29,7 +29,7 @@
 		<property name ="UAEntries">
 			<list>
 				<bean id="cardiffShibUA" class="uk.ac.cardiff.raptor.raptorica.model.UAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:9080/UA/UnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:9080/UA/UnitAggregator</value></property>
 					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
 					<!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>-->
 				</bean>

@@ -16,10 +16,14 @@
 package uk.ac.cardiff.raptor.raptorica.engine.sei;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
+import org.apache.cxf.aegis.type.TypeUtil;
+import org.apache.cxf.common.classloader.ClassLoaderUtils;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.interceptor.Fault;
 import org.slf4j.Logger;
@@ -50,23 +54,51 @@ public class ServiceEndpointInterface {
 	    factory.setServiceClass(UnitAggregator.class);
 	    AegisDatabinding databinding = new AegisDatabinding();
 
-	    Set<String> overrides = new HashSet();
+	    org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
+	    context.setWriteXsiTypes(true);
+
+	    Set<Class<?>> rootClasses = new HashSet<Class<?>>();
+
+	    Set<String> overrides = new HashSet<String>();
 	    overrides.add(ShibbolethEntry.class.getName());
 	    overrides.add(AuthenticationEntry.class.getName());
 	    overrides.add(UsageEntry.class.getName());
 	    databinding.setOverrideTypes(overrides);
+
+	    for (String typeName : overrides) {
+		Class c = null;
+		try {
+		    c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
+		} catch (ClassNotFoundException e) {
+		    throw new DatabindingException("Could not find override type class: " + typeName, e);
+		}
+
+		rootClasses.add(c);
+	    }
+
+	    context.setRootClasses(rootClasses);
+	    databinding.setAegisContext(context);
 
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
 
 	    UnitAggregator client = (UnitAggregator) factory.create();
 	    log.debug("Accessing the UA version " + client.getVersion());
+	    Set<ShibbolethEntry> newEntries = new LinkedHashSet<ShibbolethEntry>();
+	    for (Entry entry : pushed.getEntries()) {
+		log.debug("Entry is shib {}", (entry instanceof ShibbolethEntry));
+		if (entry instanceof ShibbolethEntry) {
+		    ShibbolethEntry newShib = (ShibbolethEntry) entry;
+		    newEntries.add(newShib);
+		    log.debug("New entry is: {}", newShib);
+		}
+	    }
 	    client.addAuthentications(pushed);
 	    log.debug("Sent {} authentications", pushed.getEntries().size());
 	    return true;
 	} catch (Exception e) {
-	    log.error("Could not send to {} ",endpoint,e);
-	   // e.printStackTrace();
+	    log.error("Could not send to {} ", endpoint, e);
+	    // e.printStackTrace();
 	    return false;
 	}
 

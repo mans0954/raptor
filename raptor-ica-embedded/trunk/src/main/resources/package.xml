@@ -23,7 +23,7 @@
             <directory>target/conf</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>
-                <include>*.xml</include>
+                <include>*</include>
             </includes>
         </fileSet>
     </fileSets>
