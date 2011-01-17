@@ -34,7 +34,7 @@ public class StartModel implements Serializable{
 	public enum TimeRange{TODAY,LASTWEEK,LASTMONTH,LASTYEAR}
 	
 	public StartModel(){
-	    statsRangeSelector = TimeRange.LASTYEAR;
+	    statsRangeSelector = TimeRange.TODAY;
 	}
 
 	public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {

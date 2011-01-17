@@ -26,6 +26,7 @@
  	<transition on="graphTrans" to="graphicalReports"/>
 	<transition on="setupTrans" to="setupRaptorWeb"/>
 	<transition on="aboutTrans" to="about"/>
+	<transition on="homeTrans" to="startReport"/>
  </view-state>
 
  <view-state id="graphicalReports" view ="graphicalReports.jspx">
