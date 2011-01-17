@@ -30,6 +30,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import uk.ac.cardiff.RaptorUA.dao.UADataConnection;
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.ShibbolethEntry;
 
 /**
  * @author philsmart

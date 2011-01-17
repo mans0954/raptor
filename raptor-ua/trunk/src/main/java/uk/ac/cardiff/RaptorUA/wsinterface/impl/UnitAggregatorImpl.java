@@ -23,9 +23,12 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
-import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl;
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.sei.UnitAggregator;
 
@@ -36,6 +39,7 @@ import uk.ac.cardiff.sei.UnitAggregator;
 
 @WebService(endpointInterface = "uk.ac.cardiff.sei.UnitAggregator")
 public class UnitAggregatorImpl implements UnitAggregator{
+    static Logger log = LoggerFactory.getLogger(UnitAggregatorImpl.class);
 
     private UAProcessImpl processService;
 
