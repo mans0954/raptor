@@ -15,7 +15,9 @@
 		</license>
 	</licenses>
 
-	<!-- Adding extra repositories for any other libs, which is hosted on Iam -->
+	<!--
+		Adding extra repositories for any other libs, which is hosted on Iam
+	-->
 	<repositories>
 		<repository>
 			<releases>
@@ -238,7 +240,7 @@
 				<directory>src/main/java/</directory>
 				<includes>
 					<include>uk/ac/cardiff/raptor/raptorica/model/entrymetadata.hbm.xml</include>
-					<include>uk/ac/cardiff/raptor/raptorica/model/parsersupport.hbm.xml</include>	
+					<include>uk/ac/cardiff/raptor/raptorica/model/parsersupport.hbm.xml</include>
 				</includes>
 			</resource>
 			<!-- DONE -->
@@ -334,7 +336,23 @@
 					</execution>
 				</executions>
 			</plugin>
-		
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/resources/package.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
