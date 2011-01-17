@@ -21,7 +21,7 @@ public class RunServer {
 	 */
 
 	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")+"/target/conf/beans.xml");
-	int portNumber = Integer.parseInt(System.getProperty("port", "8080"));
+	int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
 
 	System.out.println("[INFO] Jetty Config: Using Port "+portNumber);
 	System.out.println("[INFO] Spring Config: Configuration files at "+configurationFiles);
@@ -40,10 +40,10 @@ public class RunServer {
 	try {
 		System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
 		server.start();
-		System.in.read();
-		System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
-		server.stop();
-		server.join();
+//		System.in.read();
+//		System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
+//		server.stop();
+//		server.join();
 	} catch (Exception e) {
 		e.printStackTrace();
 		System.exit(100);

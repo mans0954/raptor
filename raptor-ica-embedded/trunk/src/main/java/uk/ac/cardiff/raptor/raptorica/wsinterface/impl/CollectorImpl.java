@@ -23,6 +23,7 @@ import javax.jws.WebService;
 import org.apache.log4j.Logger;
 import org.apache.maven.shared.runtime.MavenRuntimeException;
 
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.raptor.raptorica.runtimeutils.MavenMetadata;
 
 import uk.ac.cardiff.raptor.raptorica.service.ICAProcess;
@@ -71,6 +72,15 @@ public class CollectorImpl implements Collector{
 
 	public ICAProcess getProcessEngine() {
 	    return processEngine;
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.sei.Collector#forceRelease()
+	 */
+	@Override
+	public ICAEntryPush forceRelease() {
+	    // TODO Auto-generated method stub
+	    return null;
 	}
 
 
