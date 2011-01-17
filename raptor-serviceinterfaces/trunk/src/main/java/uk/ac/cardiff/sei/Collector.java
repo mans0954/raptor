@@ -22,6 +22,7 @@ import javax.jws.WebService;
 
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.UsageEntry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 @WebService
 public interface Collector {
@@ -30,4 +31,5 @@ public interface Collector {
 	/* for aegis we have to return the type of entry so the XSD can be constructed properly */
 	Set<Entry> getAllAuthentications();
 	Set<Entry> getAllUsages();
+	ICAEntryPush forceRelease();
 }
