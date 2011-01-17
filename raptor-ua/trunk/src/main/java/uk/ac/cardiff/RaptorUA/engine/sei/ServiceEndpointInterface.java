@@ -16,10 +16,14 @@
 package uk.ac.cardiff.RaptorUA.engine.sei;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
+import org.apache.cxf.aegis.type.TypeUtil;
+import org.apache.cxf.common.classloader.ClassLoaderUtils;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.interceptor.Fault;
 import org.slf4j.Logger;
@@ -74,15 +78,29 @@ public class ServiceEndpointInterface {
 
     public static boolean sendAuthentications(UAEntryPush pushed, String endpoint) {
 	try {
+
 	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
 	    factory.setServiceClass(MultiUnitAggregator.class);
 	    AegisDatabinding databinding = new AegisDatabinding();
-
-	    Set<String> overrides = new HashSet();
+	    org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
+	    context.setWriteXsiTypes(true);
+	    Set<Class<?>> rootClasses = new HashSet<Class<?>>();
+	    Set<String> overrides = new HashSet<String>();
 	    overrides.add(ShibbolethEntry.class.getName());
 	    overrides.add(AuthenticationEntry.class.getName());
 	    overrides.add(UsageEntry.class.getName());
 	    databinding.setOverrideTypes(overrides);
+	    for (String typeName : overrides) {
+		Class c = null;
+		try {
+		    c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
+		} catch (ClassNotFoundException e) {
+		    throw new DatabindingException("Could not find override type class: " + typeName, e);
+		}
+		rootClasses.add(c);
+	    }
+	    context.setRootClasses(rootClasses);
+	    databinding.setAegisContext(context);
 
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
