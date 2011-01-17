@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ICAMetadata;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
  * @author philsmart
@@ -101,6 +102,16 @@ public class ICAEngine {
 	    boolean success = entryReleaseEngine.release(uaRegistry, authRegister.getAuthenticationModules(), getIcaMetadata());
 	    if (success) retrieveTransactionFinished();
 	    return success;
+	}
+
+	/**
+	 * sends all authentication parsing modules to the release engine
+	 * @return
+	 */
+	public ICAEntryPush forceRelease() {
+	    EntryReleaseEngine entryReleaseEngine = new EntryReleaseEngine();
+	    ICAEntryPush pushed = entryReleaseEngine.getRelease(authRegister.getAuthenticationModules(), getIcaMetadata());
+	    return pushed;
 	}
 
 	public void setUaRegistry(UARegistry uaRegistry) {

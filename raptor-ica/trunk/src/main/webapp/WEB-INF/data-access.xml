@@ -47,7 +47,7 @@
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<!--<property name="parsingSupport"><ref bean="persistentParserConfig"></ref></property>-->
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-test.txt
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
 						</value>
 					</property>
 					<property name="format">

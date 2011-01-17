@@ -26,6 +26,7 @@ import org.apache.maven.shared.runtime.MavenRuntimeException;
 import runtimeutils.MavenMetadata;
 
 import main.uk.ac.cf.service.ICAProcess;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.sei.Collector;
 
 
@@ -71,6 +72,10 @@ public class CollectorImpl implements Collector{
 
 	public ICAProcess getProcessEngine() {
 	    return processEngine;
+	}
+
+	public ICAEntryPush forceRelease(){
+	    return processEngine.forceRelease();
 	}
 
 

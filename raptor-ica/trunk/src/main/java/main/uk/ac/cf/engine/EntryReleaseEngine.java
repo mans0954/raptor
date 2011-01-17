@@ -77,6 +77,20 @@ public class EntryReleaseEngine {
 
     }
 
+    public ICAEntryPush getRelease(List<AuthenticationInput> authenticationModules, ICAMetadata icaMetaData) {
+	Set<Entry> allEntries = new LinkedHashSet<Entry>();
+	for (AuthenticationInput authI : authenticationModules){
+	    log.debug("AuthenticationInput: {}, has {} entries",authI,authI.getEntryHandler().getEntries().size());
+	    allEntries.addAll(authI.getEntryHandler().getEntries());
+	}
+	 ICAEntryPush pushMessage = constructICAEntryPush(icaMetaData, allEntries);
+	 return pushMessage;
+
+
+
+
+    }
+
     /**
      * Filters the attributes from the entries being pushed to the input <code>uaEntry</code>.
      * If no filter policy has been defined, no work is done, and the input <code>allEntries</code>
