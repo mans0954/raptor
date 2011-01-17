@@ -31,6 +31,7 @@ import main.uk.ac.cf.service.ICAProcess;
 
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
  * @author philsmart
@@ -130,6 +131,14 @@ public class ICAProcessImpl implements ICAProcess {
     public Set getAllUsages() {
 	    return null;
 
+    }
+
+    /* (non-Javadoc)
+     * @see main.uk.ac.cf.service.ICAProcess#forceRelease()
+     */
+    @Override
+    public ICAEntryPush forceRelease() {
+	return engine.forceRelease();
     }
 
 }

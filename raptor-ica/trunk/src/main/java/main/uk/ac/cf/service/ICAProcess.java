@@ -18,6 +18,8 @@ package main.uk.ac.cf.service;
 import java.util.List;
 import java.util.Set;
 
+import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
+
 public interface ICAProcess{
 
 	public void capture();
@@ -31,6 +33,11 @@ public interface ICAProcess{
 	 * @return the list of usages, stored as types or subtypes of UsageEntry's
 	 */
 	public Set getAllUsages();
+
+	/**
+	 * @return
+	 */
+	public ICAEntryPush forceRelease();
 
 
 }
