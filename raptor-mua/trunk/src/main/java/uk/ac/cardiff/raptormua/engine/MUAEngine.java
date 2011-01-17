@@ -195,7 +195,7 @@ public class MUAEngine {
     public void addAuthentications(UAEntryPush pushed) {
 	log.info("Committing {} entries to the entryHandler", pushed.getEntries().size());
 	entryHandler.addEntries(pushed.getEntries());
-	log.info("EntryHandler now contains {} entries", entryHandler.getEntries().size());
+	log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
 
     }
 
