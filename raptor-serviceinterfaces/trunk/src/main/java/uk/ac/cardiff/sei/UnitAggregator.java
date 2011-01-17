@@ -21,6 +21,7 @@ import java.util.Set;
 import javax.jws.WebService;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
