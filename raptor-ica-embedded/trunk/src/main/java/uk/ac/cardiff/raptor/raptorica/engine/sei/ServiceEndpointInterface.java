@@ -85,14 +85,6 @@ public class ServiceEndpointInterface {
 	    UnitAggregator client = (UnitAggregator) factory.create();
 	    log.debug("Accessing the UA version " + client.getVersion());
 	    Set<ShibbolethEntry> newEntries = new LinkedHashSet<ShibbolethEntry>();
-	    for (Entry entry : pushed.getEntries()) {
-		log.debug("Entry is shib {}", (entry instanceof ShibbolethEntry));
-		if (entry instanceof ShibbolethEntry) {
-		    ShibbolethEntry newShib = (ShibbolethEntry) entry;
-		    newEntries.add(newShib);
-		    log.debug("New entry is: {}", newShib);
-		}
-	    }
 	    client.addAuthentications(pushed);
 	    log.debug("Sent {} authentications", pushed.getEntries().size());
 	    return true;
