@@ -113,25 +113,18 @@
 	</bean>
 
 	<!-- Polling trigger setup -->
+	
+	<!--  Polling triggers to generate SYSTEM level statistics -->
 
-	<bean id="MUAProcessTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+	<bean id="SystemStatsQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail">
-			<ref local="MUAProcessJobDetail" />
-		</property>
-		<property name="cronExpression">
-			<value>0 * * * * ?</value>
-		</property>
-	</bean>
-
-	<bean id="MUAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail">
-			<ref local="MUAProcessJobDetail" />
+			<ref local="SystemStatsJobDetail" />
 		</property>
 		<property name="repeatInterval" value="10000" />
 		<property name="repeatCount" value="0" />
 	</bean>
 
-	<bean id="MUAProcessJobDetail"
+	<bean id="SystemStatsJobDetail"
 		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject">
 			<ref bean="MUAProcess" />
@@ -148,8 +141,8 @@
 		<property name="triggers">
 			<list><!--
 				<ref local="ICAProcessTrigger" />
-
 				<ref local="MUAProcessQuickTrigger" />-->
+				<ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
@@ -158,5 +151,6 @@
 	  <import resource="dao-beans.xml"/>
 	  <import resource="ua-registry.xml" />
 	  <import resource="statistical-units.xml" />
+	  <import resource="users.xml" />
 
 </beans>
