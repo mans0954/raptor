@@ -53,7 +53,7 @@ public class GraphServiceImpl implements GraphService{
 	 */
 	public List getStatisticalUnits(){
 		List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
-		List<StatisticalUnitInformation> userUnits = new ArrayList<StatisticalUnitInformation>();		
+		List<StatisticalUnitInformation> userUnits = new ArrayList<StatisticalUnitInformation>();
 		for (StatisticalUnitInformation unit : units){
 			if (unit.getStatisticParameters().getType()==StatisticType.USER)
 			    userUnits.add(unit);
@@ -107,7 +107,7 @@ public class GraphServiceImpl implements GraphService{
 
 		}
 		else{
-		    log.error("Chart model come back from the MUA as null");
+		    log.error("Chart model came back from the MUA as null");
 		    model.setCurrentTableGraph(null);
 		    model.setCurrentGraph(null);
 		    model.setProcessingResult("The statistic failed to produce a graphable result");
