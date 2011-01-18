@@ -37,6 +37,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
 import uk.ac.cardiff.raptormua.model.UAEntry;
+import uk.ac.cardiff.raptormua.model.Users;
 
 /**
  * @author philsmart
@@ -48,6 +49,8 @@ public class MUAEngine {
     private UARegistry uaRegistry;
     private EntryHandler entryHandler;
     private StatisticsHandler statisticsHandler;
+    
+    private Users users;
 
     /* holds metadata about the <code>MUAEngine</code> e.g. name etc. */
     private MUAMetadata muaMetadata;
