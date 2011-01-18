@@ -61,7 +61,7 @@ public class StartServiceImpl implements StartService {
 	    chosenStartTime = today;
 	if (startmodel.getStatsRangeSelector()==StartModel.TimeRange.LASTYEAR)
 	    chosenStartTime = oneYearPrevious;
-	
+
 	// get all the stats
 	List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
 	log.debug("Found {} statistics", statisticalUnits.size());
@@ -131,7 +131,7 @@ public class StartServiceImpl implements StartService {
 
 	if (topFiveResources != null) {
 	    topFiveResources.getStatisticParameters().setEndTime(currentDateTime);
-	    topFiveResources.getStatisticParameters().setStartTime(chosenStartTime);	  
+	    topFiveResources.getStatisticParameters().setStartTime(chosenStartTime);
 	    AggregatorGraphModel topFiveResourcesModel = webEngine.updateAndInvokeStatisticalUnit(topFiveResources);
 	    if (topFiveResourcesModel!=null){
 		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
@@ -151,7 +151,7 @@ public class StartServiceImpl implements StartService {
 	    }
 	    else
 		startmodel.setBottomFiveResouces(null);
-	    
+
 	}
 
 	if (numberOfAuthenticationsPerIntervalNumber != null) {
@@ -162,9 +162,9 @@ public class StartServiceImpl implements StartService {
         	    RaptorGraphModel graph = ChartProcessor.constructRaptorGraphModel(numberOfAuthenticationsPerIntervalNumberModel);
         	    //blank some of the labels for display reasons
         	    for (int i =0; i < graph.getGroupLabels().size();i++){
-        		if (i%10!=0)
+        		if ((i+1)%10!=0 && i!=1)
         		    graph.getGroupLabels().set(i,new String(""));
-        	    }		
+        	    }
         	    startmodel.setHeadlineGraph(graph);
 	    }
 	    else
@@ -174,7 +174,7 @@ public class StartServiceImpl implements StartService {
 	Capabilities capabilities = getAttachedCapabilities();
 	if (capabilities!=null){
 	    startmodel.setAttachedMUACapabilities(capabilities);
-	    
+
 	}
 
     }
