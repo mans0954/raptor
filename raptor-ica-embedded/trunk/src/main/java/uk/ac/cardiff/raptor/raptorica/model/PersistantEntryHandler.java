@@ -62,7 +62,7 @@ public class PersistantEntryHandler implements EntryHandler {
      */
     public void initialise() {
 	log.info("Persistant entry handler [{}] initialising", this);
-	Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
+	Long rowCount = (Long) dataConnection.runQueryUnique("select count(*) from Entry", null);
 	log.info("Persistent data store has {} entries", rowCount);
 	entryInformation = (EntryMetadata) dataConnection.runQueryUnique("from EntryMetadata", null);
 	log.debug("Have saved entryInformaiton: " + entryInformation);
