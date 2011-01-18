@@ -38,7 +38,7 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
  *
  */
 public class MUAProcessImpl implements MUAProcess {
-	
+
 	/* class logger */
     static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
@@ -97,6 +97,7 @@ public class MUAProcessImpl implements MUAProcess {
 		lockR.unlock();
 	    }
 	}
+	log.warn("Lock was hit for method performStatistic");
 	return null;
 
     }
@@ -118,9 +119,11 @@ public class MUAProcessImpl implements MUAProcess {
      */
     @Override
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	boolean success= false;
 	if (lockR.tryLock()) {
 	    try {
 		engine.updateStatisticalUnit(statisticalUnitInformation);
+		success=true;
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
 		log.error(e.getMessage());
@@ -129,6 +132,8 @@ public class MUAProcessImpl implements MUAProcess {
 		lockR.unlock();
 	    }
 	}
+	if (!success)
+	    log.warn("Lock was hit for method updateStatisticalUnit");
     }
 
     /*
@@ -153,6 +158,7 @@ public class MUAProcessImpl implements MUAProcess {
 	    }
 
 	}
+	log.warn("Lock was hit for method performAdministrativeFunction");
 	return false;
     }
 
@@ -163,10 +169,12 @@ public class MUAProcessImpl implements MUAProcess {
      */
     @Override
     public void addAuthentications(UAEntryPush pushed) {
+	boolean success = false;
 	if (lockR.tryLock()) {
 	    try {
 		log.debug("MUA has received {} entries from {}", pushed.getEntries().size(), pushed.getUaMetaData().getUaName());
 		engine.addAuthentications(pushed);
+		success = true;
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
 		log.error(e.getMessage());
@@ -176,6 +184,8 @@ public class MUAProcessImpl implements MUAProcess {
 
 	    }
 	}
+	if (!success)
+	    log.warn("Lock was hit for method addAuthentications");
 
     }
 
@@ -194,8 +204,9 @@ public class MUAProcessImpl implements MUAProcess {
 		    	lockR.unlock();
 		    }
 		}
+		log.warn("Lock was hit for method updateAndInvokeStatisticalUnit");
 		return null;
-		
+
 	}
 
 }
