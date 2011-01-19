@@ -46,7 +46,7 @@
 				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-sorted.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-octtodec2010-sorted.log
 						</value>
 					</property>
 					<property name="format">
