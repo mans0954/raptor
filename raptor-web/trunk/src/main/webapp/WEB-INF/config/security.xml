@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:s="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+
+
+	<s:http  use-expressions="true">
+		<s:intercept-url pattern="/**" access="isAuthenticated()" />
+		<s:form-login />
+		<s:logout />
+		<!-- Uncomment to limit the number of sessions a user can have -->
+
+		<s:session-management invalid-session-url="/timeout.jsp">
+			<s:concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" />
+		</s:session-management>
+	</s:http>
+
+	<!-- Usernames/Passwords are rod/koala dianne/emu scott/wombat peter/opal -->
+
+	<s:authentication-manager>
+		<s:authentication-provider>
+			<s:password-encoder hash="md5" />
+			<s:user-service>
+				<s:user name="phil" password="d14ffd41334ec4b4b3f2c0d55c38be6f"
+					authorities="ROLE_SUPERVISOR, ROLE_USER, ROLE_TELLER" />
+				<s:user name="dianne" password="65d15fe9156f9c4bbffd98085992a44e"
+					authorities="ROLE_USER,ROLE_TELLER" />
+				<s:user name="scott" password="2b58af6dddbd072ed27ffc86725d7d3a"
+					authorities="ROLE_USER" />
+				<s:user name="peter" password="22b5c9accc6e1ba628cedc63a72d57f8"
+					authorities="ROLE_USER" />
+			</s:user-service>
+		</s:authentication-provider>
+	</s:authentication-manager>
+
+
+</beans>

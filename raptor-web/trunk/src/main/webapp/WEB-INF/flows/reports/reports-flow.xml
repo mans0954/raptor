@@ -1,100 +1,111 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
 
- <var name="common" class="uk.ac.cardiff.raptorweb.model.CommonModel" />
+	<var name="common" class="uk.ac.cardiff.raptorweb.model.CommonModel" />
+
+	<!-- holds all variables for a particualar user, for a particular instance 
+	<var name="webUserInstance" class="uk.ac.cardiff.raptorweb.model.WebUser" />-->
+
+	<on-start>
+		<!-- load the user preferences -->
+		<evaluate expression="preferenceService.loadUserPrefs(userBean)"
+			result="flowScope.webuser" />
+
+	</on-start>
 
 
- <view-state id="startReport" view ="startReport.jspx">
- 	<var name="startmodel" class="uk.ac.cardiff.raptorweb.model.StartModel" />
- 	<on-entry>
-            <evaluate expression="startService.generateStatistics(startmodel)"/>
-    </on-entry>
+	<view-state id="startReport" view="startReport.jspx">
+		<var name="startmodel" class="uk.ac.cardiff.raptorweb.model.StartModel" />
+		<on-entry>
+			<evaluate expression="startService.generateStatistics(startmodel)" />
+		</on-entry>
 
-	<transition on="refreshStartStats">
-		<evaluate expression="startService.generateStatistics(startmodel)"/>
-	</transition>
+		<transition on="refreshStartStats">
+			<evaluate expression="startService.generateStatistics(startmodel)" />
+		</transition>
 
-	<transition on="graphTrans" to="graphicalReports"/>
-	<transition on="setupTrans" to="setupRaptorWeb"/>
-	<transition on="aboutTrans" to="about"/>
-	<transition on="homeTrans" to="startReport"/>
- </view-state>
+		<transition on="graphTrans" to="graphicalReports" />
+		<transition on="setupTrans" to="setupRaptorWeb" />
+		<transition on="aboutTrans" to="about" />
+		<transition on="homeTrans" to="startReport" />
+	</view-state>
 
- <view-state id="about" view ="about.jspx">
- 	<transition on="graphTrans" to="graphicalReports"/>
-	<transition on="setupTrans" to="setupRaptorWeb"/>
-	<transition on="aboutTrans" to="about"/>
-	<transition on="homeTrans" to="startReport"/>
- </view-state>
+	<view-state id="about" view="about.jspx">
+		<transition on="graphTrans" to="graphicalReports" />
+		<transition on="setupTrans" to="setupRaptorWeb" />
+		<transition on="aboutTrans" to="about" />
+		<transition on="homeTrans" to="startReport" />
+	</view-state>
 
- <view-state id="graphicalReports" view ="graphicalReports.jspx">
- 	<!-- the model for storing information about selected graphical components (could be setup in the model attribute of the view-state element) -->
-	<var name="graphmodel" class="uk.ac.cardiff.raptorweb.model.GraphModel" />
-	<var name="reportmodel" class="uk.ac.cardiff.raptorweb.model.ReportModel" />
+	<view-state id="graphicalReports" view="graphicalReports.jspx">
+		<!-- the model for storing information about selected graphical components 
+			(could be setup in the model attribute of the view-state element) -->
+		<var name="graphmodel" class="uk.ac.cardiff.raptorweb.model.GraphModel" />
+		<var name="reportmodel" class="uk.ac.cardiff.raptorweb.model.ReportModel" />
 
-	<!--  we need to load these specific to a person and a role -->
-	<on-entry>
-            <evaluate expression="graphService.loadSavedReports(reportmodel)"/>
-    </on-entry>
+		<!-- we need to load these specific to a person and a role -->
+		<on-entry>
+			<evaluate expression="graphService.loadSavedReports(reportmodel)" />
+		</on-entry>
 
- 	<transition on="invokeStatisticalUnit">
- 		<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)"/>
- 	</transition>
+		<transition on="invokeStatisticalUnit">
+			<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)" />
+		</transition>
 
-	<transition on="updateMUAStatistic">
- 		<evaluate expression="graphService.updateMUAStatistic(graphmodel)"/>
- 		<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)"/>
- 	</transition>
+		<transition on="updateMUAStatistic">
+			<evaluate expression="graphService.updateMUAStatistic(graphmodel)" />
+			<evaluate expression="graphService.invokeStatisticalUnit(graphmodel)" />
+		</transition>
 
- 	<transition on="removeReport">
-		<evaluate expression="graphService.removeReport(reportmodel)"/>
- 	</transition>
+		<transition on="removeReport">
+			<evaluate expression="graphService.removeReport(reportmodel)" />
+		</transition>
 
- 	 <transition on="generateExcelReport">
- 		<evaluate expression="graphService.generateExcelReport(graphmodel,reportmodel)"/>
- 	</transition>
+		<transition on="generateExcelReport">
+			<evaluate expression="graphService.generateExcelReport(graphmodel,reportmodel)" />
+		</transition>
 
- 	<transition on="generateCSVReport">
- 		<evaluate expression="graphService.generateCSVReport(graphmodel,reportmodel)"/>
- 	</transition>
-
-
-
-	<transition on="graphTrans" to="graphicalReports"/>
-	<transition on="setupTrans" to="setupRaptorWeb"/>
-	<transition on="aboutTrans" to="about"/>
-	<transition on="homeTrans" to="startReport"/>
-
-
- </view-state>
-
-
-
-  <view-state id="setupRaptorWeb" view ="setupRaptorWeb.jspx">
- 	 <!--  used to help with the setup configuration  -->
-  	<var name="setupmodel" class="uk.ac.cardiff.raptorweb.model.SetupModel" />
-	<transition on="graphTrans" to="graphicalReports"/>
-	<transition on="setupTrans" to="setupRaptorWeb"/>
-	<transition on="aboutTrans" to="about"/>
-	<transition on="homeTrans" to="startReport"/>
-
-	<transition on="getAggregatorCapabilities">
-		<evaluate expression="setupService.getCapabilities(setupmodel)"/>
-	</transition>
-
-	<transition on="deleteAllEntriesFromAttachedMUA">
- 		<evaluate expression="setupService.deleteAllEntriesFromAttachedMUA(setupmodel)"/>
- 	</transition>
-
- 	<transition on="attachMUA">
- 		<evaluate expression="setupService.setAttachedEndpoint(setupmodel)"/>
- 	</transition>
+		<transition on="generateCSVReport">
+			<evaluate expression="graphService.generateCSVReport(graphmodel,reportmodel)" />
+		</transition>
 
 
 
- </view-state>
+		<transition on="graphTrans" to="graphicalReports" />
+		<transition on="setupTrans" to="setupRaptorWeb" />
+		<transition on="aboutTrans" to="about" />
+		<transition on="homeTrans" to="startReport" />
 
 
- </flow>
+	</view-state>
+
+
+
+	<view-state id="setupRaptorWeb" view="setupRaptorWeb.jspx">
+		<!-- used to help with the setup configuration -->
+		<var name="setupmodel" class="uk.ac.cardiff.raptorweb.model.SetupModel" />
+		<transition on="graphTrans" to="graphicalReports" />
+		<transition on="setupTrans" to="setupRaptorWeb" />
+		<transition on="aboutTrans" to="about" />
+		<transition on="homeTrans" to="startReport" />
+
+		<transition on="getAggregatorCapabilities">
+			<evaluate expression="setupService.getCapabilities(setupmodel)" />
+		</transition>
+
+		<transition on="deleteAllEntriesFromAttachedMUA">
+			<evaluate expression="setupService.deleteAllEntriesFromAttachedMUA(setupmodel)" />
+		</transition>
+
+		<transition on="attachMUA">
+			<evaluate expression="setupService.setAttachedEndpoint(setupmodel)" />
+		</transition>
+
+
+
+	</view-state>
+
+
+</flow>
