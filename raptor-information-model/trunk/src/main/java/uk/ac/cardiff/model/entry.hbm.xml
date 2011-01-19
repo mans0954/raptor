@@ -16,7 +16,7 @@
 	</id>
 
  	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="false" index="dt_index"/>
-	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" />
+	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" index="requesthost_index" />
 	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="false" />
 	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="false" />
 	<property name="serverHostFriendlyName" type="string" update="true" insert="true"	column="serverHostFriendlyName"  not-null="false" />
@@ -34,7 +34,7 @@
       		<property name="messageProfileId" column="messageProfileId" type="string" />
       		<property name="responseBinding" column="responseBinding" type="string" />
       		<property name="requestBinding" column="requestBinding" type="string" />
-      		<property name="principleName" column="principleName" type="string" />
+      		<property name="principleName" column="principleName" type="string" index="principalname_index" />
 			<property name="releasedAttributes" column="releasedAttributes" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 			<property name="assertionId" column="assertionId" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 			<property name="nameIdentifier" column="nameIdentifier" type="string" />
