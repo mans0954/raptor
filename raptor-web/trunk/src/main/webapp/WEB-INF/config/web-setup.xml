@@ -33,6 +33,10 @@
 	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
 	</bean>
+	
+	<bean id="preferenceService" class="uk.ac.cardiff.raptorweb.service.impl.PreferenceServiceImpl">
+	
+	</bean>
 
 	<bean id="startService" class="uk.ac.cardiff.raptorweb.service.impl.StartServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>

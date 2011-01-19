@@ -202,13 +202,18 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- spring 2.5.4 -->
+		<!-- spring <dependency> <groupId>org.springframework</groupId> <artifactId>spring</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
+
+
+		<!-- Various Application Context utilities, including EhCache, JavaMail, 
+			Quartz, and Freemarker integration Define this if you need any of these integrations -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<!-- spring webflow -->
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -252,6 +257,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- spring webflow -->
 		<dependency>
 			<groupId>org.springframework.webflow</groupId>
 			<artifactId>org.springframework.binding</artifactId>
@@ -412,17 +418,17 @@
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>2.2.7</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>2.2.7</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-bundle-jaxrs</artifactId>
-			<version>2.2.8</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>uk.ac.cardiff.raptor</groupId>
@@ -430,21 +436,39 @@
 			<version>0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>1.8.0</version>
-		</dependency>
-
-		<dependency>
 			<groupId>jexcelapi</groupId>
 			<artifactId>jxl</artifactId>
 			<version>2.6</version>
+		</dependency>
+
+		<!-- spring security, should be the same version as normal spring? -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.security.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mod4j.org.apache.commons</groupId>
+			<artifactId>lang</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>
 		<trinidad.version>1.2.13</trinidad.version>
-		<spring.version>2.5.4</spring.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
 		<webflow.version>2.0.5.RELEASE</webflow.version>
+		<spring.security.version>3.0.5.RELEASE</spring.security.version>
 	</properties>
 </project>
