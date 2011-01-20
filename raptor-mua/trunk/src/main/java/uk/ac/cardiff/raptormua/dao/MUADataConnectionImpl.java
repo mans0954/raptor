@@ -15,23 +15,14 @@
  */
 package uk.ac.cardiff.raptormua.dao;
 
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
-import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
-
-import uk.ac.cardiff.model.Entry;
 
 /**
  * @author philsmart
