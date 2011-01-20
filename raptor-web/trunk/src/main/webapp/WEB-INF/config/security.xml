@@ -25,7 +25,7 @@
 		<s:authentication-provider>
 			<s:password-encoder hash="md5" />
 			<s:user-service>
-				<s:user name="phil" password="d14ffd41334ec4b4b3f2c0d55c38be6f"
+				<s:user name="phil" password="12556ad8859d3d4d5c325df208ffcd81"
 					authorities="ROLE_SUPERVISOR, ROLE_USER, ROLE_TELLER" />
 				<s:user name="dianne" password="65d15fe9156f9c4bbffd98085992a44e"
 					authorities="ROLE_USER,ROLE_TELLER" />
