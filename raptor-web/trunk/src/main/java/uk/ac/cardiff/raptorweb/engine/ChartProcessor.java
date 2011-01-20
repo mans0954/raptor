@@ -3,7 +3,9 @@
  */
 package uk.ac.cardiff.raptorweb.engine;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
@@ -16,7 +18,7 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
  * Takes a chart from the MUA, and wraps it inside the current view technologies (trinidads) graph model
  */
 public class ChartProcessor {
-	static Logger log = Logger.getLogger(ChartProcessor.class);
+	static Logger log = LoggerFactory.getLogger(ChartProcessor.class);
 
 	public static RaptorGraphModel constructRaptorGraphModel(AggregatorGraphModel gmodel){
 		RaptorGraphModel rgraph = new RaptorGraphModel();
