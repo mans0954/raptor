@@ -8,8 +8,8 @@
 
 
 	<s:http  use-expressions="true">
-		<s:intercept-url pattern="/**" access="isAuthenticated()" />
-		<s:form-login />
+		<s:intercept-url pattern="/spring/**" access="isAuthenticated()" />
+		<s:form-login login-page='/login.html'/>
 		<s:logout />
 		<!-- Uncomment to limit the number of sessions a user can have -->
 
