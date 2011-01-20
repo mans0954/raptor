@@ -265,11 +265,6 @@
 			<artifactId>jetty-util</artifactId>
 			<version>${jetty.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.mortbay.jetty</groupId>
-			<artifactId>jsp-2.1-jetty</artifactId>
-			<version>${jetty.version}</version>
-		</dependency>
 
 
 		<!-- includes the information-model -->
