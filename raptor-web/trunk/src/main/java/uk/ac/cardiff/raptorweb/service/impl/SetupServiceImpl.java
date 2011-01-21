@@ -9,6 +9,7 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.SetupModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.service.SetupService;
 
 /**
@@ -30,8 +31,8 @@ public class SetupServiceImpl implements SetupService{
 		return null;
 	}
 
-	public void setAttachedEndpoint(SetupModel model){
-	    webEngine.setAttached(model.getSelectedEndpoint());
+	public void setAttachedEndpoint(WebSession websession){
+	    webEngine.setAttached(websession.getSetupmodel().getSelectedEndpoint());
 	}
 
 
@@ -51,12 +52,12 @@ public class SetupServiceImpl implements SetupService{
 	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getCapabilities(uk.ac.cardiff.raptorweb.model.SetupModel)
 	 */
 	@Override
-	public void getCapabilities(SetupModel model) {
-		model.setSelectEndpointCapabilities(webEngine.getCapabilities(model.getSelectedEndpoint()));
+	public void getCapabilities(WebSession websession) {
+	    websession.getSetupmodel().setSelectEndpointCapabilities(webEngine.getCapabilities(websession.getSetupmodel().getSelectedEndpoint()));
 	}
 
-	public void deleteAllEntriesFromAttachedMUA(SetupModel model){
-	    	webEngine.deleteAllEntriesFromAttachedMUA(model);
+	public void deleteAllEntriesFromAttachedMUA(WebSession websession){
+	    	webEngine.deleteAllEntriesFromAttachedMUA(websession.getSetupmodel());
 	}
 
 	/* (non-Javadoc)

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.StatisticParameters.StatisticType;
@@ -20,6 +21,7 @@ import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.service.GraphService;
 
 /**
@@ -67,20 +69,20 @@ public class GraphServiceImpl implements GraphService{
 		return null;
 	}
 
-	public void generateExcelReport(GraphModel model, ReportModel report){
-		webEngine.generateReport(model,"excel", report);
+	public void generateExcelReport(WebSession websession){
+		webEngine.generateReport(websession,"excel");
 	}
 
-	public void generateCSVReport(GraphModel model, ReportModel report){
-		webEngine.generateReport(model,"csv", report);
+	public void generateCSVReport(WebSession websession){
+		webEngine.generateReport(websession,"csv");
 	}
 
 	/**
 	 * loads the reports from the download directory into the graphmodel
 	 * @param model
 	 */
-	public void loadSavedReports(ReportModel model){
-		webEngine.loadSavedReports(model);
+	public void loadSavedReports(WebSession websession){
+		webEngine.loadSavedReports(websession);
 	}
 
 
@@ -90,7 +92,8 @@ public class GraphServiceImpl implements GraphService{
 	 * Adds the trinidad GraphModel into the Raptor Web Model
 	 */
 	@Override
-	public void invokeStatisticalUnit(GraphModel model) {
+	public void invokeStatisticalUnit(WebSession websession) {
+	        GraphModel model = websession.getGraphmodel();
 		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
 		if (gmodel!=null){
@@ -120,13 +123,13 @@ public class GraphServiceImpl implements GraphService{
 	 * @see uk.ac.cardiff.raptorweb.service.GraphService#updateMUAStatistic(uk.ac.cardiff.raptorweb.model.GraphModel)
 	 */
 	@Override
-	public void updateMUAStatistic(GraphModel model) {
-	    webEngine.updateMUAStatistic(model);
+	public void updateMUAStatistic(WebSession websession) {
+	    webEngine.updateMUAStatistic(websession.getGraphmodel());
 
 	}
 
-	public void removeReport(ReportModel model){
-	    webEngine.removeReport(model);
+	public void removeReport(WebSession websession){
+	    webEngine.removeReport(websession.getReportmodel());
 	}
 
 	@Override

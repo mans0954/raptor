@@ -30,7 +30,7 @@
 										<tr:outputText value="Processing Request, Please Wait..." />
 									</f:facet>
 									<f:facet name="ready">
-										<tr:outputText value="#{graphmodel.processingResult}" />
+										<tr:outputText value="#{flowScope.websession.graphmodel.processingResult}" />
 									</f:facet>
 								</tr:statusIndicator>
 							</tr:panelGroupLayout>
@@ -142,7 +142,7 @@
 													<tr:commandButton partialSubmit="true" text="Update"
 														action="updateMUAStatistic">
 														<f:setPropertyActionListener value="#{unit}"
-															target="#{graphmodel.selectedStatisticalUnit}" />
+															target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 													</tr:commandButton>
 												</tr:panelGroupLayout>
 
@@ -171,7 +171,7 @@
 											<tr:commandLink text="#{unit.statisticParameters.unitName}"
 												action="invokeStatisticalUnit" partialSubmit="true">
 												<f:setPropertyActionListener value="#{unit}"
-													target="#{graphmodel.selectedStatisticalUnit}" />
+													target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 											</tr:commandLink>
 
 										</tr:column>
@@ -203,9 +203,9 @@
 
 
 										<tr:table id="reportDownloadTable"
-											value="#{reportmodel.reportsForDownload}" bandingInterval="2"
+											value="#{flowScope.websession.reportmodel.reportsForDownload}" bandingInterval="2"
 											banding="row" var="row"
-											rendered="#{not empty reportmodel.reportsForDownload}"
+											rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
 											partialTriggers=":generateExcelReport :reportDownloadTable:removeReportCommandLink"
 											width="95%" labelWidth="5%">
 
@@ -230,7 +230,7 @@
 												<tr:commandLink id="removeReportCommandLink" text="x"
 													action="removeReport" partialSubmit="true">
 													<f:setPropertyActionListener value="#{row}"
-														target="#{reportmodel.selectedDownloadFile}" />
+														target="#{flowScope.websession.reportmodel.selectedDownloadFile}" />
 												</tr:commandLink>
 
 											</tr:column>
@@ -265,11 +265,11 @@
 								<!--  verticalBar, horizontalBar, stackedVerticalBar, stackedHorizontalBar, pie, area, stackedArea, line, barLine, XYLine,
 						scatterPlot, radar, radarArea, funnel, circularGauge, semiCircularGauge -->
 								<tr:outputText value="Type"
-									rendered="#{not empty graphmodel.currentGraph}" />
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartTypeSelector"
-									value="#{graphmodel.chartOptions.graphType}" autoSubmit="true"
+									value="#{flowScope.websession.graphmodel.chartOptions.graphType}" autoSubmit="true"
 									partialSubmit="true"
-									rendered="#{not empty graphmodel.currentGraph}">
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="verticalBar" itemValue="verticalBar" />
 									<f:selectItem itemLabel="horizontalBar"
 										itemValue="horizontalBar" />
@@ -287,22 +287,22 @@
 								</tr:selectOneChoice>
 								<tr:spacer width="10px" />
 								<tr:outputText value=" Perspective"
-									rendered="#{not empty graphmodel.currentGraph}" />
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartPerspectiveSelector"
-									value="#{graphmodel.chartOptions.perspective}"
+									value="#{flowScope.websession.graphmodel.chartOptions.perspective}"
 									autoSubmit="true" partialSubmit="true" shortDesc="Perspective"
-									rendered="#{not empty graphmodel.currentGraph}">
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="on" itemValue="true" />
 									<f:selectItem itemLabel="off" itemValue="false" />
 								</tr:selectOneChoice>
 								<tr:spacer width="10px" />
 								<tr:outputText value=" XMajorGridCount"
-									rendered="#{not empty graphmodel.currentGraph}" />
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartXMajorGridCountSelector"
-									value="#{graphmodel.chartOptions.xMajorGridCount}"
+									value="#{flowScope.websession.graphmodel.chartOptions.xMajorGridCount}"
 									autoSubmit="true" partialSubmit="true"
 									shortDesc="XMajorGridCount"
-									rendered="#{not empty graphmodel.currentGraph}">
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="auto" itemValue="-1" />
 									<f:selectItem itemLabel="off" itemValue="0" />
 									<f:selectItem itemLabel="5" itemValue="5" />
@@ -312,12 +312,12 @@
 								</tr:selectOneChoice>
 								<tr:spacer width="10px" />
 								<tr:outputText value=" YMajorGridCount"
-									rendered="#{not empty graphmodel.currentGraph}" />
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartYMajorGridCountSelector"
-									value="#{graphmodel.chartOptions.yMajorGridCount}"
+									value="#{flowScope.websession.graphmodel.chartOptions.yMajorGridCount}"
 									autoSubmit="true" partialSubmit="true"
 									shortDesc="YMajorGridCount"
-									rendered="#{not empty graphmodel.currentGraph}">
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="auto" itemValue="-1" />
 									<f:selectItem itemLabel="off" itemValue="0" />
 									<f:selectItem itemLabel="5" itemValue="5" />
@@ -327,34 +327,34 @@
 								</tr:selectOneChoice>
 								<tr:spacer width="10px" />
 								<tr:outputText value=" Chart Display Height"
-									rendered="#{not empty graphmodel.currentGraph}" />
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartHeightSelector"
-									value="#{graphmodel.chartOptions.chartHeight}"
+									value="#{flowScope.websession.graphmodel.chartOptions.chartHeight}"
 									autoSubmit="true" partialSubmit="true"
 									shortDesc="YMajorGridCount"
-									rendered="#{not empty graphmodel.currentGraph}">
+									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="small" itemValue="700" />
 									<f:selectItem itemLabel="medium" itemValue="1100" />
 									<f:selectItem itemLabel="large" itemValue="1700" />
 								</tr:selectOneChoice>
 
 								<h:outputText value="  " />
-								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty graphmodel.currentTableGraph}">
+								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
             						<h:outputText value=" New Window" />
         						</h:outputLink>
 						-->
 							</tr:panelGroupLayout>
 
 							<tr:chart id="chart" verticalMajorSections="15"
-								value="#{graphmodel.currentGraph}"
-								rendered="#{not empty graphmodel.currentGraph}"
-								inlineStyle="width:95%; height:#{graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
-								type="#{graphmodel.chartOptions.graphType}"
+								value="#{flowScope.websession.graphmodel.currentGraph}"
+								rendered="#{not empty flowScope.websession.graphmodel.currentGraph}"
+								inlineStyle="width:95%; height:#{flowScope.websession.graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
+								type="#{flowScope.websession.graphmodel.chartOptions.graphType}"
 								partialTriggers=":chartTypeSelector :chartPerspectiveSelector :chartXMajorGridCountSelector :chartYMajorGridCountSelector :chartHeightSelector"
 								width="95%" animationDuration="0"
-								XMajorGridLineCount="#{graphmodel.chartOptions.xMajorGridCount}"
-								YMajorGridLineCount="#{graphmodel.chartOptions.yMajorGridCount}"
-								perspective="#{graphmodel.chartOptions.perspective}"
+								XMajorGridLineCount="#{flowScope.websession.graphmodel.chartOptions.xMajorGridCount}"
+								YMajorGridLineCount="#{flowScope.websession.graphmodel.chartOptions.yMajorGridCount}"
+								perspective="#{flowScope.websession.graphmodel.chartOptions.perspective}"
 								maxPrecision="2" />
 							<br />
 
@@ -365,9 +365,9 @@
 						<!-- ________________________________ -->
 
 						<tr:panelFormLayout rows="7" labelWidth="5%">
-							<tr:table value="#{graphmodel.currentTableGraph.rows}"
+							<tr:table value="#{flowScope.websession.graphmodel.currentTableGraph.rows}"
 								bandingInterval="2" banding="row" var="row" width="95%"
-								rendered="#{not empty graphmodel.currentTableGraph}">
+								rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
 
 								<tr:column sortProperty="series" sortable="true">
 									<f:facet name="header">

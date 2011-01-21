@@ -10,6 +10,7 @@ import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
@@ -21,17 +22,17 @@ public interface GraphService {
 
 	public List getStatisticalUnits();
 
-	public void invokeStatisticalUnit(GraphModel model);
+	public void invokeStatisticalUnit(WebSession websession);
 
-	public void generateExcelReport(GraphModel model, ReportModel report);
+	public void generateExcelReport(WebSession websession);
 
-	public void generateCSVReport(GraphModel model, ReportModel report);
+	public void generateCSVReport(WebSession websession);
 
-	public void loadSavedReports(ReportModel model);
+	public void loadSavedReports(WebSession websession);
 
-	public void updateMUAStatistic(GraphModel model);
+	public void updateMUAStatistic(WebSession websession);
 
-	public void removeReport(ReportModel model);
+	public void removeReport(WebSession websession);
 
 	public Capabilities getAttachedCapabilities();
 

@@ -10,12 +10,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
 
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.model.records.Row;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -27,6 +27,9 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 /**
@@ -34,29 +37,29 @@ import org.springframework.core.io.Resource;
  *
  */
 public class ExcelReportGenerator extends ReportConstructor {
-    static Logger log = Logger.getLogger(ExcelReportGenerator.class);
+    static Logger log = LoggerFactory.getLogger(ExcelReportGenerator.class);
 
     public ExcelReportGenerator() {
-	// set which type is handles
+	// register which type it handles
 	this.setHandledReportType(HandledReportTypes.excel);
     }
 
-    public String generateReport(GraphModel model, ReportModel report) {
-	log.info("Generating Excel Report " + model.getSelectedStatisticalUnit());
+    public String generateReport(WebSession session) {
+	log.info("Generating Excel Report " + session.getGraphmodel().getSelectedStatisticalUnit());
 	String relativePath = null;
 	try {
-	    File dir = saveDirectory.getFile();
+	    File dir = new File(saveDirectory.getFile().getCanonicalPath()+"/"+session.getUser().getName());
 	    log.debug("Save Directory exists: " + dir.exists());
 	    if (!dir.exists())
 		dir.mkdir();
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + model.getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
+	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
 	    WorkbookSettings ws = new WorkbookSettings();
 	    ws.setLocale(new Locale("en", "EN"));
 	    WritableWorkbook workbook = Workbook.createWorkbook(dir, ws);
-	    WritableSheet s = workbook.createSheet("RaptorWeb Report " + model.getSelectedStatisticalUnit(), 0);
+	    WritableSheet s = workbook.createSheet("RaptorWeb Report " + session.getGraphmodel().getSelectedStatisticalUnit(), 0);
 
 	    /* SET UP WRITING STYLE */
 
@@ -77,7 +80,7 @@ public class ExcelReportGenerator extends ReportConstructor {
 	    WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.FLOAT);
 
 	    int lineCount = 1;
-	    for (Row<Double> row : model.getCurrentTableGraph().getRows()) {
+	    for (Row<Double> row : session.getGraphmodel().getCurrentTableGraph().getRows()) {
 		Label l = new Label(0, lineCount, row.getSeries(), cf);
 		s.addCell(l);
 		Double value = row.getValue();
@@ -88,7 +91,7 @@ public class ExcelReportGenerator extends ReportConstructor {
 	    }
 
 	    relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
-	    report.addReportForDownload(dir, relativePath);
+	    session.getReportmodel().addReportForDownload(dir, relativePath);
 	    log.debug("Excel Report Created At: " + relativePath);
 	    workbook.write();
 	    workbook.close();
@@ -100,7 +103,7 @@ public class ExcelReportGenerator extends ReportConstructor {
 	    log.error("Problem generating excel report " + e.getMessage());
 	}
 
-	log.info("Excel Created..." + model.getSelectedStatisticalUnit());
+	log.info("Excel Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
 	return relativePath;
     }
 }

@@ -28,11 +28,11 @@ public class StartModel implements Serializable{
 	private RaptorTableChartModel bottomFiveResouces;
 	private RaptorGraphModel headlineGraph;
 	private Capabilities attachedMUACapabilities;
-	private TimeRange statsRangeSelector;	
-	
+	private TimeRange statsRangeSelector;
+
 	/* only updated on the UI, hence sensible default*/
 	public enum TimeRange{TODAY,LASTWEEK,LASTMONTH,LASTYEAR}
-	
+
 	public StartModel(){
 	    statsRangeSelector = TimeRange.TODAY;
 	}
@@ -103,7 +103,7 @@ public class StartModel implements Serializable{
 	    return attachedMUACapabilities;
 	}
 
-	
+
 	public void setStatsRangeSelector(TimeRange timeRange){
 	    this.statsRangeSelector = timeRange;
 	}

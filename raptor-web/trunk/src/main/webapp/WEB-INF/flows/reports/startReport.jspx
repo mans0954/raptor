@@ -19,11 +19,11 @@
 							<!--<tr:statusIndicator/> not doing a PPR on this page, so this will not work-->
 
 							<tr:outputText inlineStyle="font-size:150%"
-								value="Currently Attached to #{startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
+								value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
 							<tr:spacer width="5px" />
 
 							<tr:selectOneChoice id="quickStatsRangeSelector"
-								value="#{startmodel.statsRangeSelector}" autoSubmit="true"
+								value="#{flowScope.websession.startmodel.statsRangeSelector}" autoSubmit="true"
 								shortDesc="quickStatsRangeSelector">
 								<f:selectItem itemLabel="Today" itemValue="TODAY" />
 								<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
@@ -50,8 +50,8 @@
 							<tr:panelHeader text="Number of authentications" />
 							<tr:spacer height="10px" />
 							<tr:chart id="chart" verticalMajorSections="15"
-								value="#{startmodel.headlineGraph}"
-								rendered="#{not empty startmodel.headlineGraph}"
+								value="#{flowScope.websession.startmodel.headlineGraph}"
+								rendered="#{not empty flowScope.websession.startmodel.headlineGraph}"
 								inlineStyle="width:100%; height:270px; border-style: hidden;"
 								type="stackedArea" width="98%" animationDuration="400"
 								perspective="false" maxPrecision="2" />
@@ -70,7 +70,7 @@
 									inlineStyle="font-size:120%;font-weight: bold" />
 								<tr:spacer height="7px" />
 								<tr:outputText
-									value="#{startmodel.numberOfAuthenticationsPerFormatted}"
+									value="#{flowScope.websession.startmodel.numberOfAuthenticationsPerFormatted}"
 									partialTriggers=":quickStatsRangeSelector"
 									inlineStyle="font-size:270%;font-weight: bold" />
 								<tr:spacer height="20px" />
@@ -78,15 +78,15 @@
 									inlineStyle="font-size:120%;font-weight: bold" />
 								<tr:spacer height="7px" />
 								<tr:outputText
-									value="#{startmodel.numberOfUniqueAuthenticationsPerFormatted}"
+									value="#{flowScope.websession.startmodel.numberOfUniqueAuthenticationsPerFormatted}"
 									inlineStyle="font-size:270%;font-weight: bold" />
 							</tr:panelFormLayout>
 
 							<tr:spacer width="30px" />
 
-							<tr:table value="#{startmodel.topFiveResouces.rows}"
+							<tr:table value="#{flowScope.websession.startmodel.topFiveResouces.rows}"
 								bandingInterval="2" banding="row" var="row" width="100%"
-								rendered="#{not empty startmodel.topFiveResouces}">
+								rendered="#{not empty flowScope.websession.startmodel.topFiveResouces}">
 								<f:facet name="header">
 									<tr:outputText value="Top 5 eResources" />
 								</f:facet>
@@ -107,9 +107,9 @@
 
 							<tr:spacer width="15px" />
 
-							<tr:table value="#{startmodel.bottomFiveResouces.rows}"
+							<tr:table value="#{flowScope.websession.startmodel.bottomFiveResouces.rows}"
 								bandingInterval="2" banding="row" var="row" width="100%"
-								rendered="#{not empty startmodel.bottomFiveResouces}">
+								rendered="#{not empty flowScope.websession.startmodel.bottomFiveResouces}">
 								<f:facet name="header">
 									<tr:outputText value="Bottom 5 eResources" />
 								</f:facet>
