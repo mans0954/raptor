@@ -44,7 +44,7 @@
 					it can pick up where it left off in the even of a failure
 				-->
 				<bean id="shibbolethAuditLFP" class="main.uk.ac.cf.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 					<!--<property name="parsingSupport"><ref bean="persistentParserConfig"></ref></property>-->
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
