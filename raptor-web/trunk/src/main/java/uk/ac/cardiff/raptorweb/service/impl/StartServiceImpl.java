@@ -19,6 +19,7 @@ import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.StartModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.model.StartModel.TimeRange;
 import uk.ac.cardiff.raptorweb.service.StartService;
 
@@ -36,7 +37,8 @@ public class StartServiceImpl implements StartService {
      * Adds the following statistical information from the attached MUA: 1. Number of authentications per <RANGE>
      */
     @Override
-    public void generateStatistics(StartModel startmodel) {
+    public void generateStatistics(WebSession websession) {
+	StartModel startmodel = websession.getStartmodel();
 	long currentTimeInMS = System.currentTimeMillis();
 	//decide dates to use
 	DateTime currentDateTime = new DateTime(currentTimeInMS);

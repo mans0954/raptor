@@ -5,7 +5,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
-
+<!--  allows annotations to be used to secure methods
+    <s:global-method-security secured-annotations="enabled">
+    </s:global-method-security>
+-->
 
 	<s:http  use-expressions="true">
 		<s:intercept-url pattern="/spring/**" access="isAuthenticated()" />
@@ -26,13 +29,9 @@
 			<s:password-encoder hash="md5" />
 			<s:user-service>
 				<s:user name="phil" password="12556ad8859d3d4d5c325df208ffcd81"
-					authorities="ROLE_SUPERVISOR, ROLE_USER, ROLE_TELLER" />
-				<s:user name="dianne" password="65d15fe9156f9c4bbffd98085992a44e"
+					authorities="ROLE_ADMIN" />
+				<s:user name="rhys" password="65d15fe9156f9c4bbffd98085992a44e"
 					authorities="ROLE_USER,ROLE_TELLER" />
-				<s:user name="scott" password="2b58af6dddbd072ed27ffc86725d7d3a"
-					authorities="ROLE_USER" />
-				<s:user name="peter" password="22b5c9accc6e1ba628cedc63a72d57f8"
-					authorities="ROLE_USER" />
 			</s:user-service>
 		</s:authentication-provider>
 	</s:authentication-manager>

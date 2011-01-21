@@ -15,6 +15,7 @@ import org.springframework.core.io.Resource;
 import uk.ac.cardiff.raptorweb.model.DownloadFile;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
@@ -27,11 +28,11 @@ public class ReportHandler {
 	private List<ReportConstructor> reportConstructors;
 
 
-	public void generateReport(GraphModel model, String reportType, ReportModel report){
+	public void generateReport(WebSession session, String reportType){
 		for (ReportConstructor reportConstructor : reportConstructors){
-			log.debug("finding report constructor for "+reportType+" with "+reportConstructor.getHandledReportType().toString());
+			log.debug("finding report constructor for {} with {}",reportType,reportConstructor.getHandledReportType().toString());
 			if (reportConstructor.getHandledReportType().toString().equals(reportType)){
-				reportConstructor.generateReport(model,report);
+				reportConstructor.generateReport(session);
 			}
 		}
 
@@ -48,7 +49,7 @@ public class ReportHandler {
 	/**
 	 * @param report
 	 */
-	public void loadSavedReports(ReportModel report) {
+	public void loadSavedReports(WebSession session) {
 		for (ReportConstructor reportConstructor : reportConstructors){
 			Resource directory = reportConstructor.getSaveDirectory();
 			Resource baseDirectory = reportConstructor.getBaseDirectory();
@@ -56,12 +57,12 @@ public class ReportHandler {
 
 			File dir;
 			try {
-				dir = directory.getFile();
+				dir = new File(directory.getFile().getCanonicalPath()+"/"+session.getUser().getName());
 				File[] dirList = dir.listFiles();
 				for (File file : dirList){
 					if (file.getName().endsWith("."+fileExtension)){
 						String relativePath = file.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(),"");
-						report.addReportForDownload(file, relativePath);
+						session.getReportmodel().addReportForDownload(file, relativePath);
 					}
 				}
 			}

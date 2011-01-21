@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
@@ -33,7 +34,7 @@ public abstract class ReportConstructor {
 	private HandledReportTypes handledReportType;
 
 
-	public abstract String generateReport(GraphModel model, ReportModel report);
+	public abstract String generateReport(WebSession session);
 
 	public void setSaveDirectory(Resource saveDirectory) {
 		this.saveDirectory = saveDirectory;

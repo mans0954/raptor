@@ -37,7 +37,7 @@
 									</f:facet>
 									<tr:commandLink text="Attach" action="attachMUA">
 										<f:setPropertyActionListener value="#{attached}"
-											target="#{setupmodel.selectedEndpoint}" />
+											target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
 									</tr:commandLink>
 								</tr:column>
 								<tr:column>
@@ -46,20 +46,20 @@
 									</f:facet>
 									<tr:commandLink action="getAggregatorCapabilities"
 										text="Check Now"
-										rendered="#{empty setupmodel.selectEndpointCapabilities.statisticalServices}">
+										rendered="#{empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
 										<f:setPropertyActionListener value="#{attached}"
-											target="#{setupmodel.selectedEndpoint}" />
+											target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
 									</tr:commandLink>
 									<tr:panelList rows="2"
-										rendered="#{setupmodel.selectEndpointCapabilities.error}">
+										rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}">
 										<tr:outputText
-											value="ERROR: #{setupmodel.selectEndpointCapabilities.errorMessage}"
-											text="#{setupmodel.selectEndpointCapabilities.errorMessage}" />
+											value="ERROR: #{flowScope.websession.setupmodel.selectEndpointCapabilities.errorMessage}"
+											text="#{flowScope.websession.setupmodel.selectEndpointCapabilities.errorMessage}" />
 									</tr:panelList>
 									<tr:panelList rows="10"
-										rendered="#{not empty setupmodel.selectEndpointCapabilities.statisticalServices}">
+										rendered="#{not empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
 										<c:forEach var="item"
-											items="#{setupmodel.selectEndpointCapabilities.statisticalServices}">
+											items="#{flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
 											<tr:outputText value="* #{item.statisticParameters.unitName}"
 												text="#{item.statisticParameters.unitName}" />
 										</c:forEach>
@@ -74,9 +74,9 @@
 
 									<center><tr:image source="/image/red-circle.gif"
 										shortDesc="help"
-										rendered="#{setupmodel.selectEndpointCapabilities.error}" />
+										rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
 									<tr:image source="/image/green-circle.png" shortDesc="help"
-										rendered="#{!setupmodel.selectEndpointCapabilities.error}" />
+										rendered="#{!flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
 									</center>
 								</tr:column>
 							</tr:table>
@@ -108,7 +108,7 @@
 									<tr:outputText value="Processing Request, Please Wait..." />
 								</f:facet>
 								<f:facet name="ready">
-									<tr:outputText value="#{setupmodel.processingResult}" />
+									<tr:outputText value="#{flowScope.websession.setupmodel.processingResult}" />
 								</f:facet>
 							</tr:statusIndicator>
 							<tr:spacer width="5px" />

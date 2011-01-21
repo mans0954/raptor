@@ -21,6 +21,7 @@ import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.model.SetupModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.sei.ServiceEndpointInterface;
 
 /**
@@ -32,7 +33,7 @@ public class RaptorWebEngine {
 
     /* the registry which holds information about all MUAs injected from the xml file*/
     private MUARegistry registry;
-    
+
     /* constructs downloadable reports from that currently displayed*/
     private ReportHandler reportHandler;
 
@@ -44,7 +45,7 @@ public class RaptorWebEngine {
 
     /* holds basic metadata about this particular RaptorWeb engine instance*/
     private WebMetadata webMetadata;
-     
+
 
     /**
      * @return
@@ -74,7 +75,7 @@ public class RaptorWebEngine {
     /**
      * Returns the list of USER level statistical units from the attached MUA as stored in the
      * currentlyAttachedCapabilities. If no currentlyAttachedCapabilities exists, hence
-     * no MUA has been successfully queried, it chooses either the current MUA <code>attachedMUA</code> 
+     * no MUA has been successfully queried, it chooses either the current MUA <code>attachedMUA</code>
      * or the MUA that was loaded with <code>isAttached value="true"</code>
      * from the XML configuration.
      *
@@ -88,7 +89,7 @@ public class RaptorWebEngine {
 	    MUAEntry attached = null;
 	    if (attachedMUA!=null){
 		attached =attachedMUA;
-	    }	    
+	    }
 	    for (MUAEntry entry : registry.getUAEntries()) {
 		if (entry.getIsAttached()) {
 		    attached = entry;
@@ -130,7 +131,7 @@ public class RaptorWebEngine {
 	return gmodel;
 
     }
-    
+
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
 	AggregatorGraphModel gmodel = ServiceEndpointInterface.updateAndinvokeStatisticalUnit(getCurrentlyAttached().getServiceEndpoint(), selectedStatisticalUnit);
 	return gmodel;
@@ -140,8 +141,8 @@ public class RaptorWebEngine {
     /**
      * @param currentTableGraph
      */
-    public void generateReport(GraphModel model, String reportType, ReportModel report) {
-	reportHandler.generateReport(model, reportType, report);
+    public void generateReport(WebSession session, String reportType) {
+	reportHandler.generateReport(session, reportType);
 
     }
 
@@ -153,8 +154,8 @@ public class RaptorWebEngine {
 	return reportHandler;
     }
 
-    public void loadSavedReports(ReportModel report) {
-	reportHandler.loadSavedReports(report);
+    public void loadSavedReports(WebSession session) {
+	reportHandler.loadSavedReports(session);
 
     }
 

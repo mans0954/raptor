@@ -11,6 +11,7 @@ import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.model.StartModel;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
@@ -18,7 +19,7 @@ import uk.ac.cardiff.raptorweb.model.StartModel;
  */
 public interface StartService {
 
-	public void generateStatistics(StartModel startmodel);
+	public void generateStatistics(WebSession websession);
 
 
 }
