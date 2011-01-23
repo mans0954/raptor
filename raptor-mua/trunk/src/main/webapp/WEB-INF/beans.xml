@@ -112,42 +112,6 @@
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
-	<!-- Polling trigger setup -->
-	
-	<!--  Polling triggers to generate SYSTEM level statistics -->
-
-	<bean id="SystemStatsQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
-		<property name="jobDetail">
-			<ref local="SystemStatsJobDetail" />
-		</property>
-		<property name="repeatInterval" value="10000" />
-		<property name="repeatCount" value="0" />
-	</bean>
-
-	<bean id="SystemStatsJobDetail"
-		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject">
-			<ref bean="MUAProcess" />
-		</property>
-		<property name="targetMethod">
-			<value>poll</value>
-		</property>
-		<property name="concurrent">
-			<value>false</value>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<list><!--
-				<ref local="ICAProcessTrigger" />
-				<ref local="MUAProcessQuickTrigger" />-->
-				<ref local="SystemStatsQuickTrigger"/>
-			</list>
-		</property>
-	</bean>
-	<!--  DONE -->
-
 	  <import resource="dao-beans.xml"/>
 	  <import resource="ua-registry.xml" />
 	  <import resource="statistical-units.xml" />
