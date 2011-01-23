@@ -13,16 +13,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
 	version="2.4">
 
-	<description>Template Jsf Trinidad SWF Alephsa</description>
-	<!-- - Location of the XML file that defines the root application context 
-		- Applied by ContextLoaderListener. All standard beans are included in the 
-		raptor-servlet, security is seperated into the security.xml file -->
+	<description>RaptorWeb</description>
+	
+	
+	<!-- - defines setup that can be accessed by the entire servlet, not just spring
+	hence why security is defined here -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-      /WEB-INF/config/raptorweb-servlet.xml
-      /WEB-INF/config/security.xml
-      </param-value>
+          /WEB-INF/config/security.xml
+      </param-value> 
 	</context-param>
 
 	<filter>
@@ -175,13 +175,15 @@
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
 
-	<!-- Spring web flow servlet -->
+	<!-- Spring web flow servlet, defines config specific to the current
+	application instance -->
 	<servlet>
 		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
+		 <init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/config/raptorweb-servlet.xml</param-value>
+			<param-value>/WEB-INF/config/raptorweb-servlet.xml
+			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

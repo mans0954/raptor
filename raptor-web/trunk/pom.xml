@@ -511,6 +511,20 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- Quartz  -->
+        
+        <dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<!-- spring security -->
 		<dependency>

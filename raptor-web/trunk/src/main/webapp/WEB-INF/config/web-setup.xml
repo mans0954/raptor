@@ -63,7 +63,35 @@
 	</bean>
 
 
+	<!-- Set up the start page background stats generator -->
+	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+			<ref local="SystemStatsQuickTrigger"/> 
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="SystemStatsQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref local="SystemStatsJobDetail" />
+		</property>
+		<property name="startDelay" value="5000"/>
+		<property name="repeatInterval" value="300000"/>
+	</bean>
 
+	<bean id="SystemStatsJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="startService" />
+		</property>
+		<property name="targetMethod">
+			<value>generateStatisticsBackground</value>
+		</property>
+		<property name="concurrent">
+			<value>false</value>
+		</property>
+	</bean>
 
 
 
