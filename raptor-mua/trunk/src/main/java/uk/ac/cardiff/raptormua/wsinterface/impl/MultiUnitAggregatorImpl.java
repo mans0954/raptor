@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptormua.wsinterface.impl;
 
 import javax.jws.WebService;
 
+import org.apache.cxf.binding.soap.SoapFault;
 import org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType;
 import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
@@ -70,7 +71,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#invokeStatisticalUnit(java.lang.String)
 	 */
-	public AggregatorGraphModel invokeStatisticalUnit(String statisticName) {
+	public AggregatorGraphModel invokeStatisticalUnit(String statisticName) throws SoapFault {
 		return processService.performStatistic(statisticName);
 	}
 
@@ -86,7 +87,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#setStatisticalUnit(uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation)
 	 */
 	@Override
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 	    processService.updateStatisticalUnit(statisticalUnitInformation);
 
 	}
@@ -95,7 +96,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#performAdministrativeFunction(uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
 	 */
 	@Override
-	public boolean performAdministrativeFunction(AdministrativeFunction function) {
+	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
 	    return processService.performAdministrativeFunction(function);
 	}
 
@@ -109,7 +110,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	}
 
 	@Override
-	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 		return processService.updateAndInvokeStatisticalUnit(statisticalUnitInformation);
 	}
 

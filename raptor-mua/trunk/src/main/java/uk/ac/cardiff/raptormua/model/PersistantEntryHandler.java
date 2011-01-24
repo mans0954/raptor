@@ -36,6 +36,7 @@ import uk.ac.cardiff.raptormua.dao.MUADataConnection;
  *
  */
 public class PersistantEntryHandler implements EntryHandler {
+    	//TODO can use the spring initialisation callback methods to initials the bean after all properties set etc, rather than initialising on the set method of the engine class
 
 	/* class logger */
 	static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);

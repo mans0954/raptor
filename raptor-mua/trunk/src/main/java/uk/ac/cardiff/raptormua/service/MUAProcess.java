@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.raptormua.service;
 
+import org.apache.cxf.binding.soap.SoapFault;
+
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
@@ -32,14 +34,14 @@ import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 public interface MUAProcess {
 
 	/**
-	 * 
+	 *
 	 */
 	public void poll();
 
 	/**
 	 * @param statisticName
 	 */
-	public AggregatorGraphModel performStatistic(String statisticName);
+	public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault;
 
 	/**
 	 * @return
@@ -49,12 +51,12 @@ public interface MUAProcess {
 	/**
 	 * @param statisticalUnitInformation
 	 */
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 
 	/**
 	 * @param function
 	 */
-	public boolean performAdministrativeFunction(AdministrativeFunction function);
+	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
 	/**
 	 * @param pushed
@@ -62,9 +64,9 @@ public interface MUAProcess {
 	public void addAuthentications(UAEntryPush pushed);
 
 	/**
-	 * 
+	 *
 	 * @param statisticalUnitInformation
 	 * @return
 	 */
-	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 }
