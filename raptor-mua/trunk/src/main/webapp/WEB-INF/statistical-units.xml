@@ -173,7 +173,7 @@
 	</bean>
 
 	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.ShibbolethMetadataNameFormatter">
-		<constructor-arg index="0"><value>/home/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
+		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
 	</bean>
 
 	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
@@ -187,10 +187,10 @@
 	<bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.CutRowsPostProcessor">
 		<property name="numberOfRowsToKeep"><value>5</value></property>
 	</bean>
-	
+
 	<bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.NumberFormatterPostProcessor">
 	</bean>
-	
+
 
 
 	<!--  System level statistics that must be present for RaptorWeb to work -->

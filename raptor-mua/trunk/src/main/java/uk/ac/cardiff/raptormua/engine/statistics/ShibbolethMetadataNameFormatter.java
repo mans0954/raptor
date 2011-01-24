@@ -19,14 +19,12 @@
 package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 import org.opensaml.DefaultBootstrap;
+import org.opensaml.saml2.metadata.Organization;
 import org.opensaml.saml2.metadata.OrganizationName;
+import org.opensaml.saml2.metadata.OrganizationDisplayName;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
-import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool; //import org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider;
@@ -34,14 +32,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 
-import uk.ac.cardiff.model.Entry;
-import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
-import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
-import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptormua.model.EntryHandler;
+
 
 /**
  * @author philsmart
@@ -73,7 +67,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
 	    // e.printStackTrace();
 	}
     }
-    
+
 
 	@Override
 	public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
@@ -84,16 +78,17 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
 		    	String oldName = obsG.getGroupName();
 		    	String mapTo = null;
 			    try {
-			    	mapTo = getOrganisationName(oldName);
+			    	mapTo = getOrganisationDisplayName(oldName);
 			    } catch (Exception e) {
 				// if the mapping fails, keep the original, so leave as original non mapped resultAsString
-				// log.error("Failed to map "+resultAsString);
+				// log.error("Failed to map "+oldName);
+				//e.printStackTrace();
 			    }
 			    if (mapTo!=null)
 			    	obsG.setGroupName(mapTo);
-			    
+
 		    }
-		
+
 		}
 		return observations;
 	}
@@ -109,8 +104,24 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
     private String getOrganisationName(String entityID) throws MetadataProviderException, NullPointerException {
 	// log.debug("Getting organisationName for "+entityID);
 	OrganizationName org = (OrganizationName) provider.getEntityDescriptor(entityID).getOrganization().getOrganizationNames().get(0);
-	// log.debug("Found organisationName '"+org.getName().getLocalString()+"'");
+        log.debug("Found organisationName '"+org.getName().getLocalString()+"'");
 	return org.getName().getLocalString();
+    }
+
+    /**
+     * This method returns the organizational display name of the entityID passed into it from the SAML metadata This will fail if the organizational name is not the
+     * first name in the list of organizational names can use https://idp.cardiff.ac.uk/shibboleth for testing.
+     *
+     * @param entityID
+     * @return
+     * @throws MetadataProviderException
+     */
+    private String getOrganisationDisplayName(String entityID) throws MetadataProviderException, NullPointerException {
+	// log.debug("Getting organisationName for "+entityID);
+	//Organization org = provider.getEntityDescriptor(entityID).getOrganization();
+	OrganizationDisplayName orgName = (OrganizationDisplayName) provider.getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
+	// log.debug("Found organisationName '"+orgName.getName().getLocalString()+"'");
+	return orgName.getName().getLocalString();
     }
 
     private void loadSAMLMetadata() throws MetadataProviderException, ConfigurationException {
@@ -133,6 +144,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
     public String getSAMLMetadataURI() {
 	return SAMLMetadataURI;
     }
+
 
 
 }
