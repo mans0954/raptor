@@ -41,165 +41,165 @@ import uk.ac.cardiff.raptormua.model.Users;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class MUAEngine {
-    static Logger log = LoggerFactory.getLogger(MUAEngine.class);
+	static Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
-    private UARegistry uaRegistry;
-    private EntryHandler entryHandler;
-    private StatisticsHandler statisticsHandler;
-    
-    private Users users;
+	private UARegistry uaRegistry;
+	private EntryHandler entryHandler;
+	private StatisticsHandler statisticsHandler;
 
-    /* holds metadata about the <code>MUAEngine</code> e.g. name etc. */
-    private MUAMetadata muaMetadata;
+	private Users users;
 
-    public MUAEngine() {
-	log.info("Setup Multi-Unit Aggregator Engine...");
-	log.info("Mulit-Unit Aggregator Engine is running...");
-    }
+	/* holds metadata about the <code>MUAEngine</code> e.g. name etc. */
+	private MUAMetadata muaMetadata;
 
-
-    public void poll() {
-	log.info("MultiUnit Aggregator Polling Unit Aggregators");
-	for (UAEntry entry : uaRegistry.getUAEntries()) {
-	    Set entries = entry.getAllAuthentications();
-	    // log.debug("Setting: "+entries.size());
-	    getEntryHandler().addEntries(entries);
+	public MUAEngine() {
+		log.info("Setup Multi-Unit Aggregator Engine...");
+		log.info("Mulit-Unit Aggregator Engine is running...");
 	}
-	getEntryHandler().endTransaction();
 
-    }
-
-    public void setUaRegistry(UARegistry uaRegistry) {
-	this.uaRegistry = uaRegistry;
-    }
-
-    public UARegistry getUaRegistry() {
-	return uaRegistry;
-    }
-
-    public void setStatisticsHandler(StatisticsHandler statisticsHandler) {
-	this.statisticsHandler = statisticsHandler;
-    }
-
-    public StatisticsHandler getStatisticsHandler() {
-	return statisticsHandler;
-    }
-
-    /**
-     * @param statisticName
-     */
-    public AggregatorGraphModel performStatistic(String statisticName) {
-	/* set the current set of entries held by the MUA for processing */
-	statisticsHandler.setEntryHandler(getEntryHandler());
-	return statisticsHandler.peformStatistic(statisticName);
-
-    }
-
-    /**
-     * @return
-     */
-    public Capabilities getCapabilities() {
-	// * retrieve all registered stats from the stats handler*/
-	List<Statistic> su = statisticsHandler.getStatisticalUnits();
-	/* retrieve information about attached UA */
-	List<UAEntry> uaentries = uaRegistry.getUAEntries();
-
-	Capabilities capabilities = new Capabilities();
-
-	capabilities.setMuaMetadata(muaMetadata);
-
-	ArrayList<String> ua = new ArrayList();
-	for (UAEntry entry : uaentries)
-	    ua.add(entry.getServiceEndpoint());
-	capabilities.setAttached(ua);
-
-	ArrayList<StatisticalUnitInformation> stats = new ArrayList();
-	for (Statistic entry : su) {
-	    StatisticalUnitInformation information = new StatisticalUnitInformation();
-	    information.setStatisticParameters(entry.getStatisticParameters());
-
-	    ArrayList<String> postprocessors = new ArrayList();
-	    if (entry.getPostprocessor() != null) {
-		for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
-		    postprocessors.add(postprocessor.getClass().getSimpleName());
+	public void poll() {
+		log.info("MultiUnit Aggregator Polling Unit Aggregators");
+		for (UAEntry entry : uaRegistry.getUAEntries()) {
+			Set entries = entry.getAllAuthentications();
+			// log.debug("Setting: "+entries.size());
+			getEntryHandler().addEntries(entries);
 		}
-	    }
-	    information.setPostprocessors(postprocessors);
+		getEntryHandler().endTransaction();
 
-	    ArrayList<String> preprocessors = new ArrayList();
-	    if (entry.getPreprocessor() != null)
-		preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
-	    information.setPreprocessors(preprocessors);
-
-	    stats.add(information);
 	}
-	capabilities.setStatisticalServices(stats);
 
-	return capabilities;
-    }
-
-    /**
-     * Sets the configured entry handler. Must also then initialise that entry handler
-     *
-     * @param entryHandler
-     */
-    public void setEntryHandler(EntryHandler entryHandler) {
-	this.entryHandler = entryHandler;
-	entryHandler.initialise();
-    }
-
-    public EntryHandler getEntryHandler() {
-	return entryHandler;
-    }
-
-    /**
-     * @param statisticalUnitInformation
-     */
-    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
-	log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
-	statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
-
-    }
-
-    /**
-     * @param muaMetadata
-     *            the muaMetadata to set
-     */
-    public void setMuaMetadata(MUAMetadata muaMetadata) {
-	this.muaMetadata = muaMetadata;
-    }
-
-    /**
-     * @return the muaMetadata
-     */
-    public MUAMetadata getMuaMetadata() {
-	return muaMetadata;
-    }
-
-    /**
-     * @param function
-     * @return
-     */
-    public boolean performAdministrativeFunction(AdministrativeFunction function) {
-	switch (function.getAdministrativeFunction()) {
-	    case REMOVEALL:
-		entryHandler.removeAllEntries();
-		break;
+	public void setUaRegistry(UARegistry uaRegistry) {
+		this.uaRegistry = uaRegistry;
 	}
-	return true;
-    }
 
-    /**
-     * @param pushed
-     */
-    public void addAuthentications(UAEntryPush pushed) {
-	log.info("Committing {} entries to the entryHandler", pushed.getEntries().size());
-	entryHandler.addEntries(pushed.getEntries());
-	log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
+	public UARegistry getUaRegistry() {
+		return uaRegistry;
+	}
 
-    }
+	public void setStatisticsHandler(StatisticsHandler statisticsHandler) {
+		this.statisticsHandler = statisticsHandler;
+	}
+
+	public StatisticsHandler getStatisticsHandler() {
+		return statisticsHandler;
+	}
+
+	/**
+	 * @param statisticName
+	 */
+	public AggregatorGraphModel performStatistic(String statisticName) {
+		/* set the current set of entries held by the MUA for processing */
+		statisticsHandler.setEntryHandler(getEntryHandler());
+		return statisticsHandler.peformStatistic(statisticName);
+
+	}
+
+	/**
+	 * @return
+	 */
+	public Capabilities getCapabilities() {
+		// * retrieve all registered stats from the stats handler*/
+		List<Statistic> su = statisticsHandler.getStatisticalUnits();
+		/* retrieve information about attached UA */
+		List<UAEntry> uaentries = uaRegistry.getUAEntries();
+
+		Capabilities capabilities = new Capabilities();
+
+		capabilities.setMuaMetadata(muaMetadata);
+
+		ArrayList<String> ua = new ArrayList();
+		for (UAEntry entry : uaentries)
+			ua.add(entry.getServiceEndpoint());
+		capabilities.setAttached(ua);
+
+		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
+		for (Statistic entry : su) {
+			StatisticalUnitInformation information = new StatisticalUnitInformation();
+			information.setStatisticParameters(entry.getStatisticParameters());
+
+			ArrayList<String> postprocessors = new ArrayList();
+			if (entry.getPostprocessor() != null) {
+				for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
+					postprocessors.add(postprocessor.getClass().getSimpleName());
+				}
+			}
+			information.setPostprocessors(postprocessors);
+
+			ArrayList<String> preprocessors = new ArrayList();
+			if (entry.getPreprocessor() != null)
+				preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
+			information.setPreprocessors(preprocessors);
+
+			stats.add(information);
+		}
+		capabilities.setStatisticalServices(stats);
+
+		return capabilities;
+	}
+
+	/**
+	 * Sets the configured entry handler. Must also then initialise that entry
+	 * handler
+	 * 
+	 * @param entryHandler
+	 */
+	public void setEntryHandler(EntryHandler entryHandler) {
+		this.entryHandler = entryHandler;
+		entryHandler.initialise();
+	}
+
+	public EntryHandler getEntryHandler() {
+		return entryHandler;
+	}
+
+	/**
+	 * @param statisticalUnitInformation
+	 */
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+		log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+		statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
+
+	}
+
+	/**
+	 * @param muaMetadata
+	 *            the muaMetadata to set
+	 */
+	public void setMuaMetadata(MUAMetadata muaMetadata) {
+		this.muaMetadata = muaMetadata;
+	}
+
+	/**
+	 * @return the muaMetadata
+	 */
+	public MUAMetadata getMuaMetadata() {
+		return muaMetadata;
+	}
+
+	/**
+	 * @param function
+	 * @return
+	 */
+	public boolean performAdministrativeFunction(AdministrativeFunction function) {
+		switch (function.getAdministrativeFunction()) {
+		case REMOVEALL:
+			entryHandler.removeAllEntries();
+			break;
+		}
+		return true;
+	}
+
+	/**
+	 * @param pushed
+	 */
+	public void addAuthentications(UAEntryPush pushed) {
+		log.info("Committing {} entries to the entryHandler", pushed.getEntries().size());
+		entryHandler.addEntries(pushed.getEntries());
+		log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
+
+	}
 
 }
