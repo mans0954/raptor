@@ -32,6 +32,8 @@
 					authorities="ROLE_ADMIN" />
 				<s:user name="rhys" password="65d15fe9156f9c4bbffd98085992a44e"
 					authorities="ROLE_USER,ROLE_TELLER" />
+				<s:user name="raptor" password="1f2546b5ad29ab48d553f87bfae36dc6"
+                    authorities="ROLE_ADMIN" />
 			</s:user-service>
 		</s:authentication-provider>
 	</s:authentication-manager>

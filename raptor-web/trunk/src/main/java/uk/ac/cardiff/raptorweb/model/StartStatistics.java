@@ -4,11 +4,12 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StartStatistics implements Serializable{
-    
+
     static Logger log = LoggerFactory.getLogger(StartStatistics.class);
 
     private double numberOfAuthenticationsPer;
@@ -16,6 +17,15 @@ public class StartStatistics implements Serializable{
     private RaptorTableChartModel topFiveResouces;
     private RaptorTableChartModel bottomFiveResouces;
     private RaptorGraphModel headlineGraph;
+
+    /* the time at which these values were computed */
+    private DateTime accurateOf;
+
+    public StartStatistics(){
+	topFiveResouces=null;
+	bottomFiveResouces=null;
+	headlineGraph=null;
+    }
 
     public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
 	this.numberOfAuthenticationsPer = numberOfAuthenticationsPer;
@@ -72,6 +82,20 @@ public class StartStatistics implements Serializable{
 
     public RaptorGraphModel getHeadlineGraph() {
 	return headlineGraph;
+    }
+
+    public void setAccurateOf(DateTime accurateOf) {
+	this.accurateOf = accurateOf;
+    }
+
+    public DateTime getAccurateOf() {
+	return accurateOf;
+    }
+
+    public String getAccurateOfFormatted() {
+	if (accurateOf!=null)
+	    return accurateOf.toString("dd/MM/yyyy HH:mm:ss");
+	return "not available";
     }
 
 }
