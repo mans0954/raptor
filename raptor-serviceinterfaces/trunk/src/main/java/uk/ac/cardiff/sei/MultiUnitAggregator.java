@@ -5,6 +5,7 @@ package uk.ac.cardiff.sei;
 
 import javax.jws.WebService;
 
+import org.apache.cxf.binding.soap.SoapFault;
 import org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType;
 import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
@@ -28,25 +29,23 @@ public interface MultiUnitAggregator {
 
 	public Capabilities getCapabilities();
 
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 
-	public AggregatorGraphModel invokeStatisticalUnit(String statisticName);
-	
+	public AggregatorGraphModel invokeStatisticalUnit(String statisticName) throws SoapFault;
+
 	/**
 	 * A single shot interface that both updates and then performs a statistic (returning the result)
 	 * in one go. This is useful if you want to perform both operations while there is a lock on the class
 	 * so as other operations do not take place between update and invoke.
-	 * 
+	 *
 	 * @param statisticalUnitInformation
 	 * @return
 	 */
-	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation);
-
-	//public void setParametersForStatisticalUnit(String dummy);
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 
 	public MessageType getExampleSDMX();
 
-	public boolean performAdministrativeFunction(AdministrativeFunction function);
+	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
 	public void addAuthentications(UAEntryPush pushed);
 
