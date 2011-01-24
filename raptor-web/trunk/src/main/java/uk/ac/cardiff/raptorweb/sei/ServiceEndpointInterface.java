@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
+import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.jaxrs.client.Client;
@@ -62,12 +63,19 @@ public class ServiceEndpointInterface {
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    capabilities = client.getCapabilities();
 	    log.debug("Retrieved capabilities from the MUA [{}]",endpoint);
-	} catch (Exception e) {
+	}
+	catch (SoapFault e) {
+	    log.error("Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[]{endpoint, e.getMessage()});
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
-	    log.error("Error retrieving capabilities from MUA [{}], {}",endpoint,e);
-	    e.printStackTrace();
+	   // e.printStackTrace();
+	}catch (Exception e) {
+	    log.error("Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[]{endpoint, e.getMessage()});
+	    capabilities = new Capabilities();
+	    capabilities.setError(true);
+	    capabilities.setErrorMessage(e.getMessage());
+	   // e.printStackTrace();
 	}
 	return capabilities;
 
@@ -96,7 +104,14 @@ public class ServiceEndpointInterface {
 	    log.debug("Updating statistic {} from the MUA {}", statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint);
 	    client.updateStatisticalUnit(statisticalUnitInformation);
 
-	} catch (Exception e) {
+	} catch (SoapFault e) {
+	    log.error("Problem trying to update statistical unit {} on MUA [{}] -> {}", new Object[]{statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint, e.getMessage()});
+	    capabilities = new Capabilities();
+	    capabilities.setError(true);
+	    capabilities.setErrorMessage(e.getMessage());
+	   // e.printStackTrace();
+	}catch (Exception e) {
+	    log.error("Problem trying to update statistical unit {} on MUA [{}] -> {}", new Object[]{statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint, e.getMessage()});
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
@@ -122,9 +137,13 @@ public class ServiceEndpointInterface {
 	    AggregatorGraphModel gmodel = client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint + "]");
 	    return gmodel;
-	} catch (Exception e) {
-	    log.error("Problem trying to invoke statistical unit " + selectedStatisticalUnit + " on MUA -> " + e.getMessage());
+	} catch (SoapFault e) {
+	    log.error("Problem trying to invoke statistical unit {} on MUA [{}] -> {}", new Object[]{selectedStatisticalUnit, endpoint, e.getMessage()});
+	} catch (Exception e){
+	   //catching general errors, e.g. no connection to endpoint
+	    log.error("Problem trying to invoke statistical unit {} on MUA [{}] -> {}", new Object[]{selectedStatisticalUnit, endpoint, e.getMessage()});
 	}
+
 	return null;
     }
 
@@ -139,18 +158,21 @@ public class ServiceEndpointInterface {
 	    AegisDatabinding databinding = new AegisDatabinding();
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
-
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
 	    // client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Accessing the MUA version {}",client.getVersion());
 	    boolean success = client.performAdministrativeFunction(function);
 
 	    return success;
-	} catch (Exception e) {
-	    log.error("Problem trying to perform administrative function {} on MUA {} ", function.getAdministrativeFunction().toString(), endpoint);
+	}catch (SoapFault e) {
+	    log.error("Problem trying to perform administrative function {} on MUA {} -> {}  ", new Object[]{function.getAdministrativeFunction().toString(), endpoint, e.getMessage()});
+	    return false;
+	} catch (Exception e){
+	    log.error("Problem trying to perform administrative function {} on MUA {} -> {} ", new Object[]{function.getAdministrativeFunction().toString(), endpoint, e.getMessage()});
 	    log.error("Details, {}",e);
 	    return false;
 	}
+
 
     }
 
@@ -166,8 +188,11 @@ public class ServiceEndpointInterface {
 	    AggregatorGraphModel gmodel = client.updateAndInvokeStatisticalUnit(statisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + serviceEndpoint + "]");
 	    return gmodel;
-	} catch (Exception e) {
+	} catch (SoapFault e) {
 	    log.error("Problem trying to update and invoke statistical unit {} on MUA with error {}",statisticalUnit.getStatisticParameters().getUnitName(), e.getMessage());
+	}
+	catch (Exception e){
+	    log.error("Problem trying to update and invoke statistical unit {} on MUA {} ", statisticalUnit.getStatisticParameters().getUnitName(), e.getMessage());
 	}
 	return null;
     }

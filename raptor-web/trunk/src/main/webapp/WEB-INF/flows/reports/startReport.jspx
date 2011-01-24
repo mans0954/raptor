@@ -30,8 +30,10 @@
 								<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
 								<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
 							</tr:selectOneChoice>
-							<tr:commandButton id="startStatsUpdateButton" text="Update"
+							<tr:commandButton id="startStatsUpdateButton" text="Refresh"
 								action="refreshStartStats" immediate="true" />
+							<tr:spacer width="5px" />
+							<tr:outputText value="update [#{flowScope.websession.startmodel.startStatistics.accurateOfFormatted}]" />
 						</tr:panelGroupLayout>
 
 					</f:facet>
