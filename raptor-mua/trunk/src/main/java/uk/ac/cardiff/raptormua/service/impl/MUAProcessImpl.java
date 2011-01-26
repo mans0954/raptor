@@ -99,7 +99,7 @@ public class MUAProcessImpl implements MUAProcess {
 	if (lockR.tryLock()) {
 	    try {
 		log.info("WebSservice call for perform statistic {} ", statisticName);
-		//return engine.performStatistic(statisticName);
+		return engine.performStatistic(statisticName);
 	    } catch (Exception e) {
 		// TODO either throw as service output, or deal with here
 		log.error(e.getMessage());
@@ -133,6 +133,7 @@ public class MUAProcessImpl implements MUAProcess {
 	boolean success = false;
 	if (lockR.tryLock()) {
 	    try {
+		log.info("Updating statistical unit {}",statisticalUnitInformation.getStatisticParameters().getUnitName());
 		engine.updateStatisticalUnit(statisticalUnitInformation);
 		success = true;
 	    } catch (Exception e) {
@@ -185,7 +186,7 @@ public class MUAProcessImpl implements MUAProcess {
 	boolean success = false;
 	if (lockR.tryLock()) {
 	    try {
-		log.debug("MUA has received {} entries from {}", pushed.getEntries().size(), pushed.getUaMetaData().getUaName());
+		log.info("MUA has received {} entries from {}", pushed.getEntries().size(), pushed.getUaMetaData().getUaName());
 		engine.addAuthentications(pushed);
 		success = true;
 	    } catch (Exception e) {
