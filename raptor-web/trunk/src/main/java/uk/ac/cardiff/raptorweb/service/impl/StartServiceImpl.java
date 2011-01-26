@@ -27,7 +27,7 @@ import uk.ac.cardiff.raptorweb.service.StartService;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class StartServiceImpl implements StartService {
 
@@ -41,17 +41,16 @@ public class StartServiceImpl implements StartService {
     private CachedStartStatistics cachedStartModelLastMonth;
     private CachedStartStatistics cachedStartModelLastYear;
 
+    public StartServiceImpl() {
+	cachedStartModelToday = new CachedStartStatistics();
+	cachedStartModelLastWeek = new CachedStartStatistics();
+	cachedStartModelLastMonth = new CachedStartStatistics();
+	cachedStartModelLastYear = new CachedStartStatistics();
+    }
+
     public void generateStatisticsBackground() {
 	log.info("Generating background statistics for the start page, using {}", this);
 	CurrentTimeRange currentTimeRange = getTimeRanges();
-	if (cachedStartModelToday == null)
-	    cachedStartModelToday = new CachedStartStatistics();
-	if (cachedStartModelLastWeek == null)
-	    cachedStartModelLastWeek = new CachedStartStatistics();
-	if (cachedStartModelLastMonth == null)
-	    cachedStartModelLastMonth = new CachedStartStatistics();
-	if (cachedStartModelLastYear == null)
-	    cachedStartModelLastYear = new CachedStartStatistics();
 
 	log.debug("Background start page worker getting today");
 	generateStatistics(cachedStartModelToday.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday);
@@ -104,10 +103,10 @@ public class StartServiceImpl implements StartService {
 	currentRange.startYear = oneYearPrevious;
 	currentRange.currentTime = currentDateTime;
 
-	log.debug("Start Page, TODAY [start:{}] [end:{}]",today, currentDateTime);
-	log.debug("Start Page, LASTWEEK [start:{}] [end:{}]",oneWeekPrevious, currentDateTime);
-	log.debug("Start Page, LASTMONTH [start:{}] [end:{}]",oneMonthPrevious, currentDateTime);
-	log.debug("Start Page, LASTYEAR [start:{}] [end:{}]",oneYearPrevious, currentDateTime);
+	log.debug("Start Page, TODAY [start:{}] [end:{}]", today, currentDateTime);
+	log.debug("Start Page, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
+	log.debug("Start Page, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
+	log.debug("Start Page, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
 
 	return currentRange;
 
