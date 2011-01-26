@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.raptormua.dao.MUADataConnection;
+import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
@@ -113,15 +114,28 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	/*
-	 * (non-Javadoc)
+	 * Checks for duplicates by hashCode as each entry is added one by one.
 	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
 	public void addEntries(Set<Entry> entries) {
-		log.debug("Current: {} in: {}", this.getNumberOfEntries(), entries.size());
-		dataConnection.saveAll(entries);
-		log.debug("Total No. of Entries after addition = {}", this.getNumberOfEntries());
+		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(), entries.size());
+		int duplicates=0;
+		for (Entry entry : entries){
+		    int hashcode =0;
+		    try{
+			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", entry)).intValue();
+		    }
+		    catch(Exception e){}
+		    int numberOfDuplicates = ((Integer)dataConnection.runQueryUnique("select count(*) from "+entry.getClass().getSimpleName()+" where eventTime = '"+entry.getEventTime()+"' and hashCode ='"+hashcode+"'", null)).intValue();
+		    if (numberOfDuplicates==0)
+			dataConnection.save(entry);
+		    else
+			duplicates++;
+		}
+
+		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
 	}
 
 	public void addEntry(Entry entry) {

@@ -66,7 +66,7 @@ public class AuthenticationStatistic extends Statistic {
 	/* divide the temporal extent into evenly sized buckets */
 	DateTime start = startingTime();
 	DateTime end = endingTime();
-
+	log.debug("countEntryPerInterval between [start:{}] [end:{}]",start,end);
 	long difference = end.getMillis() - start.getMillis();
 	log.debug("There is " + difference + "ms difference between start and end entries");
 	int numberOfBuckets = (int) (difference / timeIntervalInt);
@@ -153,7 +153,7 @@ public class AuthenticationStatistic extends Statistic {
 	/* divide the temporal extent into evenly sized buckets */
 	DateTime start = startingTime();
 	DateTime end = endingTime();
-
+	log.debug("countEntry between [start:{}] [end:{}]",start,end);
 	long difference = end.getMillis() - start.getMillis();
 	log.debug("There is " + difference + "ms difference between start and end entries");
 	long timeIntervalsInMs = (long) (difference / numberOfIntervals);
@@ -170,7 +170,6 @@ public class AuthenticationStatistic extends Statistic {
 	buckets[0] = new Bucket();
 	buckets[0].setStart(start);
 	buckets[0].setEnd(new DateTime(start.getMillis() + timeIntervalsInMs));
-	log.debug("Start time {} end time {}",buckets[0].getStart(),buckets[0].getEnd());
 	DateTime endOfEvenBuckets = null;
 	for (int i = 1; i < numberOfIntervals; i++) {
 	    Bucket buck = new Bucket();
@@ -251,6 +250,7 @@ public class AuthenticationStatistic extends Statistic {
 
 	DateTime start = startingTime();
 	DateTime end = endingTime();
+	log.debug("groupByFrequency between [start:{}] [end:{}]",start,end);
 	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
 	log.debug("Select {}, tableName {}",groupByField,tableName);
 	List results = getEntryHandler().query("select "+groupByField+",count(*) from "+tableName+" where (eventTime between '" + start + "' and '" + end + "') group by ("+groupByField+")");
@@ -303,6 +303,7 @@ public class AuthenticationStatistic extends Statistic {
 
 	DateTime start = startingTime();
 	DateTime end = endingTime();
+	log.debug("groupBy between [start:{}] [end:{}]",start,end);
 	String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
 	log.debug("Select {}, tableName {}",groupByField,tableName);
 	List results = getEntryHandler().query("select "+groupByField+" from "+tableName+" where (eventTime between '" + start + "' and '" + end + "') group by ("+groupByField+")");
