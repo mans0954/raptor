@@ -27,7 +27,7 @@ import uk.ac.cardiff.raptorweb.service.StartService;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class StartServiceImpl implements StartService {
 
@@ -88,18 +88,13 @@ public class StartServiceImpl implements StartService {
 
     private CurrentTimeRange getTimeRanges() {
 	long currentTimeInMS = System.currentTimeMillis();
-	// decide dates to use
 	DateTime currentDateTime = new DateTime(currentTimeInMS);
-	// log.debug("Time now: "+currentDateTime);
 	DateTime today = new DateTime(currentTimeInMS);
 	today = today.minusHours(today.getHourOfDay());
 	today = today.minusMinutes(today.getMinuteOfHour());
 	today = today.minusSeconds(today.getSecondOfMinute());
-	// log.debug("Today starts at {} ",today);
 	DateTime oneMonthPrevious = currentDateTime.minusMonths(1);
-	// log.debug("One Month Previos {}",oneMonthPrevious);
 	DateTime oneYearPrevious = currentDateTime.minusYears(1);
-	// log.debug("One Year Previous {}",oneYearPrevious);
 	DateTime oneWeekPrevious = currentDateTime.minusWeeks(1);
 
 	CurrentTimeRange currentRange = new CurrentTimeRange();
@@ -108,6 +103,12 @@ public class StartServiceImpl implements StartService {
 	currentRange.startWeek = oneWeekPrevious;
 	currentRange.startYear = oneYearPrevious;
 	currentRange.currentTime = currentDateTime;
+
+	log.debug("Start Page, TODAY [start:{}] [end:{}]",today, currentDateTime);
+	log.debug("Start Page, LASTWEEK [start:{}] [end:{}]",oneWeekPrevious, currentDateTime);
+	log.debug("Start Page, LASTMONTH [start:{}] [end:{}]",oneMonthPrevious, currentDateTime);
+	log.debug("Start Page, LASTYEAR [start:{}] [end:{}]",oneYearPrevious, currentDateTime);
+
 	return currentRange;
 
     }
