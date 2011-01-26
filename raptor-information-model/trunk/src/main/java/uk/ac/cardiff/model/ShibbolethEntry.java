@@ -106,6 +106,24 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    return areEqual;
 	}
 
+	/**
+	 * For hibernate, so the hashcode can be persisted
+	 * @return
+	 */
+	public int getHashCode(){
+	    return hashCode();
+	}
+
+	/**
+	 * For hibernate, does nothing as the hascode is computed on the fly
+	 * from the <code>hashCode</code> method
+	 *
+	 * @param hashCode
+	 */
+	public void setHashCode(int hashCode){
+
+	}
+
 
 	/**
 	 * create a unique hash, with as uniform a distribution as possible

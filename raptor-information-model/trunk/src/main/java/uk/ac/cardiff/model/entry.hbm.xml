@@ -39,7 +39,7 @@
 			<property name="assertionId" column="assertionId" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 			<property name="nameIdentifier" column="nameIdentifier" type="string" />
 			<property name="responseId" column="responseId" type="string" />
-
+            <property name="hashCode" column="hashCode" type="integer" index="hashcode_index"/>
     	</joined-subclass>
 
     </joined-subclass>
