@@ -17,6 +17,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 
 /**
@@ -62,6 +63,8 @@ public class StatisticParameters implements Serializable{
     public enum StatisticType {USER,SYSTEM};
     private StatisticType type;
 
+    /* SQL filter, to add custom where clauses*/
+    private SQLFilter sqlFilter;
 
     public void setUnitName(String unitName) {
 	log.debug("Setting unit name: "+unitName);
@@ -315,6 +318,14 @@ public class StatisticParameters implements Serializable{
 
     public String getSeriesLabelFormatted() {
 	return SeriesLabelFormatted;
+    }
+
+    public void setSqlFilter(SQLFilter sqlFilter) {
+	this.sqlFilter = sqlFilter;
+    }
+
+    public SQLFilter getSqlFilter() {
+	return sqlFilter;
     }
 
 
