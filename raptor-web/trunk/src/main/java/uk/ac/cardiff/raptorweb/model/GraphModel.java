@@ -7,14 +7,16 @@ import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
 
 public class GraphModel implements Serializable{
-	static Logger log = Logger.getLogger(GraphModel.class);
+	static Logger log = LoggerFactory.getLogger(GraphModel.class);
 
 	//private String selectedStatisticalUnit;
 	private RaptorGraphModel currentGraph;
@@ -22,6 +24,7 @@ public class GraphModel implements Serializable{
 	private RaptorTableChartModel currentTableGraph;
 	private StatisticalUnitInformation selectedStatisticalUnit;
 	private String processingResult;
+	private boolean showControlPanel;
 
 
 	/**
@@ -34,6 +37,7 @@ public class GraphModel implements Serializable{
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
+	    showControlPanel=true;
 	}
 
 	/**
@@ -94,6 +98,20 @@ public class GraphModel implements Serializable{
 
 	public String getProcessingResult() {
 	    return processingResult;
+	}
+
+	public void setShowControlPanel(boolean showControlPanel) {
+	    log.debug("showControlPanel {}",showControlPanel);
+	    this.showControlPanel = showControlPanel;
+	}
+
+	public boolean isShowControlPanel() {
+	    log.debug("Showing control panel {}",showControlPanel);
+	    return showControlPanel;
+	}
+	
+	public void toggleShowControlPanel(){
+	    showControlPanel = !showControlPanel;
 	}
 
 

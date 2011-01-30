@@ -17,11 +17,21 @@
 
 				<tr:panelBorderLayout>
 
+					<f:facet name="top">
+						<tr:panelGroupLayout layout="horizontal">
+							<tr:outputText value="Control Panel Visible"/>
+							<tr:spacer width="3px"/>
+							<tr:commandLink text="#{flowScope.websession.graphmodel.showControlPanel}" action="#{flowScope.websession.graphmodel.toggleShowControlPanel}"/>
+						</tr:panelGroupLayout>
+					</f:facet>
+
 					<f:facet name="start">
 
-						<tr:panelBox text="Control Panel">
+						<tr:panelBox text="Control Panel"
+							rendered="#{flowScope.websession.graphmodel.showControlPanel}"
+							partialTriggers="controlPanelOnOff">
 
-						<tr:panelGroupLayout layout="horizontal">
+							<tr:panelGroupLayout layout="horizontal">
 								<tr:spacer width="5px" />
 								<tr:statusIndicator />
 								<tr:spacer width="5px" />
@@ -30,7 +40,8 @@
 										<tr:outputText value="Processing Request, Please Wait..." />
 									</f:facet>
 									<f:facet name="ready">
-										<tr:outputText value="#{flowScope.websession.graphmodel.processingResult}" />
+										<tr:outputText
+											value="#{flowScope.websession.graphmodel.processingResult}" />
 									</f:facet>
 								</tr:statusIndicator>
 							</tr:panelGroupLayout>
@@ -203,8 +214,8 @@
 
 
 										<tr:table id="reportDownloadTable"
-											value="#{flowScope.websession.reportmodel.reportsForDownload}" bandingInterval="2"
-											banding="row" var="row"
+											value="#{flowScope.websession.reportmodel.reportsForDownload}"
+											bandingInterval="2" banding="row" var="row"
 											rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
 											partialTriggers=":generateExcelReport :reportDownloadTable:removeReportCommandLink"
 											width="95%" labelWidth="5%">
@@ -267,8 +278,8 @@
 								<tr:outputText value="Type"
 									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}" />
 								<tr:selectOneChoice id="chartTypeSelector"
-									value="#{flowScope.websession.graphmodel.chartOptions.graphType}" autoSubmit="true"
-									partialSubmit="true"
+									value="#{flowScope.websession.graphmodel.chartOptions.graphType}"
+									autoSubmit="true" partialSubmit="true"
 									rendered="#{not empty flowScope.websession.graphmodel.currentGraph}">
 									<f:selectItem itemLabel="verticalBar" itemValue="verticalBar" />
 									<f:selectItem itemLabel="horizontalBar"
@@ -365,7 +376,8 @@
 						<!-- ________________________________ -->
 
 						<tr:panelFormLayout rows="7" labelWidth="5%">
-							<tr:table value="#{flowScope.websession.graphmodel.currentTableGraph.rows}"
+							<tr:table
+								value="#{flowScope.websession.graphmodel.currentTableGraph.rows}"
 								bandingInterval="2" banding="row" var="row" width="95%"
 								rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
 
