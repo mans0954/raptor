@@ -37,190 +37,203 @@ import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
 /**
- * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions are thrown
- * use a <code>SoapFault</code>. Fault codes are:
- * Client (if a malformed input e.g. statistic name is wrong)
- * Server (we use for locks, as server side issue)
- * VersionMismatch
- * MustUnderstand
- *
+ * All operations should go through this service class, so as to obey locks and
+ * synchronisation issues. Locks collisions are thrown use a
+ * <code>SoapFault</code>. Fault codes are: Client (if a malformed input e.g.
+ * statistic name is wrong) Server (we use for locks, as server side issue)
+ * VersionMismatch MustUnderstand
+ * 
  * @author philsmart
- *
+ * 
  */
 public class MUAProcessImpl implements MUAProcess {
 
-    /* class logger */
-    static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
+	/* class logger */
+	static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
-    /* main engine of the MultiUnitAggregator */
-    private MUAEngine engine;
+	/* main engine of the MultiUnitAggregator */
+	private MUAEngine engine;
 
-    /*
-     * ReentrantLock to prevent more than at the same time
-     */
-    final Lock lockR = new ReentrantLock();
+	/*
+	 * ReentrantLock to prevent more than at the same time
+	 */
+	final Lock lockR = new ReentrantLock();
 
-    public void setEngine(MUAEngine engine) {
-	this.engine = engine;
-    }
-
-    public MUAEngine getEngine() {
-	return engine;
-    }
-
-    /*
-     * The MUA no longer polls for data from the UA, but this is still here in case it is needed
-     *
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#poll()
-     */
-    public void poll() {
-	if (lockR.tryLock()) {
-	    try {
-		// engine.poll();
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-	    } finally {
-		lockR.unlock();
-	    }
+	public void setEngine(MUAEngine engine) {
+		this.engine = engine;
 	}
 
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang .String)
-     */
-    public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault{
-	if (lockR.tryLock()) {
-	    try {
-		log.info("WebSservice call for perform statistic {} ", statisticName);
-		return engine.performStatistic(statisticName);
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-	    } finally {
-		lockR.unlock();
-	    }
+	public MUAEngine getEngine() {
+		return engine;
 	}
-	log.warn("Lock was hit for method performStatistic");
-	throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
 
-    }
-
-    /*
-     * Method does not need to be locked. (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
-     */
-    public Capabilities getCapabilities() {
-	log.info("WebSservice call for get capabilities");
-	return engine.getCapabilities();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#setStatisticalUnit(uk.ac.cardiff .model.wsmodel.StatisticalUnitInformation)
-     */
-    @Override
-    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
-	boolean success = false;
-	if (lockR.tryLock()) {
-	    try {
-		log.info("Updating statistical unit {}",statisticalUnitInformation.getStatisticParameters().getUnitName());
-		engine.updateStatisticalUnit(statisticalUnitInformation);
-		success = true;
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-	    } finally {
-		lockR.unlock();
-	    }
-	}
-	if (!success){
-	    log.warn("Lock was hit for method updateStatisticalUnit");
-	    throw new SoapFault("lock was hit on method updateStatisticalUnit", new QName("Server"));
-	}
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#performAdministrativeFunction (uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
-     */
-    @Override
-    public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
-	if (lockR.tryLock()) {
-	    try {
-		log.info("Performing administrative function {}, request orginates from {}", function.getAdministrativeFunction(), function.getRequester());
-		return engine.performAdministrativeFunction(function);
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-		return false;
-	    } finally {
-		lockR.unlock();
-
-	    }
+	/*
+	 * The MUA no longer polls for data from the UA, but this is still here in
+	 * case it is needed
+	 * 
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#poll()
+	 */
+	public void poll() {
+		if (lockR.tryLock()) {
+			try {
+				// engine.poll();
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+			}
+		}
 
 	}
-	log.warn("Lock was hit for method performAdministrativeFunction");
-	throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
-    }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see uk.ac.cardiff.raptormua.service.MUAProcess#addAuthentications(uk.ac.cardiff .model.wsmodel.UAEntryPush)
-     */
-    @Override
-    public void addAuthentications(UAEntryPush pushed) {
-	boolean success = false;
-	if (lockR.tryLock()) {
-	    try {
-		log.info("MUA has received {} entries from {}", pushed.getEntries().size(), pushed.getUaMetaData().getUaName());
-		engine.addAuthentications(pushed);
-		success = true;
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-	    } finally {
-		lockR.unlock();
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang
+	 * .String)
+	 */
+	public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
+		if (lockR.tryLock()) {
+			try {
+				log.info("WebSservice call for perform statistic {} ", statisticName);
+				return engine.performStatistic(statisticName);
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+			}
+		}
+		log.warn("Lock was hit for method performStatistic");
+		throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
 
-	    }
 	}
-	if (!success)
-	    log.warn("Lock was hit for method addAuthentications");
 
-    }
-
-    @Override
-    public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
-	if (lockR.tryLock()) {
-	    try {
-		log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
-		engine.updateStatisticalUnit(statisticalUnitInformation);
-		return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
-	    } catch (Exception e) {
-		// TODO either throw as service output, or deal with here
-		log.error(e.getMessage());
-		e.printStackTrace();
-	    } finally {
-		lockR.unlock();
-	    }
+	/*
+	 * Method does not need to be locked. (non-Javadoc)
+	 * 
+	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
+	 */
+	public Capabilities getCapabilities() {
+		log.info("WebSservice call for get capabilities");
+		return engine.getCapabilities();
 	}
-	log.warn("Lock was hit for method updateAndInvokeStatisticalUnit");
-	throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * uk.ac.cardiff.raptormua.service.MUAProcess#setStatisticalUnit(uk.ac.cardiff
+	 * .model.wsmodel.StatisticalUnitInformation)
+	 */
+	@Override
+	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
+		boolean success = false;
+		if (lockR.tryLock()) {
+			try {
+				log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters()
+						.getUnitName());
+				engine.updateStatisticalUnit(statisticalUnitInformation);
+				success = true;
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+			}
+		}
+		if (!success) {
+			log.warn("Lock was hit for method updateStatisticalUnit");
+			throw new SoapFault("lock was hit on method updateStatisticalUnit", new QName("Server"));
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * uk.ac.cardiff.raptormua.service.MUAProcess#performAdministrativeFunction
+	 * (uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
+	 */
+	@Override
+	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
+		if (lockR.tryLock()) {
+			try {
+				log.info("Performing administrative function {}, request orginates from {}",
+						function.getAdministrativeFunction(), function.getRequester());
+				return engine.performAdministrativeFunction(function);
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+				return false;
+			} finally {
+				lockR.unlock();
+
+			}
+
+		}
+		log.warn("Lock was hit for method performAdministrativeFunction");
+		throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * uk.ac.cardiff.raptormua.service.MUAProcess#addAuthentications(uk.ac.cardiff
+	 * .model.wsmodel.UAEntryPush)
+	 */
+	@Override
+	public void addAuthentications(UAEntryPush pushed) {
+		boolean success = false;
+		if (lockR.tryLock()) {
+			try {
+				log.info("MUA has received {} entries from {}", pushed.getEntries().size(), pushed.getUaMetaData()
+						.getUaName());
+				engine.addAuthentications(pushed);
+				success = true;
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+
+			}
+		}
+		if (!success)
+			log.warn("Lock was hit for method addAuthentications");
+
+	}
+
+	@Override
+	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation)
+			throws SoapFault {
+		if (lockR.tryLock()) {
+			try {
+				log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation
+						.getStatisticParameters().getUnitName());
+				engine.updateStatisticalUnit(statisticalUnitInformation);
+				return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
+			} catch (Exception e) {
+				// TODO either throw as service output, or deal with here
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+			}
+		}
+		log.warn("Lock was hit for method updateAndInvokeStatisticalUnit");
+		throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
+
+	}
 
 }
