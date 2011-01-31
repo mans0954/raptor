@@ -27,7 +27,7 @@
 		<property name ="MUAEntries">
 			<list>
 				<bean id="cardiffMUA" class="uk.ac.cardiff.RaptorUA.model.MUAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>http://raptor.cf.ac.uk:8080/MUA/MultiUnitAggregator</value></property>
 					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
 				</bean>
 			</list>
