@@ -98,6 +98,7 @@ public class MemoryEntryHandler implements EntryHandler{
 		    updateLastEntry(entry);
 		}
 	    }
+	  //  log.debug("Entry was before {}",entry);
 
 	}
 
