@@ -33,17 +33,19 @@
 	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
 	</bean>
-	
+
 	<bean id="preferenceService" class="uk.ac.cardiff.raptorweb.service.impl.PreferenceServiceImpl">
-	
+
 	</bean>
 
 	<bean id="startService" class="uk.ac.cardiff.raptorweb.service.impl.StartServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
+		<property name="chartProcessor"><ref bean="chartProcessor"/></property>
 	</bean>
 
 	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
+		<property name="chartProcessor"><ref bean="chartProcessor"/></property>
 	</bean>
 
 	<!--  SET UP the report generators -->
@@ -62,16 +64,21 @@
 		</property>
 	</bean>
 
+    <!-- Set up the chart processor -->
+    <bean name="chartProcessor" class="uk.ac.cardiff.raptorweb.engine.ChartProcessor">
+            <property name="saveDirectory"><value>/graphs/</value></property>
+            <property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+    </bean>
 
 	<!-- Set up the start page background stats generator -->
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			<ref local="SystemStatsQuickTrigger"/> 
+			<ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean id="SystemStatsQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail">
 			<ref local="SystemStatsJobDetail" />

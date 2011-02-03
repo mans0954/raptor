@@ -511,9 +511,9 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        
+
         <!-- Quartz  -->
-        
+
         <dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
@@ -547,6 +547,21 @@
 			<groupId>org.mod4j.org.apache.commons</groupId>
 			<artifactId>lang</artifactId>
 			<version>2.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.13</version>
+		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik</artifactId>
+			<version>1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>batik</groupId>
+			<artifactId>batik-svggen</artifactId>
+			<version>1.6-1</version>
 		</dependency>
 	</dependencies>
 	<properties>
