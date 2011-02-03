@@ -43,7 +43,7 @@
 					a valid dataConnection. Persist in this context is only the persistance of enough state information that
 					it can pick up where it left off in the even of a failure
 				-->
-				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParserForcedIncrement">
+				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-sorted-year.log
