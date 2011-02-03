@@ -38,9 +38,9 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- * 
+ *
  *         TODO need to include where filter parameters for most these methods
- * 
+ *
  */
 public class AuthenticationStatistic extends Statistic {
 	static Logger log = LoggerFactory.getLogger(AuthenticationStatistic.class);
@@ -50,7 +50,7 @@ public class AuthenticationStatistic extends Statistic {
 	 * returns false if semantic error with the entries, throws an exception on
 	 * code failure
 	 * </p>
-	 * 
+	 *
 	 * @param timeInterval
 	 *            - assumes a String representing minutes
 	 * @param sqlWhere if a SQL filter has been attached to the statistical unit, it is inputed to the method
@@ -128,7 +128,7 @@ public class AuthenticationStatistic extends Statistic {
 			if (sqlWhere.equals(""))
 				query = "select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '"
 							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')";
-			else 
+			else
 				query = "select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '"
 				+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "') and "+sqlWhere;
 			Integer count = (Integer) this.getEntryHandler().queryUnique(query);// new
@@ -147,12 +147,12 @@ public class AuthenticationStatistic extends Statistic {
 		if (this.getEntryHandler().getNumberOfEntries() != testCount)
 			log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-		if (statisticParameters.getSeriesLabel() == null)
-			statisticParameters.setSeriesLabelFormatted("Number of Events per " + timeInterval + " minutes");
-		else {
-			statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel() + " (every "
-					+ timeInterval + " minutes, where "+sqlWhere+")");
-		}
+//		if (statisticParameters.getSeries().getSeriesLabel() == null)
+//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events per " + timeInterval + " minutes");
+//		else {
+//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel() + " (every "
+//					+ timeInterval + " minutes, where "+sqlWhere+")");
+//		}
 
 		observations = buckets;
 
@@ -249,12 +249,12 @@ public class AuthenticationStatistic extends Statistic {
 		if (this.getEntryHandler().getNumberOfEntries() != testCount)
 			log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
-		if (statisticParameters.getSeriesLabel() == null)
-			statisticParameters.setSeriesLabelFormatted("Number of Events per " + timeIntervalInDays + " days");
-		else {
-			statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel() + " (every "
-					+ timeIntervalInDays + " days)");
-		}
+//		if (statisticParameters.getSeries().getSeriesLabel() == null)
+//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events per " + timeIntervalInDays + " days");
+//		else {
+//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel() + " (every "
+//					+ timeIntervalInDays + " days)");
+//		}
 
 		observations = buckets;
 
@@ -270,8 +270,8 @@ public class AuthenticationStatistic extends Statistic {
 	 * false if the statistic functioned correctly, but there are no valid
 	 * observations, or true if the statistic succeeds and there are valid
 	 * observations.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param groupByField
 	 * @return
 	 * @throws StatisticalUnitException
@@ -308,11 +308,11 @@ public class AuthenticationStatistic extends Statistic {
 		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
 		// add the series label or if none specified, add a default
-		if (statisticParameters.getSeriesLabel() == null)
-			statisticParameters.setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
-		else {
-			statisticParameters.setSeriesLabelFormatted(statisticParameters.getSeriesLabel());
-		}
+//		if (statisticParameters.getSeries().getSeriesLabel() == null)
+//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
+//		else {
+//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel());
+//		}
 
 		observations = groups.toArray(new Group[0]);
 
@@ -332,7 +332,7 @@ public class AuthenticationStatistic extends Statistic {
 	 * logic fails, or return false if the statistic functioned correctly, but
 	 * there are no valid observations, or true if the statistic succeeds and
 	 * there are valid observations.
-	 * 
+	 *
 	 * @param groupByField
 	 * @return
 	 * @throws StatisticalUnitException
@@ -362,8 +362,8 @@ public class AuthenticationStatistic extends Statistic {
 		}
 
 		// add the series label or if none specified, add a default
-		if (statisticParameters.getSeriesLabel() == null)
-			statisticParameters.setSeriesLabel("Distinct Values " + groupByField);
+//		if (statisticParameters.getSeries().getSeriesLabel() == null)
+//			statisticParameters.getSeries().setSeriesLabel("Distinct Values " + groupByField);
 
 		observations = groups.toArray(new Group[0]);
 
@@ -391,7 +391,7 @@ public class AuthenticationStatistic extends Statistic {
 	/**
 	 * <p>
 	 * </p>
-	 * 
+	 *
 	 * @param date
 	 * @param isEndTime
 	 *            - if is endTime and only ddMMyyyy is given, then the endTime

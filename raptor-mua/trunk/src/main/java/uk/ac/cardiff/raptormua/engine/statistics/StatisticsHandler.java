@@ -96,14 +96,14 @@ public class StatisticsHandler {
 			if (sqlFilter !=null){
 				SQLFilterConstructor sqlConstructor = new SQLFilterConstructor(sqlFilter);
 				whereClause = sqlConstructor.convertFilterToString();
-			}			
+			}
 			Object[] paramsO = new Object[params.size() + 1];
 			for (int i = 0; i < paramsO.length-1; i++) {
 				paramsO[i] = params.get(i).getParameter();
 			}
 			if (whereClause!=null)
 				paramsO[paramsO.length - 1] = whereClause;
-			else 
+			else
 				paramsO[paramsO.length - 1] = new String();
 			return invoke(statistic.getStatisticParameters().getMethodName(), paramsO, statistic);
 		} catch (Exception e) {
@@ -139,7 +139,7 @@ public class StatisticsHandler {
 	 * updates a statistical unit based on the values in the
 	 * <code>statisticalUnitInformation</code> parameter Not a very good primary
 	 * key (unit name) should be something else
-	 * 
+	 *
 	 * @param statisticalUnitInformation
 	 */
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
@@ -158,7 +158,7 @@ public class StatisticsHandler {
 	/**
 	 * Only currently updates certain values, these will need to be completed in
 	 * the future
-	 * 
+	 *
 	 * @param statistic
 	 * @param statisticalUnitInformation
 	 */
@@ -172,13 +172,13 @@ public class StatisticsHandler {
 		if (statisticalUnitInformation.getStatisticParameters().getMethodParams() != null)
 			statistic.getStatisticParameters().setMethodParams(
 					statisticalUnitInformation.getStatisticParameters().getMethodParams());
-		if (statisticalUnitInformation.getStatisticParameters().getSeriesLabel() != null)
-			statistic.getStatisticParameters().setSeriesLabel(
-					statisticalUnitInformation.getStatisticParameters().getSeriesLabel());
+		//if (statisticalUnitInformation.getStatisticParameters().getSeries().getSeriesLabel() != null)
+		//	statistic.getStatisticParameters().getSeries().setSeriesLabel(
+		//			statisticalUnitInformation.getStatisticParameters().getSeries().getSeriesLabel());
 	}
 
 	/**
-	 * 
+	 *
 	 * @param entryHandler
 	 */
 	public void setEntryHandler(EntryHandler entryHandler) {
@@ -186,7 +186,7 @@ public class StatisticsHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public EntryHandler getEntryHandler() {

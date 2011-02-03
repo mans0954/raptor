@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
@@ -90,20 +91,34 @@ public class Statistic {
 	if (observations instanceof Group[]) {
 	    log.info("Constructing graph model for Group type");
 	    Group[] groups = (Group[]) observations;
+	    gmodel.setPresentation(statisticParameters.getPresentation());
 
-	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabelFormatted());
-	    for (Group group : groups) {
-		gmodel.addGroupLabel(group.getGroupName());
-		List<Double> values = new ArrayList();
-		Double valueDouble = new Double(group.getValue());
-		values.add(valueDouble);
-		gmodel.addGroupValue(values);
+	    ArrayList<String> seriesLabels = new ArrayList<String>();
+	    for (Series series : statisticParameters.getSeries()){
+		seriesLabels.add(series.getSeriesLabel());
+	    }
+	    gmodel.setSeriesLabels(seriesLabels);
+
+	    for (int i=0; i < statisticParameters.getSeries().size();i++){
+        	    for (Group group : groups) {
+        		gmodel.addGroupLabel(group.getGroupName());
+        		List<Double> values = new ArrayList();
+        		Double valueDouble = new Double(group.getValue());
+        		values.add(valueDouble);
+        		gmodel.addGroupValue(values);
+        	    }
 	    }
 	} else if (observations instanceof Bucket[]) {
 	    log.info("Constructing graph model for Bucket type");
 	    Bucket[] buckets = (Bucket[]) observations;
+	    gmodel.setPresentation(statisticParameters.getPresentation());
 
-	    gmodel.addSeriesLabel(statisticParameters.getSeriesLabelFormatted());
+	    ArrayList<String> seriesLabels = new ArrayList<String>();
+	    for (Series series : statisticParameters.getSeries()){
+		seriesLabels.add(series.getSeriesLabel());
+	    }
+	    gmodel.setSeriesLabels(seriesLabels);
+
 	    DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
 	    DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
 	    for (Bucket bucket : buckets) {
