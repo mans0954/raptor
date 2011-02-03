@@ -25,12 +25,6 @@ public class RaptorJFreeChartModel implements Serializable {
     }
 
     public File getChartLocation() {
-	try {
-	    log.debug("Returning jpg file {}",chartLocation.getCanonicalPath());
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
 	return chartLocation;
     }
 

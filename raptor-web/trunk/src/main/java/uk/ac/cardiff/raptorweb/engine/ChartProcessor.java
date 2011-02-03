@@ -53,6 +53,10 @@ public class ChartProcessor {
     /* the location of the directory within the application that reports are saved to*/
     private Resource saveDirectory;
     private Resource baseDirectory;
+    
+    /* allows for selection of graph type*/
+    public enum GraphType{BAR,AREA};
+    
 
     public String getRootDirectory(String user){
 	String root=null;
@@ -101,8 +105,9 @@ public class ChartProcessor {
      * @param session
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, WebSession session) {
-	return doConstructJFreeGraph(gmodel, session.getUser().getName());
+    public RaptorJFreeChartModel constructJFreeGraph(GraphType graphType, AggregatorGraphModel gmodel, WebSession session, int width, int height) {
+	return doConstructJFreeGraphBar(graphType, gmodel, session.getUser().getName(), width, height);
+	
     }
 
     /**
@@ -110,8 +115,8 @@ public class ChartProcessor {
      * @param gmodel
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel) {
-	return doConstructJFreeGraph(gmodel, "");
+    public RaptorJFreeChartModel constructJFreeGraph(GraphType graphType, AggregatorGraphModel gmodel, int width, int height) {
+	return doConstructJFreeGraphBar(graphType, gmodel, "", width, height);
     }
 
     /**
@@ -120,7 +125,7 @@ public class ChartProcessor {
      * @param session
      * @return
      */
-    private RaptorJFreeChartModel doConstructJFreeGraph(AggregatorGraphModel gmodel, String user) {
+    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height) {
 	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
 	//construct the graph
@@ -131,8 +136,13 @@ public class ChartProcessor {
 		dataset.setValue(gmodel.getYValues().get(i).get(j), gmodel.getSeriesLabels().get(j),gmodel.getGroupLabels().get(i));
 	    }
 	}
-	JFreeChart chart = ChartFactory.createBarChart3D(gmodel.getPresentation().getGraphTitle(),gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, true,true, false);
-
+	JFreeChart chart =null;
+	
+	if (graphType==GraphType.BAR)
+	    chart = ChartFactory.createBarChart3D(gmodel.getPresentation().getGraphTitle(),gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, true,true, false);
+	else if(graphType==GraphType.AREA)
+	    chart = ChartFactory.createAreaChart(gmodel.getPresentation().getGraphTitle(),gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, true,true, false);
+	
 	//setup the graph output
 	CategoryPlot plot = (CategoryPlot)chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis)plot.getDomainAxis();
@@ -167,8 +177,6 @@ public class ChartProcessor {
 	try
 	    {
 	      int padding = 10;
-	      int width = 1440;
-	      int height = 1024;
 	      ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width-(padding*2), height-(padding*2)), padding), "png", new FileOutputStream(chartLocationPNG));
 	  }
 	  catch (IOException e)
