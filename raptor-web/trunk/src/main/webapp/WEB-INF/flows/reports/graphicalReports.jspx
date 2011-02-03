@@ -11,7 +11,6 @@
 		<ui:define name="content">
 
 
-
 			<tr:form id="graphForm">
 
 
@@ -28,8 +27,7 @@
 					<f:facet name="start">
 
 						<tr:panelBox text="Control Panel"
-							rendered="#{flowScope.websession.graphmodel.showControlPanel}"
-							partialTriggers="controlPanelOnOff">
+							rendered="#{flowScope.websession.graphmodel.showControlPanel}">
 
 							<tr:panelGroupLayout layout="horizontal">
 								<tr:spacer width="5px" />
@@ -131,10 +129,10 @@
 												</tr:panelGroupLayout>
 
 												<tr:panelGroupLayout layout="horizontal">
-													<tr:outputText value="Series Label:"
+													<tr:outputText value="Graph Title:"
 														inlineStyle="font-weight: bold;" />
 													<tr:inputText
-														value="#{unit.statisticParameters.seriesLabel}" />
+														value="#{unit.statisticParameters.presentation.graphTitle}" />
 												</tr:panelGroupLayout>
 
 												<tr:panelGroupLayout layout="horizontal">
@@ -349,14 +347,10 @@
 									<f:selectItem itemLabel="large" itemValue="1700" />
 								</tr:selectOneChoice>
 
-								<h:outputText value="  " />
-								<!--<h:outputLink  value="/RaptorWeb/adf/svg/chart.svg" target="_blank"  rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
-            						<h:outputText value=" New Window" />
-        						</h:outputLink>
-						-->
+
 							</tr:panelGroupLayout>
 
-							<tr:chart id="chart" verticalMajorSections="15"
+							<!--<tr:chart id="chart" verticalMajorSections="15"
 								value="#{flowScope.websession.graphmodel.currentGraph}"
 								rendered="#{not empty flowScope.websession.graphmodel.currentGraph}"
 								inlineStyle="width:95%; height:#{flowScope.websession.graphmodel.chartOptions.chartHeight}px; border-style: hidden;"
@@ -367,10 +361,11 @@
 								YMajorGridLineCount="#{flowScope.websession.graphmodel.chartOptions.yMajorGridCount}"
 								perspective="#{flowScope.websession.graphmodel.chartOptions.perspective}"
 								maxPrecision="2" />
-							<br />
+							--><br />
 
 						</tr:panelFormLayout>
 
+                        <tr:image rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}" source="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}" inlineStyle="width:95%"/>
 
 						<!-- RESULTS TABLE -->
 						<!-- ________________________________ -->

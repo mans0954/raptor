@@ -37,53 +37,56 @@ import org.springframework.core.io.Resource;
  * @author philsmart
  *
  */
-public class CSVReportGenerator extends ReportConstructor{
-	static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
+public class CSVReportGenerator extends ReportConstructor {
+    static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
+    public CSVReportGenerator() {
+	// set which type is handles
+	this.setHandledReportType(HandledReportTypes.csv);
+    }
 
-	public CSVReportGenerator(){
-		//set which type is handles
-		this.setHandledReportType(HandledReportTypes.csv);
+    public String generateReport(WebSession session) {
+	log.info("Generating CSV Report " + session.getGraphmodel().getSelectedStatisticalUnit());
+	String relativePath = null;
+	try {
+	    // make sure base directory exists first
+	    File baseGraphDirectory = saveDirectory.getFile();
+	    if (!baseGraphDirectory.exists())
+		baseGraphDirectory.mkdir();
+
+	    // append username, to create username specific directories
+	    File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
+	    log.debug("Save Directory exists: " + dir.exists());
+	    if (!dir.exists())
+		dir.mkdir();
+
+	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+	    java.util.Date date = new java.util.Date();
+	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".csv");
+
+	    StringBuilder fieldnames = new StringBuilder();
+	    fieldnames.append("Series Name, Series Values\n");
+
+	    StringBuilder document = new StringBuilder();
+	    for (Row row : session.getGraphmodel().getCurrentTableGraph().getRows()) {
+		document.append(row.getSeries() + "," + row.getValue() + "\n");
+	    }
+
+	    BufferedWriter writer = new BufferedWriter(new FileWriter(dir));
+	    writer.write(fieldnames.toString());
+	    writer.write(document.toString());
+	    writer.close();
+
+	    relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
+	    session.getReportmodel().addReportForDownload(dir, relativePath);
+	    log.debug("CSV Report Created At: " + relativePath);
+
+	} catch (IOException e) {
+	    log.error("Problem generating CSV report " + e.getMessage());
+
 	}
 
-	public String generateReport(WebSession session){
-		log.info("Generating CSV Report "+session.getGraphmodel().getSelectedStatisticalUnit());
-		String relativePath = null;
-		try {
-		    	//append username, to create username specific directories
-			File dir = new File(saveDirectory.getFile().getCanonicalPath()+"/"+session.getUser().getName());
-			log.debug("Save Directory exists: "+dir.exists());
-			if (!dir.exists())dir.mkdir();
-
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-			java.util.Date date = new java.util.Date();
-			dir = new File(dir.getAbsoluteFile() + "/"+session.getGraphmodel().getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "")+"-"+ dateFormat.format(date) + ".csv");
-
-
-			StringBuilder fieldnames = new StringBuilder();
-			fieldnames.append("Series Name, Series Values\n");
-
-			StringBuilder document = new StringBuilder();
-			for (Row row : session.getGraphmodel().getCurrentTableGraph().getRows()) {
-				document.append(row.getSeries()+","+row.getValue()+"\n");
-			}
-
-			BufferedWriter writer = new BufferedWriter(new FileWriter(dir));
-			writer.write(fieldnames.toString());
-			writer.write(document.toString());
-			writer.close();
-
-			relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(),"");
-			session.getReportmodel().addReportForDownload(dir, relativePath);
-			log.debug("CSV Report Created At: "+relativePath);
-
-
-		} catch (IOException e) {
-			log.error("Problem generating CSV report "+e.getMessage());
-
-		}
-
-		log.info("CSV Created..."+session.getGraphmodel().getSelectedStatisticalUnit());
-		return relativePath;
-	}
+	log.info("CSV Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
+	return relativePath;
+    }
 }

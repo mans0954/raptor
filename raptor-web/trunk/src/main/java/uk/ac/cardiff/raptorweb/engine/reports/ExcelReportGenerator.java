@@ -48,6 +48,11 @@ public class ExcelReportGenerator extends ReportConstructor {
 	log.info("Generating Excel Report " + session.getGraphmodel().getSelectedStatisticalUnit());
 	String relativePath = null;
 	try {
+	    // make sure base directory exists first
+	    File baseGraphDirectory = saveDirectory.getFile();
+	    if (!baseGraphDirectory.exists())
+		baseGraphDirectory.mkdir();
+
 	    File dir = new File(saveDirectory.getFile().getCanonicalPath()+"/"+session.getUser().getName());
 	    log.debug("Save Directory exists: " + dir.exists());
 	    if (!dir.exists())

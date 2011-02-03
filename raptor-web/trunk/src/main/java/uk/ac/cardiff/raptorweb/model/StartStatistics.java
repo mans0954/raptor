@@ -1,5 +1,6 @@
 package uk.ac.cardiff.raptorweb.model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -16,7 +17,7 @@ public class StartStatistics implements Serializable{
     private double numberOfUniqueAuthenticationsPer;
     private RaptorTableChartModel topFiveResouces;
     private RaptorTableChartModel bottomFiveResouces;
-    private RaptorGraphModel headlineGraph;
+    private RaptorJFreeChartModel headlineGraph;
 
     /* the time at which these values were computed */
     private DateTime accurateOf;
@@ -24,7 +25,6 @@ public class StartStatistics implements Serializable{
     public StartStatistics(){
 	topFiveResouces=null;
 	bottomFiveResouces=null;
-	headlineGraph=null;
     }
 
     public void setNumberOfAuthenticationsPer(double numberOfAuthenticationsPer) {
@@ -76,11 +76,11 @@ public class StartStatistics implements Serializable{
 	return bottomFiveResouces;
     }
 
-    public void setHeadlineGraph(RaptorGraphModel headlineGraph) {
+    public void setHeadlineGraph(RaptorJFreeChartModel headlineGraph) {
 	this.headlineGraph = headlineGraph;
     }
 
-    public RaptorGraphModel getHeadlineGraph() {
+    public RaptorJFreeChartModel getHeadlineGraph() {
 	return headlineGraph;
     }
 

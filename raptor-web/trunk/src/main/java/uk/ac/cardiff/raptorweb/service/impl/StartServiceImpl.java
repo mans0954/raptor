@@ -18,6 +18,7 @@ import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.CachedStartStatistics;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
+import uk.ac.cardiff.raptorweb.model.RaptorJFreeChartModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.StartModel;
 import uk.ac.cardiff.raptorweb.model.StartStatistics;
@@ -27,7 +28,7 @@ import uk.ac.cardiff.raptorweb.service.StartService;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class StartServiceImpl implements StartService {
 
@@ -40,6 +41,9 @@ public class StartServiceImpl implements StartService {
     private CachedStartStatistics cachedStartModelLastWeek;
     private CachedStartStatistics cachedStartModelLastMonth;
     private CachedStartStatistics cachedStartModelLastYear;
+
+    /* The chart processor which converts Aggregator Charts into RaptorWeb charts for outputting */
+    private ChartProcessor chartProcessor;
 
     public StartServiceImpl() {
 	cachedStartModelToday = new CachedStartStatistics();
@@ -185,7 +189,7 @@ public class StartServiceImpl implements StartService {
 
 	if (numberOfAuthentications != null && numberOfUniqueUsers != null && topFiveResourcesModel != null && bottomFiveResourcesModel != null && numberOfAuthenticationsPerIntervalNumberModel != null) {
 	    if (numberOfAuthentications != null) {
-		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfAuthentications);
+		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfAuthentications);
 		if (table.getRows().size() == 1) {
 		    if (table.getRows().get(0).getValue() instanceof Double) {
 			startstats.setNumberOfAuthenticationsPer(((Double) table.getRows().get(0).getValue()));
@@ -195,7 +199,7 @@ public class StartServiceImpl implements StartService {
 
 	    if (numberOfUniqueUsers != null) {
 		if (numberOfUniqueUsers != null) {
-		    RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(numberOfUniqueUsers);
+		    RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfUniqueUsers);
 		    // each result shows one distinct value, so number of results show number of distinct values
 		    log.debug("Number of rows: {}", table.getRows().size());
 		    if (table.getRows() != null) {
@@ -205,23 +209,18 @@ public class StartServiceImpl implements StartService {
 	    }
 
 	    if (topFiveResourcesModel != null) {
-		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(topFiveResourcesModel);
+		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(topFiveResourcesModel);
 		startstats.setTopFiveResouces(table);
 	    }
 
 	    if (bottomFiveResourcesModel != null) {
-		RaptorTableChartModel table = ChartProcessor.constructRaptorTableChartModel(bottomFiveResourcesModel);
+		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(bottomFiveResourcesModel);
 		startstats.setBottomFiveResouces(table);
 	    }
 
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
-		RaptorGraphModel graph = ChartProcessor.constructRaptorGraphModel(numberOfAuthenticationsPerIntervalNumberModel);
-		// blank some of the labels for display reasons
-		for (int i = 0; i < graph.getGroupLabels().size(); i++) {
-		    if ((i + 1) % 10 != 0 && i != 1)
-			graph.getGroupLabels().set(i, new String(""));
-		}
-		startstats.setHeadlineGraph(graph);
+		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(numberOfAuthenticationsPerIntervalNumberModel);
+		startstats.setHeadlineGraph(jfreeChart);
 	    }
 
 	    // set update time on the stats
@@ -246,6 +245,14 @@ public class StartServiceImpl implements StartService {
 
     public Capabilities getAttachedCapabilities() {
 	return webEngine.getAttachedCapabilities();
+    }
+
+    public void setChartProcessor(ChartProcessor chartProcessor) {
+	this.chartProcessor = chartProcessor;
+    }
+
+    public ChartProcessor getChartProcessor() {
+	return chartProcessor;
     }
 
 }

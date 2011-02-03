@@ -32,7 +32,11 @@ public class GraphServiceImpl implements GraphService{
 
 	static Logger log = LoggerFactory.getLogger(GraphServiceImpl.class);
 
+	/* RaptorWeb's main engine class for dealing with all service requests */
 	private RaptorWebEngine webEngine;
+
+	/* The chart processor which converts Aggregator Charts into RaptorWeb charts for outputting */
+	private ChartProcessor chartProcessor;
 
 	public void setWebEngine(RaptorWebEngine webEngine) {
 		this.webEngine = webEngine;
@@ -97,8 +101,9 @@ public class GraphServiceImpl implements GraphService{
 		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
 		if (gmodel!=null){
-		    model.setCurrentTableGraph(ChartProcessor.constructRaptorTableChartModel(gmodel));
-		    model.setCurrentGraph(ChartProcessor.constructRaptorGraphModel(gmodel));
+		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
+		    model.setCurrentGraph(chartProcessor.constructRaptorGraphModel(gmodel));
+		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel, websession));
 		    model.setProcessingResult("Done");
 		    //auto select chart heights based on heuristic
 		    if (model.getCurrentTableGraph().getRows().size()<50)
@@ -135,6 +140,14 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public Capabilities getAttachedCapabilities() {
 	    return webEngine.getAttachedCapabilities();
+	}
+
+	public void setChartProcessor(ChartProcessor chartProcessor) {
+	    this.chartProcessor = chartProcessor;
+	}
+
+	public ChartProcessor getChartProcessor() {
+	    return chartProcessor;
 	}
 
 

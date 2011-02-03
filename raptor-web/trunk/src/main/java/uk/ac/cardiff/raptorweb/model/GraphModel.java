@@ -25,6 +25,7 @@ public class GraphModel implements Serializable{
 	private StatisticalUnitInformation selectedStatisticalUnit;
 	private String processingResult;
 	private boolean showControlPanel;
+	private RaptorJFreeChartModel currentJFreeGraph;
 
 
 	/**
@@ -101,18 +102,26 @@ public class GraphModel implements Serializable{
 	}
 
 	public void setShowControlPanel(boolean showControlPanel) {
-	    log.debug("showControlPanel {}",showControlPanel);
 	    this.showControlPanel = showControlPanel;
 	}
 
 	public boolean isShowControlPanel() {
-	    log.debug("Showing control panel {}",showControlPanel);
 	    return showControlPanel;
 	}
-	
+
 	public void toggleShowControlPanel(){
 	    showControlPanel = !showControlPanel;
 	}
+
+	public void setCurrentJFreeGraph(RaptorJFreeChartModel currentJFreeGraph) {
+	    this.currentJFreeGraph = currentJFreeGraph;
+	}
+
+	public RaptorJFreeChartModel getCurrentJFreeGraph() {
+	    return currentJFreeGraph;
+	}
+
+
 
 
 
