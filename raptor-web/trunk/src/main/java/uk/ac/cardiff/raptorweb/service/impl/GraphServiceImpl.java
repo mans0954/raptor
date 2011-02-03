@@ -15,6 +15,7 @@ import uk.ac.cardiff.model.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
+import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphType;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
@@ -69,7 +70,6 @@ public class GraphServiceImpl implements GraphService{
 
 	@Override
 	public List getChartData(String statisticalUnitName) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -103,7 +103,7 @@ public class GraphServiceImpl implements GraphService{
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
 		    model.setCurrentGraph(chartProcessor.constructRaptorGraphModel(gmodel));
-		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel, websession));
+		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(GraphType.BAR,gmodel, websession,1480,1024));
 		    model.setProcessingResult("Done");
 		    //auto select chart heights based on heuristic
 		    if (model.getCurrentTableGraph().getRows().size()<50)

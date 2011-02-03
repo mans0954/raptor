@@ -51,12 +51,18 @@
 							<tr:spacer height="15px" />
 							<tr:panelHeader text="Number of authentications" />
 							<tr:spacer height="10px" />
-							<tr:chart id="chart" verticalMajorSections="15"
+							
+							<!--<tr:chart id="chart" verticalMajorSections="15"
 								value="#{flowScope.websession.startmodel.startStatistics.headlineGraph}"
 								rendered="#{not empty flowScope.websession.startmodel.startStatistics.headlineGraph}"
 								inlineStyle="width:100%; height:270px; border-style: hidden;"
 								type="stackedArea" width="98%" animationDuration="400"
-								perspective="false" maxPrecision="2" />
+								perspective="false" maxPrecision="2" />-->
+							
+							
+						 <tr:image rendered="#{not empty flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}" 
+						 source="#{flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}" inlineStyle="width:95%"/>
+								
 						</h:panelGrid>
 					</f:facet>
 
