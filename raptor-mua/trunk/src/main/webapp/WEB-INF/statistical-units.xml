@@ -58,16 +58,31 @@
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>All Authentications In X minute Intervals</value></property>
 					<property name="methodName"><value>countEntryPerInterval</value></property>
-					<property name="startTime"><value>20101020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20101020T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="seriesLabel"><value>Number of authentications</value></property>
+					<property name="startTime"><value>20110110T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>5</value></property>
+								<property name="parameter"><value>50</value></property>
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+					</property>
+
+					<property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Authentications to All Service Providers"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 	</bean>
@@ -80,7 +95,6 @@
 					<property name="methodName"><value>countEntry</value></property>
 					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
 					<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
-					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -88,6 +102,22 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Authentications over a time range"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 	</bean>
@@ -101,7 +131,6 @@
 					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="seriesLabel"><value>Number of authentications per entityID</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -109,6 +138,22 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number of Authentications per Service Provider (by entityID)"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 	</bean>
@@ -121,7 +166,6 @@
 					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="seriesLabel"><value>Number of authentications per service provider</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -129,6 +173,22 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number of Authentications per Service Provider (by Organisational Name)"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 		<property name="postprocessor">
@@ -146,7 +206,6 @@
 					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="seriesLabel"><value>Percentage (%) of authentications per service provider</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -154,6 +213,22 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number of Authentications per Service Provider by OrgName (Percentage)"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 		<property name="postprocessor">
@@ -173,7 +248,6 @@
 					<property name="methodName"><value>countEntryPerInterval</value></property>
 					<property name="startTime"><value>20101020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="seriesLabel"><value>Number of authentications for service provider</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -182,6 +256,22 @@
 						</list>
 					</property>
 					<property name="sqlFilter"><ref bean="testWhere"></ref></property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Authentications Over Time For A Single SP (by Organisational Name)"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 			</bean>
 		</property>
 		<property name="postprocessor">
@@ -216,9 +306,9 @@
 
 	<bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.NumberFormatterPostProcessor">
 	</bean>
-	
+
 	<!-- test SQL where filters , follows subset of SQL-99 spec, but too verbose-->
-	
+
 	<bean id="testWhere" class="uk.ac.cardiff.model.sql.SQLWhere">
 		<property name="booleanExpression">
 			<bean class="uk.ac.cardiff.model.sql.BooleanExpression">
@@ -240,7 +330,7 @@
 									 						</bean>
 									 					</property>
 									 				</bean>
-									 			</property>									 		
+									 			</property>
 									 		</bean>
 									 	</property>
 									</bean>
@@ -250,8 +340,8 @@
 					</bean>
 				</property>
 			</bean>
-		</property> 
-	
+		</property>
+
 	</bean>
 
 
@@ -264,7 +354,6 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
 					<property name="methodName"><value>countEntry</value></property>
-					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -272,6 +361,15 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
+
 			</bean>
 		</property>
 	</bean>
@@ -282,7 +380,6 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
 					<property name="methodName"><value>groupBy</value></property>
-					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -290,6 +387,14 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
 			</bean>
 		</property>
 	</bean>
@@ -300,7 +405,6 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
 					<property name="methodName"><value>countEntry</value></property>
-					<property name="seriesLabel"><value>Number of authentications</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -308,6 +412,14 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
 			</bean>
 		</property>
 	</bean>
@@ -318,7 +430,6 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>top5Resources</value></property>
 					<property name="methodName"><value>groupByFrequency</value></property>
-					<property name="seriesLabel"><value>Top 5 Resources</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -326,6 +437,13 @@
 							</bean>
 						</list>
 					</property>
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
 
 			</bean>
 		</property>
@@ -344,7 +462,6 @@
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>bottom5Resources</value></property>
 					<property name="methodName"><value>groupByFrequency</value></property>
-					<property name="seriesLabel"><value>Bottom 5 Resources</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -352,6 +469,14 @@
 							</bean>
 						</list>
 					</property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test"/>
+                            </bean>
+                        </list>
+                    </property>
 
 			</bean>
 		</property>
