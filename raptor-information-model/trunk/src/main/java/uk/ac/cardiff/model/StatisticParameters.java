@@ -4,6 +4,7 @@
 package uk.ac.cardiff.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -40,11 +41,6 @@ public class StatisticParameters implements Serializable{
     private String methodName;
     private List<MethodParameter> methodParams;
 
-    /* The textual description of the series, as attached to the x-axis */
-    private String seriesLabel;
-    /* A formatted textual description of the series, typically formatted by the logic of the authentication statistic*/
-    private String SeriesLabelFormatted;
-
     /*
      * the start time from which to produce the starts, defining the temporal extent If a starttime and endtime is not given, the entire temporal extent of the
      * data series will be used
@@ -66,8 +62,21 @@ public class StatisticParameters implements Serializable{
     /* SQL filter, to add custom where clauses*/
     private SQLFilter sqlFilter;
 
+    /* Configures the parameters used to view a graphical representation*/
+    private Presentation presentation;
+
+    /* A series to plot on the graph*/
+     private List<Series> series;
+
+     public StatisticParameters(){
+	 presentation = new Presentation();
+	 presentation.setGraphTitle("");
+	 presentation.setxAxisLabel("");
+	 presentation.setyAxisLabel("");
+	 setSeries(new ArrayList<Series>());
+     }
+
     public void setUnitName(String unitName) {
-	log.debug("Setting unit name: "+unitName);
 	this.unitName = unitName;
     }
 
@@ -89,14 +98,6 @@ public class StatisticParameters implements Serializable{
 
     public List<MethodParameter> getMethodParams() {
 	return methodParams;
-    }
-
-    public void setSeriesLabel(String seriesLabel) {
-	this.seriesLabel = seriesLabel;
-    }
-
-    public String getSeriesLabel() {
-	return seriesLabel;
     }
 
     /**
@@ -312,14 +313,6 @@ public class StatisticParameters implements Serializable{
 	return type;
     }
 
-    public void setSeriesLabelFormatted(String seriesLabelFormatted) {
-	SeriesLabelFormatted = seriesLabelFormatted;
-    }
-
-    public String getSeriesLabelFormatted() {
-	return SeriesLabelFormatted;
-    }
-
     public void setSqlFilter(SQLFilter sqlFilter) {
 	this.sqlFilter = sqlFilter;
     }
@@ -328,7 +321,21 @@ public class StatisticParameters implements Serializable{
 	return sqlFilter;
     }
 
+    public void setPresentation(Presentation presentation) {
+	this.presentation = presentation;
+    }
 
+    public Presentation getPresentation() {
+	return presentation;
+    }
+
+    public void setSeries(List<Series> series) {
+	this.series = series;
+    }
+
+    public List<Series> getSeries() {
+	return series;
+    }
 
 
 

@@ -3,6 +3,8 @@ package uk.ac.cardiff.model.Graph;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.ac.cardiff.model.Presentation;
+
 
 /*
  * based on the Apache Trinidad ChartModel, for compatibility. However, does not extend the Apache Trinidad Model
@@ -14,6 +16,8 @@ public class AggregatorGraphModel {
 	private List<String> groupLabels;
 	private List<String> seriesLabels;
 	private List<List<Double>> chartValues;
+
+	private Presentation presentation;
 
 
 	public List<String> getGroupLabels() {
@@ -69,6 +73,14 @@ public class AggregatorGraphModel {
 
 	public List<List<Double>> getChartValues() {
 		return chartValues;
+	}
+
+	public void setPresentation(Presentation presentation) {
+	    this.presentation = presentation;
+	}
+
+	public Presentation getPresentation() {
+	    return presentation;
 	}
 
 
