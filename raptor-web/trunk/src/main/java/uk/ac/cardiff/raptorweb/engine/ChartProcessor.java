@@ -4,6 +4,7 @@
 package uk.ac.cardiff.raptorweb.engine;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,9 +24,11 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
@@ -44,47 +47,58 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
 
 /**
  * @author philsmart
- *
+ * 
  *         Takes a chart from the MUA, and wraps it inside the current view technologies (trinidads) graph model
  */
 public class ChartProcessor {
     static Logger log = LoggerFactory.getLogger(ChartProcessor.class);
 
-    /* the location of the directory within the application that reports are saved to*/
+    /* the location of the directory within the application that reports are saved to */
     private Resource saveDirectory;
     private Resource baseDirectory;
-    
-    /* allows for selection of graph type*/
-    public enum GraphType{BAR,AREA};
+
+    /* allows for selection of graph type */
+    public enum GraphType {
+	BAR, AREA, BAR3D, LINE3D, LINE
+    };
+
+    /* options for how the graph is displayed */
+    public enum GraphPresentation {
+	FANCY(true), SIMPLE (false);
+	    private boolean legend;
+	    GraphPresentation(boolean legend){
+		this.legend=legend;
+	    }   
+    }	
     
 
-    public String getRootDirectory(String user){
-	String root=null;
+    public String getRootDirectory(String user) {
+	String root = null;
 	try {
-	    //make sure base directory exists first
+	    // make sure base directory exists first
 	    File baseGraphDirectory = saveDirectory.getFile();
 	    if (!baseGraphDirectory.exists())
 		baseGraphDirectory.mkdir();
 
-	    //then check for the existence of the users directory within the bae
-	    root = saveDirectory.getFile().getCanonicalPath()+"/"+user;
+	    // then check for the existence of the users directory within the bae
+	    root = saveDirectory.getFile().getCanonicalPath() + "/" + user;
 	    File dir = new File(root);
-	    log.debug("Save directory for charts exists: "+dir.exists());
+	    log.debug("Save directory for charts exists: " + dir.exists());
 	    if (!dir.exists())
 		dir.mkdir();
 
 	} catch (IOException e) {
-	    log.error("Could not create save directory for JFree charts, {}",e.getMessage());
+	    log.error("Could not create save directory for JFree charts, {}", e.getMessage());
 	}
 	return root;
     }
 
-    private File getRelativePath(File dir){
-	File relative =null;
+    private File getRelativePath(File dir) {
+	File relative = null;
 	try {
 	    relative = new File(dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), ""));
 	} catch (IOException e) {
-	   log.error("Could not get relative path for file {}, {}",dir,e.getMessage());
+	    log.error("Could not get relative path for file {}, {}", dir, e.getMessage());
 	}
 	return relative;
     }
@@ -101,97 +115,142 @@ public class ChartProcessor {
 
     /**
      * Outputs into the users home directory in the parent graph directory
+     * 
      * @param gmodel
      * @param session
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(GraphType graphType, AggregatorGraphModel gmodel, WebSession session, int width, int height) {
-	return doConstructJFreeGraphBar(graphType, gmodel, session.getUser().getName(), width, height);
-	
+    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, WebSession session, int width, int height) {
+	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, session.getUser().getName(), width, height);
+
     }
 
     /**
      * Will output into the root graphs directory
+     * 
      * @param gmodel
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(GraphType graphType, AggregatorGraphModel gmodel, int width, int height) {
-	return doConstructJFreeGraphBar(graphType, gmodel, "", width, height);
+    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, int width, int height) {
+	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height);
     }
 
     /**
      * Requires websession, as charts stored on file system specific to the current users home directory
+     * 
      * @param gmodel
      * @param session
      * @return
      */
-    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height) {
+    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height) {
+	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}",new Object[]{graphType,graphPresentation,graphPresentation.legend,width,height});
 	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
-	//construct the graph
+	// construct the graph
 	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 	for (int j = 0; j < gmodel.getSeriesLabels().size(); j++) {
 	    for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
-		dataset.setValue(gmodel.getYValues().get(i).get(j), gmodel.getSeriesLabels().get(j),gmodel.getGroupLabels().get(i));
+		dataset.setValue(gmodel.getYValues().get(i).get(j), gmodel.getSeriesLabels().get(j), gmodel.getGroupLabels().get(i));
 	    }
 	}
-	JFreeChart chart =null;
+	JFreeChart chart = null;
 	
-	if (graphType==GraphType.BAR)
-	    chart = ChartFactory.createBarChart3D(gmodel.getPresentation().getGraphTitle(),gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, true,true, false);
-	else if(graphType==GraphType.AREA)
-	    chart = ChartFactory.createAreaChart(gmodel.getPresentation().getGraphTitle(),gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, true,true, false);
+	if (graphType == GraphType.BAR3D)
+	    chart = ChartFactory.createBarChart3D(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.AREA)
+	    chart = ChartFactory.createAreaChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.LINE3D)
+	    chart = ChartFactory.createLineChart3D(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.BAR)
+	    chart = ChartFactory.createBarChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.LINE)
+	    chart = ChartFactory.createLineChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+
 	
-	//setup the graph output
-	CategoryPlot plot = (CategoryPlot)chart.getPlot();
-	CategoryAxis xAxis = (CategoryAxis)plot.getDomainAxis();
-	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
-	chart.setBackgroundPaint(new Color(255,255,255,0));
-	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
-	chart.getLegend().setPosition(RectangleEdge.RIGHT);
-	chart.getLegend().setBorder(0.0, 0.0, 0.0, 0.0);
-	chart.getLegend().setBackgroundPaint(new Color(255,255,255,0));
-	plot.setBackgroundPaint(new Color(222,222,222,125));
-	plot.setDomainGridlinesVisible(true);
-	plot.setRangeGridlinesVisible(true);
-	plot.setRangeGridlinePaint(Color.black);
-	plot.setDomainGridlinePaint(Color.black);
+	// setup the graph output
+	if (graphPresentation == GraphPresentation.FANCY)
+	    fancyGraphOutput(chart);
+	else if (graphPresentation == GraphPresentation.SIMPLE)
+	    simpleGraphOutput(chart);
 
+	
+	// save the graph
+	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main.svg");
+	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main.png");
+	try {
+	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
+	} catch (IOException e) {
+	    log.error("Could not save SVG File {}", e.getMessage());
+	}
 
-	//save the graph
-	File chartLocation = new File(getRootDirectory(user)+"/raptor-graphs-main.svg");
-	File chartLocationJPG = new File(getRootDirectory(user)+"/raptor-graphs-main.jpg");
-	File chartLocationPNG = new File(getRootDirectory(user)+"/raptor-graphs-main.png");
-	try {
-	    exportChartAsSVG(chart, new Rectangle(800,600), chartLocation);
-	} catch (IOException e) {
-	    log.error("Could not save SVG File {}",e.getMessage());
+	// png is used for screen output
+	if (graphPresentation == GraphPresentation.FANCY) {
+	    try {
+		int padding = 10;
+		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width - (padding * 2), height - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
+	    } catch (IOException e) {
+		log.error("Could not save PNG for screen render File {}", e.getMessage());
+	    }
+	} else {
+	    try {
+		exportChartAsPNG(chart, new Rectangle(width, height), chartLocationPNG);
+	    } catch (IOException e) {
+		log.error("Could not save PNG File {}", e.getMessage());
+	    }
 	}
-	try {
-	    exportChartAsJPG(chart, new Rectangle(1024,800), chartLocationJPG);
-	} catch (IOException e) {
-	    log.error("Could not save JPG File {}",e.getMessage());
-	}
-	//png is used for screen output
-	try
-	    {
-	      int padding = 10;
-	      ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width-(padding*2), height-(padding*2)), padding), "png", new FileOutputStream(chartLocationPNG));
-	  }
-	  catch (IOException e)
-	  {
-	      log.error("Could not save PNG for screen render File {}",e.getMessage());
-	  }
 
 	chartmodel.setChartLocation(chartLocationPNG);
 	chartmodel.setRelativeChartLocation(getRelativePath(chartLocationPNG));
 	return chartmodel;
     }
+    
+    private void fancyGraphOutput(JFreeChart chart){
+	CategoryPlot plot = (CategoryPlot) chart.getPlot();
+	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
+	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+	chart.setBackgroundPaint(new Color(255, 255, 255, 0));
+	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
+	chart.getLegend().setPosition(RectangleEdge.RIGHT);
+	chart.getLegend().setBorder(0.0, 0.0, 0.0, 0.0);
+	chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
+	plot.setBackgroundPaint(new Color(222, 222, 222, 125));
+	plot.setDomainGridlinesVisible(true);
+	plot.setRangeGridlinesVisible(true);
+	plot.setRangeGridlinePaint(Color.black);
+	plot.setDomainGridlinePaint(Color.black);
+	
+	//axis
+	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
+	rangeAxis.setUpperMargin(0.0);
+	rangeAxis.setLowerMargin(0.0);
+	
+    }
+    
+    private void simpleGraphOutput(JFreeChart chart){
+	CategoryPlot plot = (CategoryPlot) chart.getPlot();
+	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
+	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+	//chart.setBackgroundPaint(new Color(255, 255, 255, 0));
+	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
+	plot.setBackgroundPaint(new Color(222, 222, 222, 125));
+	plot.setDomainGridlinesVisible(true);
+	plot.setRangeGridlinesVisible(true);
+	plot.setRangeGridlinePaint(Color.black);
+	plot.setDomainGridlinePaint(Color.black);
+	
+	//axis
+	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
+	rangeAxis.setUpperMargin(0.0);
+	rangeAxis.setLowerMargin(0.0);
+	
+	
+
+    }
 
     /**
      * Exports a JFreeChart to a SVG file.
-     *
+     * 
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -213,7 +272,7 @@ public class ChartProcessor {
 	chart.draw(svgGenerator, bounds);
 
 	// Write svg file
-	log.debug("Saving SVG Chart to {}",svgFile.getCanonicalPath());
+	log.debug("Saving SVG Chart to {}", svgFile.getCanonicalPath());
 	OutputStream outputStream = new FileOutputStream(svgFile);
 	Writer out = new OutputStreamWriter(outputStream, "UTF-8");
 	svgGenerator.stream(out, true /* use css */);
@@ -223,7 +282,7 @@ public class ChartProcessor {
 
     /**
      * Exports a JFreeChart to a jpg file.
-     *
+     * 
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -234,12 +293,12 @@ public class ChartProcessor {
      *             if writing the svgFile fails.
      */
     private void exportChartAsJPG(JFreeChart chart, Rectangle bounds, File jpgFile) throws IOException {
-	log.debug("Saving JPG Chart to {}",jpgFile.getCanonicalPath());
+	log.debug("Saving JPG Chart to {}", jpgFile.getCanonicalPath());
 	ChartUtilities.saveChartAsJPEG(jpgFile, chart, bounds.width, bounds.height);
     }
 
     private void exportChartAsPNG(JFreeChart chart, Rectangle bounds, File pngFile) throws IOException {
-	log.debug("Saving PNG Chart to {}",pngFile.getCanonicalPath());
+	log.debug("Saving PNG Chart to {}", pngFile.getCanonicalPath());
 	ChartUtilities.saveChartAsPNG(pngFile, chart, bounds.width, bounds.height);
     }
 

@@ -15,6 +15,7 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
+import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphPresentation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphType;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.CachedStartStatistics;
@@ -219,7 +220,7 @@ public class StartServiceImpl implements StartService {
 		startstats.setBottomFiveResouces(table);
 	    }
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
-		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphType.AREA,numberOfAuthenticationsPerIntervalNumberModel,1280,400);
+		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.SIMPLE,GraphType.BAR3D,numberOfAuthenticationsPerIntervalNumberModel,1280,400);
 		startstats.setHeadlineGraph(jfreeChart);	
 	    }
 
