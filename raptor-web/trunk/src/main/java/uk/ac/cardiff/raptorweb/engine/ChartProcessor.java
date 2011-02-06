@@ -48,7 +48,7 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
 /**
  * @author philsmart
  * 
- *         Takes a chart from the MUA, and wraps it inside the current view technologies (trinidads) graph model
+ *         Takes a chart from the MUA, and wraps it inside the current graph view technologies (trinidad, JFreeChart) graph model
  */
 public class ChartProcessor {
     static Logger log = LoggerFactory.getLogger(ChartProcessor.class);
