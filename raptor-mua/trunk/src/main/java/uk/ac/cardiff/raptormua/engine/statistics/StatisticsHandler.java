@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
@@ -67,12 +68,15 @@ public class StatisticsHandler {
 		// method call
 		statistic.setEntryHandler(entryHandler);
 		Boolean success = invoke(statistic);
-		log.info("Statistic succedded " + success);
+		log.info("Statistic {} succedded {}",statistic.getStatisticParameters().getUnitName(),success);
 		if (success) {
 			// now send through post processor
 			statistic.postProcess();
 			return statistic.constructGraphModel();
 		}
+		//always reset the observationseries for the statistic, so the next execution is not
+		//an accumulation of the ones before it
+		statistic.getObservationSeries().clear();
 		return null;
 	}
 
@@ -91,21 +95,26 @@ public class StatisticsHandler {
 
 		try {
 			List<MethodParameter> params = statistic.getStatisticParameters().getMethodParams();
-			SQLFilter sqlFilter = statistic.getStatisticParameters().getSqlFilter();
-			String whereClause=null;
-			if (sqlFilter !=null){
-				SQLFilterConstructor sqlConstructor = new SQLFilterConstructor(sqlFilter);
-				whereClause = sqlConstructor.convertFilterToString();
+			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
+			boolean success = true;
+			for (Series series : listOfSeries){
+				SQLFilter sqlFilter = statistic.getStatisticParameters().getSqlFilter();
+				String whereClause=null;
+				if (sqlFilter !=null){
+					SQLFilterConstructor sqlConstructor = new SQLFilterConstructor(sqlFilter);
+					whereClause = sqlConstructor.convertFilterToString();
+				}
+				Object[] paramsO = new Object[params.size() + 1];
+				for (int i = 0; i < paramsO.length-1; i++) {
+					paramsO[i] = params.get(i).getParameter();
+				}
+				if (whereClause!=null)
+					paramsO[paramsO.length - 1] = whereClause;
+				else
+					paramsO[paramsO.length - 1] = new String();
+				success= invoke(statistic.getStatisticParameters().getMethodName(), paramsO, statistic);
 			}
-			Object[] paramsO = new Object[params.size() + 1];
-			for (int i = 0; i < paramsO.length-1; i++) {
-				paramsO[i] = params.get(i).getParameter();
-			}
-			if (whereClause!=null)
-				paramsO[paramsO.length - 1] = whereClause;
-			else
-				paramsO[paramsO.length - 1] = new String();
-			return invoke(statistic.getStatisticParameters().getMethodName(), paramsO, statistic);
+			return success;
 		} catch (Exception e) {
 			log.error("Failed to invoke statistics {} -> {}",statistic.getStatisticParameters().getUnitName(),e.getMessage());
 			e.printStackTrace();
@@ -127,7 +136,7 @@ public class StatisticsHandler {
 			Boolean success = (Boolean) statisticalMethod.invoke(object, params);
 			return success;
 		} catch (Throwable e) {
-			log.error("Field name '" + fieldname + "' does not match internal model attribute");
+			log.error("Failed to invoke statistics {} -> {}",fieldname,e.getMessage());
 			e.printStackTrace();
 			// System.exit(1);
 

@@ -38,149 +38,174 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
- * @author philsmart Holds a statistics unit or one statistics operation on one piece of data
+ * @author philsmart Holds a statistics unit or one statistics operation on one
+ *         piece of data
  */
 public class Statistic {
 
-    static Logger log = LoggerFactory.getLogger(Statistic.class);
+	static Logger log = LoggerFactory.getLogger(Statistic.class);
 
-    private EntryHandler entryHandler;
+	private EntryHandler entryHandler;
 
-    protected StatisticParameters statisticParameters;
+	protected StatisticParameters statisticParameters;
 
-    /* add a preprocessing module to the statistical method */
-    private StatisticsPreProcessor preprocessor;
+	/* add a preprocessing module to the statistical method */
+	private StatisticsPreProcessor preprocessor;
 
-    /* add a postprocessing module to the statistical method */
-    private List<StatisticsPostProcessor> postprocessor;
+	/* add a postprocessing module to the statistical method */
+	private List<StatisticsPostProcessor> postprocessor;
 
-    /*
-     * each statistical method produces objects (observations) which are stored in this array variable ready for postprocessing or construction of an
-     * <code>AggregatorGraphModel</code>
-     */
-    protected Observation[] observations;
+	private List<ObservationSeries> observationSeries;
 
-    public void setEntryHandler(EntryHandler entryHandler) {
-	if (preprocessor != null)
-	    try {
-		log.info("Invoking statistical preprocessor " + preprocessor.getClass());
-		preprocessor.preProcess(entryHandler);
-	    } catch (PreprocessorException e) {
-		log.error("Could not preprocess entries " + preprocessor.getClass());
-	    }
-	this.entryHandler = entryHandler;
-    }
-
-
-    /**
-     * <p>
-     * construct a graph model from the data observations and groupings stored in the buckets
-     * </p>
-     *
-     * @return
-     */
-    public AggregatorGraphModel constructGraphModel() {
-	AggregatorGraphModel gmodel = new AggregatorGraphModel();
-
-	log.debug("Observations type " + observations);
-
-	if (observations instanceof Group[]) {
-	    log.info("Constructing graph model for Group type");
-	    Group[] groups = (Group[]) observations;
-	    gmodel.setPresentation(statisticParameters.getPresentation());
-
-	    ArrayList<String> seriesLabels = new ArrayList<String>();
-	    for (Series series : statisticParameters.getSeries()){
-		seriesLabels.add(series.getSeriesLabel());
-	    }
-	    gmodel.setSeriesLabels(seriesLabels);
-
-	    for (int i=0; i < statisticParameters.getSeries().size();i++){
-        	    for (Group group : groups) {
-        		gmodel.addGroupLabel(group.getGroupName());
-        		List<Double> values = new ArrayList();
-        		Double valueDouble = new Double(group.getValue());
-        		values.add(valueDouble);
-        		gmodel.addGroupValue(values);
-        	    }
-	    }
-	} else if (observations instanceof Bucket[]) {
-	    log.info("Constructing graph model for Bucket type");
-	    Bucket[] buckets = (Bucket[]) observations;
-	    gmodel.setPresentation(statisticParameters.getPresentation());
-
-	    ArrayList<String> seriesLabels = new ArrayList<String>();
-	    for (Series series : statisticParameters.getSeries()){
-		seriesLabels.add(series.getSeriesLabel());
-	    }
-	    gmodel.setSeriesLabels(seriesLabels);
-
-	    DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-	    DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-	    for (Bucket bucket : buckets) {
-		gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
-		List<Double> values = new ArrayList();
-		Double valueDouble = new Double(bucket.getValue());
-		values.add(valueDouble);
-		gmodel.addGroupValue(values);
-	    }
+	public Statistic() {
+		setObservationSeries(new ArrayList<ObservationSeries>());
 	}
 
-	return gmodel;
-    }
+	public void setEntryHandler(EntryHandler entryHandler) {
+		if (preprocessor != null)
+			try {
+				log.info("Invoking statistical preprocessor " + preprocessor.getClass());
+				preprocessor.preProcess(entryHandler);
+			} catch (PreprocessorException e) {
+				log.error("Could not preprocess entries " + preprocessor.getClass());
+			}
+		this.entryHandler = entryHandler;
+	}
 
-    /**
-     * <p>
-     * pre processing effects the entries that go into the statistical unit post processing effects the observations that result form the statistical unit
-     * </p>
-     */
-    public void postProcess() {
-	try {
-	    if (getPostprocessor() != null) {
-		for (StatisticsPostProcessor post : postprocessor){
-		    observations = post.postProcess(observations);
+	/**
+	 * <p>
+	 * construct a graph model from the data observations and groupings stored
+	 * in the buckets
+	 * </p>
+	 * 
+	 * @return
+	 */
+	public AggregatorGraphModel constructGraphModel() {
+		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+		int countGroup = 0;
+		int countBucket = 0;
+
+		for (ObservationSeries obsSeries : observationSeries) {
+			if (obsSeries.getObservations() instanceof Group[])
+				countGroup++;
+			if (obsSeries.getObservations() instanceof Bucket[])
+				countBucket++;
 		}
-	    }
-	} catch (PostprocessorException e) {
-	    log.error("Could not post process entries, using " + getPostprocessor().getClass());
+		if (countGroup==0 && countBucket==0)return gmodel;
+		log.debug("Statistic has {} series and {} observations",this.getStatisticParameters().getSeries().size(),observationSeries.size());
+		if (countGroup == observationSeries.size()) {
+			log.info("Constructing graph model for Group type");
+			//construct the groups from the first series (each series will have the same grouping)
+			Observation[] observations = observationSeries.get(0).getObservations();
+			Group[] groups = (Group[]) observations;
+			for (Group group : groups) {
+				gmodel.addGroupLabel(group.getGroupName());
+			}
+			//now add each series and their values			
+			for (int i=0; i < observationSeries.size(); i++){				
+				groups = (Group[]) observations;
+				log.debug("Trying to get series label {}, which is {}",i,statisticParameters.getSeries().get(i).getSeriesLabel());
+				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
+	
+				for (Group group : groups) {
+					List<Double> values = new ArrayList();
+					Double valueDouble = new Double(group.getValue());
+					values.add(valueDouble);
+					gmodel.addGroupValue(values);
+				}
+			}
+
+		} else if (countBucket==observationSeries.size()) {
+//			log.info("Constructing graph model for {} type", observations.getClass());
+//			Bucket[] buckets = (Bucket[]) observations;
+//
+//			ArrayList<String> seriesLabels = new ArrayList<String>();
+//			for (Series series : statisticParameters.getSeries()) {
+//				seriesLabels.add(series.getSeriesLabel());
+//			}
+//			gmodel.setSeriesLabels(seriesLabels);
+//
+//			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+//			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+//			for (Bucket bucket : buckets) {
+//				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
+//				List<Double> values = new ArrayList();
+//				Double valueDouble = new Double(bucket.getValue());
+//				values.add(valueDouble);
+//				gmodel.addGroupValue(values);
+//			}
+		}
+		else{
+			log.error("Statistic had series with mixed observation types, which is currently not supported");
+		}
+
+		return gmodel;
 	}
-    }
 
-    public void setField(String field) {
+	/**
+	 * <p>
+	 * pre processing effects the entries that go into the statistical unit post
+	 * processing effects the observations that result form the statistical unit
+	 * </p>
+	 */
+	public void postProcess() {
+		try {
+			if (getPostprocessor() != null) {
+				for (StatisticsPostProcessor post : postprocessor) {
+					// perform the same post process on each observationseries
+					for (ObservationSeries obsSeries : getObservationSeries()) {
+						obsSeries.setObservations(post.postProcess(obsSeries.getObservations()));
+					}
+				}
+			}
+		} catch (PostprocessorException e) {
+			log.error("Could not post process entries, using " + getPostprocessor().getClass());
+		}
+	}
 
-    }
+	public void setField(String field) {
 
-    public void setPreprocessor(StatisticsPreProcessor preprocessor) {
-	this.preprocessor = preprocessor;
-    }
+	}
 
-    public StatisticsPreProcessor getPreprocessor() {
-	return preprocessor;
-    }
+	public void setPreprocessor(StatisticsPreProcessor preprocessor) {
+		this.preprocessor = preprocessor;
+	}
 
-    public List<StatisticsPostProcessor> getPostprocessor() {
-	return postprocessor;
-    }
+	public StatisticsPreProcessor getPreprocessor() {
+		return preprocessor;
+	}
 
-    public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
-	this.postprocessor = postprocessor;
-    }
+	public List<StatisticsPostProcessor> getPostprocessor() {
+		return postprocessor;
+	}
 
-    public void setStatisticParameters(StatisticParameters statisticParameters) {
-	this.statisticParameters = statisticParameters;
-    }
+	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
+		this.postprocessor = postprocessor;
+	}
 
-    public StatisticParameters getStatisticParameters() {
-	return statisticParameters;
-    }
+	public void setStatisticParameters(StatisticParameters statisticParameters) {
+		this.statisticParameters = statisticParameters;
+	}
 
+	public StatisticParameters getStatisticParameters() {
+		return statisticParameters;
+	}
 
-    public EntryHandler getEntryHandler() {
-	return entryHandler;
-    }
+	public EntryHandler getEntryHandler() {
+		return entryHandler;
+	}
+
+	public void setObservationSeries(List<ObservationSeries> observationSeries) {
+		this.observationSeries = observationSeries;
+	}
+
+	public List<ObservationSeries> getObservationSeries() {
+		return observationSeries;
+	}
 
 }

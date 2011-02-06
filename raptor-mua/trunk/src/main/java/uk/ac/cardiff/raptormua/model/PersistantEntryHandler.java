@@ -86,7 +86,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	@Override
 	public List query(String query) {
-	    	log.debug("SQL query to entry handler [{}]",query);
+	    //log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQuery(query, null);
 	}
 
@@ -98,7 +98,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	@Override
 	public Object queryUnique(String query) {
-		log.debug("SQL query to entry handler [{}]",query);
+		//log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQueryUnique(query, null);
 	}
 
