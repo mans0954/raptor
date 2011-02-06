@@ -153,8 +153,10 @@ public class AuthenticationStatistic extends Statistic {
 //			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel() + " (every "
 //					+ timeInterval + " minutes, where "+sqlWhere+")");
 //		}
-
-		observations = buckets;
+		ObservationSeries series=  new ObservationSeries();
+		series.setObservations(buckets);
+		getObservationSeries().add(series);
+		
 
 		// finished successfully, no exception thrown
 		return true;
@@ -256,8 +258,10 @@ public class AuthenticationStatistic extends Statistic {
 //					+ timeIntervalInDays + " days)");
 //		}
 
-		observations = buckets;
-
+		ObservationSeries series=  new ObservationSeries();
+		series.setObservations(buckets);
+		getObservationSeries().add(series);
+		
 		return true;
 
 	}
@@ -314,11 +318,14 @@ public class AuthenticationStatistic extends Statistic {
 //			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel());
 //		}
 
-		observations = groups.toArray(new Group[0]);
-
-		if (observations.length == 0)
+		if (groups.size() == 0)
 			return false;
+		
 		// finished successfully, no exception thrown
+		ObservationSeries series=  new ObservationSeries();
+		series.setObservations(groups.toArray(new Group[0]));
+		getObservationSeries().add(series);
+		
 		return true;
 
 	}
@@ -365,10 +372,14 @@ public class AuthenticationStatistic extends Statistic {
 //		if (statisticParameters.getSeries().getSeriesLabel() == null)
 //			statisticParameters.getSeries().setSeriesLabel("Distinct Values " + groupByField);
 
-		observations = groups.toArray(new Group[0]);
-
-		if (observations.length == 0)
+		if (groups.size() == 0)
 			return false;
+		
+		// finished successfully, no exception thrown
+		ObservationSeries series=  new ObservationSeries();
+		series.setObservations(groups.toArray(new Group[0]));
+		getObservationSeries().add(series);		
+		
 		// finished successfully, no exception thrown
 		return true;
 
