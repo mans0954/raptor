@@ -59,8 +59,6 @@ public class StatisticParameters implements Serializable{
     public enum StatisticType {USER,SYSTEM};
     private StatisticType type;
 
-    /* SQL filter, to add custom where clauses*/
-    private SQLFilter sqlFilter;
 
     /* Configures the parameters used to view a graphical representation*/
     private Presentation presentation;
@@ -311,14 +309,6 @@ public class StatisticParameters implements Serializable{
 
     public StatisticType getType() {
 	return type;
-    }
-
-    public void setSqlFilter(SQLFilter sqlFilter) {
-	this.sqlFilter = sqlFilter;
-    }
-
-    public SQLFilter getSqlFilter() {
-	return sqlFilter;
     }
 
     public void setPresentation(Presentation presentation) {
