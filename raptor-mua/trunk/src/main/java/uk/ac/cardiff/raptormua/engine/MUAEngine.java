@@ -136,7 +136,7 @@ public class MUAEngine {
 			stats.add(information);
 		}
 		capabilities.setStatisticalServices(stats);
-
+		log.debug("Constructed MUA Capabilities");
 		return capabilities;
 	}
 
