@@ -19,6 +19,10 @@ public class AggregatorGraphModel {
 
 	private Presentation presentation;
 
+	public AggregatorGraphModel(){
+	    seriesLabels= new ArrayList<String>();
+	}
+
 
 	public List<String> getGroupLabels() {
 		  return groupLabels;
