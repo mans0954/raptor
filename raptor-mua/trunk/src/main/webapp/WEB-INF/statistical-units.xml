@@ -129,8 +129,8 @@
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by entityID)</value></property>
 					<property name="methodName"><value>groupByFrequency</value></property>
-					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+					<property name="startTime"><value>20110115T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -144,8 +144,12 @@
                             <bean class="uk.ac.cardiff.model.Series">
                                 <property name="seriesLabel" value="test"/>
                             </bean>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="test2"/>
+                            </bean>
                         </list>
                     </property>
+
 
                     <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">

@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.LinkedHashSet;
@@ -66,6 +67,14 @@ public class Statistic {
 		setObservationSeries(new ArrayList<ObservationSeries>());
 	}
 
+	/**
+	 * Important this this method is called during the statistic process lifecycle, so that any state variables
+	 * e.g. the observationSeries, is reset ready for the next invocation
+	 */
+	public void reset(){
+	    observationSeries.clear();
+	}
+
 	public void setEntryHandler(EntryHandler entryHandler) {
 		if (preprocessor != null)
 			try {
@@ -82,11 +91,12 @@ public class Statistic {
 	 * construct a graph model from the data observations and groupings stored
 	 * in the buckets
 	 * </p>
-	 * 
+	 *
 	 * @return
 	 */
 	public AggregatorGraphModel constructGraphModel() {
 		AggregatorGraphModel gmodel = new AggregatorGraphModel();
+		gmodel.setPresentation(this.getStatisticParameters().getPresentation());
 		int countGroup = 0;
 		int countBucket = 0;
 
@@ -98,6 +108,9 @@ public class Statistic {
 		}
 		if (countGroup==0 && countBucket==0)return gmodel;
 		log.debug("Statistic has {} series and {} observations",this.getStatisticParameters().getSeries().size(),observationSeries.size());
+		log.debug("Observation type, GroupType {}, BucketType {}",countGroup, countBucket);
+
+
 		if (countGroup == observationSeries.size()) {
 			log.info("Constructing graph model for Group type");
 			//construct the groups from the first series (each series will have the same grouping)
@@ -106,22 +119,23 @@ public class Statistic {
 			for (Group group : groups) {
 				gmodel.addGroupLabel(group.getGroupName());
 			}
-			//now add each series and their values			
-			for (int i=0; i < observationSeries.size(); i++){				
+			//now add each series and their values
+			for (int i=0; i < observationSeries.size(); i++){
 				groups = (Group[]) observations;
 				log.debug("Trying to get series label {}, which is {}",i,statisticParameters.getSeries().get(i).getSeriesLabel());
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
-	
+
+				List<Double> values = new ArrayList();
 				for (Group group : groups) {
-					List<Double> values = new ArrayList();
 					Double valueDouble = new Double(group.getValue());
 					values.add(valueDouble);
-					gmodel.addGroupValue(values);
 				}
+				log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
+				gmodel.addGroupValue(values);
 			}
 
 		} else if (countBucket==observationSeries.size()) {
-//			log.info("Constructing graph model for {} type", observations.getClass());
+			log.info("Constructing graph model for Bucket type");
 //			Bucket[] buckets = (Bucket[]) observations;
 //
 //			ArrayList<String> seriesLabels = new ArrayList<String>();

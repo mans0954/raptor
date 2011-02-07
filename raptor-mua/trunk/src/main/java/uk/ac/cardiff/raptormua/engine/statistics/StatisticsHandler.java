@@ -72,11 +72,21 @@ public class StatisticsHandler {
 		if (success) {
 			// now send through post processor
 			statistic.postProcess();
-			return statistic.constructGraphModel();
+			try{
+			    AggregatorGraphModel graphModel = statistic.constructGraphModel();
+			    statistic.reset();
+			    return graphModel;
+			}
+			catch(Exception e){
+			    //must catch this error here, so we can clear the observations that the statistic has generated
+			    statistic.reset();
+			    log.error("Problem constructing graph model for statistic {}",statistic.getStatisticParameters().getUnitName());
+			    return null;
+			}
 		}
 		//always reset the observationseries for the statistic, so the next execution is not
 		//an accumulation of the ones before it
-		statistic.getObservationSeries().clear();
+		statistic.reset();
 		return null;
 	}
 
@@ -119,7 +129,7 @@ public class StatisticsHandler {
 			log.error("Failed to invoke statistics {} -> {}",statistic.getStatisticParameters().getUnitName(),e.getMessage());
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 
 	}
 
