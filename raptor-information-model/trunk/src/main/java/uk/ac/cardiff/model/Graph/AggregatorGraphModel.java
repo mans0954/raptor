@@ -52,10 +52,7 @@ public class AggregatorGraphModel {
 
 
 	public List<List<Double>> getYValues() {
-
 		    return chartValues;
-
-
 	}
 
 	public void setYValues(List<List<Double>> values) {
