@@ -47,7 +47,7 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
 
 /**
  * @author philsmart
- * 
+ *
  *         Takes a chart from the MUA, and wraps it inside the current graph view technologies (trinidad, JFreeChart) graph model
  */
 public class ChartProcessor {
@@ -64,13 +64,13 @@ public class ChartProcessor {
 
     /* options for how the graph is displayed */
     public enum GraphPresentation {
-	FANCY(true), SIMPLE (false);
-	    private boolean legend;
-	    GraphPresentation(boolean legend){
-		this.legend=legend;
-	    }   
-    }	
-    
+	FANCY(true), SIMPLE(false);
+	private boolean legend;
+
+	GraphPresentation(boolean legend) {
+	    this.legend = legend;
+	}
+    }
 
     public String getRootDirectory(String user) {
 	String root = null;
@@ -115,7 +115,7 @@ public class ChartProcessor {
 
     /**
      * Outputs into the users home directory in the parent graph directory
-     * 
+     *
      * @param gmodel
      * @param session
      * @return
@@ -127,7 +127,7 @@ public class ChartProcessor {
 
     /**
      * Will output into the root graphs directory
-     * 
+     *
      * @param gmodel
      * @return
      */
@@ -137,44 +137,54 @@ public class ChartProcessor {
 
     /**
      * Requires websession, as charts stored on file system specific to the current users home directory
-     * 
+     *
      * @param gmodel
      * @param session
      * @return
      */
     private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height) {
-	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}",new Object[]{graphType,graphPresentation,graphPresentation.legend,width,height});
+	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { graphType, graphPresentation, graphPresentation.legend, width, height });
 	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
 	// construct the graph
 	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
+	log.info("Creating dataset with {} series and {} groups", gmodel.getSeriesLabels().size(), gmodel.getGroupLabels().size());
 	for (int j = 0; j < gmodel.getSeriesLabels().size(); j++) {
 	    for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
-		dataset.setValue(gmodel.getYValues().get(i).get(j), gmodel.getSeriesLabels().get(j), gmodel.getGroupLabels().get(i));
+		dataset.setValue(gmodel.getYValues().get(j).get(i), gmodel.getSeriesLabels().get(j), gmodel.getGroupLabels().get(i));
 	    }
 	}
 	JFreeChart chart = null;
-	
-	if (graphType == GraphType.BAR3D)
-	    chart = ChartFactory.createBarChart3D(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.AREA)
-	    chart = ChartFactory.createAreaChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.LINE3D)
-	    chart = ChartFactory.createLineChart3D(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.BAR)
-	    chart = ChartFactory.createBarChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.LINE)
-	    chart = ChartFactory.createLineChart(gmodel.getPresentation().getGraphTitle(), gmodel.getPresentation().getxAxisLabel(), gmodel.getPresentation().getyAxisLabel(), dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	String chartTitle = "";
+	String xAxisLabel = "";
+	String yAxisLabel = "";
+	if (gmodel.getPresentation() != null) {
+	    if (gmodel.getPresentation().getGraphTitle() != null)
+		chartTitle = gmodel.getPresentation().getGraphTitle();
+	    if (gmodel.getPresentation().getxAxisLabel() != null)
+		xAxisLabel = gmodel.getPresentation().getxAxisLabel();
+	    if (gmodel.getPresentation().getyAxisLabel() != null)
+		yAxisLabel = gmodel.getPresentation().getyAxisLabel();
+	}
 
-	
+	log.debug("Graph Setup with Title {}, xAxisLabel {}, yAxisLabel {}", new Object[] { chartTitle, xAxisLabel, yAxisLabel });
+	if (graphType == GraphType.BAR3D)
+	    chart = ChartFactory.createBarChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.AREA)
+	    chart = ChartFactory.createAreaChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.LINE3D)
+	    chart = ChartFactory.createLineChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.BAR)
+	    chart = ChartFactory.createBarChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	else if (graphType == GraphType.LINE)
+	    chart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+
 	// setup the graph output
 	if (graphPresentation == GraphPresentation.FANCY)
 	    fancyGraphOutput(chart);
 	else if (graphPresentation == GraphPresentation.SIMPLE)
 	    simpleGraphOutput(chart);
 
-	
 	// save the graph
 	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main.svg");
 	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main.png");
@@ -204,8 +214,8 @@ public class ChartProcessor {
 	chartmodel.setRelativeChartLocation(getRelativePath(chartLocationPNG));
 	return chartmodel;
     }
-    
-    private void fancyGraphOutput(JFreeChart chart){
+
+    private void fancyGraphOutput(JFreeChart chart) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
 	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
@@ -219,38 +229,36 @@ public class ChartProcessor {
 	plot.setRangeGridlinesVisible(true);
 	plot.setRangeGridlinePaint(Color.black);
 	plot.setDomainGridlinePaint(Color.black);
-	
-	//axis
+
+	// axis
 	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
 	rangeAxis.setUpperMargin(0.0);
 	rangeAxis.setLowerMargin(0.0);
-	
+
     }
-    
-    private void simpleGraphOutput(JFreeChart chart){
+
+    private void simpleGraphOutput(JFreeChart chart) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
 	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-	//chart.setBackgroundPaint(new Color(255, 255, 255, 0));
+	// chart.setBackgroundPaint(new Color(255, 255, 255, 0));
 	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
 	plot.setBackgroundPaint(new Color(222, 222, 222, 125));
 	plot.setDomainGridlinesVisible(true);
 	plot.setRangeGridlinesVisible(true);
 	plot.setRangeGridlinePaint(Color.black);
 	plot.setDomainGridlinePaint(Color.black);
-	
-	//axis
+
+	// axis
 	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
 	rangeAxis.setUpperMargin(0.0);
 	rangeAxis.setLowerMargin(0.0);
-	
-	
 
     }
 
     /**
      * Exports a JFreeChart to a SVG file.
-     * 
+     *
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -282,7 +290,7 @@ public class ChartProcessor {
 
     /**
      * Exports a JFreeChart to a jpg file.
-     * 
+     *
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -310,16 +318,16 @@ public class ChartProcessor {
 
 	RaptorTableChartModel tableModel = new RaptorTableChartModel();
 
-	for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
-	    Row<Double> row = new Row<Double>();
-	    row.setSeries(gmodel.getGroupLabels().get(i));
-	    /*
-	     * important, as currently we only operate with one group, the second list of Doubles in the YValues will only have a List of size 1, which is
-	     * assumed here, hence get(0).
-	     */
-	    row.setValue(gmodel.getYValues().get(i).get(0));
-	    tableModel.addRow(row);
-	}
+	// for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
+	// Row<Double> row = new Row<Double>();
+	// row.setSeries(gmodel.getGroupLabels().get(i));
+	// /*
+	// * important, as currently we only operate with one group, the second list of Doubles in the YValues will only have a List of size 1, which is
+	// * assumed here, hence get(0).
+	// */
+	// row.setValue(gmodel.getYValues().get(i).get(0));
+	// tableModel.addRow(row);
+	// }
 
 	return tableModel;
     }
