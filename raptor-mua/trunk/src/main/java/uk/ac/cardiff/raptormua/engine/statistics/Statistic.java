@@ -121,8 +121,7 @@ public class Statistic {
 			}
 			//now add each series and their values
 			for (int i=0; i < observationSeries.size(); i++){
-				groups = (Group[]) observations;
-				log.debug("Trying to get series label {}, which is {}",i,statisticParameters.getSeries().get(i).getSeriesLabel());
+				groups = (Group[]) observationSeries.get(i).getObservations();
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
 
 				List<Double> values = new ArrayList();
@@ -136,23 +135,28 @@ public class Statistic {
 
 		} else if (countBucket==observationSeries.size()) {
 			log.info("Constructing graph model for Bucket type");
-//			Bucket[] buckets = (Bucket[]) observations;
-//
-//			ArrayList<String> seriesLabels = new ArrayList<String>();
-//			for (Series series : statisticParameters.getSeries()) {
-//				seriesLabels.add(series.getSeriesLabel());
-//			}
-//			gmodel.setSeriesLabels(seriesLabels);
-//
-//			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-//			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
-//			for (Bucket bucket : buckets) {
-//				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
-//				List<Double> values = new ArrayList();
-//				Double valueDouble = new Double(bucket.getValue());
-//				values.add(valueDouble);
-//				gmodel.addGroupValue(values);
-//			}
+			
+			//construct the groups from the first series (each series will have the same grouping)
+			Observation[] observations = observationSeries.get(0).getObservations();
+			Bucket[] buckets = (Bucket[]) observations;
+			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+			for (Bucket bucket : buckets) {
+				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
+			}
+
+			for (int i=0; i < observationSeries.size(); i++){	
+				buckets = (Bucket[]) observationSeries.get(i).getObservations();
+				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
+
+				List<Double> values = new ArrayList();
+				for (Bucket bucket : buckets) {
+					Double valueDouble = new Double(bucket.getValue());
+					values.add(valueDouble);					
+				}
+				log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
+				gmodel.addGroupValue(values);
+			}
 		}
 		else{
 			log.error("Statistic had series with mixed observation types, which is currently not supported");

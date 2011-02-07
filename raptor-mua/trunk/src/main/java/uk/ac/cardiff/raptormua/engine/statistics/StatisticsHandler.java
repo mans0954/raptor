@@ -108,12 +108,7 @@ public class StatisticsHandler {
 			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
 			boolean success = true;
 			for (Series series : listOfSeries){
-				SQLFilter sqlFilter = statistic.getStatisticParameters().getSqlFilter();
-				String whereClause=null;
-				if (sqlFilter !=null){
-					SQLFilterConstructor sqlConstructor = new SQLFilterConstructor(sqlFilter);
-					whereClause = sqlConstructor.convertFilterToString();
-				}
+				String whereClause=series.constructComparisonAsSQL();
 				Object[] paramsO = new Object[params.size() + 1];
 				for (int i = 0; i < paramsO.length-1; i++) {
 					paramsO[i] = params.get(i).getParameter();

@@ -74,6 +74,11 @@ public class AuthenticationStatistic extends Statistic {
 		int numberOfBuckets = (int) (difference / timeIntervalInt);
 		long reminder = difference % timeIntervalInt;
 		log.debug("There are " + numberOfBuckets + " buckets, with reminder " + reminder + "ms");
+		
+		if (difference < 0){
+			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
+			throw new StatisticalUnitException("negative time difference");
+		}
 
 		/* now create that many buckets of length timeIntervalInt */
 		Bucket[] buckets = null;
@@ -179,6 +184,11 @@ public class AuthenticationStatistic extends Statistic {
 		long timeIntervalsInMs = (long) (difference / numberOfIntervals);
 		long reminder = difference % numberOfIntervals;
 		log.debug("There are " + numberOfIntervals + " buckets, with reminder " + reminder + "ms");
+		
+		if (difference < 0){
+			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
+			throw new StatisticalUnitException("negative time difference");
+		}
 
 		/* now create that many buckets of length timeIntervalInt */
 		Bucket[] buckets = null;
