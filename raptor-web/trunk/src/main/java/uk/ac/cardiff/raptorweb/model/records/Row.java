@@ -11,20 +11,20 @@ import java.io.Serializable;
  */
 public class Row<T> implements Serializable{
 
-	private String series;
+	private String group;
 	private T value;
 
-	public void setSeries(String series) {
-		this.series = series;
-	}
-	public String getSeries() {
-		return series;
-	}
 	public void setValue(T value) {
 		this.value = value;
 	}
 	public T getValue() {
 		return value;
+	}
+	public void setGroup(String group) {
+	    this.group = group;
+	}
+	public String getGroup() {
+	    return group;
 	}
 
 

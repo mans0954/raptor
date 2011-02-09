@@ -16,6 +16,7 @@ import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.TableSeries;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.model.records.Row;
 import jxl.Workbook;
@@ -64,16 +65,29 @@ public class CSVReportGenerator extends ReportConstructor {
 	    java.util.Date date = new java.util.Date();
 	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".csv");
 
-	    StringBuilder fieldnames = new StringBuilder();
-	    fieldnames.append("Series Name, Series Values\n");
 
 	    StringBuilder document = new StringBuilder();
-	    for (Row row : session.getGraphmodel().getCurrentTableGraph().getRows()) {
-		document.append(row.getSeries() + "," + row.getValue() + "\n");
+
+	    int rowCount = 0;
+	    for (int lineCount=0; lineCount < maxNoRows(session.getGraphmodel().getCurrentTableGraph());lineCount++){
+		if (lineCount == 0) {
+		    // do headers
+		    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
+			document.append(tseries.getSeriesLabel()+",values,");
+		    }
+		    document.append("\n");
+		}
+		else{
+        	    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()){
+        		if (tseries.getRows().size()>rowCount)
+        		    document.append(tseries.getRows().get(rowCount).getGroup() + "," + tseries.getRows().get(rowCount).getValue() + ",");
+        	    }
+        	    document.append("\n");
+        	    rowCount++;
+		}
 	    }
 
 	    BufferedWriter writer = new BufferedWriter(new FileWriter(dir));
-	    writer.write(fieldnames.toString());
 	    writer.write(document.toString());
 	    writer.close();
 
@@ -88,5 +102,18 @@ public class CSVReportGenerator extends ReportConstructor {
 
 	log.info("CSV Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
 	return relativePath;
+    }
+
+    /**
+     * @param currentTableGraph
+     * @return
+     */
+    private int maxNoRows(RaptorTableChartModel currentTableGraph) {
+	int maxRows = 0;
+	 for (TableSeries tseries :currentTableGraph.getTableSeries()){
+	     if (tseries.getRows().size()>maxRows)
+		 maxRows=tseries.getRows().size();
+	 }
+	 return maxRows;
     }
 }

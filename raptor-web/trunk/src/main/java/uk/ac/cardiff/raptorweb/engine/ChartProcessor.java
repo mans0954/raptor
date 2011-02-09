@@ -42,6 +42,7 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorJFreeChartModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
+import uk.ac.cardiff.raptorweb.model.TableSeries;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.model.records.Row;
 
@@ -221,7 +222,7 @@ public class ChartProcessor {
 	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
 	chart.setBackgroundPaint(new Color(255, 255, 255, 0));
 	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
-	chart.getLegend().setPosition(RectangleEdge.RIGHT);
+	chart.getLegend().setPosition(RectangleEdge.BOTTOM);
 	chart.getLegend().setBorder(0.0, 0.0, 0.0, 0.0);
 	chart.getLegend().setBackgroundPaint(new Color(255, 255, 255, 0));
 	plot.setBackgroundPaint(new Color(222, 222, 222, 125));
@@ -318,16 +319,18 @@ public class ChartProcessor {
 
 	RaptorTableChartModel tableModel = new RaptorTableChartModel();
 
-	// for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
-	// Row<Double> row = new Row<Double>();
-	// row.setSeries(gmodel.getGroupLabels().get(i));
-	// /*
-	// * important, as currently we only operate with one group, the second list of Doubles in the YValues will only have a List of size 1, which is
-	// * assumed here, hence get(0).
-	// */
-	// row.setValue(gmodel.getYValues().get(i).get(0));
-	// tableModel.addRow(row);
-	// }
+	for (int j = 0; j < gmodel.getSeriesLabels().size(); j++) {
+	    TableSeries tseries = new TableSeries();
+	    tseries.setSeriesLabel(gmodel.getSeriesLabels().get(j));
+
+	    for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
+		Row<Double> row = new Row<Double>();
+		row.setGroup(gmodel.getGroupLabels().get(i));
+		row.setValue(gmodel.getYValues().get(j).get(i));
+		tseries.addRow(row);
+	    }
+	    tableModel.addTableSeries(tseries);
+	}
 
 	return tableModel;
     }

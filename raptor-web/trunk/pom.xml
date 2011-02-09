@@ -177,6 +177,7 @@
 			<version>${trinidad.version}</version>
 			<scope>compile</scope>
 		</dependency>
+
 		<!-- Jstl -->
 		<dependency>
 			<groupId>jstl</groupId>
@@ -563,6 +564,7 @@
 			<artifactId>batik-svggen</artifactId>
 			<version>1.6-1</version>
 		</dependency>
+
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>

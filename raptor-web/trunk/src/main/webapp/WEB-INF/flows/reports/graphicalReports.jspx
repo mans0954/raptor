@@ -18,9 +18,11 @@
 
 					<f:facet name="top">
 						<tr:panelGroupLayout layout="horizontal">
-							<tr:outputText value="Control Panel Visible"/>
-							<tr:spacer width="3px"/>
-							<tr:commandLink text="#{flowScope.websession.graphmodel.showControlPanel}" action="#{flowScope.websession.graphmodel.toggleShowControlPanel}"/>
+							<tr:outputText value="Control Panel Visible" />
+							<tr:spacer width="3px" />
+							<tr:commandLink
+								text="#{flowScope.websession.graphmodel.showControlPanel}"
+								action="#{flowScope.websession.graphmodel.toggleShowControlPanel}" />
 						</tr:panelGroupLayout>
 					</f:facet>
 
@@ -361,34 +363,23 @@
 								YMajorGridLineCount="#{flowScope.websession.graphmodel.chartOptions.yMajorGridCount}"
 								perspective="#{flowScope.websession.graphmodel.chartOptions.perspective}"
 								maxPrecision="2" />
-							--><br />
+							-->
+							<br />
 
 						</tr:panelFormLayout>
 
-                        <tr:image rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}" source="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}" inlineStyle="width:95%"/>
+						<tr:image
+							rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+							source="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+							inlineStyle="width:95%" />
 
 						<!-- RESULTS TABLE -->
 						<!-- ________________________________ -->
 
 						<tr:panelFormLayout rows="7" labelWidth="5%">
-							<tr:table
-								value="#{flowScope.websession.graphmodel.currentTableGraph.rows}"
-								bandingInterval="2" banding="row" var="row" width="95%"
+							<tr:table binding="#{graphService.table}" bandingInterval="2" banding="row" width="95%"
 								rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
 
-								<tr:column sortProperty="series" sortable="true">
-									<f:facet name="header">
-										<tr:outputText value="Series" />
-									</f:facet>
-									<tr:outputText value="#{row.series}">
-									</tr:outputText>
-								</tr:column>
-								<tr:column align="center" sortProperty="value" sortable="true">
-									<f:facet name="header">
-										<tr:outputText value="Value" />
-									</f:facet>
-									<tr:outputText value="#{row.value}" />
-								</tr:column>
 
 							</tr:table>
 
