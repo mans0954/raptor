@@ -6,6 +6,10 @@ package uk.ac.cardiff.raptorweb.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.myfaces.trinidad.component.UIXTable;
+import org.apache.myfaces.trinidad.component.core.data.CoreColumn;
+import org.apache.myfaces.trinidad.component.core.data.CoreTable;
+import org.apache.myfaces.trinidad.component.core.output.CoreOutputText;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
@@ -103,16 +107,8 @@ public class GraphServiceImpl implements GraphService{
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
-		    model.setCurrentGraph(chartProcessor.constructRaptorGraphModel(gmodel));
 		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(GraphPresentation.FANCY,GraphType.BAR3D,gmodel, websession,1480,1024));
 		    model.setProcessingResult("Done");
-		    //auto select chart heights based on heuristic
-		    if (model.getCurrentTableGraph().getRows().size()<50)
-			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.SMALL);
-		    else if (model.getCurrentTableGraph().getRows().size()<100)
-			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.MEDIUM);
-		    else
-			model.getChartOptions().setChartHeight(ChartOptions.ChartHeight.LARGE);
 
 		}
 		else{
@@ -123,6 +119,30 @@ public class GraphServiceImpl implements GraphService{
 		}
 
 
+	}
+
+	public CoreTable getTable(WebSession websession){
+	    CoreTable table = new CoreTable();
+	    List tableChildList = table.getChildren();
+
+	    for(int i=0;i<4;i++){
+		CoreColumn newCol= new CoreColumn();
+		List colChildList = newCol.getChildren();
+		//set HeaderText for new col
+		CoreOutputText newText = new CoreOutputText();
+		newText.setValue("TEST");
+
+		colChildList.add(newText);
+		tableChildList.add(newCol);
+
+		}
+
+	    log.debug("Returning table {}",table);
+	    return table;
+	}
+
+	public void setTable(CoreTable table){
+	    log.debug("Trying to set the table {}",table);
 	}
 
 	/* (non-Javadoc)

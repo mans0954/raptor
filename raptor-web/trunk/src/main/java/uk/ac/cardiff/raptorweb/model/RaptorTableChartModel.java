@@ -7,8 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.cardiff.raptorweb.model.records.Row;
-
+import org.apache.myfaces.trinidad.component.core.data.CoreTable;
 
 /**
  * @author philsmart
@@ -19,22 +18,38 @@ public class RaptorTableChartModel implements Serializable{
     /* generated serialID */
     private static final long serialVersionUID = 1765790673328864045L;
 
-	private List<Row> rows;
+    	private List<TableSeries> tableSeries;
+    	private CoreTable coreTable;
 
 	public RaptorTableChartModel(){
-		setRows(new ArrayList());
+	    setTableSeries(new ArrayList());
 	}
 
-	public void addRow(Row row){
-		getRows().add(row);
+	/**
+	 * @param tseries
+	 */
+	public void addTableSeries(TableSeries tseries) {
+	   getTableSeries().add(tseries);
 	}
 
-	public void setRows(List<Row> rows) {
-		this.rows = rows;
+	public void setTableSeries(List<TableSeries> tableSeries) {
+	    this.tableSeries = tableSeries;
 	}
 
-	public List<Row> getRows() {
-		return rows;
+	public List<TableSeries> getTableSeries() {
+	    return tableSeries;
 	}
+
+	public void setCoreTable(CoreTable coreTable) {
+	    this.coreTable = coreTable;
+	}
+
+	public CoreTable getCoreTable() {
+	    return coreTable;
+	}
+
+
+
+
 
 }

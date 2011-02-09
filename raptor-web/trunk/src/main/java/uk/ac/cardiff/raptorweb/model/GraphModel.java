@@ -39,6 +39,8 @@ public class GraphModel implements Serializable{
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
 	    showControlPanel=true;
+
+	    currentTableGraph = new RaptorTableChartModel();
 	}
 
 	/**

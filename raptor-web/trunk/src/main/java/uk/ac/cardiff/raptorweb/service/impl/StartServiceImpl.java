@@ -192,20 +192,24 @@ public class StartServiceImpl implements StartService {
 	if (numberOfAuthentications != null && numberOfUniqueUsers != null && topFiveResourcesModel != null && bottomFiveResourcesModel != null && numberOfAuthenticationsPerIntervalNumberModel != null) {
 	    if (numberOfAuthentications != null) {
 		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfAuthentications);
-		if (table.getRows().size() == 1) {
-		    if (table.getRows().get(0).getValue() instanceof Double) {
-			startstats.setNumberOfAuthenticationsPer(((Double) table.getRows().get(0).getValue()));
-		    }
+		//should only have one series, and one row
+		if (table.getTableSeries().size()==1){
+        		if (table.getTableSeries().get(0).getRows().size() == 1) {
+        		    if (table.getTableSeries().get(0).getRows().get(0).getValue() instanceof Double) {
+        			startstats.setNumberOfAuthenticationsPer(((Double) table.getTableSeries().get(0).getRows().get(0).getValue()));
+        		    }
+        		}
 		}
 	    }
 
 	    if (numberOfUniqueUsers != null) {
 		if (numberOfUniqueUsers != null) {
 		    RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfUniqueUsers);
-		    // each result shows one distinct value, so number of results show number of distinct values
-		    log.debug("Number of rows: {}", table.getRows().size());
-		    if (table.getRows() != null) {
-			startstats.setNumberOfUniqueAuthenticationsPer(table.getRows().size());
+		    // there should only be one series, and each result shows one distinct value, so number of results show number of distinct values
+		    if (table.getTableSeries().size()==1){
+        		    if (table.getTableSeries().get(0).getRows() != null) {
+        			startstats.setNumberOfUniqueAuthenticationsPer(table.getTableSeries().get(0).getRows().size());
+        		    }
 		    }
 		}
 	    }
@@ -221,7 +225,7 @@ public class StartServiceImpl implements StartService {
 	    }
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
 		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.SIMPLE,GraphType.BAR3D,numberOfAuthenticationsPerIntervalNumberModel,1280,400);
-		startstats.setHeadlineGraph(jfreeChart);	
+		startstats.setHeadlineGraph(jfreeChart);
 	    }
 
 	    // set update time on the stats
