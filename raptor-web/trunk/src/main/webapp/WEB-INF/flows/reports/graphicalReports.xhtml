@@ -1,0 +1,255 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+
+	<ui:define name="content">
+		<rich:layout>
+
+			<rich:layoutPanel position="top">
+				<a4j:form id="showForm">
+					<h:panelGrid columns="4">
+						<h:outputText value="Control Panel Visible" />
+						<rich:spacer width="3px" />
+						<a4j:commandLink reRender="showForm,ControlPanelForm,chartForm"
+							value="#{flowScope.websession.graphmodel.showControlPanel}"
+							action="#{flowScope.websession.graphmodel.toggleShowControlPanel}" />
+
+					</h:panelGrid>
+				</a4j:form>
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="left" style="width: 500px">
+
+				<a4j:form id="ControlPanelForm">
+					<rich:panel header="ControlPanel" style="width: 95%"
+						id="controlPanelPanel"
+						rendered="#{flowScope.websession.graphmodel.showControlPanel}">
+
+						<h:panelGrid border="0" columns="1"
+							rendered="#{flowScope.websession.graphmodel.showControlPanel}">
+
+							<rich:dataTable value="#{graphService.statisticalUnits}"
+								bandingInterval="2" banding="row" var="unit" width="100%"
+								labelWidth="0%" inlineStyle="border-style: hidden;"
+								rendered="#{not empty graphService.statisticalUnits}">
+
+								<f:facet name="detailStamp">
+									<h:panelGrid columns="3" labelWidth="5%">
+										<h:panelGroup layout="horizontal">
+											<h:outputText value="Method Name:"
+												inlineStyle="font-weight: bold;" />
+											<h:outputText value="#{unit.statisticParameters.methodName}" />
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal"
+											rendered="#{not empty unit.statisticParameters.startTimeAsJavaDate}">
+											<h:outputText value="Start Time:"
+												inlineStyle="font-weight: bold;" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Hour:"
+												value="#{unit.statisticParameters.startTimeHour}"
+												minimum="00" maximum="23" simple="true" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Minutes:"
+												value="#{unit.statisticParameters.startTimeMinute}"
+												minimum="00" maximum="59" simple="true" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Seconds:"
+												value="#{unit.statisticParameters.startTimeSecond}"
+												minimum="00" maximum="59" simple="true" />
+											<!--<tr:inputDate id="startTimeDate" autoSubmit="true"
+													value="#{unit.statisticParameters.startTimeAsJavaDate}">
+													<f:convertDateTime dateStyle="short" />
+												</tr:inputDate>
+
+											-->
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal"
+											rendered="#{not empty unit.statisticParameters.endTimeAsJavaDate}">
+											<h:outputText value="End Time:"
+												inlineStyle="font-weight: bold;" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Hour:"
+												value="#{unit.statisticParameters.endTimeHour}" minimum="00"
+												maximum="23" simple="true" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Minutes:"
+												value="#{unit.statisticParameters.endTimeMinute}"
+												minimum="00" maximum="59" simple="true" />
+											<rich:inputNumberSpinner autoSubmit="true" label="Seconds:"
+												value="#{unit.statisticParameters.endTimeSecond}"
+												minimum="00" maximum="59" simple="true" />
+											<!--<tr:inputDate id="endTimeDate" autoSubmit="true"
+													value="#{unit.statisticParameters.endTimeAsJavaDate}">
+													<f:convertDateTime dateStyle="short" />
+												</tr:inputDate>
+											-->
+										</h:panelGroup>
+
+										<!--<h:panelGroup layout="horizontal">
+                                            <h:outputText value="Field:"
+                                                inlineStyle="font-weight: bold;" />
+                                            <h:outputText value="#{unit.statisticParameters.field}" />
+                                        </h:panelGroup>
+
+                                        -->
+										<h:panelGroup layout="horizontal">
+											<h:outputText value="Parameters:"
+												inlineStyle="font-weight: bold;" />
+											<rich:dataTable
+												value="#{unit.statisticParameters.methodParams}"
+												var="parameter" width="95%" labelWidth="5%"
+												inlineStyle="border-style: hidden;"
+												rendered="#{not empty unit.statisticParameters.methodParams}">
+												<rich:column inlineStyle="border-style: hidden;">
+													<h:inputText value="#{parameter.parameter}" />
+												</rich:column>
+											</rich:dataTable>
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal">
+											<h:outputText value="Graph Title:"
+												inlineStyle="font-weight: bold;" />
+											<h:inputText
+												value="#{unit.statisticParameters.presentation.graphTitle}" />
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal">
+											<h:outputText value="Preprocessors:"
+												inlineStyle="font-weight: bold;" />
+											<h:outputText value="#{unit.preProcessorsAsString}" />
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal">
+											<h:outputText value="Postprocessors:"
+												inlineStyle="font-weight: bold;" />
+											<h:outputText value="#{unit.postProcessorsAsString}" />
+										</h:panelGroup>
+
+										<h:panelGroup layout="horizontal">
+											<a4j:commandButton value="Update" action="updateMUAStatistic">
+												<f:setPropertyActionListener value="#{unit}"
+													target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+											</a4j:commandButton>
+										</h:panelGroup>
+
+
+
+									</h:panelGrid>
+								</f:facet>
+								<f:facet name="header">
+									<h:outputText
+										value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
+								</f:facet>
+
+
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Statistic" />
+									</f:facet>
+									<a4j:commandLink value="#{unit.statisticParameters.unitName}"
+										action="invokeStatisticalUnit" reRender="chartForm">
+										<f:setPropertyActionListener value="#{unit}"
+											target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+									</a4j:commandLink>
+
+								</rich:column>
+							</rich:dataTable>
+
+							<rich:simpleTogglePanel switchType="client"
+								label="Download Options">
+
+								<h:panelGrid id="reportTypePanel" columns="2">
+									<a4j:commandLink id="generateExcelReport"
+										action="generateExcelReport">
+										<!-- need to get the partialSubmit="true"> working for this action -->
+										<h:graphicImage value="/image/excel-icon.gif" style="border:0">
+										</h:graphicImage>
+
+									</a4j:commandLink>
+
+									<a4j:commandLink action="generateCSVReport">
+										<h:graphicImage value="/image/csv-icon.png" style="border:0">
+										</h:graphicImage>
+									</a4j:commandLink>
+								</h:panelGrid>
+
+
+
+								<rich:dataTable id="reportDownloadTable"
+									value="#{flowScope.websession.reportmodel.reportsForDownload}"
+									bandingInterval="2" banding="row" var="row"
+									rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
+									width="100%">
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Report Name" />
+										</f:facet>
+										<h:outputText value="#{row.friendlyName} " />
+									</rich:column>
+									<rich:column align="center">
+										<f:facet name="header">
+											<h:outputText value="Download" />
+										</f:facet>
+										<a href="#{row.downloadPath}">download</a>
+									</rich:column>
+									<rich:column align="center">
+										<f:facet name="header">
+											<h:outputText value="Remove" />
+										</f:facet>
+										<a4j:commandLink id="removeReportCommandLink" text="x"
+											action="removeReport" partialSubmit="true">
+											<f:setPropertyActionListener value="#{row}"
+												target="#{flowScope.websession.reportmodel.selectedDownloadFile}" />
+										</a4j:commandLink>
+
+									</rich:column>
+								</rich:dataTable>
+
+
+
+							</rich:simpleTogglePanel>
+
+
+						</h:panelGrid>
+					</rich:panel>
+				</a4j:form>
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="center">
+
+				<a4j:form id="chartForm">
+					<h:graphicImage
+						rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+						value="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+						style="width:100" width="50%" />
+
+				</a4j:form>
+
+				<!-- RESULTS TABLE -->
+				<!-- ________________________________ -->
+
+
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<!--right-->
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="bottom">
+
+
+			</rich:layoutPanel>
+
+		</rich:layout>
+
+	</ui:define>
+</ui:composition>

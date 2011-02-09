@@ -1,0 +1,157 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+	<ui:define name="content">
+		<rich:layout>
+
+			<rich:layoutPanel position="top" style="font-size:150%">
+
+                <a4j:form>
+				<h:panelGrid columns="7" columnClasses="verticalAlignMiddle" >
+
+					<h:outputText style="font-weight:bold' color:red"
+						value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
+					<!--<h:spacer width="5px" />
+
+					--><rich:inplaceSelect id="quickStatsRangeSelector"
+						value="#{flowScope.websession.startmodel.statsRangeSelector}"
+						shortDesc="quickStatsRangeSelector" defaultLabel="Today">
+						<f:selectItem itemLabel="Today" itemValue="TODAY" />
+						<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
+						<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
+						<f:selectItem itemLabel="Last Year" itemValue="LASTYEAR" />
+					</rich:inplaceSelect>
+					<rich:spacer width="10"/>
+					<h:commandButton id="startStatsUpdateButton" value="Refresh"
+						action="refreshStartStats" immediate="true" />
+					<rich:spacer width="300"/>
+					<h:outputText
+						value="updated [#{flowScope.websession.startmodel.startStatistics.accurateOfFormatted}]" />
+
+				</h:panelGrid>
+				</a4j:form>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="left">
+
+				<!--left-->
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="center">
+
+				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
+                        <rich:spacer height="10px" />
+                        <h:outputText value="At a glance" />
+                        <rich:spacer height="7px" />
+                        <h:panelGroup layout="horizontal" width="100%">
+                            <rich:spacer width="60px" />
+
+
+                                <h:outputText value="Number of Authentications"
+                                    inlineStyle="font-size:120%;font-weight: bold" />
+                                <rich:spacer height="7px" />
+                                <h:outputText
+                                    value="#{flowScope.websession.startmodel.startStatistics.numberOfAuthenticationsPerFormatted}"
+                                    partialTriggers=":quickStatsRangeSelector"
+                                    inlineStyle="font-size:270%;font-weight: bold" />
+                                <rich:spacer height="20px" />
+                                <h:outputText value="Number of Unique Users"
+                                    inlineStyle="font-size:120%;font-weight: bold" />
+                                <rich:spacer height="7px" />
+                                <h:outputText
+                                    value="#{flowScope.websession.startmodel.startStatistics.numberOfUniqueAuthenticationsPerFormatted}"
+                                    inlineStyle="font-size:270%;font-weight: bold" />
+
+
+                            <rich:spacer width="30px" />
+
+                            <rich:dataTable value="#{flowScope.websession.startmodel.startStatistics.topFiveResouces.rows}"
+                                bandingInterval="2" banding="row" var="row" width="100%"
+                                rendered="#{not empty flowScope.websession.startmodel.startStatistics.topFiveResouces}">
+                                <f:facet name="header">
+                                    <h:outputText value="Top 5 eResources" />
+                                </f:facet>
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="eResource" />
+                                    </f:facet>
+                                    <h:outputText value="#{row.series}">
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Number of Accesses" />
+                                    </f:facet>
+                                    <h:outputText value="#{row.value}" />
+                                </rich:column>
+                            </rich:dataTable>
+
+                            <rich:spacer width="15px" />
+
+                            <rich:dataTable value="#{flowScope.websession.startmodel.startStatistics.bottomFiveResouces.rows}"
+                                bandingInterval="2" banding="row" var="row" width="100%"
+                                rendered="#{not empty flowScope.websession.startmodel.startStatistics.bottomFiveResouces}">
+                                <f:facet name="header">
+                                    <h:outputText value="Bottom 5 eResources" />
+                                </f:facet>
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="eResource" />
+                                    </f:facet>
+                                    <h:outputText value="#{row.series}">
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Number of Accesses" />
+                                    </f:facet>
+                                    <h:outputText value="#{row.value}" />
+                                </rich:column>
+
+                            </rich:dataTable>
+                        </h:panelGroup>
+                        <!--<h:outputText
+                                value="aaaaaaaaaaaaaaaaaaaaaaaaa"
+                                inlineStyle="opacity:0.0;color:#EEE9E8;" />
+                        -->
+
+                    </h:panelGrid>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<!--right-->
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="bottom">
+
+			             <h:panelGrid width="100%"
+                            style="height: 100%; text-align: center;">
+                            <rich:spacer height="15px" />
+                            <h:outputText value="Number of authentications" />
+                            <rich:spacer height="10px" />
+
+
+                         <h:graphicImage rendered="#{not empty flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}"
+                         source="#{flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}" style="width:95%"/>
+
+                        </h:panelGrid>
+
+			</rich:layoutPanel>
+
+		</rich:layout>
+
+	</ui:define>
+</ui:composition>
