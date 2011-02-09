@@ -247,12 +247,12 @@
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Authentications Over Time For A Single SP (by Organisational Name)</value></property>
 					<property name="methodName"><value>countEntryPerInterval</value></property>
-					<property name="startTime"><value>20101020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20101115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+					<property name="startTime"><value>20110116T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+					<property name="endTime"><value>20110117T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>1000</value></property>
+								<property name="parameter"><value>100</value></property>
 							</bean>
 						</list>
 					</property>
@@ -260,24 +260,24 @@
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="https://sdauth.sciencedirect.com/"/>
                                <property name="comparisonPredicate">
-									 	<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
-									 							<property name="compOp" value="EQUAL"/>
-									 							<property name="fieldName" value="requestHost"/>
-									 							<property name="value" value="https://sdauth.sciencedirect.com/"/>
-									 						</bean>
-									 					</property>
+									 <bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
+									 		<property name="compOp" value="EQUAL"/>
+									 		<property name="fieldName" value="requestHost"/>
+									 		<property name="value" value="https://sdauth.sciencedirect.com/"/>
+									 </bean>
+								</property>
                             </bean>
 							 <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="requestHost2"/>
+                                <property name="seriesLabel" value="https://scauth.scopus.com/"/>
                                 <property name="comparisonPredicate">
-									 						<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
-									 							<property name="compOp" value="EQUAL"/>
-									 							<property name="fieldName" value="requestHost"/>
-									 							<property name="value" value="https://sdauth.sciencedirect.com/"/>
-									 						</bean>
-									 					</property>
+									 	<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
+									 			<property name="compOp" value="EQUAL"/>
+									 			<property name="fieldName" value="requestHost"/>
+									 			<property name="value" value="https://scauth.scopus.com/"/>
+									 	</bean>
+								</property>
                             </bean>
                         </list>
                     </property>
