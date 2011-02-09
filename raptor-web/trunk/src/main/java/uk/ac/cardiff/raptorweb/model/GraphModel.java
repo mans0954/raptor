@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.event.ValueChangeEvent;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,11 +2,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<tr:document xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:tr="http://myfaces.apache.org/trinidad">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:sf="http://www.springframework.org/tags/faces"
+      xmlns:form="http://www.springframework.org/tags/form"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:h="http://java.sun.com/jsf/html"
+      contentType="text/html" encoding="UTF-8">
 
 	<c:set var="contextPath"
 		value="#{facesContext.externalContext.requestContextPath}" />
@@ -14,47 +18,41 @@
 	<head>
 	<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 	<title>RaptorWeb<ui:insert name="title"> Statistics Viewer</ui:insert></title>
-	<!--<link rel="stylesheet" type="text/css" media="screen" href="#{contextPath}/templates/raptor/css/main.css" />-->
-	<link rel="stylesheet" type="text/css"
-		href="#{contextPath}/templates/raptor/css/common.css" />
-
+	<link rel="stylesheet" type="text/css" href="#{contextPath}/templates/raptor/css/common.css" />
 	</head>
 
 
-
+    <body>
 
 	<div id="wrapper">
 	<div id="header"><a href="reports"><img
 		src="#{contextPath}/templates/raptor/images/simple-logo.png" alt="Raptor Logo"
 		class="logo" /></a></div>
 
-	<tr:form id="menuForm">
+	<a4j:form id="menuForm">
 	<ul id="nav">
-		<li><tr:commandLink text="Home" action="homeTrans"/></li>
-		<li><tr:commandLink text="Graphs" action="graphTrans"/></li>
-		<li><tr:commandLink text="Setup" action="setupTrans"/></li>
-		<li><tr:commandLink text="About" action="aboutTrans"/></li>
+		<li><a4j:commandLink value="Home" action="homeTrans"/></li>
+		<li><a4j:commandLink value="Graphs" action="graphTrans"/></li>
+		<li><a4j:commandLink value="Setup" action="setupTrans"/></li>
+		<li><a4j:commandLink value="About" action="aboutTrans"/></li>
 		<li><a href="RaptorWeb/j_spring_security_logout">Logout</a></li>
 	</ul>
-	</tr:form>
-	<div id="content" class="clearfix">
-	<div id="col_2"><ui:insert name="content" /></div>
+	</a4j:form>
+	<div id="content">
+	<div id="main"><ui:insert name="content" /></div>
 	</div>
-	<div id="footer">
+	<div id="footer" class="footer">
 	<center>
-		
-		<tr:panelGroupLayout layout="horizontal">
-			<h:graphicImage value="/image/cu-logo.jpg"  width="32px"/>
-			<tr:spacer width="20px"/>
-			<tr:outputText value="All content copyright 2010 Cardiff University, all rights reserved." inlineStyle="font-size:80%"/>
-			<tr:spacer width="20px"/>
-			<h:graphicImage value="/image/jisc-logo.png"  width="35px"/>
-		</tr:panelGroupLayout>
+        <h:panelGrid id="grid" columns="5">
+			<h:graphicImage value="/image/cu-logo.jpg"  style="width:500px" width="400" height="100"/>
+			<h:outputText value="Cardiff University" />
+			<h:graphicImage value="/image/jisc-logo.png"/>
+		</h:panelGrid>
 	</center>
 	</div>
 	</div>
+    </body>
 
 
 
-
-</tr:document>
+</f:view>

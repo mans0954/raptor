@@ -17,7 +17,7 @@
 	</on-start>
 
 
-	<view-state id="startReport" view="startReport.jspx">
+	<view-state id="startReport" view="startReport.xhtml">
 
 		<on-entry>
 			<evaluate expression="startService.generateStatistics(flowScope.websession)" />
@@ -40,7 +40,7 @@
 		<transition on="homeTrans" to="startReport" />
 	</view-state>
 
-	<view-state id="graphicalReports" view="graphicalReports.jspx">
+	<view-state id="graphicalReports" view="graphicalReports.xhtml">
 
 		<!-- we need to load these specific to a person and a role -->
 
