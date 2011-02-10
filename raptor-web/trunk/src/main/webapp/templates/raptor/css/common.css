@@ -52,7 +52,7 @@ h3		{ font-size: 16px; color: #666; }
 #subnav li a:hover { background:#E9D1D1 url(../images/bg_left_nav_on.gif) no-repeat 100% 0; text-decoration:none; }
 #content #col_2 { width:100%; float:left; }
 
-#footer { border-width:1px; border-top-style:solid; display:block; width:100%; padding: 10px 40px; margin:0 auto; background:#FFF; -moz-border-radius:6px; }
+#footer { border-width:1px; border-top-style:solid; display:block; width:90%; padding: 5px 5px; margin:0 auto; background:#FFF; -moz-border-radius:6px; }
 #footer small {  }
 
 .t_form { margin:20px; }

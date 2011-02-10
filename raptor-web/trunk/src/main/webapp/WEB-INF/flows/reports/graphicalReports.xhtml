@@ -14,134 +14,157 @@
 		<rich:layout>
 
 			<rich:layoutPanel position="top">
-				<a4j:form id="showForm">
-					<h:panelGrid columns="4">
-						<h:outputText value="Control Panel Visible" />
-						<rich:spacer width="3px" />
-						<a4j:commandLink reRender="showForm,ControlPanelForm,chartForm,tablePanelForm"
-							value="#{flowScope.websession.graphmodel.showControlPanel}"
-							action="#{flowScope.websession.graphmodel.toggleShowControlPanel}" />
 
-					</h:panelGrid>
+				<a4j:form id="ControlPanelForm">
+					<rich:simpleTogglePanel switchType="client" label="Control Panel"
+						opened="true">
+
+						<rich:layout>
+							<rich:layoutPanel position="left" width="40%">
+
+								<rich:dataTable value="#{graphService.statisticalUnits}"
+									bandingInterval="2" banding="row" var="unit" width="100%"
+									labelWidth="0%" inlineStyle="border-style: hidden;"
+									rendered="#{not empty graphService.statisticalUnits}">
+
+									<f:facet name="header">
+										<h:outputText
+											value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
+									</f:facet>
+
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Statistic" />
+										</f:facet>
+										<a4j:commandLink value="#{unit.statisticParameters.unitName}"
+											action="invokeStatisticalUnit"
+											reRender="chartForm,graphImage">
+											<f:setPropertyActionListener value="#{unit}"
+												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+										</a4j:commandLink>
+
+									</rich:column>
+
+									<rich:column>
+										<f:facet name="header">
+											<h:outputText value="Modifying" />
+										</f:facet>
+
+									</rich:column>
+								</rich:dataTable>
+							</rich:layoutPanel>
+
+
+
+							<rich:layoutPanel position="right">
+								<rich:panel width="100%">
+									<f:facet name="header">
+                                        Options
+                                     </f:facet>
+
+								</rich:panel>
+							</rich:layoutPanel>
+
+
+						</rich:layout>
+
+					</rich:simpleTogglePanel>
 				</a4j:form>
 			</rich:layoutPanel>
 
-			<rich:layoutPanel position="left" width="30%" >
-
-				<a4j:form id="ControlPanelForm">
-					<rich:panel header="ControlPanel" style="width: 95%"
-						id="controlPanelPanel"
+			<!--<rich:layoutPanel position="right" width="70%">
+				<a4j:form id="tablePanelForm">
+					<rich:panel header="Table" style="width:100%" id="tablePanel"
 						rendered="#{flowScope.websession.graphmodel.showControlPanel}">
 
-						<h:panelGrid border="0" columns="1"
-							rendered="#{flowScope.websession.graphmodel.showControlPanel}">
+					</rich:panel>
 
-							<rich:dataTable value="#{graphService.statisticalUnits}"
-								bandingInterval="2" banding="row" var="unit" width="100%"
-								labelWidth="0%" inlineStyle="border-style: hidden;"
-								rendered="#{not empty graphService.statisticalUnits}">
-								
-								<f:facet name="header">
-									<h:outputText
-										value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
-								</f:facet>
+				</a4j:form>
+			</rich:layoutPanel>
 
+			-->
+			<rich:layoutPanel position="bottom">
+
+				<a4j:form id="chartForm">
+
+					<rich:tabPanel id="chartTabPanel" height="450"
+						selectedTab="#{indexAction.selectedOpleidingTab}"
+						switchType="client">
+						<rich:tab name="graph" label="Graph">
+							<h:graphicImage id="graphImage"
+								rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+								value="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
+								width="100%" />
+
+							<rich:simpleTogglePanel switchType="client" label="Graph Options"
+								opened="false">
+
+
+							</rich:simpleTogglePanel>
+						</rich:tab>
+
+
+						<rich:tab name="table" label="Table">
+
+
+						</rich:tab>
+
+						<rich:tab name="Download" label="Download">
+
+							<h:panelGrid id="reportTypePanel" columns="2">
+								<a4j:commandLink id="generateExcelReport"
+									action="generateExcelReport">
+									<h:graphicImage value="/image/excel-icon.gif" style="border:0">
+									</h:graphicImage>
+
+								</a4j:commandLink>
+
+								<a4j:commandLink action="generateCSVReport">
+									<h:graphicImage value="/image/csv-icon.png" style="border:0">
+									</h:graphicImage>
+								</a4j:commandLink>
+							</h:panelGrid>
+
+
+
+							<rich:dataTable id="reportDownloadTable"
+								value="#{flowScope.websession.reportmodel.reportsForDownload}"
+								bandingInterval="2" banding="row" var="row"
+								rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
+								width="100%">
 
 								<rich:column>
 									<f:facet name="header">
-										<h:outputText value="Statistic" />
+										<h:outputText value="Report Name" />
 									</f:facet>
-									<a4j:commandLink value="#{unit.statisticParameters.unitName}"
-										action="invokeStatisticalUnit" reRender="chartForm">
-										<f:setPropertyActionListener value="#{unit}"
-											target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+									<h:outputText value="#{row.friendlyName} " />
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Download" />
+									</f:facet>
+									<a href="#{row.downloadPath}">download</a>
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Remove" />
+									</f:facet>
+									<a4j:commandLink id="removeReportCommandLink" text="x"
+										action="removeReport" partialSubmit="true">
+										<f:setPropertyActionListener value="#{row}"
+											target="#{flowScope.websession.reportmodel.selectedDownloadFile}" />
 									</a4j:commandLink>
 
 								</rich:column>
 							</rich:dataTable>
 
-							<rich:simpleTogglePanel switchType="client"
-								label="Download Options" opened="false">
 
-								<h:panelGrid id="reportTypePanel" columns="2">
-									<a4j:commandLink id="generateExcelReport"
-										action="generateExcelReport">
-										<!-- need to get the partialSubmit="true"> working for this action -->
-										<h:graphicImage value="/image/excel-icon.gif" style="border:0">
-										</h:graphicImage>
+						</rich:tab>
 
-									</a4j:commandLink>
-
-									<a4j:commandLink action="generateCSVReport">
-										<h:graphicImage value="/image/csv-icon.png" style="border:0">
-										</h:graphicImage>
-									</a4j:commandLink>
-								</h:panelGrid>
+					</rich:tabPanel>
 
 
-
-								<rich:dataTable id="reportDownloadTable"
-									value="#{flowScope.websession.reportmodel.reportsForDownload}"
-									bandingInterval="2" banding="row" var="row"
-									rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
-									width="100%">
-
-									<rich:column>
-										<f:facet name="header">
-											<h:outputText value="Report Name" />
-										</f:facet>
-										<h:outputText value="#{row.friendlyName} " />
-									</rich:column>
-									<rich:column align="center">
-										<f:facet name="header">
-											<h:outputText value="Download" />
-										</f:facet>
-										<a href="#{row.downloadPath}">download</a>
-									</rich:column>
-									<rich:column align="center">
-										<f:facet name="header">
-											<h:outputText value="Remove" />
-										</f:facet>
-										<a4j:commandLink id="removeReportCommandLink" text="x"
-											action="removeReport" partialSubmit="true">
-											<f:setPropertyActionListener value="#{row}"
-												target="#{flowScope.websession.reportmodel.selectedDownloadFile}" />
-										</a4j:commandLink>
-
-									</rich:column>
-								</rich:dataTable>
-
-
-
-							</rich:simpleTogglePanel>
-
-
-						</h:panelGrid>
-					</rich:panel>
-				</a4j:form>
-			</rich:layoutPanel>
-			
-			<rich:layoutPanel position="right" width="70%" >
-				<a4j:form id="tablePanelForm">
-				<rich:panel header="Table" style="width:100%"
-						id="tablePanel" rendered="#{flowScope.websession.graphmodel.showControlPanel}">
-						
-						</rich:panel>
-						
-				</a4j:form>
-			</rich:layoutPanel>
-
-			<rich:layoutPanel position="bottom">
-
-				<a4j:form id="chartForm">
-				<rich:panel header="Graph" style="width: 100%"
-						id="chartPanel" rendered="#{flowScope.websession.graphmodel.showControlPanel}">
-						
-					<h:graphicImage
-						rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
-						value="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
-						 width="100%" />
-					</rich:panel>
 				</a4j:form>
 
 				<!-- RESULTS TABLE -->
