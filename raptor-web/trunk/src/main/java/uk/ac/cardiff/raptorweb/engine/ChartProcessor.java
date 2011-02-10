@@ -189,11 +189,6 @@ public class ChartProcessor {
 	// save the graph
 	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main.svg");
 	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main.png");
-	try {
-	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
-	} catch (IOException e) {
-	    log.error("Could not save SVG File {}", e.getMessage());
-	}
 
 	// png is used for screen output
 	if (graphPresentation == GraphPresentation.FANCY) {
@@ -209,6 +204,12 @@ public class ChartProcessor {
 	    } catch (IOException e) {
 		log.error("Could not save PNG File {}", e.getMessage());
 	    }
+	}
+
+	try {
+	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
+	} catch (IOException e) {
+	    log.error("Could not save SVG File {}", e.getMessage());
 	}
 
 	chartmodel.setChartLocation(chartLocationPNG);
