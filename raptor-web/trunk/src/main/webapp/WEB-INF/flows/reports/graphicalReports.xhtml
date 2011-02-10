@@ -18,7 +18,7 @@
 					<h:panelGrid columns="4">
 						<h:outputText value="Control Panel Visible" />
 						<rich:spacer width="3px" />
-						<a4j:commandLink reRender="showForm,ControlPanelForm,chartForm"
+						<a4j:commandLink reRender="showForm,ControlPanelForm,chartForm,tablePanelForm"
 							value="#{flowScope.websession.graphmodel.showControlPanel}"
 							action="#{flowScope.websession.graphmodel.toggleShowControlPanel}" />
 
@@ -26,7 +26,7 @@
 				</a4j:form>
 			</rich:layoutPanel>
 
-			<rich:layoutPanel position="left" style="width: 500px">
+			<rich:layoutPanel position="left" width="30%" >
 
 				<a4j:form id="ControlPanelForm">
 					<rich:panel header="ControlPanel" style="width: 95%"
@@ -40,107 +40,7 @@
 								bandingInterval="2" banding="row" var="unit" width="100%"
 								labelWidth="0%" inlineStyle="border-style: hidden;"
 								rendered="#{not empty graphService.statisticalUnits}">
-
-								<f:facet name="detailStamp">
-									<h:panelGrid columns="3" labelWidth="5%">
-										<h:panelGroup layout="horizontal">
-											<h:outputText value="Method Name:"
-												inlineStyle="font-weight: bold;" />
-											<h:outputText value="#{unit.statisticParameters.methodName}" />
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal"
-											rendered="#{not empty unit.statisticParameters.startTimeAsJavaDate}">
-											<h:outputText value="Start Time:"
-												inlineStyle="font-weight: bold;" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Hour:"
-												value="#{unit.statisticParameters.startTimeHour}"
-												minimum="00" maximum="23" simple="true" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Minutes:"
-												value="#{unit.statisticParameters.startTimeMinute}"
-												minimum="00" maximum="59" simple="true" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Seconds:"
-												value="#{unit.statisticParameters.startTimeSecond}"
-												minimum="00" maximum="59" simple="true" />
-											<!--<tr:inputDate id="startTimeDate" autoSubmit="true"
-													value="#{unit.statisticParameters.startTimeAsJavaDate}">
-													<f:convertDateTime dateStyle="short" />
-												</tr:inputDate>
-
-											-->
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal"
-											rendered="#{not empty unit.statisticParameters.endTimeAsJavaDate}">
-											<h:outputText value="End Time:"
-												inlineStyle="font-weight: bold;" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Hour:"
-												value="#{unit.statisticParameters.endTimeHour}" minimum="00"
-												maximum="23" simple="true" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Minutes:"
-												value="#{unit.statisticParameters.endTimeMinute}"
-												minimum="00" maximum="59" simple="true" />
-											<rich:inputNumberSpinner autoSubmit="true" label="Seconds:"
-												value="#{unit.statisticParameters.endTimeSecond}"
-												minimum="00" maximum="59" simple="true" />
-											<!--<tr:inputDate id="endTimeDate" autoSubmit="true"
-													value="#{unit.statisticParameters.endTimeAsJavaDate}">
-													<f:convertDateTime dateStyle="short" />
-												</tr:inputDate>
-											-->
-										</h:panelGroup>
-
-										<!--<h:panelGroup layout="horizontal">
-                                            <h:outputText value="Field:"
-                                                inlineStyle="font-weight: bold;" />
-                                            <h:outputText value="#{unit.statisticParameters.field}" />
-                                        </h:panelGroup>
-
-                                        -->
-										<h:panelGroup layout="horizontal">
-											<h:outputText value="Parameters:"
-												inlineStyle="font-weight: bold;" />
-											<rich:dataTable
-												value="#{unit.statisticParameters.methodParams}"
-												var="parameter" width="95%" labelWidth="5%"
-												inlineStyle="border-style: hidden;"
-												rendered="#{not empty unit.statisticParameters.methodParams}">
-												<rich:column inlineStyle="border-style: hidden;">
-													<h:inputText value="#{parameter.parameter}" />
-												</rich:column>
-											</rich:dataTable>
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal">
-											<h:outputText value="Graph Title:"
-												inlineStyle="font-weight: bold;" />
-											<h:inputText
-												value="#{unit.statisticParameters.presentation.graphTitle}" />
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal">
-											<h:outputText value="Preprocessors:"
-												inlineStyle="font-weight: bold;" />
-											<h:outputText value="#{unit.preProcessorsAsString}" />
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal">
-											<h:outputText value="Postprocessors:"
-												inlineStyle="font-weight: bold;" />
-											<h:outputText value="#{unit.postProcessorsAsString}" />
-										</h:panelGroup>
-
-										<h:panelGroup layout="horizontal">
-											<a4j:commandButton value="Update" action="updateMUAStatistic">
-												<f:setPropertyActionListener value="#{unit}"
-													target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
-											</a4j:commandButton>
-										</h:panelGroup>
-
-
-
-									</h:panelGrid>
-								</f:facet>
+								
 								<f:facet name="header">
 									<h:outputText
 										value="#{graphService.attachedCapabilities.muaMetadata.muaName}" />
@@ -161,7 +61,7 @@
 							</rich:dataTable>
 
 							<rich:simpleTogglePanel switchType="client"
-								label="Download Options">
+								label="Download Options" opened="false">
 
 								<h:panelGrid id="reportTypePanel" columns="2">
 									<a4j:commandLink id="generateExcelReport"
@@ -220,15 +120,28 @@
 					</rich:panel>
 				</a4j:form>
 			</rich:layoutPanel>
+			
+			<rich:layoutPanel position="right" width="70%" >
+				<a4j:form id="tablePanelForm">
+				<rich:panel header="Table" style="width:100%"
+						id="tablePanel" rendered="#{flowScope.websession.graphmodel.showControlPanel}">
+						
+						</rich:panel>
+						
+				</a4j:form>
+			</rich:layoutPanel>
 
-			<rich:layoutPanel position="center">
+			<rich:layoutPanel position="bottom">
 
 				<a4j:form id="chartForm">
+				<rich:panel header="Graph" style="width: 100%"
+						id="chartPanel" rendered="#{flowScope.websession.graphmodel.showControlPanel}">
+						
 					<h:graphicImage
 						rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
 						value="#{flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
-						style="width:100" width="50%" />
-
+						 width="100%" />
+					</rich:panel>
 				</a4j:form>
 
 				<!-- RESULTS TABLE -->
@@ -238,16 +151,6 @@
 
 			</rich:layoutPanel>
 
-			<rich:layoutPanel position="right">
-
-				<!--right-->
-
-			</rich:layoutPanel>
-
-			<rich:layoutPanel position="bottom">
-
-
-			</rich:layoutPanel>
 
 		</rich:layout>
 

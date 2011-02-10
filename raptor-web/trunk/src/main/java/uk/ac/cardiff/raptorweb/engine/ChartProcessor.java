@@ -198,7 +198,7 @@ public class ChartProcessor {
 	// png is used for screen output
 	if (graphPresentation == GraphPresentation.FANCY) {
 	    try {
-		int padding = 10;
+		int padding = 5;
 		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width - (padding * 2), height - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
 	    } catch (IOException e) {
 		log.error("Could not save PNG for screen render File {}", e.getMessage());

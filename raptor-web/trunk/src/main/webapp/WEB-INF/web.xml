@@ -136,14 +136,14 @@
     <!-- Just here so the JSF implementation can initialize -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.jsf</url-pattern>
+        <url-pattern>*.faces</url-pattern>
     </servlet-mapping>
 
 
 	<!-- Richfaces config-->
 	<context-param>
     <param-name>org.richfaces.SKIN</param-name>
-    <param-value>deepMarine</param-value>
+    <param-value>darkX</param-value>
   </context-param>
 
    <!-- Making the RichFaces skin spread to standard HTML controls-->
