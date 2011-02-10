@@ -24,6 +24,7 @@ public class GraphModel implements Serializable{
 	private String processingResult;
 	private boolean showControlPanel;
 	private RaptorJFreeChartModel currentJFreeGraph;
+	private String controlPanelSize;
 
 
 	/**
@@ -37,7 +38,7 @@ public class GraphModel implements Serializable{
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
 	    showControlPanel=true;
-
+	    controlPanelSize="0%";
 	    currentTableGraph = new RaptorTableChartModel();
 	}
 
@@ -111,6 +112,7 @@ public class GraphModel implements Serializable{
 
 	public void toggleShowControlPanel(){
 	    showControlPanel = !showControlPanel;
+	    controlPanelSize="30%";
 	}
 
 	public void setCurrentJFreeGraph(RaptorJFreeChartModel currentJFreeGraph) {
@@ -119,6 +121,14 @@ public class GraphModel implements Serializable{
 
 	public RaptorJFreeChartModel getCurrentJFreeGraph() {
 	    return currentJFreeGraph;
+	}
+
+	public void setControlPanelSize(String controlPanelSize) {
+	    this.controlPanelSize = controlPanelSize;
+	}
+
+	public String getControlPanelSize() {
+	    return controlPanelSize;
 	}
 
 

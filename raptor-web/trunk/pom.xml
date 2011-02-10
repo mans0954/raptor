@@ -72,9 +72,7 @@
 			</snapshots>
 		</repository>
 
-		<!--
-			Adding extra repositories for any other libs, which is hosted on Iam
-		-->
+		<!-- Adding extra repositories for any other libs, which is hosted on Iam -->
 
 		<repository>
 			<releases>
@@ -162,66 +160,67 @@
 	</build>
 	<dependencies>
 
-		<!--  loggin -->
+		<!-- loggin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.6.1</version>
 		</dependency>
-		<!-- Myfaces
-		<dependency>
-			<groupId>org.apache.myfaces.core</groupId>
-			<artifactId>myfaces-api</artifactId>
-			<version>${myfaces.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.myfaces.core</groupId>
-			<artifactId>myfaces-impl</artifactId>
-			<version>${myfaces.version}</version>
-			<scope>compile</scope>
-		</dependency>-->
-		<!-- Trinidad
-		<dependency>
-			<groupId>org.apache.myfaces.trinidad</groupId>
-			<artifactId>trinidad-api</artifactId>
-			<version>${trinidad.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.myfaces.trinidad</groupId>
-			<artifactId>trinidad-impl</artifactId>
-			<version>${trinidad.version}</version>
-			<scope>compile</scope>
-		</dependency> -->
+		<!-- Myfaces <dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-api</artifactId> 
+			<version>${myfaces.version}</version> <scope>compile</scope> </dependency> 
+			<dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-impl</artifactId> 
+			<version>${myfaces.version}</version> <scope>compile</scope> </dependency> -->
+		<!-- Trinidad <dependency> <groupId>org.apache.myfaces.trinidad</groupId> 
+			<artifactId>trinidad-api</artifactId> <version>${trinidad.version}</version> 
+			<scope>compile</scope> </dependency> <dependency> <groupId>org.apache.myfaces.trinidad</groupId> 
+			<artifactId>trinidad-impl</artifactId> <version>${trinidad.version}</version> 
+			<scope>compile</scope> </dependency> -->
 
 		<!-- RICHFACES -->
 		<dependency>
 			<groupId>org.richfaces.framework</groupId>
 			<artifactId>richfaces-impl</artifactId>
 			<version>3.3.3.Final</version>
-	   </dependency>
-	    <dependency>
-            <groupId>org.richfaces.ui</groupId>
-            <artifactId>richfaces-ui</artifactId>
-            <version>3.3.3.Final</version>
-        </dependency>
+		</dependency>
+		<dependency>
+			<groupId>org.richfaces.ui</groupId>
+			<artifactId>richfaces-ui</artifactId>
+			<version>3.3.3.Final</version>
+		</dependency>
 
 		<!-- RICHFACES SKINS -->
 		<dependency>
 			<groupId>org.richfaces.samples</groupId>
 			<artifactId>laguna</artifactId>
 			<version>${richfaces.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jstl</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.richfaces.samples</groupId>
 			<artifactId>glassX</artifactId>
 			<version>${richfaces.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jstl</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.richfaces.samples</groupId>
 			<artifactId>darkX</artifactId>
 			<version>${richfaces.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jstl</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Jstl -->
@@ -231,6 +230,18 @@
 			<version>1.2</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>1.2_02</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>1.2-b19</version>
+		</dependency>
+
+
 		<!-- Facelets -->
 		<dependency>
 			<groupId>com.sun.facelets</groupId>
@@ -256,18 +267,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--
-			spring <dependency> <groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId> <version>${spring.version}</version>
-			</dependency>
-		-->
+		<!-- spring <dependency> <groupId>org.springframework</groupId> <artifactId>spring</artifactId> 
+			<version>${spring.version}</version> </dependency> -->
 
 
-		<!--
-			Various Application Context utilities, including EhCache, JavaMail,
-			Quartz, and Freemarker integration Define this if you need any of
-			these integrations
-		-->
+		<!-- Various Application Context utilities, including EhCache, JavaMail, 
+			Quartz, and Freemarker integration Define this if you need any of these integrations -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
@@ -475,17 +480,11 @@
 			</exclusions>
 		</dependency>
 		<!-- Other dependencies, mostly other Raptor dependencies and SOAP -->
-		<!--
-			<dependency> <groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>2.3.1</version> </dependency> <dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>2.3.1</version> </dependency> <dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-bundle-jaxrs</artifactId> <version>2.3.1</version>
-			</dependency>
-		-->
+		<!-- <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-rt-frontend-jaxws</artifactId> 
+			<version>2.3.1</version> </dependency> <dependency> <groupId>org.apache.cxf</groupId> 
+			<artifactId>cxf-rt-transports-http</artifactId> <version>2.3.1</version> 
+			</dependency> <dependency> <groupId>org.apache.cxf</groupId> <artifactId>cxf-bundle-jaxrs</artifactId> 
+			<version>2.3.1</version> </dependency> -->
 		<dependency>
 			<groupId>uk.ac.cardiff.raptor</groupId>
 			<artifactId>raptor-serviceinterfaces</artifactId>
@@ -560,7 +559,7 @@
 			</exclusions>
 		</dependency>
 
-		<!-- Quartz  -->
+		<!-- Quartz -->
 
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
@@ -612,17 +611,6 @@
 			<version>1.6-1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>1.2_02</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-impl</artifactId>
-			<version>1.2</version>
-			<classifier>NIGHTLY_20060227</classifier>
-		</dependency>
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>

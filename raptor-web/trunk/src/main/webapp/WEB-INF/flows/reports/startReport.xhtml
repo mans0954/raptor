@@ -17,13 +17,13 @@
                 <a4j:form>
 				<h:panelGrid columns="7" columnClasses="verticalAlignMiddle" >
 
-					<h:outputText style="font-weight:bold' color:red"
+					<h:outputText style="font-size:150%; font-weight:bold' color:red"
 						value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
 					<!--<h:spacer width="5px" />
 
 					--><rich:inplaceSelect id="quickStatsRangeSelector"
 						value="#{flowScope.websession.startmodel.statsRangeSelector}"
-						shortDesc="quickStatsRangeSelector" defaultLabel="Today">
+						shortDesc="quickStatsRangeSelector" defaultLabel="Today" style="font-size:150%">
 						<f:selectItem itemLabel="Today" itemValue="TODAY" />
 						<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
 						<f:selectItem itemLabel="Last Month" itemValue="LASTMONTH" />
