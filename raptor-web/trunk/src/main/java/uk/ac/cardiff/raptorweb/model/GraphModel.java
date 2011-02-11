@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
@@ -20,11 +21,13 @@ public class GraphModel implements Serializable{
 	private RaptorGraphModel currentGraph;
 	private ChartOptions chartOptions;
 	private RaptorTableChartModel currentTableGraph;
-	private StatisticalUnitInformation selectedStatisticalUnit;
+	private StatisticalUnitInformationView selectedStatisticalUnit;
 	private String processingResult;
 	private boolean showControlPanel;
 	private RaptorJFreeChartModel currentJFreeGraph;
 	private String controlPanelSize;
+	private List<StatisticalUnitInformationView> statisticalUnitsForView;
+
 
 
 	/**
@@ -40,13 +43,25 @@ public class GraphModel implements Serializable{
 	    showControlPanel=true;
 	    controlPanelSize="0%";
 	    currentTableGraph = new RaptorTableChartModel();
+
+	    //create a blank selected statistical unit for display
+	    selectedStatisticalUnit = new StatisticalUnitInformationView();
+	    StatisticalUnitInformation tmp = new StatisticalUnitInformation();
+	    tmp.setStatisticParameters(new StatisticParameters());
+	    selectedStatisticalUnit.setStatisticalIUnitInformation(tmp);
+
 	}
 
 	/**
+	 * Set the old statistical unit to false, update it with the newly selected statisticalunit
+	 * and set it to selected.
+	 *
 	 * @param selectedStatisticalUnit the selectedStatisticalUnit to set
 	 */
-	public void setSelectedStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
-		this.selectedStatisticalUnit = selectedStatisticalUnit;
+	public void setSelectedStatisticalUnit(StatisticalUnitInformationView selectedStatisticalUnit) {
+	    	this.selectedStatisticalUnit.setSelected(false);
+	    	this.selectedStatisticalUnit = selectedStatisticalUnit;
+	    	this.selectedStatisticalUnit.setSelected(true);
 	}
 
 
@@ -54,7 +69,7 @@ public class GraphModel implements Serializable{
 	/**
 	 * @return the selectedStatisticalUnit
 	 */
-	public StatisticalUnitInformation getSelectedStatisticalUnit() {
+	public StatisticalUnitInformationView getSelectedStatisticalUnit() {
 		return selectedStatisticalUnit;
 	}
 
@@ -130,6 +145,15 @@ public class GraphModel implements Serializable{
 	public String getControlPanelSize() {
 	    return controlPanelSize;
 	}
+
+	public void setStatisticalUnitsForView(List<StatisticalUnitInformationView> statisticalUnitsForView) {
+	    this.statisticalUnitsForView = statisticalUnitsForView;
+	}
+
+	public List<StatisticalUnitInformationView> getStatisticalUnitsForView() {
+	    return statisticalUnitsForView;
+	}
+
 
 
 

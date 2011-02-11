@@ -60,7 +60,7 @@ public class ExcelReportGenerator extends ReportConstructor {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
+	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalIUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
 	    WorkbookSettings ws = new WorkbookSettings();
 	    ws.setLocale(new Locale("en", "EN"));
 	    WritableWorkbook workbook = Workbook.createWorkbook(dir, ws);

@@ -332,6 +332,7 @@ public class ChartProcessor {
 	    }
 	    tableModel.addTableSeries(tseries);
 	}
+	tableModel.constrcutTableForView();
 
 	return tableModel;
     }
