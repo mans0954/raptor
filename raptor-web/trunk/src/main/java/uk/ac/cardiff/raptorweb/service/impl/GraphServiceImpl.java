@@ -23,6 +23,7 @@ import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
+import uk.ac.cardiff.raptorweb.model.StatisticalUnitInformationView;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.service.GraphService;
 
@@ -56,17 +57,34 @@ public class GraphServiceImpl implements GraphService{
 		return webEngine.getCurrentlyAttached();
 	}
 
+	public void populateStatisticalUnits(WebSession websession){
+	    ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList();
+	    List<StatisticalUnitInformation> units = getStatisticalUnits();
+	    for (StatisticalUnitInformation unit : units){
+        	    StatisticalUnitInformationView unitForView = new StatisticalUnitInformationView();
+        	    unitForView.setSelected(false);
+
+        	    unitForView.setStatisticalIUnitInformation(unit);
+        	    statisticalUnitsForView.add(unitForView);
+	    }
+	    websession.getGraphmodel().setStatisticalUnitsForView(statisticalUnitsForView);
+
+	}
+
 	/**
-	 * Only retrieves USER level units from those retrieved by the MUA
+	 * Only retrieves USER level units from those retrieved by the MUA. Encapsulates them in a view object
 	 */
 	public List getStatisticalUnits(){
+
 		List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
-		List<StatisticalUnitInformation> userUnits = new ArrayList<StatisticalUnitInformation>();
+		List<StatisticalUnitInformation> unitsForUser = new ArrayList<StatisticalUnitInformation>();
+
 		for (StatisticalUnitInformation unit : units){
-			if (unit.getStatisticParameters().getType()==StatisticType.USER)
-			    userUnits.add(unit);
+			if (unit.getStatisticParameters().getType()==StatisticType.USER){
+			    unitsForUser.add(unit);
+			}
 		 }
-		return userUnits;
+		return unitsForUser;
 	}
 
 	@Override
@@ -100,7 +118,7 @@ public class GraphServiceImpl implements GraphService{
 	public void invokeStatisticalUnit(WebSession websession) {
 	        GraphModel model = websession.getGraphmodel();
 		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
-		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit());
+		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalIUnitInformation());
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
 		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(GraphPresentation.FANCY,GraphType.BAR3D,gmodel, websession,1480,1024));

@@ -42,7 +42,10 @@
 
 	<view-state id="graphicalReports" view="graphicalReports.xhtml">
 
-		<!-- we need to load these specific to a person and a role -->
+		<!-- populate the statisticalunit list -->
+		<on-entry>
+            <evaluate expression="graphService.populateStatisticalUnits(flowScope.websession)" />
+        </on-entry>
 
 		<transition on="invokeStatisticalUnit">
 			<evaluate expression="graphService.invokeStatisticalUnit(flowScope.websession)" />

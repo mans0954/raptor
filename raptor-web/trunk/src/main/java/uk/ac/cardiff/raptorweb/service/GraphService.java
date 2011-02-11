@@ -22,6 +22,8 @@ public interface GraphService {
 
 	public List getStatisticalUnits();
 
+	public void populateStatisticalUnits(WebSession websession);
+
 	public void invokeStatisticalUnit(WebSession websession);
 
 	public void generateExcelReport(WebSession websession);

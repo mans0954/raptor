@@ -22,7 +22,7 @@
 						<rich:layout>
 							<rich:layoutPanel position="left" width="40%">
 
-								<rich:dataTable value="#{graphService.statisticalUnits}"
+								<rich:dataTable value="#{flowScope.websession.graphmodel.statisticalUnitsForView}"
 									bandingInterval="2" banding="row" var="unit" width="100%"
 									labelWidth="0%" inlineStyle="border-style: hidden;"
 									rendered="#{not empty graphService.statisticalUnits}">
@@ -37,9 +37,10 @@
 										<f:facet name="header">
 											<h:outputText value="Statistic" />
 										</f:facet>
-										<a4j:commandLink value="#{unit.statisticParameters.unitName}"
+										<a4j:commandLink ajaxSingle="true"
+											value="#{unit.statisticalIUnitInformation.statisticParameters.unitName}"
 											action="invokeStatisticalUnit"
-											reRender="chartForm,graphImage">
+											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm">
 											<f:setPropertyActionListener value="#{unit}"
 												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 										</a4j:commandLink>
@@ -48,9 +49,18 @@
 
 									<rich:column>
 										<f:facet name="header">
-											<h:outputText value="Modifying" />
+											<h:outputText value="Modify" />
 										</f:facet>
-
+										<a4j:commandLink ajaxSingle="true" reRender="optionsPanel,ControlPanelForm">
+											<h:graphicImage value="/image/icon/onebit_20.png"
+												style="border:0; margin-left: auto;margin-right: auto;"
+												width="20px" rendered="#{!unit.selected}"/>
+												<h:graphicImage value="/image/icon/onebit_27.png"
+                                                style="border:0; margin-left: auto;margin-right: auto;"
+                                                width="20px" rendered="#{unit.selected}"/>
+											<f:setPropertyActionListener value="#{unit}"
+												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+										</a4j:commandLink>
 									</rich:column>
 								</rich:dataTable>
 							</rich:layoutPanel>
@@ -58,12 +68,67 @@
 
 
 							<rich:layoutPanel position="right">
-								<rich:panel width="100%">
+								<rich:panel width="100%" id="optionsPanel">
 									<f:facet name="header">
                                         Options
                                      </f:facet>
 
-								</rich:panel>
+									<h:panelGrid columns="2" width="50%" >
+
+										<h:outputText value="Method Name:" style="font-weight: bold;" />
+										<h:outputText
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.statisticParameters.methodName}" />
+
+
+										<h:outputText value="Start Time:" style="font-weight: bold;" />
+										<rich:calendar id="startTimeDate" showApplyButton="true"
+											datePattern="dd/MM/yyyy HH:mm"
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.statisticParameters.startTimeAsJavaDate}">
+										</rich:calendar>
+
+
+										<h:outputText value="End Time:" style="font-weight: bold;" />
+										<rich:calendar id="endTimeDate" showApplyButton="true"
+											datePattern="dd/MM/yyyy HH:mm"
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.statisticParameters.endTimeAsJavaDate}">
+										</rich:calendar>
+
+
+										<h:outputText value="Parameters:"
+											inlineStyle="font-weight: bold;" />
+										<rich:dataTable
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.statisticParameters.methodParams}"
+											var="parameter" width="95%" labelWidth="5%"
+											style="border-style: hidden;">
+											<rich:column inlineStyle="border-style: hidden;">
+												<h:inputText value="#{parameter.parameter}" />
+											</rich:column>
+										</rich:dataTable>
+
+
+										<h:outputText value="Graph Title:" style="font-weight: bold;" />
+										<h:inputText
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.statisticParameters.presentation.graphTitle}" />
+
+										<h:outputText value="Preprocessors:"
+											style="font-weight: bold; width:100%" />
+										<h:inputText
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.preProcessorsAsString}" />
+
+
+										<h:outputText value="Postprocessors:"
+											style="font-weight: bold;" />
+										<h:inputText
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalIUnitInformation.postProcessorsAsString}" />
+
+										<f:facet name="footer">
+											<h:panelGroup style="display:block; text-align:center">
+												<h:commandButton id="Update" action="updateMUAStatistic" value="Update" />
+											</h:panelGroup>
+										</f:facet>
+
+									</h:panelGrid>
+							</rich:panel>
 							</rich:layoutPanel>
 
 
@@ -107,6 +172,21 @@
 
 						<rich:tab name="table" label="Table">
 
+						<rich:dataTable value="#{flowScope.websession.graphmodel.currentTableGraph.rowList}"
+                                    bandingInterval="2" banding="row" var="unit" width="100%"
+                                     rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
+
+
+                                     <rich:columns value="#{flowScope.websession.graphmodel.currentTableGraph.series}"
+                                     var="columns" index="index" id="column#{index}">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{columns}"/>
+                                        </f:facet>
+                                                <h:outputText value="#{unit[index]}"/>
+                                      </rich:columns>
+
+
+                        </rich:dataTable>
 
 						</rich:tab>
 
