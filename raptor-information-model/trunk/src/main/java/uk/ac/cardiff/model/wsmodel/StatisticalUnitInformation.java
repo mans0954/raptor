@@ -31,6 +31,8 @@ public class StatisticalUnitInformation implements Serializable {
     private List<String> preprocessors;
     private List<String> postprocessors;
 
+
+
     public void setStatisticParameters(StatisticParameters statisticParameters) {
 	this.statisticParameters = statisticParameters;
     }
@@ -61,6 +63,8 @@ public class StatisticalUnitInformation implements Serializable {
      */
     public String getPreProcessorsAsString(){
 	StringBuilder output = new StringBuilder();
+	if (preprocessors==null)
+	    return output.toString();
 	int count=0;
 	for (String preprocessor : preprocessors){
 	    output.append(preprocessor);
@@ -76,6 +80,8 @@ public class StatisticalUnitInformation implements Serializable {
      */
     public String getPostProcessorsAsString(){
 	StringBuilder output = new StringBuilder();
+	if (preprocessors==null)
+	    return output.toString();
 	int count=0;
 	for (String postprocessor : postprocessors){
 	    output.append(postprocessor);
@@ -84,5 +90,6 @@ public class StatisticalUnitInformation implements Serializable {
 	}
 	return output.toString();
     }
+
 
 }

@@ -254,13 +254,19 @@ public class StatisticParameters implements Serializable{
 	endTimeJava = new Date(endTime.getMillis());
     }
     public int getEndTimeHour(){
-	return endTime.getHourOfDay();
+	if (endTime!=null)
+	    return endTime.getHourOfDay();
+	return 0;
     }
     public int getEndTimeMinute(){
-	return endTime.getMinuteOfHour();
+	if (endTime!=null)
+	    return endTime.getMinuteOfHour();
+	return 0;
     }
     public int getEndTimeSecond(){
-	return endTime.getSecondOfMinute();
+	if (endTime!=null)
+	    return endTime.getSecondOfMinute();
+	return 0;
     }
 
     public void setStartTimeHour(int hour){
@@ -282,13 +288,19 @@ public class StatisticParameters implements Serializable{
 	startTimeJava = new Date(startTime.getMillis());
     }
     public int getStartTimeHour(){
-	return startTime.getHourOfDay();
+	if (startTime!=null)
+	    return startTime.getHourOfDay();
+	return 0;
     }
     public int getStartTimeMinute(){
-	return startTime.getMinuteOfHour();
+	if (startTime!=null)
+	    return startTime.getMinuteOfHour();
+	return 0;
     }
     public int getStartTimeSecond(){
-	return startTime.getSecondOfMinute();
+	if (startTime!=null)
+	    return startTime.getSecondOfMinute();
+	return 0;
     }
 
     public void setStatisticType(String type) {
