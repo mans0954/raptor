@@ -54,7 +54,7 @@ public class RaptorTableChartModel implements Serializable {
      *
      * @return
      */
-    public void constrcutTableForView() {
+    public void constructTableForView() {
 	if (rowsForView == null)
 	    rowsForView = new ArrayList<ManyRow>();
 	if (series == null)
@@ -93,8 +93,8 @@ public class RaptorTableChartModel implements Serializable {
 		    if (i==0){
 			completeRow[0] = mrow.getGroupLabel();
 		    }
-		    else if (mrow.getValues().size() > i) {
-			completeRow[i] = mrow.getValues().get(i);
+		    else if (mrow.getValues().size() >= i) {
+			completeRow[i] = mrow.getValues().get(i-1);
 		    } else {
 			completeRow[i] = "";
 		    }

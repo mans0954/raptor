@@ -64,7 +64,7 @@ public class GraphServiceImpl implements GraphService{
         	    StatisticalUnitInformationView unitForView = new StatisticalUnitInformationView();
         	    unitForView.setSelected(false);
 
-        	    unitForView.setStatisticalIUnitInformation(unit);
+        	    unitForView.setStatisticalUnitInformation(unit);
         	    statisticalUnitsForView.add(unitForView);
 	    }
 	    websession.getGraphmodel().setStatisticalUnitsForView(statisticalUnitsForView);
@@ -93,10 +93,12 @@ public class GraphServiceImpl implements GraphService{
 	}
 
 	public void generateExcelReport(WebSession websession){
+	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
 		webEngine.generateReport(websession,"excel");
 	}
 
 	public void generateCSVReport(WebSession websession){
+	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
 		webEngine.generateReport(websession,"csv");
 	}
 
@@ -117,8 +119,8 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public void invokeStatisticalUnit(WebSession websession) {
 	        GraphModel model = websession.getGraphmodel();
-		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit());
-		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalIUnitInformation());
+		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
+		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
 		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(GraphPresentation.FANCY,GraphType.BAR3D,gmodel, websession,1480,1024));

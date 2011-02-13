@@ -40,15 +40,12 @@ public class GraphModel implements Serializable{
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
-	    showControlPanel=true;
-	    controlPanelSize="0%";
-	    currentTableGraph = new RaptorTableChartModel();
-
+	    
 	    //create a blank selected statistical unit for display
 	    selectedStatisticalUnit = new StatisticalUnitInformationView();
 	    StatisticalUnitInformation tmp = new StatisticalUnitInformation();
 	    tmp.setStatisticParameters(new StatisticParameters());
-	    selectedStatisticalUnit.setStatisticalIUnitInformation(tmp);
+	    selectedStatisticalUnit.setStatisticalUnitInformation(tmp);
 
 	}
 

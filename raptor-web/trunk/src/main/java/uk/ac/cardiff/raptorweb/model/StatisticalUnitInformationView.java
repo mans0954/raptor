@@ -14,7 +14,7 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 public class StatisticalUnitInformationView implements Serializable{
 
     private boolean selected;
-    private StatisticalUnitInformation statisticalIUnitInformation;
+    private StatisticalUnitInformation statisticalUnitInformation;
 
 
     public void setSelected(boolean selected) {
@@ -23,11 +23,11 @@ public class StatisticalUnitInformationView implements Serializable{
     public boolean isSelected() {
 	return selected;
     }
-    public void setStatisticalIUnitInformation(StatisticalUnitInformation statisticalIUnitInformation) {
-	this.statisticalIUnitInformation = statisticalIUnitInformation;
+    public void setStatisticalUnitInformation(StatisticalUnitInformation statisticalUnitInformation) {
+	this.statisticalUnitInformation = statisticalUnitInformation;
     }
-    public StatisticalUnitInformation getStatisticalIUnitInformation() {
-	return statisticalIUnitInformation;
+    public StatisticalUnitInformation getStatisticalUnitInformation() {
+	return statisticalUnitInformation;
     }
 
 }
