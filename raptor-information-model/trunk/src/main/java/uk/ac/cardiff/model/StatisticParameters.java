@@ -109,6 +109,7 @@ public class StatisticParameters implements Serializable{
     }
 
     public DateTime getStartTimeAsDate() {
+	log.debug("Returning start time as {}",startTime);
 	return startTime;
     }
 
@@ -128,6 +129,7 @@ public class StatisticParameters implements Serializable{
     public void setStartTime(String startTime) {
 	this.startTime = formatDate(startTime, false);
 	this.startTimeJava = new Date (this.startTime.getMillis());
+	
     }
 
     public String getStartTime() {
@@ -156,7 +158,7 @@ public class StatisticParameters implements Serializable{
     }
 
     /**
-     * for output on the web page (just a date that can be rendered by trinidad)
+     * for output on the web page 
      * @param date
      */
     public Date getStartTimeAsJavaDate(){
