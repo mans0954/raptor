@@ -378,11 +378,19 @@
 							</bean>
 						</list>
 					</property>
+					
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number Of Authentications Per"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="Number of auths"/>
                             </bean>
                         </list>
                     </property>
@@ -404,11 +412,19 @@
 							</bean>
 						</list>
 					</property>
+					
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number of unique users for"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="Number of auths"/>
                             </bean>
                         </list>
                     </property>
@@ -429,11 +445,19 @@
 							</bean>
 						</list>
 					</property>
+					
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value=""/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="Number of auths"/>
                             </bean>
                         </list>
                     </property>
@@ -454,10 +478,18 @@
 							</bean>
 						</list>
 					</property>
+					
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Top 5 Resources"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="Number of auths"/>
                             </bean>
                         </list>
                     </property>
@@ -486,11 +518,19 @@
 							</bean>
 						</list>
 					</property>
+					
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Bottom 5 Resources"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
 
 					<property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.Series">
-                                <property name="seriesLabel" value="test"/>
+                                <property name="seriesLabel" value="Number of auths"/>
                             </bean>
                         </list>
                     </property>
