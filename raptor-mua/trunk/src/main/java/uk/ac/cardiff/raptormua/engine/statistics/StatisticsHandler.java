@@ -177,6 +177,7 @@ public class StatisticsHandler {
 	 * @param statisticalUnitInformation
 	 */
 	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
+		
 		if (statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate() != null)
 			statistic.getStatisticParameters().setEndTime(
 					statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate());
@@ -186,9 +187,9 @@ public class StatisticsHandler {
 		if (statisticalUnitInformation.getStatisticParameters().getMethodParams() != null)
 			statistic.getStatisticParameters().setMethodParams(
 					statisticalUnitInformation.getStatisticParameters().getMethodParams());
-		//if (statisticalUnitInformation.getStatisticParameters().getSeries().getSeriesLabel() != null)
-		//	statistic.getStatisticParameters().getSeries().setSeriesLabel(
-		//			statisticalUnitInformation.getStatisticParameters().getSeries().getSeriesLabel());
+		if (statisticalUnitInformation.getStatisticParameters().getPresentation().getGraphTitle() != null)
+			statistic.getStatisticParameters().getPresentation().setGraphTitle(
+					statisticalUnitInformation.getStatisticParameters().getPresentation().getGraphTitle());
 	}
 
 	/**
