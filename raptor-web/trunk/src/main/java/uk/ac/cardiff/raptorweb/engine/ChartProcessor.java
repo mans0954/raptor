@@ -317,6 +317,7 @@ public class ChartProcessor {
      * @return
      */
     public RaptorTableChartModel constructRaptorTableChartModel(AggregatorGraphModel gmodel) {
+	log.info("Constructing Raptor Table for {}",gmodel.getPresentation().getGraphTitle());
 
 	RaptorTableChartModel tableModel = new RaptorTableChartModel();
 
@@ -332,7 +333,9 @@ public class ChartProcessor {
 	    }
 	    tableModel.addTableSeries(tseries);
 	}
-	tableModel.constrcutTableForView();
+	tableModel.constructTableForView();
+	
+	//log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
 
 	return tableModel;
     }
