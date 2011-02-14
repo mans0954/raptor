@@ -3,7 +3,9 @@
  */
 package uk.ac.cardiff.raptorweb.engine;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Rectangle;
 import java.io.File;
@@ -65,7 +67,7 @@ public class ChartProcessor {
 
     /* options for how the graph is displayed */
     public enum GraphPresentation {
-	FANCY(true), SIMPLE(false);
+	FANCY(true), FRONT(false);
 	private boolean legend;
 
 	GraphPresentation(boolean legend) {
@@ -188,8 +190,8 @@ public class ChartProcessor {
 	// setup the graph output
 	if (graphPresentation == GraphPresentation.FANCY)
 	    fancyGraphOutput(chart);
-	else if (graphPresentation == GraphPresentation.SIMPLE)
-	    simpleGraphOutput(chart);
+	else if (graphPresentation == GraphPresentation.FRONT)
+	    frontGraphOutput(chart);
 
 	// save the graph
 	String endingFilename="";
@@ -251,7 +253,7 @@ public class ChartProcessor {
 
     }
 
-    private void simpleGraphOutput(JFreeChart chart) {
+    private void frontGraphOutput(JFreeChart chart) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
 	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
@@ -262,11 +264,17 @@ public class ChartProcessor {
 	plot.setRangeGridlinesVisible(true);
 	plot.setRangeGridlinePaint(Color.black);
 	plot.setDomainGridlinePaint(Color.black);
-
+	//set the thickness of the first series
+	plot.getRenderer().setSeriesStroke(0, new BasicStroke(2.0f));
+	plot.setForegroundAlpha(0.7f);
+	plot.setBackgroundPaint(new GradientPaint(0, 0,Color.white , 1f, 1f, new Color(210,210,210)));
+	plot.getRenderer().setSeriesPaint(0, Color.blue);
 	// axis
-	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
-	rangeAxis.setUpperMargin(0.0);
-	rangeAxis.setLowerMargin(0.0);
+	CategoryAxis domainAxis = (CategoryAxis) plot.getDomainAxis();
+	domainAxis.setUpperMargin(0.0);
+	domainAxis.setLowerMargin(0.0);
+	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,0));
+	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,0));
 
     }
 

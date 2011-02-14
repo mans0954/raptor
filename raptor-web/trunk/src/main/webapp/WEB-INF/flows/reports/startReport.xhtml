@@ -21,7 +21,7 @@
 						<rich:layoutPanel position="left" width="80%">
 					<h:panelGrid columns="7" columnClasses="verticalAlignMiddle">
 
-						<h:outputText style="font-size:150%; font-weight:bold' color:red"
+						<h:outputText style="font-size:150%"
 							value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
 
 						<rich:inplaceSelect id="quickStatsRangeSelector"
@@ -56,10 +56,10 @@
 				<a4j:form id="shortStats">
 
 				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
-					<rich:spacer height="20px" />
+					<rich:spacer height="50px" />
 
 					<h:panelGroup layout="horizontal" width="100%">
-						<rich:spacer width="60px" />
+						<rich:spacer width="30px" />
 
 
 						<h:outputText value="Number of Authentications"
@@ -79,10 +79,6 @@
 
 
 					</h:panelGroup>
-					<!--<h:outputText
-                                value="aaaaaaaaaaaaaaaaaaaaaaaaa"
-                                inlineStyle="opacity:0.0;color:#EEE9E8;" />
-                        -->
 
 				</h:panelGrid>
 				</a4j:form>
@@ -91,7 +87,7 @@
 
 			<rich:layoutPanel position="center" >
 				<a4j:form id="startTables">
-				<rich:spacer height="20px" />
+				<rich:spacer height="50px" />
 				<h:panelGroup columns = "2">
 					<rich:dataTable id="currentTableGraphTable"
 						value="#{flowScope.websession.startmodel.startStatistics.topFiveResouces.rowList}"
