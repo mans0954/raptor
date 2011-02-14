@@ -22,11 +22,11 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
 public class StartModel implements Serializable{
 
 	static Logger log = LoggerFactory.getLogger(StartModel.class);
-	
+
 	private Capabilities attachedMUACapabilities;
-	
+
 	private StartStatistics startStatistics;
-	
+
 	private TimeRange statsRangeSelector;
 
 	public enum TimeRange{TODAY,LASTWEEK,LASTMONTH,LASTYEAR}
@@ -45,12 +45,30 @@ public class StartModel implements Serializable{
 	}
 
 
-	public void setStatsRangeSelector(TimeRange timeRange){
-	    this.statsRangeSelector = timeRange;
+	/**
+	 * Sets the statsRangeSelector as a String which is mapped to the correct
+	 * enum type (used mainly by view components that do not deal with enums well)
+	 *
+	 * @param timeRange
+	 */
+	public void setStatsRangeSelectorString(String timeRange){
+	    for (TimeRange time : TimeRange.values()){
+		if (time.toString().equals(timeRange))
+		    statsRangeSelector = time;
+	    }
 	}
 
-	public TimeRange getStatsRangeSelector() {
+	public TimeRange getStatsRangeSelector(){
 	    return statsRangeSelector;
+	}
+
+	/**
+	 * Gets the statsRangeSelector value as a string (used mainly by view components that do not
+	 * deal with enums well)
+	 * @return
+	 */
+	public String getStatsRangeSelectorString() {
+	    return statsRangeSelector.toString();
 	}
 
 	public void setStartStatistics(StartStatistics startStatistics) {

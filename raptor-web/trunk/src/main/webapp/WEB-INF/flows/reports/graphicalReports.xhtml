@@ -11,6 +11,7 @@
 
 
 	<ui:define name="content">
+	   <a4j:include viewId="working-panel.xhtml" />
 		<rich:layout>
 
 			<rich:layoutPanel position="top">
@@ -43,9 +44,12 @@
 										<a4j:commandLink ajaxSingle="true"
 											value="#{unit.statisticalUnitInformation.statisticParameters.unitName}"
 											action="invokeStatisticalUnit"
-											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm">
+											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm"
+											onclick="#{rich:component('workingPanel')}.show();"
+                                            oncomplete="#{rich:component('workingPanel')}.hide();">
 											<f:setPropertyActionListener value="#{unit}"
 												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
+
 										</a4j:commandLink>
 
 									</rich:column>
@@ -106,7 +110,7 @@
 											var="parameter" width="95%" labelWidth="5%"
 											style="border-style: hidden;">
 											<rich:column inlineStyle="border-style: hidden;">
-												<h:inputText value="#{parameter.parameter}">													
+												<h:inputText value="#{parameter.parameter}">
 												</h:inputText>
 											</rich:column>
 										</rich:dataTable>
@@ -132,11 +136,12 @@
 										<f:facet name="footer">
 											<h:panelGroup style="display:block; text-align:center">
 												<a4j:commandButton ajaxSingle="false" value="update"
-													reRender="chartForm, ControlPanelForm" >
+													reRender="chartForm, ControlPanelForm"
+													onclick="#{rich:component('workingPanel')}.show();">
 													<!--  added the support here, as the command button needs to submit the form properties, which it only does
 													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
-													<a4j:support ajaxSingle="true" event="oncomplete" action="updateMUAStatistic" reRender="optionsPanelForm,controlPanelForm, chartForm" />
-													
+													<a4j:support ajaxSingle="true" event="oncomplete" oncomplete ="#{rich:component('workingPanel')}.hide();" action="updateMUAStatistic" reRender="optionsPanelForm,controlPanelForm, chartForm" />
+
 												</a4j:commandButton>
 											</h:panelGroup>
 										</f:facet>
@@ -157,6 +162,7 @@
 			<rich:layoutPanel position="bottom">
 
 				<a4j:form id="chartForm">
+
 
 					<rich:tabPanel id="chartTabPanel" height="450" selectedTab="graph"
 						switchType="client">
@@ -271,6 +277,7 @@
 
 
 		</rich:layout>
+
 
 	</ui:define>
 </ui:composition>

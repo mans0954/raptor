@@ -122,7 +122,7 @@ public class ChartProcessor {
      * @return
      */
     public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, WebSession session, int width, int height) {
-	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, session.getUser().getName(), width, height);
+	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, session.getUser().getName(), width, height,null);
 
     }
 
@@ -133,7 +133,12 @@ public class ChartProcessor {
      * @return
      */
     public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, int width, int height) {
-	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height);
+	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height,null);
+    }
+
+
+    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, int width, int height, String filename) {
+	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height, filename);
     }
 
     /**
@@ -143,7 +148,7 @@ public class ChartProcessor {
      * @param session
      * @return
      */
-    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height) {
+    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height, String filename) {
 	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { graphType, graphPresentation, graphPresentation.legend, width, height });
 	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
@@ -187,8 +192,15 @@ public class ChartProcessor {
 	    simpleGraphOutput(chart);
 
 	// save the graph
-	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main.svg");
-	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main.png");
+	String endingFilename="";
+	if (filename!=null)
+	    endingFilename=filename;
+
+	//must create a random number, if the image url does not change, the browser uses the cached image
+	int ran = ((int)(Math.random()*10));
+
+	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+".svg");
+	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+ran+".png");
 
 	// png is used for screen output
 	if (graphPresentation == GraphPresentation.FANCY) {
@@ -206,11 +218,11 @@ public class ChartProcessor {
 	    }
 	}
 
-	try {
-	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
-	} catch (IOException e) {
-	    log.error("Could not save SVG File {}", e.getMessage());
-	}
+//	try {
+//	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
+//	} catch (IOException e) {
+//	    log.error("Could not save SVG File {}", e.getMessage());
+//	}
 
 	chartmodel.setChartLocation(chartLocationPNG);
 	chartmodel.setRelativeChartLocation(getRelativePath(chartLocationPNG));
@@ -334,7 +346,7 @@ public class ChartProcessor {
 	    tableModel.addTableSeries(tseries);
 	}
 	tableModel.constructTableForView();
-	
+
 	//log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
 
 	return tableModel;

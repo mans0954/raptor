@@ -224,7 +224,7 @@ public class StartServiceImpl implements StartService {
 		startstats.setBottomFiveResouces(table);
 	    }
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
-		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.SIMPLE,GraphType.BAR3D,numberOfAuthenticationsPerIntervalNumberModel,1280,400);
+		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.SIMPLE,GraphType.LINE,numberOfAuthenticationsPerIntervalNumberModel,1270,400,(chosenStartTime.toString("ddMMyyyHH-mm")+"-"+currentDateTime.toString("ddMMyyyHH-mm")));
 		startstats.setHeadlineGraph(jfreeChart);
 	    }
 

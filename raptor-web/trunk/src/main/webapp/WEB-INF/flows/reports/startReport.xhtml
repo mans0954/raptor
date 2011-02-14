@@ -10,21 +10,22 @@
 	template="/templates/raptor/full.xhtml">
 
 	<ui:define name="content">
+	   <a4j:include viewId="working-panel.xhtml" />
 		<rich:layout>
 
 			<rich:layoutPanel position="top" >
 
 				<a4j:form id="statsSelectionForm">
-				
+
 					<rich:layout>
 						<rich:layoutPanel position="left" width="80%">
 					<h:panelGrid columns="7" columnClasses="verticalAlignMiddle">
 
 						<h:outputText style="font-size:150%; font-weight:bold' color:red"
 							value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.muaMetadata.muaName}, and showing statistics for: " />
-						
+
 						<rich:inplaceSelect id="quickStatsRangeSelector"
-							value="#{flowScope.websession.startmodel.statsRangeSelector}"
+							value="#{flowScope.websession.startmodel.statsRangeSelectorString}"
 							style="font-size:150%">
 							<f:selectItem itemLabel="Today" itemValue="TODAY" />
 							<f:selectItem itemLabel="Last Week" itemValue="LASTWEEK" />
@@ -33,30 +34,25 @@
 							<a4j:support ajaxSingle="true" event="onviewactivated"
 								action="refreshStartStats" reRender="statsSelectionForm, startTables, startGraph,shortStats" />
 						</rich:inplaceSelect>
-						
-						
+
+
 					</h:panelGrid>
 					</rich:layoutPanel>
-					
+
 					<rich:layoutPanel position="right">
 						<h:outputText
 							value="updated [#{flowScope.websession.startmodel.startStatistics.accurateOfFormatted}]" />
-						
+
 					</rich:layoutPanel>
-					
+
 					</rich:layout>
 				</a4j:form>
 
 			</rich:layoutPanel>
 
+
 			<rich:layoutPanel position="left">
 
-				<!--left-->
-
-			</rich:layoutPanel>
-
-			<rich:layoutPanel position="center">
-			
 				<a4j:form id="shortStats">
 
 				<h:panelGrid width="100%" style="height: 100%; text-align: center;">
@@ -81,7 +77,7 @@
 							value="#{flowScope.websession.startmodel.startStatistics.numberOfUniqueAuthenticationsPerFormatted}"
 							style="font-size:270%;font-weight: bold" />
 
-						
+
 					</h:panelGroup>
 					<!--<h:outputText
                                 value="aaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -93,7 +89,7 @@
 
 			</rich:layoutPanel>
 
-			<rich:layoutPanel position="right">
+			<rich:layoutPanel position="center" >
 				<a4j:form id="startTables">
 				<rich:spacer height="20px" />
 				<h:panelGroup columns = "2">
@@ -115,7 +111,6 @@
 						</rich:columns>
 					</rich:dataTable>
 				</h:panelGroup>
-				<rich:spacer width="30px" />
 				</a4j:form>
 			</rich:layoutPanel>
 
@@ -130,7 +125,7 @@
 					<h:graphicImage
 						rendered="#{not empty flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}"
 						value="#{flowScope.websession.startmodel.startStatistics.headlineGraph.relativeChartLocationPath}"
-						style="width:100%" />
+						/>
 
 				</h:panelGrid>
 				</a4j:form>
