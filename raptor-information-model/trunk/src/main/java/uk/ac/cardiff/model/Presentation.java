@@ -20,6 +20,9 @@ public class Presentation implements Serializable{
     /* the label displayed on the yAxis */
     private String yAxisLabel;
 
+    /* the user can specify a date format per graph if the graph is a time series*/
+    private String dateFormat;
+
 
     public void setGraphTitle(String graphTitle) {
 	this.graphTitle = graphTitle;
@@ -38,6 +41,12 @@ public class Presentation implements Serializable{
     }
     public String getyAxisLabel() {
 	return yAxisLabel;
+    }
+    public void setDateFormat(String dateFormat) {
+	this.dateFormat = dateFormat;
+    }
+    public String getDateFormat() {
+	return dateFormat;
     }
 
 }
