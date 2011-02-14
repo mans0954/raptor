@@ -185,6 +185,7 @@ public class LogFileParser extends AuthenticationInput {
 	// getEntryHandler().addEntries(entries.);
 	log.debug("Currently has: " + getEntryHandler().getEntries().size() + " entries, latestEntry: " + getEntryHandler().getLatestEntryTime());
 	getEntryHandler().endTransaction();
+	//System.exit(1);
 
 	/*
 	 * this is important, after one complete transaction, we push the
