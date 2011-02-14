@@ -378,7 +378,7 @@
 							</bean>
 						</list>
 					</property>
-					
+
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value="Number Of Authentications Per"/>
@@ -412,7 +412,7 @@
 							</bean>
 						</list>
 					</property>
-					
+
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value="Number of unique users for"/>
@@ -445,12 +445,13 @@
 							</bean>
 						</list>
 					</property>
-					
+
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value=""/>
                             <property name="xAxisLabel" value="Time"/>
                              <property name="yAxisLabel" value="Frequency"/>
+                             <property name="dateFormat" value="ddMMyy (HH:mm)"/>
                         </bean>
                     </property>
 
@@ -478,7 +479,7 @@
 							</bean>
 						</list>
 					</property>
-					
+
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value="Top 5 Resources"/>
@@ -518,7 +519,7 @@
 							</bean>
 						</list>
 					</property>
-					
+
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value="Bottom 5 Resources"/>

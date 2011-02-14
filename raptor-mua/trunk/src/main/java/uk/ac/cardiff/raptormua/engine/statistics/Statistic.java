@@ -135,24 +135,27 @@ public class Statistic {
 
 		} else if (countBucket==observationSeries.size()) {
 			log.info("Constructing graph model for Bucket type");
-			
+
 			//construct the groups from the first series (each series will have the same grouping)
 			Observation[] observations = observationSeries.get(0).getObservations();
 			Bucket[] buckets = (Bucket[]) observations;
-			DateTimeFormatter startParser = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-			DateTimeFormatter endParser = DateTimeFormat.forPattern("HH:mm");
+			String pattern ="yyyy-MM-dd HH:mm";
+			if (statisticParameters.getPresentation().getDateFormat()!=null)
+			    pattern = statisticParameters.getPresentation().getDateFormat();
+			DateTimeFormatter startParser = DateTimeFormat.forPattern(pattern);
+			DateTimeFormatter endParser = DateTimeFormat.forPattern(pattern);
 			for (Bucket bucket : buckets) {
-				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "-" + endParser.print(bucket.getEnd()));
+				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "  " + endParser.print(bucket.getEnd()));
 			}
 
-			for (int i=0; i < observationSeries.size(); i++){	
+			for (int i=0; i < observationSeries.size(); i++){
 				buckets = (Bucket[]) observationSeries.get(i).getObservations();
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
 
 				List<Double> values = new ArrayList();
 				for (Bucket bucket : buckets) {
 					Double valueDouble = new Double(bucket.getValue());
-					values.add(valueDouble);					
+					values.add(valueDouble);
 				}
 				log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
 				gmodel.addGroupValue(values);
