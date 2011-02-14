@@ -449,7 +449,7 @@
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.Presentation">
                             <property name="graphTitle" value=""/>
-                            <property name="xAxisLabel" value="Time"/>
+                            <property name="xAxisLabel" value=""/>
                              <property name="yAxisLabel" value="Frequency"/>
                              <property name="dateFormat" value="ddMMyy (HH:mm)"/>
                         </bean>
