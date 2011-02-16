@@ -74,7 +74,7 @@ public class AuthenticationStatistic extends Statistic {
 		int numberOfBuckets = (int) (difference / timeIntervalInt);
 		long reminder = difference % timeIntervalInt;
 		log.debug("There are " + numberOfBuckets + " buckets, with reminder " + reminder + "ms");
-		
+
 		if (difference < 0){
 			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
 			throw new StatisticalUnitException("negative time difference");
@@ -161,7 +161,7 @@ public class AuthenticationStatistic extends Statistic {
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
 		getObservationSeries().add(series);
-		
+
 
 		// finished successfully, no exception thrown
 		return true;
@@ -184,7 +184,7 @@ public class AuthenticationStatistic extends Statistic {
 		long timeIntervalsInMs = (long) (difference / numberOfIntervals);
 		long reminder = difference % numberOfIntervals;
 		log.debug("There are " + numberOfIntervals + " buckets, with reminder " + reminder + "ms");
-		
+
 		if (difference < 0){
 			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
 			throw new StatisticalUnitException("negative time difference");
@@ -271,7 +271,7 @@ public class AuthenticationStatistic extends Statistic {
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
 		getObservationSeries().add(series);
-		
+
 		return true;
 
 	}
@@ -330,12 +330,64 @@ public class AuthenticationStatistic extends Statistic {
 
 		if (groups.size() == 0)
 			return false;
-		
+
 		// finished successfully, no exception thrown
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(groups.toArray(new Group[0]));
 		getObservationSeries().add(series);
-		
+
+		return true;
+
+	}
+
+	public Boolean average(String groupByField, String sqlWhere) throws StatisticalUnitException {
+		log.debug("Performing groupByFrequency Statistical Operation");
+		log.debug("Params for method:  {},{}", statisticParameters.getMethodName(), statisticParameters.getUnitName());
+		log.debug("Grouping field: {}", groupByField);
+
+		DateTime start = startingTime();
+		DateTime end = endingTime();
+		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
+		String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+		log.debug("Select {}, tableName {}", groupByField, tableName);
+		List results = getEntryHandler().query(
+				"select " + groupByField + ",count(*) from " + tableName + " where (eventTime between '" + start
+						+ "' and '" + end + "') group by (" + groupByField + ")");
+
+
+
+		ArrayList<Group> groups = new ArrayList();
+		int testCount = 0;
+		for (Object result : results) {
+			Object[] resultAsArray = (Object[]) result;
+			Group group = new Group();
+			group.setValue((Integer) resultAsArray[1]);
+			group.setGroupName((String) resultAsArray[0]);
+			groups.add(group);
+			testCount += group.getValue();
+		}
+
+		/*
+		 * test count should equal the number of entries unless there is a
+		 * reminder as this has not been catered for yet.
+		 */
+		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
+
+		// add the series label or if none specified, add a default
+//		if (statisticParameters.getSeries().getSeriesLabel() == null)
+//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
+//		else {
+//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel());
+//		}
+
+		if (groups.size() == 0)
+			return false;
+
+		// finished successfully, no exception thrown
+		ObservationSeries series=  new ObservationSeries();
+		series.setObservations(groups.toArray(new Group[0]));
+		getObservationSeries().add(series);
+
 		return true;
 
 	}
@@ -384,12 +436,12 @@ public class AuthenticationStatistic extends Statistic {
 
 		if (groups.size() == 0)
 			return false;
-		
+
 		// finished successfully, no exception thrown
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(groups.toArray(new Group[0]));
-		getObservationSeries().add(series);		
-		
+		getObservationSeries().add(series);
+
 		// finished successfully, no exception thrown
 		return true;
 
