@@ -80,7 +80,7 @@
 
 
 
-	<view-state id="setupRaptorWeb" view="setupRaptorWeb.jspx">
+	<view-state id="setupRaptorWeb" view="setupRaptorWeb.xhtml">
 		<!-- used to help with the setup configuration -->
 		<transition on="graphTrans" to="graphicalReports" />
 		<transition on="setupTrans" to="setupRaptorWeb" />

@@ -1,0 +1,135 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+	<ui:define name="content">
+		<a4j:form id="setupForm">
+			<rich:tabPanel id="setupTabPanel" height="450" selectedTab="graph"
+				switchType="client">
+
+				<rich:tab name="aggregatorSetup" label="Aggregator Setup">
+
+					<h:panelGrid>
+						<rich:spacer height="15px" />
+						<rich:spacer width="30%" />
+						<rich:dataTable value="#{setupService.attached}"
+							bandingInterval="2" banding="row" var="attached" width="90%">
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Aggregator Location" />
+								</f:facet>
+								<h:outputText value="#{attached.serviceEndpoint}" />
+							</rich:column>
+							<rich:column align="center">
+								<f:facet name="header">
+									<h:outputText value="Attached" />
+								</f:facet>
+								<h:outputText value="#{attached.isAttached}" />
+							</rich:column>
+							<rich:column align="center">
+								<f:facet name="header">
+									<h:outputText value="Actions" />
+								</f:facet>
+								<h:commandLink value="Attach" action="attachMUA">
+									<f:setPropertyActionListener value="#{attached}"
+										target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
+								</h:commandLink>
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">
+									<h:outputText value="Statistical Capabilities" />
+								</f:facet>
+								<h:commandLink action="getAggregatorCapabilities"
+									value="Check Now"
+									rendered="#{empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}"
+									reRender="setupForm">
+									<f:setPropertyActionListener value="#{attached}"
+										target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
+								</h:commandLink>
+								<h:panelGrid columns="1"
+									rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}">
+									<h:outputText
+										value="ERROR: #{flowScope.websession.setupmodel.selectEndpointCapabilities.errorMessage}" />
+								</h:panelGrid>
+								<h:panelGrid columns="2"
+									rendered="#{not empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
+									<c:forEach var="item"
+										items="#{flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
+										<h:outputText value="#{item.statisticParameters.unitName}" />
+									</c:forEach>
+
+
+								</h:panelGrid>
+							</rich:column>
+							<rich:column align="center">
+								<f:facet name="header">
+									<h:outputText value="Online" />
+								</f:facet>
+
+								<center><h:graphicImage value="/image/red-circle.gif"
+									rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+								<h:graphicImage value="/image/green-circle.png" shortDesc="help"
+									rendered="#{!flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+								</center>
+							</rich:column>
+						</rich:dataTable>
+						<rich:spacer height="15px" />
+					</h:panelGrid>
+
+					<rich:separator />
+					<rich:spacer height="10px" />
+
+					<rich:spacer height="5px" />
+					<h:panelGrid columns="1">
+						<h:outputText
+							value="Organisation Name: #{setupService.attachedCapabilities.muaMetadata.organisationName}" />
+						<h:outputText
+							value="Contact: #{setupService.attachedCapabilities.muaMetadata.contactEmail}" />
+						<h:outputText
+							value="Endpoint: #{setupService.currentlyAttached.serviceEndpoint}" />
+					</h:panelGrid>
+					<rich:spacer height="15px" />
+					<rich:separator />
+					<rich:spacer height="15px" />
+
+
+					<rich:spacer height="7px" />
+                    <rich:spacer width="15px" />
+					<h:panelGrid columns="2" rendered="#{setupService.hasAttached}">
+						<h:graphicImage style="cursor: pointer" value="/image/arrow.png">
+						</h:graphicImage>
+
+						<h:commandLink style="cursor: pointer" value="Delete All Entries"
+							action="deleteAllEntriesFromAttachedMUA" />
+
+						<h:graphicImage style="cursor: pointer"
+							value="/image/arrow.png">
+						</h:graphicImage>
+						<h:commandLink style="cursor: pointer"
+							value="Delete All Entries In Range" />
+					</h:panelGrid>
+
+
+
+				</rich:tab>
+
+				<rich:tab name="preferencesSetup" label="User Preferences" />
+
+			</rich:tabPanel>
+		</a4j:form>
+
+
+
+
+
+
+	</ui:define>
+</ui:composition>

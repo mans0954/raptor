@@ -60,6 +60,9 @@ public class ChartProcessor {
     private Resource saveDirectory;
     private Resource baseDirectory;
 
+    /* allows chart name flip flop, to stop the browser from rendering an image from cache*/
+    boolean flipFlopChartName;
+
     /* allows for selection of graph type */
     public enum GraphType {
 	BAR, AREA, BAR3D, LINE3D, LINE
@@ -199,7 +202,7 @@ public class ChartProcessor {
 	    endingFilename=filename;
 
 	//must create a random number, if the image url does not change, the browser uses the cached image
-	int ran = ((int)(Math.random()*10));
+	int ran = getRandomChartFileExtension(100);
 
 	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+".svg");
 	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+ran+".png");
@@ -208,6 +211,7 @@ public class ChartProcessor {
 	if (graphPresentation == GraphPresentation.FANCY) {
 	    try {
 		int padding = 5;
+		log.debug("Writing PNG to {}",chartLocationPNG);
 		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width - (padding * 2), height - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
 	    } catch (IOException e) {
 		log.error("Could not save PNG for screen render File {}", e.getMessage());
@@ -231,6 +235,22 @@ public class ChartProcessor {
 	return chartmodel;
     }
 
+    private int getRandomFlipFlopChartFileExtension(){
+	if (flipFlopChartName){
+	    flipFlopChartName=false;
+	    return 0;
+	}
+	else {
+	    flipFlopChartName=true;
+	    return 1;
+	}
+    }
+
+    private int getRandomChartFileExtension(int upperLimit){
+	int ran = ((int)(Math.random()*upperLimit));
+	return ran;
+    }
+
     private void fancyGraphOutput(JFreeChart chart) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
@@ -247,9 +267,13 @@ public class ChartProcessor {
 	plot.setDomainGridlinePaint(Color.black);
 
 	// axis
-	CategoryAxis rangeAxis = (CategoryAxis) plot.getDomainAxis();
-	rangeAxis.setUpperMargin(0.0);
-	rangeAxis.setLowerMargin(0.0);
+	CategoryAxis domainAxis = (CategoryAxis) plot.getDomainAxis();
+	domainAxis.setUpperMargin(0.0);
+	domainAxis.setLowerMargin(0.0);
+	domainAxis.setUpperMargin(0.0);
+	domainAxis.setLowerMargin(0.0);
+	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,10));
+	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,10));
 
     }
 
@@ -273,8 +297,8 @@ public class ChartProcessor {
 	CategoryAxis domainAxis = (CategoryAxis) plot.getDomainAxis();
 	domainAxis.setUpperMargin(0.0);
 	domainAxis.setLowerMargin(0.0);
-	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,0));
-	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,0));
+	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,7));
+	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,7));
 
     }
 

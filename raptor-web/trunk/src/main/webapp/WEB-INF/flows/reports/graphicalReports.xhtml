@@ -11,11 +11,12 @@
 
 
 	<ui:define name="content">
-	   <a4j:include viewId="working-panel.xhtml" />
+		<a4j:include viewId="working-panel.xhtml" />
 		<rich:layout>
 
 			<rich:layoutPanel position="top">
-
+				<a4j:status id="stateStatus" startText="Working..."
+				startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" />
 
 				<rich:simpleTogglePanel switchType="client" label="Control Panel"
 					opened="true">
@@ -44,9 +45,7 @@
 										<a4j:commandLink ajaxSingle="true"
 											value="#{unit.statisticalUnitInformation.statisticParameters.unitName}"
 											action="invokeStatisticalUnit"
-											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm"
-											onclick="#{rich:component('workingPanel')}.show();"
-                                            oncomplete="#{rich:component('workingPanel')}.hide();">
+											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm">
 											<f:setPropertyActionListener value="#{unit}"
 												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 
@@ -135,12 +134,12 @@
 
 										<f:facet name="footer">
 											<h:panelGroup style="display:block; text-align:center">
-												<a4j:commandButton ajaxSingle="false" value="update"
-													reRender="chartForm, ControlPanelForm"
-													onclick="#{rich:component('workingPanel')}.show();">
+												<a4j:commandButton ajaxSingle="false" value="update">
 													<!--  added the support here, as the command button needs to submit the form properties, which it only does
 													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
-													<a4j:support ajaxSingle="true" event="oncomplete" oncomplete ="#{rich:component('workingPanel')}.hide();" action="updateMUAStatistic" reRender="optionsPanelForm,controlPanelForm, chartForm" />
+													<a4j:support ajaxSingle="true" event="oncomplete"
+														action="updateMUAStatistic"
+														reRender="optionsPanelForm,controlPanelForm, chartForm" />
 
 												</a4j:commandButton>
 											</h:panelGroup>
@@ -196,7 +195,8 @@
 								</f:facet>
 								<rich:columns
 									value="#{flowScope.websession.graphmodel.currentTableGraph.series}"
-									var="columns" index="index" id="column#{index}">
+									var="columns" index="index" id="column#{index}"
+									filterBy="#{columns}" filterEvent="onkeyup">
 									<f:facet name="header">
 										<h:outputText value="#{columns}" />
 									</f:facet>
