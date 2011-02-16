@@ -83,8 +83,8 @@
 		<property name="jobDetail">
 			<ref local="SystemStatsJobDetail" />
 		</property>
-		<property name="startDelay" value="500"/>
-		<property name="repeatInterval" value="3000000"/>
+		<property name="startDelay" value="5000"/>
+		<property name="repeatInterval" value="600000"/>
 	</bean>
 
 	<bean id="SystemStatsJobDetail"
