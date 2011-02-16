@@ -36,6 +36,7 @@
 				<ref bean="bottom5Resources"/>
 				<ref bean="numberOfAuthenticationsPerIntervalNumber"/>
 				<ref bean="authenticationsForOneSP"/>
+				<ref bean="numberOfUniqueAuthenticationsPerSP"/>
 			</list>
 		</property>
 	</bean>
@@ -500,6 +501,48 @@
 		<property name="postprocessor">
 			<list>
 				<ref bean="sortDsc"/>
+				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+		<property name="statisticParameters">
+			<bean class="uk.ac.cardiff.model.StatisticParameters">
+					<property name="statisticType"><value>User</value></property>
+					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
+					<property name="methodName"><value>average</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="parameter"><value>requestHost</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.Presentation">
+                            <property name="graphTitle" value="Number of Unique Authentications Per Service Provider"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.Series">
+                                <property name="seriesLabel" value="Number of auths"/>
+                            </bean>
+                        </list>
+                    </property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sortAsc"/>
 				<ref bean="cut"/>
 				<ref bean="ShibbolethMetadataNameFormatter"/>
 			</list>
