@@ -506,18 +506,22 @@
 			</list>
 		</property>
 	</bean>
-	
-	
+
+
 	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
-					<property name="statisticType"><value>User</value></property>
+					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
-					<property name="methodName"><value>average</value></property>
+					<property name="methodName"><value>groupByCountDistinct</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
 								<property name="parameter"><value>requestHost</value></property>
+
+							</bean>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+							     <property name="parameter"><value>principleName</value></property>
 							</bean>
 						</list>
 					</property>
@@ -542,7 +546,7 @@
 		</property>
 		<property name="postprocessor">
 			<list>
-				<ref bean="sortAsc"/>
+				<ref bean="sortDsc"/>
 				<ref bean="cut"/>
 				<ref bean="ShibbolethMetadataNameFormatter"/>
 			</list>
