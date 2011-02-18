@@ -37,8 +37,8 @@ public class ServiceEndpointInterface {
 
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator.
-     * This method uses a hard set connection timeout of 10 seconds, and a receive timeout of
-     * 20 seconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent
+     * This method uses a hard set connection timeout of 10 miliseconds, and a receive timeout of
+     * 20 smilieconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent
      * inside small XML documents.
      *
      * @param endpoint
@@ -100,6 +100,13 @@ public class ServiceEndpointInterface {
 	    factory.getServiceFactory().setDataBinding(databinding);
 
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	    httpClientPolicy.setConnectionTimeout(100000);
+	    httpClientPolicy.setReceiveTimeout(200000);
+	    httpConduit.setClient(httpClientPolicy);
+
 	    log.debug("Accessing the MUA version {}", client.getVersion());
 	    log.debug("Updating statistic {} from the MUA {}", statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint);
 	    client.updateStatisticalUnit(statisticalUnitInformation);
@@ -133,6 +140,14 @@ public class ServiceEndpointInterface {
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+
+	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	    httpClientPolicy.setConnectionTimeout(100000);
+	    httpClientPolicy.setReceiveTimeout(200000);
+	    httpConduit.setClient(httpClientPolicy);
+
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    AggregatorGraphModel gmodel = client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint + "]");
@@ -159,6 +174,14 @@ public class ServiceEndpointInterface {
 	    factory.setAddress(endpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+
+	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	    httpClientPolicy.setConnectionTimeout(100000);
+	    httpClientPolicy.setReceiveTimeout(200000);
+	    httpConduit.setClient(httpClientPolicy);
+
 	    // client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Accessing the MUA version {}",client.getVersion());
 	    boolean success = client.performAdministrativeFunction(function);
@@ -184,6 +207,14 @@ public class ServiceEndpointInterface {
 	    factory.setAddress(serviceEndpoint);
 	    factory.getServiceFactory().setDataBinding(databinding);
 	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+
+	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	    httpClientPolicy.setConnectionTimeout(100000);
+	    httpClientPolicy.setReceiveTimeout(200000);
+	    httpConduit.setClient(httpClientPolicy);
+
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    AggregatorGraphModel gmodel = client.updateAndInvokeStatisticalUnit(statisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + serviceEndpoint + "]");

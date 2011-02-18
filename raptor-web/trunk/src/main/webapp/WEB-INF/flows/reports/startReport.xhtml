@@ -88,14 +88,13 @@
 			<rich:layoutPanel position="center" >
 				<a4j:form id="startTables">
 				<rich:spacer height="50px" />
-				<h:panelGroup columns = "2">
+				<h:panelGrid columns = "4">
 					<rich:dataTable id="currentTableGraphTable"
 						value="#{flowScope.websession.startmodel.startStatistics.topFiveResouces.rowList}"
 						rendered="#{not empty flowScope.websession.startmodel.startStatistics.topFiveResouces}"
-						bandingInterval="2" banding="row" rows="15" var="unit"
-						width="100%">
+						bandingInterval="2" banding="row" rows="15" var="unit">
 						<f:facet name="header">
-							<h:outputText value="Top 5 eResources" />
+							<h:outputText value="Top 5 eResources (by Authentications)" />
 						</f:facet>
 						<rich:columns
 							value="#{flowScope.websession.startmodel.startStatistics.topFiveResouces.series}"
@@ -106,7 +105,24 @@
 							<h:outputText value="#{unit[index]}" />
 						</rich:columns>
 					</rich:dataTable>
-				</h:panelGroup>
+					<rich:spacer width="15px" />
+					<rich:dataTable id="currentTableGraphTable"
+                        value="#{flowScope.websession.startmodel.startStatistics.topFiveUniqueUsersPerSP.rowList}"
+                        rendered="#{not empty flowScope.websession.startmodel.startStatistics.topFiveUniqueUsersPerSP}"
+                        bandingInterval="2" banding="row" rows="15" var="unit">
+                        <f:facet name="header">
+                            <h:outputText value="Top 5 eResources (by Unique Users)" />
+                        </f:facet>
+                        <rich:columns
+                            value="#{flowScope.websession.startmodel.startStatistics.topFiveUniqueUsersPerSP.series}"
+                            var="columns" index="index" id="column#{index}">
+                            <f:facet name="header">
+                                <h:outputText value="#{columns}" />
+                            </f:facet>
+                            <h:outputText value="#{unit[index]}" />
+                        </rich:columns>
+                    </rich:dataTable>
+				</h:panelGrid>
 				</a4j:form>
 			</rich:layoutPanel>
 
