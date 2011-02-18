@@ -28,21 +28,80 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import sun.misc.Launcher;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class ReflectionHelper {
-	static Logger log = Logger.getLogger(ReflectionHelper.class);
+	static Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
+
+	public static String determineSubclassForMethods(String methodOne, String methodTwo){
+	    Object methodOneObject = findEntrySubclassForMethodAsObject(methodOne);
+	    Object methodTwoObject = findEntrySubclassForMethodAsObject(methodTwo);
+	    log.debug("Classes found, methodOne {}, methodTwo {}",methodOneObject.getClass(),methodTwoObject.getClass());
+	    //is methodTwoObject a superclass of methodOneObject, if it is, then its either an equivalent class
+	    //or its a subclass so return it
+	    log.debug("Is methodOne a superclass of methodTwo {}",(methodOneObject.getClass().isAssignableFrom(methodTwoObject.getClass())));
+	    if (methodTwoObject.getClass().isAssignableFrom(methodOneObject.getClass())){
+		return methodOneObject.getClass().getSimpleName();
+	    }
+	    else{
+		return methodTwoObject.getClass().getSimpleName();
+	    }
+
+	}
+
+
+	public static Object findEntrySubclassForMethodAsObject(String fieldName) {
+		String forPckgName = "uk.ac.cardiff.model";
+		String jarFile = getJARFilePath(forPckgName);
+		jarFile = jarFile.replace("file:", "");
+		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
+		ArrayList allclasses = new ArrayList();
+		for (String classname : classes) {
+			try {
+				Object o = Class.forName(classname.replace(".class", "")).newInstance();
+				if (o instanceof uk.ac.cardiff.model.Entry) {
+				    //log.debug("Found classname: "+classname.replace(".class", ""));
+					allclasses.add(o);
+				}
+			} catch (ClassNotFoundException cnfex) {
+				log.error("{}",cnfex);
+			} catch (InstantiationException iex) {
+				// We try to instantiate an interface
+				// or an object that does not have a
+				// default constructor
+			} catch (IllegalAccessException iaex) {
+				// The class is not public
+			}
+		}
+
+		Object objectWithMethod = null;
+		for (Object object : allclasses) {
+			if (hasField(object, fieldName)) {
+				objectWithMethod = object;
+			}
+		}
+		if (objectWithMethod != null) {
+			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName
+					+ " returning simple name " + objectWithMethod.getClass().getSimpleName());
+			return objectWithMethod;
+		}
+
+		return null;
+
+	}
 
 	/**
 	 * This method finds the simple name of the class in the uk.ac.cardiff.model
 	 * package that contains the <code>fieldName</code>.
-	 * 
+	 *
 	 * @param fieldName
 	 * @return
 	 */
@@ -60,7 +119,7 @@ public class ReflectionHelper {
 					allclasses.add(o);
 				}
 			} catch (ClassNotFoundException cnfex) {
-				log.error(cnfex);
+				log.error("{}",cnfex);
 			} catch (InstantiationException iex) {
 				// We try to instantiate an interface
 				// or an object that does not have a
@@ -69,7 +128,7 @@ public class ReflectionHelper {
 				// The class is not public
 			}
 		}
-		
+
 		Object objectWithMethod = null;
 		for (Object object : allclasses) {
 			if (hasField(object, fieldName)) {
@@ -112,7 +171,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the names of the classes, as strings, in the jar <code>jarName</code> and package
 	 * <code>packageName</code>
-	 * 
+	 *
 	 * @param jarName
 	 * @param packageName
 	 * @return
@@ -142,7 +201,7 @@ public class ReflectionHelper {
 	 * Code taken and adapted from the JWhich project. Finds all subclasses of
 	 * the uk.ac.cardiff.model.Entry class in the package <code>pckgname</code> if they
 	 * exist outside any JAR libraries, use <code>getClasseNamesInPackageJAR</code>
-	 * 
+	 *
 	 * @param pckgname
 	 * @return
 	 */
@@ -181,7 +240,7 @@ public class ReflectionHelper {
 							allclasses.add(o);
 						}
 					} catch (ClassNotFoundException cnfex) {
-						log.error(cnfex);
+						log.error("{}",cnfex);
 					} catch (InstantiationException iex) {
 						// We try to instantiate an interface
 						// or an object that does not have a
@@ -197,7 +256,7 @@ public class ReflectionHelper {
 
 	/**
 	 * Checks whether the Object <code>object</code> has the field <code>fieldName</code>
-	 * 
+	 *
 	 * @param object
 	 * @param fieldName
 	 * @return

@@ -340,20 +340,21 @@ public class AuthenticationStatistic extends Statistic {
 
 	}
 
-	public Boolean average(String groupByField, String sqlWhere) throws StatisticalUnitException {
+	public Boolean groupByCountDistinct(String groupByField, String countDistinctField, String sqlWhere) throws StatisticalUnitException {
 		log.debug("Performing groupByFrequency Statistical Operation");
 		log.debug("Params for method:  {},{}", statisticParameters.getMethodName(), statisticParameters.getUnitName());
-		log.debug("Grouping field: {}", groupByField);
+		log.debug("Grouping field: {}, count By distinct field {}", groupByField, countDistinctField);
 
 		DateTime start = startingTime();
 		DateTime end = endingTime();
 		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
-		String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+		//need to find the lowest level class from which to perform these statistics
+		String tableName = ReflectionHelper.determineSubclassForMethods(groupByField,countDistinctField);
+
 		log.debug("Select {}, tableName {}", groupByField, tableName);
 		List results = getEntryHandler().query(
-				"select " + groupByField + ",count(*) from " + tableName + " where (eventTime between '" + start
+				"select " + groupByField + ",count(distinct "+countDistinctField+") from " + tableName + " where (eventTime between '" + start
 						+ "' and '" + end + "') group by (" + groupByField + ")");
-
 
 
 		ArrayList<Group> groups = new ArrayList();
