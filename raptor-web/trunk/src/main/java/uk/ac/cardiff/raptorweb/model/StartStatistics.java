@@ -18,6 +18,7 @@ public class StartStatistics implements Serializable{
     private RaptorTableChartModel topFiveResouces;
     private RaptorTableChartModel bottomFiveResouces;
     private RaptorJFreeChartModel headlineGraph;
+    private RaptorTableChartModel topFiveUniqueUsersPerSP;
 
     /* the time at which these values were computed */
     private DateTime accurateOf;
@@ -96,6 +97,14 @@ public class StartStatistics implements Serializable{
 	if (accurateOf!=null)
 	    return accurateOf.toString("dd/MM/yyyy HH:mm:ss");
 	return "not available";
+    }
+
+    public void setTopFiveUniqueUsersPerSP(RaptorTableChartModel topFiveUniqueUsersPerSP) {
+	this.topFiveUniqueUsersPerSP = topFiveUniqueUsersPerSP;
+    }
+
+    public RaptorTableChartModel getTopFiveUniqueUsersPerSP() {
+	return topFiveUniqueUsersPerSP;
     }
 
 }

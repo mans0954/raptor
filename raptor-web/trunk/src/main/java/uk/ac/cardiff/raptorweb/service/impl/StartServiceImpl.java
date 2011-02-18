@@ -131,6 +131,7 @@ public class StartServiceImpl implements StartService {
 	StatisticalUnitInformation topFiveResources = null;
 	StatisticalUnitInformation bottomFiveResources = null;
 	StatisticalUnitInformation numberOfAuthenticationsPerIntervalNumber = null;
+	StatisticalUnitInformation numberOfUniqueAuthenticationsPerSP =null;
 	for (StatisticalUnitInformation unit : statisticalUnits) {
 	    if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
 		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPer"))
@@ -143,6 +144,8 @@ public class StartServiceImpl implements StartService {
 		    bottomFiveResources = unit;
 		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPerIntervalNumber"))
 		    numberOfAuthenticationsPerIntervalNumber = unit;
+		if (unit.getStatisticParameters().getUnitName().equals("numberOfUniqueAuthenticationsPerSP"))
+		    numberOfUniqueAuthenticationsPerSP = unit;
 	    }
 	}
 	log.debug("Using statistic {} to find number of authentications per", numberOfAuthenticationsPerUnitInformation);
@@ -150,6 +153,7 @@ public class StartServiceImpl implements StartService {
 	log.debug("Using statistic {} to find number top five resources", topFiveResources);
 	log.debug("Using statistic {} to find number bottom five resources", topFiveResources);
 	log.debug("Using statistic {} to find number of authentication in 12 intervals", numberOfAuthenticationsPerIntervalNumber);
+	log.debug("Using statistic {} to find number of unique authentication per service provider", numberOfUniqueAuthenticationsPerSP);
 
 	AggregatorGraphModel numberOfAuthentications = null;
 	if (numberOfAuthenticationsPerUnitInformation != null) {
@@ -187,9 +191,16 @@ public class StartServiceImpl implements StartService {
 	    numberOfAuthenticationsPerIntervalNumberModel = webEngine.updateAndInvokeStatisticalUnit(numberOfAuthenticationsPerIntervalNumber);
 	}
 
+	AggregatorGraphModel uniqueAuthsPerSPModel =null;
+	if (numberOfUniqueAuthenticationsPerSP !=null){
+	    numberOfUniqueAuthenticationsPerSP.getStatisticParameters().setEndTime(currentDateTime);
+	    numberOfUniqueAuthenticationsPerSP.getStatisticParameters().setStartTime(chosenStartTime);
+	    uniqueAuthsPerSPModel = webEngine.updateAndInvokeStatisticalUnit(numberOfUniqueAuthenticationsPerSP);
+	}
+
 	// Now set the statistics values ------
 
-	if (numberOfAuthentications != null && numberOfUniqueUsers != null && topFiveResourcesModel != null && bottomFiveResourcesModel != null && numberOfAuthenticationsPerIntervalNumberModel != null) {
+	if (numberOfAuthentications != null && numberOfUniqueUsers != null && topFiveResourcesModel != null && bottomFiveResourcesModel != null && numberOfAuthenticationsPerIntervalNumberModel != null && uniqueAuthsPerSPModel!=null) {
 	    if (numberOfAuthentications != null) {
 		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfAuthentications);
 		//should only have one series, and one row
@@ -226,6 +237,10 @@ public class StartServiceImpl implements StartService {
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
 		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.FRONT,GraphType.AREA,numberOfAuthenticationsPerIntervalNumberModel,1270,350,(chosenStartTime.toString("ddMMyyyHH-mm")+"-"+currentDateTime.toString("ddMMyyyHH-mm")));
 		startstats.setHeadlineGraph(jfreeChart);
+	    }
+	    if (uniqueAuthsPerSPModel != null) {
+		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(uniqueAuthsPerSPModel);
+		startstats.setTopFiveUniqueUsersPerSP(table);
 	    }
 
 	    // set update time on the stats
