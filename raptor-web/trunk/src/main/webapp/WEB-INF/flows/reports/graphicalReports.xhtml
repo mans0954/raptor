@@ -84,16 +84,18 @@
 
 									<h:panelGrid columns="2" width="50%">
 
-										<h:outputText value="Method Name:" style="font-weight: bold;" />
+										<h:outputText value="Statistic Name:" style="font-weight: bold;" />
 										<h:outputText
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.methodName}" />
+											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.unitName}" />
 
 
 										<h:outputText value="Start Time:" style="font-weight: bold;" />
-										<rich:calendar id="startTimeDate" showApplyButton="true"
-											datePattern="dd/MM/yyyy HH:mm"
+										
+										<rich:calendar id="startTimeDate" showApplyButton="true" style="width:100%;"
+											datePattern="dd/MM/yyyy HH:mm"  cellWidth="10px" cellHeight="10px"
 											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.startTimeAsJavaDate}">
 										</rich:calendar>
+										
 
 
 										<h:outputText value="End Time:" style="font-weight: bold;" />
@@ -107,7 +109,14 @@
 										<rich:dataTable
 											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.methodParams}"
 											var="parameter" width="95%" labelWidth="5%"
-											style="border-style: hidden;">
+											style="width:100%;">
+											<f:facet name="header">
+												<h:outputText value="Parameters"/>
+											</f:facet>
+											<rich:column inlineStyle="border-style: hidden;">
+												<h:outputText value="#{parameter.parameterType}">
+												</h:outputText>
+											</rich:column>
 											<rich:column inlineStyle="border-style: hidden;">
 												<h:inputText value="#{parameter.parameter}">
 												</h:inputText>
@@ -116,18 +125,18 @@
 
 
 										<h:outputText value="Graph Title:" style="font-weight: bold;" />
-										<h:inputText
+										<h:inputText style="width:100%;"
 											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
 
 										<h:outputText value="Preprocessors:"
 											style="font-weight: bold; width:100%" />
-										<h:inputText
+										<h:inputText style="width:100%;"
 											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.preProcessorsAsString}" />
 
 
 										<h:outputText value="Postprocessors:"
 											style="font-weight: bold;" />
-										<h:inputText
+										<h:inputText style="width:100%;"
 											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.postProcessorsAsString}" />
 
 

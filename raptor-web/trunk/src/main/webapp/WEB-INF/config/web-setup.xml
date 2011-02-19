@@ -74,7 +74,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			 <ref local="SystemStatsQuickTrigger"/>
+			 <!-- <ref local="SystemStatsQuickTrigger"/> -->
 			</list>
 		</property>
 	</bean>
