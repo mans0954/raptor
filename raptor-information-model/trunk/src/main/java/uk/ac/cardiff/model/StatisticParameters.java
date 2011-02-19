@@ -37,8 +37,8 @@ public class StatisticParameters implements Serializable{
     private static final String outputDateFormat ="dd/MM/yyyy HH:mm:ss";;
 
     private String unitName;
-    /* the name of the method to be invoked*/
-    private String methodName;
+
+    /* List of parameters passed into the <code>performStatistic</code> method*/
     private List<MethodParameter> methodParams;
 
     /*
@@ -82,13 +82,6 @@ public class StatisticParameters implements Serializable{
 	return unitName;
     }
 
-    public void setMethodName(String methodName) {
-	this.methodName = methodName;
-    }
-
-    public String getMethodName() {
-	return methodName;
-    }
 
     public void setMethodParams(List<MethodParameter> methodParams) {
 	this.methodParams = methodParams;
