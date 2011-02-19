@@ -53,12 +53,11 @@
 		-->
 
 
-	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>All Authentications In X minute Intervals</value></property>
-					<property name="methodName"><value>countEntryPerInterval</value></property>
 					<property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20100522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -88,12 +87,11 @@
 		</property>
 	</bean>
 
-	<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
 	<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Authentications over a time range (split)</value></property>
-					<property name="methodName"><value>countEntry</value></property>
 					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
 					<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
 					<property name="methodParams">
@@ -124,12 +122,11 @@
 	</bean>
 
 
-	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by entityID)</value></property>
-					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20110115T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -160,12 +157,11 @@
 		</property>
 	</bean>
 
-	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by Organisational Name)</value></property>
-					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -200,12 +196,11 @@
 		</property>
 	</bean>
 
-	<bean id="groupByNameFormattedNormalisedPercentage" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="groupByNameFormattedNormalisedPercentage" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider by OrgName (Percentage)</value></property>
-					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -242,12 +237,11 @@
 	</bean>
 
 
-	<bean id="authenticationsForOneSP" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="authenticationsForOneSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Comparison of Authentications For Two SPs</value></property>
-					<property name="methodName"><value>countEntryPerInterval</value></property>
 					<property name="startTime"><value>20110116T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110117T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -366,12 +360,11 @@
 
 	<!--  System level statistics that must be present for RaptorWeb to work -->
 
-	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
-					<property name="methodName"><value>countEntry</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -400,12 +393,11 @@
 		</property>
 	</bean>
 
-	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupBy">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
-					<property name="methodName"><value>groupBy</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -433,12 +425,11 @@
 		</property>
 	</bean>
 
-	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
-					<property name="methodName"><value>countEntry</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -467,12 +458,11 @@
 		</property>
 	</bean>
 
-	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>top5Resources</value></property>
-					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -508,12 +498,11 @@
 	</bean>
 
 
-	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByCountDistinct">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
-					<property name="methodName"><value>groupByCountDistinct</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -553,12 +542,11 @@
 		</property>
 	</bean>
 
-	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.AuthenticationStatistic">
+	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
 		<property name="statisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>bottom5Resources</value></property>
-					<property name="methodName"><value>groupByFrequency</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
