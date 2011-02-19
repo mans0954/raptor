@@ -22,12 +22,19 @@ public class MethodParameter implements Serializable{
     private String parameter;
 
     public void setParameter(String parameter) {
-	log.debug("Setting parameter: "+parameter);
 	this.parameter = parameter;
     }
 
     public String getParameter() {
 	return parameter;
+    }
+
+    public void setParameterType(String parameterType) {
+	this.parameterType = parameterType;
+    }
+
+    public String getParameterType() {
+	return parameterType;
     }
 
 }
