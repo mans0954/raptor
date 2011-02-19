@@ -109,15 +109,18 @@ public class StatisticsHandler {
 			boolean success = true;
 			for (Series series : listOfSeries){
 				String whereClause=series.constructComparisonAsSQL();
-				Object[] paramsO = new Object[params.size() + 1];
-				for (int i = 0; i < paramsO.length-1; i++) {
-					paramsO[i] = params.get(i).getParameter();
-				}
+				Object[] paramsO = new Object[2];
+				paramsO[0] = params;
 				if (whereClause!=null)
-					paramsO[paramsO.length - 1] = whereClause;
+					paramsO[1] = whereClause;
 				else
-					paramsO[paramsO.length - 1] = new String();
-				success= invoke(statistic.getStatisticParameters().getMethodName(), paramsO, statistic);
+					paramsO[1] = new String();
+				log.debug("statistical to invoke {}",statistic);
+//				Method[] methods = statistic.getClass().getMethods();
+//				for (Method method : methods){
+//					log.debug("Method: "+method);
+//				}
+				success= invoke("performStatistic", paramsO, statistic);
 			}
 			return success;
 		} catch (Exception e) {

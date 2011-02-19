@@ -34,6 +34,7 @@ import uk.ac.cardiff.model.Entry;
 import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
@@ -47,7 +48,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
  * @author philsmart Holds a statistics unit or one statistics operation on one
  *         piece of data
  */
-public class Statistic {
+public abstract class Statistic {
 
 	static Logger log = LoggerFactory.getLogger(Statistic.class);
 
@@ -66,6 +67,9 @@ public class Statistic {
 	public Statistic() {
 		setObservationSeries(new ArrayList<ObservationSeries>());
 	}
+	
+	public abstract Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException;
+	
 
 	/**
 	 * Important this this method is called during the statistic process lifecycle, so that any state variables
@@ -188,6 +192,22 @@ public class Statistic {
 			log.error("Could not post process entries, using " + getPostprocessor().getClass());
 		}
 	}
+	
+	
+	protected DateTime startingTime() {
+		if (statisticParameters.getStartTimeAsDate() != null)
+			return statisticParameters.getStartTimeAsDate();
+		DateTime start = (DateTime) this.getEntryHandler().queryUnique("select min(eventTime) from Entry");
+		return start;
+	}
+
+	protected DateTime endingTime() {
+		if (statisticParameters.getEndTimeAsDate() != null)
+			return statisticParameters.getEndTimeAsDate();
+		DateTime end = (DateTime) this.getEntryHandler().queryUnique("select max(eventTime) from Entry");
+		return end;
+	}
+
 
 	public void setField(String field) {
 
@@ -208,11 +228,10 @@ public class Statistic {
 	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
 		this.postprocessor = postprocessor;
 	}
-
-	public void setStatisticParameters(StatisticParameters statisticParameters) {
-		this.statisticParameters = statisticParameters;
-	}
-
+	
+	public abstract void setStatisticParameters(StatisticParameters statisticParameters) ;
+	
+	
 	public StatisticParameters getStatisticParameters() {
 		return statisticParameters;
 	}
