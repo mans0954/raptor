@@ -46,15 +46,15 @@
 	This includes:
 		unitName - a text description of the statistic used for reference within the web UI
 		field - the name of the entry field that the statistic operates over
-		methodName - the name of the internal statistical method that you invoke (a list of these and their parameters is provided in statistics.html)
+		methodName - the name of the internal statistical method that you invoke (a list of these and their values is provided in statistics.html)
 		startTime - defines the temporal extent over which the statistic is invoked (if no start time is used, the starttime of the first entry is used instead)
 		endTime - defines the temporal extent over which the statistics is invoked (if no end time is used, the endtime of the last entry is used instead)
-		methodParams - the parameters you pass into the methodName (see statistics.html for a list of these methods and their parameters)
+		methodParams - the values you pass into the methodName (see statistics.html for a list of these methods and their values)
 		-->
 
 
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>All Authentications In X minute Intervals</value></property>
@@ -63,7 +63,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>50</value></property>
+								<property name="value"><value>50</value></property>
 							</bean>
 						</list>
 					</property>
@@ -88,7 +88,7 @@
 	</bean>
 
 	<bean id="authTimeBucketsCount" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
-	<property name="statisticParameters">
+	<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Authentications over a time range (split)</value></property>
@@ -97,7 +97,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>13</value></property>
+								<property name="value"><value>13</value></property>
 							</bean>
 						</list>
 					</property>
@@ -123,7 +123,7 @@
 
 
 	<bean id="groupBy" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by entityID)</value></property>
@@ -132,7 +132,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -158,7 +158,7 @@
 	</bean>
 
 	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by Organisational Name)</value></property>
@@ -167,7 +167,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -197,7 +197,7 @@
 	</bean>
 
 	<bean id="groupByNameFormattedNormalisedPercentage" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider by OrgName (Percentage)</value></property>
@@ -206,7 +206,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -238,7 +238,7 @@
 
 
 	<bean id="authenticationsForOneSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
 					<property name="unitName"><value>Comparison of Authentications For Two SPs</value></property>
@@ -247,7 +247,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>100</value></property>
+								<property name="value"><value>100</value></property>
 							</bean>
 						</list>
 					</property>
@@ -361,14 +361,14 @@
 	<!--  System level statistics that must be present for RaptorWeb to work -->
 
 	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>1</value></property>
+								<property name="value"><value>1</value></property>
 							</bean>
 						</list>
 					</property>
@@ -394,14 +394,14 @@
 	</bean>
 
 	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupBy">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>principleName</value></property>
+								<property name="value"><value>principleName</value></property>
 							</bean>
 						</list>
 					</property>
@@ -426,14 +426,14 @@
 	</bean>
 
 	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>40</value></property>
+								<property name="value"><value>40</value></property>
 							</bean>
 						</list>
 					</property>
@@ -459,14 +459,14 @@
 	</bean>
 
 	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>top5Resources</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -499,18 +499,18 @@
 
 
 	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByCountDistinct">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 
 							</bean>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-							     <property name="parameter"><value>principleName</value></property>
+							     <property name="value"><value>principleName</value></property>
 							</bean>
 						</list>
 					</property>
@@ -543,14 +543,14 @@
 	</bean>
 
 	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="statisticParameters">
+		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
 					<property name="unitName"><value>bottom5Resources</value></property>
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="parameter"><value>requestHost</value></property>
+								<property name="value"><value>requestHost</value></property>
 							</bean>
 						</list>
 					</property>

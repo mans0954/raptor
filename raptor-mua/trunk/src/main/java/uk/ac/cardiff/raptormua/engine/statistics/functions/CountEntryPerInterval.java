@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
 import uk.ac.cardiff.raptormua.engine.statistics.ObservationSeries;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
@@ -37,7 +38,7 @@ public class CountEntryPerInterval extends Statistic{
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
 		
-		String timeInterval = methodParams.get(0).getParameter();
+		String timeInterval = methodParams.get(0).getValue();
 	
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
@@ -147,7 +148,8 @@ public class CountEntryPerInterval extends Statistic{
 	public void setStatisticParameters(StatisticParameters statisticParameters) {
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==1){
-			methodParams.get(0).setParameterType("Time Interval");
+			methodParams.get(0).setParameterName("Time Interval (minutes)");
+			methodParams.get(0).setParameterType(ParameterType.VALUE);
 		}
 		else{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
