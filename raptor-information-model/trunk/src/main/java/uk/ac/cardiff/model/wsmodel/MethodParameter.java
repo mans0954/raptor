@@ -4,6 +4,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,25 +17,55 @@ import org.slf4j.LoggerFactory;
 public class MethodParameter implements Serializable{
     static Logger log = LoggerFactory.getLogger(MethodParameter.class);
 
-    /* possible enum, which holds information about the parameter*/
-    private String parameterType;
+    /* enum, which holds information about the parameter
+     * FIELD - name of a field in the model
+     * VALUE - a primitive data type value*/
+    public enum ParameterType{FIELD, VALUE};
+    
+    private ParameterType parameterType;
+    
+    /* friendly name of the parameter, for the benefit of the view*/
+    private String parameterName;
 
-    private String parameter;
+    /* value of the parameter */
+    private String value;
+    
+    /* List of all possible values this method parameter could take*/
+    private List<String> possibleValues;
 
-    public void setParameter(String parameter) {
-	this.parameter = parameter;
+    public void setValue(String value) {
+	this.value = value;
     }
 
-    public String getParameter() {
-	return parameter;
+    public String getValue() {
+	return value;
     }
 
-    public void setParameterType(String parameterType) {
+    public void setParameterName(String parameterName) {
+	this.parameterName = parameterName;
+    }
+
+    public String getParameterName() {
+	return parameterName;
+    }
+
+    public void setParameterType(ParameterType parameterType) {
 	this.parameterType = parameterType;
     }
 
-    public String getParameterType() {
+    public ParameterType getParameterType() {
 	return parameterType;
     }
 
+    public void setPossibleValues(List<String> possibleValues) {
+	this.possibleValues = possibleValues;
+    }
+
+    public List<String> getPossibleValues() {
+	return possibleValues;
+    }
+
+
+
+ 
 }

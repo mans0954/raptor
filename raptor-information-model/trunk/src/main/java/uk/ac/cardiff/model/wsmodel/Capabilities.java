@@ -23,6 +23,7 @@ public class Capabilities implements Serializable{
 	private MUAMetadata muaMetadata;
 
 
+
 	public void setStatisticalServices(List<StatisticalUnitInformation> statisticalServices) {
 		this.statisticalServices = statisticalServices;
 	}
@@ -76,5 +77,6 @@ public class Capabilities implements Serializable{
 	public MUAMetadata getMuaMetadata() {
 	    return muaMetadata;
 	}
+
 
 }
