@@ -23,7 +23,7 @@ public class CountEntry extends Statistic{
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
 		
-		String numberOfIntervalsString = methodParams.get(0).getParameter();
+		String numberOfIntervalsString = methodParams.get(0).getValue();
 
 		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
 		log.debug("Performing countEntry Statistical Operation");
@@ -134,7 +134,8 @@ public class CountEntry extends Statistic{
 	public void setStatisticParameters(StatisticParameters statisticParameters) {
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==1){
-			methodParams.get(0).setParameterType("Number of Intervals");
+			methodParams.get(0).setParameterName("Number of Intervals");
+			methodParams.get(0).setParameterType(MethodParameter.ParameterType.VALUE);
 		}
 		else{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
 import uk.ac.cardiff.raptormua.engine.statistics.ObservationSeries;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
@@ -39,7 +40,7 @@ public class GroupByFrequency extends Statistic{
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
 		
-		String groupByField = methodParams.get(0).getParameter();
+		String groupByField = methodParams.get(0).getValue();
 		
 		log.debug("Performing groupByFrequency Statistical Operation");
 		log.debug("Params for method:  {},{}", this.getClass().getSimpleName(), statisticParameters.getUnitName());
@@ -95,7 +96,9 @@ public class GroupByFrequency extends Statistic{
 	public void setStatisticParameters(StatisticParameters statisticParameters) {
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==1){
-			methodParams.get(0).setParameterType("Group By Field");
+			methodParams.get(0).setParameterName("Group By Field");
+			methodParams.get(0).setParameterType(ParameterType.FIELD);
+			methodParams.get(0).setPossibleValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 		}
 		else{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
