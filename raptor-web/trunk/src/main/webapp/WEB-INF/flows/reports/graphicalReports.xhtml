@@ -25,7 +25,7 @@
 						<rich:layoutPanel position="left" width="40%">
 							<a4j:form id="ControlPanelForm">
 
-								<rich:datascroller for="statisticalUnitsTable" maxPages="10" />
+								
 								<rich:dataTable id="statisticalUnitsTable"
 									value="#{flowScope.websession.graphmodel.statisticalUnitsForView}"
 									bandingInterval="2" banding="row" var="unit" width="100%"
@@ -69,6 +69,10 @@
 												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 										</a4j:commandLink>
 									</rich:column>
+									
+									 <f:facet name="footer">
+              						  <rich:datascroller id="datascrollerStats" />
+           						 </f:facet>
 								</rich:dataTable>
 							</a4j:form>
 						</rich:layoutPanel>
@@ -82,9 +86,9 @@
                                         Options
                                      </f:facet>
                              
-   									<h:panelGrid columns="2" border="1">
+   									<h:panelGrid columns="2" >
 
-									<h:panelGrid columns="2" width="100%" border="1">
+									<h:panelGrid columns="2" width="100%">
 
 										<h:outputText value="Statistic Name:" style="font-weight: bold;" />
 										<h:outputText
@@ -158,8 +162,8 @@
 									</h:panelGrid>
 									
 								
-									<h:panelGrid columns="2" border="1" width="100%">
-									<h:outputText value="hi there" style="width:100%;"/>
+									<h:panelGrid columns="2" width="100%">
+									
 									
 									</h:panelGrid>
 									
