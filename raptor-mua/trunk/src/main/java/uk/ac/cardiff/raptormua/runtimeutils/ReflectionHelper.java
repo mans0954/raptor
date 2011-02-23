@@ -35,7 +35,7 @@ import sun.misc.Launcher;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class ReflectionHelper {
 	static Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
@@ -56,19 +56,19 @@ public class ReflectionHelper {
 		}
 
 	}
-	
+
 	public static List<String> getFieldsFromEntrySubClasses(){
 		ArrayList<String> allFields = new ArrayList<String>();
-		String forPckgName = "uk.ac.cardiff.model";		
+		String forPckgName = "uk.ac.cardiff.model";
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
 		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
-		
+
 		ArrayList allclasses = new ArrayList();
 		for (String classname : classes) {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
-				if (o!=null)log.debug("found object {}",o.getClass());
+				//if (o!=null)log.debug("found object {}",o.getClass());
 				if (o instanceof uk.ac.cardiff.model.Entry) {
 					allclasses.add(o);
 				}
@@ -86,12 +86,12 @@ public class ReflectionHelper {
 			for (Field field : fields){
 				allFields.add(field.getName());
 			}
-			
+
 		}
-		
+
 		return allFields;
 	}
-	
+
 
 	public static Object findEntrySubclassForMethodAsObject(String fieldName) {
 		String forPckgName = "uk.ac.cardiff.model";
@@ -135,7 +135,7 @@ public class ReflectionHelper {
 	/**
 	 * This method finds the simple name of the class in the uk.ac.cardiff.model
 	 * package that contains the <code>fieldName</code>.
-	 * 
+	 *
 	 * @param fieldName
 	 * @return
 	 */
@@ -183,7 +183,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the name, as a string, of the JAR file that contains the package
 	 * <code>pckgname</code>
-	 * 
+	 *
 	 * @param pckgname
 	 * @return
 	 */
@@ -208,7 +208,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the names of the classes, as strings, in the jar
 	 * <code>jarName</code> and package <code>packageName</code>
-	 * 
+	 *
 	 * @param jarName
 	 * @param packageName
 	 * @return
@@ -239,7 +239,7 @@ public class ReflectionHelper {
 	 * the uk.ac.cardiff.model.Entry class in the package <code>pckgname</code>
 	 * if they exist outside any JAR libraries, use
 	 * <code>getClasseNamesInPackageJAR</code>
-	 * 
+	 *
 	 * @param pckgname
 	 * @return
 	 */
@@ -295,7 +295,7 @@ public class ReflectionHelper {
 	/**
 	 * Checks whether the Object <code>object</code> has the field
 	 * <code>fieldName</code>
-	 * 
+	 *
 	 * @param object
 	 * @param fieldName
 	 * @return
