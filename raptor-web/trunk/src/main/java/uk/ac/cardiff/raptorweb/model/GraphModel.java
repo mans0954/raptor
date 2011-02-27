@@ -15,6 +15,11 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
 public class GraphModel implements Serializable{
+	
+    
+
+    	private static final long serialVersionUID = -2803349385469406219L;
+
 	static Logger log = LoggerFactory.getLogger(GraphModel.class);
 
 	//private String selectedStatisticalUnit;

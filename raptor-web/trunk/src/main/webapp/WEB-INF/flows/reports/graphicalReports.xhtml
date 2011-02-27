@@ -12,6 +12,7 @@
 
 	<ui:define name="content">
 		<a4j:include viewId="working-panel.xhtml" />
+		<a4j:include viewId="seriesPanel.xhtml" />
 		<rich:layout>
 
 			<rich:layoutPanel position="top">
@@ -86,7 +87,7 @@
                                         Options
                                      </f:facet>
                              
-   									<h:panelGrid columns="2" >
+   									<h:panelGrid columns="2" width="100%" border="1">
 
 									<h:panelGrid columns="2" width="100%">
 
@@ -163,7 +164,50 @@
 									
 								
 									<h:panelGrid columns="2" width="100%">
+										<rich:dataTable id="statisticalUnitsTable"
+									value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.series}"
+									bandingInterval="2" banding="row" var="series" width="100%"
+									 rows="10"  rowKeyVar="row"
+									rendered="#{not empty flowScope.websession.graphmodel.statisticalUnitsForView}">
 									
+											<f:facet name="header">
+												<h:outputText value="Chart Series"/>
+											</f:facet>
+											
+											<f:facet name="footer">
+													<h:graphicImage style="width:20px" value="/image/icon/onebit_31.png"/>
+											</f:facet>
+										
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="No."/>
+												</f:facet>
+												<h:outputText value="#{row}"/>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Series Label"/>
+												</f:facet>
+												
+												<h:inputText value="#{series.seriesLabel}"/>
+											</rich:column>
+											<rich:column>
+												<f:facet name="header">
+													<h:outputText value="Condition"/>
+												</f:facet>	
+												<h:panelGrid>
+												<h:graphicImage id="conditionImage" style="width:20px" value="/image/icon/onebit_39.png" rendered="#{not empty series.comparisonPredicate}"/>
+												<rich:componentControl for="seriesModalPanel" attachTo="conditionImage" operation="show" event="onclick"/>
+												</h:panelGrid>																					
+											</rich:column>
+											<rich:column >
+												<f:facet name="header">
+													<h:outputText value="Remove"/>
+												</f:facet>												
+												<h:graphicImage style="width:20px; text-align: center;" value="/image/icon/onebit_33.png" />
+											</rich:column>
+										
+										</rich:dataTable>
 									
 									</h:panelGrid>
 									
