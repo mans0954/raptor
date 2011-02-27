@@ -56,7 +56,18 @@ public class StatisticParameters implements Serializable{
     private Date endTimeJava;
 
     /* either system or user types */
-    public enum StatisticType {USER,SYSTEM};
+    public enum StatisticType {
+	/*
+	 * A statistic for use by the USER. Possibly removed in the future, in favour of individual
+	 * user based statistics
+	 */ 
+	 USER,
+	 /*
+	  * A statistic for use by the system level processes, e.g. to generate dashboard 
+	  * statistics
+	  */
+	 SYSTEM};
+	 
     private StatisticType type;
 
 
