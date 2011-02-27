@@ -13,6 +13,8 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
  */
 public class StatisticalUnitInformationView implements Serializable{
 
+    private static final long serialVersionUID = 4655547623449270295L;
+    
     private boolean selected;
     private StatisticalUnitInformation statisticalUnitInformation;
 
