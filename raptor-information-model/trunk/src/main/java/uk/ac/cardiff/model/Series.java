@@ -23,7 +23,7 @@ public class Series implements Serializable{
     private String seriesLabel;
     /* A formatted textual description of the series, typically formatted by the logic of the authentication statistic*/
     private String SeriesLabelFormatted;
-    
+    /* a comparison predicate that forms the where clause*/
     private ComparisonPredicate comparisonPredicate;
     
     public String constructComparisonAsSQL(){
