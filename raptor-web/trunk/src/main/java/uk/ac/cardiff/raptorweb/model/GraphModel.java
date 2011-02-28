@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
@@ -32,6 +33,9 @@ public class GraphModel implements Serializable{
 	private RaptorJFreeChartModel currentJFreeGraph;
 	private String controlPanelSize;
 	private List<StatisticalUnitInformationView> statisticalUnitsForView;
+	
+	/* for series modal panel*/
+	private Series selectedSeries;
 
 
 
@@ -154,6 +158,16 @@ public class GraphModel implements Serializable{
 
 	public List<StatisticalUnitInformationView> getStatisticalUnitsForView() {
 	    return statisticalUnitsForView;
+	}
+
+	public void setSelectedSeries(Series selectedSeries) {
+	    log.debug("Selected Series {}",selectedSeries);
+	    this.selectedSeries = selectedSeries;
+	}
+
+	public Series getSelectedSeries() {
+	    log.debug("Returning select series {}",selectedSeries);
+	    return selectedSeries;
 	}
 
 
