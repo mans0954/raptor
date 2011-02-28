@@ -17,7 +17,7 @@
 
 			<rich:layoutPanel position="top">
 				<a4j:status id="stateStatus" startText="Working..."
-				startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" />
+					startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" />
 
 				<rich:simpleTogglePanel switchType="client" label="Control Panel"
 					opened="true">
@@ -26,7 +26,7 @@
 						<rich:layoutPanel position="left" width="40%">
 							<a4j:form id="ControlPanelForm">
 
-								
+
 								<rich:dataTable id="statisticalUnitsTable"
 									value="#{flowScope.websession.graphmodel.statisticalUnitsForView}"
 									bandingInterval="2" banding="row" var="unit" width="100%"
@@ -70,10 +70,10 @@
 												target="#{flowScope.websession.graphmodel.selectedStatisticalUnit}" />
 										</a4j:commandLink>
 									</rich:column>
-									
-									 <f:facet name="footer">
-              						  <rich:datascroller id="datascrollerStats" />
-           						 </f:facet>
+
+									<f:facet name="footer">
+										<rich:datascroller id="datascrollerStats" />
+									</f:facet>
 								</rich:dataTable>
 							</a4j:form>
 						</rich:layoutPanel>
@@ -86,134 +86,150 @@
 									<f:facet name="header">
                                         Options
                                      </f:facet>
-                             
-   									<h:panelGrid columns="2" width="100%" border="1">
 
-									<h:panelGrid columns="2" width="100%">
+									<h:panelGrid columns="2" width="100%" border="1">
 
-										<h:outputText value="Statistic Name:" style="font-weight: bold;" />
-										<h:outputText
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.unitName}" />
+										<h:panelGrid columns="2" width="100%">
 
-
-										<h:outputText value="Start Time:" style="font-weight: bold;" />
-										
-										<rich:calendar id="startTimeDate" showApplyButton="true"
-											datePattern="dd/MM/yyyy HH:mm"
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.startTimeAsJavaDate}">
-										</rich:calendar>
-										
+											<h:outputText value="Statistic Name:"
+												style="font-weight: bold;" />
+											<h:outputText
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.unitName}" />
 
 
-										<h:outputText value="End Time:" style="font-weight: bold;" />
-										<rich:calendar id="endTimeDate" showApplyButton="true"
-											datePattern="dd/MM/yyyy HH:mm"
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.endTimeAsJavaDate}">
-										</rich:calendar>
+											<h:outputText value="Start Time:" style="font-weight: bold;" />
 
-
-										<h:outputText value="Parameters:" style="font-weight: bold;" />
-										<rich:dataTable
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.methodParams}"
-											var="parameter" width="95%" labelWidth="5%"
-											style="width:100%;">
-										
-											<rich:column inlineStyle="border-style: hidden;">
-												<h:outputText value="#{parameter.parameterName}">
-												</h:outputText>
-											</rich:column>
-											<rich:column inlineStyle="border-style: hidden;">
-												<h:inputText rendered="#{empty parameter.possibleValues}" value="#{parameter.value}">
-												</h:inputText>
-												<rich:comboBox rendered="#{not empty parameter.possibleValues}" value="#{parameter.value}" suggestionValues="#{parameter.possibleValues}" />
-											</rich:column>
-										</rich:dataTable>
-
-
-										<h:outputText value="Graph Title:" style="font-weight: bold;" />
-										<h:inputText style="width:100%;"
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
-
-										<h:outputText value="Preprocessors:"
-											style="font-weight: bold; width:100%" />
-										<h:inputText style="width:100%;"
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.preProcessorsAsString}" />
-
-
-										<h:outputText value="Postprocessors:"
-											style="font-weight: bold;" />
-										<h:inputText style="width:100%;"
-											value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.postProcessorsAsString}" />
+											<rich:calendar id="startTimeDate" showApplyButton="true"
+												datePattern="dd/MM/yyyy HH:mm"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.startTimeAsJavaDate}">
+											</rich:calendar>
 
 
 
-										<f:facet name="footer">
-											<h:panelGroup style="display:block; text-align:center">
-												<a4j:commandButton ajaxSingle="false" value="update">
-													<!--  added the support here, as the command button needs to submit the form properties, which it only does
-													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
-													<a4j:support ajaxSingle="true" event="oncomplete"
-														action="updateMUAStatistic"
-														reRender="optionsPanelForm,controlPanelForm, chartForm" />
+											<h:outputText value="End Time:" style="font-weight: bold;" />
+											<rich:calendar id="endTimeDate" showApplyButton="true"
+												datePattern="dd/MM/yyyy HH:mm"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.endTimeAsJavaDate}">
+											</rich:calendar>
 
-												</a4j:commandButton>
-											</h:panelGroup>
-										</f:facet>
 
-									</h:panelGrid>
-									
-								
-									<h:panelGrid columns="2" width="100%">
-										<rich:dataTable id="statisticalUnitsTable"
-									value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.series}"
-									bandingInterval="2" banding="row" var="series" width="100%"
-									 rows="10"  rowKeyVar="row"
-									rendered="#{not empty flowScope.websession.graphmodel.statisticalUnitsForView}">
-									
-											<f:facet name="header">
-												<h:outputText value="Chart Series"/>
-											</f:facet>
-											
+											<h:outputText value="Parameters:" style="font-weight: bold;" />
+											<rich:dataTable
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.methodParams}"
+												var="parameter" width="95%" labelWidth="5%"
+												style="width:100%;">
+
+												<rich:column inlineStyle="border-style: hidden;">
+													<h:outputText value="#{parameter.parameterName}">
+													</h:outputText>
+												</rich:column>
+												<rich:column inlineStyle="border-style: hidden;">
+													<h:inputText rendered="#{empty parameter.possibleValues}"
+														value="#{parameter.value}">
+													</h:inputText>
+													<rich:comboBox
+														rendered="#{not empty parameter.possibleValues}"
+														value="#{parameter.value}"
+														suggestionValues="#{parameter.possibleValues}" />
+												</rich:column>
+											</rich:dataTable>
+
+
+											<h:outputText value="Graph Title:" style="font-weight: bold;" />
+											<h:inputText style="width:100%;"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
+
+											<h:outputText value="Preprocessors:"
+												style="font-weight: bold; width:100%" />
+											<h:inputText style="width:100%;"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.preProcessorsAsString}" />
+
+
+											<h:outputText value="Postprocessors:"
+												style="font-weight: bold;" />
+											<h:inputText style="width:100%;"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.postProcessorsAsString}" />
+
+
+
 											<f:facet name="footer">
-													<h:graphicImage style="width:20px" value="/image/icon/onebit_31.png"/>
+												<h:panelGroup style="display:block; text-align:center">
+													<a4j:commandButton ajaxSingle="false" value="update">
+														<!--  added the support here, as the command button needs to submit the form properties, which it only does
+													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
+														<a4j:support ajaxSingle="true" event="oncomplete"
+															action="updateMUAStatistic"
+															reRender="optionsPanelForm,controlPanelForm, chartForm" />
+
+													</a4j:commandButton>
+												</h:panelGroup>
 											</f:facet>
-										
-											<rich:column>
+
+										</h:panelGrid>
+
+
+										<h:panelGrid columns="2" width="100%">
+											<rich:dataTable id="statisticalUnitsTable"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.series}"
+												bandingInterval="2" banding="row" var="series" width="100%"
+												rows="10" rowKeyVar="row"
+												rendered="#{not empty flowScope.websession.graphmodel.statisticalUnitsForView}">
+
 												<f:facet name="header">
-													<h:outputText value="No."/>
+													<h:outputText value="Chart Series" />
 												</f:facet>
-												<h:outputText value="#{row}"/>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Series Label"/>
+
+												<f:facet name="footer">
+													<h:graphicImage style="width:20px"
+														value="/image/icon/onebit_31.png" />
 												</f:facet>
-												
-												<h:inputText value="#{series.seriesLabel}"/>
-											</rich:column>
-											<rich:column>
-												<f:facet name="header">
-													<h:outputText value="Condition"/>
-												</f:facet>	
-												<h:panelGrid>
-												<h:graphicImage id="conditionImage" style="width:20px" value="/image/icon/onebit_39.png" rendered="#{not empty series.comparisonPredicate}"/>
-												<rich:componentControl for="seriesModalPanel" attachTo="conditionImage" operation="show" event="onclick"/>
-												</h:panelGrid>																					
-											</rich:column>
-											<rich:column >
-												<f:facet name="header">
-													<h:outputText value="Remove"/>
-												</f:facet>												
-												<h:graphicImage style="width:20px; text-align: center;" value="/image/icon/onebit_33.png" />
-											</rich:column>
-										
-										</rich:dataTable>
-									
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="No." />
+													</f:facet>
+													<h:outputText value="#{row}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Series Label" />
+													</f:facet>
+
+													<h:inputText value="#{series.seriesLabel}" />
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Condition" />
+													</f:facet>
+													<h:panelGrid>
+														<a4j:commandLink ajaxSingle="false"
+															id="conditionModalPanelLink" immediate="true">
+															<h:graphicImage id="conditionImage" style="width:20px"
+																value="/image/icon/onebit_39.png"
+																rendered="#{not empty series.comparisonPredicate}" />
+															<f:setPropertyActionListener value="#{series}"
+																target="#{flowScope.websession.graphmodel.selectedSeries}" />
+															<rich:componentControl for="seriesModalPanel"
+																attachTo="conditionImage" operation="show"
+																event="onclick" />
+														</a4j:commandLink>
+													</h:panelGrid>
+												</rich:column>
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Remove" />
+													</f:facet>
+													<h:graphicImage style="width:20px; text-align: center;"
+														value="/image/icon/onebit_33.png" />
+												</rich:column>
+
+											</rich:dataTable>
+
+										</h:panelGrid>
+
 									</h:panelGrid>
-									
-									</h:panelGrid>
-								
-								
+
+
 								</rich:panel>
 							</a4j:form>
 						</rich:layoutPanel>
@@ -255,7 +271,7 @@
 							<rich:dataTable id="currentTableGraphTable"
 								value="#{flowScope.websession.graphmodel.currentTableGraph.rowList}"
 								bandingInterval="2" banding="row" rows="25" var="unit"
-								width="100%" 
+								width="100%"
 								rendered="#{not empty flowScope.websession.graphmodel.currentTableGraph}">
 								<f:facet name="header">
 									<h:outputText
@@ -263,16 +279,16 @@
 								</f:facet>
 								<rich:columns
 									value="#{flowScope.websession.graphmodel.currentTableGraph.series}"
-									var="columns" index="index" id="column#{index}" sortBy="#{columns}"
-									filterBy="#{columns}" filterEvent="onkeyup">
+									var="columns" index="index" id="column#{index}"
+									sortBy="#{columns}" filterBy="#{columns}" filterEvent="onkeyup">
 									<f:facet name="header">
 										<h:outputText value="#{columns}" />
 									</f:facet>
 									<h:outputText value="#{unit[index]}" />
 								</rich:columns>
-								 <f:facet name="footer">
-              						  <rich:datascroller id="datascroller" />
-           						 </f:facet>
+								<f:facet name="footer">
+									<rich:datascroller id="datascroller" />
+								</f:facet>
 							</rich:dataTable>
 
 						</rich:tab>

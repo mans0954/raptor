@@ -8,18 +8,22 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich">
 
-    <rich:modalPanel id="seriesModalPanel" width="400" height="400" zindex="2000">
-            <f:facet name="header">
-                <h:outputText value="Condition"/>
-            </f:facet>
-            <f:facet name="controls">
-            <h:panelGroup>
-                <h:graphicImage value="/image/icon/onebit_35.png" width="20px" styleClass="hidelink" id="hidelink"/>
-                <rich:componentControl for="seriesModalPanel" attachTo="hidelink" operation="hide" event="onclick"/>
-            </h:panelGroup>
-            <h:outputText value=""/>
-        </f:facet>
-            
-     </rich:modalPanel>
+	<rich:modalPanel id="seriesModalPanel" width="400" height="400"
+		zindex="2000">
+		<f:facet name="header">
+			<h:outputText value="Condition" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/image/icon/onebit_35.png" width="20px"
+					styleClass="hidelink" id="hidelink" />
+				<rich:componentControl for="seriesModalPanel" attachTo="hidelink"
+					operation="hide" event="onclick" />
+			</h:panelGroup>			
+		</f:facet>
+
+		<h:outputText value="This is a text #{flowScope.websession.graphmodel.selectedSeries.seriesLabel}" />
+
+	</rich:modalPanel>
 
 </ui:composition>
