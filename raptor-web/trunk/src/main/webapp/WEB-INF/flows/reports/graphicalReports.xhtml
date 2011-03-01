@@ -23,7 +23,7 @@
 					opened="true">
 
 					<rich:layout>
-						<rich:layoutPanel position="left" width="40%">
+						<rich:layoutPanel position="left" width="30%">
 							<a4j:form id="ControlPanelForm">
 
 
@@ -58,6 +58,9 @@
 										<f:facet name="header">
 											<h:outputText value="Modify" />
 										</f:facet>
+
+
+
 										<a4j:commandLink ajaxSingle="true"
 											reRender="optionsPanel,ControlPanelForm">
 											<h:graphicImage value="/image/icon/onebit_20.png"
@@ -87,7 +90,7 @@
                                         Options
                                      </f:facet>
 
-									<h:panelGrid columns="2" width="100%" border="1">
+									<h:panelGrid rendered="#{not empty flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation}" columns="2" width="100%" border="0">
 
 										<h:panelGrid columns="2" width="100%">
 
@@ -173,7 +176,7 @@
 												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.series}"
 												bandingInterval="2" banding="row" var="series" width="100%"
 												rows="10" rowKeyVar="row"
-												rendered="#{not empty flowScope.websession.graphmodel.statisticalUnitsForView}">
+												rendered="#{not empty flowScope.websession.graphmodel.selectedStatisticalUnit}">
 
 												<f:facet name="header">
 													<h:outputText value="Chart Series" />
@@ -195,29 +198,26 @@
 														<h:outputText value="Series Label" />
 													</f:facet>
 
-													<h:inputText value="#{series.seriesLabel}" />
+													<h:inputText style="width:100%;" value="#{series.seriesLabel}" />
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Condition" />
+														<h:outputText value="Filter" />
 													</f:facet>
 													<h:panelGrid>
-														<a4j:commandLink ajaxSingle="false"
-															id="conditionModalPanelLink" immediate="true">
+														<a4j:commandLink  immediate="true" oncomplete="#{rich:component('seriesModalPanel')}.show()"
+															id="conditionModalPanelLink" reRender="seriesModalPanel,currentSeriesTable">
 															<h:graphicImage id="conditionImage" style="width:20px"
 																value="/image/icon/onebit_39.png"
 																rendered="#{not empty series.comparisonPredicate}" />
 															<f:setPropertyActionListener value="#{series}"
 																target="#{flowScope.websession.graphmodel.selectedSeries}" />
-															<rich:componentControl for="seriesModalPanel"
-																attachTo="conditionImage" operation="show"
-																event="onclick" />
 														</a4j:commandLink>
 													</h:panelGrid>
 												</rich:column>
 												<rich:column>
 													<f:facet name="header">
-														<h:outputText value="Remove" />
+														<h:outputText value="" />
 													</f:facet>
 													<h:graphicImage style="width:20px; text-align: center;"
 														value="/image/icon/onebit_33.png" />

@@ -57,8 +57,8 @@ public class ServiceEndpointInterface {
 	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
 	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
 	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(10);
-	    httpClientPolicy.setReceiveTimeout(20);
+	    httpClientPolicy.setConnectionTimeout(1000);
+	    httpClientPolicy.setReceiveTimeout(2000);
 	    httpConduit.setClient(httpClientPolicy);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    capabilities = client.getCapabilities();
@@ -75,7 +75,7 @@ public class ServiceEndpointInterface {
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
-	   // e.printStackTrace();
+	    //e.printStackTrace();
 	}
 	return capabilities;
 
