@@ -60,14 +60,14 @@ public class StatisticParameters implements Serializable{
 	/*
 	 * A statistic for use by the USER. Possibly removed in the future, in favour of individual
 	 * user based statistics
-	 */ 
+	 */
 	 USER,
 	 /*
-	  * A statistic for use by the system level processes, e.g. to generate dashboard 
+	  * A statistic for use by the system level processes, e.g. to generate dashboard
 	  * statistics
 	  */
 	 SYSTEM};
-	 
+
     private StatisticType type;
 
 
@@ -133,7 +133,7 @@ public class StatisticParameters implements Serializable{
     public void setStartTime(String startTime) {
 	this.startTime = formatDate(startTime, false);
 	this.startTimeJava = new Date (this.startTime.getMillis());
-	
+
     }
 
     public String getStartTime() {
@@ -162,7 +162,7 @@ public class StatisticParameters implements Serializable{
     }
 
     /**
-     * for output on the web page 
+     * for output on the web page
      * @param date
      */
     public Date getStartTimeAsJavaDate(){
@@ -336,6 +336,7 @@ public class StatisticParameters implements Serializable{
     public Presentation getPresentation() {
 	return presentation;
     }
+
 
     public void setSeries(List<Series> series) {
 	this.series = series;
