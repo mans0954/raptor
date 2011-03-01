@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.MUAMetadata;
+import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
@@ -42,7 +43,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class MUAEngine {
 	static Logger log = LoggerFactory.getLogger(MUAEngine.class);
@@ -99,6 +100,7 @@ public class MUAEngine {
 	}
 
 	/**
+	 * Gets the capabilities of this MUA, also sets some default values and possible values for the calling component to use
 	 * @return
 	 */
 	public Capabilities getCapabilities() {
@@ -119,6 +121,14 @@ public class MUAEngine {
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
 		for (Statistic entry : su) {
 			StatisticalUnitInformation information = new StatisticalUnitInformation();
+
+			//set the possible values for the filter, if any, on the series
+			List<Series> seriesList = entry.getStatisticParameters().getSeries();
+			for (Series series : seriesList){
+			    if (series.getComparisonPredicate()!=null)
+				series.getComparisonPredicate().setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+			}
+
 			information.setStatisticParameters(entry.getStatisticParameters());
 
 			ArrayList<String> postprocessors = new ArrayList();
@@ -137,14 +147,14 @@ public class MUAEngine {
 			stats.add(information);
 		}
 		capabilities.setStatisticalServices(stats);
-		log.debug("Constructed MUA Capabilities");
+		log.debug("Constructed MUA Capabilities, {}",capabilities);
 		return capabilities;
 	}
 
 	/**
 	 * Sets the configured entry handler. Must also then initialise that entry
 	 * handler
-	 * 
+	 *
 	 * @param entryHandler
 	 */
 	public void setEntryHandler(EntryHandler entryHandler) {
