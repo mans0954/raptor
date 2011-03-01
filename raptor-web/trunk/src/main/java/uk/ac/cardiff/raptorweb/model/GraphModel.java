@@ -16,8 +16,8 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
 public class GraphModel implements Serializable{
-	
-    
+
+
 
     	private static final long serialVersionUID = -2803349385469406219L;
 
@@ -33,7 +33,7 @@ public class GraphModel implements Serializable{
 	private RaptorJFreeChartModel currentJFreeGraph;
 	private String controlPanelSize;
 	private List<StatisticalUnitInformationView> statisticalUnitsForView;
-	
+
 	/* for series modal panel*/
 	private Series selectedSeries;
 
@@ -49,12 +49,12 @@ public class GraphModel implements Serializable{
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
-	    
+
 	    //create a blank selected statistical unit for display
 	    selectedStatisticalUnit = new StatisticalUnitInformationView();
-	    StatisticalUnitInformation tmp = new StatisticalUnitInformation();
-	    tmp.setStatisticParameters(new StatisticParameters());
-	    selectedStatisticalUnit.setStatisticalUnitInformation(tmp);
+	  //  StatisticalUnitInformation tmp = new StatisticalUnitInformation();
+	   // tmp.setStatisticParameters(new StatisticParameters());
+	   // selectedStatisticalUnit.setStatisticalUnitInformation(tmp);
 
 	}
 
@@ -161,12 +161,10 @@ public class GraphModel implements Serializable{
 	}
 
 	public void setSelectedSeries(Series selectedSeries) {
-	    log.debug("Selected Series {}",selectedSeries);
 	    this.selectedSeries = selectedSeries;
 	}
 
 	public Series getSelectedSeries() {
-	    log.debug("Returning select series {}",selectedSeries);
 	    return selectedSeries;
 	}
 
