@@ -173,26 +173,13 @@ public class StatisticsHandler {
 	}
 
 	/**
-	 * Only currently updates certain values, these will need to be completed in
-	 * the future
+	 * Updates the statistical parameters of the statistic, does not yet handle the post processors
 	 *
 	 * @param statistic
 	 * @param statisticalUnitInformation
 	 */
 	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
-		
-		if (statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate() != null)
-			statistic.getStatisticParameters().setEndTime(
-					statisticalUnitInformation.getStatisticParameters().getEndTimeAsDate());
-		if (statisticalUnitInformation.getStatisticParameters().getStartTimeAsDate() != null)
-			statistic.getStatisticParameters().setStartTime(
-					statisticalUnitInformation.getStatisticParameters().getStartTimeAsDate());
-		if (statisticalUnitInformation.getStatisticParameters().getMethodParams() != null)
-			statistic.getStatisticParameters().setMethodParams(
-					statisticalUnitInformation.getStatisticParameters().getMethodParams());
-		if (statisticalUnitInformation.getStatisticParameters().getPresentation().getGraphTitle() != null)
-			statistic.getStatisticParameters().getPresentation().setGraphTitle(
-					statisticalUnitInformation.getStatisticParameters().getPresentation().getGraphTitle());
+		statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
 	}
 
 	/**
