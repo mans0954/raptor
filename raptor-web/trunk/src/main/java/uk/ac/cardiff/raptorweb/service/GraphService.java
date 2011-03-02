@@ -39,4 +39,9 @@ public interface GraphService {
 	public Capabilities getAttachedCapabilities();
 
 	public MUAEntry getCurrentlyAttached();
+
+	public void removeSeriesFromSelectedStatistic(WebSession websession);
+
+	public void addSeriesToSelectedStatistic(WebSession websession);
+
 }
