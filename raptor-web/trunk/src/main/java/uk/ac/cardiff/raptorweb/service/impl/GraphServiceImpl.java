@@ -183,5 +183,17 @@ public class GraphServiceImpl implements GraphService{
 
 	}
 
+	@Override
+	public void addFilterToSelectedSeries(WebSession websession) {
+	    websession.getGraphmodel().getSelectedStatisticalUnit().addFilterToSeries(websession.getGraphmodel().getSelectedSeries());
+	    
+	}
+
+	@Override
+	public void removeSelectedFilterFromSelectedStatistic(WebSession websession) {
+	    websession.getGraphmodel().getSelectedStatisticalUnit().removeFilterFromSeries(websession.getGraphmodel().getSelectedSeries());
+	    
+	}
+
 
 }

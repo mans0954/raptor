@@ -68,12 +68,20 @@
 			<evaluate expression="graphService.generateCSVReport(flowScope.websession)" />
 		</transition>
 
-		<transition on="removeSelectedFilterFromSelectedStatistic">
+		<transition on="removeSeriesFromSelectedStatistic">
 		      <evaluate expression="graphService.removeSeriesFromSelectedStatistic(flowScope.websession)"/>
+		</transition>
+		
+		<transition on="removeSelectedFilterFromSelectedStatistic">
+		      <evaluate expression="graphService.removeSelectedFilterFromSelectedStatistic(flowScope.websession)"/>
 		</transition>
 
 		<transition on="addSeriesToSelectedStatistic">
 		  <evaluate expression="graphService.addSeriesToSelectedStatistic(flowScope.websession)"></evaluate>
+		</transition>
+		
+		<transition on="addFilterToSelectedSeries">
+			<evaluate expression="graphService.addFilterToSelectedSeries(flowScope.websession)"></evaluate>
 		</transition>
 
 

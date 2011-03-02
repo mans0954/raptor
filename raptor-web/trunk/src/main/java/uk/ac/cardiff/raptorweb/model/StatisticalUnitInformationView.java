@@ -4,8 +4,10 @@
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import uk.ac.cardiff.model.Series;
+import uk.ac.cardiff.model.sql.ComparisonPredicate;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
@@ -48,6 +50,25 @@ public class StatisticalUnitInformationView implements Serializable{
 	newSeries.setSeriesLabel("Please Change This Label");
 	statisticalUnitInformation.getStatisticParameters().getSeries().add(newSeries);
 
+    }
+    public void addFilterToSeries(Series selectedSeries) {
+	List<Series> seriesList = statisticalUnitInformation.getStatisticParameters().getSeries();
+	for (Series series: seriesList){
+	    if (series == selectedSeries){
+		if (series.getComparisonPredicate()==null)
+		    series.setComparisonPredicate(new ComparisonPredicate());
+	    }
+	}
+	
+    }
+    public void removeFilterFromSeries(Series selectedSeries) {
+	List<Series> seriesList = statisticalUnitInformation.getStatisticParameters().getSeries();
+	for (Series series: seriesList){
+	    if (series == selectedSeries){
+		series.setComparisonPredicate(null);
+	    }
+	}
+	
     }
 
 }
