@@ -217,24 +217,22 @@
 														<f:setPropertyActionListener value="#{series}"
 															target="#{flowScope.websession.graphmodel.selectedSeries}" />
 													</a4j:commandLink>
-													<!--<a4j:commandLink immediate="true"
-                                                        action="addSeriesToSelectedStatistic"
+													<a4j:commandLink immediate="true" oncomplete="#{rich:component('seriesModalPanel')}.show()"
                                                         id="conditionModalPanelLinkAdd" rendered="#{empty series.comparisonPredicate}"
-                                                        reRender="seriesModalPanel,currentSeriesTable">
+                                                        reRender="seriesModalPanel,seriesTable" action="addFilterToSelectedSeries">
                                                         <h:graphicImage id="conditionImage" style="width:20px; border:0; margin-left: auto;margin-right: auto;"
-                                                            value="/image/icon/onebit_31.png"
-                                                             />
+                                                            value="/image/icon/onebit_31.png"/>
                                                         <f:setPropertyActionListener value="#{series}"
                                                             target="#{flowScope.websession.graphmodel.selectedSeries}" />
                                                     </a4j:commandLink>
 
-												--></rich:column>
+												</rich:column>
 												<rich:column>
 													<f:facet name="header">
 														<h:outputText value="Remove" />
 													</f:facet>
 													<a4j:commandLink immediate="true"
-														action="removeSelectedFilterFromSelectedStatistic"
+														action="removeSeriesFromSelectedStatistic"
 														id="removeSeriesLink" reRender="optionsPanelForm">
 														<h:graphicImage style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 															value="/image/icon/onebit_33.png" />

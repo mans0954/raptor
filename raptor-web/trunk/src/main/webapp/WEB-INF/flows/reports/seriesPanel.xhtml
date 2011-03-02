@@ -22,11 +22,11 @@
 					operation="hide" event="onclick" />
 			</h:panelGroup>
 		</f:facet>
-		<a4j:form>
-			<rich:dataTable id="currentSeriesTable"
-				value="#{flowScope.websession.graphmodel.selectedSeries}"
+		<a4j:form id="filterTableForm">
+			<rich:dataTable id="filterTable"
+				value="#{flowScope.websession.graphmodel.selectedSeries.comparisonPredicate}"
 				bandingInterval="2" banding="row" rows="5" var="series" width="100%"
-				rendered="#{not empty flowScope.websession.graphmodel.selectedSeries}">
+				rendered="#{not empty flowScope.websession.graphmodel.selectedSeries.comparisonPredicate}">
 
 				<f:facet name="header">
 					<h:outputText value="Filter Conditions" />
@@ -36,36 +36,48 @@
 					<f:facet name="header">
 						<h:outputText value="Field" />
 					</f:facet>
-					<rich:comboBox style="width:100%" value="#{series.comparisonPredicate.fieldName}" suggestionValues="#{series.comparisonPredicate.possibleFieldNameValues}">
-                    </rich:comboBox>
+					<rich:comboBox style="width:100%" value="#{series.fieldName}"
+						suggestionValues="#{series.possibleFieldNameValues}">
+					</rich:comboBox>
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="Operator" />
 					</f:facet>
-					<rich:comboBox value="#{series.comparisonPredicate.compOp}" suggestionValues="#{series.comparisonPredicate.possibleComparisonOperatorValues}">
+					<rich:comboBox value="#{series.compOp}"
+						suggestionValues="#{series.possibleComparisonOperatorValues}">
 					</rich:comboBox>
 				</rich:column>
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="Value" />
 					</f:facet>
-					<h:inputText style="width:100%" value="#{series.comparisonPredicate.value}" />
+					<h:inputText style="width:100%" value="#{series.value}" />
 				</rich:column>
 				<!--  can not remove or add filters for the v1.0 so this is redundent -->
 				<rich:column>
 					<f:facet name="header">
 						<h:outputText value="Remove" />
 					</f:facet>
-					<h:graphicImage style="width:20px; text-align: center;"
-						value="/image/icon/onebit_33.png" />
+
+					<a4j:commandLink immediate="true"
+						action="removeSelectedFilterFromSelectedStatistic"
+						id="removeFilterLink" reRender="filterTableForm,seriesModalPanel,optionsPanelForm"
+						oncomplete="#{rich:component('seriesModalPanel')}.hide()" >
+						<h:graphicImage
+							style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+							value="/image/icon/onebit_33.png" />
+					</a4j:commandLink>
 				</rich:column>
 
 			</rich:dataTable>
 
-			<a4j:commandButton value="Save" onclick="#{rich:component('seriesModalPanel')}.hide()"/>
+
+			<a4j:commandButton value="Save"
+				onclick="#{rich:component('seriesModalPanel')}.hide()" />
 			<!-- return false, after onclick nothing else is done e.g. a form submit -->
-			<a4j:commandButton value="Close" onclick="#{rich:component('seriesModalPanel')}.hide(); return false;"/>
+			<a4j:commandButton value="Close"
+				onclick="#{rich:component('seriesModalPanel')}.hide(); return false;" />
 
 		</a4j:form>
 

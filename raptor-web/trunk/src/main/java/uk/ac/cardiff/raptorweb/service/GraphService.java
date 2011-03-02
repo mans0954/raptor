@@ -41,7 +41,11 @@ public interface GraphService {
 	public MUAEntry getCurrentlyAttached();
 
 	public void removeSeriesFromSelectedStatistic(WebSession websession);
+	
+	public void removeSelectedFilterFromSelectedStatistic(WebSession websession);
 
 	public void addSeriesToSelectedStatistic(WebSession websession);
+	
+	public void addFilterToSelectedSeries(WebSession websession);
 
 }
