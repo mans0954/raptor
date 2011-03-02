@@ -42,9 +42,9 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
  * <code>SoapFault</code>. Fault codes are: Client (if a malformed input e.g.
  * statistic name is wrong) Server (we use for locks, as server side issue)
  * VersionMismatch MustUnderstand
- * 
+ *
  * @author philsmart
- * 
+ *
  */
 public class MUAProcessImpl implements MUAProcess {
 
@@ -70,9 +70,9 @@ public class MUAProcessImpl implements MUAProcess {
 	/*
 	 * The MUA no longer polls for data from the UA, but this is still here in
 	 * case it is needed
-	 * 
+	 *
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#poll()
 	 */
 	public void poll() {
@@ -92,7 +92,7 @@ public class MUAProcessImpl implements MUAProcess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang
 	 * .String)
@@ -117,7 +117,7 @@ public class MUAProcessImpl implements MUAProcess {
 
 	/*
 	 * Method does not need to be locked. (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
 	 */
 	public Capabilities getCapabilities() {
@@ -127,7 +127,7 @@ public class MUAProcessImpl implements MUAProcess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.service.MUAProcess#setStatisticalUnit(uk.ac.cardiff
 	 * .model.wsmodel.StatisticalUnitInformation)
@@ -137,8 +137,7 @@ public class MUAProcessImpl implements MUAProcess {
 		boolean success = false;
 		if (lockR.tryLock()) {
 			try {
-				log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters()
-						.getUnitName());
+				log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
 				engine.updateStatisticalUnit(statisticalUnitInformation);
 				success = true;
 			} catch (Exception e) {
@@ -157,7 +156,7 @@ public class MUAProcessImpl implements MUAProcess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.service.MUAProcess#performAdministrativeFunction
 	 * (uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
@@ -186,7 +185,7 @@ public class MUAProcessImpl implements MUAProcess {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.service.MUAProcess#addAuthentications(uk.ac.cardiff
 	 * .model.wsmodel.UAEntryPush)
