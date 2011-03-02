@@ -57,4 +57,12 @@ public class ComparisonPredicate implements Serializable{
 	return CompOp.values();
     }
 
+    /**
+     * Does not set anything, only used to maintain compatibility with XML bindings
+     * @param compValues
+     */
+    public void setPossibleComparisonOperatorValues(CompOp[] compValues){
+
+    }
+
 }
