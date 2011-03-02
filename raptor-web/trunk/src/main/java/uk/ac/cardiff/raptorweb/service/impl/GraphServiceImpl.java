@@ -164,5 +164,24 @@ public class GraphServiceImpl implements GraphService{
 	    return chartProcessor;
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.GraphService#removeSeriesFromSelectedStatistic(uk.ac.cardiff.raptorweb.model.WebSession)
+	 */
+	@Override
+	public void removeSeriesFromSelectedStatistic(WebSession websession) {
+	    log.debug("Removing selected series {}",websession.getGraphmodel().getSelectedSeries().getSeriesLabel());
+	    websession.getGraphmodel().getSelectedStatisticalUnit().removeSeries(websession.getGraphmodel().getSelectedSeries());
+
+	}
+
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptorweb.service.GraphService#addSeriesToSelectedStatistic(uk.ac.cardiff.raptorweb.model.WebSession)
+	 */
+	@Override
+	public void addSeriesToSelectedStatistic(WebSession websession) {
+	    websession.getGraphmodel().getSelectedStatisticalUnit().addSeries();
+
+	}
+
 
 }
