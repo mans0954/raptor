@@ -27,7 +27,7 @@ public class ComparisonPredicate implements Serializable{
     private String fieldName;
     private String value;
 
-    private List<String> possibleFieldNameValues;
+
 
     public void setCompOp(CompOp compOp) {
 	this.compOp = compOp;
@@ -47,12 +47,7 @@ public class ComparisonPredicate implements Serializable{
     public String getValue() {
 	return value;
     }
-    public void setPossibleFieldNameValues(List<String> possibleFieldNameValues) {
-	this.possibleFieldNameValues = possibleFieldNameValues;
-    }
-    public List<String> getPossibleFieldNameValues() {
-	return possibleFieldNameValues;
-    }
+
     public CompOp[] getPossibleComparisonOperatorValues() {
 	return CompOp.values();
     }

@@ -21,6 +21,7 @@ public class Capabilities implements Serializable{
 	private String errorMessage;
 	private boolean error;
 	private MUAMetadata muaMetadata;
+	private SuggestionValues suggestionValues;
 
 
 
@@ -76,6 +77,12 @@ public class Capabilities implements Serializable{
 	 */
 	public MUAMetadata getMuaMetadata() {
 	    return muaMetadata;
+	}
+	public void setSuggestionValues(SuggestionValues suggestionValues) {
+	    this.suggestionValues = suggestionValues;
+	}
+	public SuggestionValues getSuggestionValues() {
+	    return suggestionValues;
 	}
 
 
