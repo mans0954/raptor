@@ -32,6 +32,7 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
@@ -117,17 +118,14 @@ public class MUAEngine {
 		for (UAEntry entry : uaentries)
 			ua.add(entry.getServiceEndpoint());
 		capabilities.setAttached(ua);
+		
+		//set possible values
+		SuggestionValues suggestionValues = new SuggestionValues();
+		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
 		for (Statistic entry : su) {
 			StatisticalUnitInformation information = new StatisticalUnitInformation();
-
-			//set the possible values for the filter, if any, on the series
-			List<Series> seriesList = entry.getStatisticParameters().getSeries();
-			for (Series series : seriesList){
-			    if (series.getComparisonPredicate()!=null)
-				series.getComparisonPredicate().setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
-			}
 
 			information.setStatisticParameters(entry.getStatisticParameters());
 

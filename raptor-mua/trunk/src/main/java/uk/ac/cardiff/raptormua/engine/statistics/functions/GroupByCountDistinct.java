@@ -85,11 +85,9 @@ public class GroupByCountDistinct extends Statistic{
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==2){
 			methodParams.get(0).setParameterName("Group By Field");
-			methodParams.get(0).setParameterType(ParameterType.FIELD);
-			methodParams.get(0).setPossibleValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+			methodParams.get(0).setParameterType(ParameterType.FIELD);			
 			methodParams.get(1).setParameterName("Count Distinct Field");
 			methodParams.get(1).setParameterType(ParameterType.FIELD);
-			methodParams.get(1).setPossibleValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 			
 		}
 		else{
