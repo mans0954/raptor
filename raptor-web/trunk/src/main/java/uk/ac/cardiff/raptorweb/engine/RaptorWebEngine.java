@@ -14,6 +14,7 @@ import uk.ac.cardiff.model.WebMetadata;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
@@ -70,6 +71,10 @@ public class RaptorWebEngine {
 	log.info("Attaching {} and retrieving abilities",entry);
 	this.attachedMUA = entry;
 	currentlyAttachedCapabilities = ServiceEndpointInterface.discoverMUACapabilities(attachedMUA.getServiceEndpoint());
+    }
+    
+    public SuggestionValues getSuggestionValues(){
+	return currentlyAttachedCapabilities.getSuggestionValues();
     }
 
     /**
