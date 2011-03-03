@@ -30,8 +30,7 @@ public class MethodParameter implements Serializable{
     /* value of the parameter */
     private String value;
     
-    /* List of all possible values this method parameter could take*/
-    private List<String> possibleValues;
+
 
     public void setValue(String value) {
 	this.value = value;
@@ -57,13 +56,6 @@ public class MethodParameter implements Serializable{
 	return parameterType;
     }
 
-    public void setPossibleValues(List<String> possibleValues) {
-	this.possibleValues = possibleValues;
-    }
-
-    public List<String> getPossibleValues() {
-	return possibleValues;
-    }
 
 
 
