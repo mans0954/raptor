@@ -86,8 +86,7 @@ public class GroupBy extends Statistic{
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==1){
 			methodParams.get(0).setParameterName("Group By Field");
-			methodParams.get(0).setParameterType(ParameterType.FIELD);
-			methodParams.get(0).setPossibleValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+			methodParams.get(0).setParameterType(ParameterType.FIELD);			
 		}
 		else{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
