@@ -45,6 +45,7 @@
 		<!-- populate the statisticalunit list -->
 		<on-entry>
             <evaluate expression="graphService.populateStatisticalUnits(flowScope.websession)" />
+            <evaluate expression="graphService.populateSuggestionValues(flowScope.webession)"/>
         </on-entry>
 
 		<transition on="invokeStatisticalUnit">

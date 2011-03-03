@@ -70,12 +70,15 @@ public class GraphServiceImpl implements GraphService{
 	    websession.getGraphmodel().setStatisticalUnitsForView(statisticalUnitsForView);
 
 	}
+	
+	public void populateSuggestionValues(WebSession websession){
+	    websession.getGraphmodel().setSuggestionValues(webEngine.getSuggestionValues());
+	}
 
 	/**
 	 * Only retrieves USER level units from those retrieved by the MUA. Encapsulates them in a view object
 	 */
 	public List getStatisticalUnits(){
-
 		List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
 		List<StatisticalUnitInformation> unitsForUser = new ArrayList<StatisticalUnitInformation>();
 
@@ -169,7 +172,6 @@ public class GraphServiceImpl implements GraphService{
 	 */
 	@Override
 	public void removeSeriesFromSelectedStatistic(WebSession websession) {
-	    log.debug("Removing selected series {}",websession.getGraphmodel().getSelectedSeries().getSeriesLabel());
 	    websession.getGraphmodel().getSelectedStatisticalUnit().removeSeries(websession.getGraphmodel().getSelectedSeries());
 
 	}
