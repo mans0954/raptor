@@ -37,7 +37,7 @@
 						<h:outputText value="Field" />
 					</f:facet>
 					<rich:comboBox style="width:100%" value="#{series.fieldName}"
-						suggestionValues="#{series.possibleFieldNameValues}">
+						suggestionValues="#{flowScope.websession.graphmodel.suggestionValues.possibleFieldNameValues}">
 					</rich:comboBox>
 				</rich:column>
 				<rich:column>
