@@ -74,6 +74,7 @@ public class RaptorWebEngine {
     }
     
     public SuggestionValues getSuggestionValues(){
+	log.debug("Getting Suggestion Values {}",currentlyAttachedCapabilities.getSuggestionValues());
 	return currentlyAttachedCapabilities.getSuggestionValues();
     }
 
@@ -215,5 +216,6 @@ public class RaptorWebEngine {
     public boolean hasAttached() {
 	return (attachedMUA!=null) ? true : false;
     }
+
 
 }

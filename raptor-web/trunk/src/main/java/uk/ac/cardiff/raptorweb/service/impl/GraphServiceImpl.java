@@ -15,8 +15,6 @@ import uk.ac.cardiff.model.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphPresentation;
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphType;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
@@ -124,9 +122,10 @@ public class GraphServiceImpl implements GraphService{
 	        GraphModel model = websession.getGraphmodel();
 		log.info("Graph Service Invoking "+model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
 		AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
+		model.setRawGraphModel(gmodel);
 		if (gmodel!=null){
 		    model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
-		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(GraphPresentation.FANCY,GraphType.BAR3D,gmodel, websession,1480,1024));
+		    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel,websession.getGraphmodel().getChartOptions()));
 		    model.setProcessingResult("Done");
 
 		}
@@ -194,6 +193,13 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public void removeSelectedFilterFromSelectedStatistic(WebSession websession) {
 	    websession.getGraphmodel().getSelectedStatisticalUnit().removeFilterFromSeries(websession.getGraphmodel().getSelectedSeries());
+	    
+	}
+
+	@Override
+	public void rerenderGraph(WebSession websession) {
+	    GraphModel model = websession.getGraphmodel();
+	    chartProcessor.constructJFreeGraph(model.getRawGraphModel(), model.getChartOptions());
 	    
 	}
 

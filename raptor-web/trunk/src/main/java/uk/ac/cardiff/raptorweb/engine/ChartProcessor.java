@@ -41,6 +41,9 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.raptorweb.model.ChartOptions;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorJFreeChartModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
@@ -63,20 +66,7 @@ public class ChartProcessor {
     /* allows chart name flip flop, to stop the browser from rendering an image from cache*/
     boolean flipFlopChartName;
 
-    /* allows for selection of graph type */
-    public enum GraphType {
-	BAR, AREA, BAR3D, LINE3D, LINE
-    };
-
-    /* options for how the graph is displayed */
-    public enum GraphPresentation {
-	FANCY(true), FRONT(false);
-	private boolean legend;
-
-	GraphPresentation(boolean legend) {
-	    this.legend = legend;
-	}
-    }
+    
 
     public String getRootDirectory(String user) {
 	String root = null;
@@ -119,31 +109,32 @@ public class ChartProcessor {
 	return rgraph;
     }
 
-    /**
-     * Outputs into the users home directory in the parent graph directory
-     *
-     * @param gmodel
-     * @param session
-     * @return
-     */
-    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, WebSession session, int width, int height) {
-	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, session.getUser().getName(), width, height,null);
 
+    
+    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, String user, ChartOptions chartOptions){
+	return doConstructJFreeGraphBar(gmodel, chartOptions,user,null);
     }
-
+    
     /**
      * Will output into the root graphs directory
-     *
+     * 
      * @param gmodel
+     * @param chartOptions
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, int width, int height) {
-	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height,null);
+    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, ChartOptions chartOptions){
+	return doConstructJFreeGraphBar(gmodel, chartOptions,"",null);
     }
 
 
-    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, int width, int height, String filename) {
-	return doConstructJFreeGraphBar(graphPresentation, graphType, gmodel, "", width, height, filename);
+
+    public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, ChartType graphType, AggregatorGraphModel gmodel, int width, int height, String filename) {
+	ChartOptions chartOptions = new ChartOptions();
+	chartOptions.setImageHeight(height);
+	chartOptions.setImageWidth(width);
+	chartOptions.setGraphPresentation(graphPresentation);
+	chartOptions.setGraphType(graphType);
+	return doConstructJFreeGraphBar( gmodel, chartOptions,"",filename);
     }
 
     /**
@@ -153,8 +144,8 @@ public class ChartProcessor {
      * @param session
      * @return
      */
-    private RaptorJFreeChartModel doConstructJFreeGraphBar(GraphPresentation graphPresentation, GraphType graphType, AggregatorGraphModel gmodel, String user, int width, int height, String filename) {
-	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { graphType, graphPresentation, graphPresentation.legend, width, height });
+    private RaptorJFreeChartModel doConstructJFreeGraphBar(AggregatorGraphModel gmodel, ChartOptions chartOptions, String user, String filename) {
+	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { chartOptions.getGraphType(), chartOptions.getGraphPresentation(), chartOptions.getGraphPresentation().getLegend(), chartOptions.getImageWidth(), chartOptions.getImageHeight() });
 	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
 	// construct the graph
@@ -177,23 +168,30 @@ public class ChartProcessor {
 	    if (gmodel.getPresentation().getyAxisLabel() != null)
 		yAxisLabel = gmodel.getPresentation().getyAxisLabel();
 	}
-
+	
+	//initialise default, then change on condition
+	PlotOrientation plotOrientation = PlotOrientation.HORIZONTAL;
+	if (chartOptions.getOrientation()==ChartOptions.OrientationType.HORIZONTAL)
+	    plotOrientation = PlotOrientation.HORIZONTAL;
+	else if (chartOptions.getOrientation()==ChartOptions.OrientationType.VERTICAL)
+	    plotOrientation = PlotOrientation.VERTICAL;
+	
 	log.debug("Graph Setup with Title {}, xAxisLabel {}, yAxisLabel {}", new Object[] { chartTitle, xAxisLabel, yAxisLabel });
-	if (graphType == GraphType.BAR3D)
-	    chart = ChartFactory.createBarChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.AREA)
-	    chart = ChartFactory.createAreaChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.LINE3D)
-	    chart = ChartFactory.createLineChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.BAR)
-	    chart = ChartFactory.createBarChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
-	else if (graphType == GraphType.LINE)
-	    chart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, PlotOrientation.VERTICAL, graphPresentation.legend, true, false);
+	if (chartOptions.getGraphType() == ChartType.BAR3D)
+	    chart = ChartFactory.createBarChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
+	else if (chartOptions.getGraphType() == ChartType.AREA)
+	    chart = ChartFactory.createAreaChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation,chartOptions.getGraphPresentation().getLegend(), true, false);
+	else if (chartOptions.getGraphType() == ChartType.LINE3D)
+	    chart = ChartFactory.createLineChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
+	else if (chartOptions.getGraphType() == ChartType.BAR)
+	    chart = ChartFactory.createBarChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
+	else if (chartOptions.getGraphType() == ChartType.LINE)
+	    chart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
 
 	// setup the graph output
-	if (graphPresentation == GraphPresentation.FANCY)
+	if (chartOptions.getGraphPresentation() == GraphPresentation.FANCY)
 	    fancyGraphOutput(chart);
-	else if (graphPresentation == GraphPresentation.FRONT)
+	else if (chartOptions.getGraphPresentation() == GraphPresentation.FRONT)
 	    frontGraphOutput(chart);
 
 	// save the graph
@@ -208,17 +206,17 @@ public class ChartProcessor {
 	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+ran+".png");
 
 	// png is used for screen output
-	if (graphPresentation == GraphPresentation.FANCY) {
+	if (chartOptions.getGraphPresentation() == GraphPresentation.FANCY) {
 	    try {
 		int padding = 5;
 		log.debug("Writing PNG to {}",chartLocationPNG);
-		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(width - (padding * 2), height - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
+		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(chartOptions.getImageWidth() - (padding * 2), chartOptions.getImageHeight() - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
 	    } catch (IOException e) {
 		log.error("Could not save PNG for screen render File {}", e.getMessage());
 	    }
 	} else {
 	    try {
-		exportChartAsPNG(chart, new Rectangle(width, height), chartLocationPNG);
+		exportChartAsPNG(chart, new Rectangle(chartOptions.getImageWidth(), chartOptions.getImageHeight()), chartLocationPNG);
 	    } catch (IOException e) {
 		log.error("Could not save PNG File {}", e.getMessage());
 	    }

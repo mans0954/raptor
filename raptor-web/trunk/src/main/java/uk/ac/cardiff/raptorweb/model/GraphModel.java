@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.StatisticParameters;
+import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
 
 
 
@@ -25,6 +28,10 @@ public class GraphModel implements Serializable{
 	static Logger log = LoggerFactory.getLogger(GraphModel.class);
 
 	//private String selectedStatisticalUnit;
+	
+	/* The raw graph model, for later reconstruction*/
+	private AggregatorGraphModel rawGraphModel;
+	
 	private RaptorGraphModel currentGraph;
 	private ChartOptions chartOptions;
 	private RaptorTableChartModel currentTableGraph;
@@ -48,16 +55,18 @@ public class GraphModel implements Serializable{
 	public GraphModel(){
 	    chartOptions = new ChartOptions();
 	    chartOptions.setPerspective("false");
-	    chartOptions.setGraphType("horizontalBar");
+	    chartOptions.setGraphType(ChartOptions.ChartType.BAR);
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
 	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
+	    chartOptions.setOrientation(ChartOptions.OrientationType.VERTICAL);
+	    chartOptions.setImageWidth(1480);
+	    chartOptions.setImageHeight(1024);
+	    chartOptions.setGraphPresentation(GraphPresentation.FANCY);
+	    chartOptions.setGraphType(ChartType.BAR3D);
 
 	    //create a blank selected statistical unit for display
 	    selectedStatisticalUnit = new StatisticalUnitInformationView();
-	  //  StatisticalUnitInformation tmp = new StatisticalUnitInformation();
-	   // tmp.setStatisticParameters(new StatisticParameters());
-	   // selectedStatisticalUnit.setStatisticalUnitInformation(tmp);
 
 	}
 
@@ -177,6 +186,14 @@ public class GraphModel implements Serializable{
 
 	public SuggestionValues getSuggestionValues() {
 	    return suggestionValues;
+	}
+
+	public void setRawGraphModel(AggregatorGraphModel rawGraphModel) {
+	    this.rawGraphModel = rawGraphModel;
+	}
+
+	public AggregatorGraphModel getRawGraphModel() {
+	    return rawGraphModel;
 	}
 
 

@@ -15,10 +15,10 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphPresentation;
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor.GraphType;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.CachedStartStatistics;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
+import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorJFreeChartModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
@@ -235,7 +235,7 @@ public class StartServiceImpl implements StartService {
 		startstats.setBottomFiveResouces(table);
 	    }
 	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
-		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.FRONT,GraphType.AREA,numberOfAuthenticationsPerIntervalNumberModel,1270,350,(chosenStartTime.toString("ddMMyyyHH-mm")+"-"+currentDateTime.toString("ddMMyyyHH-mm")));
+		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.FRONT,ChartType.AREA,numberOfAuthenticationsPerIntervalNumberModel,1270,350,(chosenStartTime.toString("ddMMyyyHH-mm")+"-"+currentDateTime.toString("ddMMyyyHH-mm")));
 		startstats.setHeadlineGraph(jfreeChart);
 	    }
 	    if (uniqueAuthsPerSPModel != null) {

@@ -47,5 +47,7 @@ public interface GraphService {
 	public void addSeriesToSelectedStatistic(WebSession websession);
 	
 	public void addFilterToSelectedSeries(WebSession websession);
+	
+	public void rerenderGraph(WebSession websession);
 
 }

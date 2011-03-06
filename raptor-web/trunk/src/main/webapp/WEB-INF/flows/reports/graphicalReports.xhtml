@@ -126,13 +126,14 @@
 														</h:outputText>
 													</rich:column>
 													<rich:column inlineStyle="border-style: hidden;">
-														<h:inputText rendered="#{empty parameter.possibleValues}"
+														<h:inputText
+															rendered="#{parameter.parameterType=='VALUE'}"
 															value="#{parameter.value}">
 														</h:inputText>
 														<rich:comboBox
-															rendered="#{not empty parameter.possibleValues}"
+															rendered="#{parameter.parameterType=='FIELD'}"
 															value="#{parameter.value}"
-															suggestionValues="#{parameter.possibleValues}" />
+															suggestionValues="#{flowScope.websession.graphmodel.suggestionValues.possibleFieldNameValues}" />
 													</rich:column>
 												</rich:dataTable>
 
@@ -181,11 +182,12 @@
 
 
 												<f:facet name="footer">
-												<a4j:commandLink immediate="true"
-                                                        action="addSeriesToSelectedStatistic"  id="addSeriesLink"
-                                                        reRender="seriesModalPanel,seriesTable">
-                                                        <h:graphicImage style="width:20px"  value="/image/icon/onebit_31.png" />
-                                                 </a4j:commandLink>
+													<a4j:commandLink immediate="true"
+														action="addSeriesToSelectedStatistic" id="addSeriesLink"
+														reRender="seriesModalPanel,seriesTable">
+														<h:graphicImage style="width:20px"
+															value="/image/icon/onebit_31.png" />
+													</a4j:commandLink>
 
 												</f:facet>
 
@@ -209,22 +211,27 @@
 													</f:facet>
 													<a4j:commandLink immediate="true"
 														oncomplete="#{rich:component('seriesModalPanel')}.show()"
-														id="conditionModalPanelLinkEdit" rendered="#{not empty series.comparisonPredicate}"
+														id="conditionModalPanelLinkEdit"
+														rendered="#{not empty series.comparisonPredicate}"
 														reRender="seriesModalPanel,seriesTable">
-														<h:graphicImage id="conditionImage" style="width:20px; border:0; margin-left: auto;margin-right: auto;"
-															value="/image/icon/onebit_39.png"
-															 />
+														<h:graphicImage id="conditionImage"
+															style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+															value="/image/icon/onebit_39.png" />
 														<f:setPropertyActionListener value="#{series}"
 															target="#{flowScope.websession.graphmodel.selectedSeries}" />
 													</a4j:commandLink>
-													<a4j:commandLink immediate="true" oncomplete="#{rich:component('seriesModalPanel')}.show()"
-                                                        id="conditionModalPanelLinkAdd" rendered="#{empty series.comparisonPredicate}"
-                                                        reRender="seriesModalPanel,seriesTable" action="addFilterToSelectedSeries">
-                                                        <h:graphicImage id="conditionImage" style="width:20px; border:0; margin-left: auto;margin-right: auto;"
-                                                            value="/image/icon/onebit_31.png"/>
-                                                        <f:setPropertyActionListener value="#{series}"
-                                                            target="#{flowScope.websession.graphmodel.selectedSeries}" />
-                                                    </a4j:commandLink>
+													<a4j:commandLink immediate="true"
+														oncomplete="#{rich:component('seriesModalPanel')}.show()"
+														id="conditionModalPanelLinkAdd"
+														rendered="#{empty series.comparisonPredicate}"
+														reRender="seriesModalPanel,seriesTable"
+														action="addFilterToSelectedSeries">
+														<h:graphicImage id="conditionImage"
+															style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+															value="/image/icon/onebit_31.png" />
+														<f:setPropertyActionListener value="#{series}"
+															target="#{flowScope.websession.graphmodel.selectedSeries}" />
+													</a4j:commandLink>
 
 												</rich:column>
 												<rich:column>
@@ -234,7 +241,8 @@
 													<a4j:commandLink immediate="true"
 														action="removeSeriesFromSelectedStatistic"
 														id="removeSeriesLink" reRender="optionsPanelForm">
-														<h:graphicImage style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+														<h:graphicImage
+															style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 															value="/image/icon/onebit_33.png" />
 														<f:setPropertyActionListener value="#{series}"
 															target="#{flowScope.websession.graphmodel.selectedSeries}" />
@@ -276,7 +284,28 @@
 								rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
 								opened="false">
 
+								<h:panelGrid columns="10">
+									<h:outputText value="Chart Type" />
+									<rich:comboBox selectFirstOnUpdate="false"
+										defaultLabel="Enter some value"
+										value="#{flowScope.websession.graphmodel.chartOptions.graphType}">
+										<f:selectItems
+											value="#{flowScope.websession.graphmodel.chartOptions.graphTypeList}" />
+									</rich:comboBox>
+									<rich:spacer width="10px" />
+									<h:outputText value="Orientation" />
+									<rich:comboBox
+										value="#{flowScope.websession.graphmodel.chartOptions.orientation}">
+										<f:selectItems
+											value="#{flowScope.websession.graphmodel.chartOptions.orientationTypeList}" />
+									</rich:comboBox>
+									<rich:spacer width="10px" />
+									<a4j:commandButton value="refresh" action="rerenderGraph">
+										<a4j:support ajaxSingle="true" event="complete"
+											reRender="graphImage" />
+									</a4j:commandButton>
 
+								</h:panelGrid>
 							</rich:simpleTogglePanel>
 						</rich:tab>
 
