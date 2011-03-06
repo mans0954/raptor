@@ -16,6 +16,10 @@ import uk.ac.cardiff.model.StatisticParameters.StatisticType;
  */
 public class Capabilities implements Serializable{
 
+	/* Generated Serial UID */
+    	private static final long serialVersionUID = -4008642148652388534L;
+    
+    
 	private List<String> attached;
 	private List<StatisticalUnitInformation> statisticalServices;
 	private String errorMessage;

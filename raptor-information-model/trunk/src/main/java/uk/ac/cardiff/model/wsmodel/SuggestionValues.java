@@ -1,8 +1,20 @@
 package uk.ac.cardiff.model.wsmodel;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SuggestionValues {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+public class SuggestionValues implements Serializable{
+    
+    /**
+     * default serial UId
+     */
+    private static final long serialVersionUID = 7312337340123235532L;
+
+    static Logger log = LoggerFactory.getLogger(SuggestionValues.class);
     
     private List<String> possibleFieldNameValues;
     
@@ -12,6 +24,7 @@ public class SuggestionValues {
     }
 
     public List<String> getPossibleFieldNameValues() {
+	log.debug("There are {} possible fieldname values",possibleFieldNameValues.size());
 	return possibleFieldNameValues;
     }
 
