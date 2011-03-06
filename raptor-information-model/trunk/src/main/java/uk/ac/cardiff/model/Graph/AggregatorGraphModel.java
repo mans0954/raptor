@@ -1,5 +1,6 @@
 package uk.ac.cardiff.model.Graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,10 @@ import uk.ac.cardiff.model.Presentation;
  * so as to remain view agnostic.
  */
 
-public class AggregatorGraphModel {
+public class AggregatorGraphModel implements Serializable{
 
+    	private static final long serialVersionUID = 5372664739350074383L;
+    
 	private List<String> groupLabels;
 	private List<String> seriesLabels;
 	private List<List<Double>> chartValues;
