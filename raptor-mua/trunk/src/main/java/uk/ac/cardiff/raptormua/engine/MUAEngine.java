@@ -122,6 +122,7 @@ public class MUAEngine {
 		//set possible values
 		SuggestionValues suggestionValues = new SuggestionValues();
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+		capabilities.setSuggestionValues(suggestionValues);
 
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
 		for (Statistic entry : su) {
