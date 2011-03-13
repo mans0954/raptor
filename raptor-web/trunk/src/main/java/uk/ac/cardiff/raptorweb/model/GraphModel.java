@@ -21,8 +21,7 @@ import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
 
 public class GraphModel implements Serializable{
 
-
-
+    	/* Generated SerialVersionUID */
     	private static final long serialVersionUID = -2803349385469406219L;
 
 	static Logger log = LoggerFactory.getLogger(GraphModel.class);
@@ -44,7 +43,7 @@ public class GraphModel implements Serializable{
 	
 	private SuggestionValues suggestionValues;
 
-	/* for series modal panel*/
+	/* Selected series modal panel*/
 	private Series selectedSeries;
 
 
@@ -58,10 +57,10 @@ public class GraphModel implements Serializable{
 	    chartOptions.setGraphType(ChartOptions.ChartType.BAR);
 	    chartOptions.setxMajorGridCount(-1);
 	    chartOptions.setyMajorGridCount(-1);
-	    chartOptions.setChartHeight(ChartOptions.ChartHeight.MEDIUM);
 	    chartOptions.setOrientation(ChartOptions.OrientationType.VERTICAL);
 	    chartOptions.setImageWidth(1480);
 	    chartOptions.setImageHeight(1024);
+	    chartOptions.setxLabelPosition(ChartOptions.LabelPositionType.UP_90);
 	    chartOptions.setGraphPresentation(GraphPresentation.FANCY);
 	    chartOptions.setGraphType(ChartType.BAR3D);
 

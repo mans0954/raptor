@@ -284,7 +284,7 @@
 								rendered="#{not empty flowScope.websession.graphmodel.currentJFreeGraph.relativeChartLocationPath}"
 								opened="false">
 
-								<h:panelGrid columns="10">
+								<h:panelGrid columns="13">
 									<h:outputText value="Chart Type" />
 									<rich:comboBox selectFirstOnUpdate="false"
 										defaultLabel="Enter some value"
@@ -300,8 +300,21 @@
 											value="#{flowScope.websession.graphmodel.chartOptions.orientationTypeList}" />
 									</rich:comboBox>
 									<rich:spacer width="10px" />
+									<h:outputText value="Height in pixels" />
+									<h:inputText value="#{flowScope.websession.graphmodel.chartOptions.imageHeight}"/>
+									<rich:spacer width="10px" />
+									<h:outputText value="Label Position" />									
+									<rich:comboBox selectFirstOnUpdate="false"
+										defaultLabel="Enter some value"
+										value="#{flowScope.websession.graphmodel.chartOptions.xLabelPosition}">
+										<f:selectItems
+											value="#{flowScope.websession.graphmodel.chartOptions.labelPositionsTypeList}" />
+									</rich:comboBox>
+									
+									<rich:spacer width="10px" />
+									
 									<a4j:commandButton value="refresh" action="rerenderGraph">
-										<a4j:support ajaxSingle="true" event="complete"
+										<a4j:support ajaxSingle="true" event="oncomplete"
 											reRender="graphImage" />
 									</a4j:commandButton>
 

@@ -74,7 +74,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			<!--  <ref local="SystemStatsQuickTrigger"/>-->
+			  <ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
@@ -84,7 +84,7 @@
 			<ref local="SystemStatsJobDetail" />
 		</property>
 		<property name="startDelay" value="5000"/>
-		<property name="repeatInterval" value="600000"/>
+		<property name="repeatInterval" value="1800000"/>
 	</bean>
 
 	<bean id="SystemStatsJobDetail"

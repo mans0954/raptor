@@ -32,6 +32,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.RectangleInsets;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
 
 /**
  * @author philsmart
- *
+ * 
  *         Takes a chart from the MUA, and wraps it inside the current graph view technologies (trinidad, JFreeChart) graph model
  */
 public class ChartProcessor {
@@ -63,10 +64,8 @@ public class ChartProcessor {
     private Resource saveDirectory;
     private Resource baseDirectory;
 
-    /* allows chart name flip flop, to stop the browser from rendering an image from cache*/
+    /* allows chart name flip flop, to stop the browser from rendering an image from cache */
     boolean flipFlopChartName;
-
-    
 
     public String getRootDirectory(String user) {
 	String root = null;
@@ -109,12 +108,10 @@ public class ChartProcessor {
 	return rgraph;
     }
 
-
-    
-    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, String user, ChartOptions chartOptions){
-	return doConstructJFreeGraphBar(gmodel, chartOptions,user,null);
+    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, String user, ChartOptions chartOptions) {
+	return doConstructJFreeGraphCategory(gmodel, chartOptions, user, null);
     }
-    
+
     /**
      * Will output into the root graphs directory
      * 
@@ -122,11 +119,9 @@ public class ChartProcessor {
      * @param chartOptions
      * @return
      */
-    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, ChartOptions chartOptions){
-	return doConstructJFreeGraphBar(gmodel, chartOptions,"",null);
+    public RaptorJFreeChartModel constructJFreeGraph(AggregatorGraphModel gmodel, ChartOptions chartOptions) {
+	return doConstructJFreeGraphCategory(gmodel, chartOptions, "", null);
     }
-
-
 
     public RaptorJFreeChartModel constructJFreeGraph(GraphPresentation graphPresentation, ChartType graphType, AggregatorGraphModel gmodel, int width, int height, String filename) {
 	ChartOptions chartOptions = new ChartOptions();
@@ -134,19 +129,37 @@ public class ChartProcessor {
 	chartOptions.setImageWidth(width);
 	chartOptions.setGraphPresentation(graphPresentation);
 	chartOptions.setGraphType(graphType);
-	return doConstructJFreeGraphBar( gmodel, chartOptions,"",filename);
+	chartOptions.setOrientation(ChartOptions.OrientationType.VERTICAL);
+	return doConstructJFreeGraphCategory(gmodel, chartOptions, "", filename);
+    }
+
+    private RaptorJFreeChartModel doConstructJFreeGraphPie(AggregatorGraphModel gmodel, ChartOptions chartOptions, String user, String filename) {
+	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { chartOptions.getGraphType(), chartOptions.getGraphPresentation(), chartOptions.getGraphPresentation().getLegend(),
+		chartOptions.getImageWidth(), chartOptions.getImageHeight() });
+	
+	final DefaultPieDataset dataset = new DefaultPieDataset();	
+
+	for (int j = 0; j < gmodel.getSeriesLabels().size(); j++) {
+	    for (int i = 0; i < gmodel.getGroupLabels().size(); i++) {
+		dataset.setValue(gmodel.getGroupLabels().get(i),gmodel.getYValues().get(j).get(i));
+	    }
+	}
+	
+	final JFreeChart chart = ChartFactory.createPieChart3D( "Pie Chart 3D Demo 1", dataset, true, true, false);
+	return doConstructChartPresentation(chart, chartOptions,user,filename);
     }
 
     /**
      * Requires websession, as charts stored on file system specific to the current users home directory
-     *
+     * 
      * @param gmodel
      * @param session
      * @return
      */
-    private RaptorJFreeChartModel doConstructJFreeGraphBar(AggregatorGraphModel gmodel, ChartOptions chartOptions, String user, String filename) {
-	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { chartOptions.getGraphType(), chartOptions.getGraphPresentation(), chartOptions.getGraphPresentation().getLegend(), chartOptions.getImageWidth(), chartOptions.getImageHeight() });
-	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
+    private RaptorJFreeChartModel doConstructJFreeGraphCategory(AggregatorGraphModel gmodel, ChartOptions chartOptions, String user, String filename) {
+	log.info("Creating graph {} with presentation {} (legend {}), width={} height={}", new Object[] { chartOptions.getGraphType(), chartOptions.getGraphPresentation(), chartOptions.getGraphPresentation().getLegend(),
+		chartOptions.getImageWidth(), chartOptions.getImageHeight() });
+
 
 	// construct the graph
 	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -168,48 +181,55 @@ public class ChartProcessor {
 	    if (gmodel.getPresentation().getyAxisLabel() != null)
 		yAxisLabel = gmodel.getPresentation().getyAxisLabel();
 	}
-	
-	//initialise default, then change on condition
+
+	// initialise default, then change on condition
 	PlotOrientation plotOrientation = PlotOrientation.HORIZONTAL;
-	if (chartOptions.getOrientation()==ChartOptions.OrientationType.HORIZONTAL)
+	if (chartOptions.getOrientation() == ChartOptions.OrientationType.HORIZONTAL)
 	    plotOrientation = PlotOrientation.HORIZONTAL;
-	else if (chartOptions.getOrientation()==ChartOptions.OrientationType.VERTICAL)
+	else if (chartOptions.getOrientation() == ChartOptions.OrientationType.VERTICAL)
 	    plotOrientation = PlotOrientation.VERTICAL;
-	
+
 	log.debug("Graph Setup with Title {}, xAxisLabel {}, yAxisLabel {}", new Object[] { chartTitle, xAxisLabel, yAxisLabel });
 	if (chartOptions.getGraphType() == ChartType.BAR3D)
 	    chart = ChartFactory.createBarChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
 	else if (chartOptions.getGraphType() == ChartType.AREA)
-	    chart = ChartFactory.createAreaChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation,chartOptions.getGraphPresentation().getLegend(), true, false);
+	    chart = ChartFactory.createAreaChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
 	else if (chartOptions.getGraphType() == ChartType.LINE3D)
 	    chart = ChartFactory.createLineChart3D(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
 	else if (chartOptions.getGraphType() == ChartType.BAR)
 	    chart = ChartFactory.createBarChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
 	else if (chartOptions.getGraphType() == ChartType.LINE)
 	    chart = ChartFactory.createLineChart(chartTitle, xAxisLabel, yAxisLabel, dataset, plotOrientation, chartOptions.getGraphPresentation().getLegend(), true, false);
+	
+	return doConstructChartPresentation(chart, chartOptions,user,filename);
+
+    }
+    
+    private RaptorJFreeChartModel doConstructChartPresentation(JFreeChart chart, ChartOptions chartOptions, String filename, String user){
+	RaptorJFreeChartModel chartmodel = new RaptorJFreeChartModel();
 
 	// setup the graph output
 	if (chartOptions.getGraphPresentation() == GraphPresentation.FANCY)
-	    fancyGraphOutput(chart);
+	    fancyGraphOutput(chart, chartOptions);
 	else if (chartOptions.getGraphPresentation() == GraphPresentation.FRONT)
-	    frontGraphOutput(chart);
+	    frontGraphOutput(chart, chartOptions);
 
 	// save the graph
-	String endingFilename="";
-	if (filename!=null)
-	    endingFilename=filename;
+	String endingFilename = "";
+	if (filename != null)
+	    endingFilename = filename;
 
-	//must create a random number, if the image url does not change, the browser uses the cached image
+	// must create a random number, if the image url does not change, the browser uses the cached image
 	int ran = getRandomChartFileExtension(100);
 
-	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+".svg");
-	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main"+endingFilename+ran+".png");
+	File chartLocation = new File(getRootDirectory(user) + "/raptor-graphs-main" + endingFilename + ".svg");
+	File chartLocationPNG = new File(getRootDirectory(user) + "/raptor-graphs-main" + endingFilename + ran + ".png");
 
 	// png is used for screen output
 	if (chartOptions.getGraphPresentation() == GraphPresentation.FANCY) {
 	    try {
 		int padding = 5;
-		log.debug("Writing PNG to {}",chartLocationPNG);
+		log.debug("Writing PNG to {}", chartLocationPNG);
 		ImageIO.write(ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(chartOptions.getImageWidth() - (padding * 2), chartOptions.getImageHeight() - (padding * 2)), padding), "png", new FileOutputStream(chartLocationPNG));
 	    } catch (IOException e) {
 		log.error("Could not save PNG for screen render File {}", e.getMessage());
@@ -222,37 +242,36 @@ public class ChartProcessor {
 	    }
 	}
 
-//	try {
-//	    exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
-//	} catch (IOException e) {
-//	    log.error("Could not save SVG File {}", e.getMessage());
-//	}
+	// try {
+	// exportChartAsSVG(chart, new Rectangle(800, 600), chartLocation);
+	// } catch (IOException e) {
+	// log.error("Could not save SVG File {}", e.getMessage());
+	// }
 
 	chartmodel.setChartLocation(chartLocationPNG);
 	chartmodel.setRelativeChartLocation(getRelativePath(chartLocationPNG));
 	return chartmodel;
     }
 
-    private int getRandomFlipFlopChartFileExtension(){
-	if (flipFlopChartName){
-	    flipFlopChartName=false;
+    private int getRandomFlipFlopChartFileExtension() {
+	if (flipFlopChartName) {
+	    flipFlopChartName = false;
 	    return 0;
-	}
-	else {
-	    flipFlopChartName=true;
+	} else {
+	    flipFlopChartName = true;
 	    return 1;
 	}
     }
 
-    private int getRandomChartFileExtension(int upperLimit){
-	int ran = ((int)(Math.random()*upperLimit));
+    private int getRandomChartFileExtension(int upperLimit) {
+	int ran = ((int) (Math.random() * upperLimit));
 	return ran;
     }
 
-    private void fancyGraphOutput(JFreeChart chart) {
+    private void fancyGraphOutput(JFreeChart chart, ChartOptions chartOptions) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
-	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_90);
+	xAxis.setCategoryLabelPositions(chartOptions.getxLabelPosition().getLabelPosition());
 	chart.setBackgroundPaint(new Color(255, 255, 255, 0));
 	chart.setPadding(new RectangleInsets(10, 5, 5, 5));
 	chart.getLegend().setPosition(RectangleEdge.BOTTOM);
@@ -270,12 +289,18 @@ public class ChartProcessor {
 	domainAxis.setLowerMargin(0.0);
 	domainAxis.setUpperMargin(0.0);
 	domainAxis.setLowerMargin(0.0);
-	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,10));
-	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,10));
+	domainAxis.setLabelFont(new Font("SansSerif", Font.PLAIN, 10));
+	domainAxis.setTickLabelFont(new Font("SansSerif", Font.PLAIN, 10));
 
     }
 
-    private void frontGraphOutput(JFreeChart chart) {
+    /**
+     * Should only be used by graphs on the front page (dashboard) as it has certain uncostomisable options
+     * 
+     * @param chart
+     * @param chartOptions
+     */
+    private void frontGraphOutput(JFreeChart chart, ChartOptions chartOptions) {
 	CategoryPlot plot = (CategoryPlot) chart.getPlot();
 	CategoryAxis xAxis = (CategoryAxis) plot.getDomainAxis();
 	xAxis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
@@ -286,23 +311,23 @@ public class ChartProcessor {
 	plot.setRangeGridlinesVisible(true);
 	plot.setRangeGridlinePaint(Color.black);
 	plot.setDomainGridlinePaint(Color.black);
-	//set the thickness of the first series
+	// set the thickness of the first series
 	plot.getRenderer().setSeriesStroke(0, new BasicStroke(2.0f));
 	plot.setForegroundAlpha(0.7f);
-	plot.setBackgroundPaint(new GradientPaint(0, 0,Color.white , 1f, 1f, new Color(210,210,210)));
+	plot.setBackgroundPaint(new GradientPaint(0, 0, Color.white, 1f, 1f, new Color(210, 210, 210)));
 	plot.getRenderer().setSeriesPaint(0, Color.blue);
 	// axis
 	CategoryAxis domainAxis = (CategoryAxis) plot.getDomainAxis();
 	domainAxis.setUpperMargin(0.0);
 	domainAxis.setLowerMargin(0.0);
-	domainAxis.setLabelFont(new Font("SansSerif",Font.PLAIN,7));
-	domainAxis.setTickLabelFont(new Font("SansSerif",Font.PLAIN,7));
+	domainAxis.setLabelFont(new Font("SansSerif", Font.PLAIN, 7));
+	domainAxis.setTickLabelFont(new Font("SansSerif", Font.PLAIN, 7));
 
     }
 
     /**
      * Exports a JFreeChart to a SVG file.
-     *
+     * 
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -334,7 +359,7 @@ public class ChartProcessor {
 
     /**
      * Exports a JFreeChart to a jpg file.
-     *
+     * 
      * @param chart
      *            JFreeChart to export
      * @param bounds
@@ -359,7 +384,7 @@ public class ChartProcessor {
      * @return
      */
     public RaptorTableChartModel constructRaptorTableChartModel(AggregatorGraphModel gmodel) {
-	log.info("Constructing Raptor Table for {}",gmodel.getPresentation().getGraphTitle());
+	log.info("Constructing Raptor Table for {}", gmodel.getPresentation().getGraphTitle());
 
 	RaptorTableChartModel tableModel = new RaptorTableChartModel();
 
@@ -377,7 +402,7 @@ public class ChartProcessor {
 	}
 	tableModel.constructTableForView();
 
-	//log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
+	// log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
 
 	return tableModel;
     }
