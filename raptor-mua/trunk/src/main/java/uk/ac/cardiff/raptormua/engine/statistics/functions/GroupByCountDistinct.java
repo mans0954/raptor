@@ -26,7 +26,7 @@ public class GroupByCountDistinct extends Statistic{
 			throw new StatisticalUnitException("incorrect method parameters");
 		
 		String groupByField = methodParams.get(0).getValue();
-		String countDistinctField = methodParams.get(0).getValue();
+		String countDistinctField = methodParams.get(1).getValue();
 		
 		log.debug("Performing groupByFrequency Statistical Operation");
 		log.debug("Params for method:  {},{}", this.getClass().getSimpleName(), statisticParameters.getUnitName());
@@ -55,18 +55,9 @@ public class GroupByCountDistinct extends Statistic{
 			testCount += group.getValue();
 		}
 
-		/*
-		 * test count should equal the number of entries unless there is a
-		 * reminder as this has not been catered for yet.
-		 */
+
 		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
-		// add the series label or if none specified, add a default
-//		if (statisticParameters.getSeries().getSeriesLabel() == null)
-//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
-//		else {
-//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel());
-//		}
 
 		if (groups.size() == 0)
 			return false;
