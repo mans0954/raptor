@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +28,44 @@ public class ChartOptions implements Serializable {
     private String perspective;
     private int xMajorGridCount;
     private int yMajorGridCount;
-    private ChartHeight chartHeight;
     private OrientationType orientation;
     private int imageWidth;
-    private int imageHeight;
-    private GraphPresentation graphPresentation;
+    private int imageHeight;   
     
+    private GraphPresentation graphPresentation;
+    private LabelPositionType xLabelPosition;
+    
+    /* the orientation of labels, mapped to JFreeChart <code>CategoryLabelPositions</code> */
+    public enum LabelPositionType{
+	UP_45(CategoryLabelPositions.UP_45, "45 Degree Up"), UP_90(CategoryLabelPositions.UP_90, "90 Degree Up"),
+	DOWN_45(CategoryLabelPositions.DOWN_45, "45 Degree Down"),DOWN_90(CategoryLabelPositions.DOWN_90, "90 Degree Down"),
+	STANDARD(CategoryLabelPositions.STANDARD, "Standard");
+	
+	private CategoryLabelPositions labelPosition;
+	private String label;
+	
+	LabelPositionType(CategoryLabelPositions labelPosition, String label){
+	    this.setLabelPosition(labelPosition);
+	}
 
+	public void setLabel(String label) {
+	    this.label = label;
+	}
+
+	public String getLabel() {
+	    return label;
+	}
+
+	public void setLabelPosition(CategoryLabelPositions labelPosition) {
+	    this.labelPosition = labelPosition;
+	}
+
+	public CategoryLabelPositions getLabelPosition() {
+	    return labelPosition;
+	}
+	
+    }
+    
     /* options for how the graph is displayed */
     public enum GraphPresentation {
 	FANCY(true), FRONT(false);
@@ -45,19 +77,6 @@ public class ChartOptions implements Serializable {
 	
 	public boolean getLegend(){
 	    return legend;
-	}
-    }
-
-    public enum ChartHeight {
-	SMALL(700), MEDIUM(1100), LARGE(1700);
-	private int heightInPx;
-
-	ChartHeight(int heightInPx) {
-	    this.heightInPx = heightInPx;
-	}
-
-	int getHeightInPx() {
-	    return heightInPx;
 	}
     }
     
@@ -90,6 +109,15 @@ public class ChartOptions implements Serializable {
 	    return this.label;
 	}
 
+    }
+    
+    public SelectItem[] getLabelPositionsTypeList() {
+	SelectItem[] items = new SelectItem[LabelPositionType.values().length];
+	int i = 0;
+	for (LabelPositionType t : LabelPositionType.values()) {
+	    items[i++] = new SelectItem(t, t.getLabel());
+	}
+	return items;
     }
     
     public SelectItem[] getOrientationTypeList() {
@@ -134,25 +162,6 @@ public class ChartOptions implements Serializable {
 	return yMajorGridCount;
     }
 
-    public void setChartHeight(ChartHeight chartHeight) {
-	this.chartHeight = chartHeight;
-    }
-
-    /**
-     * used for the view to set heights as integers
-     * 
-     * @param chartHeight
-     */
-    public void setChartHeight(int chartHeight) {
-	for (ChartHeight thisHeight : ChartHeight.values()) {
-	    if (thisHeight.getHeightInPx() == chartHeight)
-		this.chartHeight = thisHeight;
-	}
-    }
-
-    public int getChartHeight() {
-	return chartHeight.getHeightInPx();
-    }
 
     public void setGraphType(ChartType graphType) {
 	log.debug("Setting graph type {}",graphType);
@@ -194,5 +203,14 @@ public class ChartOptions implements Serializable {
     public GraphPresentation getGraphPresentation() {
 	return graphPresentation;
     }
+
+    public void setxLabelPosition(LabelPositionType xLabelPosition) {
+	this.xLabelPosition = xLabelPosition;
+    }
+
+    public LabelPositionType getxLabelPosition() {
+	return xLabelPosition;
+    }
+
 
 }

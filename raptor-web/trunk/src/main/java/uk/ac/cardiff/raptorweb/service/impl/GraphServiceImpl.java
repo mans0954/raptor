@@ -198,8 +198,9 @@ public class GraphServiceImpl implements GraphService{
 
 	@Override
 	public void rerenderGraph(WebSession websession) {
+	    log.debug("Rerendering graph for display");
 	    GraphModel model = websession.getGraphmodel();
-	    chartProcessor.constructJFreeGraph(model.getRawGraphModel(), model.getChartOptions());
+	    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(model.getRawGraphModel(), model.getChartOptions()));
 	    
 	}
 
