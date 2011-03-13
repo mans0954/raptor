@@ -31,12 +31,13 @@ public class Entry {
     /* used if a persistant db primary key is required*/
     private Long persistantId;
 
-    /* attributes generic to all entries in Raptor*/
+    /* attributes generic to all entries*/
     private DateTime eventTime;
-    private String requestHost;
-    private String serverHost;
-    private String requestHostFriendlyName;
-    private String serverHostFriendlyName;
+    private String requestHost; //requestID
+    private String serverHost; //serviceID
+    
+    //eventype
+
 
     public void setRequestHost(String requestHost) {
 	this.requestHost = requestHost;
@@ -94,21 +95,6 @@ public class Entry {
 
     }
 
-	public void setRequestHostFriendlyName(String requestHostFriendlyName) {
-		this.requestHostFriendlyName = requestHostFriendlyName;
-	}
-
-	public String getRequestHostFriendlyName() {
-		return requestHostFriendlyName;
-	}
-
-	public void setServerHostFriendlyName(String serverHostFriendlyName) {
-		this.serverHostFriendlyName = serverHostFriendlyName;
-	}
-
-	public String getServerHostFriendlyName() {
-		return serverHostFriendlyName;
-	}
 
 	public void setPersistantId(Long persistantId) {
 	    this.persistantId = persistantId;

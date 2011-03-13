@@ -18,9 +18,7 @@
  	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="false" index="dt_index"/>
 	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" index="requesthost_index" />
 	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="false" />
-	<property name="requestHostFriendlyName" type="string" update="true" insert="true"	column="requestHostFriendlyName"  not-null="false" />
-	<property name="serverHostFriendlyName" type="string" update="true" insert="true"	column="serverHostFriendlyName"  not-null="false" />
-
+	
 	<joined-subclass name="uk.ac.cardiff.model.AuthenticationEntry"  table="authenticationEntry">
       		<key column="id"/>
       <property name="authNMethod" column="authNMethod" type="string" />
