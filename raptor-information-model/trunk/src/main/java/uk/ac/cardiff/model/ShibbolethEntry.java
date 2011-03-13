@@ -89,7 +89,6 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	      EqualsUtil.areEqual(this.getEventTime(), that.getEventTime()) &&
 	      EqualsUtil.areEqual(this.getAuthNMethod(), that.getAuthNMethod()) &&
 	      EqualsUtil.areEqual(this.getRequestHost(), that.getRequestHost()) &&
-	      EqualsUtil.areEqual(this.getRequestHostFriendlyName(), that.getRequestHostFriendlyName()) &&
 	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
 	      EqualsUtil.areEqual(this.getRequestPath(), that.getRequestPath()) &&
 	      EqualsUtil.areEqual(this.getResponseBinding(), that.getResponseBinding()) &&
@@ -97,7 +96,6 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	      EqualsUtil.areEqual(this.getMessageProfileId(), that.getMessageProfileId()) &&
 	      EqualsUtil.areEqual(this.getRequestBinding(), that.getRequestBinding()) &&
 	      EqualsUtil.areEqual(this.getPrincipleName(), that.getPrincipleName()) &&
-	      EqualsUtil.areEqual(this.getServerHostFriendlyName(), that.getServerHostFriendlyName()) &&
 	      EqualsUtil.areEqual(this.getNameIdentifier(), that.getNameIdentifier()) &&
 	      EqualsUtil.areEqual(this.getResponseId(), that.getResponseId()) &&
 	      Arrays.equals(this.getAssertionId(), that.getAssertionId()) &&
@@ -135,12 +133,10 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    hash = HashCodeUtil.hash(hash,getEventTime());
 	    hash = HashCodeUtil.hash(hash,getAuthNMethod());
 	    hash = HashCodeUtil.hash(hash,getRequestHost());
-	    hash = HashCodeUtil.hash(hash,getRequestHostFriendlyName());
 	    hash = HashCodeUtil.hash(hash,getRequestId());
 	    hash = HashCodeUtil.hash(hash,getRequestPath());
 	    hash = HashCodeUtil.hash(hash,getResponseBinding());
 	    hash = HashCodeUtil.hash(hash,getServerHost());
-	    hash = HashCodeUtil.hash(hash,getServerHostFriendlyName());
 	    hash = HashCodeUtil.hash(hash,getReleasedAttributes());
 	    hash = HashCodeUtil.hash(hash,getMessageProfileId());
 	    hash = HashCodeUtil.hash(hash,getRequestBinding());

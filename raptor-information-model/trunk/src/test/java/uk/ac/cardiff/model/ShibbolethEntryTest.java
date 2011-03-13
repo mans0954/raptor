@@ -31,12 +31,10 @@ public class ShibbolethEntryTest {
 	entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	entry.setRequestHostFriendlyName("");
 	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	entry.setServerHostFriendlyName("");
 
 
 	ShibbolethEntry equalEntry = new ShibbolethEntry();
@@ -50,12 +48,10 @@ public class ShibbolethEntryTest {
 	equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	equalEntry.setRequestHostFriendlyName("");
 	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	equalEntry.setServerHostFriendlyName("");
 
 	System.out.println("testHashCodeEqual: Entry One Hash ["+entry.hashCode()+"] : Entry Two Hash ["+equalEntry.hashCode()+"] : Are Equal: "+entry.equals(equalEntry));
 
@@ -80,12 +76,10 @@ public class ShibbolethEntryTest {
 	entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	entry.setRequestHostFriendlyName("");
 	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	entry.setServerHostFriendlyName("");
 
 
 	ShibbolethEntry equalEntry = new ShibbolethEntry();
@@ -99,12 +93,10 @@ public class ShibbolethEntryTest {
 	equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	equalEntry.setRequestHostFriendlyName("");
 	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	equalEntry.setServerHostFriendlyName("");
 
 	System.out.println("testHashCodeNotEqualDate: Entry One Hash ["+entry.hashCode()+"] : Entry Two Hash ["+equalEntry.hashCode()+"] : Are Equal: "+entry.equals(equalEntry));
 
@@ -129,12 +121,10 @@ public class ShibbolethEntryTest {
 	entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	entry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation","eduPersonEntitlement"});
 	entry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	entry.setRequestHostFriendlyName("");
 	entry.setRequestId("");
 	entry.setRequestPath("");
 	entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	entry.setServerHostFriendlyName("");
 
 
 	ShibbolethEntry equalEntry = new ShibbolethEntry();
@@ -148,12 +138,10 @@ public class ShibbolethEntryTest {
 	equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
 	equalEntry.setReleasedAttributes(new String[]{"eduPersonScopedAffiliation"}); //removed eduPersonEntitlement
 	equalEntry.setRequestHost("https://abc.cardiff.ac.uk/sp/shibboleth");
-	equalEntry.setRequestHostFriendlyName("");
 	equalEntry.setRequestId("");
 	equalEntry.setRequestPath("");
 	equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
 	equalEntry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
-	equalEntry.setServerHostFriendlyName("");
 
 	System.out.println("testHashCodeNotEqualReleasedAttributes: Entry One Hash ["+entry.hashCode()+"] : Entry Two Hash ["+equalEntry.hashCode()+"] : Are Equal: "+entry.equals(equalEntry));
 
