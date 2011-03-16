@@ -356,7 +356,7 @@
 							<h:outputText value="Select Download Format"
 								style="text-align:center; font-weight:bold; font-size:150%" />
 
-							<h:panelGrid id="reportTypePanel" columns="2">
+							<h:panelGrid id="reportTypePanel" columns="3">
 								<a4j:commandLink id="generateExcelReport"
 									action="generateExcelReport" reRender="chartForm">
 									<h:graphicImage value="/image/excel-icon.gif" style="border:0">
@@ -366,6 +366,11 @@
 
 								<a4j:commandLink action="generateCSVReport" reRender="chartForm">
 									<h:graphicImage value="/image/csv-icon.png" style="border:0">
+									</h:graphicImage>
+								</a4j:commandLink>
+								
+								<a4j:commandLink action="generatePDFReport" reRender="chartForm">
+									<h:graphicImage value="/image/pdf.png" width="35px" style="border:0">
 									</h:graphicImage>
 								</a4j:commandLink>
 							</h:panelGrid>

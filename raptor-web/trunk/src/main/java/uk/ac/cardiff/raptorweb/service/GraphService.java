@@ -29,6 +29,8 @@ public interface GraphService {
 	public void generateExcelReport(WebSession websession);
 
 	public void generateCSVReport(WebSession websession);
+	
+	public void generatePDFReport(WebSession websession);
 
 	public void loadSavedReports(WebSession websession);
 

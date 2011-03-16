@@ -102,6 +102,11 @@ public class GraphServiceImpl implements GraphService{
 	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
 		webEngine.generateReport(websession,"csv");
 	}
+	
+	public void generatePDFReport(WebSession websession){
+	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
+		webEngine.generateReport(websession,"pdf");
+	}
 
 	/**
 	 * loads the reports from the download directory into the graphmodel

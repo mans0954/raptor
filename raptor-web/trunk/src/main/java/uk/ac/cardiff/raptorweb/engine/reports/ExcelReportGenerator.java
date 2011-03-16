@@ -39,10 +39,6 @@ import org.springframework.core.io.Resource;
 public class ExcelReportGenerator extends ReportConstructor {
     static Logger log = LoggerFactory.getLogger(ExcelReportGenerator.class);
 
-    public ExcelReportGenerator() {
-	// register which type it handles
-	this.setHandledReportType(HandledReportTypes.excel);
-    }
 
     public String generateReport(WebSession session) {
 	log.info("Generating Excel Report " + session.getGraphmodel().getSelectedStatisticalUnit());
@@ -111,10 +107,10 @@ public class ExcelReportGenerator extends ReportConstructor {
 	    workbook.close();
 
 	} catch (IOException e) {
-	    log.error("Problem generating excel report " + e.getMessage());
+	    log.error("Problem generating excel report {}", e.getMessage());
 
 	} catch (WriteException e) {
-	    log.error("Problem generating excel report " + e.getMessage());
+	    log.error("Problem generating excel report {}", e.getMessage());
 	}
 
 	log.info("Excel Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
@@ -132,5 +128,10 @@ public class ExcelReportGenerator extends ReportConstructor {
 		maxRows = tseries.getRows().size();
 	}
 	return maxRows;
+    }
+
+    @Override
+    protected HandledReportTypes getRegisterHandledReportType() {
+	return HandledReportTypes.excel;
     }
 }
