@@ -68,6 +68,10 @@
 		<transition on="generateCSVReport">
 			<evaluate expression="graphService.generateCSVReport(flowScope.websession)" />
 		</transition>
+		
+		<transition on="generatePDFReport">
+			<evaluate expression="graphService.generatePDFReport(flowScope.websession)"/>
+		</transition>
 
 		<transition on="removeSeriesFromSelectedStatistic">
 		      <evaluate expression="graphService.removeSeriesFromSelectedStatistic(flowScope.websession)"/>

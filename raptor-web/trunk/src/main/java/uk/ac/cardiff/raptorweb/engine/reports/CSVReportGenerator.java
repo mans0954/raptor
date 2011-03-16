@@ -41,13 +41,8 @@ import org.springframework.core.io.Resource;
 public class CSVReportGenerator extends ReportConstructor {
     static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
-    public CSVReportGenerator() {
-	// set which type is handles
-	this.setHandledReportType(HandledReportTypes.csv);
-    }
-
     public String generateReport(WebSession session) {
-	log.info("Generating CSV Report " + session.getGraphmodel().getSelectedStatisticalUnit());
+	log.info("Generating CSV Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
 	String relativePath = null;
 	try {
 	    // make sure base directory exists first
@@ -115,5 +110,10 @@ public class CSVReportGenerator extends ReportConstructor {
 		 maxRows=tseries.getRows().size();
 	 }
 	 return maxRows;
+    }
+
+    @Override
+    protected HandledReportTypes getRegisterHandledReportType() {
+	return HandledReportTypes.csv;
     }
 }

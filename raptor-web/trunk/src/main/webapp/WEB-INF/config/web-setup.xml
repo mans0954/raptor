@@ -60,6 +60,10 @@
 					<property name="saveDirectory"><value>/downloads/</value></property>
 					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
 				</bean>
+				<bean name="pdfreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.GraphAndChartPDFReportGenerator">
+					<property name="saveDirectory"><value>/downloads/</value></property>
+					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+				</bean>
 			</list>
 		</property>
 	</bean>
