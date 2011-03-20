@@ -39,9 +39,9 @@ import org.springframework.core.io.Resource;
 public class ExcelReportGenerator extends ReportConstructor {
     static Logger log = LoggerFactory.getLogger(ExcelReportGenerator.class);
 
-
-    public String generateReport(WebSession session) {
-	log.info("Generating Excel Report " + session.getGraphmodel().getSelectedStatisticalUnit());
+    @Override
+    public void generateReport(WebSession session) {
+	log.info("Generating Excel Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
 	String relativePath = null;
 	try {
 	    // make sure base directory exists first
@@ -114,7 +114,6 @@ public class ExcelReportGenerator extends ReportConstructor {
 	}
 
 	log.info("Excel Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
-	return relativePath;
     }
 
     /**

@@ -7,7 +7,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GradientPaint;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -96,6 +99,35 @@ public class ChartProcessor {
 	    log.error("Could not get relative path for file {}, {}", dir, e.getMessage());
 	}
 	return relative;
+    }
+   
+    private BufferedImage extractImage(JFreeChart chart, int width, int height) {
+	BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+	Graphics2D g2 = img.createGraphics();
+	chart.draw(g2, new Rectangle2D.Double(0, 0, width, height));
+
+	g2.dispose();
+	return img;
+
+    }
+    
+    /**
+     * static method to extract and retrieve a BufferedImage from a JFreeChart respecting
+     * the presentation options in the chartOptions parameter
+     * 
+     * @param chart
+     * @param chartOptions
+     * @return
+     */
+    public static BufferedImage extractBufferedImage(JFreeChart chart, ChartOptions chartOptions){
+	if (chartOptions.getGraphPresentation()== GraphPresentation.FANCY){
+	    int padding = 5;
+	    return ChartProcessorHelper.buildChartDropShadow(chart.createBufferedImage(chartOptions.getImageWidth() - (padding * 2), chartOptions.getImageHeight() - (padding * 2)), padding);
+	}
+	else{
+	    return chart.createBufferedImage(chartOptions.getImageWidth(), chartOptions.getImageHeight());
+	}
     }
 
     public RaptorGraphModel constructRaptorGraphModel(AggregatorGraphModel gmodel) {
@@ -250,6 +282,7 @@ public class ChartProcessor {
 
 	chartmodel.setChartLocation(chartLocationPNG);
 	chartmodel.setRelativeChartLocation(getRelativePath(chartLocationPNG));
+	chartmodel.setChart(chart);
 	return chartmodel;
     }
 

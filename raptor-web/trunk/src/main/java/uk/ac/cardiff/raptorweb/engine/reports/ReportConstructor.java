@@ -48,8 +48,9 @@ public abstract class ReportConstructor {
 	
 	protected abstract HandledReportTypes getRegisterHandledReportType();
 
-
-	public abstract String generateReport(WebSession session);
+	//TODO should test for and create a download directory before invocation of
+	//the overriden method 
+	public abstract void generateReport(WebSession session);
 
 	public void setSaveDirectory(Resource saveDirectory) {
 		this.saveDirectory = saveDirectory;

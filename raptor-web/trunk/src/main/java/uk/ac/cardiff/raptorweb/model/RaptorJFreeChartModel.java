@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
+import org.jfree.chart.JFreeChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +16,14 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class RaptorJFreeChartModel implements Serializable {
+
+    private static final long serialVersionUID = -3533889063143775041L;
+
     static Logger log = LoggerFactory.getLogger(RaptorJFreeChartModel.class);
 
     private File chartLocation;
     private File relativeChartLocation;
+    private JFreeChart chart;
 
     public void setChartLocation(File chartLocation) {
 	this.chartLocation = chartLocation;
@@ -43,6 +48,14 @@ public class RaptorJFreeChartModel implements Serializable {
 	   log.error("Could not get relative chart location for {}",relativeChartLocation);
 	}
 	return "";
+    }
+
+    public void setChart(JFreeChart chart) {
+	this.chart = chart;
+    }
+
+    public JFreeChart getChart() {
+	return chart;
     }
 
 
