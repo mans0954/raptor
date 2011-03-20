@@ -63,10 +63,14 @@
 				<bean name="pdfreportConstructorImpl" class="uk.ac.cardiff.raptorweb.engine.reports.GraphAndChartPDFReportGenerator">
 					<property name="saveDirectory"><value>/downloads/</value></property>
 					<property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
+					<property name="reportBean"><ref bean="genericReportBean"/></property>
+					<property name="reportXMLFile"><value>generic-report.xml</value></property>
 				</bean>
 			</list>
 		</property>
 	</bean>
+	
+	<bean name="genericReportBean" class="uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean"/>
 
     <!-- Set up the chart processor -->
     <bean name="chartProcessor" class="uk.ac.cardiff.raptorweb.engine.ChartProcessor">
@@ -78,7 +82,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			  <ref local="SystemStatsQuickTrigger"/>
+			<!--   <ref local="SystemStatsQuickTrigger"/>-->
 			</list>
 		</property>
 	</bean>

@@ -41,7 +41,7 @@ import org.springframework.core.io.Resource;
 public class CSVReportGenerator extends ReportConstructor {
     static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
-    public String generateReport(WebSession session) {
+    public void generateReport(WebSession session) {
 	log.info("Generating CSV Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
 	String relativePath = null;
 	try {
@@ -96,7 +96,7 @@ public class CSVReportGenerator extends ReportConstructor {
 	}
 
 	log.info("CSV Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
-	return relativePath;
+
     }
 
     /**
