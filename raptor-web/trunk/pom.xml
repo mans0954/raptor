@@ -616,6 +616,11 @@
 			<artifactId>jasperreports</artifactId>
 			<version>3.5.3</version>
 		</dependency>
+		<dependency>
+			<groupId>ar.com.fdvs</groupId>
+			<artifactId>DynamicJasper</artifactId>
+			<version>3.0.13</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<myfaces.version>1.2.5</myfaces.version>

@@ -20,6 +20,9 @@ public class Row<T> implements Serializable{
 	public T getValue() {
 		return value;
 	}
+	public String getStringValue(){
+	    return value.toString();
+	}
 	public void setGroup(String group) {
 	    this.group = group;
 	}
