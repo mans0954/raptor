@@ -31,15 +31,17 @@
 			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="true" isLazy="true">
 				<reportElement x="0" y="30" width="500" height="500"/>
 				<imageExpression class="java.awt.Image"><![CDATA[$F{image}]]></imageExpression>
-			</image>			
+			</image>
 		</band>
 	</detail>
-	
+
 	<pageFooter>
     <band height="15">
       <staticText>
         <reportElement x="0" y="0" width="40" height="15"/>
-        <textElement/>
+        <textElement>
+            <font fontName="DejaVu Sans" size="8"/>
+        </textElement>
         <text><![CDATA[Page:]]></text>
       </staticText>
       <textField>
