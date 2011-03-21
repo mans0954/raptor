@@ -49,6 +49,7 @@ import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.DynamicTableModel;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean;
+import uk.ac.cardiff.raptorweb.engine.reports.beans.SimpleRowBean;
 import uk.ac.cardiff.raptorweb.model.ManyRow;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.TableSeries;
@@ -155,11 +156,12 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	model.setData(data);
 
 	BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(),session.getGraphmodel().getChartOptions());
-	model.setImage(image);
 
-	FastReportBuilder drb = new FastReportBuilder();
-	//drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
-	//drb.addField("image", java.awt.image.BufferedImage.class.getName());
+	//FastReportBuilder drb = new FastReportBuilder();
+	DynamicReportBuilder drb = new DynamicReportBuilder();
+	drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
+//	drb.addField("image", java.awt.image.BufferedImage.class.getName());
+
 	Style columDetail = new Style();
 	columDetail.setBorder(Border.THIN);
 	Style columDetailWhite = new Style();
@@ -190,16 +192,38 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	    drb.addColumn(column);
 
 	}
-	drb.setTitle("Sample Report").setTitleStyle(titleStyle).setTitleHeight(new Integer(30)).setSubtitleHeight(new Integer(20)).setDetailHeight(new Integer(15))
-	// .setLeftMargin(margin)
-		// .setRightMargin(margin)
-		// .setTopMargin(margin)
-		// .setBottomMargin(margin)
-		.setPrintBackgroundOnOddRows(true).setOddRowBackgroundStyle(oddRowStyle).setColumnsPerPage(new Integer(1)).setUseFullPageWidth(true).setColumnSpace(new Integer(5));
-	DynamicReport dr = drb.build();
+	//drb.setTitle("Sample Report").setTitleStyle(titleStyle).setTitleHeight(new Integer(30)).setSubtitleHeight(new Integer(20)).setDetailHeight(new Integer(15))
+	//	.setPrintBackgroundOnOddRows(true).setOddRowBackgroundStyle(oddRowStyle).setColumnsPerPage(new Integer(1)).setUseFullPageWidth(true).setColumnSpace(new Integer(5));
+	drb.setPrintBackgroundOnOddRows(true).setOddRowBackgroundStyle(oddRowStyle).setColumnsPerPage(new Integer(1)).setUseFullPageWidth(true).setColumnSpace(new Integer(5));
+	
+//	ArrayList beans = new ArrayList();
+//	SimpleRowBean a1 = new SimpleRowBean("header1","row1","VALUE1");
+//	SimpleRowBean a2 = new SimpleRowBean("header2","row1","VALUE2");
+//	SimpleRowBean a3 = new SimpleRowBean("header3","row1","VALUE3");
+//	beans.add(a1);
+//	beans.add(a2);
+//	beans.add(a3);
+//
+//	SimpleRowBean b1 = new SimpleRowBean("header1","row2","VALUE1");
+//	SimpleRowBean b2 = new SimpleRowBean("header2","row2","VALUE2");
+//	SimpleRowBean b3 = new SimpleRowBean("header3","row2","VALUE3");
+//	beans.add(b1);
+//	beans.add(b2);
+//	beans.add(b3);
+	
+	reportBean.setImage(image);
+	//beans.add(reportBean);
+	//JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(beans);
+	Map parameters = new HashMap();
+	parameters.put("image", image);
+	log.debug("Map: "+parameters);
+//	JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplateXMLFile.getCanonicalPath());
+	
+//	JasperPrint jp = JasperFillManager.fillReport(jasperReport, parameters, ds);
 
+	DynamicReport dr = drb.build();
 	JRDataSource ds = new JRTableModelDataSource(model);
-	JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
+	JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds,parameters);
 	return jp;
     }
 

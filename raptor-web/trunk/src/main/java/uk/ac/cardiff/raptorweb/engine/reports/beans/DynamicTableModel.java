@@ -29,9 +29,6 @@ public class DynamicTableModel extends AbstractTableModel {
     /** The data. */
     private Object[][] data;
 
-    /** the graph of the image*/
-    private BufferedImage image;
-
 
     public DynamicTableModel(){
 	super();
@@ -113,16 +110,5 @@ public class DynamicTableModel extends AbstractTableModel {
 	this.data = data;
     }
 
-
-
-    public void setImage(BufferedImage image) {
-	this.image = image;
-    }
-
-
-
-    public BufferedImage getImage() {
-	return image;
-    }
 
 }
