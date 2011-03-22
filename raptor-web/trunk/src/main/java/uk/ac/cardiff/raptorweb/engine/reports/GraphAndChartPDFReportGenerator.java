@@ -104,80 +104,52 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
     private JasperPrint constructReport(File reportTemplateXMLFile, WebSession session) throws IOException, JRException, ColumnBuilderException {
 	log.info("Constructing Report Using DynamicJasper");
-	// List source = new ArrayList();
-	// BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(),
-	// session.getGraphmodel().getChartOptions());
-	// reportBean.setImage(image);
-	// ArrayList<String> values = new ArrayList();
-	// values.add("One");
-	// values.add("Two");
-	// reportBean.setState(values);
-	// source.add(reportBean);
-	//
-	// DynamicReportBuilder drb = new DynamicReportBuilder();
-	// drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
-	//
-	// drb.addField("image", java.awt.image.BufferedImage.class.getName());
-	//
-	// //session.getGraphmodel().getCurrentTableGraph().ge
-	//
-	// AbstractColumn columnState = ColumnBuilder.getNew().setColumnProperty("state",List.class.getName()).setTitle("State").setWidth(85).build();
-	// drb.addColumn(columnState);
-	// DynamicReport dynamicReport = drb.build();
-	//
-	// JRDataSource ds = new JRBeanCollectionDataSource(source);
-	// JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dynamicReport, new ClassicLayoutManager(), ds);
-	String[] columns = new String[session.getGraphmodel().getCurrentTableGraph().getTableSeries().size()+1];
-	columns[0] = "Group";//always group
-	int headerCount=1;
+
+	// construct the table
+	String[] columns = new String[session.getGraphmodel().getCurrentTableGraph().getTableSeries().size() + 1];
+	columns[0] = "Group";// always group
+	int headerCount = 1;
 	for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
 	    columns[headerCount++] = tseries.getSeriesLabel();
 	}
 
 	Object[][] data = new Object[maxNoRows(session.getGraphmodel().getCurrentTableGraph())][columns.length];
 
-
-
-	int rowCount=0;
+	int rowCount = 0;
 	for (ManyRow mrow : session.getGraphmodel().getCurrentTableGraph().getRowsForView()) {
-	    data[rowCount][0]=mrow.getGroupLabel();
-	    Iterator<?> it =mrow.getValues().iterator();
-	    headerCount=1;
-	    while (it.hasNext()){
+	    data[rowCount][0] = mrow.getGroupLabel();
+	    Iterator<?> it = mrow.getValues().iterator();
+	    headerCount = 1;
+	    while (it.hasNext()) {
 		String value = it.next().toString();
 		data[rowCount][headerCount++] = value;
 	    }
 	    rowCount++;
 	}
-	log.debug("{}",Arrays.toString(data));
+	log.debug("{}", Arrays.toString(data));
 
 	DynamicTableModel model = new DynamicTableModel();
 	model.setColumnNames(columns);
 	model.setData(data);
 
-	BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(),session.getGraphmodel().getChartOptions());
-
-	//FastReportBuilder drb = new FastReportBuilder();
+	// construct report and set the template
 	DynamicReportBuilder drb = new DynamicReportBuilder();
 	drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
-//	drb.addField("image", java.awt.image.BufferedImage.class.getName());
 
-	Style columDetail = new Style();
-	columDetail.setBorder(Border.THIN);
 	Style columDetailWhite = new Style();
 	columDetailWhite.setBorder(Border.THIN);
 	columDetailWhite.setBackgroundColor(Color.WHITE);
+	columDetailWhite.setHorizontalAlign(HorizontalAlign.CENTER);
 	Style columDetailWhiteBold = new Style();
 	columDetailWhiteBold.setBorder(Border.THIN);
 	columDetailWhiteBold.setBackgroundColor(Color.WHITE);
+
+
+
 	Style titleStyle = new Style();
-	titleStyle.setFont(new Font(18, Font._FONT_VERDANA, true));
-	Style numberStyle = new Style();
-	numberStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-	Style amountStyle = new Style();
-	amountStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-	amountStyle.setBackgroundColor(Color.cyan);
-	amountStyle.setTransparency(Transparency.OPAQUE);
+	titleStyle.setFont(new Font(12, Font._FONT_VERDANA, true));
+	titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+	titleStyle.setBorder(Border.THIN);
 	Style oddRowStyle = new Style();
 	oddRowStyle.setBorder(Border.NO_BORDER);
 	Color veryLightGrey = new Color(230, 230, 230);
@@ -187,43 +159,39 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	// table name column
 	String[] headings = model.getColumnNames();
 	for (int i = 0; i < headings.length; i++) {
-	    String key = headings[i];
-	    AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhite).build();
-	    drb.addColumn(column);
+	    if (i == 0) {
+		// group category
+		String key = headings[i];
+		AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhiteBold).build();
+		column.setHeaderStyle(titleStyle);
+		drb.addColumn(column);
+	    } else {
+		String key = headings[i];
+		AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhite).build();
+		column.setHeaderStyle(titleStyle);
+		drb.addColumn(column);
+	    }
 
 	}
-	//drb.setTitle("Sample Report").setTitleStyle(titleStyle).setTitleHeight(new Integer(30)).setSubtitleHeight(new Integer(20)).setDetailHeight(new Integer(15))
-	//	.setPrintBackgroundOnOddRows(true).setOddRowBackgroundStyle(oddRowStyle).setColumnsPerPage(new Integer(1)).setUseFullPageWidth(true).setColumnSpace(new Integer(5));
-	drb.setPrintBackgroundOnOddRows(true).setOddRowBackgroundStyle(oddRowStyle).setColumnsPerPage(new Integer(1)).setUseFullPageWidth(true).setColumnSpace(new Integer(5));
-	
-//	ArrayList beans = new ArrayList();
-//	SimpleRowBean a1 = new SimpleRowBean("header1","row1","VALUE1");
-//	SimpleRowBean a2 = new SimpleRowBean("header2","row1","VALUE2");
-//	SimpleRowBean a3 = new SimpleRowBean("header3","row1","VALUE3");
-//	beans.add(a1);
-//	beans.add(a2);
-//	beans.add(a3);
-//
-//	SimpleRowBean b1 = new SimpleRowBean("header1","row2","VALUE1");
-//	SimpleRowBean b2 = new SimpleRowBean("header2","row2","VALUE2");
-//	SimpleRowBean b3 = new SimpleRowBean("header3","row2","VALUE3");
-//	beans.add(b1);
-//	beans.add(b2);
-//	beans.add(b3);
-	
-	reportBean.setImage(image);
-	//beans.add(reportBean);
-	//JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(beans);
+
+	drb.setPrintBackgroundOnOddRows(true);
+	drb.setOddRowBackgroundStyle(oddRowStyle);
+	drb.setColumnsPerPage(new Integer(1));
+	drb.setUseFullPageWidth(true);
+	drb.setColumnSpace(new Integer(5));
+	drb.setDetailHeight(new Integer(15));
+
+	// add any additional parameters that are mapped to the template
+	BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session.getGraphmodel().getChartOptions());
+
 	Map parameters = new HashMap();
 	parameters.put("image", image);
-	log.debug("Map: "+parameters);
-//	JasperReport jasperReport = JasperCompileManager.compileReport(reportTemplateXMLFile.getCanonicalPath());
-	
-//	JasperPrint jp = JasperFillManager.fillReport(jasperReport, parameters, ds);
+	parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
+	log.debug("Map: " + parameters);
 
 	DynamicReport dr = drb.build();
 	JRDataSource ds = new JRTableModelDataSource(model);
-	JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds,parameters);
+	JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds, parameters);
 	return jp;
     }
 
@@ -233,11 +201,11 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
      */
     private int maxNoRows(RaptorTableChartModel currentTableGraph) {
 	int maxRows = 0;
-	 for (TableSeries tseries :currentTableGraph.getTableSeries()){
-	     if (tseries.getRows().size()>maxRows)
-		 maxRows=tseries.getRows().size();
-	 }
-	 return maxRows;
+	for (TableSeries tseries : currentTableGraph.getTableSeries()) {
+	    if (tseries.getRows().size() > maxRows)
+		maxRows = tseries.getRows().size();
+	}
+	return maxRows;
     }
 
     @Override

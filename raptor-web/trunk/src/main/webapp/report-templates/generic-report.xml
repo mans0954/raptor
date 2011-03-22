@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DataSourceReport" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="50" bottomMargin="50">
-	<style name="Sans_Normal" isDefault="true" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-	<style name="Sans_Bold" isDefault="false" fontName="DejaVu Sans" fontSize="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
-	<style name="Sans_Italic" isDefault="false" fontName="DejaVu Sans" fontSize="12" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
-	<parameter name="image" class="java.awt.Image"/>
-	<field name="description" class="java.lang.String"/>
+    <!--  This report is augmented with a table by DynamicJasper. DynamicJasper prohibits the use of the following
+    aspects of Jasper report templates:
+      The template must not have groups, DynamicJAsper will create them if necessary.
+	   The detail band must be empty: DynamicJasper will work in the detail band, any previously existing element will be deleted.
+	   One template per page size and orientation will be needed: This is because DJ knows how to arrange the element he creates, but not the existing ones.
+	   The following options will be always overwritten by the dynamic report
+	       number of columns
+	       When-No-Data behavior
+	       When-Resource-Missing behavior
+	       Title start on new page flag (false by default)
+	       Ignore Pagination flag (false by default)
+	       Detail Band Split allowed flag (true by default)
+	       Summary start on new page flag (false by default)
+     -->
+    <parameter name="image" class="java.awt.Image"/>
 
-	 <title>
- <!--  <band height="50">
-      <staticText>
-        <reportElement x="0" y="0" width="180" height="15"/>
-        <textElement>
-        	<font fontName="DejaVu Sans" size="9"/>
-        </textElement>
-        <text><![CDATA[RaptorWeb Report]]></text>
-      </staticText> 
-    </band>-->
-    <band height="600">
-			<staticText>
-				<reportElement x="0" y="10" width="311" height="20"/>
-				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans" size="20"/>
-				</textElement>
-				<text><![CDATA[Report Title]]></text>
-			</staticText>
-			<image scaleImage="RetainShape" hAlign="Center" isUsingCache="true" isLazy="true">
-				<reportElement x="0" y="30" width="500" height="500"/>
-				<imageExpression class="java.awt.Image"><![CDATA[$P{image}]]></imageExpression>
-			</image>
-		</band>
-  	</title>
-  	<pageHeader>
-    <band/>
-  	</pageHeader>
-  	
+    <!--  The integration of a chart and table with dynamic Jasper requires the chart (or image) to be placed in the pages
+    Title area  -->
+    <title>
+    <band height="72">
+            <frame>
+                <reportElement mode="Opaque" x="-20" y="-20" width="540" height="92" backcolor="#006699"/>
+                <staticText>
+                    <reportElement x="20" y="20" width="234" height="43" forecolor="#FFFFFF"/>
+                    <textElement>
+                        <font size="34" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Report]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="70" y="43" width="465" height="20" forecolor="#FFFFFF"/>
+                    <textElement textAlignment="Right">
+                        <font size="13" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$P{subtitle}]]></textFieldExpression>
+                </textField>
+            </frame>
+            <image scaleImage="RetainShape" hAlign="Center" isUsingCache="true" isLazy="true">
+                <reportElement x="0" y="100" width="500" height="500"/>
+                <imageExpression class="java.awt.Image"><![CDATA[$P{image}]]></imageExpression>
+            </image>
+        </band>
+     </title>
+
+
 	<detail>
 		<band>
-			<staticText>
-        <reportElement x="0" y="0" width="40" height="15"/>
-        <textElement>
-            <font fontName="DejaVu Sans" size="8"/>
-        </textElement>
-        <text><![CDATA[Page:]]></text>
-      </staticText>
+            <!-- This band in the detail is where DynamicJasper will add the table, please leave -->
 		</band>
-		
+
 	</detail>
 
-	<pageFooter>
-    <band height="15">
-      <staticText>
-        <reportElement x="0" y="0" width="40" height="15"/>
-        <textElement>
-            <font fontName="DejaVu Sans" size="8"/>
-        </textElement>
-        <text><![CDATA[Page:]]></text>
-      </staticText>
-      <textField>
-        <reportElement x="40" y="0" width="100" height="15"/>
-        <textElement>
-        	<font fontName="DejaVu Sans" size="8"/>
-        </textElement>
-        <textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
-      </textField>
-    </band>
-  </pageFooter>
+    <pageFooter>
+        <band height="17">
+            <textField>
+                <reportElement mode="Opaque" x="0" y="4" width="480" height="13" backcolor="#E6E6E6"/>
+                <textElement textAlignment="Right">
+                    <font fontName="DejaVu Sans" size="8"/>
+                </textElement>
+                <textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement mode="Opaque" x="480" y="4" width="40" height="13" backcolor="#E6E6E6"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="8"/>
+                </textElement>
+                <textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="0" y="4" width="100" height="13"/>
+                <textElement>
+                    <font fontName="DejaVu Sans" size="8"/>
+                </textElement>
+                <textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band/>
+    </summary>
 </jasperReport>
