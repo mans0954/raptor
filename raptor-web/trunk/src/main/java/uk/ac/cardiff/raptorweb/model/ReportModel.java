@@ -6,6 +6,7 @@ package uk.ac.cardiff.raptorweb.model;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,10 +26,12 @@ public class ReportModel implements Serializable{
 	 * @param location - Location is only used to generate friendly names
 	 * @param relativePath - used as a href to download the file
 	 */
-	public void addReportForDownload(File location, String relativePath){
+	public void addReportForDownload(File location, String relativePath, Date created, String typeDisplayName){
 		if (reportsForDownload==null)reportsForDownload = new ArrayList<DownloadFile>();
-		DownloadFile dlFile = new DownloadFile();
+		DownloadFile dlFile = new DownloadFile();		
 		dlFile.setFile(location);
+		dlFile.setCreatedDate(created);
+		dlFile.setTypeDisplayName(typeDisplayName);
 		dlFile.setDownloadPath(relativePath);
 		reportsForDownload.add(dlFile);
 	}

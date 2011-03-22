@@ -301,18 +301,19 @@
 									</rich:comboBox>
 									<rich:spacer width="10px" />
 									<h:outputText value="Height in pixels" />
-									<h:inputText value="#{flowScope.websession.graphmodel.chartOptions.imageHeight}"/>
+									<h:inputText
+										value="#{flowScope.websession.graphmodel.chartOptions.imageHeight}" />
 									<rich:spacer width="10px" />
-									<h:outputText value="Label Position" />									
+									<h:outputText value="Label Position" />
 									<rich:comboBox selectFirstOnUpdate="false"
 										defaultLabel="Enter some value"
 										value="#{flowScope.websession.graphmodel.chartOptions.xLabelPosition}">
 										<f:selectItems
 											value="#{flowScope.websession.graphmodel.chartOptions.labelPositionsTypeList}" />
 									</rich:comboBox>
-									
+
 									<rich:spacer width="10px" />
-									
+
 									<a4j:commandButton value="refresh" action="rerenderGraph">
 										<a4j:support ajaxSingle="true" event="oncomplete"
 											reRender="graphImage" />
@@ -352,35 +353,54 @@
 
 						<rich:tab name="Download" label="Download">
 
-
-							<h:outputText value="Select Download Format"
-								style="text-align:center; font-weight:bold; font-size:150%" />
-
-							<h:panelGrid id="reportTypePanel" columns="3">
-								<a4j:commandLink id="generateExcelReport"
-									action="generateExcelReport" reRender="chartForm">
-									<h:graphicImage value="/image/excel-icon.gif" style="border:0">
-									</h:graphicImage>
-
-								</a4j:commandLink>
-
-								<a4j:commandLink action="generateCSVReport" reRender="chartForm">
-									<h:graphicImage value="/image/csv-icon.png" style="border:0">
-									</h:graphicImage>
-								</a4j:commandLink>
+							<rich:panel style="padding:0" headerClass="outpanelHeader">
+								<f:facet name="header">
+									<rich:spacer height="1" />
+								</f:facet>
+								<h:panelGrid columns="3">
+									<h:graphicImage style="cursor: pointer"
+												value="/image/arrow.png"/>
+									<h:outputText value="Filename:"/>
+									<h:inputText/>
+								</h:panelGrid>
 								
-								<a4j:commandLink action="generatePDFReport" reRender="chartForm">
-									<h:graphicImage value="/image/pdf.png" width="35px" style="border:0">
-									</h:graphicImage>
-								</a4j:commandLink>
-							</h:panelGrid>
-
-							<rich:separator />
-							<rich:spacer height="10px" />
+								<h:panelGrid id="reportTypePanel" columns="3">
+											<h:graphicImage style="cursor: pointer"
+													value="/image/arrow.png"/>
+											<h:outputText value="Create table only report: "/>
+											<h:panelGrid columns="2">
+												<a4j:commandLink id="generateExcelReport"
+													action="generateExcelReport" reRender="chartForm">
+													<h:graphicImage value="/image/excel-icon.gif"
+														style="border:0">
+													</h:graphicImage>
+												</a4j:commandLink>											
+	
+												<a4j:commandLink action="generateCSVReport"
+													reRender="chartForm">
+													<h:graphicImage value="/image/csv-icon.png" style="border:0">
+													</h:graphicImage>
+												</a4j:commandLink>
+											</h:panelGrid>
+									
+										<h:graphicImage style="cursor: pointer"
+												value="/image/arrow.png"/>
+										<h:outputText value="Create table and graph report: "/> 
+										<h:panelGrid columns="1">      							
+											<a4j:commandLink action="generatePDFReport"
+												reRender="chartForm">
+												<h:graphicImage value="/image/pdf.png" width="35px"
+													style="border:0">
+												</h:graphicImage>
+											</a4j:commandLink>
+										</h:panelGrid>
+									</h:panelGrid>		
+							</rich:panel>
+						
 
 							<rich:dataTable id="reportDownloadTable"
 								value="#{flowScope.websession.reportmodel.reportsForDownload}"
-								bandingInterval="2" banding="row" var="row"
+								bandingInterval="2" banding="row" var="row" rows="15"
 								rendered="#{not empty flowScope.websession.reportmodel.reportsForDownload}"
 								width="100%">
 
@@ -392,6 +412,18 @@
 								</rich:column>
 								<rich:column align="center">
 									<f:facet name="header">
+										<h:outputText value="Date Created" />
+									</f:facet>
+									<h:outputText value="#{row.createdDate} " />
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Type" />
+									</f:facet>
+									<h:outputText value="#{row.typeDisplayName} " />
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
 										<h:outputText value="Download" />
 									</f:facet>
 									<a href="#{row.downloadPath}">download</a>
@@ -400,13 +432,19 @@
 									<f:facet name="header">
 										<h:outputText value="Remove" />
 									</f:facet>
-									<a4j:commandLink id="removeReportCommandLink" value="x"
+									<a4j:commandLink id="removeReportCommandLink"
 										action="removeReport" reRender="chartForm">
+										<h:graphicImage
+											style="width:18px; border:0; margin-left: auto;margin-right: auto;"
+											value="/image/icon/onebit_33.png" />
 										<f:setPropertyActionListener value="#{row}"
 											target="#{flowScope.websession.reportmodel.selectedDownloadFile}" />
 									</a4j:commandLink>
 
 								</rich:column>
+								<f:facet name="footer">
+									<rich:datascroller id="datascroller" />
+								</f:facet>
 							</rich:dataTable>
 
 

@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,6 +66,7 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
     @Override
     public void generateReport(WebSession session) {
+	//TODO there are common setup and store aspects to all reports that should be pushed higher
 	log.info("Generating PDF report for both graph and chart, for {}", session.getGraphmodel().getSelectedStatisticalUnit());
 
 	try {
@@ -89,7 +91,8 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	    JasperExportManager.exportReportToPdfFile(jp, dir.getCanonicalPath());
 
 	    String relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
-	    session.getReportmodel().addReportForDownload(dir, relativePath);
+	    Date now = new Date(System.currentTimeMillis());
+	    session.getReportmodel().addReportForDownload(dir, relativePath,now, this.getHandledReportType().displayName);
 	    log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit());
 
 	} catch (JRException e) {

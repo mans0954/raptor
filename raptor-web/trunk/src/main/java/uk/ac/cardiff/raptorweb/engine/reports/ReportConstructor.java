@@ -22,14 +22,16 @@ public abstract class ReportConstructor {
 	/* the location of the directory within the application that reports are saved to*/
 	protected Resource saveDirectory;
 	protected Resource baseDirectory;
-
+	
 	/* the enum list of the report types this handler can deal with e.g. excel or csv */
-	public enum HandledReportTypes {excel("xls"),csv("csv"),pdf("pdf");
+	public enum HandledReportTypes {excel("xls","excel"),csv("csv","CSV"),pdf("pdf","PDF");
 
 		public String fileExtension;
+		public String displayName;
 
-		HandledReportTypes(String fileExtension){
+		HandledReportTypes(String fileExtension, String displayName){
 			this.fileExtension = fileExtension;
+			this.displayName=displayName;
 		}
 
 	};

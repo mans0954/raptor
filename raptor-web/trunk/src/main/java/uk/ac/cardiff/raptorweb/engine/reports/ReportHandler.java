@@ -5,6 +5,7 @@ package uk.ac.cardiff.raptorweb.engine.reports;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,7 +55,7 @@ public class ReportHandler {
 			Resource directory = reportConstructor.getSaveDirectory();
 			Resource baseDirectory = reportConstructor.getBaseDirectory();
 			String fileExtension = reportConstructor.getHandledReportType().fileExtension;
-
+			
 			File dir;
 			try {
 				dir = new File(directory.getFile().getCanonicalPath()+"/"+session.getUser().getName());
@@ -62,7 +63,8 @@ public class ReportHandler {
 				for (File file : dirList){
 					if (file.getName().endsWith("."+fileExtension)){
 						String relativePath = file.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(),"");
-						session.getReportmodel().addReportForDownload(file, relativePath);
+						Date created = new Date(file.lastModified());						
+						session.getReportmodel().addReportForDownload(file, relativePath, created, reportConstructor.getHandledReportType().displayName);
 					}
 				}
 			}
