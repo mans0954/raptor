@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -87,7 +88,8 @@ public class CSVReportGenerator extends ReportConstructor {
 	    writer.close();
 
 	    relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
-	    session.getReportmodel().addReportForDownload(dir, relativePath);
+	    Date now = new Date(System.currentTimeMillis());
+	    session.getReportmodel().addReportForDownload(dir, relativePath,now, this.getHandledReportType().displayName);
 	    log.debug("CSV Report Created At: " + relativePath);
 
 	} catch (IOException e) {
