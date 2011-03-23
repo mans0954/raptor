@@ -1,35 +1,24 @@
 package uk.ac.cardiff.raptorweb.engine.reports;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
-import net.sf.jasperreports.engine.design.JasperDesign;
-import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
-import org.jfree.chart.JFreeChart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +29,6 @@ import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
-import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.fdvs.dj.domain.constants.Border;
 import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
@@ -50,12 +38,10 @@ import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.DynamicTableModel;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean;
-import uk.ac.cardiff.raptorweb.engine.reports.beans.SimpleRowBean;
 import uk.ac.cardiff.raptorweb.model.ManyRow;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.TableSeries;
 import uk.ac.cardiff.raptorweb.model.WebSession;
-import uk.ac.cardiff.raptorweb.model.records.Row;
 
 public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
@@ -129,7 +115,6 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	    }
 	    rowCount++;
 	}
-	log.debug("{}", Arrays.toString(data));
 
 	DynamicTableModel model = new DynamicTableModel();
 	model.setColumnNames(columns);
@@ -187,7 +172,7 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 	// add any additional parameters that are mapped to the template
 	BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session.getGraphmodel().getChartOptions());
 
-	Map parameters = new HashMap();
+	Map<String, Object> parameters = new HashMap<String, Object>();
 	parameters.put("image", image);
 	parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
 	log.debug("Map: " + parameters);
