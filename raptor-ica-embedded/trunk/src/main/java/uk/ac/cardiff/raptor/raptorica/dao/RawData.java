@@ -30,8 +30,11 @@ import uk.ac.cardiff.raptor.raptorica.model.EntryHandler;
  *
  */
 public abstract class RawData {
-	/* class logger */
-    static Logger log = LoggerFactory.getLogger(RawData.class);
+
+    /* class logger */
+    private final Logger log = LoggerFactory.getLogger(RawData.class);
+
+    /** The handler that is responsible for storing events */
     private EntryHandler entryHandler;
 
     public abstract void parse() throws Exception;

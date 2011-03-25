@@ -30,7 +30,7 @@ import uk.ac.cardiff.raptor.raptorica.engine.ICAEngine;
 import uk.ac.cardiff.raptor.raptorica.service.ICAProcess;
 
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -91,45 +91,5 @@ public class ICAProcessImpl implements ICAProcess {
 	return engine;
     }
 
-    /*
-     * <p> This methods returns all authentications from the <code>CaptureEngine</code>
-     * once it obtains a lock on the ReentrantLock object. A timeout is used so that
-     * the web service call does not have to wait too long for an answer if the <code>capture</code>
-     * method is taking a while to execute. If the timeout occurs, an empty Set is returned.
-     *
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.service.ICAProcess#getAllAuthentications()
-     */
-    public Set getAllAuthentications() {
-	Set authentications = new LinkedHashSet<Entry>();
-	try {
-	    if (lockR.tryLock(getTimeout, TimeUnit.MILLISECONDS)) {
-		try {
-		    log.info("Getting all authentications from the ICA");
-		    authentications = engine.getAllAuthentications();
-		    log.info("Returning "+authentications.size()+" entries");
-		} finally {
-		    lockR.unlock();
-		}
-	    }
-	    else{
-		log.debug("Lock not obtained within 10000ms, assuming still parsing, passing back 0 entries");
-	    }
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	}
-	return authentications;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.service.ICAProcess#getAllUsages()
-     */
-    public Set getAllUsages() {
-	    return null;
-
-    }
 
 }

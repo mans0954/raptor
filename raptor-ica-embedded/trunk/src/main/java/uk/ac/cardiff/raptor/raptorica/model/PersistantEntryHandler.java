@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -48,7 +48,7 @@ public class PersistantEntryHandler implements EntryHandler {
     private ICADataConnection dataConnection;
 
     /* set of all entries stored by this EntryHandler */
-    Set<Entry> entries;
+    Set<Event> entries;
 
     public PersistantEntryHandler(ICADataConnection dataConnection) {
 	// entries = new ArrayList<Entry>();
@@ -70,8 +70,8 @@ public class PersistantEntryHandler implements EntryHandler {
 	    entryInformation = new EntryMetadata();
 	log.debug("Entry Information " + entryInformation.getLatestEqualEntries());
 	// convert to set from list, maybe expensive
-	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
-	entries = new LinkedHashSet<Entry>(entriesAsList);
+	List<Event> entriesAsList = dataConnection.runQuery("from Entry", null);
+	entries = new LinkedHashSet<Event>(entriesAsList);
 	log.info("Persistant entry handler [{}] started", this);
     }
 
@@ -81,12 +81,12 @@ public class PersistantEntryHandler implements EntryHandler {
      * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
      */
     @Override
-    public void addEntries(Set<Entry> entries) {
+    public void addEntries(Set<Event> entries) {
 	// Object currentEntries =
 	// dataConnection.runQueryUnique("select count(*) from Entry", null);
 	log.debug("Current: " + entries.size() + " in: " + entries.size());
 
-	for (Entry entry : entries) {
+	for (Event entry : entries) {
 	    if (isNewerOrEqual(entry))
 		entries.add(entry);
 
@@ -97,7 +97,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
     }
 
-    public void addEntry(Entry entry) {
+    public void addEntry(Event entry) {
 	// log.debug("Trying to add "+entry);
 	boolean isAfter = isAfter(entry);
 	boolean isEqual = isEqual(entry);
@@ -120,7 +120,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
     }
 
-    private void updateLastEntry(Entry entry) {
+    private void updateLastEntry(Event entry) {
 	DateTime entryTime = entry.getEventTime();
 	if (entryInformation.getLatestEntryTime() == null)
 	    entryInformation.setLatestEntryTime(entryTime);
@@ -164,7 +164,7 @@ public class PersistantEntryHandler implements EntryHandler {
      * @see main.uk.ac.cf.model.EntryHandler#isAfter(uk.ac.cardiff.model.Entry)
      */
     @Override
-    public boolean isAfter(Entry authE) {
+    public boolean isAfter(Event authE) {
 	if (entryInformation.getLatestEntryTime() == null)
 	    return true;
 	return authE.getEventTime().isAfter(entryInformation.getLatestEntryTime());
@@ -177,7 +177,7 @@ public class PersistantEntryHandler implements EntryHandler {
      * main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
      */
     @Override
-    public boolean isEqual(Entry authE) {
+    public boolean isEqual(Event authE) {
 	if (entryInformation.getLatestEntryTime() == null)
 	    return false;
 	return authE.getEventTime().isEqual(entryInformation.getLatestEntryTime());
@@ -191,7 +191,7 @@ public class PersistantEntryHandler implements EntryHandler {
      * )
      */
     @Override
-    public boolean isNewerOrEqual(Entry authE) {
+    public boolean isNewerOrEqual(Event authE) {
 	if (entryInformation.getLatestEntryTime() == null)
 	    return true;
 	if (!authE.getEventTime().isBefore(entryInformation.getLatestEntryTime()))

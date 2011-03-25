@@ -28,7 +28,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -45,23 +45,23 @@ public class MemoryEntryHandler implements EntryHandler{
 	private DateTime lastPublishedEntryTime;
 
 	/* set of all entries stored by this EntryHandler */
-	Set<Entry> entries;
+	Set<Event> entries;
 
 	/* stores the set of latest unique entries. That is, those with the latest and same
 	 *  DateTime, but different state (attribute values). This set is check when adding new
 	 *  entries, and is not removed when records are removed.
 	 */
-	Set<Entry> latestEqualEntries;
+	Set<Event> latestEqualEntries;
 
 	public MemoryEntryHandler(){
-		entries = new LinkedHashSet<Entry>();
-		latestEqualEntries = new LinkedHashSet<Entry>();
+		entries = new LinkedHashSet<Event>();
+		latestEqualEntries = new LinkedHashSet<Event>();
 	}
 
-	public void addEntries(Set<Entry> entries){
+	public void addEntries(Set<Event> entries){
 		log.debug("Current: "+this.entries.size()+" in: "+entries.size());
 
-		for (Entry entry: entries){
+		for (Event entry: entries){
 			if (isNewerOrEqual(entry))this.entries.add(entry);
 		//	else {log.debug("entry: "+entry.getEventTime()+" latest: "+latestEntryTime+" isafter: "+entry.getEventTime().isAfter(latestEntryTime));}
 			updateLastEntry(entry);
@@ -79,7 +79,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * not allow duplicates) because the set is cleared when information is sent
 	 * to the UA.
 	 */
-	public void addEntry(Entry entry){
+	public void addEntry(Event entry){
 	    boolean isAfter = isAfter(entry);
 	    boolean isEqual = isEqual(entry);
 	    if (isAfter){
@@ -102,7 +102,7 @@ public class MemoryEntryHandler implements EntryHandler{
 
 	}
 
-	private void updateLastEntry(Entry entry){
+	private void updateLastEntry(Event entry){
 		DateTime entryTime = entry.getEventTime();
 		if (getLatestEntryTime()==null)setLatestEntryTime(entryTime);
 		if (entryTime.isAfter(getLatestEntryTime())){
@@ -127,7 +127,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * @param authE
 	 * @return
 	 */
-	public boolean isNewerOrEqual(Entry authE) {
+	public boolean isNewerOrEqual(Event authE) {
 
 		if (latestEntryTime==null) return true;
 		if (!authE.getEventTime().isBefore(latestEntryTime)) return true;
@@ -138,7 +138,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * @see main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
 	 */
 	@Override
-	public boolean isEqual(Entry authE) {
+	public boolean isEqual(Event authE) {
 	    if (latestEntryTime==null) return false;
 	    return authE.getEventTime().isEqual(latestEntryTime);
 	}
@@ -147,7 +147,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	 * @see main.uk.ac.cf.model.EntryHandler#isNewer(uk.ac.cardiff.model.Entry)
 	 */
 	@Override
-	public boolean isAfter(Entry authE) {
+	public boolean isAfter(Event authE) {
 	    if (latestEntryTime==null) return true;
 	    return authE.getEventTime().isAfter(latestEntryTime);
 	}

@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
