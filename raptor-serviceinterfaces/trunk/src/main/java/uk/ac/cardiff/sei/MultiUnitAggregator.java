@@ -6,8 +6,6 @@ package uk.ac.cardiff.sei;
 import javax.jws.WebService;
 
 import org.apache.cxf.binding.soap.SoapFault;
-import org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType;
-import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
@@ -42,8 +40,6 @@ public interface MultiUnitAggregator {
 	 * @return
 	 */
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
-
-	public MessageType getExampleSDMX();
 
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
