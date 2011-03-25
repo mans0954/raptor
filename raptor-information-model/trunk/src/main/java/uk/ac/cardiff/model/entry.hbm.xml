@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
-
 <!DOCTYPE hibernate-mapping PUBLIC
-         "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
 
-	<class name="uk.ac.cardiff.model.Entry" table="entry" dynamic-update="true" dynamic-insert="false">
+	<class name="uk.ac.cardiff.model.Event" table="entry" dynamic-update="true" dynamic-insert="false">
 
 	<id name="persistantId" column="persistantId" type="long"
 			unsaved-value="null">
@@ -18,7 +17,7 @@
  	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="false" index="dt_index"/>
 	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" index="requesthost_index" />
 	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="false" />
-	
+
 	<joined-subclass name="uk.ac.cardiff.model.AuthenticationEntry"  table="authenticationEntry">
       		<key column="id"/>
       <property name="authNMethod" column="authNMethod" type="string" />

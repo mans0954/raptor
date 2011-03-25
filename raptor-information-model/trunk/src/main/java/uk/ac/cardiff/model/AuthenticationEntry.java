@@ -22,7 +22,7 @@ package uk.ac.cardiff.model;
  * @author philsmart
  *
  */
-public class AuthenticationEntry extends Entry{
+public class AuthenticationEntry extends Event{
 
 	private String authNMethod;
 
