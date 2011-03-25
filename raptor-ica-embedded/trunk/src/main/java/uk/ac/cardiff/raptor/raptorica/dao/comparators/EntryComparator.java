@@ -20,7 +20,7 @@ package uk.ac.cardiff.raptor.raptorica.dao.comparators;
 
 import java.util.Comparator;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * Not enough to compare on in Entry, hence not used.
@@ -28,10 +28,10 @@ import uk.ac.cardiff.model.Entry;
  * @author philsmart
  *
  */
-public class EntryComparator implements Comparator<Entry> {
+public class EntryComparator implements Comparator<Event> {
 
  
-    public int compare(Entry entry1, Entry entry2) {
+    public int compare(Event entry1, Event entry2) {
 	boolean requestHostEqual = entry1.getRequestHost().equals(entry2.getRequestHost());
 	boolean serverHostEqual = entry1.getServerHost().equals(entry2.getServerHost());
 	return 0;

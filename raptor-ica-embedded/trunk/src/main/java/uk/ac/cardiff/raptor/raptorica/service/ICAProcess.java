@@ -22,15 +22,5 @@ public interface ICAProcess{
 
 	public void capture();
 
-	/**
-	 * @return the list of authentications, stored as types or subtypes of AuthenticationEntry's
-	 */
-	public Set getAllAuthentications();
-
-	/**
-	 * @return the list of usages, stored as types or subtypes of UsageEntry's
-	 */
-	public Set getAllUsages();
-
 
 }

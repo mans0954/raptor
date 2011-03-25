@@ -27,7 +27,8 @@ import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.ICAMetadata;
+import uk.ac.cardiff.model.ClientMetadata;
+
 
 /**
  * @author philsmart
@@ -35,11 +36,13 @@ import uk.ac.cardiff.model.ICAMetadata;
  * Responsible for ALL low level capture operations
  */
 public class ICAEngine {
-    	static Logger log = LoggerFactory.getLogger(ICAEngine.class);
+
+    	/** Class Logger*/
+    	private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
 
 	private DataAccessRegister authRegister;
 	private UARegistry uaRegistry;
-	private ICAMetadata icaMetadata;
+	private ClientMetadata icaMetadata;
 
 	public ICAEngine(){
 	    	log.info("ICA Capture Engine is running...");
@@ -61,21 +64,8 @@ public class ICAEngine {
 	}
 
 	/**
-	 * @return all authentication entries (all subtypes of the class AuthenticationEntry
-	 */
-	public Set getAllAuthentications() {
-	    Set allAuths = new LinkedHashSet();
-	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
-		Set authentications = authI.getAuthentications();
-		for (Object auth : authentications)allAuths.add(auth);
-	    }
-	   // retrieveTransactionFinished();
-	    return allAuths;
-	}
-
-	/**
 	 * This method removes all stored entries, in this way the ICA must only talk to
-	 * one UA, otherwise the operation is nonmonotoinc whereas it should be monotonic
+	 * one endpoint, otherwise the operation is nonmonotoinc whereas it should be monotonic
 	 * remove this method if more sophisticated operation is desired.
 	 */
 	private void retrieveTransactionFinished() {
@@ -87,16 +77,12 @@ public class ICAEngine {
 
 	}
 
-	public List getAllUages() {
-	    return null;
-	}
-
 	/**
 	 * sends all authentication parsing modules to the release engine
 	 * @return
 	 */
 	public boolean release() {
-	    EntryReleaseEngine entryReleaseEngine = new EntryReleaseEngine();
+	    EventReleaseEngine entryReleaseEngine = new EventReleaseEngine();
 	    boolean success = entryReleaseEngine.release(uaRegistry, authRegister.getAuthenticationModules(), getIcaMetadata());
 	    if (success) retrieveTransactionFinished();
 	    return success;
@@ -110,12 +96,13 @@ public class ICAEngine {
 	    return uaRegistry;
 	}
 
-	public void setIcaMetadata(ICAMetadata icaMetaData) {
-	    this.icaMetadata = icaMetaData;
+	public void setIcaMetadata(ClientMetadata icaMetadata) {
+	    this.icaMetadata = icaMetadata;
 	}
 
-	public ICAMetadata getIcaMetadata() {
+	public ClientMetadata getIcaMetadata() {
 	    return icaMetadata;
 	}
+
 
 }

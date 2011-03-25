@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -33,21 +33,21 @@ import uk.ac.cardiff.model.Entry;
 public interface EntryHandler {
 
 
-	public void addEntries(Set<Entry> entries);
+	public void addEntries(Set<Event> entries);
 
-	public void addEntry(Entry entry);
+	public void addEntry(Event entry);
 
-	public boolean isNewerOrEqual(Entry authE);
+	public boolean isNewerOrEqual(Event authE);
 
-	public Set<Entry> getEntries();
+	public Set<Event> getEntries();
 
 	public void removeAllEntries();
 
 	public void endTransaction();
 
-	public boolean isEqual(Entry authE);
+	public boolean isEqual(Event authE);
 
-	public boolean isAfter(Entry authE);
+	public boolean isAfter(Event authE);
 
 	public void setLatestEntryTime(DateTime latestEntryTime);
 
