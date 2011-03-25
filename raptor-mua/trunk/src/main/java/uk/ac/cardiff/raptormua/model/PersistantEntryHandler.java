@@ -27,7 +27,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.raptormua.dao.MUADataConnection;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
@@ -49,7 +49,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * set of all entries stored by this EntryHandler should never be used as
 	 * memory overhead is too high for large databases
 	 */
-	Set<Entry> entries;
+	Set<Event> entries;
 
 	public PersistantEntryHandler(MUADataConnection dataConnection) {
 		this.setDataConnection(dataConnection);
@@ -74,9 +74,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	private void loadEntries() {
 		log.info("Loading entries from main datastore");
-		List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
+		List<Event> entriesAsList = dataConnection.runQuery("from Entry", null);
 		log.info("MUA has loaded " + entriesAsList.size() + " entries from main datastore");
-		entries = new LinkedHashSet<Entry>(entriesAsList);
+		entries = new LinkedHashSet<Event>(entriesAsList);
 	}
 
 	/*
@@ -119,10 +119,10 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
-	public void addEntries(Set<Entry> entries) {
+	public void addEntries(Set<Event> entries) {
 		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(), entries.size());
 		int duplicates=0;
-		for (Entry entry : entries){
+		for (Event entry : entries){
 		    int hashcode =0;
 		    try{
 			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", entry)).intValue();
@@ -138,7 +138,7 @@ public class PersistantEntryHandler implements EntryHandler {
 		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
 	}
 
-	public void addEntry(Entry entry) {
+	public void addEntry(Event entry) {
 		entries.add(entry);
 
 	}
@@ -192,7 +192,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
 	 */
 	@Override
-	public void setEntries(Set<Entry> entries) {
+	public void setEntries(Set<Event> entries) {
 		// TODO Auto-generated method stub
 
 	}

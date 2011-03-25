@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;

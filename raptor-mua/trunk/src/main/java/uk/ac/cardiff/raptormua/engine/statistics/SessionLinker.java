@@ -24,7 +24,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
 
