@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.model.AuthenticationEntry;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
@@ -68,7 +68,7 @@ public class ServiceEndpointInterface {
 
 	Collector client = (Collector) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
-	Set<Entry> auths = client.getAllAuthentications();
+	Set<Event> auths = client.getAllAuthentications();
 	log.debug("Retrieved "+auths.size()+" authentications from the ICA ["+endpoint+"]");
 //	for (Entry ent : auths){//
 //	    log.debug(ent+" "+ent.getClass());//
@@ -137,7 +137,7 @@ public class ServiceEndpointInterface {
 
 	Collector client = (Collector) factory.create();
 	log.debug("Accessing the ICA version "+client.getVersion());
-	Set<Entry> auths = client.getAllUsages();
+	Set<Event> auths = client.getAllUsages();
 	log.debug("Retrieved "+auths.size()+" usages");
 //	for (Entry ent : auths){//
 //	    log.debug(ent+" "+ent.getClass());//

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -35,11 +35,11 @@ public interface EntryHandler {
 
 
 
-	public void addEntries(Set<Entry> entries);
+	public void addEntries(Set<Event> entries);
 
-	public Set<Entry> getEntries();
+	public Set<Event> getEntries();
 
-	public void setEntries(Set<Entry> entries);
+	public void setEntries(Set<Event> entries);
 
 	public void removeAllEntries();
 

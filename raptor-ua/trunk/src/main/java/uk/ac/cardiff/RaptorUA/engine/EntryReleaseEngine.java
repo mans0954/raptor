@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.RaptorUA.engine.sei.ServiceEndpointInterface;
 import uk.ac.cardiff.RaptorUA.model.EntryHandler;
 import uk.ac.cardiff.RaptorUA.model.MUAEntry;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ICAMetadata;
 import uk.ac.cardiff.model.UAMetadata;
 import uk.ac.cardiff.model.wsmodel.UAEntryPush;
@@ -46,7 +46,7 @@ public class EntryReleaseEngine {
      * @param authenticationModules
      */
     public boolean release(EntryHandler entryHandler, MUARegistry muaRegistry, UAMetadata uaMetaData) {
-	Set<Entry> allEntries = entryHandler.getEntries();
+	Set<Event> allEntries = entryHandler.getEntries();
 	log.debug("Releasing {} entries to approved MUAs",entryHandler.getEntries().size());
 	boolean releasedtoAll = true;
 	int releaseCount=0;
@@ -73,7 +73,7 @@ public class EntryReleaseEngine {
 
     }
 
-    private UAEntryPush constructEntryPush(UAMetadata uaMetaData, Set<Entry> entries){
+    private UAEntryPush constructEntryPush(UAMetadata uaMetaData, Set<Event> entries){
 	UAEntryPush pushMessage = new UAEntryPush();
 	pushMessage.setUaMetaData(uaMetaData);
 	pushMessage.setEntries(entries);

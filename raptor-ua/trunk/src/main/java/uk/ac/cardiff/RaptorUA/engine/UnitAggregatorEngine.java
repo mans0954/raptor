@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.RaptorUA.model.EntryHandler;
 import uk.ac.cardiff.RaptorUA.model.ICAEntry;
 import uk.ac.cardiff.RaptorUA.model.MemoryEntryHandler;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ICAMetadata;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UAMetadata;
@@ -101,7 +101,7 @@ public class UnitAggregatorEngine {
     public void toStdOut() {
 	log.info("Outputting All Entries to StdOut");
 	int count = 0;
-	for (Entry entryObject : entryHandler.getEntries()) {
+	for (Event entryObject : entryHandler.getEntries()) {
 	    if (entryObject instanceof ShibbolethEntry)
 		log.info(count + ". Stored Entry -- " + ((ShibbolethEntry) entryObject));
 	    count++;
@@ -113,8 +113,8 @@ public class UnitAggregatorEngine {
      * @return
      */
     public Set getAllAuthentications() {
-	LinkedHashSet<Entry> returnedAuths = new LinkedHashSet();
-	for (Entry entry : entryHandler.getEntries())
+	LinkedHashSet<Event> returnedAuths = new LinkedHashSet();
+	for (Event entry : entryHandler.getEntries())
 	    returnedAuths.add(entry);
 
 	/*
