@@ -38,6 +38,22 @@
         </dependency>
 
         <dependency>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>raptor-serviceinterfaces</artifactId>
+            <version>0.4-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xalan</artifactId>
+                    <groupId>xalan</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http</artifactId>
             <version>${apache.cxf.version}</version>
