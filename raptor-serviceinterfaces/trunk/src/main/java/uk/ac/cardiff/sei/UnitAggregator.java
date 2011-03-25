@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.jws.WebService;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
@@ -33,7 +33,7 @@ import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 public interface UnitAggregator {
 
 	String getVersion();
-	Set<Entry> getAllAuthentications();
+	Set<Event> getAllAuthentications();
 	void addAuthentications(ICAEntryPush pushed);
 
 
