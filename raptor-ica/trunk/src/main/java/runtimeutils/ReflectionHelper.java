@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import main.uk.ac.cf.dao.external.file.LogFileParser;
 
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart

@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
@@ -86,7 +86,7 @@ public class ServiceEndpointInterface {
 	    UnitAggregator client = (UnitAggregator) factory.create();
 	    log.debug("Accessing the UA version " + client.getVersion());
 	    Set<ShibbolethEntry> newEntries = new LinkedHashSet<ShibbolethEntry>();
-	    for (Entry entry : pushed.getEntries()) {
+	    for (Event entry : pushed.getEntries()) {
 		log.debug("Entry is shib {}", (entry instanceof ShibbolethEntry));
 		if (entry instanceof ShibbolethEntry) {
 		    ShibbolethEntry newShib = (ShibbolethEntry) entry;

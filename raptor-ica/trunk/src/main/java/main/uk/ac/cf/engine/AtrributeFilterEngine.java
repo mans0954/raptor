@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import runtimeutils.ReflectionHelper;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 import main.uk.ac.cf.model.AttributeFilterPolicy;
 import main.uk.ac.cf.model.AttributeRule;
@@ -51,11 +51,11 @@ public class AtrributeFilterEngine {
      * @param entries
      * @return
      */
-    public static Set<Entry> filter(AttributeFilterPolicy attributeFilterPolicy, Set<Entry> entries){
+    public static Set<Event> filter(AttributeFilterPolicy attributeFilterPolicy, Set<Event> entries){
 	log.debug("Applying attribute filter policy {} to entry set",attributeFilterPolicy.getPolicyName());
-	Set<Entry> filteredEntries = clone(entries);
+	Set<Event> filteredEntries = clone(entries);
 
-	for (Entry entry: filteredEntries){
+	for (Event entry: filteredEntries){
 	    for (AttributeRule attributeRule : attributeFilterPolicy.getAttributeRules()){
 		filterAttributes(entry, attributeRule);
 	    }
@@ -70,7 +70,7 @@ public class AtrributeFilterEngine {
      * @param entry
      * @param attributeRule
      */
-    private static void filterAttributes(Entry entry, AttributeRule attributeRule){
+    private static void filterAttributes(Event entry, AttributeRule attributeRule){
 	String attributeID = attributeRule.getAttributeID();
 	if (classHasAttribute(entry, attributeID)){
 	    if (attributeRule.getDenyValueRule().isEnabled()){
@@ -83,19 +83,19 @@ public class AtrributeFilterEngine {
 
     }
 
-    private static void nullAttribute(Entry entry, String attributeID){
+    private static void nullAttribute(Event entry, String attributeID){
 	ReflectionHelper.nullAttribute(entry, attributeID);
     }
 
-    private static boolean classHasAttribute(Entry entry, String attributeID){
+    private static boolean classHasAttribute(Event entry, String attributeID){
 	return ReflectionHelper.classHasAttribute(entry, attributeID);
     }
 
-    private static Set<Entry> clone(Set<Entry> entries){
-	Set<Entry> clonedSet = new LinkedHashSet<Entry>();
+    private static Set<Event> clone(Set<Event> entries){
+	Set<Event> clonedSet = new LinkedHashSet<Event>();
 	Cloner cloner = new Cloner();
-	for (Entry entry: entries){
-	    Entry newEntry = cloner.deepClone(entry);
+	for (Event entry: entries){
+	    Event newEntry = cloner.deepClone(entry);
 	    clonedSet.add(newEntry);
 	}
 	return clonedSet;

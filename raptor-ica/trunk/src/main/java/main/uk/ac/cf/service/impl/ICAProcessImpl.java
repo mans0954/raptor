@@ -30,7 +30,7 @@ import main.uk.ac.cf.engine.ICAEngine;
 import main.uk.ac.cf.service.ICAProcess;
 
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
@@ -103,7 +103,7 @@ public class ICAProcessImpl implements ICAProcess {
      * @see main.uk.ac.cf.service.ICAProcess#getAllAuthentications()
      */
     public Set getAllAuthentications() {
-	Set authentications = new LinkedHashSet<Entry>();
+	Set authentications = new LinkedHashSet<Event>();
 	try {
 	    if (lockR.tryLock(getTimeout, TimeUnit.MILLISECONDS)) {
 		try {
