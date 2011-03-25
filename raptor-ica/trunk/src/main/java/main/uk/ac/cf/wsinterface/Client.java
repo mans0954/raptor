@@ -26,7 +26,7 @@ import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 
 import uk.ac.cardiff.model.AuthenticationEntry;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.UsageEntry;
 import uk.ac.cardiff.sei.Collector;
@@ -56,9 +56,9 @@ public class Client {
 
 	Collector client = (Collector) factory.create();
 	System.out.println(client.getVersion());
-	Set<Entry> auths = client.getAllAuthentications();
+	Set<Event> auths = client.getAllAuthentications();
 	System.out.println("Have "+auths.size());
-	for (Entry ent : auths){
+	for (Event ent : auths){
 
 		System.out.println(ent+" "+ent.getClass());
 

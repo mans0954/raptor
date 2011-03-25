@@ -20,7 +20,7 @@ package main.uk.ac.cf.model;
 
 import org.junit.Test;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -30,7 +30,7 @@ public class EntryTest {
 
     @Test
     public void testEntry(){
-	Entry entry = new Entry();
+	Event entry = new Event();
 	assert((entry!=null));
 
     }

@@ -99,7 +99,7 @@ public class LogFileParser extends AuthenticationInput {
 		}
 	    }
 	    /* first, dynamically construct the supplied entry class */
-	    Entry authE = (Entry) this.createObject(getEntryType());
+	    Event authE = (Event) this.createObject(getEntryType());
 
 	    /* now populate its fields */
 	    for (Header header : format.getHeaders()) {

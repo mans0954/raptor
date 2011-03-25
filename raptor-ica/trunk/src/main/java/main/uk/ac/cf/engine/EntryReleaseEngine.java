@@ -30,7 +30,7 @@ import main.uk.ac.cf.model.UAEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ICAMetadata;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
@@ -46,7 +46,7 @@ public class EntryReleaseEngine {
      * @param authenticationModules
      */
     public boolean release(UARegistry uaRegistry, List<AuthenticationInput> authenticationModules, ICAMetadata icaMetaData) {
-	Set<Entry> allEntries = new LinkedHashSet<Entry>();
+	Set<Event> allEntries = new LinkedHashSet<Event>();
 	for (AuthenticationInput authI : authenticationModules){
 	    log.debug("AuthenticationInput: {}, has {} entries",authI,authI.getEntryHandler().getEntries().size());
 	    allEntries.addAll(authI.getEntryHandler().getEntries());
@@ -56,7 +56,7 @@ public class EntryReleaseEngine {
 	for (UAEntry uaEntry : uaRegistry.getUAEntries()){
 	    boolean shouldRelease = (uaEntry.getPushPolicy().getPushOnOrAfterNoEntries() <= allEntries.size());
 	    log.debug("UA Entry: {}, should release {}",uaEntry.getServiceEndpoint(),shouldRelease);
-	    Set<Entry> filteredEntries = filterAttributes(uaEntry, allEntries);
+	    Set<Event> filteredEntries = filterAttributes(uaEntry, allEntries);
 	    ICAEntryPush pushMessage = constructICAEntryPush(icaMetaData, filteredEntries);
 	    if (shouldRelease) {
 		log.debug("Pushing {} entries to the UA [{}]",filteredEntries.size(),uaEntry.getServiceEndpoint());
@@ -78,7 +78,7 @@ public class EntryReleaseEngine {
     }
 
     public ICAEntryPush getRelease(List<AuthenticationInput> authenticationModules, ICAMetadata icaMetaData) {
-	Set<Entry> allEntries = new LinkedHashSet<Entry>();
+	Set<Event> allEntries = new LinkedHashSet<Event>();
 	for (AuthenticationInput authI : authenticationModules){
 	    log.debug("AuthenticationInput: {}, has {} entries",authI,authI.getEntryHandler().getEntries().size());
 	    allEntries.addAll(authI.getEntryHandler().getEntries());
@@ -100,12 +100,12 @@ public class EntryReleaseEngine {
      * @param allEntries
      * @return
      */
-    private Set<Entry> filterAttributes(UAEntry uaEntry, Set<Entry> allEntries){
+    private Set<Event> filterAttributes(UAEntry uaEntry, Set<Event> allEntries){
 	if (uaEntry.getAttributeFilterPolicy()==null) return allEntries;
 	return AtrributeFilterEngine.filter(uaEntry.getAttributeFilterPolicy(), allEntries);
     }
 
-    private ICAEntryPush constructICAEntryPush(ICAMetadata icaMetaData, Set<Entry> entries){
+    private ICAEntryPush constructICAEntryPush(ICAMetadata icaMetaData, Set<Event> entries){
 	ICAEntryPush pushMessage = new ICAEntryPush();
 	pushMessage.setIcaMetaData(icaMetaData);
 	pushMessage.setEntries(entries);

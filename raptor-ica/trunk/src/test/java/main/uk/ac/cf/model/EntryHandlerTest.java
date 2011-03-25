@@ -31,7 +31,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 
 /**
@@ -92,7 +92,7 @@ public class EntryHandlerTest {
      * @param entryTwo
      * @return
      */
-    private <T extends Entry> boolean isDisjoint(T entry, T entryTwo){
+    private <T extends Event> boolean isDisjoint(T entry, T entryTwo){
 	System.out.println("testDisjointEntries: Entry One is: "+entry+" With hashCode: "+entry.hashCode());
 	System.out.println("testDisjointEntries: Entry Two is: "+entryTwo+" With hashCode: "+entryTwo.hashCode());
 	System.out.println("testDisjointEntries: Equality: "+entry.equals(entryTwo));
@@ -103,7 +103,7 @@ public class EntryHandlerTest {
     @Test
     public void testHashSet(){
 
-	Set<Entry> entries = new LinkedHashSet<Entry>();
+	Set<Event> entries = new LinkedHashSet<Event>();
 
 	ShibbolethEntry entry = new ShibbolethEntry();
 	entry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");

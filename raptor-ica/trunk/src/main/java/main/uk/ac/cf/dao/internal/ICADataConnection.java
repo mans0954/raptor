@@ -21,7 +21,7 @@ package main.uk.ac.cf.dao.internal;
 import java.util.Collection;
 import java.util.List;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
