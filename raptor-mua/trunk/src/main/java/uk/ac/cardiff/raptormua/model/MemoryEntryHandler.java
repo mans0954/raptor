@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -39,15 +39,15 @@ public class MemoryEntryHandler implements EntryHandler{
     	static Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
 
 	/* list of all entries stored by this EntryHandler */
-    	Set<Entry> entries;
+    	Set<Event> entries;
 
 	public MemoryEntryHandler(){
 
 	}
 
-	public void addEntries(Set<Entry> entries){
+	public void addEntries(Set<Event> entries){
 		log.info("Adding {} entries to the MUA",entries.size());
-		for (Entry entry: entries){
+		for (Event entry: entries){
 			this.entries.add(entry);
 		}
 		log.info("MUA now has a total of "+this.entries.size()+" entries");
@@ -55,7 +55,7 @@ public class MemoryEntryHandler implements EntryHandler{
 
 	public void initialise(){
 		log.info("Memory entry handler [{}] initialising",this);
-		entries = new LinkedHashSet<Entry>();
+		entries = new LinkedHashSet<Event>();
 		log.info("Memory entry handler [{}] started",this);
 	}
 
@@ -69,7 +69,7 @@ public class MemoryEntryHandler implements EntryHandler{
 
 	}
 
-	public void setEntries(Set<Entry> entries){
+	public void setEntries(Set<Event> entries){
 	    this.entries = entries;
 	}
 

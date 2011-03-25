@@ -22,7 +22,7 @@ package uk.ac.cardiff.raptormua.runtimeutils;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
@@ -30,8 +30,8 @@ import uk.ac.cardiff.model.Entry;
  */
 public class EntryClone {
 
-	public static Set<Entry> cloneEntries(LinkedHashSet<Entry> entries){
-		return (LinkedHashSet<Entry>) entries.clone();
+	public static Set<Event> cloneEntries(LinkedHashSet<Event> entries){
+		return (LinkedHashSet<Event>) entries.clone();
 	}
 
 }

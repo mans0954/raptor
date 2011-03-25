@@ -21,8 +21,6 @@ package uk.ac.cardiff.raptormua.wsinterface.impl;
 import javax.jws.WebService;
 
 import org.apache.cxf.binding.soap.SoapFault;
-import org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType;
-import org.sdmx.resources.sdmxml.schemas.v2_0.message.MessageType;
 
 
 import uk.ac.cardiff.model.AdministrativeFunction;
@@ -31,7 +29,6 @@ import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.UAEntryPush;
-import uk.ac.cardiff.raptormua.runtimeutils.SDMXHandler;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
 
@@ -75,13 +72,6 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 		return processService.performStatistic(statisticName);
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#getExampleSDMX()
-	 */
-	@Override
-	public MessageType getExampleSDMX() {
-		return SDMXHandler.createSDMXMessage();
-	}
 
 	/* (non-Javadoc)
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#setStatisticalUnit(uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation)
