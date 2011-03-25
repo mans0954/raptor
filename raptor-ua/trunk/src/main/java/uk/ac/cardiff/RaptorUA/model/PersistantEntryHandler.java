@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import uk.ac.cardiff.RaptorUA.dao.UADataConnection;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 
 /**
@@ -45,7 +45,7 @@ public class PersistantEntryHandler implements EntryHandler {
     private UADataConnection dataConnection;
 
     /* set of all entries stored by this EntryHandler */
-    Set<Entry> entries;
+    Set<Event> entries;
 
     public PersistantEntryHandler(UADataConnection dataConnection) {
 	this.setDataConnection(dataConnection);
@@ -60,9 +60,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	log.info("Persistant entry handler [{}] initialising", this);
 	Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
 	log.info("Persistent data store has {} entries", rowCount);
-	List<Entry> entriesAsList = dataConnection.runQuery("from Entry", null);
+	List<Event> entriesAsList = dataConnection.runQuery("from Entry", null);
 	log.info("UA has loaded " + entriesAsList.size() + " entries from DB backed cache");
-	entries = new LinkedHashSet<Entry>(entriesAsList);
+	entries = new LinkedHashSet<Event>(entriesAsList);
 	log.info("Persistant entry handler [{}] started", this);
     }
 
@@ -72,16 +72,16 @@ public class PersistantEntryHandler implements EntryHandler {
      * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
      */
     @Override
-    public void addEntries(Set<Entry> entries) {
+    public void addEntries(Set<Event> entries) {
 	log.debug("Current: " + this.getEntries().size() + " in: " + entries.size());
-	for (Entry entry : entries) {
+	for (Event entry : entries) {
 	    this.getEntries().add(entry);
 	}
 	log.debug("Total No. of Entries " + this.getEntries().size());
 
     }
 
-    public void addEntry(Entry entry) {
+    public void addEntry(Event entry) {
 	entries.add(entry);
 
     }
@@ -136,7 +136,7 @@ public class PersistantEntryHandler implements EntryHandler {
      * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
      */
     @Override
-    public void setEntries(Set<Entry> entries) {
+    public void setEntries(Set<Event> entries) {
 	// TODO Auto-generated method stub
 
     }

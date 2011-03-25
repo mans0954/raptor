@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.RaptorUA.engine.UnitAggregatorEngine;
 import uk.ac.cardiff.RaptorUA.service.UAProcess;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 
 /**
@@ -97,7 +97,7 @@ public class UAProcessImpl implements UAProcess {
      *
      */
     public Set getAllAuthentications() {
-	Set authentications = new LinkedHashSet<Entry>();
+	Set authentications = new LinkedHashSet<Event>();
 	try {
 	    if (lockR.tryLock(getTimeout, TimeUnit.MILLISECONDS)) {
 		try {

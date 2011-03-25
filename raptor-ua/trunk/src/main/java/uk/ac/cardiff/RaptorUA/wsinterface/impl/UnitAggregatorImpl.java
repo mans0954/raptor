@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.RaptorUA.service.impl.UAProcessImpl;
-import uk.ac.cardiff.model.Entry;
+import uk.ac.cardiff.model.Event;
 import uk.ac.cardiff.model.ShibbolethEntry;
 import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
 import uk.ac.cardiff.sei.UnitAggregator;
