@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
  * @author philsmart
  *
  */
-public class UsageEntry extends Entry {
+public class UsageEntry extends Event {
 
 
 

@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
  * @author philsmart
  *
  */
-public class Entry {
+public class Event {
 
     /* used if a persistant db primary key is required*/
     private Long persistantId;
