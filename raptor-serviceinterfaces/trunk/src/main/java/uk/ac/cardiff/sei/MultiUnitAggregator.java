@@ -10,9 +10,9 @@ import org.apache.cxf.binding.soap.SoapFault;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
+import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.model.wsmodel.UAEntryPush;
+
 
 /**
  * @author philsmart
@@ -43,6 +43,6 @@ public interface MultiUnitAggregator {
 
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
-	public void addAuthentications(UAEntryPush pushed);
+	public void addAuthentications(EventPushMessage pushed);
 
 }
