@@ -9,12 +9,14 @@ package uk.ac.cardiff.model;
  */
 public class ClientMetadata {
 
-    /** The service name of the client this metadata is constructed for */
+    /** The name of the client this metadata is constructed for */
     private String clientName;
     /** The name of the organisation that has authoritative control over this client */
     private String organisationName;
     /** The email address of the individual responsible for maintaining this client */
     private String contactEmail;
+    /** The name of the  service that this metadata is constructed for */
+    private String serviceName;
 
 
     /**
@@ -50,7 +52,7 @@ public class ClientMetadata {
     }
 
     /**
-     * Sets the service name of this client
+     * Sets the name of this client
      * @param clientName
      */
     public void setClientName(String clientName) {
@@ -58,11 +60,27 @@ public class ClientMetadata {
     }
 
     /**
-     * Gets the service name of this client
+     * Gets the name of this client
      * @return
      */
     public String getClientName() {
 	return clientName;
+    }
+
+    /**
+     * Sets the service name of this client
+     * @param serviceName
+     */
+    public void setServiceName(String serviceName) {
+	this.serviceName = serviceName;
+    }
+
+    /**
+     * Gets the service name of this client
+     * @return
+     */
+    public String getServiceName() {
+	return serviceName;
     }
 
 
