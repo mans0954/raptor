@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.raptor.raptorica.dao.RawData;
-import uk.ac.cardiff.raptor.raptorica.model.ExclusionList;
-import uk.ac.cardiff.raptor.raptorica.model.InclusionList;
+import uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList;
+import uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList;
 
 public abstract class AuthenticationInput extends RawData{
 

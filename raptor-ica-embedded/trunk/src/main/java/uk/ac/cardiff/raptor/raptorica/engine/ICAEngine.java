@@ -18,16 +18,21 @@
  */
 package uk.ac.cardiff.raptor.raptorica.engine;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import uk.ac.cardiff.raptor.exceptions.ReleaseFailureException;
 import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
+import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
+import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.Event;
 
 
 /**
@@ -41,7 +46,7 @@ public class ICAEngine {
     	private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
 
 	private DataAccessRegister authRegister;
-	private UARegistry uaRegistry;
+	private EventReleaseClient eventReleaseClient;
 	private ClientMetadata icaMetadata;
 
 	public ICAEngine(){
@@ -78,23 +83,21 @@ public class ICAEngine {
 	}
 
 	/**
-	 * sends all authentication parsing modules to the release engine
+	 * Converts all information from all modules into a single list that is sent to the release engine
 	 * @return
 	 */
 	public boolean release() {
-	    EventReleaseEngine entryReleaseEngine = new EventReleaseEngine();
-	    boolean success = entryReleaseEngine.release(uaRegistry, authRegister.getAuthenticationModules(), getIcaMetadata());
+		List<Event> eventsToSend = new ArrayList<Event>();
+	    boolean success =false;
+		try {
+			success = eventReleaseClient.release(eventsToSend, getIcaMetadata());
+		} catch (ReleaseFailureException e) {
+			log.error("Release failed ",e);
+		}
 	    if (success) retrieveTransactionFinished();
 	    return success;
 	}
 
-	public void setUaRegistry(UARegistry uaRegistry) {
-	    this.uaRegistry = uaRegistry;
-	}
-
-	public UARegistry getUaRegistry() {
-	    return uaRegistry;
-	}
 
 	public void setIcaMetadata(ClientMetadata icaMetadata) {
 	    this.icaMetadata = icaMetadata;
@@ -102,6 +105,14 @@ public class ICAEngine {
 
 	public ClientMetadata getIcaMetadata() {
 	    return icaMetadata;
+	}
+
+	public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
+		this.eventReleaseClient = eventReleaseClient;
+	}
+
+	public EventReleaseClient getEventReleaseClient() {
+		return eventReleaseClient;
 	}
 
 
