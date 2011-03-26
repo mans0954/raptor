@@ -23,89 +23,100 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
-import uk.ac.cardiff.raptor.raptorica.engine.sei.ServiceEndpointInterface;
-import uk.ac.cardiff.raptor.raptorica.model.UAEntry;
+import uk.ac.cardiff.raptor.attribute.filtering.AtrributeFilterEngine;
+import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.ICAMetadata;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
-import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
-
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class EventReleaseEngine {
 
-    /** Class logger */
-    private final Logger log = LoggerFactory.getLogger(EventReleaseEngine.class);
+	private AtrributeFilterEngine attributeFilterEngine;
+	private ServiceEndpointInterface serviceEndpointInterface;
 
-    /**
-     * Performs the release of all events to all applicable endpoints defined in the endpoint registry. Endpoints are applicable
-     * to be sent to if they meet the push policy defined on them. Event attributes are also filtered according to the
-     * attribute filter policy defined per endpoint.
-     * @param authenticationModules
-     */
-    public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ClientMetadata clientMetadata) {
-	boolean releasedtoAll = true;
-	int releaseCount=0;
-	for (Endpoint endpoint : endpointRegistry.getEndpoints()){
-	    boolean shouldRelease = (endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
-	    log.debug("Endpoint {}, should release {}",endpoint.getServiceEndpoint(),shouldRelease);
-	    List<Event> filteredEntries = filterAttributes(endpoint, events);
-	    EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
-	    if (shouldRelease) {
-		log.debug("Pushing {} entries to the Endpoint [{}]",filteredEntries.size(),endpoint.getServiceEndpoint());
-		boolean releaseSuccess = ServiceEndpointInterface.sendAuthentications(pushMessage, endpoint.getServiceEndpoint());
-		log.debug("Release to [{}] succeeded {}",endpoint.getServiceEndpoint(),releaseSuccess);
-		if (releaseSuccess==false)  releasedtoAll =false;
-		else releaseCount++;
-	    }
-	    else{
-		releasedtoAll=false;
-	    }
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(EventReleaseEngine.class);
+
+	/**
+	 * Performs the release of all events to all applicable endpoints defined in
+	 * the endpoint registry. Endpoints are applicable to be sent to if they
+	 * meet the push policy defined on them. Event attributes are also filtered
+	 * according to the attribute filter policy defined per endpoint.
+	 * 
+	 * @param authenticationModules
+	 */
+	public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ClientMetadata clientMetadata) {
+		boolean releasedtoAll = true;
+		int releaseCount = 0;
+		for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
+			boolean shouldRelease = (endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
+			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
+			List<Event> filteredEntries = filterAttributes(endpoint, events);
+			EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
+			if (shouldRelease) {
+				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
+				boolean releaseSuccess = serviceEndpointInterface.sendEvents(pushMessage,endpoint.getServiceEndpoint());
+				log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
+				if (releaseSuccess == false)
+					releasedtoAll = false;
+				else
+					releaseCount++;
+			} else {
+				releasedtoAll = false;
+			}
+
+		}
+		log.info("Released to {} listening Endpoints, out of a total of {}", releaseCount, endpointRegistry
+				.getEndpoints().size());
+
+		return releasedtoAll;
 
 	}
-	log.info("Released to {} listening Endpoints, out of a total of {}",releaseCount,endpointRegistry.getEndpoints().size());
 
-	return releasedtoAll;
+	/**
+	 * Filters the attributes from each event being pushed to the input
+	 * endpoint. If no filter policy has been defined, no work is done, and the
+	 * input allEvents is returned without modification
+	 * 
+	 * @param endpoint
+	 * @param allEvents
+	 * @return
+	 */
+	private List<Event> filterAttributes(Endpoint endpoint, List<Event> allEvents) {
+		if (endpoint.getAttributeFilterPolicy() == null)
+			return allEvents;
+		return attributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(), allEvents);
+	}
 
+	/**
+	 * Constructs an event push message, which encapsulates the events to send
+	 * 
+	 * @param clientMetadata
+	 * @param events
+	 * @return
+	 */
+	private EventPushMessage constructEventPush(ClientMetadata clientMetadata, List<Event> events) {
+		EventPushMessage pushMessage = new EventPushMessage();
+		pushMessage.setClientMetadata(clientMetadata);
+		pushMessage.setEvents(events);
+		pushMessage.setTimeOfPush(new Date(System.currentTimeMillis()));
+		return pushMessage;
+	}
 
-    }
+	public void setAttributeFilterEngine(AtrributeFilterEngine attributeFilterEngine) {
+		this.attributeFilterEngine = attributeFilterEngine;
+	}
 
-    /**
-     * Filters the attributes from each event being pushed to the input endpoint.
-     * If no filter policy has been defined, no work is done, and the input allEvents
-     * is returned without modification
-     *
-     * @param endpoint
-     * @param allEvents
-     * @return
-     */
-    private List<Event> filterAttributes(Endpoint endpoint, List<Event> allEvents){
-	if (endpoint.getAttributeFilterPolicy()==null) return allEvents;
-	return AtrributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(), allEvents);
-    }
-
-    /**
-     * Constructs an event push message, which encapsulates the events to send
-     *
-     * @param clientMetadata
-     * @param events
-     * @return
-     */
-    private EventPushMessage constructEventPush(ClientMetadata clientMetadata, List<Event> events){
-	EventPushMessage pushMessage = new EventPushMessage();
-	pushMessage.setClientMetadata(clientMetadata);
-	pushMessage.setEvents(events);
-	pushMessage.setTimeOfPush(new Date(System.currentTimeMillis()));
-	return pushMessage;
-    }
+	public AtrributeFilterEngine getAttributeFilterEngine() {
+		return attributeFilterEngine;
+	}
 
 }
