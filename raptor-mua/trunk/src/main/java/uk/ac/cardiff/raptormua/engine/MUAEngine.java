@@ -26,14 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.MUAMetadata;
+import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.model.wsmodel.ICAEntryPush;
+import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
-import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
@@ -56,22 +55,11 @@ public class MUAEngine {
 	private Users users;
 
 	/* holds metadata about the <code>MUAEngine</code> e.g. name etc. */
-	private MUAMetadata muaMetadata;
+	private ClientMetadata muaMetadata;
 
 	public MUAEngine() {
 		log.info("Setup Multi-Unit Aggregator Engine...");
 		log.info("Mulit-Unit Aggregator Engine is running...");
-	}
-
-	public void poll() {
-		log.info("MultiUnit Aggregator Polling Unit Aggregators");
-		for (UAEntry entry : uaRegistry.getUAEntries()) {
-			Set entries = entry.getAllAuthentications();
-			// log.debug("Setting: "+entries.size());
-			getEntryHandler().addEntries(entries);
-		}
-		getEntryHandler().endTransaction();
-
 	}
 
 	public void setUaRegistry(UARegistry uaRegistry) {
@@ -174,20 +162,6 @@ public class MUAEngine {
 
 	}
 
-	/**
-	 * @param muaMetadata
-	 *            the muaMetadata to set
-	 */
-	public void setMuaMetadata(MUAMetadata muaMetadata) {
-		this.muaMetadata = muaMetadata;
-	}
-
-	/**
-	 * @return the muaMetadata
-	 */
-	public MUAMetadata getMuaMetadata() {
-		return muaMetadata;
-	}
 
 	/**
 	 * @param function
@@ -205,9 +179,9 @@ public class MUAEngine {
 	/**
 	 * @param pushed
 	 */
-	public void addAuthentications(UAEntryPush pushed) {
-		log.info("Committing {} entries to the entryHandler", pushed.getEntries().size());
-		entryHandler.addEntries(pushed.getEntries());
+	public void addAuthentications(EventPushMessage pushed) {
+		log.info("Committing {} entries to the entryHandler", pushed.getEvents().size());
+		entryHandler.addEntries(pushed.getEvents());
 		log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
 
 	}

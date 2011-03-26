@@ -27,8 +27,8 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.model.wsmodel.UAEntryPush;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
 
@@ -94,7 +94,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#addAuthentications(uk.ac.cardiff.model.wsmodel.UAEntryPush)
 	 */
 	@Override
-	public void addAuthentications(UAEntryPush pushed) {
+	public void addAuthentications(EventPushMessage pushed) {
 	    processService.addAuthentications(pushed);
 
 	}
