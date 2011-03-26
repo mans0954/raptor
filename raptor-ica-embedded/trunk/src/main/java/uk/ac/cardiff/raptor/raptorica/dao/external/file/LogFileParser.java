@@ -36,9 +36,9 @@ import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
 import uk.ac.cardiff.raptor.raptorica.dao.external.format.Header;
 import uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat;
 import uk.ac.cardiff.raptor.raptorica.dao.internal.ICADataConnection;
-import uk.ac.cardiff.raptor.raptorica.model.ExclusionEntry;
-import uk.ac.cardiff.raptor.raptorica.model.InclusionEntry;
 import uk.ac.cardiff.raptor.raptorica.model.PersistentParserSupport;
+import uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionEntry;
+import uk.ac.cardiff.raptor.raptorica.model.filter.InclusionEntry;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.joda.time.DateTime;
