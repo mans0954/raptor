@@ -44,9 +44,9 @@
 					it can pick up where it left off in the even of a failure
 				-->
 				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-sorted-to-20110213.log
+						<value>file:///home/philsmart/Documents/DataSets/Logs/example.log
 						</value>
 					</property>
 					<property name="format">
@@ -59,10 +59,10 @@
 					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser
 					 all other fields are ignored, this is run before the exclusion list-->
 					<property name="inclusionList">
-							<bean class="uk.ac.cardiff.raptor.raptorica.model.InclusionList">
+							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList">
 								<property name="inclusionEntries">
 									<list>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.RegexInclusionEntry">
+										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.RegexInclusionEntry">
 											<property name ="fieldName" value="messageProfileId"/>
 											<property name="match" value=":sso"/>
 										</bean>

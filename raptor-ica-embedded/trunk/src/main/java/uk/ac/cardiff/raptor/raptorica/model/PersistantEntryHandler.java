@@ -35,232 +35,222 @@ import uk.ac.cardiff.model.Event;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class PersistantEntryHandler implements EntryHandler {
 
-    /* class logger */
-    static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
+	/* class logger */
+	static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
-    /* information about entries, e.g. last entry */
-    private EntryMetadata entryInformation;
+	/* information about entries, e.g. last entry */
+	private EntryMetadata entryInformation;
 
-    private ICADataConnection dataConnection;
+	private ICADataConnection dataConnection;
 
-    /* set of all entries stored by this EntryHandler */
-    Set<Event> entries;
+	/* set of all entries stored by this EntryHandler */
+	Set<Event> entries;
 
-    public PersistantEntryHandler(ICADataConnection dataConnection) {
-	// entries = new ArrayList<Entry>();
-	this.setDataConnection(dataConnection);
-
-    }
-
-    /**
-     * Initialises the entry handler. In particular, loads all entries from the
-     * main datastore, through the <code>dataConnection</code> instance.
-     */
-    public void initialise() {
-	log.info("Persistant entry handler [{}] initialising", this);
-	Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
-	log.info("Persistent data store has {} entries", rowCount);
-	entryInformation = (EntryMetadata) dataConnection.runQueryUnique("from EntryMetadata", null);
-	log.debug("Have saved entryInformaiton: " + entryInformation);
-	if (entryInformation == null)
-	    entryInformation = new EntryMetadata();
-	log.debug("Entry Information " + entryInformation.getLatestEqualEntries());
-	// convert to set from list, maybe expensive
-	List<Event> entriesAsList = dataConnection.runQuery("from Entry", null);
-	entries = new LinkedHashSet<Event>(entriesAsList);
-	log.info("Persistant entry handler [{}] started", this);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
-     */
-    @Override
-    public void addEntries(Set<Event> entries) {
-	// Object currentEntries =
-	// dataConnection.runQueryUnique("select count(*) from Entry", null);
-	log.debug("Current: " + entries.size() + " in: " + entries.size());
-
-	for (Event entry : entries) {
-	    if (isNewerOrEqual(entry))
-		entries.add(entry);
-
-	    updateLastEntry(entry);
+	public PersistantEntryHandler(ICADataConnection dataConnection) {
+		// entries = new ArrayList<Entry>();
+		this.setDataConnection(dataConnection);
 
 	}
-	log.debug("Total No. of Entries " + entries.size() + " Latest Entry at: " + entryInformation.getLatestEntryTime());
 
-    }
-
-    public void addEntry(Event entry) {
-	// log.debug("Trying to add "+entry);
-	boolean isAfter = isAfter(entry);
-	boolean isEqual = isEqual(entry);
-	if (isAfter) {
-	    // log.debug("Is After "+entry+"  with: "+getLatestEntryTime());
-	    entries.add(entry);
-	    updateLastEntry(entry);
-	} else if (isEqual) {
-	    Integer hashcode = entry.hashCode();
-	    // log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
-	    boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
-	    if (isAlreadyInLatest) {
-		log.error("Duplicated entries found\n{}", entry);
-	    }
-	    if (!isAlreadyInLatest) {
-		entries.add(entry);
-		updateLastEntry(entry);
-	    }
+	/**
+	 * Initialises the entry handler. In particular, loads all entries from the
+	 * main datastore, through the <code>dataConnection</code> instance.
+	 */
+	public void initialise() {
+		log.info("Persistant entry handler [{}] initialising", this);
+		Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
+		log.info("Persistent data store has {} entries", rowCount);
+		entryInformation = (EntryMetadata) dataConnection.runQueryUnique("from EntryMetadata", null);
+		log.debug("Have saved entryInformaiton: " + entryInformation);
+		if (entryInformation == null)
+			entryInformation = new EntryMetadata();
+		log.debug("Entry Information " + entryInformation.getLatestEqualEntries());
+		// convert to set from list, maybe expensive
+		List<Event> entriesAsList = dataConnection.runQuery("from Event", null);
+		entries = new LinkedHashSet<Event>(entriesAsList);
+		log.info("Persistant entry handler [{}] started", this);
 	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
+	 */
+	@Override
+	public void addEntries(Set<Event> entries) {
+		// Object currentEntries =
+		// dataConnection.runQueryUnique("select count(*) from Entry", null);
+		log.debug("Current: " + entries.size() + " in: " + entries.size());
 
-    private void updateLastEntry(Event entry) {
-	DateTime entryTime = entry.getEventTime();
-	if (entryInformation.getLatestEntryTime() == null)
-	    entryInformation.setLatestEntryTime(entryTime);
-	if (entryTime.isAfter(getLatestEntryTime())) {
-	    setLatestEntryTime(entryTime);
-	    entryInformation.getLatestEqualEntries().clear();
-	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
+		for (Event entry : entries) {
+			if (isNewerOrEqual(entry))
+				entries.add(entry);
+
+			updateLastEntry(entry);
+
+		}
+		log.debug("Total No. of Entries " + entries.size() + " Latest Entry at: "
+				+ entryInformation.getLatestEntryTime());
+
 	}
-	if (entryTime.isEqual(getLatestEntryTime())) {
-	    entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
+
+	public void addEntry(Event entry) {
+		// log.debug("Trying to add "+entry);
+		boolean isAfter = isAfter(entry);
+		boolean isEqual = isEqual(entry);
+		if (isAfter) {
+			// log.debug("Is After "+entry+"  with: "+getLatestEntryTime());
+			entries.add(entry);
+			updateLastEntry(entry);
+		} else if (isEqual) {
+			Integer hashcode = entry.hashCode();
+			// log.debug("Equal: Checking hashcode: "+hashcode+"  in set of "+entryInformation.getLatestEqualEntries().size()+" found: "+entryInformation.getLatestEqualEntries().contains(hashcode));
+			boolean isAlreadyInLatest = entryInformation.getLatestEqualEntries().contains(hashcode);
+			if (isAlreadyInLatest) {
+				log.error("Duplicated entries found\n{}", entry);
+			}
+			if (!isAlreadyInLatest) {
+				entries.add(entry);
+				updateLastEntry(entry);
+			}
+		}
+
 	}
-    }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
-     */
-    @Override
-    public void endTransaction() {
-	log.debug("Saving entries to persitant storage...");
-	dataConnection.saveAll(entries);
-	dataConnection.save(entryInformation);
-	log.debug("Saving entries to persitant storage...done");
+	private void updateLastEntry(Event entry) {
+		DateTime entryTime = entry.getEventTime();
+		if (entryInformation.getLatestEntryTime() == null)
+			entryInformation.setLatestEntryTime(entryTime);
+		if (entryTime.isAfter(getLatestEntryTime())) {
+			setLatestEntryTime(entryTime);
+			entryInformation.getLatestEqualEntries().clear();
+			entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
+		}
+		if (entryTime.isEqual(getLatestEntryTime())) {
+			entryInformation.getLatestEqualEntries().add(new Integer(entry.hashCode()));
+		}
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
+	 */
+	@Override
+	public void endTransaction() {
+		log.debug("Saving entries to persitant storage...");
+		dataConnection.saveAll(entries);
+		dataConnection.save(entryInformation);
+		log.debug("Saving entries to persitant storage...done");
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#getEntries()
-     */
-    @Override
-    public Set getEntries() {
-	return entries;
-    }
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#isAfter(uk.ac.cardiff.model.Entry)
-     */
-    @Override
-    public boolean isAfter(Event authE) {
-	if (entryInformation.getLatestEntryTime() == null)
-	    return true;
-	return authE.getEventTime().isAfter(entryInformation.getLatestEntryTime());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
+	 */
+	@Override
+	public Set getEntries() {
+		return entries;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
-     */
-    @Override
-    public boolean isEqual(Event authE) {
-	if (entryInformation.getLatestEntryTime() == null)
-	    return false;
-	return authE.getEventTime().isEqual(entryInformation.getLatestEntryTime());
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#isAfter(uk.ac.cardiff.model.Entry)
+	 */
+	@Override
+	public boolean isAfter(Event authE) {
+		if (entryInformation.getLatestEntryTime() == null)
+			return true;
+		return authE.getEventTime().isAfter(entryInformation.getLatestEntryTime());
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * main.uk.ac.cf.model.EntryHandler#isNewerOrEqual(uk.ac.cardiff.model.Entry
-     * )
-     */
-    @Override
-    public boolean isNewerOrEqual(Event authE) {
-	if (entryInformation.getLatestEntryTime() == null)
-	    return true;
-	if (!authE.getEventTime().isBefore(entryInformation.getLatestEntryTime()))
-	    return true;
-	return false;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
+	 */
+	@Override
+	public boolean isEqual(Event authE) {
+		if (entryInformation.getLatestEntryTime() == null)
+			return false;
+		return authE.getEventTime().isEqual(entryInformation.getLatestEntryTime());
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
-     */
-    @Override
-    public void removeAllEntries() {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.uk.ac.cf.model.EntryHandler#isNewerOrEqual(uk.ac.cardiff.model.Entry
+	 * )
+	 */
+	@Override
+	public boolean isNewerOrEqual(Event authE) {
+		if (entryInformation.getLatestEntryTime() == null)
+			return true;
+		if (!authE.getEventTime().isBefore(entryInformation.getLatestEntryTime()))
+			return true;
+		return false;
+	}
 
-	dataConnection.deleteAllEntries(entries);
-	entries.clear();
-	// entryInformation.setLatestEntryTime(null);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
+	 */
+	@Override
+	public void removeAllEntries() {
 
-    // /**
-    // * <p> Sets the latest time entry on the class, also saves it to the data
-    // store
-    // * to achieve persistence </p>
-    // *
-    // * @param latestEntryTime
-    // */
-    // public void setLatestEntryTime(DateTime latestEntryTime) {
-    // entryInformation.setLatestEntryTime(latestEntryTime);
-    // //dataConnection.save(entryInformation);
-    // }
+		dataConnection.deleteAllEntries(entries);
+		entries.clear();
+		// entryInformation.setLatestEntryTime(null);
+	}
 
-    public void setDataConnection(ICADataConnection dataConnection) {
-	this.dataConnection = dataConnection;
-    }
 
-    public ICADataConnection getDataConnection() {
-	return dataConnection;
-    }
+	public void setDataConnection(ICADataConnection dataConnection) {
+		this.dataConnection = dataConnection;
+	}
 
-    public void setEntryInformation(EntryMetadata entryInformation) {
-	this.entryInformation = entryInformation;
-    }
+	public ICADataConnection getDataConnection() {
+		return dataConnection;
+	}
 
-    public EntryMetadata getEntryInformation() {
-	return entryInformation;
-    }
+	public void setEntryInformation(EntryMetadata entryInformation) {
+		this.entryInformation = entryInformation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see main.uk.ac.cf.model.EntryHandler#getLatestEntryTime()
-     */
-    @Override
-    public DateTime getLatestEntryTime() {
-	return entryInformation.getLatestEntryTime();
-    }
+	public EntryMetadata getEntryInformation() {
+		return entryInformation;
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see
-     * main.uk.ac.cf.model.EntryHandler#setLatestEntryTime(org.joda.time.DateTime
-     * )
-     */
-    @Override
-    public void setLatestEntryTime(DateTime latestEntryTime) {
-	entryInformation.setLatestEntryTime(latestEntryTime);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.uk.ac.cf.model.EntryHandler#getLatestEntryTime()
+	 */
+	@Override
+	public DateTime getLatestEntryTime() {
+		return entryInformation.getLatestEntryTime();
+	}
 
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.uk.ac.cf.model.EntryHandler#setLatestEntryTime(org.joda.time.DateTime
+	 * )
+	 */
+	@Override
+	public void setLatestEntryTime(DateTime latestEntryTime) {
+		entryInformation.setLatestEntryTime(latestEntryTime);
+
+	}
 
 }
