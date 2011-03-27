@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.Series;
+import uk.ac.cardiff.model.ServerMetadata;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
@@ -37,7 +38,6 @@ import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.model.EntryHandler;
-import uk.ac.cardiff.raptormua.model.UAEntry;
 import uk.ac.cardiff.raptormua.model.Users;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
@@ -48,26 +48,17 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 public class MUAEngine {
 	static Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
-	private UARegistry uaRegistry;
 	private EntryHandler entryHandler;
 	private StatisticsHandler statisticsHandler;
 
 	private Users users;
 
-	/* holds metadata about the <code>MUAEngine</code> e.g. name etc. */
-	private ClientMetadata muaMetadata;
+	/* Metadata about the this MUA instance */
+	private ServerMetadata muaMetadata;
 
 	public MUAEngine() {
 		log.info("Setup Multi-Unit Aggregator Engine...");
 		log.info("Mulit-Unit Aggregator Engine is running...");
-	}
-
-	public void setUaRegistry(UARegistry uaRegistry) {
-		this.uaRegistry = uaRegistry;
-	}
-
-	public UARegistry getUaRegistry() {
-		return uaRegistry;
 	}
 
 	public void setStatisticsHandler(StatisticsHandler statisticsHandler) {
@@ -93,19 +84,12 @@ public class MUAEngine {
 	 * @return
 	 */
 	public Capabilities getCapabilities() {
-		// * retrieve all registered stats from the stats handler*/
+
 		List<Statistic> su = statisticsHandler.getStatisticalUnits();
-		/* retrieve information about attached UA */
-		List<UAEntry> uaentries = uaRegistry.getUAEntries();
 
 		Capabilities capabilities = new Capabilities();
+		capabilities.setMetadata(this.getMuaMetadata());
 
-		capabilities.setMuaMetadata(muaMetadata);
-
-		ArrayList<String> ua = new ArrayList();
-		for (UAEntry entry : uaentries)
-			ua.add(entry.getServiceEndpoint());
-		capabilities.setAttached(ua);
 		
 		//set possible values
 		SuggestionValues suggestionValues = new SuggestionValues();
@@ -184,6 +168,14 @@ public class MUAEngine {
 		entryHandler.addEntries(pushed.getEvents());
 		log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
 
+	}
+
+	public void setMuaMetadata(ServerMetadata muaMetadata) {
+		this.muaMetadata = muaMetadata;
+	}
+
+	public ServerMetadata getMuaMetadata() {
+		return muaMetadata;
 	}
 
 }

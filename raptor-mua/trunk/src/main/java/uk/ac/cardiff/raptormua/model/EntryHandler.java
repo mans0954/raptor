@@ -39,7 +39,7 @@ public interface EntryHandler {
     	 *
     	 * @param entries
     	 */
-	public void addEntries(Set<Event> entries);
+	public void addEntries(List<Event> entries);
 
 	/**
 	 *

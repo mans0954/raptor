@@ -21,7 +21,7 @@
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="uaRegistry" class="uk.ac.cardiff.raptormua.engine.UARegistry">
+	<!-- <bean id="uaRegistry" class="uk.ac.cardiff.raptormua.engine.UARegistry">
 		<property name ="UAEntries">
 			<list>
 				<bean id="cardiffShibUA" class="uk.ac.cardiff.raptormua.model.UAEntry">
@@ -30,5 +30,6 @@
 			</list>
 		</property>
 	</bean>
+	-->
 
 </beans>
