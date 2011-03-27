@@ -35,10 +35,10 @@ import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
  * @author philsmart
  * 
  */
-public class AtrributeFilterEngine {
+public class AttrributeFilterEngine {
 
 	/* class logger. */
-	private final Logger log = LoggerFactory.getLogger(AtrributeFilterEngine.class);
+	private final Logger log = LoggerFactory.getLogger(AttrributeFilterEngine.class);
 
 	/**
 	 * Only runs against the deny rules, and only denies basic:ANY attributes,

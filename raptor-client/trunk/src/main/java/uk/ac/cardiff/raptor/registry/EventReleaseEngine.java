@@ -23,7 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.raptor.attribute.filtering.AtrributeFilterEngine;
+import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
 
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
  */
 public class EventReleaseEngine {
 
-	private AtrributeFilterEngine attributeFilterEngine;
+	private AttrributeFilterEngine attributeFilterEngine;
 	private ServiceEndpointInterface serviceEndpointInterface;
 
 	/** Class logger */
@@ -63,7 +63,7 @@ public class EventReleaseEngine {
 			EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
 			if (shouldRelease) {
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
-				boolean releaseSuccess = serviceEndpointInterface.sendEvents(pushMessage,endpoint.getServiceEndpoint());
+				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint.getServiceEndpoint());
 				log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
 				if (releaseSuccess == false)
 					releasedtoAll = false;
@@ -111,12 +111,20 @@ public class EventReleaseEngine {
 		return pushMessage;
 	}
 
-	public void setAttributeFilterEngine(AtrributeFilterEngine attributeFilterEngine) {
+	public void setAttributeFilterEngine(AttrributeFilterEngine attributeFilterEngine) {
 		this.attributeFilterEngine = attributeFilterEngine;
 	}
 
-	public AtrributeFilterEngine getAttributeFilterEngine() {
+	public AttrributeFilterEngine getAttributeFilterEngine() {
 		return attributeFilterEngine;
+	}
+
+	public void setServiceEndpointInterface(ServiceEndpointInterface serviceEndpointInterface) {
+		this.serviceEndpointInterface = serviceEndpointInterface;
+	}
+
+	public ServiceEndpointInterface getServiceEndpointInterface() {
+		return serviceEndpointInterface;
 	}
 
 }
