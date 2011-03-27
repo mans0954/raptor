@@ -5,7 +5,7 @@
 
 <hibernate-mapping>
 
-	<class name="uk.ac.cardiff.model.Event" table="entry" dynamic-update="true" dynamic-insert="false">
+	<class name="uk.ac.cardiff.model.Event" table="event" dynamic-update="true" dynamic-insert="false">
 
 	<id name="persistantId" column="persistantId" type="long"
 			unsaved-value="null">

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.ServerMetadata;
 import uk.ac.cardiff.model.StatisticParameters.StatisticType;
 
 /**
@@ -24,7 +25,7 @@ public class Capabilities implements Serializable{
 	private List<StatisticalUnitInformation> statisticalServices;
 	private String errorMessage;
 	private boolean error;
-	private ClientMetadata muaMetadata;
+	private ServerMetadata metadata;
 	private SuggestionValues suggestionValues;
 
 
@@ -76,11 +77,11 @@ public class Capabilities implements Serializable{
 	public SuggestionValues getSuggestionValues() {
 	    return suggestionValues;
 	}
-	public void setMuaMetadata(ClientMetadata muaMetadata) {
-	    this.muaMetadata = muaMetadata;
+	public void setMetadata(ServerMetadata metadata) {
+	    this.metadata = metadata;
 	}
-	public ClientMetadata getMuaMetadata() {
-	    return muaMetadata;
+	public ServerMetadata getMetadata() {
+	    return metadata;
 	}
 
 
