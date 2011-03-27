@@ -34,13 +34,15 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class PersistantEntryHandler implements EntryHandler {
-    	//TODO can use the spring initialisation callback methods to initials the bean after all properties set etc, rather than initialising on the set method of the engine class
+	// TODO can use the spring initialisation callback methods to initials the
+	// bean after all properties set etc, rather than initialising on the set
+	// method of the engine class
 
 	/* class logger */
-	static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
+	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
 	/* data connection used to persist entries */
 	private MUADataConnection dataConnection;
@@ -62,7 +64,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	public void initialise() {
 		log.info("Persistant entry handler [{}] initialising", this);
-		Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
+		Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
 		log.info("Persistent data store has {} entries", rowCount);
 		log.info("Persistant entry handler [{}] started", this);
 	}
@@ -74,37 +76,37 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	private void loadEntries() {
 		log.info("Loading entries from main datastore");
-		List<Event> entriesAsList = dataConnection.runQuery("from Entry", null);
+		List<Event> entriesAsList = dataConnection.runQuery("from Event", null);
 		log.info("MUA has loaded " + entriesAsList.size() + " entries from main datastore");
 		entries = new LinkedHashSet<Event>(entriesAsList);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#query(java.lang.String)
 	 */
 	@Override
 	public List query(String query) {
-	    //log.debug("SQL query to entry handler [{}]",query);
+		// log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQuery(query, null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
 	@Override
 	public Object queryUnique(String query) {
-		//log.debug("SQL query to entry handler [{}]",query);
+		// log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQueryUnique(query, null);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
@@ -115,27 +117,31 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * Checks for duplicates by hashCode as each entry is added one by one.
-	 *
+	 * 
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
-	public void addEntries(Set<Event> entries) {
-		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(), entries.size());
-		int duplicates=0;
-		for (Event entry : entries){
-		    int hashcode =0;
-		    try{
-			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", entry)).intValue();
-		    }
-		    catch(Exception e){}
-		    int numberOfDuplicates = ((Integer)dataConnection.runQueryUnique("select count(*) from "+entry.getClass().getSimpleName()+" where eventTime = '"+entry.getEventTime()+"' and hashCode ='"+hashcode+"'", null)).intValue();
-		    if (numberOfDuplicates==0)
-			dataConnection.save(entry);
-		    else
-			duplicates++;
+	public void addEntries(List<Event> entries) {
+		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(),
+				entries.size());
+		int duplicates = 0;
+		for (Event entry : entries) {
+			int hashcode = 0;
+			try {
+				hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", entry)).intValue();
+			} catch (Exception e) {
+			}
+			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from "
+					+ entry.getClass().getSimpleName() + " where eventTime = '" + entry.getEventTime()
+					+ "' and hashCode ='" + hashcode + "'", null)).intValue();
+			if (numberOfDuplicates == 0)
+				dataConnection.save(entry);
+			else
+				duplicates++;
 		}
 
-		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
+		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(),
+				duplicates);
 	}
 
 	public void addEntry(Event entry) {
@@ -145,7 +151,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
 	 */
 	@Override
@@ -157,7 +163,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
 	 */
 	@Override
@@ -167,7 +173,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
 	 */
 	@Override
@@ -188,7 +194,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
 	 */
 	@Override
@@ -199,7 +205,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#getNumberOfEntries()
 	 */
 	@Override

@@ -36,7 +36,7 @@ import uk.ac.cardiff.model.Event;
 public class MemoryEntryHandler implements EntryHandler{
 
 	/* class level logger */
-    	static Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
+    private final Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
 
 	/* list of all entries stored by this EntryHandler */
     	Set<Event> entries;
@@ -45,7 +45,7 @@ public class MemoryEntryHandler implements EntryHandler{
 
 	}
 
-	public void addEntries(Set<Event> entries){
+	public void addEntries(List<Event> entries){
 		log.info("Adding {} entries to the MUA",entries.size());
 		for (Event entry: entries){
 			this.entries.add(entry);
