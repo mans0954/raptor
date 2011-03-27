@@ -25,11 +25,11 @@
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 
-	<bean id="uaRegistry" class="uk.ac.cardiff.raptor.raptorica.engine.UARegistry">
-		<property name ="UAEntries">
+	<bean id="endpointRegistry" class="uk.ac.cardiff.raptor.registry.EndpointRegistry">
+		<property name ="endpoints">
 			<list>
-				<bean id="cardiffShibUA" class="uk.ac.cardiff.raptor.raptorica.model.UAEntry">
-					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:9080/UA/UnitAggregator</value></property>
+				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
+					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:8080/MUA/MultiUnitAggregator</value></property>
 					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
 					<!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>-->
 				</bean>
@@ -39,20 +39,20 @@
 
 	<!--  policy for release of entries to the UA -->
 
-	<bean id="genericPushPolicy" class="uk.ac.cardiff.raptor.raptorica.model.PushPolicy">
+	<bean id="genericPushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.PushPolicy">
 		<property name="pushOnOrAfterNoEntries"><value>10</value></property>
 	</bean>
 
 	<!-- Attribute filter policies -->
 
-	<bean id="removePrincipleFilterPolicy" class="uk.ac.cardiff.raptor.raptorica.model.AttributeFilterPolicy">
+	<bean id="removePrincipleFilterPolicy" class="uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy">
 		<property name="policyName"><value>removePrincipleName</value></property>
 		<property name="attributeRules">
 		<list>
-			<bean class="uk.ac.cardiff.raptor.raptorica.model.AttributeRule">
+			<bean class="uk.ac.cardiff.raptor.attribute.filtering.AttributeRule">
 				<property name="attributeID"><value>requestHost</value></property>
 				<property name="denyValueRule">
-					<bean class="uk.ac.cardiff.raptor.raptorica.model.MatchRule">
+					<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
 						<property name="enabled"><value>true</value></property>
 					</bean>
 				</property>

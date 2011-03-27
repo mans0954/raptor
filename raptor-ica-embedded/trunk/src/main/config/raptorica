@@ -44,7 +44,7 @@ pidFile="/var/run/$serviceNameLo.pid"                      # name of PID file (P
 javaCommand="java"                                         # name of the Java launcher without the path
 javaExe="/usr/local/java/jre1.6.0_23/bin/$javaCommand"                      # file name of the Java application launcher executable
 
-javaArgs="-Xmx128M -jar -DconfigurationFiles=/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/conf/beans.xml raptor-ica-embedded-0.0.1-SNAPSHOT.jar"
+javaArgs="-Xmx128M -jar -DconfigurationFiles=/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/conf/ica-core.xml raptor-ica-embedded-0.0.1-SNAPSHOT.jar"
       # arguments for Java launcher
 javaCommandLine="$javaExe $javaArgs"                       # command line to start the Java service application
 javaCommandLineKeyword="com.sharemail.cfdev.idmpublicinterfaces.init.ApplicationInit"                    # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others

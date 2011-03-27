@@ -34,77 +34,76 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.Event;
 
-
 /**
  * @author philsmart
- *
- * Responsible for ALL low level capture operations
+ * 
+ *         Responsible for ALL low level capture operations
  */
 public class ICAEngine {
 
-    	/** Class Logger*/
-    	private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
+	/** Class Logger */
+	private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
 
-	private DataAccessRegister authRegister;
+	private DataAccessRegister dataAccessRegister;
 	private EventReleaseClient eventReleaseClient;
 	private ClientMetadata icaMetadata;
 
-	public ICAEngine(){
-	    	log.info("ICA Capture Engine is running...");
+	public ICAEngine() {
+		log.info("ICA Capture Engine is running...");
 	}
 
-	public void capturePerform() throws Exception{
-		for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
-			log.info("Capturing from {}",authI);
+	public void capturePerform() throws Exception {
+		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()) {
+			log.info("Capturing from {}", authI);
 			authI.parse();
 		}
 	}
 
-	public void setAuthRegister(DataAccessRegister authRegister) {
-		this.authRegister = authRegister;
-	}
-
-	public DataAccessRegister getAuthRegister() {
-		return authRegister;
-	}
 
 	/**
-	 * This method removes all stored entries, in this way the ICA must only talk to
-	 * one endpoint, otherwise the operation is nonmonotoinc whereas it should be monotonic
-	 * remove this method if more sophisticated operation is desired.
+	 * This method removes all stored entries, in this way the ICA must only
+	 * talk to one endpoint, otherwise the operation is nonmonotoinc whereas it
+	 * should be monotonic remove this method if more sophisticated operation is
+	 * desired.
 	 */
 	private void retrieveTransactionFinished() {
-	    log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...");
-	    for (AuthenticationInput authI : authRegister.getAuthenticationModules()){
-		authI.removeAllEntries();
-	    }
-	    log.debug("Retrieve Transaction Finished, entries are being removed form the ICA...done");
+		log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...");
+		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()) {
+			authI.removeAllEntries();
+		}
+		log.debug("Retrieve Transaction Finished, entries are being removed form the ICA...done");
 
 	}
 
 	/**
-	 * Converts all information from all modules into a single list that is sent to the release engine
+	 * Converts all information from all modules into a single list that is sent
+	 * to the release engine
+	 * 
 	 * @return
 	 */
 	public boolean release() {
-		List<Event> eventsToSend = new ArrayList<Event>();
-	    boolean success =false;
+		List<Event> eventsToSend = new ArrayList<Event>();		
+		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()){
+			eventsToSend.addAll(authI.getAuthentications());
+		}
+		
+		boolean success = false;
 		try {
 			success = eventReleaseClient.release(eventsToSend, getIcaMetadata());
 		} catch (ReleaseFailureException e) {
-			log.error("Release failed ",e);
+			log.error("Release failed ", e);
 		}
-	    if (success) retrieveTransactionFinished();
-	    return success;
+		if (success)
+			retrieveTransactionFinished();
+		return success;
 	}
 
-
 	public void setIcaMetadata(ClientMetadata icaMetadata) {
-	    this.icaMetadata = icaMetadata;
+		this.icaMetadata = icaMetadata;
 	}
 
 	public ClientMetadata getIcaMetadata() {
-	    return icaMetadata;
+		return icaMetadata;
 	}
 
 	public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
@@ -115,5 +114,12 @@ public class ICAEngine {
 		return eventReleaseClient;
 	}
 
+	public void setDataAccessRegister(DataAccessRegister dataAccessRegister) {
+		this.dataAccessRegister = dataAccessRegister;
+	}
+
+	public DataAccessRegister getDataAccessRegister() {
+		return dataAccessRegister;
+	}
 
 }

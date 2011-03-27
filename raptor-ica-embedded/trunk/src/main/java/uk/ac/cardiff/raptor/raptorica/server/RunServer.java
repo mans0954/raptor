@@ -20,7 +20,7 @@ public class RunServer {
 	 * configured (as in the web.xml) if we need the CXF services to be exposed.
 	 */
 
-	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")+"/target/conf/beans.xml");
+	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")+"/target/conf/ica-core.xml");
 	int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
 
 	System.out.println("[INFO] Jetty Config: Using Port "+portNumber);

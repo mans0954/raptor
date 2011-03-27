@@ -20,53 +20,6 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
-
-	<import resource="classpath:META-INF/cxf/cxf.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
-	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
-
-	<!--  WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
-	<jaxws:endpoint id="collector" implementor="#CollectorEndpoint"
-		address="/Collector">
-		<jaxws:serviceFactory>
-			<ref bean='jaxws-and-aegis-service-factory' />
-		</jaxws:serviceFactory>
-	</jaxws:endpoint>
-
-	<bean id="CollectorEndpoint" class="uk.ac.cardiff.raptor.raptorica.wsinterface.impl.CollectorImpl">
-		<property name="processEngine">
-			<ref bean="ICAProcess"></ref>
-		</property>
-	</bean>
-
-	<bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding"
-		scope="prototype" />
-	<bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean"
-		scope="prototype">
-		<property name="dataBinding" ref="aegisBean" />
-		<property name="properties">
-			<map>
-				<entry key="writeXsiType">
-					<value type="java.lang.Boolean">true</value>
-				</entry>
-				<entry key="overrideTypesList">
-					<list>
-					<!--  THIS LIST IS IMPORTANT, it exposes these classes to the aegis XSD creator
-					so we can output the generic Entry class in lists in the Collector Service Endpoint Class
-					but actually output any of its subclasses. Hence, this is a way of dealing with
-					inheritence in CXF and aegis
--->
-						<value>uk.ac.cardiff.model.AuthenticationEntry</value>
-						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
-						<value>uk.ac.cardiff.model.UsageEntry</value>
-					</list>
-				</entry>
-			</map>
-		</property>
-	</bean>
-
-	<!--  DONE -->
-
 	<!-- Polling trigger setup -->
 
 
@@ -115,26 +68,35 @@
 		used by all services of the ICA
 	-->
 	<bean id="CaptureEngine" class="uk.ac.cardiff.raptor.raptorica.engine.ICAEngine">
-		<property name="authRegister"><ref bean="dataAccessRegister"></ref></property>
-		<property name="uaRegistry"><ref bean="uaRegistry"></ref></property>
+		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
+		<property name="eventReleaseClient"><ref bean="eventReleaseClient"></ref></property>
 		<property name="icaMetadata"><ref bean="ICAMetadata"></ref></property>
-
 	</bean>
 
 	<!-- ICA Metadata -->
-	<bean id="ICAMetadata" class="uk.ac.cardiff.model.ICAMetadata">
-		<property name="icaName"><value>IdP1 Shibboleth Log File Parser</value></property>
+	<bean id="ICAMetadata" class="uk.ac.cardiff.model.ClientMetadata">
+		<property name="clientName"><value>IdP1 Shibboleth Log File Parser</value></property>
 		<property name="organisationName"><value>Cardiff University</value></property>
 		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
+		<property name="serviceName"><value>Cardiff University Shibboleth Identity Provider</value></property>
 	</bean>
 
+	<bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
+		<property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
+		<property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
+	</bean>
+	
+	<bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
+		<property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
+		<property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>
+	</bean>
 
-
-
-
+	<bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
+	
+	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointInterface"/>
 
 	<import resource="dao-beans.xml"/>
 	<import resource="data-access.xml" />
-	<import resource="ua-registry.xml" />
+	<import resource="event-release.xml" />
 
 </beans>
