@@ -22,10 +22,8 @@ public class EventReleaseClientImpl implements EventReleaseClient{
 
 	@Override
 	public boolean release(List<Event> events, ClientMetadata clientMetadata) throws ReleaseFailureException{
-		
-		eventReleaseEngine.release(endpointRegistry, events, clientMetadata);
-		
-		return true;
+		boolean success = eventReleaseEngine.release(endpointRegistry, events, clientMetadata);		
+		return success;
 		
 	}
 
