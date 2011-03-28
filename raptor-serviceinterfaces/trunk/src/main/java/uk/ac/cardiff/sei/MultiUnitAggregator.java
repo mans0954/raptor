@@ -43,6 +43,6 @@ public interface MultiUnitAggregator {
 
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
-	public void addAuthentications(EventPushMessage pushed);
+	public void addAuthentications(EventPushMessage pushed) throws SoapFault;
 
 }
