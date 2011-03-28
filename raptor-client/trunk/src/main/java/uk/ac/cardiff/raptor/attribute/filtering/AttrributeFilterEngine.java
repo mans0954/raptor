@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rits.cloning.Cloner;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**

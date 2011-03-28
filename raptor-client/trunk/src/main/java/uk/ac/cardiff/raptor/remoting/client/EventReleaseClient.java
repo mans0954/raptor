@@ -6,7 +6,7 @@ package uk.ac.cardiff.raptor.remoting.client;
 import java.util.List;
 
 import uk.ac.cardiff.model.ClientMetadata;
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.exceptions.ReleaseFailureException;
 
 /**
