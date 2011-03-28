@@ -61,7 +61,7 @@ public interface MUAProcess {
 	/**
 	 * @param pushed
 	 */
-	public void addAuthentications(EventPushMessage pushed);
+	public void addAuthentications(EventPushMessage pushed) throws SoapFault;
 
 	/**
 	 *

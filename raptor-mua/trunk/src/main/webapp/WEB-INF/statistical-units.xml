@@ -132,7 +132,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -167,7 +167,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -206,7 +206,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -259,7 +259,7 @@
                                <property name="comparisonPredicate">
 									 <bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
 									 		<property name="compOp" value="EQUAL"/>
-									 		<property name="fieldName" value="requestHost"/>
+									 		<property name="fieldName" value="serviceHost"/>
 									 		<property name="value" value="https://sdauth.sciencedirect.com/"/>
 									 </bean>
 								</property>
@@ -269,7 +269,7 @@
                                 <property name="comparisonPredicate">
 									 	<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
 									 			<property name="compOp" value="EQUAL"/>
-									 			<property name="fieldName" value="requestHost"/>
+									 			<property name="fieldName" value="serviceHost"/>
 									 			<property name="value" value="https://scauth.scopus.com/"/>
 									 	</bean>
 								</property>
@@ -319,44 +319,6 @@
 	<bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.NumberFormatterPostProcessor">
 	</bean>
 
-	<!-- test SQL where filters , follows subset of SQL-99 spec, but too verbose-->
-
-	<bean id="testWhere" class="uk.ac.cardiff.model.sql.SQLWhere">
-		<property name="booleanExpression">
-			<bean class="uk.ac.cardiff.model.sql.BooleanExpression">
-				<property name="booleanTerm">
-					<bean class="uk.ac.cardiff.model.sql.BooleanTerm">
-						<property name="booleanFactor">
-							<bean class="uk.ac.cardiff.model.sql.BooleanFactor">
-								<property name="booleanTest">
-									<bean class="uk.ac.cardiff.model.sql.BooleanTest">
-									 	<property name="booleanPrimary">
-									 		<bean class="uk.ac.cardiff.model.sql.BooleanPrimary">
-									 			<property name="predicate">
-									 				<bean class="uk.ac.cardiff.model.sql.Predicate">
-									 					<property name="comparisonPredicate">
-									 						<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
-									 							<property name="compOp" value="EQUAL"/>
-									 							<property name="fieldName" value="requestHost"/>
-									 							<property name="value" value="https://sdauth.sciencedirect.com/"/>
-									 						</bean>
-									 					</property>
-									 				</bean>
-									 			</property>
-									 		</bean>
-									 	</property>
-									</bean>
-								</property>
-							</bean>
-						</property>
-					</bean>
-				</property>
-			</bean>
-		</property>
-
-	</bean>
-
-
 
 	<!--  System level statistics that must be present for RaptorWeb to work -->
 
@@ -401,7 +363,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>principleName</value></property>
+								<property name="value"><value>principalName</value></property>
 							</bean>
 						</list>
 					</property>
@@ -466,7 +428,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 							</bean>
 						</list>
 					</property>
@@ -506,11 +468,11 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 
 							</bean>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-							     <property name="value"><value>principleName</value></property>
+							     <property name="value"><value>principalName</value></property>
 							</bean>
 						</list>
 					</property>
@@ -550,7 +512,7 @@
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>requestHost</value></property>
+								<property name="value"><value>serviceHost</value></property>
 							</bean>
 						</list>
 					</property>

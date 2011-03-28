@@ -191,7 +191,7 @@ public class MUAProcessImpl implements MUAProcess {
 	 * .model.wsmodel.UAEntryPush)
 	 */
 	@Override
-	public void addAuthentications(EventPushMessage pushed) {
+	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
 		boolean success = false;
 		if (lockR.tryLock()) {
 			try {
@@ -199,16 +199,20 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.addAuthentications(pushed);
 				success = true;
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
-				log.error(e.getMessage());
-				e.printStackTrace();
+				log.error("Error trying to add authentications to this MUA, {}",e.getMessage(),e);
+
 			} finally {
 				lockR.unlock();
 
 			}
 		}
-		if (!success)
-			log.warn("Lock was hit for method addAuthentications");
+		else
+		    log.warn("Lock was hit for method addAuthentications");
+		if (!success){
+		    log.error("WARNING, technical fault, could not add events to this MUA");
+		    throw new SoapFault("Technical fault at the server, could not add events to MUA ["+this.getEngine().getMuaMetadata().getServerName()+"]", new QName("Server"));
+		}
+
 
 	}
 

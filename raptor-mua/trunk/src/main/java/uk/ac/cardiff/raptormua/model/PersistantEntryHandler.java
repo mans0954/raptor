@@ -28,13 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptormua.dao.MUADataConnection;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class PersistantEntryHandler implements EntryHandler {
 	// TODO can use the spring initialisation callback methods to initials the
@@ -83,7 +83,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#query(java.lang.String)
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
@@ -106,7 +106,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
 	 */
@@ -117,7 +117,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * Checks for duplicates by hashCode as each entry is added one by one.
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
@@ -151,7 +151,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
 	 */
 	@Override
@@ -163,7 +163,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
 	 */
 	@Override
@@ -173,7 +173,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
 	 */
 	@Override
@@ -194,7 +194,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.RaptorUA.model.EntryHandler#setEntries(java.util.Set)
 	 */
 	@Override
@@ -205,12 +205,12 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#getNumberOfEntries()
 	 */
 	@Override
 	public int getNumberOfEntries() {
-		return (Integer) dataConnection.runQueryUnique("select count(*) from Entry", null);
+		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
 	}
 
 }
