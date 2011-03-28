@@ -12,14 +12,14 @@ import uk.ac.cardiff.utility.HashCodeUtil;
  * @author philsmart
  *
  */
-public class ShibbolethEntry extends AuthenticationEntry{
+public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
+
 	private String requestPath;
 	private String requestId;
 	private String messageProfileId;
 	private String responseBinding;
 	private String responseId;
 	private String requestBinding;
-	private String principleName;
 	private String nameIdentifier;
 	private String[] assertionId;
 	private String[] releasedAttributes;
@@ -52,12 +52,6 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	public String getMessageProfileId() {
 		return messageProfileId;
 	}
-	public void setPrincipleName(String principleName) {
-		this.principleName = principleName;
-	}
-	public String getPrincipleName() {
-		return principleName;
-	}
 	/**
 	 * @param releasedAttributes the releasedAttributes to set
 	 */
@@ -71,6 +65,7 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    return releasedAttributes;
 	}
 
+	//TODO lots of concatenations, use a stringbuilder
 	public String toString(){
 		if (releasedAttributes!=null || releasedAttributes.length>0)
 			return getClass().getName()+"@["+getEventTime()+","+requestPath+","+requestBinding+","+requestId+","+responseBinding+","+Arrays.asList(releasedAttributes)+"]";
@@ -84,18 +79,18 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    if ( this == obj ) return true;
 	    if((obj == null) || (obj.getClass() != this.getClass()))
 		return false;
-	    ShibbolethEntry that = (ShibbolethEntry)obj;
+	    ShibbolethIdpAuthenticationEvent that = (ShibbolethIdpAuthenticationEvent)obj;
 	    boolean areEqual =
 	      EqualsUtil.areEqual(this.getEventTime(), that.getEventTime()) &&
-	      EqualsUtil.areEqual(this.getAuthNMethod(), that.getAuthNMethod()) &&
-	      EqualsUtil.areEqual(this.getRequestHost(), that.getRequestHost()) &&
+	      EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
+	      EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
 	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
 	      EqualsUtil.areEqual(this.getRequestPath(), that.getRequestPath()) &&
 	      EqualsUtil.areEqual(this.getResponseBinding(), that.getResponseBinding()) &&
-	      EqualsUtil.areEqual(this.getServerHost(), that.getServerHost()) &&
+	      EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
 	      EqualsUtil.areEqual(this.getMessageProfileId(), that.getMessageProfileId()) &&
 	      EqualsUtil.areEqual(this.getRequestBinding(), that.getRequestBinding()) &&
-	      EqualsUtil.areEqual(this.getPrincipleName(), that.getPrincipleName()) &&
+	      EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName()) &&
 	      EqualsUtil.areEqual(this.getNameIdentifier(), that.getNameIdentifier()) &&
 	      EqualsUtil.areEqual(this.getResponseId(), that.getResponseId()) &&
 	      Arrays.equals(this.getAssertionId(), that.getAssertionId()) &&
@@ -131,16 +126,16 @@ public class ShibbolethEntry extends AuthenticationEntry{
 	    int hash = HashCodeUtil.SEED;
 
 	    hash = HashCodeUtil.hash(hash,getEventTime());
-	    hash = HashCodeUtil.hash(hash,getAuthNMethod());
-	    hash = HashCodeUtil.hash(hash,getRequestHost());
+	    hash = HashCodeUtil.hash(hash,getAuthenticationType());
+	    hash = HashCodeUtil.hash(hash,getServiceHost());
 	    hash = HashCodeUtil.hash(hash,getRequestId());
 	    hash = HashCodeUtil.hash(hash,getRequestPath());
 	    hash = HashCodeUtil.hash(hash,getResponseBinding());
-	    hash = HashCodeUtil.hash(hash,getServerHost());
+	    hash = HashCodeUtil.hash(hash,getResourceHost());
 	    hash = HashCodeUtil.hash(hash,getReleasedAttributes());
 	    hash = HashCodeUtil.hash(hash,getMessageProfileId());
 	    hash = HashCodeUtil.hash(hash,getRequestBinding());
-	    hash = HashCodeUtil.hash(hash,getPrincipleName());
+	    hash = HashCodeUtil.hash(hash,getPrincipalName());
 	    hash = HashCodeUtil.hash(hash,getNameIdentifier());
 	    hash = HashCodeUtil.hash(hash,getResponseId());
 	    hash = HashCodeUtil.hash(hash,getAssertionId());

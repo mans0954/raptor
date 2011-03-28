@@ -28,24 +28,17 @@ import org.joda.time.DateTime;
  */
 public class Event {
 
-    /* used if a persistant db primary key is required*/
+    /* used if a persistant db primary key is required */
     private Long persistantId;
 
-    /* attributes generic to all entries*/
+    /* attributes generic to all entries */
     private DateTime eventTime;
-    private String requestHost; //requestID
-    private String serverHost; //serviceID
-    
-    //eventype
-
-
-    public void setRequestHost(String requestHost) {
-	this.requestHost = requestHost;
-    }
-
-    public String getRequestHost() {
-	return requestHost;
-    }
+    private long eventID;
+    private String serviceID;
+    private String eventType;
+    private String serviceHost;
+    private String resourceHost;
+    private String resourceID;
 
     public void setEventTime(DateTime eventTime) {
 	this.eventTime = eventTime;
@@ -55,22 +48,13 @@ public class Event {
 	return eventTime;
     }
 
-    public void setServerHost(String serverHost) {
-	this.serverHost = serverHost;
-    }
-
-    public String getServerHost() {
-	return serverHost;
-    }
-
-    public String toString() {
-    	return getClass().getName()+"@[" + this.getEventTime() + "," + this.getRequestHost() + "," + this.getServerHost() + "]";
-    }
+     public String toString() {
+	 return getClass().getName()+"@[" + this.getEventTime() + "," + this.getServiceHost() + "," + this.getResourceHost() + "]";
+     }
 
     /**
-     * Only XML DATE or XML DATETIME objects can be sent through XML WS
-     * hence, the joda.DateTime property is ignored, instead a proxy
-     * getDate method is used to convert from DateTime to Date
+     * Only XML DATE or XML DATETIME objects can be sent through XML WS hence, the joda.DateTime property is ignored, instead a proxy getDate method is used to
+     * convert from DateTime to Date
      * <p>
      *
      * @return a Date representation of the eventTime DateTime format
@@ -82,10 +66,8 @@ public class Event {
     }
 
     /**
-     * Only XML DATE or XML DATETIME objects can be sent through XML WS
-     * hence, the joda.DateTime property is ignored, instead a proxy
-     * setDate method is used to convert from the XML Date to the DateTime
-     * used by eventTime
+     * Only XML DATE or XML DATETIME objects can be sent through XML WS hence, the joda.DateTime property is ignored, instead a proxy setDate method is used to
+     * convert from the XML Date to the DateTime used by eventTime
      * <p>
      *
      * @return a Date representation of the eventTime DateTime format
@@ -95,12 +77,59 @@ public class Event {
 
     }
 
+    public void setPersistantId(Long persistantId) {
+	this.persistantId = persistantId;
+    }
 
-	public void setPersistantId(Long persistantId) {
-	    this.persistantId = persistantId;
-	}
+    public Long getPersistantId() {
+	return persistantId;
+    }
 
-	public Long getPersistantId() {
-	    return persistantId;
-	}
+    public void setEventID(long eventID) {
+	this.eventID = eventID;
+    }
+
+    public long getEventID() {
+	return eventID;
+    }
+
+    public void setServiceID(String serviceID) {
+	this.serviceID = serviceID;
+    }
+
+    public String getServiceID() {
+	return serviceID;
+    }
+
+    public void setEventType(String eventType) {
+	this.eventType = eventType;
+    }
+
+    public String getEventType() {
+	return eventType;
+    }
+
+    public void setServiceHost(String serviceHost) {
+	this.serviceHost = serviceHost;
+    }
+
+    public String getServiceHost() {
+	return serviceHost;
+    }
+
+    public void setResourceHost(String resourceHost) {
+	this.resourceHost = resourceHost;
+    }
+
+    public String getResourceHost() {
+	return resourceHost;
+    }
+
+    public void setResourceID(String resourceID) {
+	this.resourceID = resourceID;
+    }
+
+    public String getResourceID() {
+	return resourceID;
+    }
 }
