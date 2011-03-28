@@ -20,7 +20,7 @@ public class ShibbolethEntryTest {
 
     @Test
     public void testHashCodeEqual(){
-	ShibbolethEntry entry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent entry = new ShibbolethIdpAuthenticationEvent();
 	entry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	String eventTime ="20101117T184343";
 	DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
@@ -37,7 +37,7 @@ public class ShibbolethEntryTest {
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
 
 
-	ShibbolethEntry equalEntry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent equalEntry = new ShibbolethIdpAuthenticationEvent();
 	equalEntry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	eventTime ="20101117T184343";
 	dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
@@ -65,7 +65,7 @@ public class ShibbolethEntryTest {
      */
     @Test
     public void testHashCodeNotEqualDate(){
-	ShibbolethEntry entry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent entry = new ShibbolethIdpAuthenticationEvent();
 	entry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	String eventTime ="20101117T184343";
 	DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
@@ -82,7 +82,7 @@ public class ShibbolethEntryTest {
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
 
 
-	ShibbolethEntry equalEntry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent equalEntry = new ShibbolethIdpAuthenticationEvent();
 	equalEntry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	eventTime ="20101117T184342"; //changed 3 to 2 at the end
 	dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
@@ -110,7 +110,7 @@ public class ShibbolethEntryTest {
      */
     @Test
     public void testHashCodeNotEqualReleasedAttributes(){
-	ShibbolethEntry entry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent entry = new ShibbolethIdpAuthenticationEvent();
 	entry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	String eventTime ="20101117T184343";
 	DateTimeFormatter dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
@@ -127,7 +127,7 @@ public class ShibbolethEntryTest {
 	entry.setServerHost("https://idp.cardiff.ac.uk/shibboleth");
 
 
-	ShibbolethEntry equalEntry = new ShibbolethEntry();
+	ShibbolethIdpAuthenticationEvent equalEntry = new ShibbolethIdpAuthenticationEvent();
 	equalEntry.setAuthNMethod("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
 	eventTime ="20101117T184343";
 	dtf = DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss");
