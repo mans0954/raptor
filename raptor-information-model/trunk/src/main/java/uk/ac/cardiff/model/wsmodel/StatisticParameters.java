@@ -1,7 +1,7 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,9 +17,10 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.Presentation;
+import uk.ac.cardiff.model.Series;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.sql.SQLFilter;
-import uk.ac.cardiff.model.wsmodel.MethodParameter;
 
 /**
  * @author philsmart
@@ -27,14 +28,13 @@ import uk.ac.cardiff.model.wsmodel.MethodParameter;
  */
 public class StatisticParameters implements Serializable{
 
-    /**
-     * generated serial ID
-     */
+    /** generated serial ID  */
     private static final long serialVersionUID = 9135524508369102248L;
 
-    static Logger log = LoggerFactory.getLogger(StatisticParameters.class);
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(StatisticParameters.class);
 
-    private static final String outputDateFormat ="dd/MM/yyyy HH:mm:ss";;
+    private static final String OUTPUT_DATE_FORMAT ="dd/MM/yyyy HH:mm:ss";;
 
     private String unitName;
 
@@ -137,7 +137,7 @@ public class StatisticParameters implements Serializable{
     }
 
     public String getStartTime() {
-	if (startTime!=null)return startTime.toString(outputDateFormat);
+	if (startTime!=null)return startTime.toString(OUTPUT_DATE_FORMAT);
 	return null;
     }
 
@@ -147,7 +147,7 @@ public class StatisticParameters implements Serializable{
     }
 
     public String getEndTime() {
-	if (endTime!=null)return endTime.toString(outputDateFormat);
+	if (endTime!=null)return endTime.toString(OUTPUT_DATE_FORMAT);
 	return null;
     }
 
@@ -183,7 +183,7 @@ public class StatisticParameters implements Serializable{
     /* human consumable outputs */
 
     public String getStartTimeAsFormattedString() {
-	DateTimeFormatter dtf = DateTimeFormat.forPattern(outputDateFormat);
+	DateTimeFormatter dtf = DateTimeFormat.forPattern(OUTPUT_DATE_FORMAT);
 	if (getStartTime() != null)
 	    return getStartTimeAsDate().toString(dtf);
 	else
@@ -191,7 +191,7 @@ public class StatisticParameters implements Serializable{
     }
 
     public String getEndTimeAsFormattedString() {
-	DateTimeFormatter dtf = DateTimeFormat.forPattern(outputDateFormat);
+	DateTimeFormatter dtf = DateTimeFormat.forPattern(OUTPUT_DATE_FORMAT);
 	if (getEndTime() != null)
 	    return getEndTimeAsDate().toString(dtf);
 	else
@@ -229,7 +229,7 @@ public class StatisticParameters implements Serializable{
 	    return dt;
 	} else if (date.length()==19){
 	    // assume outputDateFormat
-	    String format = outputDateFormat;
+	    String format = OUTPUT_DATE_FORMAT;
 	    DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
 	    DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
 	    log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());

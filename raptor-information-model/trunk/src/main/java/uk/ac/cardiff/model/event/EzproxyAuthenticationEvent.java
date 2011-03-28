@@ -1,13 +1,13 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.event;
 
 /**
  * @author philsmart
  *
  */
-public class OpenathenslaAuthenticationEvent {
+public class EzproxyAuthenticationEvent {
 
     private String requesterIP;
 

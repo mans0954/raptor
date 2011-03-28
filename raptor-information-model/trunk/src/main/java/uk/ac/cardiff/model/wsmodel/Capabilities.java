@@ -9,7 +9,7 @@ import java.util.List;
 
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.ServerMetadata;
-import uk.ac.cardiff.model.StatisticParameters.StatisticType;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 
 /**
  * @author philsmart

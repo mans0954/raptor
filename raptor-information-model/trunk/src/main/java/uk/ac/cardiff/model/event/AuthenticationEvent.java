@@ -16,16 +16,30 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.event;
 
-import org.joda.time.DateTime;
 
 /**
  * @author philsmart
  *
  */
-public class UsageEntry extends Event {
+public class AuthenticationEvent extends Event{
 
+	private String authenticationType;
+	private String principalName;
+
+	public void setPrincipalName(String principalName) {
+	    this.principalName = principalName;
+	}
+	public String getPrincipalName() {
+	    return principalName;
+	}
+	public void setAuthenticationType(String authenticationType) {
+	    this.authenticationType = authenticationType;
+	}
+	public String getAuthenticationType() {
+	    return authenticationType;
+	}
 
 
 }

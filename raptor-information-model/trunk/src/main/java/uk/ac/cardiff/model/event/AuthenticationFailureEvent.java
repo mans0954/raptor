@@ -1,7 +1,7 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.event;
 
 /**
  * @author philsmart

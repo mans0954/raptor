@@ -1,4 +1,4 @@
-package uk.ac.cardiff.model.Graph;
+package uk.ac.cardiff.model.report;
 
 import java.io.Serializable;
 import java.util.ArrayList;
