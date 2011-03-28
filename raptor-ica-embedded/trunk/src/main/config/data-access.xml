@@ -46,14 +46,14 @@
 				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///home/philsmart/Documents/DataSets/Logs/example.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
 						</value>
 					</property>
 					<property name="format">
 						<ref bean="shibIDPAuditFileFormat" />
 					</property>
 					<property name="entryType">
-						<value>uk.ac.cardiff.model.ShibbolethEntry</value>
+						<value>uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent</value>
 					</property>
 
 					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser
@@ -135,7 +135,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
-						<value>requestHost</value>
+						<value>serviceHost</value>
 					</property>
 					<property name="fieldNo">
 						<value>1</value>
@@ -214,7 +214,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
-						<value>requestHost</value>
+						<value>serviceHost</value>
 					</property>
 					<property name="fieldNo">
 						<value>3</value>
@@ -259,7 +259,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
-						<value>principleName</value>
+						<value>principalName</value>
 					</property>
 					<property name="fieldNo">
 						<value>8</value>
@@ -270,7 +270,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
-						<value>authNMethod</value>
+						<value>authenticationType</value>
 					</property>
 					<property name="fieldNo">
 						<value>9</value>

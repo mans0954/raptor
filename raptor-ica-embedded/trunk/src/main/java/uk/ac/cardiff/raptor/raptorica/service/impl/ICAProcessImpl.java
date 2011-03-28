@@ -50,7 +50,7 @@ public class ICAProcessImpl implements ICAProcess {
 	final Lock lockR = new ReentrantLock();
 
 	/*
-	 * <p> This class initites the <code>CapturePerform</code> method of the
+	 * This class initiates the <code>CapturePerform</code> method of the
 	 * <code>CaptureEngine</code> once it obtains a lock from the
 	 * <code>Lock</code> object. Hence, the processImpl can not both capture and
 	 * send entries at the same time. Which prevents concurrency issues.

@@ -98,7 +98,7 @@ public class LogFileParser extends AuthenticationInput {
 		    log.error("input column was not a string");
 		}
 	    }
-	    /* first, dynamically construct the supplied entry class */
+	    /* first, dynamically construct the supplied entry class, which is subclass of Event */
 	    Event authE = (Event) this.createObject(getEntryType());
 
 	    /* now populate its fields */
