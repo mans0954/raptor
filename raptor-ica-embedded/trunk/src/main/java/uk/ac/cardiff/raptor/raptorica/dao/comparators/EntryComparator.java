@@ -20,7 +20,7 @@ package uk.ac.cardiff.raptor.raptorica.dao.comparators;
 
 import java.util.Comparator;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 
 /**
  * Not enough to compare on in Entry, hence not used.

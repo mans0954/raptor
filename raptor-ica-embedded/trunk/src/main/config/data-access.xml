@@ -53,7 +53,7 @@
 						<ref bean="shibIDPAuditFileFormat" />
 					</property>
 					<property name="entryType">
-						<value>uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent</value>
+						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
 
 					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser

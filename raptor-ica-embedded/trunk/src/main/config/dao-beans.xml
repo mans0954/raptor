@@ -43,7 +43,7 @@
 		<!--  OR mapping files. -->
 		<property name="mappingResources">
 			<list>
-				<value>uk/ac/cardiff/model/event.hbm.xml</value>
+				<value>uk/ac/cardiff/model/event/event.hbm.xml</value>
 				<value>uk/ac/cardiff/raptor/raptorica/model/entrymetadata.hbm.xml</value>
 			</list>
 		</property>
