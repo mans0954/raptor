@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.WebMetadata;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;

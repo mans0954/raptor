@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
-import uk.ac.cardiff.model.StatisticParameters.StatisticType;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;

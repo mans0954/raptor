@@ -44,7 +44,7 @@ import org.springframework.core.io.Resource;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;

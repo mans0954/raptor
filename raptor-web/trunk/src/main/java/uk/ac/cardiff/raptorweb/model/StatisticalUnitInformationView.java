@@ -6,7 +6,7 @@ package uk.ac.cardiff.raptorweb.model;
 import java.io.Serializable;
 import java.util.List;
 
-import uk.ac.cardiff.model.Series;
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.sql.ComparisonPredicate;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 

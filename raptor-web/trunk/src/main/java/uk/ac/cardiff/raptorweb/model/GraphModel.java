@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import uk.ac.cardiff.model.Series;
-import uk.ac.cardiff.model.StatisticParameters;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.Series;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
