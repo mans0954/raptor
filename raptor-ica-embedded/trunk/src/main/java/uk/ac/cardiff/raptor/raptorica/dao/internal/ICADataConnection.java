@@ -21,7 +21,7 @@ package uk.ac.cardiff.raptor.raptorica.dao.internal;
 import java.util.Collection;
 import java.util.List;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart

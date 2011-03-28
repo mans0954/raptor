@@ -51,6 +51,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
 import uk.ac.cardiff.raptor.raptorica.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.model.*;
+import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author phil
