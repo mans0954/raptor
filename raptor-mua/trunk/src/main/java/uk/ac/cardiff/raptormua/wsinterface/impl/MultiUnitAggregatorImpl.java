@@ -94,7 +94,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#addAuthentications(uk.ac.cardiff.model.wsmodel.UAEntryPush)
 	 */
 	@Override
-	public void addAuthentications(EventPushMessage pushed) {
+	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
 	    processService.addAuthentications(pushed);
 
 	}
