@@ -30,10 +30,10 @@ import uk.ac.cardiff.model.Event;
  */
 public class EntryComparator implements Comparator<Event> {
 
- 
+
     public int compare(Event entry1, Event entry2) {
-	boolean requestHostEqual = entry1.getRequestHost().equals(entry2.getRequestHost());
-	boolean serverHostEqual = entry1.getServerHost().equals(entry2.getServerHost());
+	boolean requestHostEqual = entry1.getServiceHost().equals(entry2.getServiceHost());
+	boolean serverHostEqual = entry1.getResourceHost().equals(entry2.getResourceHost());
 	return 0;
     }
 
