@@ -69,7 +69,7 @@ public class ReflectionHelper {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
 				//if (o!=null)log.debug("found object {}",o.getClass());
-				if (o instanceof uk.ac.cardiff.model.Event) {
+				if (o instanceof uk.ac.cardiff.model.event.Event) {
 					allclasses.add(o);
 				}
 			} catch (ClassNotFoundException cnfex) {
@@ -102,7 +102,7 @@ public class ReflectionHelper {
 		for (String classname : classes) {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
-				if (o instanceof uk.ac.cardiff.model.Event) {
+				if (o instanceof uk.ac.cardiff.model.event.Event) {
 					allclasses.add(o);
 				}
 			} catch (ClassNotFoundException cnfex) {
@@ -148,7 +148,7 @@ public class ReflectionHelper {
 		for (String classname : classes) {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
-				if (o instanceof uk.ac.cardiff.model.Event) {
+				if (o instanceof uk.ac.cardiff.model.event.Event) {
 					// log.debug("Found classname: "+classname.replace(".class",
 					// ""));
 					allclasses.add(o);
@@ -273,7 +273,7 @@ public class ReflectionHelper {
 						log.debug("classname: " + classname);
 						// Try to create an instance of the object
 						Object o = Class.forName(pckgname + "." + classname).newInstance();
-						if (o instanceof uk.ac.cardiff.model.Event) {
+						if (o instanceof uk.ac.cardiff.model.event.Event) {
 							// log.debug("Found classname: "+classname);
 							allclasses.add(o);
 						}
