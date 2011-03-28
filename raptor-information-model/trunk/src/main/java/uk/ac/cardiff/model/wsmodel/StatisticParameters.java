@@ -17,9 +17,9 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import uk.ac.cardiff.model.Presentation;
-import uk.ac.cardiff.model.Series;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.report.Presentation;
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.sql.SQLFilter;
 
 /**
@@ -38,24 +38,24 @@ public class StatisticParameters implements Serializable{
 
     private String unitName;
 
-    /* List of parameters passed into the <code>performStatistic</code> method*/
-    private List<MethodParameter> methodParams;
+    /** List of parameters passed into the <code>performStatistic</code> method*/
+    private List<MethodParameter> methodParameters;
 
-    /*
+    /**
      * the start time from which to produce the starts, defining the temporal extent If a starttime and endtime is not given, the entire temporal extent of the
      * data series will be used
      */
     private DateTime startTime;
 
-    /* the end time from which to produce the starts, defining the temporal extent */
+    /** the end time from which to produce the starts, defining the temporal extent */
     private DateTime endTime;
 
-    /*Its important that these dates (used for display in trinidad) are kept in sync with the
+    /** Its important that these dates (used for display in trinidad) are kept in sync with the
      * Joda DateTime classes above*/
     private Date startTimeJava;
     private Date endTimeJava;
 
-    /* either system or user types */
+    /** either system or user types */
     public enum StatisticType {
 	/*
 	 * A statistic for use by the USER. Possibly removed in the future, in favour of individual
@@ -95,11 +95,11 @@ public class StatisticParameters implements Serializable{
 
 
     public void setMethodParams(List<MethodParameter> methodParams) {
-	this.methodParams = methodParams;
+	this.methodParameters = methodParams;
     }
 
     public List<MethodParameter> getMethodParams() {
-	return methodParams;
+	return methodParameters;
     }
 
     /**

@@ -1,7 +1,7 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.report;
 
 import java.io.Serializable;
 
