@@ -15,11 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.AuthenticationEvent;
-import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.UsageEntry;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.event.AuthenticationEvent;
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
