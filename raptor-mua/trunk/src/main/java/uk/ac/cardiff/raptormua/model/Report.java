@@ -15,7 +15,7 @@
  */
 package uk.ac.cardiff.raptormua.model;
 
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 
 public class Report {
 	

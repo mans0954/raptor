@@ -30,11 +30,11 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.Series;
-import uk.ac.cardiff.model.StatisticParameters;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;

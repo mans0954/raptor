@@ -22,7 +22,7 @@ package uk.ac.cardiff.raptormua.runtimeutils;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart

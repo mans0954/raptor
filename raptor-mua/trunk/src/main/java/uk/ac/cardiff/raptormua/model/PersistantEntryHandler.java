@@ -27,8 +27,8 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptormua.dao.MUADataConnection;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 

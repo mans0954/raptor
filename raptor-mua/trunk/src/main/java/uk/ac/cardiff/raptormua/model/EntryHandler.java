@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;

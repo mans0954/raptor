@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 

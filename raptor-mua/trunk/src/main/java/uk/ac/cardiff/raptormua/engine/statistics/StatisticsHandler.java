@@ -25,9 +25,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.Series;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -108,7 +108,7 @@ public class StatisticsHandler {
 			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
 			boolean success = true;
 			for (Series series : listOfSeries){
-				String whereClause=series.constructComparisonAsSQL();
+				String whereClause=series.computeComparisonAsSQL();
 				Object[] paramsO = new Object[2];
 				paramsO[0] = params;
 				if (whereClause!=null)

@@ -22,7 +22,7 @@ import org.apache.cxf.binding.soap.SoapFault;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
-import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
+import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
