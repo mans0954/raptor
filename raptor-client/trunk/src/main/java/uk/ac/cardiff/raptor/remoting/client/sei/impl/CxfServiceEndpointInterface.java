@@ -13,9 +13,8 @@ import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.AuthenticationEvent;
-import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
-import uk.ac.cardiff.model.UsageEntry;
+import uk.ac.cardiff.model.event.AuthenticationEvent;
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
@@ -41,7 +40,6 @@ public class CxfServiceEndpointInterface implements ServiceEndpointInterface {
 			Set<String> overrides = new HashSet<String>();
 			overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
 			overrides.add(AuthenticationEvent.class.getName());
-			overrides.add(UsageEntry.class.getName());
 			databinding.setOverrideTypes(overrides);
 
 			for (String typeName : overrides) {
