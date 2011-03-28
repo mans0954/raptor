@@ -1,9 +1,10 @@
 /**
  *
  */
-package uk.ac.cardiff.model;
+package uk.ac.cardiff.model.event;
 
 import org.joda.time.DateTime;
+
 
 /**
  * @author philsmart

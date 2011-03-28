@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.ClientMetadata;
-import uk.ac.cardiff.model.Event;
+import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart

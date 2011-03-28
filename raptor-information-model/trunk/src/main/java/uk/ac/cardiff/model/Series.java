@@ -27,16 +27,19 @@ public class Series implements Serializable{
     private ComparisonPredicate comparisonPredicate;
 
 
-    public String constructComparisonAsSQL(){
+    public String computeComparisonAsSQL(){
 	if (comparisonPredicate==null) return null;
 
 	StringBuilder sql = new StringBuilder();
 	sql.append(comparisonPredicate.getFieldName());
-	if (comparisonPredicate.getCompOp()==CompOp.EQUAL)sql.append("=");
-	if (comparisonPredicate.getCompOp()==CompOp.NOT_EQUAL)sql.append("!=");
+	if (comparisonPredicate.getCompOp()==CompOp.EQUAL)
+	    sql.append("=");
+	if (comparisonPredicate.getCompOp()==CompOp.NOT_EQUAL)
+	    sql.append("!=");
 	sql.append("'"+comparisonPredicate.getValue()+"'");
 
-	if (sql.length()==0)return null;
+	if (sql.length()==0)
+	    return null;
 
 	return sql.toString();
     }

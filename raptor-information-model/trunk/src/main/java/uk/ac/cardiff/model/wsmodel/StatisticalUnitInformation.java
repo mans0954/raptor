@@ -11,7 +11,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import uk.ac.cardiff.model.StatisticParameters;
 
 /**
  * This class only represents information, the dattypes are strings, and the strings maybe formatted As a result, this class is only for human consumption (or
