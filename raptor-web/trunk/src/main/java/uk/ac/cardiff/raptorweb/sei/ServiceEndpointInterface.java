@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.AuthenticationEntry;
+import uk.ac.cardiff.model.AuthenticationEvent;
 import uk.ac.cardiff.model.Event;
-import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.UsageEntry;
 import uk.ac.cardiff.model.Graph.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
