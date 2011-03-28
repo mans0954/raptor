@@ -7,14 +7,16 @@ import java.util.Set;
 import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.aegis.type.TypeUtil;
+import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.common.classloader.ClassLoaderUtils;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.AuthenticationEntry;
-import uk.ac.cardiff.model.ShibbolethEntry;
+import uk.ac.cardiff.model.AuthenticationEvent;
+import uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.UsageEntry;
+import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
 import uk.ac.cardiff.sei.MultiUnitAggregator;
@@ -37,8 +39,8 @@ public class CxfServiceEndpointInterface implements ServiceEndpointInterface {
 			Set<Class<?>> rootClasses = new HashSet<Class<?>>();
 
 			Set<String> overrides = new HashSet<String>();
-			overrides.add(ShibbolethEntry.class.getName());
-			overrides.add(AuthenticationEntry.class.getName());
+			overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
+			overrides.add(AuthenticationEvent.class.getName());
 			overrides.add(UsageEntry.class.getName());
 			databinding.setOverrideTypes(overrides);
 
@@ -61,13 +63,16 @@ public class CxfServiceEndpointInterface implements ServiceEndpointInterface {
 
 			MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
 			log.debug("Accessing the endpoint version " + client.getVersion());
-			Set<ShibbolethEntry> newEntries = new LinkedHashSet<ShibbolethEntry>();
+			Set<ShibbolethIdpAuthenticationEvent> newEntries = new LinkedHashSet<ShibbolethIdpAuthenticationEvent>();
 			client.addAuthentications(pushed);
 			log.debug("Sent {} events", pushed.getEvents().size());
 			return true;
-		} catch (Exception e) {
-			log.error("Could not send to endpoint [{}] ", endpointURL, e);
-			return false;
+		} catch (SoapFault e) {
+		    log.error("Could not send events to endpoint [{}] -> {}", new Object[]{endpointURL, e.getMessage()});
+		    return false;
+		}catch (Exception e) {
+		    log.error("Could not send events to endpoint [{}] -> {}", new Object[]{endpointURL, e.getMessage()});
+		    return false;
 		}
 
 	}
