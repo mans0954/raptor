@@ -15,15 +15,16 @@
 	</id>
 
  	<property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true" insert="true" column="dateTime"  not-null="false" index="dt_index"/>
-	<property name="requestHost" type="string" update="true" insert="true"	column="requestHost"  not-null="false" index="requesthost_index" />
-	<property name="serverHost" type="string" update="true" insert="true"	column="serverHost"  not-null="false" />
+	<property name="serviceHost" type="string" update="true" insert="true"	column="serviceHost"  not-null="false" index="requesthost_index" />
+	<property name="resourceHost" type="string" update="true" insert="true"	column="resourceHost"  not-null="false" />
 
-	<joined-subclass name="uk.ac.cardiff.model.AuthenticationEntry"  table="authenticationEntry">
+	<joined-subclass name="uk.ac.cardiff.model.AuthenticationEvent"  table="authenticationEvent">
       		<key column="id"/>
-      <property name="authNMethod" column="authNMethod" type="string" />
+      <property name="authenticationType" column="authenticationType" type="string" />
+      <property name="principalName" column="principalName" type="string" index="principalname_index" />
 
 
-      	<joined-subclass name="uk.ac.cardiff.model.ShibbolethEntry"  table="shibbolethEntry">
+      	<joined-subclass name="uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent"  table="shibbolethidpAuthenticationEvent">
           	 <key column="id"/>
 
       		<property name="requestPath" column="requestPath" type="string" />
@@ -31,7 +32,6 @@
       		<property name="messageProfileId" column="messageProfileId" type="string" />
       		<property name="responseBinding" column="responseBinding" type="string" />
       		<property name="requestBinding" column="requestBinding" type="string" />
-      		<property name="principleName" column="principleName" type="string" index="principalname_index" />
 			<property name="releasedAttributes" column="releasedAttributes" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 			<property name="assertionId" column="assertionId" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 			<property name="nameIdentifier" column="nameIdentifier" type="string" />

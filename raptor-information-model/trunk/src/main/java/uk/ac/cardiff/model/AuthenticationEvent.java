@@ -22,15 +22,22 @@ package uk.ac.cardiff.model;
  * @author philsmart
  *
  */
-public class AuthenticationEntry extends Event{
+public class AuthenticationEvent extends Event{
 
-	private String authNMethod;
+	private String authenticationType;
+	private String principalName;
 
-	public void setAuthNMethod(String authNMethod) {
-		this.authNMethod = authNMethod;
+	public void setPrincipalName(String principalName) {
+	    this.principalName = principalName;
 	}
-	public String getAuthNMethod() {
-		return authNMethod;
+	public String getPrincipalName() {
+	    return principalName;
+	}
+	public void setAuthenticationType(String authenticationType) {
+	    this.authenticationType = authenticationType;
+	}
+	public String getAuthenticationType() {
+	    return authenticationType;
 	}
 
 
