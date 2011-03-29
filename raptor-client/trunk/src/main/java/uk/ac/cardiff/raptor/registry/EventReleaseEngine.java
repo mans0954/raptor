@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
-import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
+import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 public class EventReleaseEngine {
 
 	private AttrributeFilterEngine attributeFilterEngine;
-	private ServiceEndpointInterface serviceEndpointInterface;
+	private ServiceEndpointClient serviceEndpointInterface;
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(EventReleaseEngine.class);
@@ -119,11 +119,11 @@ public class EventReleaseEngine {
 		return attributeFilterEngine;
 	}
 
-	public void setServiceEndpointInterface(ServiceEndpointInterface serviceEndpointInterface) {
+	public void setServiceEndpointInterface(ServiceEndpointClient serviceEndpointInterface) {
 		this.serviceEndpointInterface = serviceEndpointInterface;
 	}
 
-	public ServiceEndpointInterface getServiceEndpointInterface() {
+	public ServiceEndpointClient getServiceEndpointInterface() {
 		return serviceEndpointInterface;
 	}
 

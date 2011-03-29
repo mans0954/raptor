@@ -1,9 +1,9 @@
 package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
-import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
+import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 
-public class DefaultServiceEndpointInterfaceImpl implements ServiceEndpointInterface {
+public class DefaultServiceEndpointClient implements ServiceEndpointClient {
 
 	@Override
 	public boolean sendEvents(EventPushMessage pushed, String endpoint) {

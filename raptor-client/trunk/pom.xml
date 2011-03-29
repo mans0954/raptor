@@ -36,7 +36,7 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.6.1</version>
         </dependency>
-        
+
         <!-- Deep clone library -->
 		<dependency>
 			<groupId>clonable</groupId>
@@ -46,18 +46,8 @@
 
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
-            <artifactId>raptor-serviceinterfaces</artifactId>
+            <artifactId>raptor-information-model</artifactId>
             <version>0.4-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>xalan</artifactId>
-                    <groupId>xalan</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>xercesImpl</artifactId>
-                    <groupId>xerces</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
