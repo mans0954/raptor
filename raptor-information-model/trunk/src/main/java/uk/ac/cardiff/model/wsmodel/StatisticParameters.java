@@ -209,7 +209,7 @@ public class StatisticParameters implements Serializable{
      */
     private DateTime formatDate(String date, boolean isEndTime) {
 	/* this is not a nice hack, please tidy */
-	log.debug("Date format being parsed {} with {} characters",date,date.length());
+	//log.debug("Date format being parsed {} with {} characters",date,date.length());
 	if (date.length() == 8) {
 	    // assume ddMMyyy
 	    String format = "ddMMyyyy";
@@ -218,21 +218,21 @@ public class StatisticParameters implements Serializable{
 	    if (isEndTime) {
 		dt = new DateTime(dt.getMillis() + 86340000); // where 86340000 is 23.59 hours
 	    }
-	    log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
+	 //   log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
 	    return dt;
 	} else if (date.length() == 15) {
 	    // assume yyyyMMdd'T'HHmmss
 	    String format = "yyyyMMdd'T'HHmmss";
 	    DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
 	    DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
-	    log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
+	//    log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
 	    return dt;
 	} else if (date.length()==19){
 	    // assume outputDateFormat
 	    String format = OUTPUT_DATE_FORMAT;
 	    DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
 	    DateTime dt = dtf.parseDateTime(date.substring(0, date.length()));
-	    log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
+	 //   log.debug("time set to " + dt.getDayOfMonth() + "th " + dt.getMonthOfYear() + " " + dt.getYear() + " " + dt.getHourOfDay() + ":" + dt.getMinuteOfHour() + ":" + dt.getSecondOfMinute() + " for " + getUnitName());
 	    return dt;
 	}
 	//which is instantiated with the current date and time
