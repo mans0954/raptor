@@ -15,14 +15,14 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 public class CountEntry extends Statistic{
-	
+
 	static Logger log = LoggerFactory.getLogger(CountEntry.class);
-	
+
 	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
-		
+
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
-		
+
 		String numberOfIntervalsString = methodParams.get(0).getValue();
 
 		int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
@@ -95,7 +95,7 @@ public class CountEntry extends Statistic{
 			// SQL between is >= start && <= end. We want, >= start && < end, so
 			// must exclude equals end
 			Integer count = (Integer) this.getEntryHandler().queryUnique(
-					"select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '"
+					"select count(*) from Event where (eventTime between '" + bucket.getStart() + "' and '"
 							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')");// new
 			// Object[]{start,end});
 			bucket.setValue(count);
@@ -108,19 +108,6 @@ public class CountEntry extends Statistic{
 		 * contain the entries.
 		 */
 		log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
-
-		double timeIntervalInHours = ((((timeIntervalsInMs / 1000) / 60) / 60));
-		double timeIntervalInDays = ((((timeIntervalsInMs / 1000) / 60) / 60) / 24);
-
-		if (this.getEntryHandler().getNumberOfEntries() != testCount)
-			log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
-
-//		if (statisticParameters.getSeries().getSeriesLabel() == null)
-//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events per " + timeIntervalInDays + " days");
-//		else {
-//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel() + " (every "
-//					+ timeIntervalInDays + " days)");
-//		}
 
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
@@ -141,7 +128,7 @@ public class CountEntry extends Statistic{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
 		}
 		this.statisticParameters = statisticParameters;
-		
+
 	}
 
 }

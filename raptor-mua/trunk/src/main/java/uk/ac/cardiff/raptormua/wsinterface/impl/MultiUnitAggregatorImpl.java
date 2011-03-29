@@ -29,15 +29,15 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
-import uk.ac.cardiff.sei.MultiUnitAggregator;
 
 /**
  * @author philsmart
  *
  */
 
-@WebService(endpointInterface = "uk.ac.cardiff.sei.MultiUnitAggregator")
+@WebService(endpointInterface = "uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator")
 public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 
 	private MUAProcess processService;

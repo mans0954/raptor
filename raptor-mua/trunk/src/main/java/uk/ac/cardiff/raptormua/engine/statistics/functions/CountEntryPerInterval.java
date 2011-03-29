@@ -16,10 +16,10 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 public class CountEntryPerInterval extends Statistic{
-	
+
 	static Logger log = LoggerFactory.getLogger(CountEntryPerInterval.class);
 
-	
+
 	/**
 	 * <p>
 	 * returns false if semantic error with the entries, throws an exception on
@@ -33,13 +33,13 @@ public class CountEntryPerInterval extends Statistic{
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
-	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException { 
-		
+	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
+
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
-		
+
 		String timeInterval = methodParams.get(0).getValue();
-	
+
 		log.debug("Performing countEntryPerInterval Statistical Operation");
 		int timeIntervalInt = Integer.parseInt(timeInterval);
 		// convert minutes to ms for the procedure
@@ -112,10 +112,10 @@ public class CountEntryPerInterval extends Statistic{
 			// must exclude equals end
 			String query=null;
 			if (sqlWhere.equals(""))
-				query = "select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '"
+				query = "select count(*) from Event where (eventTime between '" + bucket.getStart() + "' and '"
 							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')";
 			else
-				query = "select count(*) from Entry where (eventTime between '" + bucket.getStart() + "' and '"
+				query = "select count(*) from Event where (eventTime between '" + bucket.getStart() + "' and '"
 				+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "') and "+sqlWhere;
 			Integer count = (Integer) this.getEntryHandler().queryUnique(query);// new
 			// Object[]{start,end});
@@ -123,20 +123,13 @@ public class CountEntryPerInterval extends Statistic{
 			testCount += bucket.getValue();
 		}
 
-		/*
-		 * test count should equal the number of entries unless there is a
-		 * reminder, or the specified start time and endtime does not completely
-		 * contain the entries.
-		 */
+
 		log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
 
-		if (this.getEntryHandler().getNumberOfEntries() != testCount)
-			log.error("Ah! Curse your sudden but inevitable betrayal!, Potential statistical error in countEntryPerInterval, total frequency does not match total entries");
 
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
 		getObservationSeries().add(series);
-
 
 		// finished successfully, no exception thrown
 		return true;
@@ -155,7 +148,7 @@ public class CountEntryPerInterval extends Statistic{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
 		}
 		this.statisticParameters = statisticParameters;
-		
+
 	}
 
 }
