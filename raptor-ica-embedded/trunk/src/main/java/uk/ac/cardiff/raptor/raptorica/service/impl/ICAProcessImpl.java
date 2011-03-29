@@ -33,7 +33,7 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- * 
+ *
  *         main service suite for the ICA
  */
 public class ICAProcessImpl implements ICAProcess {
@@ -54,9 +54,9 @@ public class ICAProcessImpl implements ICAProcess {
 	 * <code>CaptureEngine</code> once it obtains a lock from the
 	 * <code>Lock</code> object. Hence, the processImpl can not both capture and
 	 * send entries at the same time. Which prevents concurrency issues.
-	 * 
+	 *
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.service.ICAProcess#capture()
 	 */
 	public void capture() {
@@ -69,7 +69,7 @@ public class ICAProcessImpl implements ICAProcess {
 				log.info("Capture Success, taking {} ms", (end - start));
 				log.info("Running Event Release");
 				boolean released = engine.release();
-				log.info("Events released to all listening UAs {}", released);
+				log.info("Events released to all listening endpoints {}", released);
 			} catch (Exception e) {
 				// TODO either throw as service output, or deal with here
 				log.error(e.getMessage());
