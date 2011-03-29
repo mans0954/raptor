@@ -24,8 +24,8 @@
 	</bean>
 
 	<!-- MUA Metadata -->
-	<bean id="webMetadata" class="uk.ac.cardiff.model.WebMetadata">
-		<property name="webName"><value>Cardiff University's RaptorWeb Instance</value></property>
+	<bean id="webMetadata" class="uk.ac.cardiff.model.ServerMetadata">
+		<property name="serverName"><value>Cardiff University's RaptorWeb Instance</value></property>
 		<property name="organisationName"><value>Cardiff University</value></property>
 		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
 	</bean>
@@ -69,7 +69,7 @@
 			</list>
 		</property>
 	</bean>
-	
+
 	<bean name="genericReportBean" class="uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean"/>
 
     <!-- Set up the chart processor -->

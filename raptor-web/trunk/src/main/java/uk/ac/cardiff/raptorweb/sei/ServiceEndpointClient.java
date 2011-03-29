@@ -8,23 +8,17 @@ import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
-import org.apache.cxf.jaxrs.client.Client;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.UsageEntry;
-import uk.ac.cardiff.model.event.AuthenticationEvent;
-import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.raptorweb.model.MUAEntry;
-import uk.ac.cardiff.sei.MultiUnitAggregator;
-import uk.ac.cardiff.sei.UnitAggregator;
+import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
+
 
 /**
  * @author philsmart
@@ -32,8 +26,8 @@ import uk.ac.cardiff.sei.UnitAggregator;
  *         Instances of this class are responsible for retrieving data from a service endpoint
  *
  */
-public class ServiceEndpointInterface {
-    static Logger log = LoggerFactory.getLogger(ServiceEndpointInterface.class);
+public class ServiceEndpointClient {
+    static Logger log = LoggerFactory.getLogger(ServiceEndpointClient.class);
 
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator.
