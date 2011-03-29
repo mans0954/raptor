@@ -25,7 +25,7 @@
 			<props>
 				<prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> <!-- database type -->
 				<prop key="hibernate.show_sql">false</prop>  <!-- outputs the SQL queries used to the standard logger -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
+				<prop key="hibernate.hbm2ddl.auto">create</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
 					in production do not use any of these -->
 				<!-- Generate hibernate statistics
 				<prop key="hibernate.generate_statistics">true</prop> -->
@@ -34,7 +34,7 @@
 		<!-- OR mapping files. -->
 		<property name="mappingResources">
 			<list>
-				<value>uk/ac/cardiff/model/event.hbm.xml</value>
+				<value>uk/ac/cardiff/model/event/event.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

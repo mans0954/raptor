@@ -17,10 +17,10 @@ import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 public class GroupByFrequency extends Statistic{
-	
+
 	static Logger log = LoggerFactory.getLogger(GroupByFrequency.class);
-	
-	
+
+
 	/**
 	 * Perform the groupByField statistic. This statistic counts the frequency
 	 * that each distinct value of the given <code>groupByField</code> occurs in
@@ -36,12 +36,12 @@ public class GroupByFrequency extends Statistic{
 	 * @throws StatisticalUnitException
 	 */
 	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
-	
+
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
-		
+
 		String groupByField = methodParams.get(0).getValue();
-		
+
 		log.debug("Performing groupByFrequency Statistical Operation");
 		log.debug("Params for method:  {},{}", this.getClass().getSimpleName(), statisticParameters.getUnitName());
 		log.debug("Grouping field: {}", groupByField);
@@ -66,18 +66,8 @@ public class GroupByFrequency extends Statistic{
 			testCount += group.getValue();
 		}
 
-		/*
-		 * test count should equal the number of entries unless there is a
-		 * reminder as this has not been catered for yet.
-		 */
-		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
-		// add the series label or if none specified, add a default
-//		if (statisticParameters.getSeries().getSeriesLabel() == null)
-//			statisticParameters.getSeries().setSeriesLabelFormatted("Number of Events Grouped By " + groupByField);
-//		else {
-//			statisticParameters.getSeries().setSeriesLabelFormatted(statisticParameters.getSeries().getSeriesLabel());
-//		}
+		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
 		if (groups.size() == 0)
 			return false;
@@ -103,7 +93,7 @@ public class GroupByFrequency extends Statistic{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
 		}
 		this.statisticParameters = statisticParameters;
-		
+
 	}
 
 }

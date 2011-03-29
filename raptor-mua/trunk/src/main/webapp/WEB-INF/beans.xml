@@ -68,8 +68,8 @@
 					so we can output the generic Entry class in lists in the Collector Service Endpoint Class
 					but actually output any of its subclasses. Hence, this is a way of dealing with
 					inheritence in CXF and aegis -->
-						<value>uk.ac.cardiff.model.AuthenticationEvent</value>
-						<value>uk.ac.cardiff.model.ShibbolethIdpAuthenticationEvent</value>
+						<value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
+						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 						<!-- <value>org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType</value>-->
 					</list>
 				</entry>
@@ -92,7 +92,7 @@
 		used by all services of the MUA
 	-->
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
-		
+
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
