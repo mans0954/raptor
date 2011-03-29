@@ -17,13 +17,14 @@ import uk.ac.cardiff.model.event.AuthenticationEvent;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
-import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointInterface;
-import uk.ac.cardiff.sei.MultiUnitAggregator;
+import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
+import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 
-public class CxfServiceEndpointInterface implements ServiceEndpointInterface {
+
+public class CxfServiceEndpointClient implements ServiceEndpointClient {
 
 	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(CxfServiceEndpointInterface.class);
+	private final Logger log = LoggerFactory.getLogger(CxfServiceEndpointClient.class);
 
 	@Override
 	public boolean sendEvents(EventPushMessage pushed, String endpointURL) {
