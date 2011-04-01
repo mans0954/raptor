@@ -34,6 +34,7 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
+import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
@@ -50,6 +51,9 @@ public class MUAEngine {
 
 	private EntryHandler entryHandler;
 	private StatisticsHandler statisticsHandler;
+
+	/** The client that is used to process, filter and send events to another MUA instance*/
+	private EventReleaseClient eventReleaseClient;
 
 	private Users users;
 
@@ -90,7 +94,7 @@ public class MUAEngine {
 		Capabilities capabilities = new Capabilities();
 		capabilities.setMetadata(this.getMuaMetadata());
 
-		
+
 		//set possible values
 		SuggestionValues suggestionValues = new SuggestionValues();
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
@@ -176,6 +180,14 @@ public class MUAEngine {
 
 	public ServerMetadata getMuaMetadata() {
 		return muaMetadata;
+	}
+
+	public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
+	    this.eventReleaseClient = eventReleaseClient;
+	}
+
+	public EventReleaseClient getEventReleaseClient() {
+	    return eventReleaseClient;
 	}
 
 }
