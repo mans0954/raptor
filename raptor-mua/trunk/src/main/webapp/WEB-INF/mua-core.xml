@@ -92,11 +92,28 @@
 		used by all services of the MUA
 	-->
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
-
+        <property name="eventReleaseClient"><ref bean="eventReleaseClient"></ref></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 	</bean>
+
+	<!--  the event release client, for sending events to other MUA's -->
+
+	 <bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
+        <property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
+        <property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
+    </bean>
+
+    <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
+        <property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
+        <property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>
+    </bean>
+
+    <bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
+
+    <bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient"/>
+
 
 	<!-- MUA Metadata -->
 	<bean id="MUAMetadata" class="uk.ac.cardiff.model.ServerMetadata">
@@ -114,6 +131,7 @@
 	  <import resource="dao-beans.xml"/>
 	  <import resource="mua-registry.xml" />
 	  <import resource="statistical-units.xml" />
+	  <import resource="event-release.xml"/>
 	  <import resource="users.xml" />
 
 </beans>
