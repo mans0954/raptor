@@ -23,29 +23,46 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
+import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
 
 /**
  * @author philsmart
  *
- * Provides a register for parsing engines to plugin to. Also manages such engines.
+ * Provides a register for parsing modules to attach to.
  */
 public class DataAccessRegister {
-	static Logger log = Logger.getLogger(DataAccessRegister.class);
 
-	private List<AuthenticationInput> authenticationModules;
+    	/** Class logger */
+	private final Logger log = Logger.getLogger(DataAccessRegister.class);
 
+	/** List of parsing modules */
+	private List<BaseEventParser> parsingModules;
+
+	/**
+	 * Default constructor that sets an empty list of parsing modules by default.
+	 */
 	public DataAccessRegister(){
-		setAuthenticationModules(new ArrayList<AuthenticationInput>());
+	    setParsingModules(new ArrayList<BaseEventParser>());
 	}
 
-	public void setAuthenticationModules(List<AuthenticationInput> authenticationModules) {
-		for (AuthenticationInput authI : authenticationModules)log.info("Registering: "+authI.getClass());
-		this.authenticationModules = authenticationModules;
+	/**
+	 * Sets and prints the name of all parsing modules passed as an input parameter
+	 *
+	 * @param parsingModules
+	 */
+	public void setParsingModules(List<BaseEventParser> parsingModules) {
+		for (BaseEventParser parser : parsingModules)
+		    log.info("Registering: "+parser.getClass());
+		this.parsingModules = parsingModules;
 	}
 
-	public List<AuthenticationInput> getAuthenticationModules() {
-		return authenticationModules;
+	/**
+	 * Gets the list of parsing modules currently registered
+	 *
+	 * @return list of parsing modules, all subclasses of the {@link BaseEventParser} class
+	 */
+	public List<BaseEventParser> getParsingModules() {
+		return parsingModules;
 	}
 
 

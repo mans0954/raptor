@@ -274,17 +274,7 @@
 
 
 		<!-- includes the information-model -->
-		<dependency>
-			<groupId>uk.ac.cardiff.raptor</groupId>
-			<artifactId>raptor-serviceinterfaces</artifactId>
-			<version>0.4-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>slf4j-api</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+
 		<dependency>
 			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>

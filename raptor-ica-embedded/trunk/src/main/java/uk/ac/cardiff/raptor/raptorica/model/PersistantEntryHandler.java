@@ -35,12 +35,12 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class PersistantEntryHandler implements EntryHandler {
 
 	/* class logger */
-	static Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
+	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
 	/* information about entries, e.g. last entry */
 	private EntryMetadata entryInformation;
@@ -63,21 +63,22 @@ public class PersistantEntryHandler implements EntryHandler {
 	public void initialise() {
 		log.info("Persistant entry handler [{}] initialising", this);
 		Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
-		log.info("Persistent data store has {} entries", rowCount);
+		log.info("Persistent data store has {} events", rowCount);
 		entryInformation = (EntryMetadata) dataConnection.runQueryUnique("from EntryMetadata", null);
 		log.debug("Have saved entryInformaiton: " + entryInformation);
 		if (entryInformation == null)
 			entryInformation = new EntryMetadata();
 		log.debug("Entry Information " + entryInformation.getLatestEqualEntries());
 		// convert to set from list, maybe expensive
-		List<Event> entriesAsList = dataConnection.runQuery("from Event", null);
-		entries = new LinkedHashSet<Event>(entriesAsList);
+		//List<Event> entriesAsList = dataConnection.runQuery("from Event", null);
+		//entries = new LinkedHashSet<Event>(entriesAsList);
+		entries = new LinkedHashSet<Event>();
 		log.info("Persistant entry handler [{}] started", this);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
 	 */
 	@Override
@@ -137,7 +138,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
 	 */
 	@Override
@@ -151,7 +152,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
 	 */
 	@Override
@@ -161,7 +162,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#isAfter(uk.ac.cardiff.model.Entry)
 	 */
 	@Override
@@ -173,7 +174,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * main.uk.ac.cf.model.EntryHandler#isEqualTime(uk.ac.cardiff.model.Entry)
 	 */
@@ -186,7 +187,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * main.uk.ac.cf.model.EntryHandler#isNewerOrEqual(uk.ac.cardiff.model.Entry
 	 * )
@@ -202,7 +203,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
 	 */
 	@Override
@@ -232,7 +233,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.model.EntryHandler#getLatestEntryTime()
 	 */
 	@Override
@@ -242,7 +243,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * main.uk.ac.cf.model.EntryHandler#setLatestEntryTime(org.joda.time.DateTime
 	 * )

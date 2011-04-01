@@ -18,8 +18,6 @@
  */
 package uk.ac.cardiff.raptor.raptorica.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.joda.time.DateTime;

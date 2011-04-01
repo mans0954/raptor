@@ -21,15 +21,11 @@
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 	<!-- Polling trigger setup -->
-
-
-
 	<bean id="ICAProcessQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
 		<property name="jobDetail">
 			<ref local="ICAProcessJobDetail" />
 		</property>
 		<property name="repeatInterval" value="30000" />
-		<!-- <property name="repeatCount" value="0" />-->
 	</bean>
 
 	<bean id="ICAProcessJobDetail"
@@ -47,9 +43,7 @@
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
-			<list><!--
-				<ref local="ICAProcessTrigger" />
-				-->
+			<list>
 				<ref local="ICAProcessQuickTrigger" />
 			</list>
 		</property>
@@ -85,15 +79,15 @@
 		<property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
 		<property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
 	</bean>
-	
+
 	<bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
 		<property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
 		<property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>
 	</bean>
 
 	<bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
-	
-	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointInterface"/>
+
+	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient"/>
 
 	<import resource="dao-beans.xml"/>
 	<import resource="data-access.xml" />
