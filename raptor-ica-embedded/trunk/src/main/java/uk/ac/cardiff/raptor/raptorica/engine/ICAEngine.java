@@ -19,13 +19,10 @@
 package uk.ac.cardiff.raptor.raptorica.engine;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import uk.ac.cardiff.raptor.exceptions.ReleaseFailureException;
-import uk.ac.cardiff.raptor.raptorica.dao.external.AuthenticationInput;
-import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
+import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 
 import org.slf4j.Logger;
@@ -36,7 +33,7 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- * 
+ *
  *         Responsible for ALL low level capture operations
  */
 public class ICAEngine {
@@ -53,9 +50,9 @@ public class ICAEngine {
 	}
 
 	public void capturePerform() throws Exception {
-		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()) {
-			log.info("Capturing from {}", authI);
-			authI.parse();
+		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
+			log.info("Capturing from {}", parser);
+			parser.parse();
 		}
 	}
 
@@ -68,25 +65,25 @@ public class ICAEngine {
 	 */
 	private void retrieveTransactionFinished() {
 		log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...");
-		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()) {
-			authI.removeAllEntries();
+		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
+		    parser.removeAllEntries();
 		}
-		log.debug("Retrieve Transaction Finished, entries are being removed form the ICA...done");
+		log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...done");
 
 	}
 
 	/**
 	 * Converts all information from all modules into a single list that is sent
 	 * to the release engine
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean release() {
-		List<Event> eventsToSend = new ArrayList<Event>();		
-		for (AuthenticationInput authI : getDataAccessRegister().getAuthenticationModules()){
-			eventsToSend.addAll(authI.getAuthentications());
+		List<Event> eventsToSend = new ArrayList<Event>();
+		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()){
+			eventsToSend.addAll(parser.getAuthentications());
 		}
-		
+
 		boolean success = false;
 		try {
 			success = eventReleaseClient.release(eventsToSend, getIcaMetadata());

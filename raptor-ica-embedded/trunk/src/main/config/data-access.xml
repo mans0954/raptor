@@ -22,7 +22,7 @@
 
 	<!--  List all the data access beans, used by the parser -->
 	<bean id="dataAccessRegister" class="uk.ac.cardiff.raptor.raptorica.engine.DataAccessRegister">
-		<property name="authenticationModules">
+		<property name="parsingModules">
 			<list><!--
 				<bean id="shibbolethAccessLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
@@ -44,17 +44,18 @@
 					it can pick up where it left off in the even of a failure
 				-->
 				<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-sorted-to-20110213.log
 						</value>
 					</property>
 					<property name="format">
 						<ref bean="shibIDPAuditFileFormat" />
 					</property>
-					<property name="entryType">
+					<property name="eventType">
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
+					<property name="printParsingPosition"><value>true</value></property>
 
 					<!--  The inclusion list is an OR of field name, value pairs that are loaded by the parser
 					 all other fields are ignored, this is run before the exclusion list-->

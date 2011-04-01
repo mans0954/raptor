@@ -21,13 +21,13 @@ package uk.ac.cardiff.raptor.raptorica.dao.external;
 import java.util.List;
 import java.util.Set;
 
-import uk.ac.cardiff.raptor.raptorica.dao.RawData;
+import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
 
 /**
  * @author philsmart
  *
  */
-public abstract class UsageInput extends RawData{
+public abstract class UsageInput extends BaseEventParser{
 
 
 
