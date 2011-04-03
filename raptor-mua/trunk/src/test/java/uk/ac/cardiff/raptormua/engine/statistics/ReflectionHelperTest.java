@@ -25,13 +25,13 @@ public class ReflectionHelperTest {
 	
 	@Test
 	public void testFindClassForField(){		
-			String classForField = ReflectionHelper.findEntrySubclassForMethod("principleName");
+			String classForField = ReflectionHelper.findEntrySubclassForMethod("principalName");
 			System.out.println("ShibbolethEntry = "+classForField);
-			equals(classForField.equals("ShibbolethEntry"));
+			equals(classForField.equals("ShibbolethIdpAuthenticationEvent"));
 			
-			classForField = ReflectionHelper.findEntrySubclassForMethod("requestHost");
-			System.out.println("Entry = "+classForField);
-			equals(classForField.equals("Entry"));
+			classForField = ReflectionHelper.findEntrySubclassForMethod("serviceHost");
+			System.out.println("Event = "+classForField);
+			equals(classForField.equals("Event"));
 			
 			
 	}
