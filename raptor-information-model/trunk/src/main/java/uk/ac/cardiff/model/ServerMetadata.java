@@ -3,18 +3,26 @@
  */
 package uk.ac.cardiff.model;
 
+import java.io.Serializable;
+
 /**
  * @author philsmart
  *
  */
-public class ServerMetadata {
+public class ServerMetadata implements Serializable{
 
+    /** Generated serial UID */
+    private static final long serialVersionUID = -5593034367810177954L;
+    
     /** The name of the server this metadata is constructed for */
     private String serverName;
+    
     /** The name of the organisation that has authoritative control over this client */
     private String organisationName;
+    
     /** The email address of the individual responsible for maintaining this client */
     private String contactEmail;
+    
     /** The name of the  service that this metadata is constructed for */
     private String serviceName;
 
