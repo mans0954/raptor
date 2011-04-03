@@ -31,9 +31,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class RunServer {
 
     public static void main(String args[]) throws Exception {
-	/** this will setup and allow the ICA to push information, however the CXF servlet needs to be
-	 * configured (as in the web.xml) if we need the CXF services to be exposed.
-	 */
+    	
 
 	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")+"/target/conf/ica-core.xml");
 	int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
@@ -53,7 +51,7 @@ public class RunServer {
 	context.addServlet(servletHolder, "/*");
 
 	try {
-		System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
+		System.out.println(">>> STARTING EMBEDDED JETTY SERVER");
 		server.start();
 //		System.in.read();
 //		System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
