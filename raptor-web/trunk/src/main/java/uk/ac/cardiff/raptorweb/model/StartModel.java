@@ -21,10 +21,15 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
  */
 public class StartModel implements Serializable{
 
-	static Logger log = LoggerFactory.getLogger(StartModel.class);
+    	/** Generated Serial UID */
+    	private static final long serialVersionUID = 6795818266913419538L;
+
+	/** The Class logger */
+	private final Logger log = LoggerFactory.getLogger(StartModel.class);
 
 	private Capabilities attachedMUACapabilities;
 
+	/** Holds the statistics used by the dashboard on the front page*/
 	private StartStatistics startStatistics;
 
 	private TimeRange statsRangeSelector;
