@@ -38,12 +38,7 @@
 			<ref bean='jaxws-and-aegis-service-factory' />
 		</jaxws:serviceFactory>
 
-			<!-- output all CXF intercepter chain messages to a logging class, rather than the stdOUT, DOES not work
-		<jaxws:properties>
-			<entry key="org.apache.cxf.logging.FaultLogger">
-				<bean class="uk.ac.cardiff.raptorcommon.loggers.SOAPFaultLogger"/>
-			</entry>
-		</jaxws:properties>-->
+
 	  </jaxws:endpoint>
 
 	  <bean id="muaEndpointInterface" class="uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl">
