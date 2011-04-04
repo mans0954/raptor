@@ -59,6 +59,18 @@
                     <artifactId>spring-web</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
+                <exclusion>
+                	<artifactId>spring-context</artifactId>
+                	<groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                	<artifactId>spring-beans</artifactId>
+                	<groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                	<artifactId>spring-core</artifactId>
+                	<groupId>org.springframework</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -112,6 +124,14 @@
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                	<artifactId>jetty</artifactId>
+                	<groupId>org.mortbay.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                	<artifactId>jetty-util</artifactId>
+                	<groupId>org.mortbay.jetty</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
