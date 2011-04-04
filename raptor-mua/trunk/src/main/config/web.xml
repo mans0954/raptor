@@ -25,7 +25,7 @@
 <web-app>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>WEB-INF/mua-core.xml</param-value>
+		<param-value>mua-core.xml</param-value>
 	</context-param>
 
 	<listener>
