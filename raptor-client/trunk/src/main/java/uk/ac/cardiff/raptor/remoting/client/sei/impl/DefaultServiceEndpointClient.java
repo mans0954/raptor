@@ -16,14 +16,18 @@
 package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 
 public class DefaultServiceEndpointClient implements ServiceEndpointClient {
 
+	/* (non-Javadoc)
+	 * @see uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient#sendEvents(uk.ac.cardiff.model.wsmodel.EventPushMessage, uk.ac.cardiff.raptor.registry.Endpoint)
+	 */
 	@Override
-	public boolean sendEvents(EventPushMessage pushed, String endpoint) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint) {
+	    // TODO Auto-generated method stub
+	    return false;
 	}
 
 }

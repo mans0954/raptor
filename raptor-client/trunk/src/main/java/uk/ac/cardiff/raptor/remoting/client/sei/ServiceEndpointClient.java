@@ -16,9 +16,10 @@
 package uk.ac.cardiff.raptor.remoting.client.sei;
 
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.raptor.registry.Endpoint;
 
 public interface ServiceEndpointClient {
-	
-	public boolean sendEvents(EventPushMessage pushed, String endpoint);
+
+	public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint);
 
 }
