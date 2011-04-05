@@ -35,7 +35,7 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class EventReleaseEngine {
 
@@ -50,7 +50,7 @@ public class EventReleaseEngine {
 	 * the endpoint registry. Endpoints are applicable to be sent to if they
 	 * meet the push policy defined on them. Event attributes are also filtered
 	 * according to the attribute filter policy defined per endpoint.
-	 * 
+	 *
 	 * @param authenticationModules
 	 */
 	public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ClientMetadata clientMetadata) {
@@ -63,7 +63,7 @@ public class EventReleaseEngine {
 			EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
 			if (shouldRelease) {
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
-				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint.getServiceEndpoint());
+				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint);
 				log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
 				if (releaseSuccess == false)
 					releasedtoAll = false;
@@ -85,7 +85,7 @@ public class EventReleaseEngine {
 	 * Filters the attributes from each event being pushed to the input
 	 * endpoint. If no filter policy has been defined, no work is done, and the
 	 * input allEvents is returned without modification
-	 * 
+	 *
 	 * @param endpoint
 	 * @param allEvents
 	 * @return
@@ -98,7 +98,7 @@ public class EventReleaseEngine {
 
 	/**
 	 * Constructs an event push message, which encapsulates the events to send
-	 * 
+	 *
 	 * @param clientMetadata
 	 * @param events
 	 * @return
