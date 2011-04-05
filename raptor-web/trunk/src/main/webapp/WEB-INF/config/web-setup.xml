@@ -10,8 +10,10 @@
 		<property name ="MUAEntries">
 			<list>
 				<bean id="cardiffShibMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
-					<property name="serviceEndpoint"><value>http://localhost:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>https://localhost:8443/MUA/MultiUnitAggregator</value></property>
 					<property name="isAttached" value="true"></property>
+					<property name="publicKey"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value></property>
+                    <property name="publicKeyPassword"><value>phil11</value></property>
 				</bean>
 			</list>
 		</property>
