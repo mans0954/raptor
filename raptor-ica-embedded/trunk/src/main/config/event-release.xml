@@ -29,10 +29,12 @@
 		<property name ="endpoints">
 			<list>
 				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
-					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>https://ipower.insrv.cf.ac.uk:8443/MUA/MultiUnitAggregator</value></property>
 					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
 					<!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>-->
-				</bean>
+					<property name="publicKey"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value></property>
+				    <property name="publicKeyPassword"><value>phil11</value></property>
+                </bean>
 			</list>
 		</property>
 	</bean>
