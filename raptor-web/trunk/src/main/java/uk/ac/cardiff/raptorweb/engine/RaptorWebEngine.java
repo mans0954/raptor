@@ -70,7 +70,7 @@ public class RaptorWebEngine {
     public void setAttached(MUAEntry entry) {
 	log.info("Attaching {} and retrieving abilities",entry);
 	this.attachedMUA = entry;
-	currentlyAttachedCapabilities = ServiceEndpointClient.discoverMUACapabilities(attachedMUA.getServiceEndpoint());
+	currentlyAttachedCapabilities = ServiceEndpointClient.discoverMUACapabilities(attachedMUA);
     }
 
     public SuggestionValues getSuggestionValues(){
@@ -102,7 +102,7 @@ public class RaptorWebEngine {
 		    attached = entry;
 		}
 	    }
-	    Capabilities capabilities = ServiceEndpointClient.discoverMUACapabilities(attached.getServiceEndpoint());
+	    Capabilities capabilities = ServiceEndpointClient.discoverMUACapabilities(attached);
 	    if (capabilities!=null && !capabilities.isError()){
 		log.debug("Has retrieved {} statistics", capabilities.getStatisticalServices().size());
 		attachedMUA = attached;
@@ -121,7 +121,7 @@ public class RaptorWebEngine {
      * @return
      */
     public Capabilities getCapabilities(MUAEntry selectedEndpoint) {
-	return ServiceEndpointClient.discoverMUACapabilities(selectedEndpoint.getServiceEndpoint());
+	return ServiceEndpointClient.discoverMUACapabilities(selectedEndpoint);
     }
 
     public MUAEntry getCurrentlyAttached() {
@@ -134,13 +134,13 @@ public class RaptorWebEngine {
     }
 
     public AggregatorGraphModel invokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
-	AggregatorGraphModel gmodel = ServiceEndpointClient.invokeStatisticalUnit(getCurrentlyAttached().getServiceEndpoint(), selectedStatisticalUnit.getStatisticParameters().getUnitName());
+	AggregatorGraphModel gmodel = ServiceEndpointClient.invokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit.getStatisticParameters().getUnitName());
 	return gmodel;
 
     }
 
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
-	AggregatorGraphModel gmodel = ServiceEndpointClient.updateAndinvokeStatisticalUnit(getCurrentlyAttached().getServiceEndpoint(), selectedStatisticalUnit);
+	AggregatorGraphModel gmodel = ServiceEndpointClient.updateAndinvokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit);
 	return gmodel;
 
     }
@@ -172,7 +172,7 @@ public class RaptorWebEngine {
     public void updateMUAStatistic(GraphModel model) {
 	log.debug("Updating statistic {} ",model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
 	log.debug("Has startDate {}",model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getStartTimeAsDate());
-	ServiceEndpointClient.updateStatisticalUnit(attachedMUA.getServiceEndpoint(),model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
+	ServiceEndpointClient.updateStatisticalUnit(attachedMUA,model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
     }
 
     /**
@@ -199,7 +199,7 @@ public class RaptorWebEngine {
 	    function.setRequester(webMetadata.getServerName());
 	else
 	    function.setRequester("UNKNOWN");
-	boolean success = ServiceEndpointClient.invokeAdministrativeFunction(attachedMUA.getServiceEndpoint(), function);
+	boolean success = ServiceEndpointClient.invokeAdministrativeFunction(attachedMUA, function);
 	log.debug("Removal successfull {}",success);
 	if (!success) model.setProcessingResult("ERROR: Entries did not remove");
 	else if (success) model.setProcessingResult("Operation Successful");
