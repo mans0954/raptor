@@ -16,8 +16,12 @@
 package uk.ac.cardiff.raptormua.server;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
+import java.util.Properties;
 
 import javax.xml.ws.Endpoint;
 
@@ -45,57 +49,62 @@ import uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl;
 
 public class RunServer {
 
-	/**
-	 * Programmatically start a Jetty Server instance, and set the web.xml in the
-	 * configuration directory to initialise the servlet.
-	 * 
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String args[]) {
+    /**
+     * Programmatically start a Jetty Server instance, and set the web.xml in the configuration directory to initialise the servlet.
+     *
+     * @param args
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    public static void main(String args[]) throws FileNotFoundException, IOException {
 
-		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")
-				+ "/target/conf");
-		int portNumber = Integer.parseInt(System.getProperty("port", "8080"));
+	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 
-		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
-		System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
+	Properties props = new Properties();
+	props.load(new FileInputStream(configurationFiles + "/server.properties"));
 
-		Server server = new Server();	
-		
-		SslSocketConnector sslConnector = new SslSocketConnector();
-		sslConnector.setPort(8443); 
-		sslConnector.setMaxIdleTime(30000); 
-		sslConnector.setKeystore("/home/philsmart/Downloads/jetty-distribution-7.2.2.v20101205/etc/keystore"); 
-		sslConnector.setPassword("changeit"); 
-		sslConnector.setKeyPassword("changeit"); 
-		sslConnector.setTruststore("/home/philsmart/Downloads/jetty-distribution-7.2.2.v20101205/etc/keystore"); 
-		sslConnector.setTrustPassword("changeit"); 
-		
-		SocketConnector connector = new SocketConnector(); 
-		connector.setPort(portNumber); 
-		connector.setMaxIdleTime(30000); 
-		connector.setConfidentialPort(8443); 
+	int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8443"));
+	String keyStoreLocaion = props.getProperty("jetty.keyStoreLocation", "");
+	String keyStorePassword = props.getProperty("jetty.keyStorePassword", "changeit");
+	String trustStoreLocaion = props.getProperty("jetty.trustStoreLocaion", "");
+	String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
+	String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
 
-		server.setConnectors(new Connector[]{connector, sslConnector});
-			
-		WebAppContext webappcontext = new WebAppContext();
-		webappcontext.setDescriptor(configurationFiles+"/web.xml");
-		webappcontext.setContextPath("/MUA");
-		webappcontext.setWar(configurationFiles);
-		
-		HandlerCollection handlers= new HandlerCollection();
-		handlers.setHandlers(new Handler[]{webappcontext, new DefaultHandler()});
+	System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
+	System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
 
-		server.setHandler(handlers);
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
+	Server server = new Server();
 
+	SslSocketConnector sslConnector = new SslSocketConnector();
+	sslConnector.setPort(portNumber);
+	sslConnector.setMaxIdleTime(30000);
+	sslConnector.setKeystore(keyStoreLocaion);
+	sslConnector.setPassword(keyStorePassword);
+	sslConnector.setKeyPassword(keyStorePassword);
+	sslConnector.setTruststore(trustStoreLocaion);
+	sslConnector.setTrustPassword(trustStorePassword);
+
+	server.setConnectors(new Connector[] {  sslConnector });
+
+	WebAppContext webappcontext = new WebAppContext();
+	webappcontext.setDescriptor(configurationFiles+"/web.xml");
+	webappcontext.setContextPath(webappContextPath);
+	webappcontext.setWar(configurationFiles);
+
+	HandlerCollection handlers = new HandlerCollection();
+	handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
+
+	server.setHandler(handlers);
+
+	try {
+	    server.start();
+	    server.join();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    System.exit(100);
 	}
+
+    }
 
 }
