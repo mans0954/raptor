@@ -29,6 +29,7 @@ public class EndpointRegistry {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
+   
 
     /** List of endpoints for invoking methods on*/
     private List<Endpoint> endpoints;

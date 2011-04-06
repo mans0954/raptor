@@ -41,6 +41,18 @@ public class EventReleaseEngine {
 
 	private AttrributeFilterEngine attributeFilterEngine;
 	private ServiceEndpointClient serviceEndpointInterface;
+	
+	/** The public certificates for trusted servers*/
+	private String trustStoreLocation;
+	
+	/** The private certificate for this client */
+	private String keyStoreLocation;
+	
+	/** The password for the trust store*/
+	private String trustStorePassword;
+	
+	/** The password for the key store */
+	private String keyStorePassword;
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(EventReleaseEngine.class);
@@ -125,6 +137,38 @@ public class EventReleaseEngine {
 
 	public ServiceEndpointClient getServiceEndpointInterface() {
 		return serviceEndpointInterface;
+	}
+
+	public void setTrustStoreLocation(String trustStoreLocation) {
+		this.trustStoreLocation = trustStoreLocation;
+	}
+
+	public String getTrustStoreLocation() {
+		return trustStoreLocation;
+	}
+
+	public void setKeyStoreLocation(String keyStoreLocation) {
+		this.keyStoreLocation = keyStoreLocation;
+	}
+
+	public String getKeyStoreLocation() {
+		return keyStoreLocation;
+	}
+
+	public void setTrustStorePassword(String trustStorePassword) {
+		this.trustStorePassword = trustStorePassword;
+	}
+
+	public String getTrustStorePassword() {
+		return trustStorePassword;
+	}
+
+	public void setKeyStorePassword(String keyStorePassword) {
+		this.keyStorePassword = keyStorePassword;
+	}
+
+	public String getKeyStorePassword() {
+		return keyStorePassword;
 	}
 
 }
