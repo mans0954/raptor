@@ -49,66 +49,66 @@ import uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl;
 
 public class RunServer {
 
-    /**
-     * Programmatically start a Jetty Server instance, and set the web.xml in the configuration directory to initialise the servlet.
-     *
-     * @param args
-     * @throws IOException
-     * @throws FileNotFoundException
-     * @throws Exception
-     */
-    public static void main(String args[]) throws FileNotFoundException, IOException {
+	/**
+	 * Programmatically start a Jetty Server instance, and set the web.xml in
+	 * the configuration directory to initialise the servlet.
+	 * 
+	 * @param args
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws Exception
+	 */
+	public static void main(String args[]) throws FileNotFoundException, IOException {
 
-	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
+		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 
-	Properties props = new Properties();
-	props.load(new FileInputStream(configurationFiles + "/server.properties"));
+		Properties props = new Properties();
+		props.load(new FileInputStream(configurationFiles + "/server.properties"));
 
-	int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8443"));
-	String keyStoreLocaion = props.getProperty("jetty.keyStoreLocation", "");
-	String keyStorePassword = props.getProperty("jetty.keyStorePassword", "changeit");
-	String trustStoreLocaion = props.getProperty("jetty.trustStoreLocaion", "");
-	String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
-	String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
+		int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8443"));
+		String keyStoreLocaion = props.getProperty("jetty.keyStoreLocation", "");
+		String keyStorePassword = props.getProperty("jetty.keyStorePassword", "changeit");
+		String trustStoreLocaion = props.getProperty("jetty.trustStoreLocaion", "");
+		String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
+		String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
 
-	System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
-	System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
+		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
+		System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
 
-	Server server = new Server();
+		Server server = new Server();
 
-	SslSocketConnector sslConnector = new SslSocketConnector();
-	sslConnector.setPort(portNumber);
-	sslConnector.setMaxIdleTime(30000);
-	sslConnector.setKeystore(keyStoreLocaion);
-	sslConnector.setPassword(keyStorePassword);
-	sslConnector.setKeyPassword(keyStorePassword);
-	sslConnector.setTruststore(trustStoreLocaion);
-	sslConnector.setTrustPassword(trustStorePassword);
+		SslSocketConnector sslConnector = new SslSocketConnector();
+		sslConnector.setPort(portNumber);
+		sslConnector.setMaxIdleTime(30000);
+		sslConnector.setKeystore(keyStoreLocaion);
+		sslConnector.setPassword(keyStorePassword);
+		sslConnector.setKeyPassword(keyStorePassword);
+		sslConnector.setTruststore(trustStoreLocaion);
+		sslConnector.setTrustPassword(trustStorePassword);
 
-	//enable mutual authentication
-	sslConnector.setNeedClientAuth(true);
+		// enable mutual authentication
+		sslConnector.setNeedClientAuth(true);
 
+		server.setConnectors(new Connector[] { sslConnector });
 
-	server.setConnectors(new Connector[] {  sslConnector });
+		WebAppContext webappcontext = new WebAppContext();
+		webappcontext.setDescriptor(configurationFiles + "/web.xml");
+		webappcontext.setContextPath(webappContextPath);
+		webappcontext.setWar(configurationFiles);
 
-	WebAppContext webappcontext = new WebAppContext();
-	webappcontext.setDescriptor(configurationFiles+"/web.xml");
-	webappcontext.setContextPath(webappContextPath);
-	webappcontext.setWar(configurationFiles);
+		HandlerCollection handlers = new HandlerCollection();
+		handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
 
-	HandlerCollection handlers = new HandlerCollection();
-	handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
+		server.setHandler(handlers);
 
-	server.setHandler(handlers);
+		try {
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
+		}
 
-	try {
-	    server.start();
-	    server.join();
-	} catch (Exception e) {
-	    e.printStackTrace();
-	    System.exit(100);
 	}
-
-    }
 
 }
