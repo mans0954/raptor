@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
@@ -31,6 +33,7 @@ import org.apache.cxf.aegis.type.TypeUtil;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.common.classloader.ClassLoaderUtils;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
+import org.apache.cxf.configuration.security.ClientAuthentication;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -88,15 +91,32 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
 	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
 	    httpConduit.setClient(httpClientPolicy);
+
 	    TLSClientParameters tls = new TLSClientParameters();
+
 	    tls.setDisableCNCheck(true);//disable URL and CN on cert match
+
+	    //clients private
+	    KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
+	    File keyStoreFile = new File("/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks");
+	    keyStoreKeyManager.load(new FileInputStream(keyStoreFile),  "phil11".toCharArray());
+	    KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+	    keyFactory.init(keyStoreKeyManager, "phil11".toCharArray());
+
+	    KeyManager[] km = keyFactory.getKeyManagers();
+	    tls.setKeyManagers(km);
+
+	    //servers public key
 	    KeyStore keyStore = KeyStore.getInstance("JKS");
 	    File truststore = new File(endpoint.getPublicKey());
 	    keyStore.load(new FileInputStream(truststore),  endpoint.getPublicKeyPassword().toCharArray());
 	    TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 	    trustFactory.init(keyStore);
+
 	    TrustManager[] tm = trustFactory.getTrustManagers();
 	    tls.setTrustManagers(tm);
+
+
 	    httpConduit.setTlsClientParameters(tls);
 
 	    log.debug("Accessing the endpoint version " + client.getVersion());
