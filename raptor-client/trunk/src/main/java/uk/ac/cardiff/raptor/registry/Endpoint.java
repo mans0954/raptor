@@ -34,12 +34,6 @@ public class Endpoint {
     private PushPolicy pushPolicy;
     private AttributeFilterPolicy attributeFilterPolicy;
 
-    /** They public key used to encrypt messages sent to this endpoint*/
-    private String publicKey;
-
-    /** The password used to access the public key */
-    private String publicKeyPassword;
-
     public void setServiceEndpoint(String serviceEndpoint) {
 	this.serviceEndpoint = serviceEndpoint;
     }
@@ -64,33 +58,7 @@ public class Endpoint {
 	return attributeFilterPolicy;
     }
 
-    /**
-     * @param publicKey the publicKey to set
-     */
-    public void setPublicKey(String publicKey) {
-	this.publicKey = publicKey;
-    }
-
-    /**
-     * @return the publicKey
-     */
-    public String getPublicKey() {
-	return publicKey;
-    }
-
-    /**
-     * @param publicKeyPassword the publicKeyPassword to set
-     */
-    public void setPublicKeyPassword(String publicKeyPassword) {
-	this.publicKeyPassword = publicKeyPassword;
-    }
-
-    /**
-     * @return the publicKeyPassword
-     */
-    public String getPublicKeyPassword() {
-	return publicKeyPassword;
-    }
+    
 
 
 
