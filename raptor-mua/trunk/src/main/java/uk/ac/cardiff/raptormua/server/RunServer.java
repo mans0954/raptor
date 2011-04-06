@@ -85,6 +85,10 @@ public class RunServer {
 	sslConnector.setTruststore(trustStoreLocaion);
 	sslConnector.setTrustPassword(trustStorePassword);
 
+	//enable mutual authentication
+	sslConnector.setNeedClientAuth(true);
+
+
 	server.setConnectors(new Connector[] {  sslConnector });
 
 	WebAppContext webappcontext = new WebAppContext();
