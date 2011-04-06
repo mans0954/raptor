@@ -103,6 +103,10 @@
     <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
         <property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
         <property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>
+        <property name="trustStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value></property>
+        <property name="trustStorePassword"><value>phil11</value></property>
+        <property name="keyStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value></property>
+        <property name="keyStorePassword"><value>phil11</value></property>
     </bean>
 
     <bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
