@@ -106,11 +106,11 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 	    return true;
 	} catch (SoapFault e) {
 	    log.error("Could not send events to endpoint [{}] -> {}", new Object[] { endpoint.getServiceEndpoint(), e.getMessage() });
-	    e.printStackTrace();
+	    //e.printStackTrace();
 	    return false;
 	} catch (Exception e) {
 	    log.error("Could not send events to endpoint [{}] -> {}", new Object[] { endpoint.getServiceEndpoint(), e.getMessage() });
-	    e.printStackTrace();
+	    //e.printStackTrace();
 	    return false;
 	}
 

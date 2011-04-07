@@ -18,21 +18,18 @@
  */
 package uk.ac.cardiff.raptor.remoting.policy;
 
+import java.util.List;
+
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.registry.Endpoint;
+
 /**
  * @author philsmart
  *
  */
-public class PushPolicy {
+public abstract class PushPolicy {
 
-    private int pushOnOrAfterNoEntries;
-
-    public void setPushOnOrAfterNoEntries(int pushOnOrAfterNoEntries) {
-	this.pushOnOrAfterNoEntries = pushOnOrAfterNoEntries;
-    }
-
-    public int getPushOnOrAfterNoEntries() {
-	return pushOnOrAfterNoEntries;
-    }
+    public abstract boolean evaluatePolicy(List<Event> events);
 
 
 }
