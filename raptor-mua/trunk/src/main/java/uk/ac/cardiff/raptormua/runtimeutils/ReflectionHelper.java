@@ -38,7 +38,9 @@ import sun.misc.Launcher;
  *
  */
 public class ReflectionHelper {
-	static Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
+	
+	/** Class logger */
+	private final static Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
 
 	public static String determineSubclassForMethods(String methodOne, String methodTwo) {
 		Object methodOneObject = findEntrySubclassForMethodAsObject(methodOne);
@@ -193,10 +195,9 @@ public class ReflectionHelper {
 			name = "/" + name;
 		}
 		name = name.replace('.', '/');
-		// Get a File object for the package
-		log.debug("package name: " + name);
+		//log.debug("package name: " + name);
 		URL url = ReflectionHelper.class.getResource(name);
-		log.debug("URL: " + url.getPath().substring(0, url.getPath().indexOf('!')));
+		//log.debug("URL: "+url);
 		if (url != null && url.getPath().contains("!"))
 			return url.getPath().substring(0, url.getPath().indexOf('!'));
 		else if (url != null)

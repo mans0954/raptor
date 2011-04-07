@@ -124,7 +124,6 @@
 	</bean>
 
 	  <import resource="dao-beans.xml"/>
-	  <import resource="mua-registry.xml" />
 	  <import resource="statistical-units.xml" />
 	  <import resource="event-release.xml"/>
 	  <import resource="users.xml" />
