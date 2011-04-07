@@ -21,6 +21,8 @@ import java.util.Set;
 public interface ICAProcess{
 
 	public void capture();
+	
+	public void release();
 
 
 }
