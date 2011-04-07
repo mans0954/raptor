@@ -87,7 +87,16 @@
 
 	<bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
 
-	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient"/>
+	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient">
+	   <property name="tlsParameters">
+	       <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
+                 <property name="trustStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value></property>
+                 <property name="trustStorePassword"><value>phil11</value></property>
+                 <property name="keyStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value></property>
+                 <property name="keyStorePassword"><value>phil11</value></property>
+	       </bean>
+	   </property>
+	</bean>
 
 	<import resource="dao-beans.xml"/>
 	<import resource="data-access.xml" />
