@@ -31,7 +31,7 @@ import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 public class Endpoint {
 
     private String serviceEndpoint;
-    private PushPolicy pushPolicy;
+    private List<PushPolicy> pushPolicies;
     private AttributeFilterPolicy attributeFilterPolicy;
 
     public void setServiceEndpoint(String serviceEndpoint) {
@@ -42,14 +42,6 @@ public class Endpoint {
 	return serviceEndpoint;
     }
 
-    public void setPushPolicy(PushPolicy pushPolicy) {
-	this.pushPolicy = pushPolicy;
-    }
-
-    public PushPolicy getPushPolicy() {
-	return pushPolicy;
-    }
-
     public void setAttributeFilterPolicy(AttributeFilterPolicy attributeFilterPolicy) {
 	this.attributeFilterPolicy = attributeFilterPolicy;
     }
@@ -58,8 +50,12 @@ public class Endpoint {
 	return attributeFilterPolicy;
     }
 
-    
+	public void setPushPolicies(List<PushPolicy> pushPolicies) {
+		this.pushPolicies = pushPolicies;
+	}
 
-
+	public List<PushPolicy> getPushPolicies() {
+		return pushPolicies;
+	}
 
 }

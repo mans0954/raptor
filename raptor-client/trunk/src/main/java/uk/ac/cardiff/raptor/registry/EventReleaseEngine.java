@@ -23,8 +23,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
+import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +60,7 @@ public class EventReleaseEngine {
 		boolean releasedtoAll = true;
 		int releaseCount = 0;
 		for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
-			boolean shouldRelease = (endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
+			boolean shouldRelease = shouldRelease(endpoint,events);//(endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
 			List<Event> filteredEntries = filterAttributes(endpoint, events);
 			EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
@@ -80,6 +82,23 @@ public class EventReleaseEngine {
 
 		return releasedtoAll;
 
+	}
+	
+	/**
+	 * Iterates through all push policies attached to the <code>endpoint</code> parameter
+	 * to determine if events should be released to this endpoint
+	 * 
+	 * @param endpoint the endpoint to evaluate the policy on
+	 * @param events the events ready to be released.
+	 * @return true iff at least one push policy evaluates to true, false otherwise
+	 */
+	private boolean shouldRelease(Endpoint endpoint, List<Event> events){
+		boolean shouldRelease = false;
+		for (PushPolicy policy : endpoint.getPushPolicies()){
+			if (policy.evaluatePolicy(events))
+				shouldRelease = true;
+		}		
+		return shouldRelease;
 	}
 
 	/**
