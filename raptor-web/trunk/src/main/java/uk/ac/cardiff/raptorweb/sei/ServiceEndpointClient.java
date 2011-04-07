@@ -32,23 +32,23 @@ import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 
 /**
- *
- *
+ * 
+ * 
  * @author philsmart
- *
- *         Instances of this class are responsible for retrieving data from a service endpoint. This class should not be static
- *         and should not recreate the Client for every request.
- *
+ * 
+ *         Instances of this class are responsible for retrieving data from a service endpoint. This class should not be static and should not recreate the
+ *         Client for every request.
+ * 
  */
 public class ServiceEndpointClient {
 
     /** Class logger */
-    private static final Logger log = LoggerFactory.getLogger(ServiceEndpointClient.class);
+    private final Logger log = LoggerFactory.getLogger(ServiceEndpointClient.class);
 
     /** Raptor specific TLS parameters class, that can return cxf TLSParameters */
-    private static ClientTLSParameters tlsParameters;
+    private ClientTLSParameters tlsParameters;
 
-    public static MultiUnitAggregator getEndpointConnection(MUAEntry endpoint) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
+    public MultiUnitAggregator getEndpointConnection(MUAEntry endpoint) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
 	factory.setServiceClass(MultiUnitAggregator.class);
 	AegisDatabinding databinding = new AegisDatabinding();
@@ -60,10 +60,10 @@ public class ServiceEndpointClient {
 	HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
 	HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
 	httpClientPolicy.setConnectionTimeout(1000);
-	httpClientPolicy.setReceiveTimeout(2000);
+	httpClientPolicy.setReceiveTimeout(20000);
 	httpConduit.setClient(httpClientPolicy);
 
-	if (tlsParameters!=null)
+	if (tlsParameters != null)
 	    httpConduit.setTlsClientParameters(tlsParameters.getTlsClientParameters());
 
 	return client;
@@ -72,27 +72,14 @@ public class ServiceEndpointClient {
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator. This method uses a hard set connection timeout of 10 miliseconds,
      * and a receive timeout of 20 smilieconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent inside small XML documents.
-     *
+     * 
      * @param endpoint
      * @return
      */
-    public static Capabilities discoverMUACapabilities(MUAEntry endpoint) {
+    public Capabilities discoverMUACapabilities(MUAEntry endpoint) {
 	Capabilities capabilities = null;
 	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
-
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(1000);
-	    httpClientPolicy.setReceiveTimeout(2000);
-	    httpConduit.setClient(httpClientPolicy);
-	    httpConduit.setTlsClientParameters(getTlsSettings(endpoint));
+	    MultiUnitAggregator client = getEndpointConnection(endpoint);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    capabilities = client.getCapabilities();
 	    log.debug("Retrieved capabilities from the MUA [{}]", endpoint);
@@ -101,13 +88,13 @@ public class ServiceEndpointClient {
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
-	    // e.printStackTrace();
+	     e.printStackTrace();
 	} catch (Exception e) {
 	    log.error("Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[] { endpoint, e.getMessage() });
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
-	    // e.printStackTrace();
+	     e.printStackTrace();
 	}
 	return capabilities;
 
@@ -117,28 +104,15 @@ public class ServiceEndpointClient {
      * This method sends a <code>StatisticalUnitInformaiton</code> instance to the MultiUnitAggregator <code>endpoint</code> The
      * <code>StatisicalUnitInformation</code> instance encapsulates the parameters for a single statistical unit. Allowing the values to be sent back and
      * changed on the MultiUnitAggregator
-     *
+     * 
      * @param endpoint
      * @param statisticalUnitInformation
      * @return
      */
-    public static Capabilities updateStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnitInformation) {
+    public Capabilities updateStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnitInformation) {
 	Capabilities capabilities = null;
 	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
-
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(100000);
-	    httpClientPolicy.setReceiveTimeout(200000);
-	    httpConduit.setClient(httpClientPolicy);
-	    httpConduit.setTlsClientParameters(getTlsSettings(endpoint));
+	    MultiUnitAggregator client = getEndpointConnection(endpoint);
 	    log.debug("Accessing the MUA version {}", client.getVersion());
 	    log.debug("Updating statistic {} from the MUA {}", statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint);
 	    client.updateStatisticalUnit(statisticalUnitInformation);
@@ -163,22 +137,9 @@ public class ServiceEndpointClient {
     /**
      * @param selectedStatisticalUnit
      */
-    public static AggregatorGraphModel invokeStatisticalUnit(MUAEntry endpoint, String selectedStatisticalUnit) {
+    public AggregatorGraphModel invokeStatisticalUnit(MUAEntry endpoint, String selectedStatisticalUnit) {
 	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(100000);
-	    httpClientPolicy.setReceiveTimeout(200000);
-	    httpConduit.setClient(httpClientPolicy);
-	    httpConduit.setTlsClientParameters(getTlsSettings(endpoint));
+	    MultiUnitAggregator client = getEndpointConnection(endpoint);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    AggregatorGraphModel gmodel = client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint + "]");
@@ -197,22 +158,9 @@ public class ServiceEndpointClient {
      * @param endpoint
      * @param removeall
      */
-    public static boolean invokeAdministrativeFunction(MUAEntry endpoint, AdministrativeFunction function) {
+    public boolean invokeAdministrativeFunction(MUAEntry endpoint, AdministrativeFunction function) {
 	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(100000);
-	    httpClientPolicy.setReceiveTimeout(200000);
-	    httpConduit.setClient(httpClientPolicy);
-	    httpConduit.setTlsClientParameters(getTlsSettings(endpoint));
+	    MultiUnitAggregator client = getEndpointConnection(endpoint);
 	    // client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Accessing the MUA version {}", client.getVersion());
 	    boolean success = client.performAdministrativeFunction(function);
@@ -229,22 +177,9 @@ public class ServiceEndpointClient {
 
     }
 
-    public static AggregatorGraphModel updateAndinvokeStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnit) {
+    public AggregatorGraphModel updateAndinvokeStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnit) {
 	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpClientPolicy.setConnectionTimeout(100000);
-	    httpClientPolicy.setReceiveTimeout(200000);
-	    httpConduit.setClient(httpClientPolicy);
-	    httpConduit.setTlsClientParameters(getTlsSettings(endpoint));
+	    MultiUnitAggregator client = getEndpointConnection(endpoint);
 	    log.debug("Accessing the MUA version " + client.getVersion());
 	    AggregatorGraphModel gmodel = client.updateAndInvokeStatisticalUnit(statisticalUnit);
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint.getServiceEndpoint() + "]");
