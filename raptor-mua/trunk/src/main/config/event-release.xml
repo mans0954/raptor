@@ -30,7 +30,11 @@
 			<list>
 				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
 					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:8080/MUA/MultiUnitAggregator</value></property>
-					<property name="pushPolicy"><ref bean="genericPushPolicy"></ref></property>
+					<property name="pushPolicies">
+                        <list>
+                            <ref bean="entryNoPushPolicy"></ref>
+                        </list>
+                    </property>
 					<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>
 				</bean>
 			</list>
@@ -39,7 +43,7 @@
 
 	<!--  policy for release of events -->
 
-	<bean id="genericPushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.PushPolicy">
+	<bean id="entryNoPushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.EntryNoPushPolicy">
 		<property name="pushOnOrAfterNoEntries"><value>10</value></property>
 	</bean>
 

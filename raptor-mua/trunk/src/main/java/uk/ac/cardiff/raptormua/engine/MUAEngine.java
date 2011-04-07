@@ -99,9 +99,12 @@ public class MUAEngine {
 		SuggestionValues suggestionValues = new SuggestionValues();
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 		capabilities.setSuggestionValues(suggestionValues);
+		
+		log.debug("Possible values set");
 
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
 		for (Statistic entry : su) {
+			log.debug("Setting statistical unit information as: "+entry.getStatisticParameters().getUnitName());
 			StatisticalUnitInformation information = new StatisticalUnitInformation();
 
 			information.setStatisticParameters(entry.getStatisticParameters());
