@@ -25,6 +25,7 @@
 		<property name="jobDetail">
 			<ref local="ICAProcessJobDetail" />
 		</property>
+        <property name="startDelay" value="1000" />
 		<property name="repeatInterval" value="30000" />
 	</bean>
 
@@ -40,11 +41,34 @@
 			<value>false</value>
 		</property>
 	</bean>
+    
+    <!-- release trigger setup -->
+    <bean id="icaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="icaReleaseJobDetail" />
+        </property>
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+    
+    <bean id="icaReleaseJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="ICAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>release</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="ICAProcessQuickTrigger" />
+                <ref local="icaReleaseQuickTrigger" />
 			</list>
 		</property>
 	</bean>

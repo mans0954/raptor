@@ -37,19 +37,22 @@ import uk.ac.cardiff.model.event.Event;
  *         main service suite for the ICA
  */
 public class ICAProcessImpl implements ICAProcess {
-	static Logger log = LoggerFactory.getLogger(ICAProcess.class);
+	
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(ICAProcess.class);
 
+	/** The engine responsible for all core ICA functions*/
 	private ICAEngine engine;
 
-	/* how long any retrieve method should wait before it returns an empt set */
+	/** how long any retrieve method should wait before it returns an empt set */
 	private final int getTimeout = 10000;
 
-	/*
+	/**
 	 * ReentrantLock to prevent both capture and retrieve at the same time
 	 */
 	final Lock lockR = new ReentrantLock();
 
-	/*
+	/**
 	 * This class initiates the <code>CapturePerform</code> method of the
 	 * <code>CaptureEngine</code> once it obtains a lock from the
 	 * <code>Lock</code> object. Hence, the processImpl can not both capture and
@@ -67,11 +70,7 @@ public class ICAProcessImpl implements ICAProcess {
 				engine.capturePerform();
 				long end = System.currentTimeMillis();
 				log.info("Capture Success, taking {} ms", (end - start));
-				log.info("Running Event Release");
-				boolean released = engine.release();
-				log.info("Events released to all listening endpoints {}", released);
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
 				log.error(e.getMessage());
 				e.printStackTrace();
 			} finally {
@@ -79,6 +78,21 @@ public class ICAProcessImpl implements ICAProcess {
 			}
 		}
 
+	}
+	
+	public void release(){
+		if (lockR.tryLock()) {
+			try {
+				log.info("Running Event Release");
+				boolean released = engine.release();
+				log.info("Events released to all listening endpoints {}", released);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+				e.printStackTrace();
+			} finally {
+				lockR.unlock();
+			}
+		}
 	}
 
 	public void setEngine(ICAEngine engine) {
