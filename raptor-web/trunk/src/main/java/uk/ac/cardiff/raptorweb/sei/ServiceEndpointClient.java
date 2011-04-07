@@ -257,22 +257,6 @@ public class ServiceEndpointClient {
 	return null;
     }
 
-    private static TLSClientParameters getTlsSettings(MUAEntry endpoint) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
-
-	TLSClientParameters tls = new TLSClientParameters();
-	tls.setDisableCNCheck(true);// disable URL and CN on cert match
-	KeyStore keyStore = KeyStore.getInstance("JKS");
-	File truststore = new File(endpoint.getPublicKey());
-	keyStore.load(new FileInputStream(truststore), endpoint.getPublicKeyPassword().toCharArray());
-	TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-	trustFactory.init(keyStore);
-	TrustManager[] tm = trustFactory.getTrustManagers();
-	tls.setTrustManagers(tm);
-
-	return tls;
-
-    }
-
     /**
      * @param tlsParameters
      *            the tlsParameters to set
