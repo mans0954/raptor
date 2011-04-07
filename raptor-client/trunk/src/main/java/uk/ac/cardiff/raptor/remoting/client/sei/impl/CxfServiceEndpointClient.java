@@ -52,9 +52,9 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(CxfServiceEndpointClient.class);
-    
-    /** TLS parameters */
-    private TLSClientParameters tlsParameters;
+
+    /** Raptor specific TLS parameters class, that can return cxf TLSParameters*/
+    private ClientTLSParameters tlsParameters;
 
     @Override
     public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint) {
@@ -95,9 +95,9 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
 	    httpConduit.setClient(httpClientPolicy);
 
-	  
-	    if (tlsParameters!=null)
-	    	httpConduit.setTlsClientParameters(tlsParameters);
+
+	    if (getTlsParameters()!=null)
+	    	httpConduit.setTlsClientParameters(getTlsParameters().getTlsClientParameters());
 
 	    log.debug("Accessing the endpoint version " + client.getVersion());
 	    client.addAuthentications(pushed);
@@ -115,31 +115,19 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 	}
 
     }
-    
-    private TLSClientParameters getTlsSettings(){
-    	 TLSClientParameters tls = new TLSClientParameters();
 
-  	    tls.setDisableCNCheck(true);//disable URL and CN on cert match
-
-  	    //clients private
-  	    KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
-  	    File keyStoreFile = new File("/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks");
-  	    keyStoreKeyManager.load(new FileInputStream(keyStoreFile),  "phil11".toCharArray());
-  	    KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-  	    keyFactory.init(keyStoreKeyManager, "phil11".toCharArray());
-
-  	    KeyManager[] km = keyFactory.getKeyManagers();
-  	    tls.setKeyManagers(km);
-
-  	    //servers public key
-  	    KeyStore keyStore = KeyStore.getInstance("JKS");
-  	    File truststore = new File(endpoint.getPublicKey());
-  	    keyStore.load(new FileInputStream(truststore),  endpoint.getPublicKeyPassword().toCharArray());
-  	    TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-  	    trustFactory.init(keyStore);
-
-  	    TrustManager[] tm = trustFactory.getTrustManagers();
-  	    tls.setTrustManagers(tm);
-
+    /**
+     * @param tlsParameters the tlsParameters to set
+     */
+    public void setTlsParameters(ClientTLSParameters tlsParameters) {
+	this.tlsParameters = tlsParameters;
     }
+
+    /**
+     * @return the tlsParameters
+     */
+    public ClientTLSParameters getTlsParameters() {
+	return tlsParameters;
+    }
+
 }
