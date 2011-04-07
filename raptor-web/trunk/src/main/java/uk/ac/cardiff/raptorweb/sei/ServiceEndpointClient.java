@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -29,19 +27,47 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 
 /**
+ *
+ *
  * @author philsmart
  *
- *         Instances of this class are responsible for retrieving data from a service endpoint
+ *         Instances of this class are responsible for retrieving data from a service endpoint. This class should not be static
+ *         and should not recreate the Client for every request.
  *
  */
 public class ServiceEndpointClient {
 
     /** Class logger */
     private static final Logger log = LoggerFactory.getLogger(ServiceEndpointClient.class);
+
+    /** Raptor specific TLS parameters class, that can return cxf TLSParameters */
+    private static ClientTLSParameters tlsParameters;
+
+    public static MultiUnitAggregator getEndpointConnection(MUAEntry endpoint) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
+	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+	factory.setServiceClass(MultiUnitAggregator.class);
+	AegisDatabinding databinding = new AegisDatabinding();
+	factory.setAddress(endpoint.getServiceEndpoint());
+	factory.getServiceFactory().setDataBinding(databinding);
+
+	MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+	org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+	HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+	HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+	httpClientPolicy.setConnectionTimeout(1000);
+	httpClientPolicy.setReceiveTimeout(2000);
+	httpConduit.setClient(httpClientPolicy);
+
+	if (tlsParameters!=null)
+	    httpConduit.setTlsClientParameters(tlsParameters.getTlsClientParameters());
+
+	return client;
+    }
 
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator. This method uses a hard set connection timeout of 10 miliseconds,
@@ -245,6 +271,21 @@ public class ServiceEndpointClient {
 
 	return tls;
 
+    }
+
+    /**
+     * @param tlsParameters
+     *            the tlsParameters to set
+     */
+    public void setTlsParameters(ClientTLSParameters tlsParameters) {
+	this.tlsParameters = tlsParameters;
+    }
+
+    /**
+     * @return the tlsParameters
+     */
+    public ClientTLSParameters getTlsParameters() {
+	return tlsParameters;
     }
 
 }
