@@ -16,7 +16,7 @@ public class ProxyEvent extends Event{
     private int httpResponseCode;
     private long responseSize;
     private DateTime responseTime;
-    private String requestIp;
+    private String requesterIp;
 
 
     public void setRequestURL(String requestURL) {
@@ -43,10 +43,17 @@ public class ProxyEvent extends Event{
     public DateTime getResponseTime() {
 	return responseTime;
     }
-    public void setRequestIp(String requestIp) {
-	this.requestIp = requestIp;
+    /**
+     * @param requesterIp the requesterIp to set
+     */
+    public void setRequesterIp(String requesterIp) {
+	this.requesterIp = requesterIp;
     }
-    public String getRequestIp() {
-	return requestIp;
+    /**
+     * @return the requesterIp
+     */
+    public String getRequesterIp() {
+	return requesterIp;
     }
+
 }

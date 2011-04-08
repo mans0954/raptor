@@ -28,17 +28,20 @@ import org.joda.time.DateTime;
  */
 public class Event {
 
-    /* used if a persistant db primary key is required */
+    /** used if a persistant db primary key is required */
     private Long persistantId;
 
-    /* attributes generic to all entries */
+    /** attributes generic to all entries */
     private DateTime eventTime;
     private long eventID;
     private String serviceID;
     private String eventType;
     private String serviceHost;
     private String resourceHost;
-    private String resourceID;
+    private String resourceId;
+
+    /** User defined category for this event for this resourceId, e.g. internal resource or external resource*/
+    private int resourceIdCategory;
 
     public void setEventTime(DateTime eventTime) {
 	this.eventTime = eventTime;
@@ -125,11 +128,25 @@ public class Event {
 	return resourceHost;
     }
 
-    public void setResourceID(String resourceID) {
-	this.resourceID = resourceID;
+    public void setResourceId(String resourceId) {
+	this.resourceId = resourceId;
     }
 
-    public String getResourceID() {
-	return resourceID;
+    public String getResourceId() {
+	return resourceId;
+    }
+
+    /**
+     * @param resourceIdCategory the resourceIdCategory to set
+     */
+    public void setResourceIdCategory(int resourceIdCategory) {
+	this.resourceIdCategory = resourceIdCategory;
+    }
+
+    /**
+     * @return the resourceIdCategory
+     */
+    public int getResourceIdCategory() {
+	return resourceIdCategory;
     }
 }

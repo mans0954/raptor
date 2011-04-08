@@ -3,20 +3,58 @@
  */
 package uk.ac.cardiff.model.event;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 /**
  * @author philsmart
  *
  */
-public class EzproxyAuthenticationEvent {
+public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 
-    private String requesterIP;
+    private String requesterIp;
+    private String sessionId;
 
-    public void setRequesterIP(String requesterIP) {
-	this.requesterIP = requesterIP;
+    public void setRequesterIp(String requesterIp) {
+	this.requesterIp = requesterIp;
     }
 
-    public String getRequesterIP() {
-	return requesterIP;
+    public String getRequesterIp() {
+	return requesterIp;
+    }
+
+    /**
+     * @param sessionId the sessionId to set
+     */
+    public void setSessionId(String sessionId) {
+	this.sessionId = sessionId;
+    }
+
+    /**
+     * @return the sessionId
+     */
+    public String getSessionId() {
+	return sessionId;
+    }
+
+    public String toString() {
+	Method[] methods = this.getClass().getMethods();
+	StringBuilder builder = new StringBuilder();
+	builder.append(this.getClass() + "@[");
+	for (Method method : methods) {
+	    try {
+		if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
+		    this.getClass().getMethod(method.getName(), (Class[]) null);
+		    Object object = method.invoke(this, (Object[]) null);
+		    builder.append(method.getName() + " [" + object + "],");
+
+		}
+	    } catch (Exception e){
+		//do nothing
+	    }
+	}
+	builder.append("]");
+	return builder.toString();
     }
 
 }
