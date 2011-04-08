@@ -19,17 +19,25 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.BufferedInputStream;
 
 import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
 import uk.ac.cardiff.raptor.raptorica.dao.external.format.Header;
+import uk.ac.cardiff.raptor.raptorica.dao.external.format.LineFilter;
 import uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat;
 import uk.ac.cardiff.raptor.raptorica.model.exception.HeaderException;
 import uk.ac.cardiff.raptor.raptorica.model.exception.ParserException;
@@ -48,15 +56,14 @@ import uk.ac.cardiff.raptor.raptorica.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.model.event.Event;
 
 /**
- * A log file parser, used to parse files on the local filesystem according to a given
- * format and transformed into the given event type.
+ * A log file parser, used to parse files on the local filesystem according to a given format and transformed into the given event type.
  *
  * @author phil
  *
  */
 public class LogFileParser extends BaseEventParser {
 
-    /** The class logger*/
+    /** The class logger */
     private final Logger log = LoggerFactory.getLogger(LogFileParser.class);
 
     /** The specification of the format of this log file */
@@ -70,6 +77,9 @@ public class LogFileParser extends BaseEventParser {
 
     /** Whether to print out the current position of parsing in the <code>logFile</code> */
     private boolean printParsingPosition;
+
+    /** A filter to remove a line from the raw log file */
+    private LineFilter lineFilter;
 
     /**
      * Default constructor
@@ -99,32 +109,40 @@ public class LogFileParser extends BaseEventParser {
 		if (printParsingPosition) {
 		    printParsingPosition(lineCount, totalNoLines);
 		}
+		boolean parseLine = true;
+		if (lineFilter != null) {
+		    parseLine = lineFilter.parsableLine(inputLine);
+		    // log.debug("Parse [{}] - {}",parseLine,inputLine);
+		}
 
-		// TODO TOKENIZE METHOD, then regex
-		StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
-		tokenizer.setIgnoreEmptyTokens(false);
-		ArrayList<String> allvalues = new ArrayList<String>();
-		while (tokenizer.hasNext()) {
-		    Object next = tokenizer.next();
-		    if (next instanceof String)
-			allvalues.add((String) next);
-		    else {
-			log.error("input column was not a string");
+		if (parseLine == true) {
+		    StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
+		    tokenizer.setIgnoreEmptyTokens(false);
+		    ArrayList<String> allvalues = new ArrayList<String>();
+		    while (tokenizer.hasNext()) {
+			Object next = tokenizer.next();
+			if (next instanceof String)
+			    allvalues.add((String) next);
+			else {
+			    log.error("input column was not a string");
+			}
 		    }
-		}
 
-		Event authE = (Event) this.createObject(eventType);
-		try {
-		    populateField(allvalues, authE);
-		} catch (HeaderException e) {
-		    log.error("ERROR: trying to access field {}, when only {} fields in log file", e.getHeaderNo(), allvalues.size());
-		}
+		    Event authE = (Event) this.createObject(eventType);
 
-		boolean shouldBeIncluded = isIncluded(authE);
-		boolean preventAdd = isExcluded(authE);
+		    try {
+			populateField(allvalues, authE);
+		    } catch (HeaderException e) {
+			log.error("ERROR: trying to access field {}, when only {} fields in log file", e.getHeaderNo(), allvalues.size());
+		    }
+		    //log.debug("Event: " + authE.toString());
+		    boolean shouldBeIncluded = isIncluded(authE);
+		    boolean preventAdd = isExcluded(authE);
 
-		if (shouldBeIncluded && !preventAdd) {
-		    entryHandler.addEntry(authE);
+		    if (shouldBeIncluded && !preventAdd) {
+			entryHandler.addEntry(authE);
+		    }
+		   // System.exit(1);
 		}
 
 	    }
@@ -134,9 +152,9 @@ public class LogFileParser extends BaseEventParser {
 	    log.debug("LogFileParser currently has: {} entries, latestEntry: {}", getEntryHandler().getEntries().size(), getEntryHandler().getLatestEntryTime());
 	    entryHandler.endTransaction();
 	} catch (MalformedURLException e1) {
-	    throw new ParserException("Could not find the source file ["+logfile+"] for parsing",e1);
+	    throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
 	} catch (IOException e2) {
-	    throw new ParserException("Could not read from the source file ["+logfile+"] during parsing",e2);
+	    throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
 	}
 
 	// System.exit(1);
@@ -166,7 +184,9 @@ public class LogFileParser extends BaseEventParser {
 	for (Header header : format.getHeaders()) {
 	    try {
 		if (!(header.getFieldNo() >= allvalues.size())) {
-		    String value = allvalues.get(header.getFieldNo());
+		    String value = getFieldValue(allvalues,header);
+		    value = replace(value, header);
+		    value = retain(value,header);
 		    switch (header.getType()) {
 			case DATE:
 			    addDate(value, header.getDateTimeFormat(), header.getTimeZone(), header.getFieldName(), authE);
@@ -179,6 +199,10 @@ public class LogFileParser extends BaseEventParser {
 			    break;
 			case STRINGLIST:
 			    addStringList(value, header.getFieldName(), authE, header.getListDelimeter());
+			    break;
+			case URL:
+			    value = decode(value);
+			    addString(value, header.getFieldName(), authE);
 			    break;
 		    }
 
@@ -193,6 +217,54 @@ public class LogFileParser extends BaseEventParser {
 
 	    }
 	}
+    }
+
+    private String getFieldValue(List<String> allvalues, Header header){
+	StringBuilder output = new StringBuilder();
+	output.append(allvalues.get(header.getFieldNo()));
+	if (header.getAdditionalFieldNos()!=null){
+	    for (int fieldNo : header.getAdditionalFieldNos()){
+		output.append(allvalues.get(fieldNo));
+	    }
+	}
+	return output.toString();
+    }
+
+    private String decode(String value){
+	try {
+	    String decodedURL = URLDecoder.decode(value, "ISO-8859-1");
+	    return decodedURL;
+	} catch (UnsupportedEncodingException e) {
+	    return value;
+	}
+    }
+
+    private String replace(String value, Header header) {
+	if (header.getRegexReplaceAll() == null)
+	    return value;
+
+	Set<String> keys = header.getRegexReplaceAll().keySet();
+	for (String replaceRegex : keys) {
+	    String with = header.getRegexReplaceAll().get(replaceRegex);
+	    value = value.replaceAll(replaceRegex.trim(), with);
+	}
+	return value;
+    }
+
+    private String retain(String value, Header header) {
+	if (header.getRegexRetain() == null)
+	    return value;
+
+	Pattern p = Pattern.compile(header.getRegexRetain());
+	Matcher match = p.matcher(value);
+	ArrayList<String> allFound = new ArrayList<String>();
+	while (match.find()){
+	    allFound.add(match.group());
+	}
+	if (allFound.size() > 0) {
+	    return allFound.get(0);
+	}
+	return value;
     }
 
     /**
@@ -379,7 +451,8 @@ public class LogFileParser extends BaseEventParser {
     }
 
     /**
-     * @param eventType the eventType to set
+     * @param eventType
+     *            the eventType to set
      */
     public void setEventType(String eventType) {
 	this.eventType = eventType;
@@ -390,6 +463,21 @@ public class LogFileParser extends BaseEventParser {
      */
     public String getEventType() {
 	return eventType;
+    }
+
+    /**
+     * @param lineFilter
+     *            the lineFilter to set
+     */
+    public void setLineFilter(LineFilter lineFilter) {
+	this.lineFilter = lineFilter;
+    }
+
+    /**
+     * @return the lineFilter
+     */
+    public LineFilter getLineFilter() {
+	return lineFilter;
     }
 
 }

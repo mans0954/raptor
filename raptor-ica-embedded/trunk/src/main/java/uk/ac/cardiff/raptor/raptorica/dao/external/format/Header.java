@@ -18,17 +18,26 @@
  */
 package uk.ac.cardiff.raptor.raptorica.dao.external.format;
 
+import java.util.Map;
+
 /**
  * @author philsmart
  *
  */
 public class Header {
 
-	public enum Type {STRING, DATE, INTEGER, STRINGLIST}
+	public enum Type {STRING, DATE, INTEGER, STRINGLIST, URL}
 
 	private String fieldName;
 	private int fieldNo;
+
+	/** Used to combined two fields together */
+	private int[] additionalFieldNos;
+
+
 	private Type fieldType;
+	private Map<String,String> regexReplaceAll;
+	private String regexRetain;
 
 	//only needed if the object type is a date
 	private String dateTimeFormat;
@@ -94,6 +103,45 @@ public class Header {
 	    if (timeZone==null)return "UTC";
 	    return timeZone;
 	}
+	/**
+	 * @param regexReplaceAll the regexReplaceAll to set
+	 */
+	public void setRegexReplaceAll(Map<String,String> regexReplaceAll) {
+	    this.regexReplaceAll = regexReplaceAll;
+	}
+	/**
+	 * @return the regexReplaceAll
+	 */
+	public Map<String,String> getRegexReplaceAll() {
+	    return regexReplaceAll;
+	}
+	/**
+	 * @param regexRetain the regexRetain to set
+	 */
+	public void setRegexRetain(String regexRetain) {
+	    this.regexRetain = regexRetain;
+	}
+	/**
+	 * @return the regexRetain
+	 */
+	public String getRegexRetain() {
+	    return regexRetain;
+	}
+	/**
+	 * @param additionalFieldNos the additionalFieldNos to set
+	 */
+	public void setAdditionalFieldNos(int[] additionalFieldNos) {
+	    this.additionalFieldNos = additionalFieldNos;
+	}
+	/**
+	 * @return the additionalFieldNos
+	 */
+	public int[] getAdditionalFieldNos() {
+	    return additionalFieldNos;
+	}
+
+
+
 
 
 }
