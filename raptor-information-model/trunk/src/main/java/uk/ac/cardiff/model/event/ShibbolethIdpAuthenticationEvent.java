@@ -3,7 +3,11 @@
  */
 package uk.ac.cardiff.model.event;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
@@ -65,14 +69,30 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	    return releasedAttributes;
 	}
 
-	//TODO lots of concatenations, use a stringbuilder
-	public String toString(){
-		if (releasedAttributes!=null || releasedAttributes.length>0)
-			return getClass().getName()+"@["+getEventTime()+","+requestPath+","+requestBinding+","+requestId+","+responseBinding+","+Arrays.asList(releasedAttributes)+"]";
-		else
-			return getClass().getName()+"@["+getEventTime()+","+requestPath+","+requestBinding+","+requestId+","+responseBinding+ "]";
+	public String toString() {
+		Method[] methods = this.getClass().getMethods();
+		StringBuilder builder = new StringBuilder();
+		builder.append(this.getClass() + "@[");
+		for (Method method : methods) {
+		    try {
+			if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
+			    this.getClass().getMethod(method.getName(), (Class[]) null);
+			    Object object = method.invoke(this, (Object[]) null);
+			    if (object instanceof Collection){
+				 builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
+			    }
+			    else{
+				builder.append(method.getName() + " [" + object + "],");
+			    }
+		      }
+		    } catch (Exception e){
+			//do nothing
+		    }
+		}
+		builder.append("]");
+		return builder.toString();
+	 }
 
-	}
 
 	@Override
 	public boolean equals(Object obj){
