@@ -24,27 +24,51 @@
 	<bean id="dataAccessRegister" class="uk.ac.cardiff.raptor.raptorica.engine.DataAccessRegister">
 		<property name="parsingModules">
 			<list>
-				<bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20110107.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib-access.2007-04-20.log
 						</value>
 					</property>
 					<property name="format">
-						<ref bean="ezProxyFileFormat" />
+						<ref bean="shib13IDPAccessFileFormat" />
 					</property>
 					<property name="eventType">
-						<value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
-					<property name="lineFilter">
-					   <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.ContainsLineFilter">
-					       <property name="includeIfContains"><value>connect?session</value></property>
-					   </bean>
-					</property>
+                     <property name="lineFilter">
+                       <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.ContainsLineFilter">
+                           <property name="includeIfContains"><value>Authentication assertion</value></property>
+                       </bean>
+                    </property>
 				</bean>
+                
+                <!--  EZPROXY 
+                
+               <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/shib-access.2007-04-20.log
+                        </value>
+                    </property>
+                    <property name="format">
+                        <ref bean="shib13IDPAccessFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                    </property>
+                    <property name="lineFilter">
+                       <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.ContainsLineFilter">
+                           <property name="includeIfContains"><value>connect?session</value></property>
+                       </bean>
+                    </property>
+                </bean>
+                -->
 
 
-				<!--<bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+				<!-- Shibboleth 2
+                
+                bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
@@ -174,6 +198,88 @@
 			<value>|</value>
 		</property>
 	</bean>
+    
+     <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>1</value>
+                        </list>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>yyyy-MM-ddHH:mm:ss,SSS</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                    <property name="fieldName">
+                        <value>resourceHost</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>7</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>12</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                         <entry key="\." value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                    <property name="fieldName">
+                        <value>nameIdentifier</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>15</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                         <entry key="\." value=""/>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter">
+            <value> </value>
+        </property>
+    </bean>
 
 	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
 		<property name="headers">
