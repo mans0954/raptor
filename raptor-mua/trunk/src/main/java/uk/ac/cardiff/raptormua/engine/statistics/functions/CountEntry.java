@@ -16,7 +16,8 @@ import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 public class CountEntry extends Statistic{
 
-	static Logger log = LoggerFactory.getLogger(CountEntry.class);
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(CountEntry.class);
 
 	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
 

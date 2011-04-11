@@ -10,15 +10,16 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptormua.engine.statistics.ObservationSeries;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
-import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
 
 public class GroupByCountDistinct extends Statistic{
 	
-	static Logger log = LoggerFactory.getLogger(GroupByCountDistinct.class);
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(GroupByCountDistinct.class);
 	
 	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
 		

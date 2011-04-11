@@ -281,11 +281,7 @@
         </dependency>
 
 
-		<dependency>
-			<groupId>hibernate</groupId>
-			<artifactId>hibernate</artifactId>
-			<version>3.1rc2</version>
-		</dependency>
+
 
 
 		<dependency>
