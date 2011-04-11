@@ -93,7 +93,12 @@ public interface EntryHandler {
 	 * @param parameters
 	 * @return
 	 */
-	Object queryUnique(String query, Object[] parameters);
+	public Object queryUnique(String query, Object[] parameters);
+
+        /**
+         * @param events
+         */
+        public void addEntriesAsynchronous(List<Event> events);
 
 
 

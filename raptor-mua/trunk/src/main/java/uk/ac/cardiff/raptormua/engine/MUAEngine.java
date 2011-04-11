@@ -34,6 +34,7 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
+import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
@@ -47,13 +48,18 @@ import uk.ac.cardiff.raptormua.runtimeutils.ReflectionHelper;
  *
  */
 public class MUAEngine {
-	static Logger log = LoggerFactory.getLogger(MUAEngine.class);
+
+        /** Class logger*/
+	private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
 	private EntryHandler entryHandler;
 	private StatisticsHandler statisticsHandler;
 
 	/** The client that is used to process, filter and send events to another MUA instance*/
 	private EventReleaseClient eventReleaseClient;
+
+	/** Engine used to associate attributes to existing events in the MUA */
+	private AttributeAssociationEngine attributeAssociationEngine;
 
 	private Users users;
 
@@ -99,7 +105,7 @@ public class MUAEngine {
 		SuggestionValues suggestionValues = new SuggestionValues();
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 		capabilities.setSuggestionValues(suggestionValues);
-		
+
 		log.debug("Possible values set");
 
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
@@ -172,7 +178,7 @@ public class MUAEngine {
 	 */
 	public void addAuthentications(EventPushMessage pushed) {
 		log.info("Committing {} entries to the entryHandler", pushed.getEvents().size());
-		entryHandler.addEntries(pushed.getEvents());
+		entryHandler.addEntriesAsynchronous(pushed.getEvents());
 		log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
 
 	}
@@ -192,5 +198,19 @@ public class MUAEngine {
 	public EventReleaseClient getEventReleaseClient() {
 	    return eventReleaseClient;
 	}
+
+    /**
+     * @param attributeAssociationEngine the attributeAssociationEngine to set
+     */
+    public void setAttributeAssociationEngine(AttributeAssociationEngine attributeAssociationEngine) {
+        this.attributeAssociationEngine = attributeAssociationEngine;
+    }
+
+    /**
+     * @return the attributeAssociationEngine
+     */
+    public AttributeAssociationEngine getAttributeAssociationEngine() {
+        return attributeAssociationEngine;
+    }
 
 }
