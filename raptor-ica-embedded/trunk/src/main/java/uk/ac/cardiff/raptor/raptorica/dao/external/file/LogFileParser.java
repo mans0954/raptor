@@ -26,8 +26,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -58,9 +56,9 @@ import uk.ac.cardiff.model.event.Event;
 /**
  * A log file parser, used to parse files on the local filesystem according to a
  * given format and transformed into the given event type.
- * 
+ *
  * @author phil
- * 
+ *
  */
 public class LogFileParser extends BaseEventParser {
 
@@ -115,7 +113,7 @@ public class LogFileParser extends BaseEventParser {
 				}
 				boolean parseLine = true;
 				if (lineFilter != null) {
-					parseLine = lineFilter.parsableLine(inputLine);					
+					parseLine = lineFilter.parsableLine(inputLine);
 				}
 			//	log.debug("Parse [{}] - {}",parseLine,inputLine);
 				if (parseLine == true) {
@@ -166,7 +164,7 @@ public class LogFileParser extends BaseEventParser {
 
 	/**
 	 * Prints, as a percentage, the line currently being parsed.
-	 * 
+	 *
 	 * @param lineCount
 	 * @param totalNoLines
 	 */
@@ -179,10 +177,10 @@ public class LogFileParser extends BaseEventParser {
 	/**
 	 * Populates attributes in the Event class <code>authE</code> (or subclasses
 	 * thereof) from the headers defined in <code>format</code>
-	 * 
-	 * @param allvalues
-	 * @param authE
-	 * @throws HeaderException
+	 *
+	 * @param allvalues values for each field in a single record
+	 * @param authE the Event to populate
+	 * @throws HeaderException if trying to set a value on a field that does not exist in the list <code>allvalues</code>
 	 */
 	private void populateField(List<String> allvalues, Event authE) throws HeaderException {
 		for (Header header : format.getHeaders()) {
@@ -234,6 +232,12 @@ public class LogFileParser extends BaseEventParser {
 		return output.toString();
 	}
 
+	/**
+	 * Decodes a URL based on the ISO-8859-1 ISO-Latin character set
+	 *
+	 * @param value the URL to be decoded
+	 * @return the <code>value</code> URL decoded
+	 */
 	private String decode(String value) {
 		try {
 			String decodedURL = URLDecoder.decode(value, "ISO-8859-1");
@@ -243,6 +247,14 @@ public class LogFileParser extends BaseEventParser {
 		}
 	}
 
+	/**
+	 * Replace substrings from <code>value</code> with the given strings in the <code>header</code>
+	 * that match the regular expression(s) in the regexReplaceAll from the <code>header</code>
+	 *
+	 * @param value the value with which to replace certain substrings
+	 * @param header the header that holds the matching regular expressions and their replacements
+	 * @return the <code>value</code> from the input after substring replacement
+	 */
 	private String replace(String value, Header header) {
 		if (header.getRegexReplaceAll() == null)
 			return value;
@@ -255,6 +267,14 @@ public class LogFileParser extends BaseEventParser {
 		return value;
 	}
 
+	/**
+	 * Returns only the substring from <code>value</code> that matches the given <code>regexRetain<code>
+	 * variable in the <code>header</code> input.
+	 *
+	 * @param value the string from which a regex matching group is returned
+	 * @param header the <code>Header</code> that contains the regex pattern to match
+	 * @return the substring from <code>value</code> that matches the regex pattern in <code>header</code>
+	 */
 	private String retain(String value, Header header) {
 		if (header.getRegexRetain() == null)
 			return value;
@@ -275,8 +295,8 @@ public class LogFileParser extends BaseEventParser {
 	 * Determines if the event should not be stored, as determined by a
 	 * <fieldname, value> match on the input <code>authE</code> event with those
 	 * in the <code>exclusionList</code>.
-	 * 
-	 * @param authE
+	 *
+	 * @param authE the <code>Event</code> that is tested for exclusion
 	 * @return true if any <fieldname,value> pairs in the <code>autheE</code>
 	 *         event are found in the exclusion list, false otherwise
 	 */
@@ -300,7 +320,7 @@ public class LogFileParser extends BaseEventParser {
 	 * Determines if the event should stored, as determined by a <fieldname,
 	 * value> match on the input <code>authE</code> event with those in the
 	 * <code>exclusionList</code>.
-	 * 
+	 *
 	 * @param authE
 	 * @return true if any <fieldname,value> pairs in the <code>autheE</code>
 	 *         event are found in the inclusion list, false otherwise
@@ -326,10 +346,10 @@ public class LogFileParser extends BaseEventParser {
 
 	/**
 	 * Efficient method for finding the number of lines in a logfile
-	 * 
-	 * @param logfileURL
-	 * @return
-	 * @throws IOException
+	 *
+	 * @param logfileURL the location, as a URL, of the logfile that is to be processed
+	 * @return the number of lines in the <code>logfileURL</code>
+	 * @throws IOException if the <code>logfileURL</code> is not the location of valid file
 	 */
 	private int count(URL logfileURL) throws IOException {
 
@@ -348,9 +368,14 @@ public class LogFileParser extends BaseEventParser {
 	}
 
 	/**
-	 * @param value
-	 * @param fieldName
-	 * @param authE
+	 * Converts the <code>value</code> into a list delimited by the <code> delimeter</code> input,
+	 * and adds the list of string values to the <code>fieldName</code> of the <code>object</code> using
+	 * Reflection.
+	 *
+	 * @param value the value to add to the <code>object</code>
+	 * @param fieldName the name of the field that the value is added to
+	 * @param delimeter the delimeter used to split the <code>value</code> into a list
+	 * @param object the object with which to set the <code>value</code> on
 	 */
 	private void addStringList(String value, String fieldName, Object object, String delimeter) {
 		try {
@@ -362,6 +387,19 @@ public class LogFileParser extends BaseEventParser {
 		}
 	}
 
+
+
+	/**
+	 * Converts the <code>value</code> into a date using the given <code>format</code> and <code>timezone</code>
+	 * parameters, and adds the date to the <code>fieldName</code> of the <code>object</code> using
+         * Reflection.
+	 *
+	 * @param value the value to add to the <code>object</code>
+	 * @param format the date format used to parse the <code>value</code> into a string
+	 * @param timezone sets the timezone on the newly created date
+	 * @param fieldName the name of the field that the value is added to
+	 * @param object the object with which to set the <code>value</code> on
+	 */
 	private void addDate(String value, String format, String timezone, String fieldName, Object object) {
 		try {
 			/*
@@ -384,6 +422,14 @@ public class LogFileParser extends BaseEventParser {
 
 	}
 
+	/**
+	 * Adds the string <code>value</code> to the <code>fieldName</code> of the <code>object</code> using
+         * Reflection.
+	 *
+	 * @param value the value to add to the <code>object</code>
+	 * @param fieldName the name of the field that the value is added to
+	 * @param object the object with which to set the <code>value</code> on
+	 */
 	private void addString(String value, String fieldName, Object object) {
 		try {
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
@@ -394,6 +440,15 @@ public class LogFileParser extends BaseEventParser {
 
 	}
 
+	/**
+	 * Converts the <code>value</code> into an Integer, and adds the Integer to the
+	 * <code>fieldName</code> of the <code>object</code> using
+         * Reflection.
+         *
+         * @param value the value to add to the <code>object</code>
+         * @param fieldName the name of the field that the value is added to
+         * @param object the object with which to set the <code>value</code> on
+	 */
 	private void addInteger(String value, String fieldName, Object object) {
 		try {
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
@@ -404,6 +459,13 @@ public class LogFileParser extends BaseEventParser {
 
 	}
 
+	/**
+	 * Returns the value of the <code>fieldname</code> parameter from the <code>object</code> Object
+	 *
+	 * @param fieldname the name of the field from which to retrieve the value
+	 * @param object the object from which to retrieve the value
+	 * @return an object that represents the value of the <code>fieldname</code> from the given <code>object</code>
+	 */
 	private Object getValueFromObject(String fieldname, Object object) {
 		try {
 			Class<? extends Object> id = object.getClass();
@@ -417,6 +479,13 @@ public class LogFileParser extends BaseEventParser {
 		return null;
 	}
 
+	/**
+	 * Sets the <code>param</code> object on the field <code>fieldname</code> of the object <code>object</code>
+	 *
+	 * @param fieldname the name of the field from which to set the value <code>param</code>
+	 * @param param the object to set on the <code>fieldname</code> of the <code>object</code>
+	 * @param object the object with which to set the object <code>param</code>
+	 */
 	private void setValueOnObject(String fieldname, Object param, Object object) {
 		try {
 			Class<? extends Object> id = object.getClass();
