@@ -35,13 +35,13 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
+import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
-import uk.ac.cardiff.raptormua.model.EntryHandler;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
@@ -50,7 +50,8 @@ import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
  */
 public abstract class Statistic {
 
-	static Logger log = LoggerFactory.getLogger(Statistic.class);
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(Statistic.class);
 
 	private EntryHandler entryHandler;
 

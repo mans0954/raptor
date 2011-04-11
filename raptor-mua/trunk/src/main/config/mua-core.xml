@@ -124,7 +124,7 @@
 	</bean>
 
 	<!-- Create the entry handler -->
-	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptormua.model.PersistantEntryHandler">
+	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 

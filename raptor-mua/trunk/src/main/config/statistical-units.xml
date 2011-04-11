@@ -295,8 +295,6 @@
 
 	<!--  Support statistical workflows -->
 
-	<bean id="SessionLinker" class = "uk.ac.cardiff.raptormua.engine.statistics.SessionLinker"/>
-
 	<bean id="percentagePost" class = "uk.ac.cardiff.raptormua.engine.statistics.PercentagePostProcessor">
 	</bean>
 
