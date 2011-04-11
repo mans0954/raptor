@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -41,13 +44,13 @@ public class PersistantEntryHandler implements EntryHandler {
 	// bean after all properties set etc, rather than initialising on the set
 	// method of the engine class
 
-	/* class logger */
+	/** class logger */
 	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
-	/* data connection used to persist entries */
+	/** data connection used to persist entries */
 	private MUADataConnection dataConnection;
 
-	/*
+	/**
 	 * set of all entries stored by this EntryHandler should never be used as
 	 * memory overhead is too high for large databases
 	 */
@@ -81,46 +84,24 @@ public class PersistantEntryHandler implements EntryHandler {
 		entries = new LinkedHashSet<Event>(entriesAsList);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see uk.ac.cardiff.raptormua.model.EntryHandler#query(java.lang.String)
-	 */
-	@Override
+
 	public List query(String query) {
 		// log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQuery(query, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
-	 */
-	@Override
+
 	public Object queryUnique(String query) {
 		// log.debug("SQL query to entry handler [{}]",query);
 		return dataConnection.runQueryUnique(query, null);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.model.EntryHandler#queryUnique(java.lang.String)
-	 */
-	@Override
+
 	public Object queryUnique(String query, Object[] parameters) {
 		return dataConnection.runQueryUnique(query, parameters);
 	}
 
-	/*
-	 * Checks for duplicates by hashCode as each entry is added one by one.
-	 *
-	 * @see main.uk.ac.cf.model.EntryHandler#addEntries(java.util.List)
-	 */
-	@Override
+
 	public void addEntries(List<Event> entries) {
 		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(),
 				entries.size());
@@ -149,34 +130,19 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see main.uk.ac.cf.model.EntryHandler#endTransaction()
-	 */
-	@Override
+
 	public void endTransaction() {
 		log.debug("Saving transaction for MUA");
 		dataConnection.saveAll(entries);
 		log.debug("Saving transaction for MUA...Done");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see main.uk.ac.cf.model.EntryHandler#getEntries()
-	 */
-	@Override
+
 	public Set getEntries() {
 		return entries;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see main.uk.ac.cf.model.EntryHandler#removeAllEntries()
-	 */
-	@Override
+
 	public void removeAllEntries() {
 		log.debug("Removing all entries from this entry handler");
 		dataConnection.deleteAllEntries(entries);
@@ -212,5 +178,23 @@ public class PersistantEntryHandler implements EntryHandler {
 	public int getNumberOfEntries() {
 		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
 	}
+
+        /* (non-Javadoc)
+         * @see uk.ac.cardiff.raptormua.model.EntryHandler#addEntriesAsynchronous(java.util.List)
+         */
+        public void addEntriesAsynchronous(List<Event> events) {
+            FutureTask<Boolean> task = new FutureTask<Boolean>(new PersistentEntriesTask());
+            ExecutorService es = Executors.newSingleThreadExecutor();
+            es.submit(task);
+            try {
+                task.get();
+                System.out.println ("Result from task.get () = ");
+            }
+            catch (Exception e) {
+               System.err.println (e);
+            }
+           es.shutdown ();
+
+        }
 
 }
