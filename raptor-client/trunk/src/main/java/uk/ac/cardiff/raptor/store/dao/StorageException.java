@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
 package uk.ac.cardiff.raptor.store.dao;
 
-import java.util.Collection;
-import java.util.List;
+public class StorageException extends Exception{
 
-import uk.ac.cardiff.model.event.Event;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -4614661463043866258L;
 
-/**
- * @author philsmart
- *
- */
-public interface MUADataConnection {
+	public StorageException (String message){
+		super(message);
+	}
 
-	public List runQuery(String query, Object[] parameters);
-	public Object runQueryUnique(String query, Object[] parameters);
-	public void save(Object object);
-	public void deleteAllEntries(Collection entries);
-	public void saveAll(Collection collection);
-
+	public StorageException (String message, Exception wrappedException){
+            super(message,wrappedException);
+    }
 
 
 }

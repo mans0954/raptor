@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import java.util.concurrent.FutureTask;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
@@ -37,11 +39,12 @@ import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.AsynchronousEntryStorage;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.StoreEntriesTask;
-import uk.ac.cardiff.raptor.store.dao.MUADataConnection;
+import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
+import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class PersistantEntryHandler implements EntryHandler {
 	// TODO can use the spring initialisation callback methods to initials the
@@ -52,20 +55,20 @@ public class PersistantEntryHandler implements EntryHandler {
 	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
 	/** data connection used to persist entries */
-	private MUADataConnection dataConnection;
+	private RaptorDataConnection dataConnection;
 
 	/**
 	 * set of all entries stored by this EntryHandler should never be used as
 	 * memory overhead is too high for large databases
 	 */
 	private Set<Event> entries;
-	
+
 	/** Used to hold events temporarily before they are persisted, allows
 	 * resilience if events can not be immediately stored, for example
 	 * failure of the underlying persistent store */
 	private Set<Event> storeQueue;
 
-	public PersistantEntryHandler(MUADataConnection dataConnection) {
+	public PersistantEntryHandler(RaptorDataConnection dataConnection) {
 		this.setDataConnection(dataConnection);
 
 	}
@@ -107,21 +110,43 @@ public class PersistantEntryHandler implements EntryHandler {
 		return dataConnection.runQueryUnique(query, parameters);
 	}
 
-	public void addEntries(List<Event> entries) {
+	/**
+	 *
+	 *
+	 * @param entries the list of events that are to be stored
+	 * @throws
+	 */
+	public void addEntries(List<Event> entries) throws StorageException{
 		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted", this.getNumberOfEntries(), entries.size());
 		int duplicates = 0;
-		for (Event entry : entries) {
+		List<Event> persist = new ArrayList<Event>();
+		for (Event event : entries) {
 			int hashcode = 0;
 			try {
-				hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", entry)).intValue();
+				hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
 			} catch (Exception e) {
+			    log.error("Could not get hashcode for event {}, event not stored");
+			    continue;
 			}
-			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + entry.getClass().getSimpleName()
-					+ " where eventTime = '" + entry.getEventTime() + "' and hashCode ='" + hashcode + "'", null)).intValue();
-			if (numberOfDuplicates == 0)
-				dataConnection.save(entry);
-			else
-				duplicates++;
+			//int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
+			//		+ " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'", null)).intValue();
+			Object[] parameters= new Object[]{event.getEventTime(),hashcode};
+			log.debug("Values: "+Arrays.toString(parameters));
+			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()+" where eventTime = ? " +
+					"and hashCode =?", parameters)).intValue();
+
+			if (numberOfDuplicates == 0){
+			    persist.add(event);
+			}
+			else{
+			    duplicates++;
+			}
+		}
+		try{
+		    dataConnection.saveAll(persist);
+		}
+		catch(DataAccessException e){
+		    throw new StorageException("Could not persist events",e);
 		}
 
 		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
@@ -148,11 +173,11 @@ public class PersistantEntryHandler implements EntryHandler {
 		entries.clear();
 	}
 
-	public void setDataConnection(MUADataConnection dataConnection) {
+	public void setDataConnection(RaptorDataConnection dataConnection) {
 		this.dataConnection = dataConnection;
 	}
 
-	public MUADataConnection getDataConnection() {
+	public RaptorDataConnection getDataConnection() {
 		return dataConnection;
 	}
 
@@ -164,10 +189,5 @@ public class PersistantEntryHandler implements EntryHandler {
 		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
 	}
 
-	public void addEntriesAsynchronous(List<Event> events) {
-		AsynchronousEntryStorage asyncEntryStorage = new AsynchronousEntryStorage();
-		asyncEntryStorage.store(events);
-
-	}
 
 }

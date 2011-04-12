@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.ac.cardiff.raptor.store;
 
 import java.util.List;
@@ -15,24 +30,38 @@ public class AsynchronousEntryStorage implements StoreEntriesTaskCallbackInterfa
 
 	/** class logger */
 	private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStorage.class);
-		
-	public void storageResultCallback(Object result) {
-		log.debug("Storage task completed");
-		
+
+	/** An ID used to track the progress of any transaction */
+	private int transactionId;
+
+	public AsynchronousEntryStorage(int transactionId){
+	    this.setTransactionId(transactionId);
 	}
-	
-	public void store(List<Event> events){
-		StoreEntriesTask storeEntryTask = new StoreEntriesTask();
-		storeEntryTask.setAsynchronousEntryStorage(this);
+
+	public void storageResultCallback(Object result) {
+		log.debug("Storage task completed {}, for transaction id [{}]",result, transactionId);
+
+	}
+
+	public void store(EntryHandler entryHandler, List<Event> events){
+		StoreEntriesTask storeEntryTask = new StoreEntriesTask(entryHandler, events,this);
 		ExecutorService es = Executors.newSingleThreadExecutor();
 		es.submit(storeEntryTask);
-//		try {
-//			task.get();
-//			log.debug("Result from task.get () = ");
-//		} catch (Exception e) {
-//			log.error("Error adding events to the database...events stored for future storage...",e);
-//		}
-//		es.shutdown();
+		es.shutdown();
 	}
+
+    /**
+     * @param transactionId the transactionId to set
+     */
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    /**
+     * @return the transactionId
+     */
+    public int getTransactionId() {
+        return transactionId;
+    }
 
 }
