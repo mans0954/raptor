@@ -89,7 +89,7 @@
 	<bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
         <property name="eventReleaseClient"><ref bean="eventReleaseClient"></ref></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
-		<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 		<property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
@@ -123,10 +123,16 @@
 		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
 	</bean>
 
-	<!-- Create the entry handler -->
+	<!-- Create the storage engine and entry handler -->
+	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.StorageEngine">
+        <property name="entryHandler"><ref bean="persistantEntryHandler"/></property>
+	</bean>
+
 	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
+
+	<!--  Load all other bean definitions -->
 
 	  <import resource="dao-beans.xml"/>
 	  <import resource="statistical-units.xml" />

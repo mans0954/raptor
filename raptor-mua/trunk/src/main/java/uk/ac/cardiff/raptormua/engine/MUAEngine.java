@@ -38,6 +38,7 @@ import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
@@ -53,7 +54,7 @@ public class MUAEngine {
         /** Class logger*/
 	private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
-	private EntryHandler entryHandler;
+	/** Performs all statistics*/
 	private StatisticsHandler statisticsHandler;
 
 	/** The client that is used to process, filter and send events to another MUA instance*/
@@ -62,9 +63,13 @@ public class MUAEngine {
 	/** Engine used to associate attributes to existing events in the MUA */
 	private AttributeAssociationEngine attributeAssociationEngine;
 
+	//TODO implement user level control on the MUA?
 	private Users users;
 
-	/* Metadata about the this MUA instance */
+	/** The Storage Engine that handles all storage transactions*/
+	private StorageEngine storageEngine;
+
+	/** Metadata about the this MUA instance */
 	private ServerMetadata muaMetadata;
 
 	public MUAEngine() {
@@ -84,8 +89,8 @@ public class MUAEngine {
 	 * @param statisticName
 	 */
 	public AggregatorGraphModel performStatistic(String statisticName) {
-		/* set the current set of entries held by the MUA for processing */
-		statisticsHandler.setEntryHandler(getEntryHandler());
+		//TODO we do not need to set this each time
+		statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
 		return statisticsHandler.peformStatistic(statisticName);
 
 	}
@@ -136,20 +141,6 @@ public class MUAEngine {
 		return capabilities;
 	}
 
-	/**
-	 * Sets the configured entry handler. Must also then initialise that entry
-	 * handler
-	 *
-	 * @param entryHandler
-	 */
-	public void setEntryHandler(EntryHandler entryHandler) {
-		this.entryHandler = entryHandler;
-		entryHandler.initialise();
-	}
-
-	public EntryHandler getEntryHandler() {
-		return entryHandler;
-	}
 
 	/**
 	 * @param statisticalUnitInformation
@@ -168,7 +159,7 @@ public class MUAEngine {
 	public boolean performAdministrativeFunction(AdministrativeFunction function) {
 		switch (function.getAdministrativeFunction()) {
 		case REMOVEALL:
-			entryHandler.removeAllEntries();
+			storageEngine.removeAllEntries();
 			break;
 		}
 		return true;
@@ -178,9 +169,9 @@ public class MUAEngine {
 	 * @param pushed
 	 */
 	public void addAuthentications(EventPushMessage pushed) {
-		log.info("Committing {} entries to the entryHandler", pushed.getEvents().size());
-		entryHandler.addEntriesAsynchronous(pushed.getEvents());
-		log.info("EntryHandler now contains {} entries", entryHandler.getNumberOfEntries());
+	        int transactionId = (int)(Math.random()*10000);
+		log.info("Committing {} entries to the storage engine, with transaction id [{}]", pushed.getEvents().size(),transactionId);
+		storageEngine.addEntriesAsynchronous(transactionId,pushed.getEvents());
 
 	}
 
@@ -212,6 +203,20 @@ public class MUAEngine {
      */
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
+    }
+
+    /**
+     * @param storageEngine the storageEngine to set
+     */
+    public void setStorageEngine(StorageEngine storageEngine) {
+        this.storageEngine = storageEngine;
+    }
+
+    /**
+     * @return the storageEngine
+     */
+    public StorageEngine getStorageEngine() {
+        return storageEngine;
     }
 
 }
