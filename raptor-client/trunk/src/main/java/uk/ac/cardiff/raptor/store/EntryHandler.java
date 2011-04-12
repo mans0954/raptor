@@ -26,24 +26,25 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
 public interface EntryHandler {
 
 	/**
-	 * 
+	 *
 	 * @param entries
 	 */
-	public void addEntries(List<Event> entries);
+	public void addEntries(List<Event> entries) throws StorageException;
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public Set<Event> getEntries();
 
 	/**
-	 * 
+	 *
 	 * @param entries
 	 */
 	public void setEntries(Set<Event> entries);
@@ -64,21 +65,21 @@ public interface EntryHandler {
 	public void initialise();
 
 	/**
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 */
 	public List query(String query);
 
 	/**
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 */
 	public Object queryUnique(String query);
 
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public int getNumberOfEntries();
@@ -90,9 +91,5 @@ public interface EntryHandler {
 	 */
 	public Object queryUnique(String query, Object[] parameters);
 
-	/**
-	 * @param events
-	 */
-	public void addEntriesAsynchronous(List<Event> events);
 
 }

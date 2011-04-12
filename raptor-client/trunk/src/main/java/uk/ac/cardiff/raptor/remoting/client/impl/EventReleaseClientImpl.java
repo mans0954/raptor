@@ -19,10 +19,10 @@ import java.util.List;
 
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.exceptions.ReleaseFailureException;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
+import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 
 
 public class EventReleaseClientImpl implements EventReleaseClient{

@@ -22,7 +22,6 @@ import java.util.List;
 
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.exceptions.ReleaseFailureException;
 
 /**
  * Sends event records using the CXF SOAP libraries

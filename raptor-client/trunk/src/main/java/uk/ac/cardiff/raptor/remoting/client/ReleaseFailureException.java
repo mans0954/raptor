@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptor.exceptions;
+package uk.ac.cardiff.raptor.remoting.client;
 
 public class ReleaseFailureException extends Exception{
 

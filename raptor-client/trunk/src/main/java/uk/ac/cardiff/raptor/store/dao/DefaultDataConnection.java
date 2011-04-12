@@ -20,14 +20,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 /**
  * @author philsmart
- * 
+ *
  */
-public class MUADataConnectionImpl implements MUADataConnection {
+public class DefaultDataConnection implements RaptorDataConnection {
 
 	/* hibernate template to persist classes */
 	private HibernateTemplate hibernateTemplate;
@@ -35,20 +36,14 @@ public class MUADataConnectionImpl implements MUADataConnection {
 	private SessionFactory sessionFactory;
 
 	/** class logger */
-	private static Logger log = Logger.getLogger(MUADataConnectionImpl.class);
+	private static Logger log = Logger.getLogger(DefaultDataConnection.class);
 
-	public void save(Object object) {
-		// log.debug("Saving..."+entry);
+	public void save(Object object) throws DataAccessException{
 		hibernateTemplate.saveOrUpdate(object);
-		// hibernateTemplate.flush();
-
 	}
 
-	public void saveAll(Collection collection) {
-		// log.debug("Saving...");
+	public void saveAll(Collection collection) throws DataAccessException{
 		hibernateTemplate.saveOrUpdateAll(collection);
-		// hibernateTemplate.flush();
-
 	}
 
 	public List runQuery(String query, Object[] parameters) {
@@ -77,11 +72,11 @@ public class MUADataConnectionImpl implements MUADataConnection {
 	 * <p> import, here we load all entries to bind them in hibernate then we
 	 * delete them. Not sure if all these entries are loaded then delete if lazy
 	 * loading is false.</p> (non-Javadoc)
-	 * 
+	 *
 	 * @see main.uk.ac.cf.dao.internal.ICADataConnection#deleteAllEntries()
 	 */
 	@Override
-	public void deleteAllEntries(Collection entries) {
+	public void deleteAllEntries(Collection entries) throws DataAccessException{
 		hibernateTemplate.deleteAll(entries);
 
 	}

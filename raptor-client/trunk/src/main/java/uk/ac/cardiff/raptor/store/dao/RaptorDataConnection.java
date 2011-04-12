@@ -13,10 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptor.store;
+/**
+ *
+ */
+package uk.ac.cardiff.raptor.store.dao;
 
-public interface StoreEntriesTaskCallbackInterface {
-	
-	public void storageResultCallback(Object result);
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.dao.DataAccessException;
+
+import uk.ac.cardiff.model.event.Event;
+
+/**
+ * @author philsmart
+ *
+ */
+public interface RaptorDataConnection {
+
+	public List runQuery(String query, Object[] parameters);
+	public Object runQueryUnique(String query, Object[] parameters);
+	public void save(Object object) throws DataAccessException;
+	public void deleteAllEntries(Collection entries) throws DataAccessException;
+	public void saveAll(Collection collection) throws DataAccessException;
+
+
 
 }
