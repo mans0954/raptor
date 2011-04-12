@@ -130,9 +130,9 @@ public class PersistantEntryHandler implements EntryHandler {
 			}
 			//int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
 			//		+ " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'", null)).intValue();
-			Object[] parameters= new Object[]{event.getEventTime(),hashcode};
+			Object[] parameters= new Object[]{hashcode};
 			log.debug("Values: "+Arrays.toString(parameters));
-			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()+" where eventTime = ? " +
+			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()+" where eventTime = '" + event.getEventTime() + "'"+
 					"and hashCode =?", parameters)).intValue();
 
 			if (numberOfDuplicates == 0){
