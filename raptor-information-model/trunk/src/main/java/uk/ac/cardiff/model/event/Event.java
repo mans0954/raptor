@@ -33,8 +33,8 @@ public class Event {
 
     /** attributes generic to all entries */
     private DateTime eventTime;
-    private long eventID;
-    private String serviceID;
+    private long eventId;
+    private String serviceId;
     private String eventType;
     private String serviceHost;
     private String resourceHost;
@@ -88,22 +88,6 @@ public class Event {
 	return persistantId;
     }
 
-    public void setEventID(long eventID) {
-	this.eventID = eventID;
-    }
-
-    public long getEventID() {
-	return eventID;
-    }
-
-    public void setServiceID(String serviceID) {
-	this.serviceID = serviceID;
-    }
-
-    public String getServiceID() {
-	return serviceID;
-    }
-
     public void setEventType(String eventType) {
 	this.eventType = eventType;
     }
@@ -148,5 +132,21 @@ public class Event {
      */
     public int getResourceIdCategory() {
 	return resourceIdCategory;
+    }
+
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceId() {
+        return serviceId;
     }
 }

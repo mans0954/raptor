@@ -5,6 +5,10 @@ package uk.ac.cardiff.model.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import uk.ac.cardiff.utility.EqualsUtil;
+import uk.ac.cardiff.utility.HashCodeUtil;
 
 /**
  * @author philsmart
@@ -55,6 +59,69 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 	}
 	builder.append("]");
 	return builder.toString();
+    }
+    
+
+    /**
+     * create a unique hash, with as uniform a distribution as possible
+     */
+    public int hashCode(){
+        int hash = HashCodeUtil.SEED;
+
+        hash = HashCodeUtil.hash(hash,getEventTime());
+        hash = HashCodeUtil.hash(hash,getAuthenticationType());
+        hash = HashCodeUtil.hash(hash,getServiceHost());
+        hash = HashCodeUtil.hash(hash,getRequesterIp());
+        hash = HashCodeUtil.hash(hash,getSessionId());
+        hash = HashCodeUtil.hash(hash,getResourceHost());
+        hash = HashCodeUtil.hash(hash,getPrincipalName());
+        hash = HashCodeUtil.hash(hash,getEventId());
+        hash = HashCodeUtil.hash(hash,getEventType());
+        hash = HashCodeUtil.hash(hash,getServiceId());
+        hash = HashCodeUtil.hash(hash,getResourceId());
+        
+
+        return hash;
+
+    }
+    
+    /**
+     * For hibernate, so the hashcode can be persisted
+     * @return
+     */
+    public int getHashCode(){
+        return hashCode();
+    }
+
+    /**
+     * For hibernate, does nothing as the hascode is computed on the fly
+     * from the <code>hashCode</code> method
+     *
+     * @param hashCode
+     */
+    public void setHashCode(int hashCode){
+
+    }
+
+    public boolean equals(Object obj){
+        if ( this == obj ) return true;
+        if((obj == null) || (obj.getClass() != this.getClass()))
+            return false;
+        EzproxyAuthenticationEvent that = (EzproxyAuthenticationEvent)obj;
+        boolean areEqual =
+          EqualsUtil.areEqual(this.getEventTime(), that.getEventTime()) &&
+          EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
+          EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
+          EqualsUtil.areEqual(this.getRequesterIp(), that.getRequesterIp()) &&
+          EqualsUtil.areEqual(this.getSessionId(), that.getSessionId()) &&
+          EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
+          EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) &&
+          EqualsUtil.areEqual(this.getEventType(), that.getEventType()) &&
+          EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
+          EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) &&
+          EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName());
+
+        return areEqual;
     }
 
 }
