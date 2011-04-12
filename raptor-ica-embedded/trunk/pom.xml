@@ -333,37 +333,6 @@
 						<wtpversion>2.0</wtpversion>
 					</configuration>
 				</plugin>
-				<plugin> <!-- not sure of this plugin is actually used in the build cycle -->
-					<groupId>org.apache.cxf</groupId>
-					<artifactId>cxf-codegen-plugin</artifactId>
-					<version>2.0-incubator-RC-SNAPSHOT</version>
-					<executions>
-						<execution>
-							<id>generate-sources</id>
-							<phase>generate-sources</phase>
-							<configuration>
-								<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>
-								<wsdlOptions>
-									<wsdlOption>
-										<wsdl>${basedir}/src/main/wsdl/ICA.wsdl</wsdl>
-									</wsdlOption>
-								</wsdlOptions>
-							</configuration>
-							<goals>
-								<goal>wsdl2java</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>tomcat-maven-plugin</artifactId>
-					<configuration>
-						<url>http://localhost:8080/manager</url>
-						<server>mytomcat</server>
-						<path>/ICA2</path>
-					</configuration>
-				</plugin>
 				<plugin>
 					<groupId>com.google.code.maven-license-plugin</groupId>
 					<artifactId>maven-license-plugin</artifactId>
@@ -375,6 +344,7 @@
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
+				    <finalName>raptor-ica-${project.version}</finalName>
 					<archive>
 						<manifest>
 							<mainClass>uk.ac.cardiff.raptor.raptorica.server.RunServer</mainClass>
@@ -396,8 +366,8 @@
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/lib</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteReleases>true</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
 						</configuration>
 					</execution>
@@ -413,6 +383,8 @@
 							<goal>assembly</goal>
 						</goals>
 						<configuration>
+						<appendAssemblyId>false</appendAssemblyId>
+						    <finalName>raptor-ica-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/main/resources/package.xml</descriptor>
 							</descriptors>
@@ -473,7 +445,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 
