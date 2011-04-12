@@ -169,7 +169,7 @@ public class MUAEngine {
 	 * @param pushed
 	 */
 	public void addAuthentications(EventPushMessage pushed) {
-	        int transactionId = (int)(Math.random()*10000);
+	        int transactionId = (int)(Math.random()*1000000);
 		log.info("Committing {} entries to the storage engine, with transaction id [{}]", pushed.getEvents().size(),transactionId);
 		storageEngine.addEntriesAsynchronous(transactionId,pushed.getEvents());
 
