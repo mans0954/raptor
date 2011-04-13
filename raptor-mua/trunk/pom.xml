@@ -39,6 +39,8 @@
 
 	<dependencies>
 
+
+
 		<!-- jetty runtime for standalone deployment -->
 
         <dependency>
