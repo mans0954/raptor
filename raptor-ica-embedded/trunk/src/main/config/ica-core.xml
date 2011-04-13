@@ -41,7 +41,7 @@
 			<value>false</value>
 		</property>
 	</bean>
-    
+
     <!-- release trigger setup -->
     <bean id="icaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
@@ -50,7 +50,7 @@
         <property name="startDelay" value="10000" />
         <property name="repeatInterval" value="10000" />
     </bean>
-    
+
     <bean id="icaReleaseJobDetail"
         class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
@@ -91,13 +91,7 @@
 		<property name="icaMetadata"><ref bean="ICAMetadata"></ref></property>
 	</bean>
 
-	<!-- ICA Metadata -->
-	<bean id="ICAMetadata" class="uk.ac.cardiff.model.ClientMetadata">
-		<property name="clientName"><value>IdP1 Shibboleth Log File Parser</value></property>
-		<property name="organisationName"><value>Cardiff University</value></property>
-		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
-		<property name="serviceName"><value>Cardiff University Shibboleth Identity Provider</value></property>
-	</bean>
+
 
 	<bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
 		<property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
@@ -111,17 +105,9 @@
 
 	<bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
 
-	<bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient">
-	   <property name="tlsParameters">
-	       <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
-                 <property name="trustStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value></property>
-                 <property name="trustStorePassword"><value>phil11</value></property>
-                 <property name="keyStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value></property>
-                 <property name="keyStorePassword"><value>phil11</value></property>
-	       </bean>
-	   </property>
-	</bean>
+	
 
+    <import resource="metadata.xml"/>
 	<import resource="dao-beans.xml"/>
 	<import resource="data-access.xml" />
 	<import resource="event-release.xml" />
