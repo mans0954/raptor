@@ -18,8 +18,10 @@ package uk.ac.cardiff.raptor.store.dao;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -36,7 +38,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
 	private SessionFactory sessionFactory;
 
 	/** class logger */
-	private static Logger log = Logger.getLogger(DefaultDataConnection.class);
+	private static Logger log = LoggerFactory.getLogger(DefaultDataConnection.class);
 
 	public void save(Object object) throws DataAccessException{
 		hibernateTemplate.saveOrUpdate(object);

@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptor.event.expansion;
 
 import java.util.List;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +49,10 @@ public class AttributeAssociationEngine {
      * Gets associated attributes for the given ...
      */
     public void associateAttributesAsynchronous() {
-
+       // AttributeResolver resolver = new AttributeResolver(" foo ");
 
     }
+
+
 
 }
