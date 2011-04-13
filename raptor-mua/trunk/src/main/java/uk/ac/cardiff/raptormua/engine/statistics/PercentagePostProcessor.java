@@ -20,7 +20,8 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
@@ -33,7 +34,7 @@ import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 public class PercentagePostProcessor implements StatisticsPostProcessor{
 
 	/* class logger */
-	static Logger log = Logger.getLogger(PercentagePostProcessor.class);
+	private final Logger log = LoggerFactory.getLogger(PercentagePostProcessor.class);
 
 
 	/*

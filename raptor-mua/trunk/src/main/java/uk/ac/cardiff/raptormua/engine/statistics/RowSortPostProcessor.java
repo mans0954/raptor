@@ -22,7 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
@@ -35,8 +36,8 @@ import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
  */
 public class RowSortPostProcessor implements StatisticsPostProcessor{
 
-	/* class logger */
-	static Logger log = Logger.getLogger(RowSortPostProcessor.class);
+	/** class logger */
+	private final Logger log = LoggerFactory.getLogger(RowSortPostProcessor.class);
 
 	private boolean ascending;
 
