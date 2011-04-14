@@ -24,6 +24,9 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/opensaml-messaging-api/opensaml-messaging-api">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/idp-attribute-resolver-impl/idp-attribute-resolver-impl">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-information-model/raptor-information-model">
             <dependency-type>uses</dependency-type>
         </dependent-module>
