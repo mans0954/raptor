@@ -18,6 +18,10 @@
         <property name="serviceHost" type="string" update="true" insert="true" column="serviceHost" not-null="false"
             index="requesthost_index" />
         <property name="resourceHost" type="string" update="true" insert="true" column="resourceHost" not-null="false" />
+        <property name="serviceId" type="string" update="true" insert="true" column="serviceId" not-null="false" index="serviceid_index"/>
+        <property name="resourceId" type="string" update="true" insert="true" column="resourceId" not-null="false" />
+        <property name="eventId" type="long" update="true" insert="true" column="eventId" not-null="false" />
+        <property name="eventType" type="string" update="true" insert="true" column="eventType" not-null="false" />
 
         <joined-subclass name="uk.ac.cardiff.model.event.AuthenticationEvent" table="authenticationEvent">
             <key column="id" />
