@@ -732,13 +732,13 @@ public class LdapDataConnector extends BaseDataConnector {
         Map<String, Attribute<?>> attributes = null;
 
         // check for cached data
-        if (cacheResults) {
-            log.debug("Checking cache for search results");
-            attributes = getCachedAttributes(resolutionContext, searchFilter);
-            if (attributes != null && log.isDebugEnabled()) {
-                log.debug("Returning attributes from cache");
-            }
-        }
+//        if (cacheResults) {
+//            log.debug("Checking cache for search results");
+//            attributes = getCachedAttributes(resolutionContext, searchFilter);
+//            if (attributes != null && log.isDebugEnabled()) {
+//                log.debug("Returning attributes from cache");
+//            }
+//        }
 
         // results not found in the cache
         if (attributes == null) {
@@ -750,10 +750,10 @@ public class LdapDataConnector extends BaseDataConnector {
             }
             // build resolved attributes from LDAP attributes
             attributes = buildBaseAttributes(results);
-            if (cacheResults && attributes != null) {
-                setCachedAttributes(resolutionContext, searchFilter, attributes);
-                log.debug("Stored results in the cache");
-            }
+//            if (cacheResults && attributes != null) {
+//                setCachedAttributes(resolutionContext, searchFilter, attributes);
+//                log.debug("Stored results in the cache");
+//            }
         }
 
         return attributes;
@@ -761,30 +761,30 @@ public class LdapDataConnector extends BaseDataConnector {
 
 
     //TODO AttributeResolutionException expection was removed
-    public void validate() {
-        Ldap ldap = null;
-        try {
-            ldap = (Ldap) ldapPool.borrowObject();
-            if (!ldap.connect()) {
-                throw new NamingException();
-            }
-        } catch (NamingException e) {
-            log.error("An error occured when attempting to search the LDAP: " + ldapConfig.getEnvironment(), e);
-            throw new AttributeResolutionException("An error occurred when attempting to search the LDAP");
-        } catch (Exception e) {
-            log.error("Could not retrieve Ldap object from pool", e);
-            throw new AttributeResolutionException(
-                    "An error occurred when attempting to retrieve a LDAP connection from the pool");
-        } finally {
-            if (ldap != null) {
-                try {
-                    ((Ldap)ldapPool).returnObject(ldap);
-                } catch (Exception e) {
-                    log.error("Could not return Ldap object back to pool", e);
-                }
-            }
-        }
-    }
+//    public void validate() throws Exception{
+//        Ldap ldap = null;
+//        try {
+//            ldap = (Ldap) ldapPool.borrowObject();
+//            if (!ldap.connect()) {
+//                throw new NamingException();
+//            }
+//        } catch (NamingException e) {
+//            log.error("An error occured when attempting to search the LDAP: " + ldapConfig.getEnvironment(), e);
+//            throw new Exception("An error occurred when attempting to search the LDAP");
+//        } catch (Exception e) {
+//            log.error("Could not retrieve Ldap object from pool", e);
+//            throw new Exception(
+//                    "An error occurred when attempting to retrieve a LDAP connection from the pool");
+//        } finally {
+//            if (ldap != null) {
+//                try {
+//                    ldapPool.returnObject(ldap);
+//                } catch (Exception e) {
+//                    log.error("Could not return Ldap object back to pool", e);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * This searches the LDAP with the supplied filter.
@@ -826,7 +826,7 @@ public class LdapDataConnector extends BaseDataConnector {
     protected Map<String, Attribute<?>> buildBaseAttributes(Iterator<SearchResult> results)
             throws AttributeResolutionException {
 
-        Map<String, BaseAttribute> attributes = new HashMap<String, BaseAttribute>();
+        Map<String, Attribute<?>> attributes = new HashMap<String, Attribute<?>>();
 
         if (!results.hasNext()) {
             return attributes;
@@ -841,13 +841,12 @@ public class LdapDataConnector extends BaseDataConnector {
                 log.error("Error parsing LDAP attributes", e);
                 throw new AttributeResolutionException("Error parsing LDAP attributes");
             }
-
+            log.debug("Found {} attributes",newAttrsMap.size());
             for (Map.Entry<String, List<String>> entry : newAttrsMap.entrySet()) {
                 log.debug("Found the following attribute: {}", entry);
-                BaseAttribute<String> attribute = attributes.get(entry.getKey());
+                Attribute<String> attribute = (Attribute<String>) attributes.get(entry.getKey());
                 if(attribute == null){
-                    attribute = new BasicAttribute<String>();
-                    ((BasicAttribute)attribute).setId(entry.getKey());
+                    attribute = new Attribute<String>(entry.getKey());
                     attributes.put(entry.getKey(), attribute);
                 }
 
@@ -855,7 +854,7 @@ public class LdapDataConnector extends BaseDataConnector {
                 if(values != null && !values.isEmpty()){
                     for(String value : values){
                         if(!DatatypeHelper.isEmpty(value)){
-                            attribute.getValues().add(DatatypeHelper.safeTrimOrNullString(value));
+                           attribute.addValue(DatatypeHelper.safeTrimOrNullString(value));
                         }
                     }
                 }
@@ -865,46 +864,46 @@ public class LdapDataConnector extends BaseDataConnector {
         return attributes;
     }
 
-    /**
-     * This stores the supplied attributes in the cache.
-     *
-     * @param resolutionContext <code>ResolutionContext</code>
-     * @param searchFiler the searchFilter that produced the attributes
-     * @param attributes <code>Map</code> of attribute ids to attributes
-     */
-    protected void setCachedAttributes(AttributeResolutionContext resolutionContext, String searchFiler,
-            Map<String, Attribute<?>> attributes) {
-        Map<String, Map<String, BaseAttribute>> results = null;
-        String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
-        if (cache.containsKey(principal)) {
-            results = cache.get(principal);
-        } else {
-            results = new HashMap<String, Map<String, BaseAttribute>>();
-            cache.put(principal, results);
-        }
-        results.put(searchFiler, attributes);
-    }
+//    /**
+//     * This stores the supplied attributes in the cache.
+//     *
+//     * @param resolutionContext <code>ResolutionContext</code>
+//     * @param searchFiler the searchFilter that produced the attributes
+//     * @param attributes <code>Map</code> of attribute ids to attributes
+//     */
+//    protected void setCachedAttributes(AttributeResolutionContext resolutionContext, String searchFiler,
+//            Map<String, Attribute> attributes) {
+//        Map<String, Map<String, Attribute>> results = null;
+//        String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
+//        if (cache.containsKey(principal)) {
+//            results = cache.get(principal);
+//        } else {
+//            results = new HashMap<String, Map<String, Attribute>>();
+//            cache.put(principal, results);
+//        }
+//        results.put(searchFiler, attributes);
+//    }
 
-    /**
-     * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
-     *
-     * @param resolutionContext <code>ResolutionContext</code>
-     * @param searchFilter the search filter the produced the attributes
-     *
-     * @return <code>Map</code> of attributes ids to attributes
-     */
-    protected Map<String, Attribute<?>> getCachedAttributes(AttributeResolutionContext resolutionContext,
-            String searchFilter) {
-        Map<String, BaseAttribute> attributes = null;
-        if (cacheResults) {
-            String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
-            if (cache.containsKey(principal)) {
-                Map<String, Map<String, BaseAttribute>> results = cache.get(principal);
-                attributes = results.get(searchFilter);
-            }
-        }
-        return attributes;
-    }
+//    /**
+//     * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
+//     *
+//     * @param resolutionContext <code>ResolutionContext</code>
+//     * @param searchFilter the search filter the produced the attributes
+//     *
+//     * @return <code>Map</code> of attributes ids to attributes
+//     */
+//    protected Map<String, Attribute> getCachedAttributes(AttributeResolutionContext resolutionContext,
+//            String searchFilter) {
+//        Map<String, Attribute> attributes = null;
+//        if (cacheResults) {
+//            String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
+//            if (cache.containsKey(principal)) {
+//                Map<String, Map<String, Attribute>> results = cache.get(principal);
+//                attributes = results.get(searchFilter);
+//            }
+//        }
+//        return attributes;
+//    }
 
 
 
