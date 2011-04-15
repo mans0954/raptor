@@ -7,6 +7,7 @@ package uk.ac.cardiff.raptor.event.expansion;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import net.shibboleth.idp.attribute.Attribute;
@@ -34,21 +35,23 @@ public class AttributeAssociationTest {
 
         AttributeResolutionContext context = new AttributeResolutionContext(null);
 
-        MockBaseDataConnector connector = new MockBaseDataConnector("foo", (Map<String, Attribute<?>>)null);
-        Assert.assertNull(connector.resolve(context));
-
         //String id, String ldapUrl, String ldapBaseDn, boolean startTls, int maxIdle, int initIdleCapacity
-        LdapDataConnector ldapConnector = new LdapDataConnector("ldap","","",false,100,100);
+        LdapDataConnector ldapConnector = new LdapDataConnector("ldap","zidman12.cf.ac.uk","o=people",false,10,10);
+        ldapConnector.setPrincipal("cn=srvreg1,o=users");
+        ldapConnector.setPrincipalCredential("1hk27be");
+        ldapConnector.setCacheResults(false);
+        Map<String, String> ldapProperties = new HashMap<String, String>();
+        ldapProperties.put("","");
+        ldapConnector.initialize();
 
-        HashMap<String, Attribute<?>> values = new HashMap<String, Attribute<?>>();
-        connector = new MockBaseDataConnector("foo", values);
-        Assert.assertNotNull(connector.resolve(context));
+        HashSet<Attribute<?>> attributes = new HashSet<Attribute<?>>();
+        Attribute<?> attribute = new Attribute<String>("CardiffIDManStatus");
+        attributes.add(attribute);
+        context.setRequestedAttributes(attributes);
+        //I think the ldap connector should take it form the context, as set above, not as a seperate set of attributes.
+        //ldapConnector.setReturnAttributes("CardiffIDManStatus");
 
-        Attribute<?> attribute = new Attribute<String>("foo");
-        values.put(attribute.getId(), attribute);
-
-        connector = new MockBaseDataConnector("foo", values);
-        Map<String, Attribute<?>> result = connector.resolve(context);
+        Map<String, Attribute<?>> result = ldapConnector.resolve(context);
         Assert.assertTrue(result.containsKey(attribute.getId()));
         Assert.assertEquals(result.get(attribute.getId()), attribute);
     }

@@ -160,6 +160,12 @@
         	<artifactId>spring-orm</artifactId>
         	<version>3.0.2.RELEASE</version>
         </dependency>
+
+        <dependency>
+        	<groupId>commons-pool</groupId>
+        	<artifactId>commons-pool</artifactId>
+        	<version>1.5.6</version>
+        </dependency>
     </dependencies>
 
         <!--
