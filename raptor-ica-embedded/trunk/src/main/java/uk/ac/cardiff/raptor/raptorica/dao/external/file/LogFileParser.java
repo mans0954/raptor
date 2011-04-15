@@ -115,7 +115,7 @@ public class LogFileParser extends BaseEventParser {
 				if (lineFilter != null) {
 					parseLine = lineFilter.parsableLine(inputLine);
 				}
-			//	log.debug("Parse [{}] - {}",parseLine,inputLine);
+				//log.debug("Parse [{}] - {}",parseLine,inputLine);
 				if (parseLine == true) {
 					StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
 					tokenizer.setIgnoreEmptyTokens(false);
@@ -128,9 +128,7 @@ public class LogFileParser extends BaseEventParser {
 							log.error("input column was not a string");
 						}
 					}
-
 					Event authE = (Event) this.createObject(eventType);
-
 					try {
 						populateField(allvalues, authE);
 					} catch (HeaderException e) {
@@ -158,7 +156,7 @@ public class LogFileParser extends BaseEventParser {
 			throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
 		}
 
-		// System.exit(1);
+		 System.exit(1);
 
 	}
 
@@ -187,8 +185,8 @@ public class LogFileParser extends BaseEventParser {
 			try {
 				if (!(header.getFieldNo() >= allvalues.size())) {
 					String value = getFieldValue(allvalues, header);
-					value = replace(value, header);
 					value = retain(value, header);
+					value = replace(value, header);
 					switch (header.getType()) {
 					case DATE:
 						addDate(value, header.getDateTimeFormat(), header.getTimeZone(), header.getFieldName(), authE);

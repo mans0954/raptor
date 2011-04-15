@@ -24,6 +24,8 @@
 	<bean id="dataAccessRegister" class="uk.ac.cardiff.raptor.raptorica.engine.DataAccessRegister">
 		<property name="parsingModules">
 			<list>
+				<!-- SHIB 1.3
+
 				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
@@ -42,17 +44,17 @@
                        </bean>
                     </property>
 				</bean>
-                
-                <!--  EZPROXY 
-                
+
+                --><!--  EZPROXY -->
+
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+                    <property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
                     <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/shib-access.2007-04-20.log
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-2011-04.log
                         </value>
                     </property>
                     <property name="format">
-                        <ref bean="shib13IDPAccessFileFormat" />
+                        <ref bean="ezProxyFileFormat" />
                     </property>
                     <property name="eventType">
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
@@ -63,15 +65,15 @@
                        </bean>
                     </property>
                 </bean>
-                -->
+
 
 
 				<!-- Shibboleth 2
-                
-                bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+
+                <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-2011-04.log
 						</value>
 					</property>
 					<property name="format">
@@ -103,18 +105,18 @@
 						ignored.
 
 					<property name="exclusionList">
-							<bean class="uk.ac.cardiff.raptor.raptorica.model.ExclusionList">
+							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList">
 								<property name="exclusionEntries">
 									<list>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.ExactMatchExclusionEntry">
+										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
 											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
 										</bean>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.ExactMatchExclusionEntry">
+										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
 											<property name="match" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
 										</bean>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.ExactMatchExclusionEntry">
+										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
 											<property name ="fieldName" value="requestBinding"/>
 											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
 										</bean>
@@ -122,8 +124,8 @@
 								</property>
 							</bean>
 					</property>
-				</bean>
-			--></list>
+				</bean>-->
+			</list>
 		</property>
 	</bean>
 
@@ -198,7 +200,7 @@
 			<value>|</value>
 		</property>
 	</bean>
-    
+
      <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
         <property name="headers">
             <list>
@@ -223,7 +225,7 @@
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
                     <property name="fieldName">
-                        <value>resourceHost</value>
+                        <value>resourceId</value>
                     </property>
                     <property name="fieldNo">
                         <value>7</value>
@@ -322,7 +324,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
-						<value>resourceHost</value>
+						<value>resourceId</value>
 					</property>
 					<property name="fieldNo">
 						<value>3</value>
@@ -401,18 +403,7 @@
 						<value>,</value>
 					</property>
 				</bean>
-				<!--<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
-					<property name="fieldName">
-						<value>nameIdentifier</value>
-					</property>
-					<property name="fieldNo">
-						<value>9</value>
-					</property>
-					<property name="fieldType">
-						<value>STRING</value>
-					</property>
-				</bean>
-				--><bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
 					<property name="fieldName">
 						<value>assertionId</value>
 					</property>
@@ -515,7 +506,7 @@
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
                     <property name="fieldName">
-                        <value>resourceHost</value>
+                        <value>resourceId</value>
                     </property>
                     <property name="fieldNo">
                         <value>6</value>
@@ -524,7 +515,12 @@
                         <value>URL</value>
                     </property>
                     <property name="regexRetain">
-                       <value>http%3a%2f%2f[^%]*</value>
+                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="url=" value=""/>
+                        </map>
                     </property>
                 </bean>
             </list>
