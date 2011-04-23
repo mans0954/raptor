@@ -18,6 +18,9 @@
 
 	<!--  Import the setup for the web interface -->
 	 <import resource="web-setup.xml" />
+     
+     <!--  Import the setup of the front page dashboard statistics -->
+     <import resource="dashboard-statistics.xml"/>
 
 
 

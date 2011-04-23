@@ -24,9 +24,12 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
  */
 public class CachedStartStatistics{
 
-	static Logger log = LoggerFactory.getLogger(CachedStartStatistics.class);
+        /** Class logger */
+	private final Logger log = LoggerFactory.getLogger(CachedStartStatistics.class);
 
+	/** The cached statistic */
 	private StartStatistics cached;
+	
 	
 	public CachedStartStatistics(){
 	    cached = new StartStatistics();

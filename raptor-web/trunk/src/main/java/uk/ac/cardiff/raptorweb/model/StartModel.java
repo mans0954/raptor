@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 
 /**
  * @author philsmart
@@ -35,9 +36,19 @@ public class StartModel implements Serializable{
 	private TimeRange statsRangeSelector;
 
 	public enum TimeRange{TODAY,LASTWEEK,LASTMONTH,LASTYEAR}
+	
+	public enum EventType{
+	        /** A Shibboleth Authentication Event Type*/
+	        SHIBBOLETH_AUTHENTICATION,
+	        /** An Ezproxy Authentication Event Type */
+	        EZPROXY_AUTHENTICATION;	       
+	}
+	    
+	private EventType eventType;
 
 	public StartModel(){
 	    statsRangeSelector = TimeRange.TODAY;
+	    eventType = EventType.SHIBBOLETH_AUTHENTICATION;
 	}
 
 
@@ -75,6 +86,17 @@ public class StartModel implements Serializable{
 	public String getStatsRangeSelectorString() {
 	    return statsRangeSelector.toString();
 	}
+	
+	public String getEventTypeString() {
+            return eventType.toString();
+        }
+	
+	public void setEventTypeString(String eventTypeString){
+            for (EventType type : EventType.values()){
+                if (type.toString().equals(eventTypeString))
+                    eventType = type;
+            }
+        }
 
 	public void setStartStatistics(StartStatistics startStatistics) {
 	    this.startStatistics = startStatistics;
@@ -83,6 +105,16 @@ public class StartModel implements Serializable{
 	public StartStatistics getStartStatistics() {
 	    return startStatistics;
 	}
+
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+
+    public EventType getEventType() {
+        return eventType;
+    }
 
 
 

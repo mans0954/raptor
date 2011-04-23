@@ -160,12 +160,7 @@
 	</build>
 	<dependencies>
 
-		<!-- loggin -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.1</version>
-		</dependency>
+		
 		<!-- Myfaces <dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-api</artifactId>
 			<version>${myfaces.version}</version> <scope>compile</scope> </dependency>
 			<dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-impl</artifactId>
@@ -558,6 +553,10 @@
 					<artifactId>xercesImpl</artifactId>
 					<groupId>xerces</groupId>
 				</exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
 			</exclusions>
 		</dependency>
 
@@ -570,6 +569,10 @@
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
 					<groupId>org.slf4j</groupId>
 				</exclusion>
 			</exclusions>
