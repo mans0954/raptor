@@ -34,6 +34,19 @@
 							<a4j:support ajaxSingle="true" event="onviewactivated"
 								action="refreshStartStats" reRender="statsSelectionForm, startTables, startGraph,shortStats" />
 						</rich:inplaceSelect>
+						
+						<h:outputText style="font-size:150%"
+                            value=" For" />
+						
+						
+						<rich:inplaceSelect id="eventTypeSelector"
+                            value="#{flowScope.websession.startmodel.eventTypeString}"
+                            style="font-size:150%">
+                            <f:selectItem itemLabel="Shibboleth" itemValue="SHIBBOLETH_AUTHENTICATION" />
+                            <f:selectItem itemLabel="Ezproxy" itemValue="EZPROXY_AUTHENTICATION" />
+                            <a4j:support ajaxSingle="true" event="onviewactivated"
+                                action="refreshStartStats" reRender="statsSelectionForm, startTables, startGraph,shortStats" />
+                        </rich:inplaceSelect>
 
 
 					</h:panelGrid>

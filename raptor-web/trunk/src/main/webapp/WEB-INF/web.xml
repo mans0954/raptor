@@ -40,7 +40,7 @@
 	</context-param>
 
 
-	<!-- Use JSF view templates saved as *.jspx, for use with Facelets -->
+	<!-- Use xhtml view templates saved as *.xhtml, for use with Facelets -->
 	<context-param>
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>

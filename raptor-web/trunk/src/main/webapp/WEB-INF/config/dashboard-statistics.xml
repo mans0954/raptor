@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- All these dashboard statistics are computed for the time ranges: TODAY, LASTWEEK, LASTMONTH and LASTYEAR -->
+
+    <util:list id="dashboardStatisticsList">
+        <bean id="shibNoAuthentications" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>numberOfAuthenticationsPer</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+        <bean id="shibNoUniqueUsers" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>numberOfUnqiueUsersPer</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+        <bean id="shibTop5Resources" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>top5Resources</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+        <bean id="shibBottom5Resources" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>bottom5Resources</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+        <bean id="shibNoAuthenticationsOverInterval" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>numberOfAuthenticationsPerIntervalNumber</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+        <bean id="shibNoUniqueAuthenticationsPerServiceProvider" class="uk.ac.cardiff.raptorweb.model.DashboardStatistic">
+            <property name="statisticalUnitName">
+                <value>numberOfUniqueAuthenticationsPerSP</value>
+            </property>
+            <property name="enabled">
+                <value>true</value>
+            </property>
+            <property name="eventType">
+                <value>SHIBBOLETH_AUTHENTICATION</value>
+            </property>
+        </bean>
+    </util:list>
+
+
+
+</beans>
