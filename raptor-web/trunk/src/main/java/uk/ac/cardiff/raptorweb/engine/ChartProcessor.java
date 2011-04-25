@@ -61,7 +61,9 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
  *         Takes a chart from the MUA, and wraps it inside the current graph view technologies (trinidad, JFreeChart) graph model
  */
 public class ChartProcessor {
-    static Logger log = LoggerFactory.getLogger(ChartProcessor.class);
+    
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(ChartProcessor.class);
 
     /* the location of the directory within the application that reports are saved to */
     private Resource saveDirectory;
@@ -435,7 +437,7 @@ public class ChartProcessor {
 	}
 	tableModel.constructTableForView();
 
-	// log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
+	log.debug("Raptor Table model constructed, with {} rows",tableModel.getRowList().size());
 
 	return tableModel;
     }

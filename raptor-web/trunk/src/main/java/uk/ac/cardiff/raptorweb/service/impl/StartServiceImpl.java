@@ -14,12 +14,10 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.CachedStartStatistics;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
-import uk.ac.cardiff.raptorweb.model.DashboardStatistic;
 import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
 import uk.ac.cardiff.raptorweb.model.RaptorJFreeChartModel;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
@@ -27,135 +25,126 @@ import uk.ac.cardiff.raptorweb.model.StartModel;
 import uk.ac.cardiff.raptorweb.model.StartStatistics;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.model.StartModel.TimeRange;
+import uk.ac.cardiff.raptorweb.model.dashboard.AbstractDashboardStatistic;
+import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticException;
 import uk.ac.cardiff.raptorweb.service.StartService;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class StartServiceImpl implements StartService {
-    //TODO start or dashboard stats should not be hard coded
-    
+    // TODO start or dashboard stats should not be hard coded
+
     /** Class Logger */
     private final Logger log = LoggerFactory.getLogger(StartServiceImpl.class);
 
-    /** The engine that is delegated to for all common internal functions of RaptorWeb*/
+    /** The engine that is delegated to for all common internal functions of RaptorWeb */
     private RaptorWebEngine webEngine;
-    
-    private List<DashboardStatistic> dashboardStatistics;
-    
+
+    /** A <code>List</code> of all the dashboard statistics to compute */
+    private List<AbstractDashboardStatistic> dashboardStatistics;
 
     /** holds the statistics for the front page gathered from the background worker thread */
     private CachedStartStatistics cachedStartModelTodayShib;
     private CachedStartStatistics cachedStartModelLastWeekShib;
     private CachedStartStatistics cachedStartModelLastMonthShib;
     private CachedStartStatistics cachedStartModelLastYearShib;
-    
+
     private CachedStartStatistics cachedStartModelTodayEzproxy;
     private CachedStartStatistics cachedStartModelLastWeekEzproxy;
     private CachedStartStatistics cachedStartModelLastMonthEzproxy;
     private CachedStartStatistics cachedStartModelLastYearEzproxy;
 
-    /** The chart processor which converts Aggregator Charts into RaptorWeb charts for outputting */
-    private ChartProcessor chartProcessor;
-
     public StartServiceImpl() {
-	cachedStartModelTodayShib = new CachedStartStatistics();
-	cachedStartModelLastWeekShib = new CachedStartStatistics();
-	cachedStartModelLastMonthShib = new CachedStartStatistics();
-	cachedStartModelLastYearShib = new CachedStartStatistics();
-	
-	cachedStartModelTodayEzproxy = new CachedStartStatistics();
-	cachedStartModelLastWeekEzproxy = new CachedStartStatistics();
-	cachedStartModelLastMonthEzproxy = new CachedStartStatistics();
-	cachedStartModelLastYearEzproxy = new CachedStartStatistics();
+        cachedStartModelTodayShib = new CachedStartStatistics();
+        cachedStartModelLastWeekShib = new CachedStartStatistics();
+        cachedStartModelLastMonthShib = new CachedStartStatistics();
+        cachedStartModelLastYearShib = new CachedStartStatistics();
+
+        cachedStartModelTodayEzproxy = new CachedStartStatistics();
+        cachedStartModelLastWeekEzproxy = new CachedStartStatistics();
+        cachedStartModelLastMonthEzproxy = new CachedStartStatistics();
+        cachedStartModelLastYearEzproxy = new CachedStartStatistics();
     }
 
     public void generateStatisticsBackground() {
-	log.info("Generating background statistics for the start page, using {}", this);
-	CurrentTimeRange currentTimeRange = getTimeRanges();
+        log.info("Generating background statistics for the start page, using {}", this);
+        CurrentTimeRange currentTimeRange = getTimeRanges();
 
-	StatisticParameters.EventType shibEventType = StatisticParameters.EventType.SHIBBOLETH_AUTHENTICATION;
-	StatisticParameters.EventType ezproxyEventType = StatisticParameters.EventType.EZPROXY_AUTHENTICATION;
-	
-	log.debug("Background start page worker getting today");
-	generateStatistics(cachedStartModelTodayShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday,shibEventType);
-	generateStatistics(cachedStartModelTodayEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday,ezproxyEventType);
-	log.debug("Background start page worker getting last week");
-	generateStatistics(cachedStartModelLastWeekShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek,shibEventType);
-	generateStatistics(cachedStartModelLastWeekEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek,ezproxyEventType);
-	log.debug("Background start page worker getting last month");
-	generateStatistics(cachedStartModelLastMonthShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth,shibEventType);
-	generateStatistics(cachedStartModelLastMonthEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth,ezproxyEventType);
-	log.debug("Background start page worker getting last year");
-	generateStatistics(cachedStartModelLastYearShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear,shibEventType);
-	generateStatistics(cachedStartModelLastYearEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear,ezproxyEventType);
+        StatisticParameters.EventType shibEventType = StatisticParameters.EventType.SHIBBOLETH_AUTHENTICATION;
+        StatisticParameters.EventType ezproxyEventType = StatisticParameters.EventType.EZPROXY_AUTHENTICATION;
 
-	log.info("Generating background statistics for the start page...done");
+        log.debug("Background start page worker getting today");
+        generateStatistics(cachedStartModelTodayShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, shibEventType);
+        generateStatistics(cachedStartModelTodayEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, ezproxyEventType);
+        log.debug("Background start page worker getting last week");
+        generateStatistics(cachedStartModelLastWeekShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, shibEventType);
+        generateStatistics(cachedStartModelLastWeekEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, ezproxyEventType);
+        log.debug("Background start page worker getting last month");
+        generateStatistics(cachedStartModelLastMonthShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, shibEventType);
+        generateStatistics(cachedStartModelLastMonthEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, ezproxyEventType);
+        log.debug("Background start page worker getting last year");
+        generateStatistics(cachedStartModelLastYearShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, shibEventType);
+        generateStatistics(cachedStartModelLastYearEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, ezproxyEventType);
+
+        log.info("Generating background statistics for the start page...done");
     }
 
     @Override
     public void generateStatistics(WebSession websession) {
-	log.debug("Getting start statistics for {} from {}", websession.getStartmodel().getStatsRangeSelector(), this);
+        log.debug("Getting start statistics for {} from {}", websession.getStartmodel().getStatsRangeSelector(), this);
 
-	if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
-	        websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-	    websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShib.getCached());
-	if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-	    websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShib.getCached());
-	if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-	    websession.getStartmodel().setStartStatistics(cachedStartModelTodayShib.getCached());
-	if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-	    websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShib.getCached());
-	
-	if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShib.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShib.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayShib.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShib.getCached());
+
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
             websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
             websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
             websession.getStartmodel().setStartStatistics(cachedStartModelTodayEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
-                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
             websession.getStartmodel().setStartStatistics(cachedStartModelLastYearEzproxy.getCached());
 
-	// so we could output the name of the attached MUA
-	Capabilities capabilities = getAttachedCapabilities();
-	if (capabilities != null) {
-	    websession.getStartmodel().setAttachedMUACapabilities(capabilities);
+        // so we could output the name of the attached MUA
+        Capabilities capabilities = getAttachedCapabilities();
+        if (capabilities != null) {
+            websession.getStartmodel().setAttachedMUACapabilities(capabilities);
 
-	}
+        }
     }
 
     private CurrentTimeRange getTimeRanges() {
-	long currentTimeInMS = System.currentTimeMillis();
-	DateTime currentDateTime = new DateTime(currentTimeInMS);
-	DateTime today = new DateTime(currentTimeInMS);
-	today = today.minusHours(today.getHourOfDay());
-	today = today.minusMinutes(today.getMinuteOfHour());
-	today = today.minusSeconds(today.getSecondOfMinute());
-	DateTime oneMonthPrevious = currentDateTime.minusMonths(1);
-	DateTime oneYearPrevious = currentDateTime.minusYears(1);
-	DateTime oneWeekPrevious = currentDateTime.minusWeeks(1);
+        long currentTimeInMS = System.currentTimeMillis();
+        DateTime currentDateTime = new DateTime(currentTimeInMS);
+        DateTime today = new DateTime(currentTimeInMS);
+        today = today.minusHours(today.getHourOfDay());
+        today = today.minusMinutes(today.getMinuteOfHour());
+        today = today.minusSeconds(today.getSecondOfMinute());
+        DateTime oneMonthPrevious = currentDateTime.minusMonths(1);
+        DateTime oneYearPrevious = currentDateTime.minusYears(1);
+        DateTime oneWeekPrevious = currentDateTime.minusWeeks(1);
 
-	CurrentTimeRange currentRange = new CurrentTimeRange();
-	currentRange.startMonth = oneMonthPrevious;
-	currentRange.startToday = today;
-	currentRange.startWeek = oneWeekPrevious;
-	currentRange.startYear = oneYearPrevious;
-	currentRange.currentTime = currentDateTime;
+        CurrentTimeRange currentRange = new CurrentTimeRange();
+        currentRange.startMonth = oneMonthPrevious;
+        currentRange.startToday = today;
+        currentRange.startWeek = oneWeekPrevious;
+        currentRange.startYear = oneYearPrevious;
+        currentRange.currentTime = currentDateTime;
 
-	log.debug("Start Page, TODAY [start:{}] [end:{}]", today, currentDateTime);
-	log.debug("Start Page, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
-	log.debug("Start Page, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
-	log.debug("Start Page, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
+        log.debug("Start Page, TODAY [start:{}] [end:{}]", today, currentDateTime);
+        log.debug("Start Page, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
+        log.debug("Start Page, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
+        log.debug("Start Page, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
 
-	return currentRange;
+        return currentRange;
 
     }
 
@@ -164,158 +153,97 @@ public class StartServiceImpl implements StartService {
      */
     private void generateStatistics(StartStatistics startstats, DateTime currentDateTime, DateTime chosenStartTime, StatisticParameters.EventType eventType) {
 
-	List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
-	log.debug("Found {} statistics", statisticalUnits.size());
-	// check for statistical units named numberOfAuthenticationsPer, numberOfUnqiueUsersPer, hence the MUA must support this
-	StatisticalUnitInformation numberOfAuthenticationsPerUnitInformation = null;
-	StatisticalUnitInformation numberOfUniqueUsersPerUnitInformation = null;
-	StatisticalUnitInformation topFiveResources = null;
-	StatisticalUnitInformation bottomFiveResources = null;
-	StatisticalUnitInformation numberOfAuthenticationsPerIntervalNumber = null;
-	StatisticalUnitInformation numberOfUniqueAuthenticationsPerSP =null;
-	for (StatisticalUnitInformation unit : statisticalUnits) {
-	    if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
-		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPer"))
-		    numberOfAuthenticationsPerUnitInformation = unit;
-		if (unit.getStatisticParameters().getUnitName().equals("numberOfUnqiueUsersPer"))
-		    numberOfUniqueUsersPerUnitInformation = unit;
-		if (unit.getStatisticParameters().getUnitName().equals("top5Resources"))
-		    topFiveResources = unit;
-		if (unit.getStatisticParameters().getUnitName().equals("bottom5Resources"))
-		    bottomFiveResources = unit;
-		if (unit.getStatisticParameters().getUnitName().equals("numberOfAuthenticationsPerIntervalNumber"))
-		    numberOfAuthenticationsPerIntervalNumber = unit;
-		if (unit.getStatisticParameters().getUnitName().equals("numberOfUniqueAuthenticationsPerSP"))
-		    numberOfUniqueAuthenticationsPerSP = unit;
-	    }
-	}
-	log.debug("Using statistic {} to find number of authentications per", numberOfAuthenticationsPerUnitInformation);
-	log.debug("Using statistic {} to find number of unique users per", numberOfUniqueUsersPerUnitInformation);
-	log.debug("Using statistic {} to find number top five resources", topFiveResources);
-	log.debug("Using statistic {} to find number bottom five resources", topFiveResources);
-	log.debug("Using statistic {} to find number of authentication in 12 intervals", numberOfAuthenticationsPerIntervalNumber);
-	log.debug("Using statistic {} to find number of unique authentication per service provider", numberOfUniqueAuthenticationsPerSP);
+        List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
+        log.info("Dashboard statistics are to be computed from a possible {} MUA statistics", statisticalUnits.size());
 
-	AggregatorGraphModel numberOfAuthentications = null;
-	if (numberOfAuthenticationsPerUnitInformation != null) {
-	    numberOfAuthenticationsPerUnitInformation.getStatisticParameters().setEndTime(currentDateTime);
-	    numberOfAuthenticationsPerUnitInformation.getStatisticParameters().setStartTime(chosenStartTime);
-	    numberOfAuthenticationsPerUnitInformation.getStatisticParameters().setEventType(eventType);
-	    numberOfAuthentications = webEngine.updateAndInvokeStatisticalUnit(numberOfAuthenticationsPerUnitInformation);
-	}
+        int computed=0;
+        int toCompute =0;
+        for (AbstractDashboardStatistic dashboardStatistic : dashboardStatistics) {
+            if (dashboardStatistic.isEnabled() && dashboardStatistic.getEventType()==eventType) {
+                toCompute++;
+                for (StatisticalUnitInformation unit : statisticalUnits) {
+                    if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
+                        if (unit.getStatisticParameters().getUnitName().equals(dashboardStatistic.getStatisticalUnitName())) {
+                            unit.getStatisticParameters().setEndTime(currentDateTime);
+                            unit.getStatisticParameters().setStartTime(chosenStartTime);
+                            unit.getStatisticParameters().setEventType(dashboardStatistic.getEventType());
+                            log.debug("Invoking statistic {} for the dasboard page",unit.getStatisticParameters().getUnitName());
+                            AggregatorGraphModel model = webEngine.updateAndInvokeStatisticalUnit(unit);
+                            try {
+                                Object result = dashboardStatistic.getProcessedStatistic(model,unit);
+                                cacheStatistic(startstats, result, dashboardStatistic.getDashboardStatisticType());
+                                computed++;
+                            } catch (DashboardStatisticException e) {
+                                log.warn("Dashboard statistic failed to process statistic, {}", e.getMessage());
+                            } catch (ClassCastException e) {
+                                log.error("Unable to set cached statistic {}", e.getMessage());
+                            }
+                        }
+                    }
 
-	AggregatorGraphModel numberOfUniqueUsers = null;
-	if (numberOfUniqueUsersPerUnitInformation != null) {
-	    numberOfUniqueUsersPerUnitInformation.getStatisticParameters().setEndTime(currentDateTime);
-	    numberOfUniqueUsersPerUnitInformation.getStatisticParameters().setStartTime(chosenStartTime);
-	    numberOfUniqueUsersPerUnitInformation.getStatisticParameters().setEventType(eventType);
-	    numberOfUniqueUsers = webEngine.updateAndInvokeStatisticalUnit(numberOfUniqueUsersPerUnitInformation);
-
-	}
-
-	AggregatorGraphModel topFiveResourcesModel = null;
-	if (topFiveResources != null) {
-	    topFiveResources.getStatisticParameters().setEndTime(currentDateTime);
-	    topFiveResources.getStatisticParameters().setStartTime(chosenStartTime);
-	    topFiveResources.getStatisticParameters().setEventType(eventType);
-	    topFiveResourcesModel = webEngine.updateAndInvokeStatisticalUnit(topFiveResources);
-	}
-
-
-	AggregatorGraphModel numberOfAuthenticationsPerIntervalNumberModel = null;
-	if (numberOfAuthenticationsPerIntervalNumber != null) {
-	    numberOfAuthenticationsPerIntervalNumber.getStatisticParameters().setEndTime(currentDateTime);
-	    numberOfAuthenticationsPerIntervalNumber.getStatisticParameters().setStartTime(chosenStartTime);
-	    numberOfAuthenticationsPerIntervalNumber.getStatisticParameters().setEventType(eventType);
-	    numberOfAuthenticationsPerIntervalNumberModel = webEngine.updateAndInvokeStatisticalUnit(numberOfAuthenticationsPerIntervalNumber);
-	}
-
-	AggregatorGraphModel uniqueAuthsPerSPModel =null;
-	if (numberOfUniqueAuthenticationsPerSP !=null){
-	    numberOfUniqueAuthenticationsPerSP.getStatisticParameters().setEndTime(currentDateTime);
-	    numberOfUniqueAuthenticationsPerSP.getStatisticParameters().setStartTime(chosenStartTime);
-	    numberOfUniqueAuthenticationsPerSP.getStatisticParameters().setEventType(eventType);
-	    uniqueAuthsPerSPModel = webEngine.updateAndInvokeStatisticalUnit(numberOfUniqueAuthenticationsPerSP);
-	}
-
-	// Now set the statistics values ------
-
-	if (numberOfAuthentications != null && numberOfUniqueUsers != null && topFiveResourcesModel != null && numberOfAuthenticationsPerIntervalNumberModel != null && uniqueAuthsPerSPModel!=null) {
-	    if (numberOfAuthentications != null) {
-		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfAuthentications);
-		//should only have one series, and one row
-		if (table.getTableSeries().size()==1){
-        		if (table.getTableSeries().get(0).getRows().size() == 1) {
-        		    if (table.getTableSeries().get(0).getRows().get(0).getValue() instanceof Double) {
-        			startstats.setNumberOfAuthenticationsPer(((Double) table.getTableSeries().get(0).getRows().get(0).getValue()));
-        		    }
-        		}
-		}
-	    }
-
-	    if (numberOfUniqueUsers != null) {
-		if (numberOfUniqueUsers != null) {
-		    RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(numberOfUniqueUsers);
-		    // there should only be one series, and each result shows one distinct value, so number of results show number of distinct values
-		    if (table.getTableSeries().size()==1){
-        		    if (table.getTableSeries().get(0).getRows() != null) {
-        			startstats.setNumberOfUniqueAuthenticationsPer(table.getTableSeries().get(0).getRows().size());
-        		    }
-		    }
-		}
-	    }
-
-	    if (topFiveResourcesModel != null) {
-		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(topFiveResourcesModel);
-		startstats.setTopFiveResouces(table);
-	    }
-
-	    if (numberOfAuthenticationsPerIntervalNumberModel != null) {
-		RaptorJFreeChartModel jfreeChart = getChartProcessor().constructJFreeGraph(GraphPresentation.FRONT,ChartType.AREA,numberOfAuthenticationsPerIntervalNumberModel,1270,350,(chosenStartTime.toString("ddMMyyyHH-mm")+"-"+currentDateTime.toString("ddMMyyyHH-mm")));
-		startstats.setHeadlineGraph(jfreeChart);
-	    }
-	    if (uniqueAuthsPerSPModel != null) {
-		RaptorTableChartModel table = getChartProcessor().constructRaptorTableChartModel(uniqueAuthsPerSPModel);
-		startstats.setTopFiveUniqueUsersPerSP(table);
-	    }
-
-	    // set update time on the stats
-	    startstats.setAccurateOf(new DateTime(System.currentTimeMillis()));
-	} else {
-	    log.warn("Did not fetch all statistics for dates {} and {}", chosenStartTime, currentDateTime);
-	}
+                }
+            }
+        }
+        log.info("{} out of a possible {} dashboard statistics computed",computed,toCompute);
+        startstats.setAccurateOf(new DateTime(System.currentTimeMillis()));
 
     }
 
-    private List getStatisticalUnits() {
-	return webEngine.getStatisticalUnits();
+    private void cacheStatistic(StartStatistics startstats, Object result, StartStatistics.StartStatisticType statisticType) throws ClassCastException  {
+        log.debug("Setting cached start statistic, for type {}",statisticType);
+        
+        if (statisticType==null){
+            log.error("StatisticType not set for this statistic");
+            return;
+        }
+        
+        switch (statisticType) {
+            case NO_AUTHS:
+                startstats.setNumberOfAuthenticationsPer(((Double) result).doubleValue());
+                break;
+
+            case NO_UNIQUE_AUTHS:
+                startstats.setNumberOfUniqueAuthenticationsPer(((Double) result).doubleValue());
+                break;
+
+            case TOP_FIVE:
+                startstats.setTopFiveResouces((RaptorTableChartModel) result);
+                break;
+
+            case HEADLINE_GRAPH:
+                startstats.setHeadlineGraph((RaptorJFreeChartModel) result);
+                break;
+
+            case TOP_FIVE_UNIQUE:
+                startstats.setTopFiveUniqueUsersPerSP((RaptorTableChartModel) result);
+                break;
+            default:
+                log.error("Statistic could not be cached, probably the wrong statisticType set");
+        }
+
+    }
+
+    private List<StatisticalUnitInformation> getStatisticalUnits() {
+        return webEngine.getStatisticalUnits();
     }
 
     public void setWebEngine(RaptorWebEngine webEngine) {
-	this.webEngine = webEngine;
+        this.webEngine = webEngine;
     }
 
     public RaptorWebEngine getWebEngine() {
-	return webEngine;
+        return webEngine;
     }
 
     public Capabilities getAttachedCapabilities() {
-	return webEngine.getAttachedCapabilities();
+        return webEngine.getAttachedCapabilities();
     }
 
-    public void setChartProcessor(ChartProcessor chartProcessor) {
-	this.chartProcessor = chartProcessor;
-    }
-
-    public ChartProcessor getChartProcessor() {
-	return chartProcessor;
-    }
-
-    public void setDashboardStatistics(List<DashboardStatistic> dashboardStatistics) {
+    public void setDashboardStatistics(List<AbstractDashboardStatistic> dashboardStatistics) {
         this.dashboardStatistics = dashboardStatistics;
     }
 
-    public List<DashboardStatistic> getDashboardStatistics() {
+    public List<AbstractDashboardStatistic> getDashboardStatistics() {
         return dashboardStatistics;
     }
 

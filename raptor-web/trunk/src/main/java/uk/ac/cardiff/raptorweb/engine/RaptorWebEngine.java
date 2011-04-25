@@ -102,7 +102,7 @@ public class RaptorWebEngine {
      *
      * @return List of statistical units, as <code>StatisticalUnitInformation</code>
      */
-    public List getStatisticalUnits() {
+    public List<StatisticalUnitInformation> getStatisticalUnits() {
 	/* get the statistical methods from the currently attached MUA */
 	if (currentlyAttachedCapabilities!=null && currentlyAttachedCapabilities.isError()==false){
 	    return currentlyAttachedCapabilities.getStatisticalServices();
@@ -127,7 +127,7 @@ public class RaptorWebEngine {
 	}
 
 	//return an empty list so as not confuse the view.
-	return new ArrayList();
+	return new ArrayList<StatisticalUnitInformation>();
     }
 
     /**
