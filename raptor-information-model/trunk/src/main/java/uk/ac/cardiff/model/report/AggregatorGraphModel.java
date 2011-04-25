@@ -13,12 +13,19 @@ import java.util.List;
 
 public class AggregatorGraphModel implements Serializable{
 
-    	private static final long serialVersionUID = 5372664739350074383L;
+    	/** Class logger */
+        private static final long serialVersionUID = 5372664739350074383L;
     
+    	/** The list of <code>String</code> labels for the groups*/
 	private List<String> groupLabels;
+	
+	/** The list of <code>String</code> labels for each series*/
 	private List<String> seriesLabels;
+	
+	/** The list of <code>Double</code> values assigned to each series */
 	private List<List<Double>> chartValues;
 
+	/** A class that holds presentation information for this graph model*/
 	private Presentation presentation;
 
 	public AggregatorGraphModel(){

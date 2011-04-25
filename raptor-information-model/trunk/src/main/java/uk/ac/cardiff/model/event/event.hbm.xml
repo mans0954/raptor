@@ -52,6 +52,7 @@
 
                 <property name="requesterIp" column="requesterIp" type="string" />
                 <property name="sessionId" column="sessionId" type="string" />
+                <property name="hashCode" column="hashCode" type="integer" index="hashcode_index" />
 
             </joined-subclass>
 

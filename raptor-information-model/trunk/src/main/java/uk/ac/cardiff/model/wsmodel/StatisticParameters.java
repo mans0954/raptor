@@ -57,18 +57,40 @@ public class StatisticParameters implements Serializable{
 
     /** either system or user types */
     public enum StatisticType {
-	/*
+	/**
 	 * A statistic for use by the USER. Possibly removed in the future, in favour of individual
 	 * user based statistics
 	 */
 	 USER,
-	 /*
+	 /**
 	  * A statistic for use by the system level processes, e.g. to generate dashboard
 	  * statistics
 	  */
 	 SYSTEM};
 
+    /** The type of statistic */
     private StatisticType type;
+    
+    //TODO should be constructed in XML
+    /** The type of event from the information model this statistic should be performed over*/
+    public enum EventType{
+        /** A Shibboleth Authentication Event Type*/
+        SHIBBOLETH_AUTHENTICATION("ShibbolethIdpAuthenticationEvent"),
+        /** An Ezproxy Authentication Event Type */
+        EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent");
+        
+        private String hibernateSimpleClassName;
+        
+        private EventType(String hibernateSimpleClassName){
+            this.hibernateSimpleClassName = hibernateSimpleClassName;
+        }
+        
+        public String getHibernateSimpleClassName(){
+            return hibernateSimpleClassName;
+        }
+    }
+    
+    private EventType eventType;
 
 
     /* Configures the parameters used to view a graphical representation*/
@@ -344,6 +366,14 @@ public class StatisticParameters implements Serializable{
 
     public List<Series> getSeries() {
 	return series;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public EventType getEventType() {
+        return eventType;
     }
 
 
