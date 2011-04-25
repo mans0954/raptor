@@ -28,22 +28,39 @@ public class Header {
 
 	public enum Type {STRING, DATE, INTEGER, STRINGLIST, URL}
 
+	/** The name of the field this header matches to in the internal <code>Event</code> model*/
 	private String fieldName;
+	
+	/** The index in the currently tokenized line this header matches to*/
 	private int fieldNo;
 
 	/** Used to combined two fields together */
 	private int[] additionalFieldNos;
 
-
+	/** The type of field, based on the Type enum */
 	private Type fieldType;
+	
+	/** A map of regular expressions and replacement values*/
 	private Map<String,String> regexReplaceAll;
+	
+	/** A regular expression that matches to a substring, which if found is kept as the value for this header*/
 	private String regexRetain;
+	
+	/** Whether the <code>regexRetain</code> should be case insensitive. Default is false*/
+	private boolean regexRetainCaseInsensitive;
 
-	//only needed if the object type is a date
+	/** If this header has a <code>DATE</code> type, this represents
+	 * the format the value of the header should be parsed with*/
 	private String dateTimeFormat;
+	
+	/** Timezone information*/
 	private String timeZone;
 
 	private String listDelimeter;
+	
+	public Header(){
+		regexRetainCaseInsensitive=false;
+	}
 
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
@@ -138,6 +155,12 @@ public class Header {
 	 */
 	public int[] getAdditionalFieldNos() {
 	    return additionalFieldNos;
+	}
+	public void setRegexRetainCaseInsensitive(boolean regexRetainCaseInsensitive) {
+		this.regexRetainCaseInsensitive = regexRetainCaseInsensitive;
+	}
+	public boolean isRegexRetainCaseInsensitive() {
+		return regexRetainCaseInsensitive;
 	}
 
 

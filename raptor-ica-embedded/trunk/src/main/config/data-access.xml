@@ -65,7 +65,7 @@
                        </bean>
                     </property>
                 </bean>
-
+                
 
 
 				<!-- Shibboleth 2
@@ -84,8 +84,8 @@
 					</property>
 					<property name="printParsingPosition"><value>true</value></property>
 
-					  The inclusion list is an OR of field name, value pairs that are loaded by the parser
-					 all other fields are ignored, this is run before the exclusion list
+				 	  The inclusion list is an OR of field name, value pairs that are loaded by the parser
+					 all other fields are ignored, this is run before the exclusion list 
 					<property name="inclusionList">
 							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList">
 								<property name="inclusionEntries">
@@ -99,10 +99,10 @@
 							</bean>
 					</property>
 
-
-						exclude entries, is an OR list of <field name, field value> pairs
+                        
+					 	exclude entries, is an OR list of <field name, field value> pairs
 						that are checked for when parsing , if oneof them exists, that entry is
-						ignored.
+						ignored. 
 
 					<property name="exclusionList">
 							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList">
@@ -124,6 +124,7 @@
 								</property>
 							</bean>
 					</property>
+                    
 				</bean>-->
 			</list>
 		</property>
@@ -131,7 +132,7 @@
 
 	<!-- Create the entry handler -->
 	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.raptorica.model.MemoryEntryHandler"></bean>
-	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.raptorica.model.PersistantEntryHandler">
+	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
@@ -515,7 +516,10 @@
                         <value>URL</value>
                     </property>
                     <property name="regexRetain">
-                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*</value>
+                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*</value>
+                    </property>
+                    <property name="regexRetainCaseInsensitive">
+                        <value>true</value>
                     </property>
                     <property name="regexReplaceAll">
                         <map>

@@ -90,7 +90,7 @@ public class LogFileParser extends BaseEventParser {
 		super();
 	}
 
-	@Override
+
 	public void parse() throws ParserException {
 		log.info("parsing: {} instance: {}", logfile, this);
 
@@ -134,9 +134,10 @@ public class LogFileParser extends BaseEventParser {
 					} catch (HeaderException e) {
 						log.error("ERROR: trying to access field {}, when only {} fields in log file", e.getHeaderNo(), allvalues.size());
 					}
-					//log.debug("Event: " + authE.toString());
+					
 					boolean shouldBeIncluded = isIncluded(authE);
 					boolean preventAdd = isExcluded(authE);
+					//log.debug("Included {}, Veoted {}, Event: {}",new Object[]{shouldBeIncluded,preventAdd,authE.toString()});
 
 					if (shouldBeIncluded && !preventAdd) {
 						entryHandler.addEntry(authE);
@@ -148,8 +149,8 @@ public class LogFileParser extends BaseEventParser {
 			in.close();
 
 			log.debug("done, walked {} lines", lineCount);
-			log.debug("LogFileParser currently has: {} entries, latestEntry: {}", getEntryHandler().getEntries().size(), getEntryHandler().getLatestEntryTime());
-			entryHandler.endTransaction();
+			log.debug("LogFileParser currently has: {} entries, latestEntry: {}", entryHandler.getNumberOfEntries(), entryHandler.getLatestEntryTime());
+			//entryHandler.endTransaction();
 		} catch (MalformedURLException e1) {
 			throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
 		} catch (IOException e2) {
@@ -246,7 +247,7 @@ public class LogFileParser extends BaseEventParser {
 	}
 
 	/**
-	 * Replace substrings from <code>value</code> with the given strings in the <code>header</code>
+	 * Replace substrings from <code>value</code> with the given strings in <code>header</code>
 	 * that match the regular expression(s) in the regexReplaceAll from the <code>header</code>
 	 *
 	 * @param value the value with which to replace certain substrings
@@ -276,8 +277,13 @@ public class LogFileParser extends BaseEventParser {
 	private String retain(String value, Header header) {
 		if (header.getRegexRetain() == null)
 			return value;
-
-		Pattern p = Pattern.compile(header.getRegexRetain());
+		
+		Pattern p = null;
+		if (header.isRegexRetainCaseInsensitive())
+			p = Pattern.compile(header.getRegexRetain(),Pattern.CASE_INSENSITIVE);
+		else
+			p = Pattern.compile(header.getRegexRetain());
+		
 		Matcher match = p.matcher(value);
 		ArrayList<String> allFound = new ArrayList<String>();
 		while (match.find()) {
