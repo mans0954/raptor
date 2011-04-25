@@ -16,6 +16,8 @@
 package uk.ac.cardiff.raptor.raptorica.server;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
@@ -26,45 +28,74 @@ import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
+
 public class RunServer {
+	
+	
+	/**
+	 * Programmatically do the following:
+	 * 1. Set the Apache CXF logger to use SLF4J
+	 * 2. Configure the logback logger
+	 * 3. Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
+	 * 
+	 * @param args
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws Exception
+	 */
+	public static void main(String args[]) throws FileNotFoundException, IOException {
+		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 
-    public static void main(String args[]) throws Exception {
-    	
+		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
+		
+		configureLogger(configurationFiles+"/logback.xml");
+		
+		int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
 
-	String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir")+"/target/conf/ica-core.xml");
-	int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
+		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
+		System.out.println("[INFO] Spring Config: Configuration files at " + configurationFiles);
 
-	System.out.println("[INFO] Jetty Config: Using Port "+portNumber);
-	System.out.println("[INFO] Spring Config: Configuration files at "+configurationFiles);
+		Server server = new Server(portNumber);
+		Context context = new Context(server, "/ICA", Context.SESSIONS);
 
-	Server server = new Server(portNumber);
-	Context context = new Context(server, "/ICA", Context.SESSIONS);
+		DispatcherServlet dispatcherServlet = new DispatcherServlet();
+		// dispatcherServlet.setContextConfigLocation("classpath:beans.xml");
+		File springBeans = new File(configurationFiles+"/ica-core.xml");
+		dispatcherServlet.setContextConfigLocation("file://" + springBeans.getCanonicalPath());
 
-	DispatcherServlet dispatcherServlet = new DispatcherServlet();
-	//dispatcherServlet.setContextConfigLocation("classpath:beans.xml");
-	File springBeans = new File(configurationFiles);
-	dispatcherServlet.setContextConfigLocation("file://"+springBeans.getCanonicalPath());
+		ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
+		context.addServlet(servletHolder, "/*");
 
-	ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
-	context.addServlet(servletHolder, "/*");
+		try {
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
+		}
 
-	try {
-		System.out.println(">>> STARTING EMBEDDED JETTY SERVER");
-		server.start();
-//		System.in.read();
-//		System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
-//		server.stop();
-//		server.join();
-	} catch (Exception e) {
-		e.printStackTrace();
-		System.exit(100);
 	}
 
+	private static void configureLogger(String logback) {
+		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-    }
+		try {
+			JoranConfigurator configurator = new JoranConfigurator();
+			configurator.setContext(lc);
+			lc.reset();
+			configurator.doConfigure(logback);
+		} catch (JoranException je) {
+			// StatusPrinter will handle thiss
+		}
+		StatusPrinter.print(lc);
 
-
+	}
 
 }

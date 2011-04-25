@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.raptorica.model.EntryHandler;
+import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.raptorica.model.exception.ParserException;
 import uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList;
 import uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList;
