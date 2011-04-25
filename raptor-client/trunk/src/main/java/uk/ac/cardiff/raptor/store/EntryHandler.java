@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.joda.time.DateTime;
+
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
@@ -36,6 +38,18 @@ public interface EntryHandler {
 	 * @param entries
 	 */
 	public void addEntries(List<Event> entries) throws StorageException;
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	public void addEntry(Event event);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public DateTime getLatestEntryTime();
 
 	/**
 	 *
@@ -54,10 +68,6 @@ public interface EntryHandler {
 	 */
 	public void removeAllEntries();
 
-	/**
-	 *
-	 */
-	public void endTransaction();
 
 	/**
 	 *

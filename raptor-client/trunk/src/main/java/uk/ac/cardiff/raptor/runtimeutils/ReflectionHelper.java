@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 
-
 /**
  * @author philsmart
  * 
@@ -42,6 +41,10 @@ public class ReflectionHelper {
 
 	/** Class logger */
 	private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
+	
+	private static final String EVENT_PACKAGE_NAME ="uk.ac.cardiff.model.event";
+	
+	private static final String JAR_PREFIX = "jar";
 
 	/**
 	 * Checks if an attribute exists on a class by finding if it has a 'get'
@@ -97,27 +100,28 @@ public class ReflectionHelper {
 		}
 
 	}
-	
-	public static String determineSubclassForMethods(String methodOne, String methodTwo) {
+
+	public static String determineSubclassForMethods(String methodOne, String methodTwo) throws ReflectionException {
 		Object methodOneObject = findEntrySubclassForMethodAsObject(methodOne);
 		Object methodTwoObject = findEntrySubclassForMethodAsObject(methodTwo);
-		log.debug("Classes found, methodOne {}, methodTwo {}", methodOneObject.getClass(), methodTwoObject.getClass());
-		// is methodTwoObject a superclass of methodOneObject, if it is, then
-		// its either an equivalent class
-		// or its a subclass so return it
-		log.debug("Is methodOne a superclass of methodTwo {}",
-				(methodOneObject.getClass().isAssignableFrom(methodTwoObject.getClass())));
-		if (methodTwoObject.getClass().isAssignableFrom(methodOneObject.getClass())) {
-			return methodOneObject.getClass().getSimpleName();
+		if (methodOneObject != null && methodTwoObject != null) {
+			log.debug("Classes found, methodOne {}, methodTwo {}", methodOneObject.getClass(), methodTwoObject.getClass());
+			log.debug("Is methodOne a superclass of methodTwo {}", (methodOneObject.getClass().isAssignableFrom(methodTwoObject.getClass())));
+			if (methodTwoObject.getClass().isAssignableFrom(methodOneObject.getClass())) {
+				return methodOneObject.getClass().getSimpleName();
+			} else {
+				return methodTwoObject.getClass().getSimpleName();
+			}
 		} else {
-			return methodTwoObject.getClass().getSimpleName();
+			log.error("Could not determine which method belongs to the subclass, from {} and {}", methodOne, methodTwo);
+			throw new ReflectionException("Could not determine which method belongs to the subclass");
 		}
 
 	}
 
-	public static List<String> getFieldsFromEntrySubClasses(){
+	public static List<String> getFieldsFromEntrySubClasses() {
 		ArrayList<String> allFields = new ArrayList<String>();
-		String forPckgName = "uk.ac.cardiff.model";
+		String forPckgName = EVENT_PACKAGE_NAME;
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
 		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
@@ -126,22 +130,22 @@ public class ReflectionHelper {
 		for (String classname : classes) {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
-				//if (o!=null)log.debug("found object {}",o.getClass());
+				// if (o!=null)log.debug("found object {}",o.getClass());
 				if (o instanceof uk.ac.cardiff.model.event.Event) {
 					allclasses.add(o);
 				}
 			} catch (ClassNotFoundException cnfex) {
 				log.error("error getting subclasses of Entry, {}", cnfex);
 			} catch (InstantiationException iex) {
-				//log.error("{}", iex);
+				// log.error("{}", iex);
 			} catch (IllegalAccessException iaex) {
 				// The class is not public
-				//log.error("{}", iaex);
+				// log.error("{}", iaex);
 			}
 		}
 		for (Object object : allclasses) {
 			Field[] fields = object.getClass().getDeclaredFields();
-			for (Field field : fields){
+			for (Field field : fields) {
 				allFields.add(field.getName());
 			}
 
@@ -150,12 +154,12 @@ public class ReflectionHelper {
 		return allFields;
 	}
 
-
 	public static Object findEntrySubclassForMethodAsObject(String fieldName) {
-		String forPckgName = "uk.ac.cardiff.model";
+		String forPckgName = EVENT_PACKAGE_NAME;
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
-		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
+		log.debug("jar {}",jarFile);
+		List<String> classes = getClassNamesInJarOrFolder(jarFile,forPckgName);
 		ArrayList allclasses = new ArrayList();
 		for (String classname : classes) {
 			try {
@@ -181,8 +185,8 @@ public class ReflectionHelper {
 			}
 		}
 		if (objectWithMethod != null) {
-			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName
-					+ " returning simple name " + objectWithMethod.getClass().getSimpleName());
+			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName + " returning simple name "
+					+ objectWithMethod.getClass().getSimpleName());
 			return objectWithMethod;
 		}
 
@@ -193,15 +197,15 @@ public class ReflectionHelper {
 	/**
 	 * This method finds the simple name of the class in the uk.ac.cardiff.model
 	 * package that contains the <code>fieldName</code>.
-	 *
+	 * 
 	 * @param fieldName
 	 * @return
 	 */
 	public static String findEntrySubclassForMethod(String fieldName) {
-		String forPckgName = "uk.ac.cardiff.model";
+		String forPckgName = EVENT_PACKAGE_NAME;
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
-		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
+		List<String> classes = getClassNamesInJarOrFolder(jarFile,forPckgName);
 		ArrayList allclasses = new ArrayList();
 		for (String classname : classes) {
 			try {
@@ -229,8 +233,8 @@ public class ReflectionHelper {
 			}
 		}
 		if (objectWithMethod != null) {
-			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName
-					+ " returning simple name " + objectWithMethod.getClass().getSimpleName());
+			log.debug("Object " + objectWithMethod.getClass().getName() + " has method " + fieldName + " returning simple name "
+					+ objectWithMethod.getClass().getSimpleName());
 			return objectWithMethod.getClass().getSimpleName();
 		}
 
@@ -241,9 +245,9 @@ public class ReflectionHelper {
 	/**
 	 * Gets the name, as a string, of the JAR file that contains the package
 	 * <code>pckgname</code>
-	 *
+	 * 
 	 * @param pckgname
-	 * @return
+	 * @return the name, as a <code>String</code>, of the JAR file that contains the package <code>pckgname</code>
 	 */
 	private static String getJARFilePath(String pckgname) {
 		String name = new String(pckgname);
@@ -253,7 +257,7 @@ public class ReflectionHelper {
 		name = name.replace('.', '/');
 		//log.debug("package name: " + name);
 		URL url = ReflectionHelper.class.getResource(name);
-		//log.debug("URL: "+url);
+	    //log.debug("URL: "+url);
 		if (url != null && url.getPath().contains("!"))
 			return url.getPath().substring(0, url.getPath().indexOf('!'));
 		else if (url != null)
@@ -265,7 +269,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the names of the classes, as strings, in the jar
 	 * <code>jarName</code> and package <code>packageName</code>
-	 *
+	 * 
 	 * @param jarName
 	 * @param packageName
 	 * @return
@@ -290,13 +294,48 @@ public class ReflectionHelper {
 		}
 		return classes;
 	}
+	
+	private static List<String> getClassNamesInJarOrFolder(String jarOrDirectoryName, String packageName){
+		if (jarOrDirectoryName.endsWith(JAR_PREFIX)){
+			return getClasseNamesInPackageJAR(jarOrDirectoryName, packageName);
+		}
+		else {
+			return getClasseNamesInDirectory(jarOrDirectoryName, packageName);
+		}
+	}
+	
+	/**
+	 * Gets the names of the classes, as strings, in the directory
+	 * <code>directoryName</code> and package <code>packageName</code>
+	 * 
+	 * @param directoryName the name of the directory to look for classes 
+	 * @param packageName the name of the package the classes belong to
+	 * @return a list of class names in the current folder
+	 */
+	private static List<String> getClasseNamesInDirectory(String directoryName, String packageName) {
+		ArrayList<String> classes = new ArrayList<String>();
+		packageName = packageName.replaceAll("\\.", "/");
+		try {
+			File dir = new File(directoryName);
+			//log.debug("Directory {}, is directory {}",dir, dir.isDirectory());
+			for (String file : dir.list()){
+				if ((file.endsWith(".class"))) {
+					//log.debug("Found class file, {}",file);
+					classes.add(packageName.replaceAll("/", "\\.")+"."+file);
+				}
+			}
+		} catch (Exception e) {
+			log.error("Error in getting classnames in directory {}",directoryName);
+		}
+		return classes;
+	}
 
 	/**
 	 * Code taken and adapted from the JWhich project. Finds all subclasses of
 	 * the uk.ac.cardiff.model.Entry class in the package <code>pckgname</code>
 	 * if they exist outside any JAR libraries, use
 	 * <code>getClasseNamesInPackageJAR</code>
-	 *
+	 * 
 	 * @param pckgname
 	 * @return
 	 */
@@ -352,7 +391,7 @@ public class ReflectionHelper {
 	/**
 	 * Checks whether the Object <code>object</code> has the field
 	 * <code>fieldName</code>
-	 *
+	 * 
 	 * @param object
 	 * @param fieldName
 	 * @return
@@ -373,7 +412,7 @@ public class ReflectionHelper {
 
 	public static String prepareMethodNameSet(String method) {
 		if (method.length() > 0) {
-			String name = "set";
+		    String name = "set";
 			// now capitalise the first letter of the method name
 			Character firstLetter = method.charAt(0);
 			firstLetter = Character.toUpperCase(firstLetter);
@@ -393,7 +432,7 @@ public class ReflectionHelper {
 	 */
 	public static String prepareMethodNameGet(String method) {
 		if (method.length() > 0) {
-			String name = "get";
+		    String name = "get";
 			// now capitalise the first letter of the method name
 			Character firstLetter = method.charAt(0);
 			firstLetter = Character.toUpperCase(firstLetter);
