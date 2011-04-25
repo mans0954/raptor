@@ -123,13 +123,13 @@ public abstract class Statistic {
 			Group[] groups = (Group[]) observations;
 			for (Group group : groups) {
 				gmodel.addGroupLabel(group.getGroupName());
-			}
+			}			
 			//now add each series and their values
 			for (int i=0; i < observationSeries.size(); i++){
 				groups = (Group[]) observationSeries.get(i).getObservations();
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
 
-				List<Double> values = new ArrayList();
+				List<Double> values = new ArrayList<Double>();
 				for (Group group : groups) {
 					Double valueDouble = new Double(group.getValue());
 					values.add(valueDouble);
@@ -198,14 +198,14 @@ public abstract class Statistic {
 	protected DateTime startingTime() {
 		if (statisticParameters.getStartTimeAsDate() != null)
 			return statisticParameters.getStartTimeAsDate();
-		DateTime start = (DateTime) this.getEntryHandler().queryUnique("select min(eventTime) from Entry");
+		DateTime start = (DateTime) this.getEntryHandler().queryUnique("select min(eventTime) from Event");
 		return start;
 	}
 
 	protected DateTime endingTime() {
 		if (statisticParameters.getEndTimeAsDate() != null)
 			return statisticParameters.getEndTimeAsDate();
-		DateTime end = (DateTime) this.getEntryHandler().queryUnique("select max(eventTime) from Entry");
+		DateTime end = (DateTime) this.getEntryHandler().queryUnique("select max(eventTime) from Event");
 		return end;
 	}
 

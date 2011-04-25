@@ -64,8 +64,6 @@ public class StatisticsHandler {
 	}
 
 	private AggregatorGraphModel performStatiticalPipeline(Statistic statistic) {
-		// on set entries, also perform preprocessing, could be done as an extra
-		// method call
 		statistic.setEntryHandler(entryHandler);
 		Boolean success = invoke(statistic);
 		log.info("Statistic {} succedded {}",statistic.getStatisticParameters().getUnitName(),success);
@@ -80,7 +78,8 @@ public class StatisticsHandler {
 			catch(Exception e){
 			    //must catch this error here, so we can clear the observations that the statistic has generated
 			    statistic.reset();
-			    log.error("Problem constructing graph model for statistic {}",statistic.getStatisticParameters().getUnitName());
+			    log.error("Problem constructing graph model for statistic {}",statistic.getStatisticParameters().getUnitName(),e);
+			    e.printStackTrace();
 			    return null;
 			}
 		}

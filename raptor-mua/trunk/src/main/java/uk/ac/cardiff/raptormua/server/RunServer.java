@@ -40,9 +40,15 @@ import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
 
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl;
@@ -50,8 +56,10 @@ import uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl;
 public class RunServer {
 
 	/**
-	 * Programmatically start a Jetty Server instance, and set the web.xml in
-	 * the configuration directory to initialise the servlet.
+	 * Programmatically do the following:
+	 * 1. Set the Apache CXF logger to use SLF4J
+	 * 2. Configure the logback logger
+	 * 3. Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
 	 * 
 	 * @param args
 	 * @throws IOException
@@ -59,8 +67,11 @@ public class RunServer {
 	 * @throws Exception
 	 */
 	public static void main(String args[]) throws FileNotFoundException, IOException {
+		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
+		
+		configureLogger(configurationFiles+"/logback.xml");
 
 		Properties props = new Properties();
 		props.load(new FileInputStream(configurationFiles + "/server.properties"));
@@ -108,6 +119,21 @@ public class RunServer {
 			e.printStackTrace();
 			System.exit(100);
 		}
+
+	}
+
+	private static void configureLogger(String logback) {
+		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+		try {
+			JoranConfigurator configurator = new JoranConfigurator();
+			configurator.setContext(lc);
+			lc.reset();
+			configurator.doConfigure(logback);
+		} catch (JoranException je) {
+			// StatusPrinter will handle thiss
+		}
+		StatusPrinter.print(lc);
 
 	}
 

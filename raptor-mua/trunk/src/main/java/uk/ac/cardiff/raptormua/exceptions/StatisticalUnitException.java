@@ -25,6 +25,10 @@ public class StatisticalUnitException extends Exception{
 	public StatisticalUnitException (String message){
 			super(message);
 	}
+	
+	public StatisticalUnitException (String message, Exception wrappedException){
+		super(message, wrappedException);
+	}
 
 
 }

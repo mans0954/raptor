@@ -57,6 +57,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                    <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>All Authentications In X minute Intervals</value></property>
 					<property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20100522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -91,6 +92,7 @@
 	<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>Authentications over a time range (split)</value></property>
 					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
 					<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
@@ -126,13 +128,14 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by entityID)</value></property>
 					<property name="startTime"><value>20110115T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
+								<property name="value"><value>resourceId</value></property>
 							</bean>
 						</list>
 					</property>
@@ -161,13 +164,14 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider (by Organisational Name)</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
+								<property name="value"><value>resourceId</value></property>
 							</bean>
 						</list>
 					</property>
@@ -200,13 +204,14 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>Number of Authentications per Service Provider by OrgName (Percentage)</value></property>
 					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
+								<property name="value"><value>resourceId</value></property>
 							</bean>
 						</list>
 					</property>
@@ -241,6 +246,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
+                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
 					<property name="unitName"><value>Comparison of Authentications For Two SPs</value></property>
 					<property name="startTime"><value>20110116T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110117T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -259,7 +265,7 @@
                                <property name="comparisonPredicate">
 									 <bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
 									 		<property name="compOp" value="EQUAL"/>
-									 		<property name="fieldName" value="serviceHost"/>
+									 		<property name="fieldName" value="resourceId"/>
 									 		<property name="value" value="https://sdauth.sciencedirect.com/"/>
 									 </bean>
 								</property>
@@ -269,7 +275,7 @@
                                 <property name="comparisonPredicate">
 									 	<bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
 									 			<property name="compOp" value="EQUAL"/>
-									 			<property name="fieldName" value="serviceHost"/>
+									 			<property name="fieldName" value="resourceId"/>
 									 			<property name="value" value="https://scauth.scopus.com/"/>
 									 	</bean>
 								</property>
@@ -318,229 +324,7 @@
 	</bean>
 
 
-	<!--  System level statistics that must be present for RaptorWeb to work -->
-
-	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>1</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number Of Authentications Per"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupBy">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>principalName</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number of unique users for"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>40</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value=""/>
-                            <property name="xAxisLabel" value=""/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                             <property name="dateFormat" value="ddMMyy (HH:mm)"/>
-                        </bean>
-                    </property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>top5Resources</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Top 5 Resources"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-
-			</bean>
-		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="sortDsc"/>
-				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
-			</list>
-		</property>
-	</bean>
-
-
-	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByCountDistinct">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
-
-							</bean>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-							     <property name="value"><value>principalName</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number of Unique Authentications Per Service Provider"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-
-			</bean>
-		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="sortDsc"/>
-				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>System</value></property>
-					<property name="unitName"><value>bottom5Resources</value></property>
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>serviceHost</value></property>
-							</bean>
-						</list>
-					</property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Bottom 5 Resources"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of auths"/>
-                            </bean>
-                        </list>
-                    </property>
-
-			</bean>
-		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="sortAsc"/>
-				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
-			</list>
-		</property>
-	</bean>
+	<import resource="statistical-units-system.xml"/>
 
 
 </beans>

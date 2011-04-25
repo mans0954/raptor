@@ -51,11 +51,15 @@ public class GroupByFrequency extends Statistic{
 		DateTime start = startingTime();
 		DateTime end = endingTime();
 		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
-		String tableName = ReflectionHelper.findEntrySubclassForMethod(groupByField);
+		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
-		List results = getEntryHandler().query(
-				"select " + groupByField + ",count(*) from " + tableName + " where (eventTime between '" + start
-						+ "' and '" + end + "') group by (" + groupByField + ")");
+		
+		
+		
+		String query ="select " + groupByField + ",count(*) from "+tableName+" where (eventTime between '" + start
+		+ "' and '" + end + "') group by (" + groupByField + ")";
+		
+		List results = getEntryHandler().query(query);
 
 		ArrayList<Group> groups = new ArrayList();
 		int testCount = 0;
