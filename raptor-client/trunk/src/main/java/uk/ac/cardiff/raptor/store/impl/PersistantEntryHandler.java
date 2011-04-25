@@ -62,7 +62,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * set of all entries stored by this EntryHandler should never be used as
 	 * memory overhead is too high for large databases
 	 */
-	private Set<Event> entries;
+	//private Set<Event> entries;
 
 	/** Used to hold events temporarily before they are persisted, allows
 	 * resilience if events can not be immediately stored, for example
@@ -86,17 +86,6 @@ public class PersistantEntryHandler implements EntryHandler {
 		log.info("Persistant entry handler [{}] started", this);
 	}
 
-	/**
-	 * This method loads all <code>Entries</code> in the <code>entries</code>
-	 * variable. This method is often not used as large datasets will require
-	 * vast amounts of memory
-	 */
-	private void loadEntries() {
-		log.info("Loading entries from main datastore");
-		List<Event> entriesAsList = dataConnection.runQuery("from Event", null);
-		log.info("MUA has loaded {} entries from main datastore",entriesAsList.size());
-		entries = new LinkedHashSet<Event>(entriesAsList);
-	}
 
 	public List query(String query) {
 		 log.trace("SQL query to entry handler [{}]",query);
@@ -157,25 +146,36 @@ public class PersistantEntryHandler implements EntryHandler {
 		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
 	}
 
-	public void addEntry(Event entry) {
-		entries.add(entry);
+	public void addEntry(Event event) {
+		int hashcode = 0;
+		try {
+			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+		} catch (Exception e) {
+		    log.error("Could not get hashcode for event {}, event not stored");
+		    return;
+		}
+		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
+		Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
+		int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
+
+		if (numberOfDuplicates == 0){
+		   dataConnection.save(event);
+		}
+		else{
+			log.error("Duplicated event found\n{}", event);
+		}
+
 
 	}
 
-	public void endTransaction() {
-		log.debug("Saving transaction for MUA");
-		dataConnection.saveAll(entries);
-		log.debug("Saving transaction for MUA...Done");
-	}
-
-	public Set getEntries() {
-		return entries;
+	public Set<Event> getEntries() {
+		return (Set<Event>) dataConnection.runQuery("Select from Event",null);
 	}
 
 	public void removeAllEntries() {
-		log.debug("Removing all entries from this entry handler");
-		dataConnection.deleteAllEntries(entries);
-		entries.clear();
+//		log.debug("Removing all entries from this entry handler");
+//		dataConnection.deleteAllEntries(entries);
+//		entries.clear();
 	}
 
 	public void setDataConnection(RaptorDataConnection dataConnection) {
@@ -192,6 +192,10 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	public int getNumberOfEntries() {
 		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
+	}
+	
+	public DateTime getLatestEntryTime(){
+		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
 
 
