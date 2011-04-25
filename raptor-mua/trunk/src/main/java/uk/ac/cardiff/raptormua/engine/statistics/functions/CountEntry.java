@@ -96,7 +96,7 @@ public class CountEntry extends Statistic{
 			// SQL between is >= start && <= end. We want, >= start && < end, so
 			// must exclude equals end
 			Integer count = (Integer) this.getEntryHandler().queryUnique(
-					"select count(*) from Event where (eventTime between '" + bucket.getStart() + "' and '"
+					"select count(*) from "+statisticParameters.getEventType().getHibernateSimpleClassName()+" where (eventTime between '" + bucket.getStart() + "' and '"
 							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')");// new
 			// Object[]{start,end});
 			bucket.setValue(count);
@@ -108,7 +108,7 @@ public class CountEntry extends Statistic{
 		 * reminder, or the specified start time and endtime does not completely
 		 * contain the entries.
 		 */
-		log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
+		log.debug("Events: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
 
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
