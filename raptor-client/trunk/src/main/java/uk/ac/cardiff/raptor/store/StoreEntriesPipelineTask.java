@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
+import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
@@ -33,10 +35,10 @@ import uk.ac.cardiff.raptor.store.dao.StorageException;
  * @author philsmart
  *
  */
-public class StoreEntriesTask implements Callable<Boolean>{
+public class StoreEntriesPipelineTask implements Callable<Boolean>{
 
 	/** class logger */
-	private final Logger log = LoggerFactory.getLogger(StoreEntriesTask.class);
+	private final Logger log = LoggerFactory.getLogger(StoreEntriesPipelineTask.class);
 
 	/** The entry handler used to store entries (e.g. events)*/
     private EntryHandler entryHandler;
@@ -44,19 +46,25 @@ public class StoreEntriesTask implements Callable<Boolean>{
     /** The callback interface that is called once the <code>call</code> method has completed*/
     private StoreEntriesTaskCallbackInterface storeCallback;
 
+    /** Attribute association engine, used to attach additional attributes to events */
+    private AttributeAssociationEngine attributeAssociationEngine;
+
     /** The events that need to be stored */
     private List<Event> events;
 
-    public StoreEntriesTask(EntryHandler entryHandler, List<Event> events, StoreEntriesTaskCallbackInterface storeCallback){
+    public StoreEntriesPipelineTask(EntryHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine,List<Event> events, StoreEntriesTaskCallbackInterface storeCallback){
         this.storeCallback = storeCallback;
+        this.attributeAssociationEngine = attributeAssociationEngine;
         this.entryHandler = entryHandler;
         this.events = events;
     }
 
     public Boolean call() throws Exception {
-    	log.debug("Storing entries");
     	try{
-    	    entryHandler.addEntries(events);
+
+    	    associate();
+    	    store();
+
     	}
     	catch(StorageException e){
     	    log.error("Failed to store events asynchronously");
@@ -65,6 +73,18 @@ public class StoreEntriesTask implements Callable<Boolean>{
     	}
         storeCallback.storageResultCallback(new Boolean("true"));
         return true;
+    }
+
+    private void store() throws StorageException{
+        entryHandler.addEntries(events);
+    }
+
+    private void associate(){
+        try {
+            attributeAssociationEngine.associateAttributes(events);
+        } catch (AttributeAssociationException e) {
+            log.warn("{}",e.getMessage());
+        }
     }
 
 }

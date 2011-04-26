@@ -37,9 +37,9 @@ import org.springframework.dao.DataAccessException;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.AsynchronousEntryStorage;
+import uk.ac.cardiff.raptor.store.AsynchronousEntryStoragePipeline;
 import uk.ac.cardiff.raptor.store.EntryHandler;
-import uk.ac.cardiff.raptor.store.StoreEntriesTask;
+import uk.ac.cardiff.raptor.store.StoreEntriesPipelineTask;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 

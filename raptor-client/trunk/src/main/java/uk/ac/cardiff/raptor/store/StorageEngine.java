@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 /**
  * @author philsmart
@@ -38,6 +39,10 @@ public class StorageEngine {
     private EntryHandler entryHandler;
 
 
+    /** Engine used to associate attributes to existing events in the MUA */
+    private AttributeAssociationEngine attributeAssociationEngine;
+
+
     /** Default Constructor*/
     public StorageEngine(){
 
@@ -46,9 +51,9 @@ public class StorageEngine {
     /**
      * @param events
      */
-    public void addEntriesAsynchronous(int transactionId, List<Event> events){
-        AsynchronousEntryStorage asyncEntryStorage = new AsynchronousEntryStorage(transactionId);
-        asyncEntryStorage.store(entryHandler, events);
+    public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events){
+        AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, entryHandler,attributeAssociationEngine);
+        asyncEntryStorage.execute(events);
     }
 
     /**
@@ -78,6 +83,21 @@ public class StorageEngine {
     public EntryHandler getEntryHandler() {
         return entryHandler;
     }
+
+    /**
+     * @param attributeAssociationEngine the attributeAssociationEngine to set
+     */
+    public void setAttributeAssociationEngine(AttributeAssociationEngine attributeAssociationEngine) {
+        this.attributeAssociationEngine = attributeAssociationEngine;
+    }
+
+    /**
+     * @return the attributeAssociationEngine
+     */
+    public AttributeAssociationEngine getAttributeAssociationEngine() {
+        return attributeAssociationEngine;
+    }
+
 
 
 
