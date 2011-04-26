@@ -87,9 +87,7 @@ public class MemoryEntryHandler implements EntryHandler{
 		updateLastEntry(entry);
 	    }
 	    else if (isEqual){
-		//log.debug("Is Equal Time: "+entry);
 		boolean isAlreadyInLatest = latestEqualEntries.contains(entry);
-		//log.debug("Has matched: "+isAlreadyInLatest+" from: "+latestEqualEntries.size()+" entries");
 		if (isAlreadyInLatest){
 		    log.error("Duplicated entries found\n{}",entry);
 		}

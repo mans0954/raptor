@@ -45,7 +45,7 @@
                     </property>
 				</bean>
 
-                --><!--  EZPROXY -->
+                --><!--  EZPROXY
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
                     <property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
@@ -65,15 +65,15 @@
                        </bean>
                     </property>
                 </bean>
-                
+                -->
 
 
-				<!-- Shibboleth 2
+				<!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-2011-04.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
 						</value>
 					</property>
 					<property name="format">
@@ -82,11 +82,11 @@
 					<property name="eventType">
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
-					<property name="printParsingPosition"><value>true</value></property>
+					<property name="printParsingPosition"><value>true</value></property><!--
 
 				 	  The inclusion list is an OR of field name, value pairs that are loaded by the parser
-					 all other fields are ignored, this is run before the exclusion list 
-					<property name="inclusionList">
+					 all other fields are ignored, this is run before the exclusion list
+					--><property name="inclusionList">
 							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList">
 								<property name="inclusionEntries">
 									<list>
@@ -97,14 +97,14 @@
 									</list>
 								</property>
 							</bean>
-					</property>
+					</property><!--
 
-                        
+
 					 	exclude entries, is an OR list of <field name, field value> pairs
 						that are checked for when parsing , if oneof them exists, that entry is
-						ignored. 
+						ignored.
 
-					<property name="exclusionList">
+					--><!--<property name="exclusionList">
 							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList">
 								<property name="exclusionEntries">
 									<list>
@@ -124,14 +124,14 @@
 								</property>
 							</bean>
 					</property>
-                    
-				</bean>-->
+
+				--></bean>
 			</list>
 		</property>
 	</bean>
 
 	<!-- Create the entry handler -->
-	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.raptorica.model.MemoryEntryHandler"></bean>
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.MemoryEntryHandler"></bean>
 	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
