@@ -24,18 +24,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 
-public class AsynchronousEntryStorage implements StoreEntriesTaskCallbackInterface{
+public class AsynchronousEntryStoragePipeline implements StoreEntriesTaskCallbackInterface{
 
 	/** class logger */
-	private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStorage.class);
+	private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStoragePipeline.class);
 
 	/** An ID used to track the progress of any transaction */
 	private int transactionId;
 
-	public AsynchronousEntryStorage(int transactionId){
-	    this.setTransactionId(transactionId);
+	/** entry handler used to store entries (e.g. events)*/
+    private EntryHandler entryHandler;
+
+    /** Attribute association engine, used to attach additional attributes to events */
+    private AttributeAssociationEngine attributeAssociationEngine;
+
+	public AsynchronousEntryStoragePipeline(int transactionId, EntryHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine){
+	    this.entryHandler = entryHandler;
+	    this.attributeAssociationEngine = attributeAssociationEngine;
+	    this.transactionId=transactionId;
 	}
 
 	public void storageResultCallback(Object result) {
@@ -43,12 +52,19 @@ public class AsynchronousEntryStorage implements StoreEntriesTaskCallbackInterfa
 
 	}
 
-	public void store(EntryHandler entryHandler, List<Event> events){
-		StoreEntriesTask storeEntryTask = new StoreEntriesTask(entryHandler, events,this);
-		ExecutorService es = Executors.newSingleThreadExecutor();
-		es.submit(storeEntryTask);
-		es.shutdown();
+	/**
+         * Starts and shuts down the <code>storeEntryTask</code> immediately, so that when it completes
+         * it can be re-used.
+         *
+	 * @param events
+	 */
+	public void execute(List<Event> events){
+	    StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(entryHandler, attributeAssociationEngine, events,this);
+            ExecutorService es = Executors.newSingleThreadExecutor();
+            es.submit(storeEntryTask);
+            es.shutdown();
 	}
+
 
     /**
      * @param transactionId the transactionId to set

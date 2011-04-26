@@ -35,21 +35,21 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class ReflectionHelper {
 
 	/** Class logger */
 	private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
-	
+
 	private static final String EVENT_PACKAGE_NAME ="uk.ac.cardiff.model.event";
-	
+
 	private static final String JAR_PREFIX = "jar";
 
 	/**
 	 * Checks if an attribute exists on a class by finding if it has a 'get'
 	 * method associated on the class
-	 * 
+	 *
 	 * @param entry
 	 * @param attributeID
 	 */
@@ -72,7 +72,7 @@ public class ReflectionHelper {
 	 * <code>object</code>. Iterates through the list of methods to find the
 	 * setter method, so as the parameter types to the method e.g. using
 	 * <code>id.getMethod(..)</code>, do not need to be known.
-	 * 
+	 *
 	 * @param object
 	 * @param attributeID
 	 */
@@ -197,7 +197,7 @@ public class ReflectionHelper {
 	/**
 	 * This method finds the simple name of the class in the uk.ac.cardiff.model
 	 * package that contains the <code>fieldName</code>.
-	 * 
+	 *
 	 * @param fieldName
 	 * @return
 	 */
@@ -245,7 +245,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the name, as a string, of the JAR file that contains the package
 	 * <code>pckgname</code>
-	 * 
+	 *
 	 * @param pckgname
 	 * @return the name, as a <code>String</code>, of the JAR file that contains the package <code>pckgname</code>
 	 */
@@ -269,7 +269,7 @@ public class ReflectionHelper {
 	/**
 	 * Gets the names of the classes, as strings, in the jar
 	 * <code>jarName</code> and package <code>packageName</code>
-	 * 
+	 *
 	 * @param jarName
 	 * @param packageName
 	 * @return
@@ -294,7 +294,7 @@ public class ReflectionHelper {
 		}
 		return classes;
 	}
-	
+
 	private static List<String> getClassNamesInJarOrFolder(String jarOrDirectoryName, String packageName){
 		if (jarOrDirectoryName.endsWith(JAR_PREFIX)){
 			return getClasseNamesInPackageJAR(jarOrDirectoryName, packageName);
@@ -303,12 +303,12 @@ public class ReflectionHelper {
 			return getClasseNamesInDirectory(jarOrDirectoryName, packageName);
 		}
 	}
-	
+
 	/**
 	 * Gets the names of the classes, as strings, in the directory
 	 * <code>directoryName</code> and package <code>packageName</code>
-	 * 
-	 * @param directoryName the name of the directory to look for classes 
+	 *
+	 * @param directoryName the name of the directory to look for classes
 	 * @param packageName the name of the package the classes belong to
 	 * @return a list of class names in the current folder
 	 */
@@ -335,7 +335,7 @@ public class ReflectionHelper {
 	 * the uk.ac.cardiff.model.Entry class in the package <code>pckgname</code>
 	 * if they exist outside any JAR libraries, use
 	 * <code>getClasseNamesInPackageJAR</code>
-	 * 
+	 *
 	 * @param pckgname
 	 * @return
 	 */
@@ -391,7 +391,7 @@ public class ReflectionHelper {
 	/**
 	 * Checks whether the Object <code>object</code> has the field
 	 * <code>fieldName</code>
-	 * 
+	 *
 	 * @param object
 	 * @param fieldName
 	 * @return
@@ -450,7 +450,6 @@ public class ReflectionHelper {
 			Class id = object.getClass();
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameGet(fieldname);
 			Method getter = id.getMethod(fieldAsMethod, new Class[] {});
-			// log.debug("Trying to Set :"+param)
 			Object result = getter.invoke(object, new Object[] {});
 			return result;
 		} catch (Throwable e) {
@@ -467,7 +466,6 @@ public class ReflectionHelper {
 			Class id = object.getClass();
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldname);
 			Method setter = id.getMethod(fieldAsMethod, new Class[] { param.getClass() });
-			// log.debug("Trying to Set :"+param)
 			setter.invoke(object, new Object[] { param });
 		} catch (Throwable e) {
 			log.error("Field name '" + fieldname + "' does not match internal model attribute, or parameters are wrong");
