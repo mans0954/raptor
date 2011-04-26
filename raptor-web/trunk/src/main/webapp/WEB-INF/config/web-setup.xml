@@ -25,7 +25,7 @@
 		<property name="webMetadata"><ref bean="webMetadata"></ref></property>
         <constructor-arg index="0"><ref bean="serviceEndpointClient"/></constructor-arg>
 	</bean>
-    
+
     <bean id="serviceEndpointClient" class="uk.ac.cardiff.raptorweb.sei.ServiceEndpointClient">
          <property name="tlsParameters">
            <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
@@ -96,7 +96,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			<!--  <ref local="SystemStatsQuickTrigger"/>-->
+			  <ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
