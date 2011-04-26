@@ -91,13 +91,9 @@
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
-		<property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
 
-	<!--  the attribute association engine -->
-	<bean id="attributeAssociationEngine" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine">
 
-	</bean>
 
 	<!--  the event release client, for sending events to other MUA's -->
 
@@ -126,6 +122,7 @@
 	<!-- Create the storage engine and entry handler -->
 	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.StorageEngine">
         <property name="entryHandler"><ref bean="persistantEntryHandler"/></property>
+        <property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
 
 	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
@@ -138,5 +135,6 @@
 	  <import resource="statistical-units.xml" />
 	  <import resource="event-release.xml"/>
 	  <import resource="users.xml" />
+	  <import resource="attribute-association.xml"/>
 
 </beans>
