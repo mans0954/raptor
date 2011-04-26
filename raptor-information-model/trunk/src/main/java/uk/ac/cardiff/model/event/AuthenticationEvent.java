@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.model.event;
 
+import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
+
 
 /**
  * @author philsmart
@@ -27,6 +29,9 @@ public class AuthenticationEvent extends Event{
 
 	private String authenticationType;
 	private String principalName;
+
+	/**This is fixed to a principal expansion */
+	private PrincipalInformation principalInformation;
 
 	public void setPrincipalName(String principalName) {
 	    this.principalName = principalName;
@@ -40,6 +45,18 @@ public class AuthenticationEvent extends Event{
 	public String getAuthenticationType() {
 	    return authenticationType;
 	}
+    /**
+     * @param principalInformation the principalInformation to set
+     */
+    public void setPrincipalInformation(PrincipalInformation principalInformation) {
+        this.principalInformation = principalInformation;
+    }
+    /**
+     * @return the principalInformation
+     */
+    public PrincipalInformation getPrincipalInformation() {
+        return principalInformation;
+    }
 
 
 }
