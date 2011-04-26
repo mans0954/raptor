@@ -134,7 +134,7 @@ public class LogFileParser extends BaseEventParser {
 					} catch (HeaderException e) {
 						log.error("ERROR: trying to access field {}, when only {} fields in log file", e.getHeaderNo(), allvalues.size());
 					}
-					
+
 					boolean shouldBeIncluded = isIncluded(authE);
 					boolean preventAdd = isExcluded(authE);
 					//log.debug("Included {}, Veoted {}, Event: {}",new Object[]{shouldBeIncluded,preventAdd,authE.toString()});
@@ -157,7 +157,7 @@ public class LogFileParser extends BaseEventParser {
 			throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
 		}
 
-		 System.exit(1);
+		// System.exit(1);
 
 	}
 
@@ -277,13 +277,13 @@ public class LogFileParser extends BaseEventParser {
 	private String retain(String value, Header header) {
 		if (header.getRegexRetain() == null)
 			return value;
-		
+
 		Pattern p = null;
 		if (header.isRegexRetainCaseInsensitive())
 			p = Pattern.compile(header.getRegexRetain(),Pattern.CASE_INSENSITIVE);
 		else
 			p = Pattern.compile(header.getRegexRetain());
-		
+
 		Matcher match = p.matcher(value);
 		ArrayList<String> allFound = new ArrayList<String>();
 		while (match.find()) {
