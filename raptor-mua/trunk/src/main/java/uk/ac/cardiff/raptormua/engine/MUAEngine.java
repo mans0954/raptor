@@ -60,9 +60,6 @@ public class MUAEngine {
 	/** The client that is used to process, filter and send events to another MUA instance*/
 	private EventReleaseClient eventReleaseClient;
 
-	/** Engine used to associate attributes to existing events in the MUA */
-	private AttributeAssociationEngine attributeAssociationEngine;
-
 	//TODO implement user level control on the MUA?
 	private Users users;
 
@@ -171,7 +168,7 @@ public class MUAEngine {
 	public void addAuthentications(EventPushMessage pushed) {
 	        int transactionId = (int)(Math.random()*1000000);
 		log.info("Committing {} entries to the storage engine, with transaction id [{}]", pushed.getEvents().size(),transactionId);
-		storageEngine.addEntriesAsynchronous(transactionId,pushed.getEvents());
+		storageEngine.performAsynchronousEntryStoragePipeline(transactionId,pushed.getEvents());
 
 	}
 
@@ -190,20 +187,6 @@ public class MUAEngine {
 	public EventReleaseClient getEventReleaseClient() {
 	    return eventReleaseClient;
 	}
-
-    /**
-     * @param attributeAssociationEngine the attributeAssociationEngine to set
-     */
-    public void setAttributeAssociationEngine(AttributeAssociationEngine attributeAssociationEngine) {
-        this.attributeAssociationEngine = attributeAssociationEngine;
-    }
-
-    /**
-     * @return the attributeAssociationEngine
-     */
-    public AttributeAssociationEngine getAttributeAssociationEngine() {
-        return attributeAssociationEngine;
-    }
 
     /**
      * @param storageEngine the storageEngine to set
