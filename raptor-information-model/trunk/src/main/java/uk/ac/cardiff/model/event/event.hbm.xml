@@ -5,61 +5,100 @@
 
 <hibernate-mapping>
 
-    <class name="uk.ac.cardiff.model.event.Event" table="event" dynamic-update="true" dynamic-insert="false">
+	<class name="uk.ac.cardiff.model.event.Event" table="event"
+		dynamic-update="true" dynamic-insert="false">
 
-        <id name="persistantId" column="persistantId" type="long" unsaved-value="null">
-            <generator class="native">
-                <param name="sequence">hib_entity_seq</param>
-            </generator>
-        </id>
+		<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">hib_entity_seq</param>
+			</generator>
+		</id>
 
-        <property name="eventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true"
-            insert="true" column="eventtime" not-null="false" index="dt_index" />
-        <property name="serviceHost" type="string" update="true" insert="true" column="serviceHost" not-null="false"
-            index="requesthost_index" />
-        <property name="resourceHost" type="string" update="true" insert="true" column="resourceHost" not-null="false" />
-        <property name="serviceId" type="string" update="true" insert="true" column="serviceId" not-null="false" index="serviceid_index"/>
-        <property name="resourceId" type="string" update="true" insert="true" column="resourceId" not-null="false" />
-        <property name="eventId" type="long" update="true" insert="true" column="eventId" not-null="false" />
-        <property name="eventType" type="string" update="true" insert="true" column="eventType" not-null="false" />
+		<property name="eventTime"
+			type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true"
+			insert="true" column="eventtime" not-null="false" index="dt_index" />
+		<property name="serviceHost" type="string" update="true"
+			insert="true" column="serviceHost" not-null="false" index="requesthost_index" />
+		<property name="resourceHost" type="string" update="true"
+			insert="true" column="resourceHost" not-null="false" />
+		<property name="serviceId" type="string" update="true"
+			insert="true" column="serviceId" not-null="false" index="serviceid_index" />
+		<property name="resourceId" type="string" update="true"
+			insert="true" column="resourceId" not-null="false" />
+		<property name="eventId" type="long" update="true" insert="true"
+			column="eventId" not-null="false" />
+		<property name="eventType" type="string" update="true"
+			insert="true" column="eventType" not-null="false" />
 
-        <joined-subclass name="uk.ac.cardiff.model.event.AuthenticationEvent" table="authenticationEvent">
-            <key column="id" />
-            <property name="authenticationType" column="authenticationType" type="string" />
-            <property name="principalName" column="principalName" type="string" index="principalname_index" />
+		<joined-subclass name="uk.ac.cardiff.model.event.AuthenticationEvent"
+			table="authenticationEvent">
+			<key column="id" />
+			<property name="authenticationType" column="authenticationType"
+				type="string" />
+			<property name="principalName" column="principalName" type="string"
+				index="principalname_index" />
+
+			<one-to-one  name="principalInformation"
+				class="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
+				/>
+
+			<joined-subclass
+				name="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"
+				table="shibbolethidpAuthenticationEvent">
+				<key column="id" />
+
+				<property name="requestPath" column="requestPath" type="string" />
+				<property name="requestId" column="requestID" type="string" />
+				<property name="messageProfileId" column="messageProfileId"
+					type="string" />
+				<property name="responseBinding" column="responseBinding"
+					type="string" />
+				<property name="requestBinding" column="requestBinding"
+					type="string" />
+				<property name="releasedAttributes" column="releasedAttributes"
+					type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+				<property name="assertionId" column="assertionId"
+					type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+				<property name="nameIdentifier" column="nameIdentifier"
+					type="string" />
+				<property name="responseId" column="responseId" type="string" />
+				<property name="hashCode" column="hashCode" type="integer"
+					index="hashcode_index" />
+			</joined-subclass>
 
 
-            <joined-subclass name="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent" table="shibbolethidpAuthenticationEvent">
-                <key column="id" />
+			<joined-subclass
+				name="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent" table="ezproxyauthenticationevent">
+				<key column="id" />
 
-                <property name="requestPath" column="requestPath" type="string" />
-                <property name="requestId" column="requestID" type="string" />
-                <property name="messageProfileId" column="messageProfileId" type="string" />
-                <property name="responseBinding" column="responseBinding" type="string" />
-                <property name="requestBinding" column="requestBinding" type="string" />
-                <property name="releasedAttributes" column="releasedAttributes"
-                    type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
-                <property name="assertionId" column="assertionId"
-                    type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
-                <property name="nameIdentifier" column="nameIdentifier" type="string" />
-                <property name="responseId" column="responseId" type="string" />
-                <property name="hashCode" column="hashCode" type="integer" index="hashcode_index" />
-            </joined-subclass>
+				<property name="requesterIp" column="requesterIp" type="string" />
+				<property name="sessionId" column="sessionId" type="string" />
+				<property name="hashCode" column="hashCode" type="integer"
+					index="hashcode_index" />
+
+			</joined-subclass>
+
+		</joined-subclass>
 
 
-            <joined-subclass name="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent" table="ezproxyauthenticationevent">
-                <key column="id" />
+	</class>
 
-                <property name="requesterIp" column="requesterIp" type="string" />
-                <property name="sessionId" column="sessionId" type="string" />
-                <property name="hashCode" column="hashCode" type="integer" index="hashcode_index" />
+	<class name="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
+		table="principalInformation" dynamic-update="true" dynamic-insert="false">
+		<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="null">
+			<generator class="native">
+				<param name="sequence">hib_persistent_info_seq</param>
+			</generator>
 
-            </joined-subclass>
+		</id>
+		<property name="school" type="string" update="true" insert="true" column="school" index="school_index"/>
+        <property name="affiliation" type="string" update="true" insert="true" column="affiliation" index="affiliation_index"/>
 
-        </joined-subclass>
+	</class>
 
 
-    </class>
 
 
 </hibernate-mapping>
