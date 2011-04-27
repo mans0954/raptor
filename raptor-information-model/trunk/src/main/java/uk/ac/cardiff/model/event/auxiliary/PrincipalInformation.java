@@ -1,6 +1,105 @@
 package uk.ac.cardiff.model.event.auxiliary;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collection;
+
 public class PrincipalInformation {
-    //TODO populate this class for expanded information about a principal. Also remember its mapping through hibernate.
+
+    /** For Hibernate table id */
+    private long persistantId;
+
+    /** The name of the school or department this principal is a member of*/
+    private String school;
+
+    /** The affiliation this principal has with their current school or department*/
+    private String affiliation;
+
+
+    /**
+     * @param school the school to set
+     */
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+
+
+    /**
+     * @return the school
+     */
+    public String getSchool() {
+        return school;
+    }
+
+
+
+    /**
+     * @param affiliation the affiliation to set
+     */
+    public void setAffiliation(String affiliation) {
+        this.affiliation = affiliation;
+    }
+
+
+
+    /**
+     * @return the affiliation
+     */
+    public String getAffiliation() {
+        return affiliation;
+    }
+
+
+    /**
+     * Reflection based toString method that outputs all the field value pairs of this class
+     */
+    public String toString() {
+        Method[] methods = this.getClass().getMethods();
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.getClass() + "@[");
+        for (Method method : methods) {
+            try {
+                if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
+                    this.getClass().getMethod(method.getName(), (Class[]) null);
+                    Object object = method.invoke(this, (Object[]) null);
+                    if (object instanceof Collection){
+                         builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
+                    }
+                    else{
+                        builder.append(method.getName() + " [" + object + "],");
+                    }
+              }
+            } catch (Exception e){
+                //do nothing
+            }
+        }
+        builder.append("]");
+        return builder.toString();
+ }
+
+
+
+    /**
+     * @param persistantId the persistantId to set
+     */
+    public void setPersistantId(long persistantId) {
+        this.persistantId = persistantId;
+    }
+
+
+
+    /**
+     * @return the persistantId
+     */
+    public long getPersistantId() {
+        return persistantId;
+    }
+
+
+
+
+
+
 
 }
