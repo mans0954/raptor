@@ -447,7 +447,7 @@ public class ReflectionHelper {
 
 	public static Object getValueFromObject(String fieldname, Object object) {
 		try {
-			Class id = object.getClass();
+			Class<?> id = object.getClass();
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameGet(fieldname);
 			Method getter = id.getMethod(fieldAsMethod, new Class[] {});
 			Object result = getter.invoke(object, new Object[] {});
@@ -455,7 +455,6 @@ public class ReflectionHelper {
 		} catch (Throwable e) {
 			log.error("Field name '" + fieldname + "' does not match internal model attribute");
 			e.printStackTrace();
-			// System.exit(1);
 
 		}
 		return null;
@@ -463,16 +462,46 @@ public class ReflectionHelper {
 
 	public static void setValueOnObject(String fieldname, Object param, Object object) {
 		try {
-			Class id = object.getClass();
+			Class<?> id = object.getClass();
 			String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldname);
 			Method setter = id.getMethod(fieldAsMethod, new Class[] { param.getClass() });
 			setter.invoke(object, new Object[] { param });
 		} catch (Throwable e) {
 			log.error("Field name '" + fieldname + "' does not match internal model attribute, or parameters are wrong");
-			// e.printStackTrace();
-			// System.exit(1);
 
 		}
 	}
+
+    /**
+     * @param objectToAttach
+     * @param event
+     */
+    public static void attachObjectTo(Object objectToAttach, Event event) {
+        Field[] fields = getInheritedPrivateFields(event.getClass()).toArray(new Field[0]);
+        Field fieldToSet = null;
+        for (Field field : fields){
+            if (field.getType() == objectToAttach.getClass()){
+                fieldToSet = field;
+            }
+        }
+        //now use the public accessor method to set it
+        String fieldName = fieldToSet.getName();
+        setValueOnObject(fieldName, objectToAttach, event);
+    }
+
+    private static List<Field> getInheritedPrivateFields(Class<?> type) {
+        List<Field> result = new ArrayList<Field>();
+
+        Class<?> i = type;
+        while (i != null && i != Object.class) {
+           for (Field field : i.getDeclaredFields()){
+               result.add(field);
+           }
+           i = i.getSuperclass();
+        }
+
+        return result;
+    }
+
 
 }

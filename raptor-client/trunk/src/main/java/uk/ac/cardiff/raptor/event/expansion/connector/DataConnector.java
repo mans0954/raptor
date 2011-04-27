@@ -15,4 +15,6 @@ public interface DataConnector {
 
     public void initialise();
 
+    public void setReturnAttributes(String[] s);
+
 }

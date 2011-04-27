@@ -81,8 +81,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	public void initialise() {
 		log.info("Persistant entry handler [{}] initialising", this);
-		Integer rowCount = (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
-		log.info("Persistent data store has {} entries", rowCount);
+		log.info("Persistent data store has {} entries for [{}]", this.getNumberOfEntries(),this);
 		log.info("Persistant entry handler [{}] started", this);
 	}
 
@@ -103,7 +102,7 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/**
 	 * The <code>entries</code> are stored in the <code>persistQueue</code> until they are persisted. If an exception is thrown before
-	 * they are persisted, they remain in the <code>persistQueue</code>. 
+	 * they are persisted, they remain in the <code>persistQueue</code>.
 	 *
 	 * @param entries the list of events that are to be stored
 	 * @throws
@@ -111,11 +110,11 @@ public class PersistantEntryHandler implements EntryHandler {
 	public void addEntries(List<Event> entries) throws StorageException{
 		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted, and {} exist in the queue",
 				new Object[]{this.getNumberOfEntries(), entries.size(),persistQueue.size()});
-		
+
 		int duplicates = 0;
 		persistQueue.addAll(entries);
 		List<Event> persist = new ArrayList<Event>();
-		
+
 		for (Event event : persistQueue) {
 			int hashcode = 0;
 			try {
@@ -135,7 +134,7 @@ public class PersistantEntryHandler implements EntryHandler {
 			    duplicates++;
 			}
 		}
-		
+
 		try{
 		    dataConnection.saveAll(persist);
 		}
@@ -168,8 +167,8 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	}
 
-	public Set<Event> getEntries() {
-		return (Set<Event>) dataConnection.runQuery("Select from Event",null);
+	public List<Event> getEntries() {
+		return  dataConnection.runQuery("from Event",null);
 	}
 
 	public void removeAllEntries() {
@@ -193,7 +192,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	public int getNumberOfEntries() {
 		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
 	}
-	
+
 	public DateTime getLatestEntryTime(){
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}

@@ -153,8 +153,8 @@ public class MemoryEntryHandler implements EntryHandler{
 	/**
 	 * @return the list of entries currently stored by the entry handler
 	 */
-	public Set<Event> getEntries() {
-	    return entries;
+	public List<Event> getEntries() {
+	    return new ArrayList<Event>(entries);
 
 	}
 
