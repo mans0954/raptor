@@ -17,19 +17,34 @@
 
     <!-- data connector -->
     <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
-        <constructor-arg index="0"><value>zidman12.cf.ac.uk</value></constructor-arg>
-         <constructor-arg index="1"><value>o=people</value></constructor-arg>
-         <constructor-arg index="2"><value>false</value></constructor-arg>
-         <constructor-arg index="3"><value>10</value></constructor-arg>
-         <constructor-arg index="4"><value>10</value></constructor-arg>
+         <property name="poolMaxIdle"><value>10</value></property>
+         <property name="poolInitIdleCapacity"><value>10</value></property>
+         <property name="ldapUrl"><value>zidman12.cf.ac.uk</value></property>
+         <property name="ldapBaseDn"><value>o=people</value></property>
+         <property name="startTls"><value>false</value></property>
          <property name="principal"><value>cn=srvreg1,o=users</value></property>
          <property name="principalCredential"><value>1hk27be</value></property>
          <property name="cacheResults"><value>false</value></property>
+        <!-- add the filter here, where [principal] is replaced by the principal extracted per event -->
+         <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
     </bean>
 
-    <!-- Properties to set -->
+    <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->
     <bean id="attributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
         <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="internalModelClass"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManAffiliation</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManDept</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
     </bean>
 
 

@@ -25,10 +25,8 @@
 			<props>
 				<prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> <!-- database type -->
 				<prop key="hibernate.show_sql">false</prop>  <!-- outputs the SQL queries used to the standard logger -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
+				<prop key="hibernate.hbm2ddl.auto">create</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
 					in production do not use any of these -->
-				<!-- Generate hibernate statistics
-				<prop key="hibernate.generate_statistics">true</prop> -->
 			</props>
 		</property>
 		<!-- OR mapping files. -->
@@ -39,28 +37,6 @@
 		</property>
 	</bean>
 
-	<!-- allows MBEAN stats pass out
-
-	<bean id="jmxExporter" class="org.springframework.jmx.export.MBeanExporter">
-		<property name="beans">
-			<map>
-				<entry key="Hibernate:name=statistics">
-					<ref local="statisticsBean" />
-				</entry>
-			</map>
-		</property>
-	</bean>
-
-
-	<bean id="statisticsBean" class="org.hibernate.jmx.StatisticsService">
-		<property name="statisticsEnabled">
-			<value>true</value>
-		</property>
-		<property name="sessionFactory">
-			<ref local="muaSessionFactory" />
-		</property>
-	</bean>
-	-->
 
 	<bean id="muac3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
         destroy-method="close">
