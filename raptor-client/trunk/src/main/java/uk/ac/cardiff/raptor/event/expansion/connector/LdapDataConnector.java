@@ -104,13 +104,6 @@ public class LdapDataConnector implements DataConnector {
     /** Whether to cache search results for the duration of the session. */
     private boolean cacheResults;
 
-
-    /** Name the filter template is registered under within the template engine. */
-    private String filterTemplateName;
-
-    /** Template that produces the query to use. */
-    private String filterTemplate;
-
     /** Attributes to return from ldap searches. */
     private String[] returnAttributes;
 
@@ -127,27 +120,20 @@ public class LdapDataConnector implements DataConnector {
     private int poolInitIdleCapacity;
 
     /** Data cache. */
-    private Map<String, Map<String, Map<String, Attribute<?>>>> cache;
+    private Map<String, Map<String, Map<String, String>>> cache;
 
     /** Whether this data connector has been initialized. */
     private boolean initialized;
 
+    /** The ldap search filter template*/
+    private String searchFilterTemplate;
+
 
     /**
-     * This creates a new ldap data connector with the supplied properties.
-     *
-     * @param id unique ID for this data connector
-     * @param ldapUrl <code>String</code> to connect to
-     * @param ldapBaseDn <code>String</code> to begin searching at
-     * @param startTls <code>boolean</code> whether connection should startTls
-     * @param maxIdle <code>int</code> maximum number of idle pool objects
-     * @param initIdleCapacity <code>int</code> initial capacity of the pool
+     * This creates a new ldap data connector.
      */
-    public LdapDataConnector(String ldapUrl, String ldapBaseDn, boolean startTls, int maxIdle, int initIdleCapacity) {
-        ldapConfig = new LdapConfig(ldapUrl, ldapBaseDn);
-        ldapConfig.useTls(startTls);
-        poolMaxIdle = maxIdle;
-        poolInitIdleCapacity = initIdleCapacity;
+    public LdapDataConnector() {
+        ldapConfig = new LdapConfig();
     }
 
     /**
@@ -175,7 +161,7 @@ public class LdapDataConnector implements DataConnector {
      */
     protected void initializeCache() {
         if (cacheResults && initialized) {
-            cache = new HashMap<String, Map<String, Map<String, Attribute<?>>>>();
+            cache = new HashMap<String, Map<String, Map<String, String>>>();
         }
     }
 
@@ -254,24 +240,6 @@ public class LdapDataConnector implements DataConnector {
         noResultsIsError = b;
     }
 
-    /**
-     * Gets the template used to create queries.
-     *
-     * @return template used to create queries
-     */
-    public String getFilterTemplate() {
-        return filterTemplate;
-    }
-
-    /**
-     * Sets the template used to create queries.
-     *
-     * @param template template used to create queries
-     */
-    public void setFilterTemplate(String template) {
-        filterTemplate = template;
-        clearCache();
-    }
 
     /**
      * This returns the URL this connector is using.
@@ -541,7 +509,7 @@ public class LdapDataConnector implements DataConnector {
      */
     public void setReturnAttributes(String[] s) {
         returnAttributes = s;
-        clearCache();
+        //clearCache();
     }
 
     /**
@@ -666,8 +634,6 @@ public class LdapDataConnector implements DataConnector {
      */
     public void setPrincipal(String s) {
         ldapConfig.setServiceUser(s);
-        clearCache();
-        initializeLdapPool();
     }
 
     /**
@@ -690,8 +656,6 @@ public class LdapDataConnector implements DataConnector {
      */
     public void setPrincipalCredential(String s) {
         ldapConfig.setServiceCredential(s);
-        clearCache();
-        initializeLdapPool();
     }
 
     /**
@@ -714,7 +678,8 @@ public class LdapDataConnector implements DataConnector {
 
     /** {@inheritDoc} */
     public Map<String, String> lookup(String principal) throws AttributeAssociationException {
-        String searchFilter = "cn="+principal;
+        String searchFilter = searchFilterTemplate.replace("[principal]",principal);
+
         searchFilter = searchFilter.trim();
         log.debug("Search filter: {}", searchFilter);
 
@@ -732,7 +697,7 @@ public class LdapDataConnector implements DataConnector {
 
         // results not found in the cache
         if (attributes == null) {
-            log.debug("Retrieving attributes from LDAP");
+            //log.debug("Retrieving attributes from LDAP");
             Iterator<SearchResult> results = searchLdap(searchFilter);
             // check for empty result set
             if (noResultsIsError && !results.hasNext()) {
@@ -805,28 +770,100 @@ public class LdapDataConnector implements DataConnector {
                 log.error("Error parsing LDAP attributes", e);
                 throw new AttributeAssociationException("Error parsing LDAP attributes");
             }
-            log.debug("Found {} attributes",newAttrsMap.size());
+            //log.debug("Found {} attributes",newAttrsMap.size());
             for (Map.Entry<String, List<String>> entry : newAttrsMap.entrySet()) {
                 //log.debug("Found the following attribute: {}", entry);
                 String attribute = (String) attributes.get(entry.getKey());
                 if(attribute == null){
                     attribute = new String(entry.getKey());
-                    attributes.put(entry.getKey(), attribute);
+
                 }
 
                 List<String> values = entry.getValue();
+                StringBuilder builder = new StringBuilder();
                 if(values != null && !values.isEmpty()){
+                    int count=0;
                     for(String value : values){
                         if(!DatatypeHelper.isEmpty(value)){
-                           attribute = DatatypeHelper.safeTrimOrNullString(value);
+                            builder.append(DatatypeHelper.safeTrimOrNullString(value));
+                            if (count < values.size()-1){
+                                builder.append(",");
+                            }
+                            count++;
                         }
                     }
                 }
+                attributes.put(entry.getKey(), builder.toString());
             }
         }while (mergeMultipleResults && results.hasNext());
 
         return attributes;
     }
+
+    /**
+     * @param ldapUrl the ldapUrl to set
+     */
+    public void setLdapUrl(String ldapUrl) {
+        ldapConfig.setHost(ldapUrl);
+    }
+
+    /**
+     * @param ldapBaseDn the ldapBaseDn to set
+     */
+    public void setLdapBaseDn(String ldapBaseDn) {
+        ldapConfig.setBase(ldapBaseDn);
+    }
+
+
+    /**
+     * @param startTls the startTls to set
+     */
+    public void setStartTls(boolean startTls) {
+        ldapConfig.useTls(startTls);
+    }
+
+    /**
+     * @param poolMaxIdle the poolMaxIdle to set
+     */
+    public void setPoolMaxIdle(int poolMaxIdle) {
+        this.poolMaxIdle = poolMaxIdle;
+    }
+
+    /**
+     * @return the poolMaxIdle
+     */
+    public int getPoolMaxIdle() {
+        return poolMaxIdle;
+    }
+
+    /**
+     * @param poolInitIdleCapacity the poolInitIdleCapacity to set
+     */
+    public void setPoolInitIdleCapacity(int poolInitIdleCapacity) {
+        this.poolInitIdleCapacity = poolInitIdleCapacity;
+    }
+
+    /**
+     * @return the poolInitIdleCapacity
+     */
+    public int getPoolInitIdleCapacity() {
+        return poolInitIdleCapacity;
+    }
+
+    /**
+     * @param searchFilterTemplate the searchFilterTemplate to set
+     */
+    public void setSearchFilterTemplate(String searchFilterTemplate) {
+        this.searchFilterTemplate = searchFilterTemplate;
+    }
+
+    /**
+     * @return the searchFilterTemplate
+     */
+    public String getSearchFilterTemplate() {
+        return searchFilterTemplate;
+    }
+
 
 //    /**
 //     * This stores the supplied attributes in the cache.

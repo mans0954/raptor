@@ -38,15 +38,15 @@ public interface EntryHandler {
 	 * @param entries
 	 */
 	public void addEntries(List<Event> entries) throws StorageException;
-	
+
 	/**
-	 * 
+	 *
 	 * @param event
 	 */
 	public void addEntry(Event event);
-	
+
 	/**
-	 * 
+	 *
 	 * @return
 	 */
 	public DateTime getLatestEntryTime();
@@ -55,7 +55,7 @@ public interface EntryHandler {
 	 *
 	 * @return
 	 */
-	public Set<Event> getEntries();
+	public List<Event> getEntries();
 
 	/**
 	 *

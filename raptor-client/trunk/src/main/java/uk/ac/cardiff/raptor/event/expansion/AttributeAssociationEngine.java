@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptor.event.expansion;
 
 import java.util.List;
+import java.util.Map;
 
 
 import org.slf4j.Logger;
@@ -72,10 +73,16 @@ public class AttributeAssociationEngine {
             }
             if (principal!=null){
                 try {
-                    dataConnector.lookup(principal);
+                    dataConnector.setReturnAttributes(attributeAssociationDefinition.getSourceAttributesAsArray());
+                    Map<String, String> attributes = dataConnector.lookup(principal);
+                    populate(attributes,event);
                     attached++;
                 } catch (AttributeAssociationException e) {
                     log.error("Association error for principal [{}]",principal,e);
+                } catch (InstantiationException e) {
+                    log.warn("Could not populate event [{}], {}",event,e.getMessage());
+                } catch (IllegalAccessException e) {
+                    log.warn("Could not populate event [{}], {}",event,e.getMessage());
                 }
             }
             else{
@@ -83,6 +90,29 @@ public class AttributeAssociationEngine {
             }
         }
         log.info("Associated information to {} events, where {} events did not have a valid principal",attached,noPrincipal);
+    }
+
+    private void populate(Map<String,String> attributes, Event event) throws InstantiationException, IllegalAccessException{
+
+        Object classToPopulate = attributeAssociationDefinition.getInternalModelClass().newInstance();
+
+        for (Map.Entry<String,String> entry : attributes.entrySet()){
+            String attributeSourceName = entry.getKey();
+            String attributeValue = entry.getValue();
+            log.trace("source [{}], value [{}]",attributeSourceName,attributeValue);
+            try{
+                String internalFieldName = attributeAssociationDefinition.getInternalAttributeName(attributeSourceName);
+                ReflectionHelper.setValueOnObject(internalFieldName, attributeValue, classToPopulate);
+            }
+            catch(AttributeAssociationException e){
+                log.warn("Error trying to populate internal model. {}",e.getMessage());
+            }
+        }
+
+        //now attach the object where approppriate on the current <code>Event</code> object
+        ReflectionHelper.attachObjectTo(classToPopulate,event);
+
+        log.trace("{}",classToPopulate);
     }
 
     /**

@@ -19,19 +19,30 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
+import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
+
 public class ReflectionHelperTest {
-	
+
 	@Test
-	public void testFindClassForField(){		
+	public void testFindClassForField(){
 			String classForField = ReflectionHelper.findEntrySubclassForMethod("principalName");
 			System.out.println("ShibbolethEntry = "+classForField);
 			equals(classForField.equals("ShibbolethIdpAuthenticationEvent"));
-			
+
 			classForField = ReflectionHelper.findEntrySubclassForMethod("serviceHost");
 			System.out.println("Event = "+classForField);
 			equals(classForField.equals("Event"));
-			
-			
+
+
+	}
+
+	@Test
+	public void testAttachObjectToClass(){
+	    Event shibbotheIdpAuthenticationEvent = new ShibbolethIdpAuthenticationEvent();
+	    Object principalInformation = new PrincipalInformation();
+	    ReflectionHelper.attachObjectTo(principalInformation, shibbotheIdpAuthenticationEvent);
 	}
 
 }

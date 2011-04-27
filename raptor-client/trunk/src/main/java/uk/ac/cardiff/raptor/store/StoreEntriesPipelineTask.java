@@ -24,6 +24,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.event.AuthenticationEvent;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
@@ -67,7 +68,7 @@ public class StoreEntriesPipelineTask implements Callable<Boolean>{
 
     	}
     	catch(StorageException e){
-    	    log.error("Failed to store events asynchronously");
+    	    log.error("Failed to store events asynchronously {}",e.getMessage(),e);
     	    storeCallback.storageResultCallback(new Boolean("false"));
     	    return false;
     	}
