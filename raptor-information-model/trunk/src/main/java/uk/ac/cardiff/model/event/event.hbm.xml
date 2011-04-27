@@ -39,9 +39,11 @@
 			<property name="principalName" column="principalName" type="string"
 				index="principalname_index" />
 
-			<one-to-one  name="principalInformation"
-				class="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
-				/>
+                <!--  MUST use the cascade property, otherwise hibernate will think the referenced table is already persisted and will
+                try to link to it, when it may not be there. So we need to make sure it saves or updates the object during save or update of this
+                object -->
+             <many-to-one name="principalInformation" class="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation" column="principalInformation_id" 
+                cascade="save-update"/>
 
 			<joined-subclass
 				name="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"
@@ -85,14 +87,12 @@
 	</class>
 
 	<class name="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
-		table="principalInformation" dynamic-update="true" dynamic-insert="false">
-		<id name="persistantId" column="persistantId" type="long"
-			unsaved-value="null">
-			<generator class="native">
-				<param name="sequence">hib_persistent_info_seq</param>
-			</generator>
-
-		</id>
+		table="principalInformation" >
+        
+		<id name="principleId" column="id" type="java.lang.Long">
+            <generator class="increment"/>
+        </id>
+        
 		<property name="school" type="string" update="true" insert="true" column="school" index="school_index"/>
         <property name="affiliation" type="string" update="true" insert="true" column="affiliation" index="affiliation_index"/>
 
