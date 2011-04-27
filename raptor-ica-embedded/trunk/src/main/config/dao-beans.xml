@@ -31,7 +31,7 @@
 			<props>
 				<prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> <!-- database type -->
 				<prop key="hibernate.show_sql">false</prop>  <!-- outputs the SQL queries used to the standard logger -->
-			  <prop key="hibernate.hbm2ddl.auto">update</prop> <!-- update changes the db if mapping changes, creates the db if none exists, in production do not use any of these
+			  <prop key="hibernate.hbm2ddl.auto">create</prop> <!-- update changes the db if mapping changes, creates the db if none exists, in production do not use any of these
 -->
 				<prop key="hibernate.c3p0.minPoolSize">5</prop> <!-- IMPORTANT this then uses the c3po pooling which is better than hibs implementation for production systems
 -->
@@ -44,7 +44,6 @@
 		<property name="mappingResources">
 			<list>
 				<value>uk/ac/cardiff/model/event/event.hbm.xml</value>
-				<value>uk/ac/cardiff/raptor/raptorica/model/entrymetadata.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

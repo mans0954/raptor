@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptor.raptorica.dao;
 
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -156,7 +157,7 @@ public abstract class BaseEventParser {
      *
      * @return
      */
-    public Set<Event> getAuthentications() {
+    public List<Event> getAuthentications() {
 	return entryHandler.getEntries();
 
     }
