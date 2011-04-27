@@ -111,8 +111,8 @@ public class AttributeAssociationEngine {
 
         //now attach the object where approppriate on the current <code>Event</code> object
         ReflectionHelper.attachObjectTo(classToPopulate,event);
-
-        log.trace("{}",classToPopulate);
+        
+        log.debug("{}",event);
     }
 
     /**
