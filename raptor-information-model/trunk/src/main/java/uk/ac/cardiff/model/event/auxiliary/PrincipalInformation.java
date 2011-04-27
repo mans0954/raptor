@@ -7,23 +7,21 @@ import java.util.Collection;
 public class PrincipalInformation {
 
     /** For Hibernate table id */
-    private long persistantId;
+    private long principleId;
 
-    /** The name of the school or department this principal is a member of*/
+    /** The name of the school or department this principal is a member of */
     private String school;
 
-    /** The affiliation this principal has with their current school or department*/
+    /** The affiliation this principal has with their current school or department */
     private String affiliation;
 
-
     /**
-     * @param school the school to set
+     * @param school
+     *            the school to set
      */
     public void setSchool(String school) {
         this.school = school;
     }
-
-
 
     /**
      * @return the school
@@ -32,16 +30,13 @@ public class PrincipalInformation {
         return school;
     }
 
-
-
     /**
-     * @param affiliation the affiliation to set
+     * @param affiliation
+     *            the affiliation to set
      */
     public void setAffiliation(String affiliation) {
         this.affiliation = affiliation;
     }
-
-
 
     /**
      * @return the affiliation
@@ -49,7 +44,6 @@ public class PrincipalInformation {
     public String getAffiliation() {
         return affiliation;
     }
-
 
     /**
      * Reflection based toString method that outputs all the field value pairs of this class
@@ -63,43 +57,26 @@ public class PrincipalInformation {
                 if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
                     this.getClass().getMethod(method.getName(), (Class[]) null);
                     Object object = method.invoke(this, (Object[]) null);
-                    if (object instanceof Collection){
-                         builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
-                    }
-                    else{
+                    if (object instanceof Collection) {
+                        builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
+                    } else {
                         builder.append(method.getName() + " [" + object + "],");
                     }
-              }
-            } catch (Exception e){
-                //do nothing
+                }
+            } catch (Exception e) {
+                // do nothing
             }
         }
         builder.append("]");
         return builder.toString();
- }
-
-
-
-    /**
-     * @param persistantId the persistantId to set
-     */
-    public void setPersistantId(long persistantId) {
-        this.persistantId = persistantId;
     }
 
-
-
-    /**
-     * @return the persistantId
-     */
-    public long getPersistantId() {
-        return persistantId;
+    public void setPrincipleId(long principleId) {
+        this.principleId = principleId;
     }
 
-
-
-
-
-
+    public long getPrincipleId() {
+        return principleId;
+    }
 
 }
