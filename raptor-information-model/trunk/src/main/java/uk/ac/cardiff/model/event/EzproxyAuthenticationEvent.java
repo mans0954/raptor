@@ -3,7 +3,6 @@
  */
 package uk.ac.cardiff.model.event;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
@@ -60,7 +59,7 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 	builder.append("]");
 	return builder.toString();
     }
-    
+
 
     /**
      * create a unique hash, with as uniform a distribution as possible
@@ -79,12 +78,12 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
         hash = HashCodeUtil.hash(hash,getEventType());
         hash = HashCodeUtil.hash(hash,getServiceId());
         hash = HashCodeUtil.hash(hash,getResourceId());
-        
+
 
         return hash;
 
     }
-    
+
     /**
      * For hibernate, so the hashcode can be persisted
      * @return
