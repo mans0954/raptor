@@ -21,9 +21,9 @@ public class ReleaseFailureException extends Exception{
 	 * Generated serialUID
 	 */
 	private static final long serialVersionUID = -1091443418866759066L;
-	
-	public ReleaseFailureException (String message, Exception e){
-		super (message,e);
+
+	public ReleaseFailureException (String message, Exception wrappedException){
+		super (message,wrappedException);
 	}
 
 }

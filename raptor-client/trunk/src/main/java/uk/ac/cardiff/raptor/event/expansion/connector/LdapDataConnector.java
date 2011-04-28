@@ -41,12 +41,15 @@ import net.shibboleth.idp.attribute.resolver.AttributeResolutionContext;
 import net.shibboleth.idp.attribute.resolver.AttributeResolutionException;
 import net.shibboleth.idp.attribute.resolver.BaseDataConnector;
 
+import org.joda.time.DateTime;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+
+import uk.ac.cardiff.raptor.event.expansion.AttributeLookup;
 
 import edu.vt.middleware.ldap.Ldap;
 import edu.vt.middleware.ldap.LdapConfig;
@@ -128,6 +131,11 @@ public class LdapDataConnector implements DataConnector {
     /** The ldap search filter template*/
     private String searchFilterTemplate;
 
+    /** How long the cache remains valid before it is cleared */
+    private long cacheTimeoutMs;
+
+    /** The time at which the cache was last reset*/
+    private long cacheResetTimeMs;
 
     /**
      * This creates a new ldap data connector.
@@ -140,9 +148,11 @@ public class LdapDataConnector implements DataConnector {
      * Initializes the connector and prepares it for use.
      */
     public void initialise() {
-        initialized = true;
-        initializeLdapPool();
-        initializeCache();
+        if (!initialized){
+            initialized = true;
+            initializeLdapPool();
+            initializeCache();
+        }
     }
 
     /**
@@ -162,6 +172,7 @@ public class LdapDataConnector implements DataConnector {
     protected void initializeCache() {
         if (cacheResults && initialized) {
             cache = new HashMap<String, Map<String, Map<String, String>>>();
+            cacheResetTimeMs = System.currentTimeMillis();
         }
     }
 
@@ -171,6 +182,7 @@ public class LdapDataConnector implements DataConnector {
     protected void clearCache() {
         if (cacheResults && initialized) {
             cache.clear();
+            cacheResetTimeMs = System.currentTimeMillis();
         }
     }
 
@@ -288,8 +300,6 @@ public class LdapDataConnector implements DataConnector {
      */
     public void setSslSocketFactory(SSLSocketFactory sf) {
         ldapConfig.setSslSocketFactory(sf);
-        clearCache();
-        initializeLdapPool();
     }
 
     /**
@@ -675,40 +685,49 @@ public class LdapDataConnector implements DataConnector {
         initializeLdapPool();
     }
 
+    private void checkCacheValidity(){
+        if (cacheTimeoutMs==0 || !cacheResults){
+            return;
+        }
+        long currentTimeMillis = System.currentTimeMillis();
+        boolean shouldReset  = (currentTimeMillis - cacheResetTimeMs) > cacheTimeoutMs;
+        if (shouldReset){
+            log.info("Ldap cache was cleared, timeout reached");
+            clearCache();
+        }
+    }
+
 
     /** {@inheritDoc} */
     public Map<String, String> lookup(String principal) throws AttributeAssociationException {
-        String searchFilter = searchFilterTemplate.replace("[principal]",principal);
 
+        String searchFilter = searchFilterTemplate.replace("[principal]",principal);
         searchFilter = searchFilter.trim();
-        log.debug("Search filter: {}", searchFilter);
+        //log.debug("Search: "+searchFilter);
+        //check if cache is still valid
+        checkCacheValidity();
 
         // create Attribute objects to return
         Map<String, String> attributes = null;
 
         // check for cached data
-//        if (cacheResults) {
-//            log.debug("Checking cache for search results");
-//            attributes = getCachedAttributes(resolutionContext, searchFilter);
-//            if (attributes != null && log.isDebugEnabled()) {
-//                log.debug("Returning attributes from cache");
-//            }
-//        }
+        if (cacheResults) {
+            attributes = getCachedAttributes(principal, searchFilter);
+        }
 
         // results not found in the cache
         if (attributes == null) {
-            //log.debug("Retrieving attributes from LDAP");
             Iterator<SearchResult> results = searchLdap(searchFilter);
             // check for empty result set
             if (noResultsIsError && !results.hasNext()) {
-                throw new AttributeAssociationException("No LDAP entry found for scmps2");
+                throw new AttributeAssociationException("No LDAP entry found for "+principal);
             }
             // build resolved attributes from LDAP attributes
             attributes = buildBaseAttributes(results);
-//            if (cacheResults && attributes != null) {
-//                setCachedAttributes(resolutionContext, searchFilter, attributes);
-//                log.debug("Stored results in the cache");
-//            }
+            if (cacheResults && attributes != null) {
+                setCachedAttributes(principal, searchFilter, attributes);
+                //log.debug("Stored results in the cache");
+            }
         }
 
         return attributes;
@@ -865,46 +884,57 @@ public class LdapDataConnector implements DataConnector {
     }
 
 
-//    /**
-//     * This stores the supplied attributes in the cache.
-//     *
-//     * @param resolutionContext <code>ResolutionContext</code>
-//     * @param searchFiler the searchFilter that produced the attributes
-//     * @param attributes <code>Map</code> of attribute ids to attributes
-//     */
-//    protected void setCachedAttributes(AttributeResolutionContext resolutionContext, String searchFiler,
-//            Map<String, Attribute> attributes) {
-//        Map<String, Map<String, Attribute>> results = null;
-//        String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
-//        if (cache.containsKey(principal)) {
-//            results = cache.get(principal);
-//        } else {
-//            results = new HashMap<String, Map<String, Attribute>>();
-//            cache.put(principal, results);
-//        }
-//        results.put(searchFiler, attributes);
-//    }
+    /**
+     * This stores the supplied attributes in the cache.
+     *
+     * @param principalName
+     * @param searchFiler the searchFilter that produced the attributes
+     * @param attributes <code>Map</code> of attribute ids to attributes
+     */
+    protected void setCachedAttributes(String principalName, String searchFiler, Map<String, String> attributes) {
+        Map<String, Map<String, String>> results = null;
+        if (cache.containsKey(principalName)) {
+            results = cache.get(principalName);
+        } else {
+            results = new HashMap<String, Map<String, String>>();
+            cache.put(principalName, results);
+        }
+        results.put(searchFiler, attributes);
+    }
 
-//    /**
-//     * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
-//     *
-//     * @param resolutionContext <code>ResolutionContext</code>
-//     * @param searchFilter the search filter the produced the attributes
-//     *
-//     * @return <code>Map</code> of attributes ids to attributes
-//     */
-//    protected Map<String, Attribute> getCachedAttributes(AttributeResolutionContext resolutionContext,
-//            String searchFilter) {
-//        Map<String, Attribute> attributes = null;
-//        if (cacheResults) {
-//            String principal = resolutionContext.getAttributeRequestContext().getPrincipalName();
-//            if (cache.containsKey(principal)) {
-//                Map<String, Map<String, Attribute>> results = cache.get(principal);
-//                attributes = results.get(searchFilter);
-//            }
-//        }
-//        return attributes;
-//    }
+    /**
+     * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
+     *
+     * @param principalName
+     * @param searchFilter the search filter the produced the attributes
+     *
+     * @return <code>Map</code> of attributes ids to attributes
+     */
+    protected Map<String, String> getCachedAttributes(String principalName,
+            String searchFilter) {
+        Map<String, String> attributes = null;
+        if (cacheResults) {
+            if (cache.containsKey(principalName)) {
+                Map<String, Map<String, String>> results = cache.get(principalName);
+                attributes = results.get(searchFilter);
+            }
+        }
+        return attributes;
+    }
+
+    /**
+     * @param cacheTimeoutMs the cacheTimeoutMs to set
+     */
+    public void setCacheTimeoutMs(long cacheTimeoutMs) {
+        this.cacheTimeoutMs = cacheTimeoutMs;
+    }
+
+    /**
+     * @return the cacheTimeoutMs
+     */
+    public long getCacheTimeoutMs() {
+        return cacheTimeoutMs;
+    }
 
 
 

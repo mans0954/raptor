@@ -30,7 +30,7 @@ import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
  * @author philsmart
  *
  */
-public class StorageEngine {
+public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
 
     /** Class logger*/
     private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
@@ -42,18 +42,34 @@ public class StorageEngine {
     /** Engine used to associate attributes to existing events in the MUA */
     private AttributeAssociationEngine attributeAssociationEngine;
 
+    /** The ID of the currently executing transaction */
+    private int currentTransactionId;
+
+    /** Whether a transaction is currently in progress*/
+    private boolean transactionInProgress;
 
     /** Default Constructor*/
     public StorageEngine(){
+        transactionInProgress=false;
+    }
 
+    public void storageResultCallback(Object result) {
+        log.debug("Storage task completed {}, for transaction id [{}]",result, currentTransactionId);
+        transactionInProgress=false;
     }
 
     /**
      * @param events
      */
-    public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events){
+    public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException{
+        if (transactionInProgress){
+            throw new TransactionInProgressException("Transaction "+currentTransactionId+" currently in processing");
+        }
+        log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(),transactionId);
+        transactionInProgress=true;
+        this.currentTransactionId = transactionId;
         AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, entryHandler,attributeAssociationEngine);
-        asyncEntryStorage.execute(events);
+        asyncEntryStorage.execute(events,this);
     }
 
     /**
@@ -97,6 +113,8 @@ public class StorageEngine {
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
     }
+
+
 
 
 

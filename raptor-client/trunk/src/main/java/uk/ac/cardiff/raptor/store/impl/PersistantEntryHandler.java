@@ -120,7 +120,7 @@ public class PersistantEntryHandler implements EntryHandler {
 			try {
 				hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
 			} catch (Exception e) {
-			    log.error("Could not get hashcode for event {}, event not stored");
+			    log.error("Could not get hashcode for event {}, event not stored", event);
 			    continue;
 			}
 			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";

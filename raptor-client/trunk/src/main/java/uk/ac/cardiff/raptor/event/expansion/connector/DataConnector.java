@@ -17,4 +17,6 @@ public interface DataConnector {
 
     public void setReturnAttributes(String[] s);
 
+    public void setSearchFilterTemplate(String searchFilterTemplate);
+
 }

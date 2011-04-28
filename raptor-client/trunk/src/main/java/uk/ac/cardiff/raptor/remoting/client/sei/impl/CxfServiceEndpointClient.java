@@ -42,6 +42,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.AuthenticationEvent;
+import uk.ac.cardiff.model.event.EzproxyAuthenticationEvent;
+import uk.ac.cardiff.model.event.EzproxyProxyEvent;
+import uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.raptor.registry.Endpoint;
@@ -71,10 +74,12 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 	    Set<String> overrides = new HashSet<String>();
 	    overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
 	    overrides.add(AuthenticationEvent.class.getName());
+	    overrides.add(EzproxyAuthenticationEvent.class.getName());
+	    overrides.add(OpenathenslaAuthenticationEvent.class.getName());
 	    databinding.setOverrideTypes(overrides);
 
 	    for (String typeName : overrides) {
-		Class c = null;
+		Class<?> c = null;
 		try {
 		    c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
 		} catch (ClassNotFoundException e) {
