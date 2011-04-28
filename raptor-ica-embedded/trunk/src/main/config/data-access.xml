@@ -45,10 +45,10 @@
                     </property>
 				</bean>
 
-                --><!--  EZPROXY
+                --><!--  EZPROXY-->
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
-                    <property name="entryHandler"><ref bean="persistantEntryHandler"></ref></property>
+                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-2011-04.log
                         </value>
@@ -65,15 +65,15 @@
                        </bean>
                     </property>
                 </bean>
-                -->
 
 
-				<!-- Shibboleth 2 -->
+
+				<!-- Shibboleth 2
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-17th.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-2011-04.log
 						</value>
 					</property>
 					<property name="format">
@@ -82,11 +82,9 @@
 					<property name="eventType">
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
-					<property name="printParsingPosition"><value>true</value></property><!--
+					<property name="printParsingPosition"><value>true</value></property>
 
-				 	  The inclusion list is an OR of field name, value pairs that are loaded by the parser
-					 all other fields are ignored, this is run before the exclusion list
-					--><property name="inclusionList">
+					<property name="inclusionList">
 							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.InclusionList">
 								<property name="inclusionEntries">
 									<list>
@@ -97,35 +95,9 @@
 									</list>
 								</property>
 							</bean>
-					</property><!--
-
-
-					 	exclude entries, is an OR list of <field name, field value> pairs
-						that are checked for when parsing , if oneof them exists, that entry is
-						ignored.
-
-					--><!--<property name="exclusionList">
-							<bean class="uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionList">
-								<property name="exclusionEntries">
-									<list>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
-										</bean>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="match" value="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding"/>
-										</bean>
-										<bean class ="uk.ac.cardiff.raptor.raptorica.model.filter.match.ExactMatchExclusionEntry">
-											<property name ="fieldName" value="requestBinding"/>
-											<property name="match" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"/>
-										</bean>
-									</list>
-								</property>
-							</bean>
 					</property>
 
-				--></bean>
+				</bean>-->
 			</list>
 		</property>
 	</bean>
