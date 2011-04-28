@@ -48,13 +48,13 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
  */
 public class MUAProcessImpl implements MUAProcess {
 
-	/* class logger */
-	static Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
+	/** class logger */
+	private final Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
-	/* main engine of the MultiUnitAggregator */
+	/** main engine of the MultiUnitAggregator */
 	private MUAEngine engine;
 
-	/*
+	/**
 	 * ReentrantLock to prevent more than at the same time
 	 */
 	final Lock lockR = new ReentrantLock();
@@ -67,36 +67,7 @@ public class MUAProcessImpl implements MUAProcess {
 		return engine;
 	}
 
-	/*
-	 * The MUA no longer polls for data from the UA, but this is still here in
-	 * case it is needed
-	 *
-	 * (non-Javadoc)
-	 *
-	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#poll()
-	 */
-	public void poll() {
-		if (lockR.tryLock()) {
-			try {
-				// engine.poll();
-			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
-				log.error(e.getMessage());
-				e.printStackTrace();
-			} finally {
-				lockR.unlock();
-			}
-		}
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.service.MUAProcess#performStatistics(java.lang
-	 * .String)
-	 */
 	public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
 		if (lockR.tryLock()) {
 			try {
@@ -115,23 +86,13 @@ public class MUAProcessImpl implements MUAProcess {
 
 	}
 
-	/*
-	 * Method does not need to be locked. (non-Javadoc)
-	 *
-	 * @see uk.ac.cardiff.raptormua.service.MUAProcess#getCapabilities()
-	 */
+
 	public Capabilities getCapabilities() {
 		log.info("WebSservice call for get capabilities");
 		return engine.getCapabilities();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.service.MUAProcess#setStatisticalUnit(uk.ac.cardiff
-	 * .model.wsmodel.StatisticalUnitInformation)
-	 */
+
 	@Override
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 		boolean success = false;
@@ -154,13 +115,7 @@ public class MUAProcessImpl implements MUAProcess {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.service.MUAProcess#performAdministrativeFunction
-	 * (uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
-	 */
+
 	@Override
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
 		if (lockR.tryLock()) {
@@ -183,12 +138,8 @@ public class MUAProcessImpl implements MUAProcess {
 		throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * uk.ac.cardiff.raptormua.service.MUAProcess#addAuthentications(uk.ac.cardiff
-	 * .model.wsmodel.UAEntryPush)
+	/**
+	 * Because this is perform async, the lock is not useful, its the exceptions that are.
 	 */
 	@Override
 	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
@@ -199,7 +150,7 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.addAuthentications(pushed);
 				success = true;
 			} catch (Exception e) {
-				log.error("Error trying to add authentications to this MUA, {}",e.getMessage(),e);
+				log.error("Error trying to add authentications to this MUA, {}",e.getMessage());
 
 			} finally {
 				lockR.unlock();

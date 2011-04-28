@@ -11,28 +11,25 @@
 
         <!--  the attribute association engine -->
     <bean id="attributeAssociationEngine" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine">
-        <property name="attributeAssociationDefinition"><ref bean="attributeAssociationDefinition"></ref></property>
-        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <property name="attributeAssociationDefinitions">
+            <list>
+                <ref bean="shibAttributeAssociationDefinition"/>
+                <ref bean="ezproxyAttributeAssociationDefinition"/>
+             </list>
+        </property>
     </bean>
 
-    <!-- data connector -->
-    <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
-         <property name="poolMaxIdle"><value>10</value></property>
-         <property name="poolInitIdleCapacity"><value>10</value></property>
-         <property name="ldapUrl"><value>zidman12.cf.ac.uk</value></property>
-         <property name="ldapBaseDn"><value>o=people</value></property>
-         <property name="startTls"><value>false</value></property>
-         <property name="principal"><value>cn=srvreg1,o=users</value></property>
-         <property name="principalCredential"><value>1hk27be</value></property>
-         <property name="cacheResults"><value>false</value></property>
-        <!-- add the filter here, where [principal] is replaced by the principal extracted per event -->
-         <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
-    </bean>
 
     <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->
-    <bean id="attributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
+    <bean id="shibAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
+        <property name="definiationName"><value>ShibAssociationDefinition</value></property>
         <property name="subjectPrincipalField"><value>principalName</value></property>
-        <property name="internalModelClass"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
         <property name="lookupAttributes">
             <list>
                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
@@ -45,6 +42,45 @@
                 </bean>
             </list>
         </property>
+    </bean>
+
+    <bean id="ezproxyAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
+        <property name="definiationName"><value>EzproxyAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchFilterTemplate"><value>CardiffIDManParentIdentityUid=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManAffiliation</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManDept</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+
+
+        <!-- data connectors. Currently only LDAP. Static Singleton Connector  -->
+    <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
+         <property name="poolMaxIdle"><value>10</value></property>
+         <property name="poolInitIdleCapacity"><value>10</value></property>
+         <property name="ldapUrl"><value>zidman12.cf.ac.uk</value></property>
+         <property name="ldapBaseDn"><value>o=people</value></property>
+         <property name="startTls"><value>false</value></property>
+         <property name="principal"><value>cn=srvreg1,o=users</value></property>
+         <property name="principalCredential"><value>1hk27be</value></property>
+         <property name="cacheResults"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>86400000</value></property>
     </bean>
 
 
