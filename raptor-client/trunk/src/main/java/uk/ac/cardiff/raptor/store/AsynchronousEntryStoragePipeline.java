@@ -27,7 +27,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 
-public class AsynchronousEntryStoragePipeline implements StoreEntriesTaskCallbackInterface{
+public class AsynchronousEntryStoragePipeline {
 
 	/** class logger */
 	private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStoragePipeline.class);
@@ -47,19 +47,14 @@ public class AsynchronousEntryStoragePipeline implements StoreEntriesTaskCallbac
 	    this.transactionId=transactionId;
 	}
 
-	public void storageResultCallback(Object result) {
-		log.debug("Storage task completed {}, for transaction id [{}]",result, transactionId);
-
-	}
-
 	/**
          * Starts and shuts down the <code>storeEntryTask</code> immediately, so that when it completes
          * it can be re-used.
          *
 	 * @param events
 	 */
-	public void execute(List<Event> events){
-	    StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(entryHandler, attributeAssociationEngine, events,this);
+	public void execute(List<Event> events, StoreEntriesTaskCallbackInterface callback){
+	    StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(entryHandler, attributeAssociationEngine, events,callback);
             ExecutorService es = Executors.newSingleThreadExecutor();
             es.submit(storeEntryTask);
             es.shutdown();

@@ -40,9 +40,7 @@ public class AttributeAssociationEngine {
     private final Logger log = LoggerFactory.getLogger(AttributeAssociationEngine.class);
 
     /** Defines which attributes to add, and what principal to attach to*/
-    private AttributeAssociationDefinition attributeAssociationDefinition;
-
-    private DataConnector dataConnector;
+    private List<AttributeAssociationDefinition> attributeAssociationDefinitions;
 
     /**
      * Default Constructor
@@ -51,100 +49,70 @@ public class AttributeAssociationEngine {
 
     }
 
-
     /**
      * Gets associated attributes for the given ...
      */
     public void associateAttributes(List<Event> events) throws AttributeAssociationException{
-        log.info("Has Attribute Definition [{}]",attributeAssociationDefinition!=null);
-        if (attributeAssociationDefinition==null){
-            throw new AttributeAssociationException("Attribute association not specified");
-        }
 
-        log.info("Attribute Association started for principal field [{}]",attributeAssociationDefinition.getSubjectPrincipalField());
+        for (AttributeAssociationDefinition attributeAssociationDefinition: attributeAssociationDefinitions){
+            log.info("Attribute Association Definition [{}], is enabled [{}]",attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
 
-        int attached=0;
-        int noPrincipal=0;
-        for (Event event : events){
-            Object principalObject = ReflectionHelper.getValueFromObject(attributeAssociationDefinition.getSubjectPrincipalField(), event);
-            String principal = null;
-            if (principalObject instanceof String){
-                principal = (String)principalObject;
+            if (!attributeAssociationDefinition.isEnabled()){
+                continue;
             }
-            if (principal!=null){
-                try {
-                    dataConnector.setReturnAttributes(attributeAssociationDefinition.getSourceAttributesAsArray());
-                    Map<String, String> attributes = dataConnector.lookup(principal);
-                    populate(attributes,event);
+
+            int attached=0;
+            int noPrincipal=0;
+            int current=0;
+            final int noOfEvents = events.size();
+            for (Event event : events){
+                printProgressPosition(current, noOfEvents);
+                boolean associated = attributeAssociationDefinition.associate(event);
+                if (associated){
                     attached++;
-                } catch (AttributeAssociationException e) {
-                    log.error("Association error for principal [{}]",principal,e);
-                } catch (InstantiationException e) {
-                    log.warn("Could not populate event [{}], {}",event,e.getMessage());
-                } catch (IllegalAccessException e) {
-                    log.warn("Could not populate event [{}], {}",event,e.getMessage());
                 }
+                else{
+                    noPrincipal++;
+                }
+                current++;
             }
-            else{
-                noPrincipal++;
-            }
+            log.info("Attribute Association Definition {} finished, associated information to {} events, where {} events where not of a valid class type or did not have the correct principal",
+                    new Object[]{attributeAssociationDefinition.getDefiniationName(),attached,noPrincipal});
         }
-        log.info("Associated information to {} events, where {} events did not have a valid principal",attached,noPrincipal);
     }
 
-    private void populate(Map<String,String> attributes, Event event) throws InstantiationException, IllegalAccessException{
 
-        Object classToPopulate = attributeAssociationDefinition.getInternalModelClass().newInstance();
+    /**
+     * Prints, as a percentage of the total, the event currently being processed.
+     *
+     * @param lineCount
+     * @param totalNoLines
+     */
+    private void printProgressPosition(int lineCount, int totalNoLines) {
+            double linePercentage = (((double) lineCount / (double) totalNoLines) * 100);
+            if (linePercentage % 25 >= 0 && linePercentage % 25 <= 0.003)
+                    log.debug("Attribute Association, Complete {}%", linePercentage);
+    }
 
-        for (Map.Entry<String,String> entry : attributes.entrySet()){
-            String attributeSourceName = entry.getKey();
-            String attributeValue = entry.getValue();
-            log.trace("source [{}], value [{}]",attributeSourceName,attributeValue);
-            try{
-                String internalFieldName = attributeAssociationDefinition.getInternalAttributeName(attributeSourceName);
-                ReflectionHelper.setValueOnObject(internalFieldName, attributeValue, classToPopulate);
-            }
-            catch(AttributeAssociationException e){
-                log.warn("Error trying to populate internal model. {}",e.getMessage());
-            }
+    /**
+     * Also initialises the definitions
+     *
+     * @param attributeAssociationDefinitions the attributeAssociationDefinitions to set
+     */
+    public void setAttributeAssociationDefinitions(List<AttributeAssociationDefinition> attributeAssociationDefinitions) {
+        this.attributeAssociationDefinitions = attributeAssociationDefinitions;
+        for (AttributeAssociationDefinition definition : attributeAssociationDefinitions){
+              definition.initialise();
         }
-
-        //now attach the object where approppriate on the current <code>Event</code> object
-        ReflectionHelper.attachObjectTo(classToPopulate,event);
-        
-        log.debug("{}",event);
     }
 
     /**
-     * @param attributeAssociationDefinition the attributeAssociationDefinition to set
+     * @return the attributeAssociationDefinitions
      */
-    public void setAttributeAssociationDefinition(AttributeAssociationDefinition attributeAssociationDefinition) {
-        this.attributeAssociationDefinition = attributeAssociationDefinition;
+    public List<AttributeAssociationDefinition> getAttributeAssociationDefinitions() {
+        return attributeAssociationDefinitions;
     }
 
-    /**
-     * @return the attributeAssociationDefinition
-     */
-    public AttributeAssociationDefinition getAttributeAssociationDefinition() {
-        return attributeAssociationDefinition;
-    }
-
-
-    /**
-     * @param dataConnector the dataConnector to set
-     */
-    public void setDataConnector(DataConnector dataConnector) {
-        this.dataConnector = dataConnector;
-        dataConnector.initialise();
-    }
-
-
-    /**
-     * @return the dataConnector
-     */
-    public DataConnector getDataConnector() {
-        return dataConnector;
-    }
 
 
 
