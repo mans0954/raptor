@@ -39,6 +39,7 @@ import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.StorageEngine;
+import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
@@ -164,10 +165,10 @@ public class MUAEngine {
 
 	/**
 	 * @param pushed
+	 * @throws TransactionInProgressException
 	 */
-	public void addAuthentications(EventPushMessage pushed) {
+	public void addAuthentications(EventPushMessage pushed) throws TransactionInProgressException {
 	        int transactionId = (int)(Math.random()*1000000);
-		log.info("Committing {} entries to the storage engine, with transaction id [{}]", pushed.getEvents().size(),transactionId);
 		storageEngine.performAsynchronousEntryStoragePipeline(transactionId,pushed.getEvents());
 
 	}

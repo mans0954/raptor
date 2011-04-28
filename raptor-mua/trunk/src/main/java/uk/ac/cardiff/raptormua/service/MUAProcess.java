@@ -34,11 +34,6 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 public interface MUAProcess {
 
 	/**
-	 *
-	 */
-	public void poll();
-
-	/**
 	 * @param statisticName
 	 */
 	public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault;

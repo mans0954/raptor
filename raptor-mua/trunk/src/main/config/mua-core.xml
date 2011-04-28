@@ -65,7 +65,8 @@
 					inheritence in CXF and aegis -->
 						<value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
-						<!-- <value>org.sdmx.resources.sdmxml.schemas.v2_0.message.CompactDataType</value>-->
+						<value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+						<value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
 					</list>
 				</entry>
 			</map>
