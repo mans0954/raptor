@@ -16,7 +16,7 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.raptorica.dao;
+package uk.ac.cardiff.raptor.raptorica.parse;
 
 import java.util.List;
 import java.util.Set;

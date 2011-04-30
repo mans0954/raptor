@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser;
+import uk.ac.cardiff.raptor.raptorica.parse.external.file.LogFileParser;
 
 
 import uk.ac.cardiff.model.event.Event;

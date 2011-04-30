@@ -21,9 +21,12 @@ package uk.ac.cardiff.raptor.raptorica.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
+
+
+import uk.ac.cardiff.raptor.raptorica.parse.BaseEventParser;
 
 /**
  * @author philsmart
@@ -33,7 +36,7 @@ import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
 public class DataAccessRegister {
 
     	/** Class logger */
-	private final Logger log = Logger.getLogger(DataAccessRegister.class);
+	private final Logger log = LoggerFactory.getLogger(DataAccessRegister.class);
 
 	/** List of parsing modules */
 	private List<BaseEventParser> parsingModules;

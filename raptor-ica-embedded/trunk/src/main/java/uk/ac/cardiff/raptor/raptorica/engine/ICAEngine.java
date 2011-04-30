@@ -21,7 +21,7 @@ package uk.ac.cardiff.raptor.raptorica.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
+import uk.ac.cardiff.raptor.raptorica.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 

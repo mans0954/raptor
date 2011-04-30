@@ -45,7 +45,7 @@
                     </property>
 				</bean>
 
-                --><!--  EZPROXY-->
+                --><!--  EZPROXY
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
                     <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
@@ -64,11 +64,11 @@
                            <property name="includeIfContains"><value>connect?session</value></property>
                        </bean>
                     </property>
-                </bean>
+                </bean>-->
 
 
 
-				<!-- Shibboleth 2
+				<!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
@@ -97,7 +97,7 @@
 							</bean>
 					</property>
 
-				</bean>-->
+				</bean>
 			</list>
 		</property>
 	</bean>
