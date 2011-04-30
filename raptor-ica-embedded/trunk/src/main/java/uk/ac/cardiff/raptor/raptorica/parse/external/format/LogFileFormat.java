@@ -16,29 +16,33 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.raptorica.dao.comparators;
+package uk.ac.cardiff.raptor.raptorica.parse.external.format;
 
-import java.util.Comparator;
-
-import uk.ac.cardiff.model.event.Event;
+import java.util.List;
 
 /**
- * Not enough to compare on in Entry, hence not used.
- *
  * @author philsmart
  *
  */
-public class EntryComparator implements Comparator<Event> {
+public class LogFileFormat {
+	private String delimeter;
+	private List<Header> headers;
 
 
-    public int compare(Event entry1, Event entry2) {
-	boolean requestHostEqual = entry1.getServiceHost().equals(entry2.getServiceHost());
-	boolean serverHostEqual = entry1.getResourceHost().equals(entry2.getResourceHost());
-	return 0;
-    }
+	public void setHeaders(List headers) {
+		this.headers = headers;
+	}
 
+	public List<Header> getHeaders() {
+		return headers;
+	}
 
+	public void setDelimeter(String delimeter) {
+		this.delimeter = delimeter;
+	}
 
-
+	public String getDelimeter() {
+		return delimeter;
+	}
 
 }

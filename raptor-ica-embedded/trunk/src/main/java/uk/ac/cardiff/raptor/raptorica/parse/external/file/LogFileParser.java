@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptor.raptorica.dao.external.file;
+package uk.ac.cardiff.raptor.raptorica.parse.external.file;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,10 +33,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.BufferedInputStream;
 
-import uk.ac.cardiff.raptor.raptorica.dao.BaseEventParser;
-import uk.ac.cardiff.raptor.raptorica.dao.external.format.Header;
-import uk.ac.cardiff.raptor.raptorica.dao.external.format.LineFilter;
-import uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat;
 import uk.ac.cardiff.raptor.raptorica.model.exception.HeaderException;
 import uk.ac.cardiff.raptor.raptorica.model.exception.ParserException;
 import uk.ac.cardiff.raptor.raptorica.model.filter.ExclusionEntry;
@@ -50,6 +46,10 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.raptor.raptorica.parse.BaseEventParser;
+import uk.ac.cardiff.raptor.raptorica.parse.external.format.Header;
+import uk.ac.cardiff.raptor.raptorica.parse.external.format.LineFilter;
+import uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat;
 import uk.ac.cardiff.raptor.raptorica.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.model.event.Event;
 

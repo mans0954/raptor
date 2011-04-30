@@ -16,7 +16,7 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.raptorica.dao.external.format;
+package uk.ac.cardiff.raptor.raptorica.parse.external.format;
 
 import java.util.Map;
 

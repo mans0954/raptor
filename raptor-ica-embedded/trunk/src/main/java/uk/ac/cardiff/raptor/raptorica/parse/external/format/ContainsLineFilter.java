@@ -16,7 +16,7 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.raptorica.dao.external.format;
+package uk.ac.cardiff.raptor.raptorica.parse.external.format;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

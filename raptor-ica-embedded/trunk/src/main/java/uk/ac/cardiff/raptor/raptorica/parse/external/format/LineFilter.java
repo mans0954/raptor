@@ -16,33 +16,14 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.raptorica.dao.external.format;
-
-import java.util.List;
+package uk.ac.cardiff.raptor.raptorica.parse.external.format;
 
 /**
  * @author philsmart
  *
  */
-public class LogFileFormat {
-	private String delimeter;
-	private List<Header> headers;
+public interface LineFilter {
 
-
-	public void setHeaders(List headers) {
-		this.headers = headers;
-	}
-
-	public List<Header> getHeaders() {
-		return headers;
-	}
-
-	public void setDelimeter(String delimeter) {
-		this.delimeter = delimeter;
-	}
-
-	public String getDelimeter() {
-		return delimeter;
-	}
+    public boolean parsableLine(String line);
 
 }
