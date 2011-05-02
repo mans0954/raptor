@@ -75,7 +75,7 @@
 	<!--  DONE -->
 
 
-	<bean id="ICAProcess" class="uk.ac.cardiff.raptor.raptorica.service.impl.ICAProcessImpl">
+	<bean id="ICAProcess" class="uk.ac.cardiff.raptor.raptorica.service.IcaProcessImpl">
 		<property name="engine">
 			<ref bean="CaptureEngine"></ref>
 		</property>

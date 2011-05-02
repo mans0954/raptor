@@ -26,7 +26,7 @@
 			<list>
 				<!-- SHIB 1.3
 
-				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.raptorica.parse.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib-access.2007-04-20.log
@@ -39,7 +39,7 @@
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
                      <property name="lineFilter">
-                       <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.ContainsLineFilter">
+                       <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.ContainsLineFilter">
                            <property name="includeIfContains"><value>Authentication assertion</value></property>
                        </bean>
                     </property>
@@ -47,7 +47,7 @@
 
                 --><!--  EZPROXY
 
-               <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+               <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.raptorica.parse.external.file.LogFileParser">
                     <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-2011-04.log
@@ -60,7 +60,7 @@
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                     </property>
                     <property name="lineFilter">
-                       <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.ContainsLineFilter">
+                       <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.ContainsLineFilter">
                            <property name="includeIfContains"><value>connect?session</value></property>
                        </bean>
                     </property>
@@ -70,7 +70,7 @@
 
 				<!-- Shibboleth 2 -->
 
-                <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.dao.external.file.LogFileParser">
+                <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.raptorica.parse.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-2011-04.log
@@ -117,10 +117,10 @@
 
 	<!-- accepted types are DATE, STRING, INTEGER -->
 
-	<bean id="shibIDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
+	<bean id="shibIDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat">
 		<property name="headers">
 			<list>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>eventTime</value>
 					</property>
@@ -134,7 +134,7 @@
 						<value>yyyyMMdd'T'HHmmss</value>
 					</property> <!--  Atom (ISO 8601) -->
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>serviceHost</value>
 					</property>
@@ -145,7 +145,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>requestID</value>
 					</property>
@@ -156,7 +156,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>requestPath</value>
 					</property>
@@ -174,10 +174,10 @@
 		</property>
 	</bean>
 
-     <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
+     <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat">
         <property name="headers">
             <list>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>eventTime</value>
                     </property>
@@ -196,7 +196,7 @@
                         <value>yyyy-MM-ddHH:mm:ss,SSS</value>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>resourceId</value>
                     </property>
@@ -213,7 +213,7 @@
                         </map>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>principalName</value>
                     </property>
@@ -231,7 +231,7 @@
                         </map>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>nameIdentifier</value>
                     </property>
@@ -256,10 +256,10 @@
         </property>
     </bean>
 
-	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
+	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat">
 		<property name="headers">
 			<list>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>eventTime</value>
 					</property>
@@ -273,7 +273,7 @@
 						<value>yyyyMMdd'T'HHmmss</value>
 					</property> <!--  Atom (ISO 8601) -->
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>requestBinding</value>
 					</property>
@@ -284,7 +284,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>requestId</value>
 					</property>
@@ -295,7 +295,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>resourceId</value>
 					</property>
@@ -307,7 +307,7 @@
 					</property>
 				</bean>
 
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>messageProfileId</value>
 					</property>
@@ -318,7 +318,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>responseBinding</value>
 					</property>
@@ -329,7 +329,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>responseId</value>
 					</property>
@@ -340,7 +340,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>principalName</value>
 					</property>
@@ -351,7 +351,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>authenticationType</value>
 					</property>
@@ -362,7 +362,7 @@
 						<value>STRING</value>
 					</property>
 				</bean>
-				<bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+				<bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>releasedAttributes</value>
 					</property>
@@ -376,7 +376,7 @@
 						<value>,</value>
 					</property>
 				</bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
 					<property name="fieldName">
 						<value>assertionId</value>
 					</property>
@@ -397,10 +397,10 @@
 		</property>
 	</bean>
 
-	<bean id="ezProxyFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat">
+	<bean id="ezProxyFileFormat" class="uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat">
 	<property name="headers">
             <list>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>requesterIp</value>
                     </property>
@@ -411,7 +411,7 @@
                         <value>STRING</value>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>sessionId</value>
                     </property>
@@ -422,7 +422,7 @@
                         <value>STRING</value>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>principalName</value>
                     </property>
@@ -438,7 +438,7 @@
                         </map>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>eventTime</value>
                     </property>
@@ -463,7 +463,7 @@
                         </map>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>serviceHost</value>
                     </property>
@@ -477,7 +477,7 @@
                        <value>https://[^:]*</value>
                     </property>
                 </bean>
-                <bean class="uk.ac.cardiff.raptor.raptorica.dao.external.format.Header">
+                <bean class="uk.ac.cardiff.raptor.raptorica.parse.external.format.Header">
                     <property name="fieldName">
                         <value>resourceId</value>
                     </property>
@@ -509,7 +509,7 @@
 
 	</bean>
 
-	<bean id="W3CFileFormat" class="uk.ac.cardiff.raptor.raptorica.dao.external.format.LogFileFormat"></bean>
+	<bean id="W3CFileFormat" class="uk.ac.cardiff.raptor.raptorica.parse.external.format.LogFileFormat"></bean>
 
 
 
