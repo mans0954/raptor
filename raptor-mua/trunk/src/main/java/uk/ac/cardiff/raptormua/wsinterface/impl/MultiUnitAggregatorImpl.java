@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.raptormua.wsinterface.impl;
 
+import java.util.List;
+
 import javax.jws.WebService;
 
 import org.apache.cxf.binding.soap.SoapFault;
@@ -28,6 +30,7 @@ import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
@@ -42,9 +45,6 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 
 	private MUAProcess processService;
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptormua.wsinterface.MultiUnitAggregator#getVersion()
-	 */
 	public String getVersion() {
 		return "Alpha";
 	}
@@ -57,42 +57,30 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 		return processService;
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#getCapabilities()
-	 */
 	public Capabilities getCapabilities() {
 		// TODO Auto-generated method stub
 		return processService.getCapabilities();
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#invokeStatisticalUnit(java.lang.String)
-	 */
+
 	public AggregatorGraphModel invokeStatisticalUnit(String statisticName) throws SoapFault {
 		return processService.performStatistic(statisticName);
 	}
 
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#setStatisticalUnit(uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation)
-	 */
 	@Override
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 	    processService.updateStatisticalUnit(statisticalUnitInformation);
 
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#performAdministrativeFunction(uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType)
-	 */
+
 	@Override
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
 	    return processService.performAdministrativeFunction(function);
 	}
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.sei.MultiUnitAggregator#addAuthentications(uk.ac.cardiff.model.wsmodel.UAEntryPush)
-	 */
+
 	@Override
 	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
 	    processService.addAuthentications(pushed);
@@ -102,6 +90,10 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	@Override
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 		return processService.updateAndInvokeStatisticalUnit(statisticalUnitInformation);
+	}
+
+	public boolean batchUpload(List<LogFileUpload> uploadFiles) {
+		return processService.batchUpload(uploadFiles);
 	}
 
 }

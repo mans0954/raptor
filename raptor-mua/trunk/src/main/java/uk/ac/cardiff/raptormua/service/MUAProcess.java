@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.raptormua.service;
 
+import java.util.List;
+
 import org.apache.cxf.binding.soap.SoapFault;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
@@ -25,6 +27,7 @@ import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
@@ -64,4 +67,6 @@ public interface MUAProcess {
 	 * @return
 	 */
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
+
+	public boolean batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault;
 }

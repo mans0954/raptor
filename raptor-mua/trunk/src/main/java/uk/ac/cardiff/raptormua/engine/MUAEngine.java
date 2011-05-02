@@ -18,6 +18,10 @@
  */
 package uk.ac.cardiff.raptormua.engine;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +36,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
@@ -52,7 +57,7 @@ import uk.ac.cardiff.raptormua.model.Users;
  */
 public class MUAEngine {
 
-        /** Class logger*/
+	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
 	/** Performs all statistics*/
@@ -202,5 +207,14 @@ public class MUAEngine {
     public StorageEngine getStorageEngine() {
         return storageEngine;
     }
+
+    /** Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
+     * 
+     * @param uploadFiles the files to parse and store
+     */
+	public void batchParse(List<LogFileUpload> uploadFiles) {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(uploadFiles.get(0).getData())));
+		
+	}
 
 }
