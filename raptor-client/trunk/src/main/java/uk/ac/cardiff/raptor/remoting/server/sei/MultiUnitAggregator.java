@@ -18,6 +18,9 @@
  */
 package uk.ac.cardiff.raptor.remoting.server.sei;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jws.WebService;
 
 import org.apache.cxf.binding.soap.SoapFault;
@@ -26,6 +29,7 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
@@ -59,5 +63,8 @@ public interface MultiUnitAggregator {
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault;
 
 	public void addAuthentications(EventPushMessage pushed) throws SoapFault;
+
+	/** Send a batch of log files to the MUA to store */
+	public boolean batchUpload(List<LogFileUpload> uploadFiles);
 
 }
