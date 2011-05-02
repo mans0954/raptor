@@ -36,20 +36,12 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-import net.shibboleth.idp.attribute.Attribute;
-import net.shibboleth.idp.attribute.resolver.AttributeResolutionContext;
-import net.shibboleth.idp.attribute.resolver.AttributeResolutionException;
-import net.shibboleth.idp.attribute.resolver.BaseDataConnector;
 
-import org.joda.time.DateTime;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 
-import uk.ac.cardiff.raptor.event.expansion.AttributeLookup;
 
 import edu.vt.middleware.ldap.Ldap;
 import edu.vt.middleware.ldap.LdapConfig;
@@ -747,10 +739,10 @@ public class LdapDataConnector implements DataConnector {
             ldap = (Ldap) ldapPool.borrowObject();
             return ldap.search(searchFilter, returnAttributes);
         } catch (NamingException e) {
-            log.error("An error occured when attempting to search the LDAP: " + ldapConfig.getEnvironment(), e);
-            throw new AttributeAssociationException("An error occurred when attempting to search the LDAP");
+            //log.error("An error occured when attempting to search the LDAP: {}, {}",ldapConfig.getEnvironment(), e.getMessage());
+            throw new AttributeAssociationException("An error occurred when attempting to search the LDAP "+e.getMessage());
         } catch (Exception e) {
-            log.error("Could not retrieve Ldap object from pool", e);
+            log.error("Could not retrieve Ldap object from pool, {}", e.getMessage());
             throw new AttributeAssociationException(
                     "An error occurred when attempting to retrieve a LDAP connection from the pool");
         } finally {
@@ -758,7 +750,7 @@ public class LdapDataConnector implements DataConnector {
                 try {
                     ldapPool.returnObject(ldap);
                 } catch (Exception e) {
-                    log.error("Could not return Ldap object back to pool", e);
+                    log.error("Could not return Ldap object back to pool {}", e.getMessage());
                 }
             }
         }

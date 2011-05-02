@@ -123,7 +123,7 @@ public class AttributeAssociationDefinition {
 
                  return true;
             } catch (AttributeAssociationException e) {
-                log.error("Association error for principal [{}]",principal,e);
+                log.error("Association error for principal [{}], {}",principal,e.getMessage());
             } catch (InstantiationException e) {
                 log.warn("Could not populate event [{}], {}",event,e.getMessage());
             } catch (IllegalAccessException e) {
