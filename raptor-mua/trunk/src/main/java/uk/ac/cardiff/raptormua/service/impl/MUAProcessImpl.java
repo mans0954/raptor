@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptormua.service.impl;
 
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -32,6 +33,7 @@ import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
@@ -177,7 +179,6 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.updateStatisticalUnit(statisticalUnitInformation);
 				return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
 				log.error(e.getMessage());
 				e.printStackTrace();
 			} finally {
@@ -186,6 +187,20 @@ public class MUAProcessImpl implements MUAProcess {
 		}
 		log.warn("Lock was hit for method updateAndInvokeStatisticalUnit");
 		throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
+
+	}
+
+	/**
+	 * Batch upload does not employ a lock on the MUA
+	 */
+	@Override
+	public boolean batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
+		log.info("Webservice call to parse {} batch log file(s)",uploadFiles.size());
+		for (LogFileUpload logfile : uploadFiles){
+			log.debug("Log File details: name [{}], MIME type [{}], Length [{}]",new Object[]{logfile.getName(),logfile.getMime(),logfile.getData().length});
+		}
+		engine.batchParse(uploadFiles);
+		return true;
 
 	}
 
