@@ -31,7 +31,8 @@ import uk.ac.cardiff.raptorweb.service.GraphService;
  */
 public class GraphServiceImpl implements GraphService{
 
-	static Logger log = LoggerFactory.getLogger(GraphServiceImpl.class);
+        /** Class logger */
+	private final Logger log = LoggerFactory.getLogger(GraphServiceImpl.class);
 
 	/* RaptorWeb's main engine class for dealing with all service requests */
 	private RaptorWebEngine webEngine;

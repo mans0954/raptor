@@ -37,5 +37,13 @@ public interface SetupService {
 	public Capabilities getAttachedCapabilities();
 
 	public MUAEntry getCurrentlyAttached();
+	
+	      
+	/**
+	 * Upload all files currently stored in <code>websession.setupmodel.fileUpload</code> class.
+	 * 
+	 * @param websession
+	 */
+        public void batchUpload(WebSession websession);
 
 }

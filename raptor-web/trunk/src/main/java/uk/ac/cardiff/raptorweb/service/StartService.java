@@ -22,4 +22,5 @@ public interface StartService {
 	public void generateStatistics(WebSession websession);
 
 
+
 }

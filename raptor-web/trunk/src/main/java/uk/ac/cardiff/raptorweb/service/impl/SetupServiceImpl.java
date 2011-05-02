@@ -14,70 +14,56 @@ import uk.ac.cardiff.raptorweb.service.SetupService;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class SetupServiceImpl implements SetupService{
+public class SetupServiceImpl implements SetupService {
 
-	private RaptorWebEngine webEngine;
+    /** The engine of the web interface, where all central and common functions exist */
+    private RaptorWebEngine webEngine;
 
+    public List getStatisticalServices() {
+        return null;
+    }
 
+    public void setAttachedEndpoint(WebSession websession) {
+        webEngine.setAttached(websession.getSetupmodel().getSelectedEndpoint());
+    }
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getStatisticalServices()
-	 */
-	@Override
-	public List getStatisticalServices() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List getAttached() {
+        return webEngine.getAttached();
+    }
 
-	public void setAttachedEndpoint(WebSession websession){
-	    webEngine.setAttached(websession.getSetupmodel().getSelectedEndpoint());
-	}
+    public void setWebEngine(RaptorWebEngine webEngine) {
+        this.webEngine = webEngine;
+    }
 
+    public RaptorWebEngine getWebEngine() {
+        return webEngine;
+    }
 
-	public List getAttached(){
-		return webEngine.getAttached();
-	}
+    public void getCapabilities(WebSession websession) {
+        websession.getSetupmodel().setSelectEndpointCapabilities(webEngine.getCapabilities(websession.getSetupmodel().getSelectedEndpoint()));
+    }
 
-	public void setWebEngine(RaptorWebEngine webEngine) {
-		this.webEngine = webEngine;
-	}
+    public void deleteAllEntriesFromAttachedMUA(WebSession websession) {
+        webEngine.deleteAllEntriesFromAttachedMUA(websession.getSetupmodel());
+    }
 
-	public RaptorWebEngine getWebEngine() {
-		return webEngine;
-	}
+    public boolean getHasAttached() {
+        return webEngine.hasAttached();
+    }
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getCapabilities(uk.ac.cardiff.raptorweb.model.SetupModel)
-	 */
-	@Override
-	public void getCapabilities(WebSession websession) {
-	    websession.getSetupmodel().setSelectEndpointCapabilities(webEngine.getCapabilities(websession.getSetupmodel().getSelectedEndpoint()));
-	}
+    public Capabilities getAttachedCapabilities() {
+        return webEngine.getAttachedCapabilities();
+    }
 
-	public void deleteAllEntriesFromAttachedMUA(WebSession websession){
-	    	webEngine.deleteAllEntriesFromAttachedMUA(websession.getSetupmodel());
-	}
+    public MUAEntry getCurrentlyAttached() {
+        return webEngine.getCurrentlyAttached();
+    }
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptorweb.service.SetupService#hasAttached()
-	 */
-	@Override
-	public boolean getHasAttached() {
-	    return webEngine.hasAttached();
-	}
+    public void batchUpload(WebSession websession) {
+        webEngine.batchUpload(websession);
 
-	/* (non-Javadoc)
-	 * @see uk.ac.cardiff.raptorweb.service.SetupService#getAttachedCapabilities()
-	 */
-	@Override
-	public Capabilities getAttachedCapabilities() {
-	    return webEngine.getAttachedCapabilities();
-	}
-
-	public MUAEntry getCurrentlyAttached(){
-		return webEngine.getCurrentlyAttached();
-	}
+    }
 
 }
