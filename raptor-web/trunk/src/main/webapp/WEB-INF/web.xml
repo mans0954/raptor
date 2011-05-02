@@ -1,133 +1,120 @@
 <?xml version = '1.0' encoding = 'ISO-8859-1'?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor
-	license agreements. See the NOTICE file distributed with this work for additional
-	information regarding copyright ownership. The ASF licenses this file to
-	you under the Apache License, Version 2.0 (the "License"); you may not use
-	this file except in compliance with the License. You may obtain a copy of
-	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required
-	by applicable law or agreed to in writing, software distributed under the
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
-	OF ANY KIND, either express or implied. See the License for the specific
-	language governing permissions and limitations under the License. -->
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file 
+    distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under 
+    the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may 
+    obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to 
+    in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
+    ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under 
+    the License. -->
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-	version="2.4">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
 
-	<description>RaptorWeb</description>
+    <description>RaptorWeb</description>
 
 
-	<!-- - defines setup that can be accessed by the entire servlet, not just
-		spring hence why security is defined here -->
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
+    <!-- - defines setup that can be accessed by the entire servlet, not just spring hence why security is defined here -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
           /WEB-INF/config/security.xml
       </param-value>
-	</context-param>
+    </context-param>
 
-	<filter>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>springSecurityFilterChain</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-	<context-param>
-		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>server</param-value>
-	</context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
 
 
-	<!-- Use xhtml view templates saved as *.xhtml, for use with Facelets -->
-	<context-param>
-		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-		<param-value>.xhtml</param-value>
-	</context-param>
-	<!-- Enables special Facelets debug output during development -->
-	<context-param>
-		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<!-- Causes Facelets to refresh templates during development -->
-	<context-param>
-		<param-name>facelets.REFRESH_PERIOD</param-name>
-		<param-value>1</param-value>
-	</context-param>
+    <!-- Use xhtml view templates saved as *.xhtml, for use with Facelets -->
+    <context-param>
+        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+        <param-value>.xhtml</param-value>
+    </context-param>
+    <!-- Enables special Facelets debug output during development -->
+    <context-param>
+        <param-name>facelets.DEVELOPMENT</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Causes Facelets to refresh templates during development -->
+    <context-param>
+        <param-name>facelets.REFRESH_PERIOD</param-name>
+        <param-value>1</param-value>
+    </context-param>
 
-	<!-- Enforce UTF-8 Character Encoding -->
-	<filter>
-		<filter-name>charEncodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>ISO-8859-1</param-value>
-		</init-param>
-		<init-param>
-			<param-name>forceEncoding</param-name>
-			<param-value>true</param-value>
-		</init-param>
-	</filter>
+    <!-- Enforce UTF-8 Character Encoding -->
+    <filter>
+        <filter-name>charEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>ISO-8859-1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
 
-	<filter-mapping>
-		<filter-name>charEncodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <filter-mapping>
+        <filter-name>charEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-	<!-- Listener for spring -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-	<!-- Listener, to allow Jetty serving MyFaces apps
-	<listener>
-		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
-	</listener>-->
+    <!-- Listener for spring -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <!-- Listener, to allow Jetty serving MyFaces apps <listener> <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class> 
+        </listener> -->
 
-	<!-- Spring web flow servlet, defines config specific to the current application
-		instance -->
-	<servlet>
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/config/raptorweb-servlet.xml
+    <!-- Spring web flow servlet, defines config specific to the current application instance -->
+    <servlet>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/config/raptorweb-servlet.xml
 			</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-	<!-- allows spring security to monitor the HTTPSession, so on logout the
-		session is released furthermore, this is required to allow concurrency control
-		e.g. 1 user session max, otherwise sessions are only every timed out -->
-	<listener>
-		<listener-class>
-			org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-	</listener>
+    <!-- allows spring security to monitor the HTTPSession, so on logout the session is released furthermore, this is required 
+        to allow concurrency control e.g. 1 user session max, otherwise sessions are only every timed out -->
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
 
-	<!-- Serves static resource content from .jar files such as spring-faces.jar -->
-	<servlet>
-		<servlet-name>Resources Servlet</servlet-name>
-		<servlet-class>org.springframework.js.resource.ResourceServlet</servlet-class>
-		<load-on-startup>0</load-on-startup>
-	</servlet>
+    <!-- Serves static resource content from .jar files such as spring-faces.jar -->
+    <servlet>
+        <servlet-name>Resources Servlet</servlet-name>
+        <servlet-class>org.springframework.js.resource.ResourceServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
 
-	<!-- Map all /resources requests to the Resource Servlet for handling -->
+    <!-- Map all /resources requests to the Resource Servlet for handling -->
     <servlet-mapping>
         <servlet-name>Resources Servlet</servlet-name>
         <url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
 
-	<!-- Faces Servlet -->
-	<!--<servlet>
-		<servlet-name>faces</servlet-name>
-		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-	</servlet>-->
+    <!-- Faces Servlet -->
+    <!--<servlet> <servlet-name>faces</servlet-name> <servlet-class>javax.faces.webapp.FacesServlet</servlet-class> </servlet> -->
 
-	<servlet>
+    <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -140,23 +127,33 @@
     </servlet-mapping>
 
 
-	<!-- Richfaces config-->
-	<context-param>
-    <param-name>org.richfaces.SKIN</param-name>
-    <param-value>darkX</param-value>
-  </context-param>
+    <!-- Richfaces config -->
+    <context-param>
+        <param-name>org.richfaces.SKIN</param-name>
+        <param-value>darkX</param-value>
+    </context-param>
 
-   <!-- Making the RichFaces skin spread to standard HTML controls-->
-  <context-param>
-    <param-name>org.richfaces.CONTROL_SKINNING</param-name>
-    <param-value>enable</param-value>
-  </context-param>
+    <!-- Making the RichFaces skin spread to standard HTML controls -->
+    <context-param>
+        <param-name>org.richfaces.CONTROL_SKINNING</param-name>
+        <param-value>enable</param-value>
+    </context-param>
+
 
 
     <filter>
-    <display-name>RichFaces Filter</display-name>
+        <display-name>RichFaces Filter</display-name>
         <filter-name>richfaces</filter-name>
-    <filter-class>org.ajax4jsf.Filter</filter-class>
+        <filter-class>org.ajax4jsf.Filter</filter-class>
+        <init-param>
+            <param-name>maxRequestSize</param-name>
+            <param-value>10240000</param-value>
+        </init-param>
+        <init-param>
+            <param-name>createTempFiles</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        
     </filter>
     <filter-mapping>
         <filter-name>richfaces</filter-name>
@@ -166,15 +163,15 @@
         <dispatcher>INCLUDE</dispatcher>
     </filter-mapping>
 
-	<!-- Spring web flow servlet mapping -->
-	<servlet-mapping>
-		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
-		<url-pattern>/spring/*</url-pattern>
-	</servlet-mapping>
+    <!-- Spring web flow servlet mapping -->
+    <servlet-mapping>
+        <servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+        <url-pattern>/spring/*</url-pattern>
+    </servlet-mapping>
 
-	<!-- Welcome Files -->
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
+    <!-- Welcome Files -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 </web-app>

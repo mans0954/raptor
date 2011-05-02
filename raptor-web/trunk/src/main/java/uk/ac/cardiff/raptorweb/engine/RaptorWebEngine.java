@@ -13,6 +13,7 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ServerMetadata;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
@@ -240,6 +241,14 @@ public class RaptorWebEngine {
 
     public ServiceEndpointClient getServiceEndpointClient() {
 	return serviceEndpointClient;
+    }
+
+    public void batchUpload(WebSession websession) {
+        ArrayList<LogFileUpload> uploadFiles = websession.getSetupmodel().getFileUpload().getFiles();
+        boolean sent = serviceEndpointClient.sendBatch(uploadFiles,attachedMUA);
+        if (sent)
+            websession.getSetupmodel().getFileUpload().processingStatus("MUA has taken possession of the log files");
+        
     }
 
 

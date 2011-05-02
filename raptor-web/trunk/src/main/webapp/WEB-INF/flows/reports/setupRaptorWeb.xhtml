@@ -9,31 +9,30 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
 	template="/templates/raptor/full.xhtml">
+	
 
 	<ui:define name="content">
-		<h:form id="setupForm">
-			<rich:tabPanel id="setupTabPanel" height="450" selectedTab="graph"
-				switchType="client"> 
 
-				<rich:tab name="aggregatorSetup" label="Aggregator Setup">
+		<rich:tabPanel id="setupTabPanel" height="450"
+			selectedTab="aggregatorSetup" switchType="client">
 
-					<rich:layout>
+			<rich:tab name="aggregatorSetup" label="Aggregator Setup">
 
-						<rich:layoutPanel position="left" width="10%">
+				<rich:layout>
 
+					<rich:layoutPanel position="left" width="10%">
+					</rich:layoutPanel>
 
+					<rich:layoutPanel position="top">
+						<center>
+							<h2>Aggregators</h2>
+						</center>
+					</rich:layoutPanel>
+					<rich:layoutPanel position="right">
 
-						</rich:layoutPanel>
-						
-						<rich:layoutPanel position="top">						
-							<center><h2>Aggregators</h2></center>
-						</rich:layoutPanel>
+						<rich:spacer height="15px" />
 
-
-						<rich:layoutPanel position="right">
-							
-							<rich:spacer height="15px" />
-
+						<h:form id="serviceTableForm">
 							<rich:dataTable value="#{setupService.attached}"
 								bandingInterval="2" banding="row" var="attached" width="90%">
 								<rich:column>
@@ -64,7 +63,7 @@
 									<h:commandLink action="getAggregatorCapabilities"
 										value="Check Now"
 										rendered="#{empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}"
-										reRender="setupForm">
+										reRender="serviceTableForm">
 										<f:setPropertyActionListener value="#{attached}"
 											target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
 									</h:commandLink>
@@ -88,62 +87,101 @@
 										<h:outputText value="Online" />
 									</f:facet>
 
-									<center><h:graphicImage value="/image/red-circle.gif"
-										rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
-									<h:graphicImage value="/image/green-circle.png"
-										shortDesc="help"
-										rendered="#{!flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+									<center>
+										<h:graphicImage value="/image/red-circle.gif"
+											rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+										<h:graphicImage value="/image/green-circle.png"
+											shortDesc="help"
+											rendered="#{!flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
 									</center>
 								</rich:column>
 							</rich:dataTable>
-							<rich:spacer height="15px" />
 
-						</rich:layoutPanel>
-					</rich:layout>
+						</h:form>
 
-					<rich:separator />
-					<rich:spacer height="10px" />					
-					<center><h2>Attached Aggregator Information</h2></center>
-					<rich:spacer height="5px" />
-					<h:panelGrid columns="1">
-						<h:outputText
-							value="Organisation Name: #{setupService.attachedCapabilities.metadata.organisationName}" />
-						<h:outputText
-							value="Contact: #{setupService.attachedCapabilities.metadata.contactEmail}" />
-						<h:outputText
-							value="Endpoint: #{setupService.currentlyAttached.serviceEndpoint}" />
-					</h:panelGrid>
-					<rich:spacer height="15px" />
-					<rich:separator />
-					<rich:spacer height="15px" />
-					<center><h2>Administrative Functions</h2></center>
+						<rich:spacer height="15px" />
 
-					<rich:spacer height="10px" />
-					<rich:spacer width="15px" />
-					<h:panelGrid columns="2" rendered="#{setupService.hasAttached}">
-						<h:graphicImage style="cursor: pointer" value="/image/arrow.png"/>
-						
+					</rich:layoutPanel>
+				</rich:layout>
 
-						<h:commandLink style="cursor: pointer" value="Delete All Entries"/>
-							<!-- action="deleteAllEntriesFromAttachedMUA" />
+				<rich:separator />
+				<rich:spacer height="10px" />
+				<center>
+					<h2>Attached Aggregator Information</h2>
+				</center>
+				<rich:spacer height="5px" />
+				<h:panelGrid columns="1">
+					<h:outputText
+						value="Organisation Name: #{setupService.attachedCapabilities.metadata.organisationName}" />
+					<h:outputText
+						value="Contact: #{setupService.attachedCapabilities.metadata.contactEmail}" />
+					<h:outputText
+						value="Endpoint: #{setupService.currentlyAttached.serviceEndpoint}" />
+				</h:panelGrid>
+				<rich:spacer height="15px" />
+				<rich:separator />
+				<rich:spacer height="15px" />
+				<center>
+					<h2>Batch Log File Upload</h2>
+				</center>
 
-						<h:graphicImage style="cursor: pointer" value="/image/arrow.png"/>
-				
-						<h:commandLink style="cursor: pointer" value="Delete All Entries In Range" />-->
-					</h:panelGrid>
+				<center>
+					<h:form id="uploadPanelForm">
+
+						<h:panelGrid id="uploadPanelGrid" columns="2"
+							style="border: 1px solid black; vertical-align:top; background-color:white;">
+							<rich:fileUpload fileUploadListener="#{flowScope.websession.setupmodel.fileUpload.listener}"
+								maxFilesQuantity="#{flowScope.websession.setupmodel.fileUpload.uploadsAvailable}" id="upload"
+								immediateUpload="#{flowScope.websession.setupmodel.fileUpload.autoUpload}"
+								acceptedTypes="txt, log" allowFlash="true">
+								<a4j:support event="onuploadcomplete" reRender="uploadPanelForm" />
+							</rich:fileUpload>
+							<h:panelGroup id="info">
+								<rich:panel bodyClass="info">
+									<f:facet name="header">
+										<h:outputText value="Uploaded Files Info" />
+									</f:facet>
+									<h:outputText value="No files currently uploaded"
+										rendered="#{flowScope.websession.setupmodel.fileUpload.size==0}" />
+									<rich:dataTable value="#{flowScope.websession.setupmodel.fileUpload.files}" var="file"
+										rowKeyVar="row">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="File Name" />
+											</f:facet>											
+											<h:outputText value="#{file.name}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="File Length(bytes)" />
+											</f:facet>											
+											<h:outputText value="#{file.length}" />
+										</rich:column>
+
+									</rich:dataTable>
+								</rich:panel>
+								<rich:spacer height="3" />
+								<br />
+								<a4j:commandButton action="#{flowScope.websession.setupmodel.fileUpload.clearUploadData}"
+									reRender="info, upload" value="Clear Uploaded Data"
+									rendered="#{flowScope.websession.setupmodel.fileUpload.size>0}" />
+								<a4j:commandButton action="batchUpload"
+                                    reRender="info, upload" value="Commit To MUA"
+                                    rendered="#{flowScope.websession.setupmodel.fileUpload.size>0}" />
+                                 <h:outputText value="#{flowScope.websession.setupmodel.fileUpload.processingStatus"
+                                        rendered="#{flowScope.websession.setupmodel.fileUpload.size==0}" />									
+							</h:panelGroup>
+						</h:panelGrid>
+
+					</h:form>
+				</center>
 
 
+			</rich:tab>
 
-				</rich:tab>
+			<rich:tab name="preferencesSetup" label="User Preferences" />
 
-				<rich:tab name="preferencesSetup" label="User Preferences" />
-
-			</rich:tabPanel>
-		</h:form>
-
-
-
-
+		</rich:tabPanel>
 
 
 	</ui:define>

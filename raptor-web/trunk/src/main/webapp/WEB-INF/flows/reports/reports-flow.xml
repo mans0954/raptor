@@ -123,6 +123,10 @@
 		<transition on="attachMUA">
 			<evaluate expression="setupService.setAttachedEndpoint(flowScope.websession)" />
 		</transition>
+        
+        <transition on="batchUpload">
+            <evaluate expression="setupService.batchUpload(flowScope.websession)" />
+        </transition>
 
 
 

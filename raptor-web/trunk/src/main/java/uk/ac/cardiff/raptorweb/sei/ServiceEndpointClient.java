@@ -9,6 +9,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
@@ -161,7 +163,6 @@ public class ServiceEndpointClient {
     public boolean invokeAdministrativeFunction(MUAEntry endpoint, AdministrativeFunction function) {
 	try {
 	    MultiUnitAggregator client = getEndpointConnection(endpoint);
-	    // client.invokeStatisticalUnit(selectedStatisticalUnit);
 	    log.debug("Accessing the MUA version {}", client.getVersion());
 	    boolean success = client.performAdministrativeFunction(function);
 
@@ -175,6 +176,24 @@ public class ServiceEndpointClient {
 	    return false;
 	}
 
+    }
+    
+    public boolean sendBatch(ArrayList<LogFileUpload> uploadFiles, MUAEntry endpoint) {
+        try {
+            MultiUnitAggregator client = getEndpointConnection(endpoint);
+            log.debug("Accessing the MUA version {}", client.getVersion());
+            boolean success = client.batchUpload(uploadFiles);
+
+            return success;
+        } catch (SoapFault e) {
+            log.error("Problem trying to send batch log files to MUA {} -> {}  ", new Object[] {endpoint, e.getMessage() });
+            return false;
+        } catch (Exception e) {
+            log.error("Problem trying to send batch log files to MUA {} -> {} ", new Object[] {endpoint, e.getMessage() });
+            log.error("Details, {}", e);
+            return false;
+        }
+        
     }
 
     public AggregatorGraphModel updateAndinvokeStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnit) {
@@ -206,5 +225,7 @@ public class ServiceEndpointClient {
     public ClientTLSParameters getTlsParameters() {
 	return tlsParameters;
     }
+
+
 
 }

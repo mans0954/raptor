@@ -91,12 +91,13 @@
             <property name="saveDirectory"><value>/graphs/</value></property>
             <property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
     </bean>
+    
 
 	<!-- Set up the start page background stats generator -->
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			  <ref local="SystemStatsQuickTrigger"/>
+			 <!-- <ref local="SystemStatsQuickTrigger/>-->
 			</list>
 		</property>
 	</bean>
