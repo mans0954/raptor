@@ -24,11 +24,14 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 
 import org.joda.time.DateTime;
@@ -50,66 +53,49 @@ public class MemoryEntryHandler implements EntryHandler{
 	/** set of all entries stored by this EntryHandler */
 	private Set<Event> entries;
 
-	/** stores the set of latest unique entries. That is, those with the latest and same
-	 *  DateTime, but different state (attribute values). This set is check when adding new
-	 *  entries, and is not removed when records are removed.
-	 */
-	private Set<Event> latestEqualEntries;
 
 	public MemoryEntryHandler(){
 		entries = new LinkedHashSet<Event>();
-		latestEqualEntries = new LinkedHashSet<Event>();
 	}
 
 	public void addEntries(List<Event> entries){
 		log.debug("Current: "+this.entries.size()+" in: "+entries.size());
-
+		int notAdded = 0;
 		for (Event event: entries){
-		    addEntry(event);
+		    boolean didAdd = addEntry(event);
+		    if (didAdd==false)
+		        notAdded++;
 
 		}
-		log.debug("Total No. of Entries "+this.entries.size()+" Latest Entry at: "+getLatestEntryTime());
+		log.debug("Total No. of Entries {}, Lastest Entry at: {}, with {} duplicates",new Object[]{this.entries.size(),getLatestEntryTime(),notAdded});
 	}
+
 
 
 	/**
-	 * If newer entry, just add to the set.
-	 * If equal, first check the <code>latestEqualEntries</code> set,
-	 * if contained in this set, then it has already been added. If not
-	 * add. Importantly, we do not just add to the entries set (which would
-	 * not allow duplicates) because the set is cleared when information is sent
-	 * to the UA.
+	 * Checks whether this event is already stored, if not, then it
+	 * adds the <code>event</code> to the <code>entries<code> set.
+	 *
+	 * @param event the event to store
 	 */
-	public void addEntry(Event entry){
-	    boolean isAfter = isAfter(entry);
-	    boolean isEqual = isEqual(entry);
-	    if (isAfter){
-		entries.add(entry);
-		updateLastEntry(entry);
+	public boolean addEntry(Event event){
+	    if (!entries.contains(event)){
+	        entries.add(event);
+	        updateLastEntry(event);
+	        return true;
 	    }
-	    else if (isEqual){
-		boolean isAlreadyInLatest = latestEqualEntries.contains(entry);
-		if (isAlreadyInLatest){
-		    log.error("Duplicated entries found\n{}",entry);
-		}
-		if (!isAlreadyInLatest){
-		    entries.add(entry);
-		    updateLastEntry(entry);
-		}
+	    else{
+	        return false;
 	    }
 
 	}
 
-	private void updateLastEntry(Event entry){
-		DateTime entryTime = entry.getEventTime();
+	private void updateLastEntry(Event event){
+		DateTime entryTime = event.getEventTime();
 		if (getLatestEntryTime()==null)setLatestEntryTime(entryTime);
 		if (entryTime.isAfter(getLatestEntryTime())){
 		    setLatestEntryTime(entryTime);
-		    latestEqualEntries.clear();
-		    latestEqualEntries.add(entry);
-		}
-		if (entryTime.isEqual(getLatestEntryTime())){
-		    latestEqualEntries.add(entry);
+
 		}
 	}
 
@@ -121,26 +107,7 @@ public class MemoryEntryHandler implements EntryHandler{
 		return latestEntryTime;
 	}
 
-	/**
-	 * @param authE
-	 * @return
-	 */
-	public boolean isNewerOrEqual(Event event) {
-		if (latestEntryTime==null) return true;
-		if (!event.getEventTime().isBefore(latestEntryTime)) return true;
-		return false;
-	}
 
-
-	public boolean isEqual(Event event) {
-	    if (latestEntryTime==null) return false;
-	    return event.getEventTime().isEqual(latestEntryTime);
-	}
-
-	public boolean isAfter(Event event) {
-	    if (latestEntryTime==null) return true;
-	    return event.getEventTime().isAfter(latestEntryTime);
-	}
 
 	/**
 	 * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)

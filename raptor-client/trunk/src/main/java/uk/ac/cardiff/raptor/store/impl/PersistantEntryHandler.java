@@ -66,7 +66,8 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/** Used to hold events temporarily before they are persisted, allows
 	 * resilience if events can not be immediately stored, for example
-	 * failure of the underlying persistent store */
+	 * failure of the underlying persistent store. Also, as its a set, it
+	 * prevents the addition of duplicate values */
 	private Set<Event> persistQueue;
 
 	public PersistantEntryHandler(RaptorDataConnection dataConnection) {
@@ -102,7 +103,10 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	/**
 	 * The <code>entries</code> are stored in the <code>persistQueue</code> until they are persisted. If an exception is thrown before
-	 * they are persisted, they remain in the <code>persistQueue</code>.
+	 * they are persisted, they remain in the <code>persistQueue</code>. This method then saves this collection in batch, as opposed to the
+	 * <code>addEntry</code> method which stores events one at a time. In order to detect duplicates, a query is run over the database in order
+	 * to check duplicates within already stored events, as well as adding new events to a <code>Set</code> <code>persist</code> which
+	 * prevents duplicates in the incomming <code>List</code> of entries
 	 *
 	 * @param entries the list of events that are to be stored
 	 * @throws
@@ -113,7 +117,8 @@ public class PersistantEntryHandler implements EntryHandler {
 
 		int duplicates = 0;
 		persistQueue.addAll(entries);
-		List<Event> persist = new ArrayList<Event>();
+
+		Set<Event> persist = new HashSet<Event>();
 
 		for (Event event : persistQueue) {
 			int hashcode = 0;
@@ -145,13 +150,13 @@ public class PersistantEntryHandler implements EntryHandler {
 		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
 	}
 
-	public void addEntry(Event event) {
+	public boolean addEntry(Event event) {
 		int hashcode = 0;
 		try {
 			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
 		} catch (Exception e) {
 		    log.error("Could not get hashcode for event {}, event not stored");
-		    return;
+		    return false;
 		}
 		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
 		Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
@@ -159,11 +164,12 @@ public class PersistantEntryHandler implements EntryHandler {
 
 		if (numberOfDuplicates == 0){
 		   dataConnection.save(event);
+		   return true;
 		}
 		else{
 			log.error("Duplicated event found\n{}", event);
+			return false;
 		}
-
 
 	}
 

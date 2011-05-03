@@ -43,7 +43,7 @@ public interface EntryHandler {
 	 *
 	 * @param event
 	 */
-	public void addEntry(Event event);
+	public boolean addEntry(Event event);
 
 	/**
 	 *
