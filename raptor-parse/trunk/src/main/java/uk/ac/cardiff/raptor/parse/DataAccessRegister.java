@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 
 
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 
 /**
@@ -55,7 +56,7 @@ public class DataAccessRegister {
 	 */
 	public void setParsingModules(List<BaseEventParser> parsingModules) {
 		for (BaseEventParser parser : parsingModules)
-		    log.info("Registering: "+parser.getClass());
+		    log.info("Registering parsing module {} for Event Type {}",parser.getClass(),parser.getEventType());
 		this.parsingModules = parsingModules;
 	}
 
@@ -67,6 +68,25 @@ public class DataAccessRegister {
 	public List<BaseEventParser> getParsingModules() {
 		return parsingModules;
 	}
+
+    /**
+     * Returns the first parsing module whos <code>eventType</code> matches the
+     * <code>eventType</code> parameter
+     *
+     * @param eventTypeFriendlyName the <code>friendlyName</code> of the event parser to find
+     * @return returns the matching parsing module if found, or throws a <code>EventParserNotFoundException</code> if not found
+     */
+    public BaseEventParser getParsingModuleForType(String eventTypeFriendlyName) throws EventParserNotFoundException{
+        if (eventTypeFriendlyName==null)
+            throw new EventParserNotFoundException("No event type supplied to the data register, hence parsing module could not be found");
+        for (BaseEventParser baseEventParser : parsingModules){
+            if (baseEventParser.getEventTypeFriendlyName().equals(eventTypeFriendlyName))
+                return baseEventParser;
+        }
+
+        throw new EventParserNotFoundException("No parser could be found for the event type "+eventTypeFriendlyName);
+
+    }
 
 
 
