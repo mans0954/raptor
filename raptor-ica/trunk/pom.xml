@@ -5,9 +5,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Raptor Information Collector Agent</name>
   <description>	</description>
-  
-  
-  
+
+
+
   <licenses>
         <license>
             <name>Apache 2</name>
@@ -99,7 +99,7 @@
             <artifactId>raptor-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-        
+
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-parse</artifactId>
@@ -262,7 +262,7 @@
             <artifactId>postgresql</artifactId>
             <version>9.0-801.jdbc4</version>
         </dependency>
-        
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -343,7 +343,7 @@
                         </goals>
                         <configuration>
                         <appendAssemblyId>false</appendAssemblyId>
-                            <finalName>raptor-ica-${project.version}</finalName>
+                            <finalName>raptor-ica</finalName>
                             <descriptors>
                                 <descriptor>src/main/resources/package.xml</descriptor>
                             </descriptors>
