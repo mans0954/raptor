@@ -39,7 +39,7 @@
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
                      <property name="lineFilter">
-                       <bean class="uk.ac.cardiff.raptor.parse.external.format.ContainsLineFilter">
+                       <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
                            <property name="includeIfContains"><value>Authentication assertion</value></property>
                        </bean>
                     </property>
@@ -60,7 +60,7 @@
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                     </property>
                     <property name="lineFilter">
-                       <bean class="uk.ac.cardiff.raptor.parse.external.format.ContainsLineFilter">
+                       <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
                            <property name="includeIfContains"><value>connect?session</value></property>
                        </bean>
                     </property>
