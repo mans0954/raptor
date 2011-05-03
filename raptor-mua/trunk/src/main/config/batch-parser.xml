@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+		Licensed under the Apache License, Version 2.0 (the "License"); you
+		may not use this file except in compliance with the License. You may
+		obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--  THERE IS NO NEED TO TOUCH THIS FILE. ALL PARSERS SHOULD USE AN IN MEMORY PARSER -->
+
+	<!--  List all the data access beans, used by the parser -->
+	<bean id="dataAccessRegister" class="uk.ac.cardiff.raptor.parse.DataAccessRegister">
+		<property name="parsingModules">
+			<list>
+
+				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+					<property name="eventTypeFriendlyName">
+					   <value>Shibboleth 1.3</value>
+					</property>
+					<property name="format">
+						<ref bean="shib13IDPAccessFileFormat" />
+					</property>
+					<property name="eventType">
+						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+					</property>
+                     <property name="lineFilter">
+                       <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
+                           <property name="includeIfContains"><value>Authentication assertion</value></property>
+                       </bean>
+                    </property>
+				</bean>
+
+
+
+               <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+                    <property name="eventTypeFriendlyName">
+                       <value>Ezproxy</value>
+                    </property>
+                    <property name="format">
+                        <ref bean="ezProxyFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                    </property>
+                    <property name="lineFilter">
+                       <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
+                           <property name="includeIfContains"><value>connect?session</value></property>
+                       </bean>
+                    </property>
+                </bean>
+
+
+
+
+
+                <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
+					<property name="eventTypeFriendlyName">
+                       <value>Shibboleth 2</value>
+                    </property>
+					<property name="format">
+						<ref bean="shibIDPAuditFileFormat" />
+					</property>
+					<property name="eventType">
+						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+					</property>
+					<property name="printParsingPosition"><value>true</value></property>
+
+					<property name="inclusionList">
+							<bean class="uk.ac.cardiff.raptor.parse.filter.InclusionList">
+								<property name="inclusionEntries">
+									<list>
+										<bean class ="uk.ac.cardiff.raptor.parse.filter.match.RegexInclusionEntry">
+											<property name ="fieldName" value="messageProfileId"/>
+											<property name="match" value=":sso"/>
+										</bean>
+									</list>
+								</property>
+							</bean>
+					</property>
+
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Create the entry handler -->
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.MemoryEntryHandler"></bean>
+
+	<!--
+		definition of the log file format, where some standard log file
+		formats will be specified here e.g. shib-access, W3C, apache, EZProxy
+		etc IMPORTANT, the headers must be a match for the internal model at
+		the moment
+	-->
+
+	<!-- accepted types are DATE, STRING, INTEGER -->
+
+	<bean id="shibIDPAccessFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+		<property name="headers">
+			<list>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>eventTime</value>
+					</property>
+					<property name="fieldNo">
+						<value>0</value>
+					</property>
+					<property name="fieldType">
+						<value>DATE</value>
+					</property>
+					<property name="dateTimeFormat">
+						<value>yyyyMMdd'T'HHmmss</value>
+					</property> <!--  Atom (ISO 8601) -->
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>serviceHost</value>
+					</property>
+					<property name="fieldNo">
+						<value>1</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>requestID</value>
+					</property>
+					<property name="fieldNo">
+						<value>2</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>requestPath</value>
+					</property>
+					<property name="fieldNo">
+						<value>3</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="delimeter">
+			<value>|</value>
+		</property>
+	</bean>
+
+     <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>1</value>
+                        </list>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>yyyy-MM-ddHH:mm:ss,SSS</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>7</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>12</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                         <entry key="\." value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>nameIdentifier</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>15</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                         <entry key="\." value=""/>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter">
+            <value> </value>
+        </property>
+    </bean>
+
+	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+		<property name="headers">
+			<list>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>eventTime</value>
+					</property>
+					<property name="fieldNo">
+						<value>0</value>
+					</property>
+					<property name="fieldType">
+						<value>DATE</value>
+					</property>
+					<property name="dateTimeFormat">
+						<value>yyyyMMdd'T'HHmmss</value>
+					</property> <!--  Atom (ISO 8601) -->
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>requestBinding</value>
+					</property>
+					<property name="fieldNo">
+						<value>1</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>requestId</value>
+					</property>
+					<property name="fieldNo">
+						<value>2</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>resourceId</value>
+					</property>
+					<property name="fieldNo">
+						<value>3</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>messageProfileId</value>
+					</property>
+					<property name="fieldNo">
+						<value>4</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>responseBinding</value>
+					</property>
+					<property name="fieldNo">
+						<value>6</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>responseId</value>
+					</property>
+					<property name="fieldNo">
+						<value>7</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>principalName</value>
+					</property>
+					<property name="fieldNo">
+						<value>8</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>authenticationType</value>
+					</property>
+					<property name="fieldNo">
+						<value>9</value>
+					</property>
+					<property name="fieldType">
+						<value>STRING</value>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>releasedAttributes</value>
+					</property>
+					<property name="fieldNo">
+						<value>10</value>
+					</property>
+					<property name="fieldType">
+						<value>STRINGLIST</value>
+					</property>
+					<property name="listDelimeter">
+						<value>,</value>
+					</property>
+				</bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+					<property name="fieldName">
+						<value>assertionId</value>
+					</property>
+					<property name="fieldNo">
+						<value>12</value>
+					</property>
+					<property name="fieldType">
+						<value>STRINGLIST</value>
+					</property>
+					<property name="listDelimeter">
+						<value>,</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="delimeter">
+			<value>|</value>
+		</property>
+	</bean>
+
+	<bean id="ezProxyFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+	<property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>requesterIp</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>sessionId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>1</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>2</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="@cardiff.ac.uk" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>3</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>4</value>
+                        </list>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>dd/MMM/yyyy:HH:mm:ssZ</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\[" value=""/>
+                         <entry key="\]" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceHost</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexRetain">
+                       <value>https://[^:]*</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>URL</value>
+                    </property>
+                    <property name="regexRetain">
+                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*</value>
+                    </property>
+                    <property name="regexRetainCaseInsensitive">
+                        <value>true</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="url=" value=""/>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter">
+            <value> </value>
+        </property>
+
+
+
+	</bean>
+
+	<bean id="W3CFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat"></bean>
+
+
+
+
+</beans>

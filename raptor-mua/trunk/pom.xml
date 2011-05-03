@@ -39,6 +39,14 @@
 
 	<dependencies>
 
+	   <!-- RAPTOR specific dependencies -->
+
+	    <dependency>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>raptor-parse</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
 
 
 		<!-- jetty runtime for standalone deployment -->
@@ -267,7 +275,7 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
 		</dependency>
-        
+
         <!--  to deal with existing log4j components that do not use slf4j. This bridge pushes those through
         slf4j and hence then through logback (or the sl4fy implementation) -->
 		<dependency>

@@ -28,6 +28,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
@@ -68,5 +69,5 @@ public interface MUAProcess {
 	 */
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 
-	public boolean batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault;
+	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault;
 }
