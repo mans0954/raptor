@@ -1,10 +1,10 @@
 <?xml version = '1.0' encoding = 'ISO-8859-1'?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file 
-    distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under 
-    the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may 
-    obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to 
-    in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF 
-    ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file
+    distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under
+    the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may
+    obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to
+    in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+    ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under
     the License. -->
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
@@ -77,7 +77,7 @@
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
-    <!-- Listener, to allow Jetty serving MyFaces apps <listener> <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class> 
+    <!-- Listener, to allow Jetty serving MyFaces apps <listener> <listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
         </listener> -->
 
     <!-- Spring web flow servlet, defines config specific to the current application instance -->
@@ -92,7 +92,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- allows spring security to monitor the HTTPSession, so on logout the session is released furthermore, this is required 
+    <!-- allows spring security to monitor the HTTPSession, so on logout the session is released furthermore, this is required
         to allow concurrency control e.g. 1 user session max, otherwise sessions are only every timed out -->
     <listener>
         <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
@@ -147,13 +147,13 @@
         <filter-class>org.ajax4jsf.Filter</filter-class>
         <init-param>
             <param-name>maxRequestSize</param-name>
-            <param-value>10240000</param-value>
+            <param-value>50240000</param-value>
         </init-param>
         <init-param>
             <param-name>createTempFiles</param-name>
             <param-value>false</param-value>
         </init-param>
-        
+
     </filter>
     <filter-mapping>
         <filter-name>richfaces</filter-name>

@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -28,19 +29,20 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
 
 /**
- * 
- * 
+ *
+ *
  * @author philsmart
- * 
+ *
  *         Instances of this class are responsible for retrieving data from a service endpoint. This class should not be static and should not recreate the
  *         Client for every request.
- * 
+ *
  */
 public class ServiceEndpointClient {
 
@@ -74,7 +76,7 @@ public class ServiceEndpointClient {
     /**
      * Method to determine and return the <code>Capabilities</code> of a MultiUnitAggregator. This method uses a hard set connection timeout of 10 miliseconds,
      * and a receive timeout of 20 smilieconds, under the assumption that the capabilities of a MultiUnitAggregator can be sent inside small XML documents.
-     * 
+     *
      * @param endpoint
      * @return
      */
@@ -86,7 +88,7 @@ public class ServiceEndpointClient {
 	    capabilities = client.getCapabilities();
 	    log.debug("Retrieved capabilities from the MUA [{}]", endpoint);
 	} catch (SoapFault e) {
-	    log.error("Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[] { endpoint, e.getMessage() });
+	    log.error("SOAP Fault, Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[] { endpoint, e.getMessage() });
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
@@ -106,7 +108,7 @@ public class ServiceEndpointClient {
      * This method sends a <code>StatisticalUnitInformaiton</code> instance to the MultiUnitAggregator <code>endpoint</code> The
      * <code>StatisicalUnitInformation</code> instance encapsulates the parameters for a single statistical unit. Allowing the values to be sent back and
      * changed on the MultiUnitAggregator
-     * 
+     *
      * @param endpoint
      * @param statisticalUnitInformation
      * @return
@@ -120,7 +122,7 @@ public class ServiceEndpointClient {
 	    client.updateStatisticalUnit(statisticalUnitInformation);
 
 	} catch (SoapFault e) {
-	    log.error("Problem trying to update statistical unit {} on MUA [{}] -> {}", new Object[] { statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint, e.getMessage() });
+	    log.error("SOAP Fault, Problem trying to update statistical unit {} on MUA [{}] -> {}", new Object[] { statisticalUnitInformation.getStatisticParameters().getUnitName(), endpoint, e.getMessage() });
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
@@ -147,7 +149,7 @@ public class ServiceEndpointClient {
 	    log.debug("Retrieved Graph Model from the MUA [" + endpoint + "]");
 	    return gmodel;
 	} catch (SoapFault e) {
-	    log.error("Problem trying to invoke statistical unit {} on MUA [{}] -> {}", new Object[] { selectedStatisticalUnit, endpoint, e.getMessage() });
+	    log.error("SOAP Fault, Problem trying to invoke statistical unit {} on MUA [{}] -> {}", new Object[] { selectedStatisticalUnit, endpoint, e.getMessage() });
 	} catch (Exception e) {
 	    // catching general errors, e.g. no connection to endpoint
 	    log.error("Problem trying to invoke statistical unit {} on MUA [{}] -> {}", new Object[] { selectedStatisticalUnit, endpoint, e.getMessage() });
@@ -168,7 +170,7 @@ public class ServiceEndpointClient {
 
 	    return success;
 	} catch (SoapFault e) {
-	    log.error("Problem trying to perform administrative function {} on MUA {} -> {}  ", new Object[] { function.getAdministrativeFunction().toString(), endpoint, e.getMessage() });
+	    log.error("SOAP Fault, Problem trying to perform administrative function {} on MUA {} -> {}  ", new Object[] { function.getAdministrativeFunction().toString(), endpoint, e.getMessage() });
 	    return false;
 	} catch (Exception e) {
 	    log.error("Problem trying to perform administrative function {} on MUA {} -> {} ", new Object[] { function.getAdministrativeFunction().toString(), endpoint, e.getMessage() });
@@ -177,23 +179,22 @@ public class ServiceEndpointClient {
 	}
 
     }
-    
-    public boolean sendBatch(ArrayList<LogFileUpload> uploadFiles, MUAEntry endpoint) {
+
+    public List<LogFileUploadResult>  sendBatch(ArrayList<LogFileUpload> uploadFiles, MUAEntry endpoint) {
         try {
             MultiUnitAggregator client = getEndpointConnection(endpoint);
             log.debug("Accessing the MUA version {}", client.getVersion());
-            boolean success = client.batchUpload(uploadFiles);
+            return client.batchUpload(uploadFiles);
 
-            return success;
         } catch (SoapFault e) {
-            log.error("Problem trying to send batch log files to MUA {} -> {}  ", new Object[] {endpoint, e.getMessage() });
-            return false;
+            log.error("SOAP Fault, Problem trying to send batch log files to MUA {} -> {}  ", new Object[] {endpoint, e.getMessage() });
+            return null;
         } catch (Exception e) {
             log.error("Problem trying to send batch log files to MUA {} -> {} ", new Object[] {endpoint, e.getMessage() });
             log.error("Details, {}", e);
-            return false;
+            return null;
         }
-        
+
     }
 
     public AggregatorGraphModel updateAndinvokeStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnit) {

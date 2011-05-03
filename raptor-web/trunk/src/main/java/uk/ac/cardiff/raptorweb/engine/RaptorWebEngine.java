@@ -14,6 +14,7 @@ import uk.ac.cardiff.model.ServerMetadata;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
@@ -31,7 +32,7 @@ import uk.ac.cardiff.raptorweb.sei.ServiceEndpointClient;
  *
  */
 public class RaptorWebEngine {
-    
+
     /** Class Logger */
     private final Logger log = LoggerFactory.getLogger(RaptorWebEngine.class);
 
@@ -49,7 +50,7 @@ public class RaptorWebEngine {
 
     /** holds basic metadata about this particular RaptorWeb engine instance*/
     private ServerMetadata webMetadata;
-    
+
     /** The client used to set up, connect to, action and return results from the attached MUA*/
     private ServiceEndpointClient serviceEndpointClient;
 
@@ -245,10 +246,40 @@ public class RaptorWebEngine {
 
     public void batchUpload(WebSession websession) {
         ArrayList<LogFileUpload> uploadFiles = websession.getSetupmodel().getFileUpload().getFiles();
-        boolean sent = serviceEndpointClient.sendBatch(uploadFiles,attachedMUA);
-        if (sent)
-            websession.getSetupmodel().getFileUpload().processingStatus("MUA has taken possession of the log files");
-        
+
+        ArrayList<LogFileUpload> toUpload = new ArrayList<LogFileUpload>();
+        for (LogFileUpload lfu : uploadFiles){
+            if (lfu.isProcessed()==false){
+                if (lfu.getEventType() == LogFileUpload.ParsingEventType.NA){
+                    lfu.setProcessingStatus("No event type selected");
+                }
+                else{
+                    toUpload.add(lfu);
+                }
+            }
+        }
+        if (toUpload.size()>0){
+            List<LogFileUploadResult> results = serviceEndpointClient.sendBatch(toUpload,attachedMUA);
+
+            if (results!=null){
+                for (LogFileUpload uploadFile : toUpload){
+                    for (LogFileUploadResult result : results){
+                        if (uploadFile.getId()==result.getId()){
+                            uploadFile.setProcessingStatus(result.getStatus());
+                            uploadFile.setProcessed(result.isProcessed());
+                        }
+                    }
+                }
+            }
+            if (results==null){
+                for (LogFileUpload uploadFile : toUpload){
+                    uploadFile.setProcessingStatus("Error in upload, Retry");
+                    uploadFile.setProcessed(false);
+                }
+            }
+        }
+
+
     }
 
 
