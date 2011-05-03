@@ -30,6 +30,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 
@@ -65,6 +66,6 @@ public interface MultiUnitAggregator {
 	public void addAuthentications(EventPushMessage pushed) throws SoapFault;
 
 	/** Send a batch of log files to the MUA to store */
-	public boolean batchUpload(List<LogFileUpload> uploadFiles);
+	public List<LogFileUploadResult>  batchUpload(List<LogFileUpload> uploadFiles);
 
 }

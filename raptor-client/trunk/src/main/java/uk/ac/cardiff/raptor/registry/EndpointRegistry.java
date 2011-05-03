@@ -29,7 +29,7 @@ public class EndpointRegistry {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
-   
+
 
     /** List of endpoints for invoking methods on*/
     private List<Endpoint> endpoints;
@@ -39,9 +39,8 @@ public class EndpointRegistry {
     }
 
     public void setEndpoints(List<Endpoint> endpoints) {
-	log.info("Setting Service Endpoints");
 	for (Endpoint entry : endpoints)
-	    log.info("Registering: {}", entry.getClass());
+	    log.info("Registering Service Endpoint: {}", entry.getServiceEndpoint());
 	this.endpoints = endpoints;
     }
 
