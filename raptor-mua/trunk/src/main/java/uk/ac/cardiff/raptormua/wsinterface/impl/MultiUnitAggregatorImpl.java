@@ -31,6 +31,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
@@ -92,7 +93,7 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 		return processService.updateAndInvokeStatisticalUnit(statisticalUnitInformation);
 	}
 
-	public boolean batchUpload(List<LogFileUpload> uploadFiles) {
+	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault{
 		return processService.batchUpload(uploadFiles);
 	}
 

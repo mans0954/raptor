@@ -34,7 +34,9 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
@@ -57,7 +59,7 @@ public class MUAProcessImpl implements MUAProcess {
 	private MUAEngine engine;
 
 	/**
-	 * ReentrantLock to prevent more than at the same time
+	 * ReentrantLock to prevent more than one operation at the same time
 	 */
 	final Lock lockR = new ReentrantLock();
 
@@ -194,13 +196,19 @@ public class MUAProcessImpl implements MUAProcess {
 	 * Batch upload does not employ a lock on the MUA
 	 */
 	@Override
-	public boolean batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
+	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
 		log.info("Webservice call to parse {} batch log file(s)",uploadFiles.size());
+
 		for (LogFileUpload logfile : uploadFiles){
-			log.debug("Log File details: name [{}], MIME type [{}], Length [{}]",new Object[]{logfile.getName(),logfile.getMime(),logfile.getData().length});
+			log.debug("Log File details: name [{}], MIME type [{}], Length [{}], ID [{}]",new Object[]{logfile.getName(),logfile.getMime(),logfile.getData().length, logfile.getId()});
 		}
-		engine.batchParse(uploadFiles);
-		return true;
+		try{
+		    return engine.batchParse(uploadFiles);
+		}
+		catch (TransactionInProgressException e){
+		    log.error("Could not parse and store batch upload {}",e.getMessage());
+		    throw new SoapFault("Could not parse and store batch upload "+e.getMessage(),new QName("Server"));
+		}
 
 	}
 

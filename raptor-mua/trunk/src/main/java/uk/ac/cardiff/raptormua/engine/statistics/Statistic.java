@@ -68,9 +68,9 @@ public abstract class Statistic {
 	public Statistic() {
 		setObservationSeries(new ArrayList<ObservationSeries>());
 	}
-	
+
 	public abstract Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException;
-	
+
 
 	/**
 	 * Important this this method is called during the statistic process lifecycle, so that any state variables
@@ -123,7 +123,7 @@ public abstract class Statistic {
 			Group[] groups = (Group[]) observations;
 			for (Group group : groups) {
 				gmodel.addGroupLabel(group.getGroupName());
-			}			
+			}
 			//now add each series and their values
 			for (int i=0; i < observationSeries.size(); i++){
 				groups = (Group[]) observationSeries.get(i).getObservations();
@@ -162,7 +162,7 @@ public abstract class Statistic {
 					Double valueDouble = new Double(bucket.getValue());
 					values.add(valueDouble);
 				}
-				log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
+				//log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
 				gmodel.addGroupValue(values);
 			}
 		}
@@ -193,8 +193,8 @@ public abstract class Statistic {
 			log.error("Could not post process entries, using " + getPostprocessor().getClass());
 		}
 	}
-	
-	
+
+
 	protected DateTime startingTime() {
 		if (statisticParameters.getStartTimeAsDate() != null)
 			return statisticParameters.getStartTimeAsDate();
@@ -229,10 +229,10 @@ public abstract class Statistic {
 	public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
 		this.postprocessor = postprocessor;
 	}
-	
+
 	public abstract void setStatisticParameters(StatisticParameters statisticParameters) ;
-	
-	
+
+
 	public StatisticParameters getStatisticParameters() {
 		return statisticParameters;
 	}

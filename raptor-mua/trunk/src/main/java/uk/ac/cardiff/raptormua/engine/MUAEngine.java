@@ -32,14 +32,20 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ClientMetadata;
 import uk.ac.cardiff.model.ServerMetadata;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
+import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
+import uk.ac.cardiff.raptor.parse.BaseEventParser;
+import uk.ac.cardiff.raptor.parse.DataAccessRegister;
+import uk.ac.cardiff.raptor.parse.EventParserNotFoundException;
+import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
@@ -50,152 +56,197 @@ import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.model.Users;
 
-
 /**
  * @author philsmart
  *
  */
 public class MUAEngine {
 
-	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
-	/** Performs all statistics*/
-	private StatisticsHandler statisticsHandler;
+    /** Performs all statistics */
+    private StatisticsHandler statisticsHandler;
 
-	/** The client that is used to process, filter and send events to another MUA instance*/
-	private EventReleaseClient eventReleaseClient;
+    /** The client that is used to process, filter and send events to another MUA instance */
+    private EventReleaseClient eventReleaseClient;
 
-	//TODO implement user level control on the MUA?
-	private Users users;
+    // TODO implement user level control on the MUA?
+    private Users users;
 
-	/** The Storage Engine that handles all storage transactions*/
-	private StorageEngine storageEngine;
+    /** The Storage Engine that handles all storage transactions */
+    private StorageEngine storageEngine;
 
-	/** Metadata about the this MUA instance */
-	private ServerMetadata muaMetadata;
+    /** Metadata about the this MUA instance */
+    private ServerMetadata muaMetadata;
 
-	public MUAEngine() {
-		log.info("Setup Multi-Unit Aggregator Engine...");
-		log.info("Mulit-Unit Aggregator Engine is running...");
-	}
+    /** Used to parse batch uploads */
+    private DataAccessRegister dataAccessRegister;
 
-	public void setStatisticsHandler(StatisticsHandler statisticsHandler) {
-		this.statisticsHandler = statisticsHandler;
-	}
+    public MUAEngine() {
+        log.info("Setup Multi-Unit Aggregator Engine...");
+        log.info("Mulit-Unit Aggregator Engine is running...");
+    }
 
-	public StatisticsHandler getStatisticsHandler() {
-		return statisticsHandler;
-	}
+    public void setStatisticsHandler(StatisticsHandler statisticsHandler) {
+        this.statisticsHandler = statisticsHandler;
+    }
 
-	/**
-	 * @param statisticName
-	 */
-	public AggregatorGraphModel performStatistic(String statisticName) {
-		//TODO we do not need to set this each time
-		statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
-		return statisticsHandler.peformStatistic(statisticName);
-
-	}
-
-	/**
-	 * Gets the capabilities of this MUA, also sets some default values and possible values for the calling component to use
-	 * @return
-	 */
-	public Capabilities getCapabilities() {
-
-		List<Statistic> su = statisticsHandler.getStatisticalUnits();
-
-		Capabilities capabilities = new Capabilities();
-		capabilities.setMetadata(this.getMuaMetadata());
-
-
-		//set possible values
-		SuggestionValues suggestionValues = new SuggestionValues();
-		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
-		capabilities.setSuggestionValues(suggestionValues);
-
-		log.debug("Possible values set");
-
-		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
-		for (Statistic entry : su) {
-			log.debug("Setting statistical unit information as: "+entry.getStatisticParameters().getUnitName());
-			StatisticalUnitInformation information = new StatisticalUnitInformation();
-
-			information.setStatisticParameters(entry.getStatisticParameters());
-
-			ArrayList<String> postprocessors = new ArrayList();
-			if (entry.getPostprocessor() != null) {
-				for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
-					postprocessors.add(postprocessor.getClass().getSimpleName());
-				}
-			}
-			information.setPostprocessors(postprocessors);
-
-			ArrayList<String> preprocessors = new ArrayList();
-			if (entry.getPreprocessor() != null)
-				preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
-			information.setPreprocessors(preprocessors);
-
-			stats.add(information);
-		}
-		capabilities.setStatisticalServices(stats);
-		log.debug("Constructed MUA Capabilities, {}",capabilities);
-		return capabilities;
-	}
-
-
-	/**
-	 * @param statisticalUnitInformation
-	 */
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
-		log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
-		statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
-
-	}
-
-
-	/**
-	 * @param function
-	 * @return
-	 */
-	public boolean performAdministrativeFunction(AdministrativeFunction function) {
-		switch (function.getAdministrativeFunction()) {
-		case REMOVEALL:
-			storageEngine.removeAllEntries();
-			break;
-		}
-		return true;
-	}
-
-	/**
-	 * @param pushed
-	 * @throws TransactionInProgressException
-	 */
-	public void addAuthentications(EventPushMessage pushed) throws TransactionInProgressException {
-	        int transactionId = (int)(Math.random()*1000000);
-		storageEngine.performAsynchronousEntryStoragePipeline(transactionId,pushed.getEvents());
-
-	}
-
-	public void setMuaMetadata(ServerMetadata muaMetadata) {
-		this.muaMetadata = muaMetadata;
-	}
-
-	public ServerMetadata getMuaMetadata() {
-		return muaMetadata;
-	}
-
-	public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
-	    this.eventReleaseClient = eventReleaseClient;
-	}
-
-	public EventReleaseClient getEventReleaseClient() {
-	    return eventReleaseClient;
-	}
+    public StatisticsHandler getStatisticsHandler() {
+        return statisticsHandler;
+    }
 
     /**
-     * @param storageEngine the storageEngine to set
+     * @param statisticName
+     */
+    public AggregatorGraphModel performStatistic(String statisticName) {
+        // TODO we do not need to set this each time
+        statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
+        return statisticsHandler.peformStatistic(statisticName);
+
+    }
+
+    /**
+     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling component to use
+     *
+     * @return
+     */
+    public Capabilities getCapabilities() {
+
+        List<Statistic> su = statisticsHandler.getStatisticalUnits();
+
+        Capabilities capabilities = new Capabilities();
+        capabilities.setMetadata(this.getMuaMetadata());
+
+        // set possible values
+        SuggestionValues suggestionValues = new SuggestionValues();
+        suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+        capabilities.setSuggestionValues(suggestionValues);
+
+        log.debug("Possible values set");
+
+        ArrayList<StatisticalUnitInformation> stats = new ArrayList();
+        for (Statistic entry : su) {
+            log.debug("Setting statistical unit information as: " + entry.getStatisticParameters().getUnitName());
+            StatisticalUnitInformation information = new StatisticalUnitInformation();
+
+            information.setStatisticParameters(entry.getStatisticParameters());
+
+            ArrayList<String> postprocessors = new ArrayList();
+            if (entry.getPostprocessor() != null) {
+                for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
+                    postprocessors.add(postprocessor.getClass().getSimpleName());
+                }
+            }
+            information.setPostprocessors(postprocessors);
+
+            ArrayList<String> preprocessors = new ArrayList();
+            if (entry.getPreprocessor() != null)
+                preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
+            information.setPreprocessors(preprocessors);
+
+            stats.add(information);
+        }
+        capabilities.setStatisticalServices(stats);
+        log.debug("Constructed MUA Capabilities, {}", capabilities);
+        return capabilities;
+    }
+
+    /**
+     * Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
+     *
+     * @param uploadFiles
+     *            the files to parse and store
+     * @throws TransactionInProgressException
+     */
+    public List<LogFileUploadResult>  batchParse(List<LogFileUpload> uploadFiles) throws TransactionInProgressException {
+        log.info("Going to parse {} batch uploaded files",uploadFiles.size());
+        ArrayList<Event> allEvents = new ArrayList<Event>();
+
+        ArrayList<LogFileUploadResult> results = new ArrayList<LogFileUploadResult>();
+
+        for (LogFileUpload logfileUpload : uploadFiles){
+            LogFileUploadResult result = new LogFileUploadResult();
+            result.setId(logfileUpload.getId());
+            try {
+                BaseEventParser parser = dataAccessRegister.getParsingModuleForType(logfileUpload.getEventType().friendlyName);
+                log.debug("Parsing {} using parser {} for type {}",new Object[]{logfileUpload.getName(),parser.getClass(),logfileUpload.getEventType()});
+                parser.parse(logfileUpload.getData());
+                allEvents.addAll(parser.getEntryHandler().getEntries());
+                parser.removeAllEntries();
+                result.setStatus("Parsed On the MUA");
+                result.setProcessed(true);
+
+            } catch (ParserException e) {
+                log.error("Error Parsing the batch uploaded log file {}, with reason",logfileUpload.getName(),e.getMessage());
+                result.setStatus("Failed To Parse");
+                result.setProcessed(false);
+            } catch (EventParserNotFoundException e){
+                log.error("Event parser could not be found for {}, with reason {}",logfileUpload.getName(),e.getMessage());
+                result.setStatus("Failed To Parse");
+                result.setProcessed(false);
+            }
+            results.add(result);
+        }
+        log.info("Storing all {} parsed events",allEvents.size());
+        int transactionId = (int) (Math.random() * 1000000);
+        storageEngine.performAsynchronousEntryStoragePipeline(transactionId, allEvents);
+
+        return results;
+
+    }
+
+    /**
+     * @param statisticalUnitInformation
+     */
+    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+        log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+        statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
+
+    }
+
+    /**
+     * @param function
+     * @return
+     */
+    public boolean performAdministrativeFunction(AdministrativeFunction function) {
+        switch (function.getAdministrativeFunction()) {
+            case REMOVEALL:
+                storageEngine.removeAllEntries();
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * @param pushed
+     * @throws TransactionInProgressException
+     */
+    public void addAuthentications(EventPushMessage pushed) throws TransactionInProgressException {
+        int transactionId = (int) (Math.random() * 1000000);
+        storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+
+    }
+
+    public void setMuaMetadata(ServerMetadata muaMetadata) {
+        this.muaMetadata = muaMetadata;
+    }
+
+    public ServerMetadata getMuaMetadata() {
+        return muaMetadata;
+    }
+
+    public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
+        this.eventReleaseClient = eventReleaseClient;
+    }
+
+    public EventReleaseClient getEventReleaseClient() {
+        return eventReleaseClient;
+    }
+
+    /**
+     * @param storageEngine
+     *            the storageEngine to set
      */
     public void setStorageEngine(StorageEngine storageEngine) {
         this.storageEngine = storageEngine;
@@ -208,13 +259,19 @@ public class MUAEngine {
         return storageEngine;
     }
 
-    /** Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
-     * 
-     * @param uploadFiles the files to parse and store
+    /**
+     * @param dataAccessRegister the dataAccessRegister to set
      */
-	public void batchParse(List<LogFileUpload> uploadFiles) {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(uploadFiles.get(0).getData())));
-		
-	}
+    public void setDataAccessRegister(DataAccessRegister dataAccessRegister) {
+        this.dataAccessRegister = dataAccessRegister;
+    }
+
+    /**
+     * @return the dataAccessRegister
+     */
+    public DataAccessRegister getDataAccessRegister() {
+        return dataAccessRegister;
+    }
+
 
 }

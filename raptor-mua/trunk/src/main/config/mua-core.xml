@@ -92,6 +92,7 @@
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
+		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
 	</bean>
 
 
@@ -137,5 +138,6 @@
 	  <import resource="event-release.xml"/>
 	  <import resource="users.xml" />
 	  <import resource="attribute-association.xml"/>
+	  <import resource="batch-parser.xml"/>
 
 </beans>
