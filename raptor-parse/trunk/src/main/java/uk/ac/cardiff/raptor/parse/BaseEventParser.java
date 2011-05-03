@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptor.parse;
 
+import java.io.BufferedInputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +52,12 @@ public abstract class BaseEventParser {
     /** A list of <fieldname, value> pairs that should be included during parsing */
     private InclusionList inclusionList;
 
+    /** The fully qualified name of the event type class */
+    protected String eventType;
+
+    /** A human readable name of the types of events this parser handles*/
+    private String eventTypeFriendlyName;
+
     /**
      * Default constructor
      */
@@ -58,7 +65,15 @@ public abstract class BaseEventParser {
     }
 
     /**
-     * The method that must be provided to parse events from a particular datasource
+     * The method that must be provided to parse events from the <code>bytes</code> parameter
+     *
+     * @throws ParserException
+     */
+    public abstract void parse(byte[] bytes) throws ParserException;
+
+    /**
+     * The method that must be provided to parse events from the internally configured
+     * log file location e.g. <code>logfile</code>
      *
      * @throws ParserException
      */
@@ -161,6 +176,35 @@ public abstract class BaseEventParser {
     public List<Event> getAuthentications() {
 	return entryHandler.getEntries();
 
+    }
+
+    /**
+     * @param eventType
+     *            the eventType to set
+     */
+    public void setEventType(String eventType) {
+            this.eventType = eventType;
+    }
+
+    /**
+     * @return the eventType
+     */
+    public String getEventType() {
+            return eventType;
+    }
+
+    /**
+     * @param eventTypeFriendlyName the eventTypeFriendlyName to set
+     */
+    public void setEventTypeFriendlyName(String eventTypeFriendlyName) {
+        this.eventTypeFriendlyName = eventTypeFriendlyName;
+    }
+
+    /**
+     * @return the eventTypeFriendlyName
+     */
+    public String getEventTypeFriendlyName() {
+        return eventTypeFriendlyName;
     }
 
 

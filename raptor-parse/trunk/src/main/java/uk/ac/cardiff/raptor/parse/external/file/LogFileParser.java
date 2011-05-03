@@ -16,6 +16,7 @@
 package uk.ac.cardiff.raptor.parse.external.file;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,11 +69,10 @@ public class LogFileParser extends BaseEventParser {
 	/** The specification of the format of this log file */
 	private LogFileFormat format;
 
-	/** The fully qualified path of the log file */
+	/** The fully qualified path of the log file. Not required if <code>parse(bytes[])</code>
+	 * is used
+	 */
 	private String logfile;
-
-	/** The fully qualified name of the event type class */
-	private String eventType;
 
 	/**
 	 * Whether to print out the current position of parsing in the
@@ -90,21 +90,48 @@ public class LogFileParser extends BaseEventParser {
 		super();
 	}
 
+	@Override
+	public void parse(byte[] bytes) throws ParserException{
+	    try{
+	        log.info("Parsing log file as byte array with length {}",bytes.length);
+	        BufferedReader bf = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+                int totalNoLines = count(bytes);
+                doParse(bf, totalNoLines);
+            }
+            catch (MalformedURLException e1) {
+                throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
+            } catch (IOException e2) {
+                throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
+            }
 
+	}
+
+	@Override
 	public void parse() throws ParserException {
-		log.info("parsing: {} instance: {}", logfile, this);
+	    try{
+	        log.info("parsing log file: {}", logfile);
+    	        URL logfileURL = new URL(logfile);
+                URLConnection logfileconnection = logfileURL.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
+                int totalNoLines = count(logfileURL);
+                doParse(in, totalNoLines);
+	    }
+	    catch (MalformedURLException e1) {
+	        throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
+	    } catch (IOException e2) {
+                throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
+	    }
 
+	}
+
+
+
+	private void doParse(BufferedReader in, int totalNoLines) throws ParserException {
 		try {
-			URL logfileURL = new URL(logfile);
-
-			URLConnection logfileconnection = logfileURL.openConnection();
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
 			int lineCount = 0;
 			String inputLine;
-			int totalNoLines = count(logfileURL);
 
-			log.debug("Parsing file with {} lines", totalNoLines);
+			//log.debug("Parsing file with {} lines", totalNoLines);
 			while ((inputLine = in.readLine()) != null) {
 				lineCount++;
 
@@ -151,8 +178,6 @@ public class LogFileParser extends BaseEventParser {
 			log.debug("done, walked {} lines", lineCount);
 			log.debug("LogFileParser currently has: {} entries, latestEntry: {}", entryHandler.getNumberOfEntries(), entryHandler.getLatestEntryTime());
 			//entryHandler.endTransaction();
-		} catch (MalformedURLException e1) {
-			throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
 		} catch (IOException e2) {
 			throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
 		}
@@ -349,7 +374,7 @@ public class LogFileParser extends BaseEventParser {
 	}
 
 	/**
-	 * Efficient method for finding the number of lines in a logfile
+	 * Efficient method for finding the number of lines in a logfile. Where each line is denoted by the line break character \n
 	 *
 	 * @param logfileURL the location, as a URL, of the logfile that is to be processed
 	 * @return the number of lines in the <code>logfileURL</code>
@@ -369,6 +394,24 @@ public class LogFileParser extends BaseEventParser {
 			}
 		}
 		return count;
+	}
+
+	/**
+	 * Counts the number of lines (where each line is denoted by the line break character \n) stored by a buffered reader.
+	 * Maybe not such an efficient method
+	 *
+	 * @param reader the <code>BufferedReader</code> that the line count is performed on
+	 * @return the number of lines in the <code>reader</code> input parameter
+	 * @throws IOException
+	 */
+	private int count(byte[] bytes) throws IOException  {
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+	    int lineCount=0;
+	    while (reader.readLine()!=null){
+	        lineCount++;
+	    }
+	    return lineCount;
+
 	}
 
 	/**
@@ -532,20 +575,6 @@ public class LogFileParser extends BaseEventParser {
 		return printParsingPosition;
 	}
 
-	/**
-	 * @param eventType
-	 *            the eventType to set
-	 */
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
-	}
-
-	/**
-	 * @return the eventType
-	 */
-	public String getEventType() {
-		return eventType;
-	}
 
 	/**
 	 * @param lineFilter
