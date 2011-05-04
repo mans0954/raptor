@@ -24,8 +24,8 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> <!-- database type -->
-				<prop key="hibernate.show_sql">true</prop>  <!-- outputs the SQL queries used to the standard logger -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
+				<prop key="hibernate.show_sql">false</prop>  <!-- outputs the SQL queries used to the standard logger -->
+				<prop key="hibernate.hbm2ddl.auto">upload</prop> <!-- update changes the db if mapping changes, creates the db if none exists,
 					in production do not use any of these -->
 			</props>
 		</property>

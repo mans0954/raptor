@@ -36,7 +36,7 @@
 				<ref bean="numberOfAuthenticationsPerIntervalNumber"/>
 				<ref bean="authenticationsForOneSP"/>
 				<ref bean="numberOfUniqueAuthenticationsPerSP"/>
-
+                <ref bean="authsPerPersonAffiliation"/>
 			</list>
 		</property>
 	</bean>
@@ -81,7 +81,7 @@
                         <bean class="uk.ac.cardiff.model.report.Presentation">
                             <property name="graphTitle" value="Authentications to All Service Providers"/>
                             <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="yAxisLabel" value="Number"/>
                         </bean>
                     </property>
 			</bean>
@@ -116,7 +116,7 @@
                         <bean class="uk.ac.cardiff.model.report.Presentation">
                             <property name="graphTitle" value="Authentications over a time range"/>
                             <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="yAxisLabel" value="Number"/>
                         </bean>
                     </property>
 			</bean>
@@ -153,7 +153,7 @@
                         <bean class="uk.ac.cardiff.model.report.Presentation">
                             <property name="graphTitle" value="Number of authentications grouped by"/>
                             <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="yAxisLabel" value="Number"/>
                         </bean>
                     </property>
 			</bean>
@@ -206,7 +206,7 @@
                         <bean class="uk.ac.cardiff.model.report.Presentation">
                             <property name="graphTitle" value="Comparison of authentications for particular Service Providers"/>
                             <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="yAxisLabel" value="Number"/>
                         </bean>
                     </property>
 			</bean>
@@ -247,7 +247,43 @@
                         <bean class="uk.ac.cardiff.model.report.Presentation">
                             <property name="graphTitle" value="Number of authentications per school"/>
                             <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="yAxisLabel" value="Number"/>
+                        </bean>
+                    </property>
+            </bean>
+        </property>
+    </bean>
+    
+        <bean id="authsPerPersonAffiliation" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
+        <property name="StatisticParameters">
+            <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+                    <property name="statisticType"><value>User</value></property>
+                    <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
+                    <property name="unitName"><value>Number of authentications per affiliation type</value></property>
+                    <property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+                    <property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+                    <property name="methodParams">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="value"><value>principalInformation.affiliation</value></property>
+                            </bean>
+                        </list>
+                    </property>
+
+                    <property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of authentications"/>
+                            </bean>
+                        </list>
+                    </property>
+
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Number of authentications per affiliation type"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Number"/>
                         </bean>
                     </property>
             </bean>

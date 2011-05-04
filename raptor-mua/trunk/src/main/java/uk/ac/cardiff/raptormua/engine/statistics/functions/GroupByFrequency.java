@@ -16,12 +16,10 @@ import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
-
-public class GroupByFrequency extends Statistic{
+public class GroupByFrequency extends Statistic {
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(GroupByFrequency.class);
-
 
 	/**
 	 * Perform the groupByField statistic. This statistic counts the frequency
@@ -31,15 +29,15 @@ public class GroupByFrequency extends Statistic{
 	 * false if the statistic functioned correctly, but there are no valid
 	 * observations, or true if the statistic succeeds and there are valid
 	 * observations.
-	 *
-	 *
+	 * 
+	 * 
 	 * @param groupByField
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
 	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
 
-		if (methodParams.size()!=1)
+		if (methodParams.size() != 1)
 			throw new StatisticalUnitException("incorrect method parameters");
 
 		String groupByField = methodParams.get(0).getValue();
@@ -51,20 +49,17 @@ public class GroupByFrequency extends Statistic{
 		DateTime start = startingTime();
 		DateTime end = endingTime();
 		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
-		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
+		String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
 
-		String  query="";
-		if (sqlWhere.equals("")){
-		    query ="select " + groupByField + ", count(*) from "+tableName+" where (eventTime between '" + start
-		    + "' and '" + end + "') group by (" + groupByField + ")";
+		String query = "";
+		if (sqlWhere.equals("")) {
+			query = "select " + groupByField + ", count(*) from " + tableName + " where (eventTime between '" + start + "' and '" + end + "') group by ("
+					+ groupByField + ")";
+		} else {
+			query = "select " + groupByField + ", count(*) from " + tableName + " where (eventTime between '" + start + "' and '" + end + "') and " + sqlWhere
+					+ " group by (" + groupByField + ")";
 		}
-		else{
-		    query ="select " + groupByField + ", count(*) from "+tableName+" where (eventTime between '" + start
-                    + "' and '" + end + "') and "+sqlWhere+" group by (" + groupByField + ")";
-		}
-
-
 
 		List results = getEntryHandler().query(query);
 
@@ -73,22 +68,19 @@ public class GroupByFrequency extends Statistic{
 		for (Object result : results) {
 			Object[] resultAsArray = (Object[]) result;
 			Group group = new Group();
-			try{
-			    group.setValue((Integer) resultAsArray[1]);
+			try {
+				group.setValue((Integer) resultAsArray[1]);
+			} catch (ClassCastException e) {
+				throw new StatisticalUnitException("Results were not of the correct type");
 			}
-			catch(ClassCastException e){
-			    throw new StatisticalUnitException("Results were not of the correct type");
+			try {
+				group.setGroupName((String) resultAsArray[0]);
+			} catch (ClassCastException e) {
+				throw new StatisticalUnitException("Results were not of the correct type");
 			}
-			try{
-			    group.setGroupName((String) resultAsArray[0]);
-			}
-                        catch(ClassCastException e){
-                            throw new StatisticalUnitException("Results were not of the correct type");
-                        }
 			groups.add(group);
 			testCount += group.getValue();
 		}
-
 
 		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
 
@@ -96,7 +88,7 @@ public class GroupByFrequency extends Statistic{
 			return false;
 
 		// finished successfully, no exception thrown
-		ObservationSeries series=  new ObservationSeries();
+		ObservationSeries series = new ObservationSeries();
 		series.setObservations(groups.toArray(new Group[0]));
 		getObservationSeries().add(series);
 
@@ -104,16 +96,14 @@ public class GroupByFrequency extends Statistic{
 
 	}
 
-
 	@Override
 	public void setStatisticParameters(StatisticParameters statisticParameters) {
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
-		if (methodParams.size()==1){
+		if (methodParams.size() == 1) {
 			methodParams.get(0).setParameterName("Group By Field");
 			methodParams.get(0).setParameterType(ParameterType.FIELD);
-		}
-		else{
-			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
+		} else {
+			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters", this.getClass().getSimpleName());
 		}
 		this.statisticParameters = statisticParameters;
 
