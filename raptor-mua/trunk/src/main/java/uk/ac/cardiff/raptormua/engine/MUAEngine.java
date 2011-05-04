@@ -123,7 +123,6 @@ public class MUAEngine {
         suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
         capabilities.setSuggestionValues(suggestionValues);
 
-        log.debug("Possible values set");
 
         ArrayList<StatisticalUnitInformation> stats = new ArrayList();
         for (Statistic entry : su) {
@@ -149,6 +148,7 @@ public class MUAEngine {
         }
         capabilities.setStatisticalServices(stats);
         log.debug("Constructed MUA Capabilities, {}", capabilities);
+        log.debug("Suggestions {}",capabilities.getSuggestionValues());
         return capabilities;
     }
 

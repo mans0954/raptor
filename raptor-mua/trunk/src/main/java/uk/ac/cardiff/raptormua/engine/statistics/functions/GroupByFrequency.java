@@ -53,21 +53,38 @@ public class GroupByFrequency extends Statistic{
 		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
-		
-		
-		
-		String query ="select " + groupByField + ",count(*) from "+tableName+" where (eventTime between '" + start
-		+ "' and '" + end + "') group by (" + groupByField + ")";
-		
+
+		String  query="";
+		if (sqlWhere.equals("")){
+		    query ="select " + groupByField + ", count(*) from "+tableName+" where (eventTime between '" + start
+		    + "' and '" + end + "') group by (" + groupByField + ")";
+		}
+		else{
+		    query ="select " + groupByField + ", count(*) from "+tableName+" where (eventTime between '" + start
+                    + "' and '" + end + "') and "+sqlWhere+" group by (" + groupByField + ")";
+		}
+
+
+
 		List results = getEntryHandler().query(query);
 
-		ArrayList<Group> groups = new ArrayList();
+		ArrayList<Group> groups = new ArrayList<Group>();
 		int testCount = 0;
 		for (Object result : results) {
 			Object[] resultAsArray = (Object[]) result;
 			Group group = new Group();
-			group.setValue((Integer) resultAsArray[1]);
-			group.setGroupName((String) resultAsArray[0]);
+			try{
+			    group.setValue((Integer) resultAsArray[1]);
+			}
+			catch(ClassCastException e){
+			    throw new StatisticalUnitException("Results were not of the correct type");
+			}
+			try{
+			    group.setGroupName((String) resultAsArray[0]);
+			}
+                        catch(ClassCastException e){
+                            throw new StatisticalUnitException("Results were not of the correct type");
+                        }
 			groups.add(group);
 			testCount += group.getValue();
 		}

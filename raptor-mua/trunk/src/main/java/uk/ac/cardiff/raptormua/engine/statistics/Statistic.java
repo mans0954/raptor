@@ -80,6 +80,7 @@ public abstract class Statistic {
 	    observationSeries.clear();
 	}
 
+
 	public void setEntryHandler(EntryHandler entryHandler) {
 		if (preprocessor != null)
 			try {

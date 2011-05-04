@@ -44,7 +44,10 @@ public class StatisticsHandler {
 	private EntryHandler entryHandler;
 
 	public void setStatisticalUnits(List<Statistic> statisticalUnits) {
-		this.statisticalUnits = statisticalUnits;
+	    for (Statistic stat : statisticalUnits){
+	        log.info("Registering statistic {}, role {}",stat.getStatisticParameters().getUnitName(),stat.getStatisticParameters().getType());
+	    }
+	    this.statisticalUnits = statisticalUnits;
 	}
 
 	public List<Statistic> getStatisticalUnits() {
