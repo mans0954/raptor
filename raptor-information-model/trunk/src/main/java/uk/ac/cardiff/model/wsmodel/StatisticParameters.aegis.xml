@@ -15,5 +15,6 @@ property using the getDate and setDate methods -->
 		<property name="startTimeHour" ignore="true"/>
 		<property name="startTimeMinute" ignore="true"/>
 		<property name="startTimeSecond" ignore="true"/>
+        <property name="eventTypeString" ignore="true"/>
 	</mapping>
 </mappings>

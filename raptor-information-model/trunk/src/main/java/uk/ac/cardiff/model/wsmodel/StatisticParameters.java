@@ -76,18 +76,25 @@ public class StatisticParameters implements Serializable{
     /** The type of event from the information model this statistic should be performed over*/
     public enum EventType{
         /** A Shibboleth Authentication Event Type*/
-        SHIBBOLETH_AUTHENTICATION("ShibbolethIdpAuthenticationEvent"),
+        SHIBBOLETH_AUTHENTICATION("ShibbolethIdpAuthenticationEvent", new String[]{"uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent","uk.ac.cardiff.model.event.AuthenticationEvent","uk.ac.cardiff.model.event.Event"}),
         /** An Ezproxy Authentication Event Type */
-        EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent");
+        EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent", new String[]{"uk.ac.cardiff.model.event.EzproxyAuthenticationEvent","uk.ac.cardiff.model.event.AuthenticationEvent","uk.ac.cardiff.model.event.Event"});
 
         private String hibernateSimpleClassName;
+        
+        private String[] classHierarchy;
 
-        private EventType(String hibernateSimpleClassName){
+        private EventType(String hibernateSimpleClassName, String[] classHierarchy){
             this.hibernateSimpleClassName = hibernateSimpleClassName;
+            this.classHierarchy = classHierarchy;
         }
 
         public String getHibernateSimpleClassName(){
             return hibernateSimpleClassName;
+        }
+        
+        public String[] getClassHierarchy(){
+            return classHierarchy;
         }
     }
 
