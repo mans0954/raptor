@@ -62,14 +62,13 @@ public class GraphServiceImpl implements GraphService{
 	    for (StatisticalUnitInformation unit : units){
         	    StatisticalUnitInformationView unitForView = new StatisticalUnitInformationView();
         	    unitForView.setSelected(false);
-
         	    unitForView.setStatisticalUnitInformation(unit);
         	    statisticalUnitsForView.add(unitForView);
 	    }
 	    websession.getGraphmodel().setStatisticalUnitsForView(statisticalUnitsForView);
 
 	}
-	
+
 	public void populateSuggestionValues(WebSession websession){
 	    websession.getGraphmodel().setSuggestionValues(webEngine.getSuggestionValues());
 	}
@@ -103,7 +102,7 @@ public class GraphServiceImpl implements GraphService{
 	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
 		webEngine.generateReport(websession,"csv");
 	}
-	
+
 	public void generatePDFReport(WebSession websession){
 	    if (websession.getGraphmodel().getCurrentTableGraph()!=null)
 		webEngine.generateReport(websession,"pdf");
@@ -193,13 +192,13 @@ public class GraphServiceImpl implements GraphService{
 	@Override
 	public void addFilterToSelectedSeries(WebSession websession) {
 	    websession.getGraphmodel().getSelectedStatisticalUnit().addFilterToSeries(websession.getGraphmodel().getSelectedSeries());
-	    
+
 	}
 
 	@Override
 	public void removeSelectedFilterFromSelectedStatistic(WebSession websession) {
 	    websession.getGraphmodel().getSelectedStatisticalUnit().removeFilterFromSeries(websession.getGraphmodel().getSelectedSeries());
-	    
+
 	}
 
 	@Override
@@ -207,7 +206,7 @@ public class GraphServiceImpl implements GraphService{
 	    log.debug("Rerendering graph for display");
 	    GraphModel model = websession.getGraphmodel();
 	    model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(model.getRawGraphModel(), model.getChartOptions()));
-	    
+
 	}
 
 
