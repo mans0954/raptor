@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -124,13 +125,14 @@ public class ReflectionHelper {
 		String forPckgName = EVENT_PACKAGE_NAME;
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
-		List<String> classes = getClasseNamesInPackageJAR(jarFile, forPckgName);
-
+		log.debug("jar {}",jarFile);
+		List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
+		log.debug("{}",Arrays.asList(classes.toArray(new String[0])));
 		ArrayList allclasses = new ArrayList();
 		for (String classname : classes) {
 			try {
 				Object o = Class.forName(classname.replace(".class", "")).newInstance();
-				// if (o!=null)log.debug("found object {}",o.getClass());
+				 if (o!=null)log.debug("found object {}",o.getClass());
 				if (o instanceof uk.ac.cardiff.model.event.Event) {
 					allclasses.add(o);
 				}
@@ -146,6 +148,7 @@ public class ReflectionHelper {
 		for (Object object : allclasses) {
 			Field[] fields = object.getClass().getDeclaredFields();
 			for (Field field : fields) {
+			    log.debug("Field {}",field.getName());
 				allFields.add(field.getName());
 			}
 
