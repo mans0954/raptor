@@ -27,9 +27,8 @@
 			<list>
 				<ref bean="authTimeBuckets" />
 				<ref bean="groupBy" />
-				<ref bean="groupByNameFormatted"/>
 				<ref bean="authTimeBucketsCount"/>
-				<ref bean="groupByNameFormattedNormalisedPercentage"/>
+				<ref bean="authsPerSchool"/>
 				<ref bean="numberOfAuthenticationsPer"/>
 				<ref bean="numberOfUniqueUsersPer"/>
 				<ref bean="top5Resources"/>
@@ -37,6 +36,7 @@
 				<ref bean="numberOfAuthenticationsPerIntervalNumber"/>
 				<ref bean="authenticationsForOneSP"/>
 				<ref bean="numberOfUniqueAuthenticationsPerSP"/>
+
 			</list>
 		</property>
 	</bean>
@@ -58,13 +58,13 @@
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>All Authentications In X minute Intervals</value></property>
+					<property name="unitName"><value>Number of authentications over defined interval</value></property>
 					<property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20100522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+					<property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>50</value></property>
+								<property name="value"><value>200</value></property>
 							</bean>
 						</list>
 					</property>
@@ -93,9 +93,9 @@
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
                      <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>Authentications over a time range (split)</value></property>
+					<property name="unitName"><value>Number of authentications over defined segments</value></property>
 					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
-					<property name="endTime"><value>20101020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
+					<property name="endTime"><value>20111020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
 					<property name="methodParams">
 						<list>
 							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
@@ -129,7 +129,7 @@
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
                      <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>Number of Authentications per Service Provider (by entityID)</value></property>
+					<property name="unitName"><value>Number of authentications grouped by particular field</value></property>
 					<property name="startTime"><value>20110115T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -151,93 +151,12 @@
 
                     <property name="presentation">
                         <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number of Authentications per Service Provider (by entityID)"/>
+                            <property name="graphTitle" value="Number of authentications grouped by"/>
                             <property name="xAxisLabel" value="Time"/>
                              <property name="yAxisLabel" value="Frequency"/>
                         </bean>
                     </property>
 			</bean>
-		</property>
-	</bean>
-
-	<bean id="groupByNameFormatted" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>User</value></property>
-                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>Number of Authentications per Service Provider (by Organisational Name)</value></property>
-					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>resourceId</value></property>
-							</bean>
-						</list>
-					</property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of authentications"/>
-                            </bean>
-                        </list>
-                    </property>
-
-                    <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number of Authentications per Service Provider (by Organisational Name)"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-			</bean>
-		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="ShibbolethMetadataNameFormatter"></ref>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="groupByNameFormattedNormalisedPercentage" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
-		<property name="StatisticParameters">
-			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
-					<property name="statisticType"><value>User</value></property>
-                     <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>Number of Authentications per Service Provider by OrgName (Percentage)</value></property>
-					<property name="startTime"><value>20091020T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
-					<property name="endTime"><value>20110115T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
-					<property name="methodParams">
-						<list>
-							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-								<property name="value"><value>resourceId</value></property>
-							</bean>
-						</list>
-					</property>
-
-					<property name="series">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of authentications"/>
-                            </bean>
-                        </list>
-                    </property>
-
-					 <property name="presentation">
-                        <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Number of Authentications per Service Provider by OrgName (Percentage)"/>
-                            <property name="xAxisLabel" value="Time"/>
-                             <property name="yAxisLabel" value="Frequency"/>
-                        </bean>
-                    </property>
-			</bean>
-		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="ShibbolethMetadataNameFormatter"></ref>
-				<ref bean="percentagePost"></ref>
-			</list>
 		</property>
 	</bean>
 
@@ -247,7 +166,7 @@
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
                      <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
-					<property name="unitName"><value>Comparison of Authentications For Two SPs</value></property>
+					<property name="unitName"><value>Comparison of authentications for particular Service Providers</value></property>
 					<property name="startTime"><value>20110116T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110117T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
 					<property name="methodParams">
@@ -285,7 +204,7 @@
 
 					 <property name="presentation">
                         <bean class="uk.ac.cardiff.model.report.Presentation">
-                            <property name="graphTitle" value="Authentications Over Time For A Single SP (by Organisational Name)"/>
+                            <property name="graphTitle" value="Comparison of authentications for particular Service Providers"/>
                             <property name="xAxisLabel" value="Time"/>
                              <property name="yAxisLabel" value="Frequency"/>
                         </bean>
@@ -298,6 +217,42 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="authsPerSchool" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
+        <property name="StatisticParameters">
+            <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+                    <property name="statisticType"><value>User</value></property>
+                    <property name="eventType"><value>SHIBBOLETH_AUTHENTICATION</value></property>
+                    <property name="unitName"><value>Number of authentications per school</value></property>
+                    <property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+                    <property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+                    <property name="methodParams">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="value"><value>principalInformation.school</value></property>
+                            </bean>
+                        </list>
+                    </property>
+
+                    <property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of authentications"/>
+                            </bean>
+                        </list>
+                    </property>
+
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Number of authentications per school"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+            </bean>
+        </property>
+    </bean>
 
 	<!--  Support statistical workflows -->
 
