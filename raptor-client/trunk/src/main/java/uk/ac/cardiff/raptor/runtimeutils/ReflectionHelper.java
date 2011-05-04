@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -33,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.wsmodel.Suggestion;
 
 /**
  * @author philsmart
@@ -120,14 +122,20 @@ public class ReflectionHelper {
 
 	}
 
-	public static List<String> getFieldsFromEntrySubClasses() {
-		ArrayList<String> allFields = new ArrayList<String>();
+	/**
+	 * This is terrible code. Finds all fieldnames of all classes that are subclasses of
+	 * the <code>uk.ac.cardiff.model.event.Event</code> class.
+	 * 
+	 * @return
+	 */
+	public static List<Suggestion> getFieldsFromEntrySubClasses() {
+		List<Suggestion> allFields = new ArrayList<Suggestion>();
 		String forPckgName = EVENT_PACKAGE_NAME;
 		String jarFile = getJARFilePath(forPckgName);
 		jarFile = jarFile.replace("file:", "");
 		log.debug("jar {}",jarFile);
 		List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
-		log.debug("{}",Arrays.asList(classes.toArray(new String[0])));
+
 		ArrayList allclasses = new ArrayList();
 		for (String classname : classes) {
 			try {
@@ -142,14 +150,31 @@ public class ReflectionHelper {
 				// log.error("{}", iex);
 			} catch (IllegalAccessException iaex) {
 				// The class is not public
-				// log.error("{}", iaex);
 			}
 		}
 		for (Object object : allclasses) {
 			Field[] fields = object.getClass().getDeclaredFields();
-			for (Field field : fields) {
-			    log.debug("Field {}",field.getName());
-				allFields.add(field.getName());
+			for (Field field : fields) {			    
+			    //if field is another class in the same package, then expand its methods
+			    if (field.getType().getCanonicalName().contains(EVENT_PACKAGE_NAME)){
+			    	Object o=null;
+			    	String fieldName = field.getName();
+			    	try {
+						 o = Class.forName(field.getType().getCanonicalName()).newInstance();
+					} catch (Exception e) {
+					}
+					if (o!=null){
+						Field[] newFields = o.getClass().getDeclaredFields();
+						for (Field newField : newFields){
+							//format it for hibernate
+							allFields.add(new Suggestion(object.getClass().getCanonicalName(),fieldName+"."+newField.getName()));
+						}
+						
+					}
+			    }
+			    else{
+			    	allFields.add(new Suggestion(object.getClass().getCanonicalName(),field.getName()));
+			    }
 			}
 
 		}
