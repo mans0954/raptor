@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
@@ -21,14 +22,10 @@ import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
 
 public class GraphModel implements Serializable{
 
-    	/* Generated SerialVersionUID */
+    	/** Generated SerialVersionUID */
     	private static final long serialVersionUID = -2803349385469406219L;
 
-	static Logger log = LoggerFactory.getLogger(GraphModel.class);
-
-	//private String selectedStatisticalUnit;
-
-	/* The raw graph model, for later reconstruction*/
+	/** The raw graph model, for later reconstruction*/
 	private AggregatorGraphModel rawGraphModel;
 
 	private RaptorGraphModel currentGraph;
@@ -79,6 +76,16 @@ public class GraphModel implements Serializable{
 	    	this.selectedStatisticalUnit.setSelected(false);
 	    	this.selectedStatisticalUnit = selectedStatisticalUnit;
 	    	this.selectedStatisticalUnit.setSelected(true);
+	}
+	
+	/** Find all fields for the currently selected event type 
+	 * 
+	 * @return
+	 */
+	public List<String> getPossibleFieldNameValues(){
+	    EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
+	    String[] classFilter = eventType.getClassHierarchy();
+	    return suggestionValues.getPossibleFieldNameValuesList(classFilter);	    	    
 	}
 
 
@@ -180,7 +187,6 @@ public class GraphModel implements Serializable{
 	}
 
 	public void setSuggestionValues(SuggestionValues suggestionValues) {
-	    log.debug("Setting possible field values as {}",suggestionValues);
 	    this.suggestionValues = suggestionValues;
 	}
 

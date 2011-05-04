@@ -142,7 +142,7 @@
 														<rich:comboBox
 															rendered="#{parameter.parameterType=='FIELD'}"
 															value="#{parameter.value}"
-															suggestionValues="#{flowScope.websession.graphmodel.suggestionValues.possibleFieldNameValues}" />
+															suggestionValues="#{flowScope.websession.graphmodel.possibleFieldNameValues}" />
 													</rich:column>
 												</rich:dataTable>
 
@@ -260,6 +260,10 @@
 												</rich:column>
 
 											</rich:dataTable>
+											
+											<h:outputText value="Processing Status:" style="font-weight: bold;"/>
+											<h:outputText value="#{flowScope.websession.graphmodel.processingResult}"/>
+											
 										</rich:layoutPanel>
 									</rich:layout>
 								</rich:panel>

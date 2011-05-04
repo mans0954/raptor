@@ -96,7 +96,7 @@ public class ChartOptions implements Serializable {
     }
 
     public enum ChartType {
-	LINE("Line Graph"), BAR("Bar Graph"), PIE("Pie Chart"),AREA("Area Graph"), 
+	LINE("Line Graph"), BAR("Bar Graph"),AREA("Area Graph"), 
 	BAR3D ("3D Bar Graph"), LINE3D ("3D Line Graph");
 
 	private final String label;
