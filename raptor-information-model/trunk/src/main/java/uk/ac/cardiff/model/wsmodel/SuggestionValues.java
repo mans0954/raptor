@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 
 
 public class SuggestionValues implements Serializable{
-    
+
     /**
      * default serial UId
      */
     private static final long serialVersionUID = 7312337340123235532L;
 
-    static Logger log = LoggerFactory.getLogger(SuggestionValues.class);
-    
+    private final Logger log = LoggerFactory.getLogger(SuggestionValues.class);
+
     private List<String> possibleFieldNameValues;
-    
+
 
     public void setPossibleFieldNameValues(List<String> possibleFieldNameValues) {
 	this.possibleFieldNameValues = possibleFieldNameValues;

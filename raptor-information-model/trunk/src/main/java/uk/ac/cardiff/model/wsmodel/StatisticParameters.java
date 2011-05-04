@@ -5,6 +5,7 @@ package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -70,7 +71,7 @@ public class StatisticParameters implements Serializable{
 
     /** The type of statistic */
     private StatisticType type;
-    
+
     //TODO should be constructed in XML
     /** The type of event from the information model this statistic should be performed over*/
     public enum EventType{
@@ -78,18 +79,19 @@ public class StatisticParameters implements Serializable{
         SHIBBOLETH_AUTHENTICATION("ShibbolethIdpAuthenticationEvent"),
         /** An Ezproxy Authentication Event Type */
         EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent");
-        
+
         private String hibernateSimpleClassName;
-        
+
         private EventType(String hibernateSimpleClassName){
             this.hibernateSimpleClassName = hibernateSimpleClassName;
         }
-        
+
         public String getHibernateSimpleClassName(){
             return hibernateSimpleClassName;
         }
     }
-    
+
+    /** The type of event this statistic is computed for */
     private EventType eventType;
 
 
@@ -135,7 +137,6 @@ public class StatisticParameters implements Serializable{
     }
 
     public DateTime getStartTimeAsDate() {
-	log.debug("Returning start time as {}",startTime);
 	return startTime;
     }
 
@@ -372,9 +373,23 @@ public class StatisticParameters implements Serializable{
         this.eventType = eventType;
     }
 
+    public void setEventTypeString(String eventType) {
+        for (EventType type : EventType.values()){
+            if (type.toString().equals(eventType)){
+                this.eventType = type;
+            }
+        }
+    }
+
+    public String getEventTypeString(){
+        return eventType.toString();
+    }
+
     public EventType getEventType() {
         return eventType;
     }
+
+
 
 
 

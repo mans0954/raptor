@@ -52,7 +52,7 @@
 			when it may not be there. So we need to make sure it saves or updates
 			the object during save or update of this object
 		-->
-		<many-to-one name="principalInformation"
+		<!--<many-to-one name="principalInformation"
 			class="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
 			column="principalInformation_id" cascade="all" />
 
@@ -60,6 +60,14 @@
 
 
 
+
+	-->
+        <component name="principalInformation">
+            <property name="school" type="string" update="true" insert="true"
+            column="school" index="school_index" />
+            <property name="affiliation" type="string" update="true"
+            insert="true" column="affiliation" index="affiliation_index" />
+        </component>
 
 	</subclass>
 
@@ -94,7 +102,7 @@
 
 	</subclass>
 
-	<class name="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
+	<!--<class name="uk.ac.cardiff.model.event.auxiliary.PrincipalInformation"
 		table="principalInformation">
 
 		<id name="principleId" column="id" type="java.lang.Long">
@@ -111,4 +119,4 @@
 
 
 
-</hibernate-mapping>
+--></hibernate-mapping>
