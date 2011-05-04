@@ -27,10 +27,10 @@ public class GraphModel implements Serializable{
 	static Logger log = LoggerFactory.getLogger(GraphModel.class);
 
 	//private String selectedStatisticalUnit;
-	
+
 	/* The raw graph model, for later reconstruction*/
 	private AggregatorGraphModel rawGraphModel;
-	
+
 	private RaptorGraphModel currentGraph;
 	private ChartOptions chartOptions;
 	private RaptorTableChartModel currentTableGraph;
@@ -40,7 +40,7 @@ public class GraphModel implements Serializable{
 	private RaptorJFreeChartModel currentJFreeGraph;
 	private String controlPanelSize;
 	private List<StatisticalUnitInformationView> statisticalUnitsForView;
-	
+
 	private SuggestionValues suggestionValues;
 
 	/* Selected series modal panel*/
@@ -180,6 +180,7 @@ public class GraphModel implements Serializable{
 	}
 
 	public void setSuggestionValues(SuggestionValues suggestionValues) {
+	    log.debug("Setting possible field values as {}",suggestionValues);
 	    this.suggestionValues = suggestionValues;
 	}
 

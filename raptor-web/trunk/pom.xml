@@ -160,7 +160,7 @@
 	</build>
 	<dependencies>
 
-		
+
 		<!-- Myfaces <dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-api</artifactId>
 			<version>${myfaces.version}</version> <scope>compile</scope> </dependency>
 			<dependency> <groupId>org.apache.myfaces.core</groupId> <artifactId>myfaces-impl</artifactId>
@@ -631,7 +631,7 @@
 		<myfaces.version>1.2.5</myfaces.version>
 		<trinidad.version>1.2.13</trinidad.version>
 		<spring.version>3.0.2.RELEASE</spring.version>
-		<apache.cxf.version>2.2.7</apache.cxf.version>
+		<apache.cxf.version>2.2.8</apache.cxf.version>
 		<webflow.version>2.0.5.RELEASE</webflow.version>
 		<spring.security.version>3.0.5.RELEASE</spring.security.version>
 		<richfaces.version>3.3.3.Final</richfaces.version>

@@ -32,8 +32,8 @@ h2 		{ font-size:18px; }
 h3		{ font-size: 16px; color: #666; }
 
 #wrapper 		{ width:100%; margin:0 auto; }
-#header 		{ position:relative; display:block; width:100%; height:50px; background:#FFF }
-#header .logo 	{ position:absolute; left:40px; top:5px; }
+header 		{ position:relative; display:block; width:100%; height:50px; background:#FFF }
+#header .logo 	{ position:absolute; left:10px; top:5px; }
 
 #nav 			{ display:block; width:100%; height:26px; margin:0; padding:0; list-style:none; text-align:center; background:#A13D3D url(../images/bg_nav.gif) repeat-x; }
 #nav li 		{ float:left; width:150px;  }
@@ -52,7 +52,7 @@ h3		{ font-size: 16px; color: #666; }
 #subnav li a:hover { background:#E9D1D1 url(../images/bg_left_nav_on.gif) no-repeat 100% 0; text-decoration:none; }
 #content #col_2 { width:100%; float:left; }
 
-#footer { border-width:1px; border-top-style:solid; display:block; width:90%; padding: 5px 5px; margin:0 auto; background:#FFF; -moz-border-radius:6px; }
+footer { border-width:1px; border-top-style:solid; display:block; width:98%; padding: 5px 5px; margin:0 auto; background:#FFF; -moz-border-radius:6px; }
 #footer small {  }
 
 .t_form { margin:20px; }

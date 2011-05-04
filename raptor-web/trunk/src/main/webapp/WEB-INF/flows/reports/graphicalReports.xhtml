@@ -99,6 +99,15 @@
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.unitName}" />
 
 
+                                                <h:outputText value="Event Type"
+                                                    style="font-weight: bold;" />
+
+                                                <rich:inplaceSelect value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventTypeString}">
+                                                         <f:selectItem itemLabel="Shibboleth" itemValue="SHIBBOLETH_AUTHENTICATION" />
+                                                         <f:selectItem itemLabel="Ezproxy" itemValue="EZPROXY_AUTHENTICATION" />
+                                                </rich:inplaceSelect>
+
+
 												<h:outputText value="Start Time:" style="font-weight: bold;" />
 
 												<rich:calendar id="startTimeDate" showApplyButton="true"
@@ -363,7 +372,7 @@
 									<h:outputText value="Filename:"/>
 									<h:inputText/>
 								</h:panelGrid>
-								
+
 								<h:panelGrid id="reportTypePanel" columns="3">
 											<h:graphicImage style="cursor: pointer"
 													value="/image/arrow.png"/>
@@ -374,19 +383,19 @@
 													<h:graphicImage value="/image/excel-icon.gif"
 														style="border:0">
 													</h:graphicImage>
-												</a4j:commandLink>											
-	
+												</a4j:commandLink>
+
 												<a4j:commandLink action="generateCSVReport"
 													reRender="chartForm">
 													<h:graphicImage value="/image/csv-icon.png" style="border:0">
 													</h:graphicImage>
 												</a4j:commandLink>
 											</h:panelGrid>
-									
+
 										<h:graphicImage style="cursor: pointer"
 												value="/image/arrow.png"/>
-										<h:outputText value="Create table and graph report: "/> 
-										<h:panelGrid columns="1">      							
+										<h:outputText value="Create table and graph report: "/>
+										<h:panelGrid columns="1">
 											<a4j:commandLink action="generatePDFReport"
 												reRender="chartForm">
 												<h:graphicImage value="/image/pdf.png" width="35px"
@@ -394,9 +403,9 @@
 												</h:graphicImage>
 											</a4j:commandLink>
 										</h:panelGrid>
-									</h:panelGrid>		
+									</h:panelGrid>
 							</rich:panel>
-						
+
 
 							<rich:dataTable id="reportDownloadTable"
 								value="#{flowScope.websession.reportmodel.reportsForDownload}"
