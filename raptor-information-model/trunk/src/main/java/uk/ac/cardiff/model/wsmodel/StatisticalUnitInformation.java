@@ -21,13 +21,16 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public class StatisticalUnitInformation implements Serializable {
 
-    /* generated serial UID for this class */
+    /** generated serial UID for this class */
     private static final long serialVersionUID = 4580271084108294958L;
 
+    /** Class representing all parameters for this statistical unit */
     private StatisticParameters statisticParameters;
 
-    /* both these are simple string values (representing names) for the time being*/
+    /** Simple string values (representing names) of the configured pre-processors*/
     private List<String> preprocessors;
+    
+    /** Simple string values (representing names) of the configured post-processors*/
     private List<String> postprocessors;
 
 
