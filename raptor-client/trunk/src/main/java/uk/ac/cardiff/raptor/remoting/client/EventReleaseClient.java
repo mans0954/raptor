@@ -20,7 +20,7 @@ package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.List;
 
-import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 
 /**
@@ -29,7 +29,15 @@ import uk.ac.cardiff.model.event.Event;
  *
  */
 public interface EventReleaseClient {
-	
-	public boolean release(List<Event> events, ClientMetadata clientMetadata) throws ReleaseFailureException;
+
+    /**
+     * Release the <code>events</code> to the endpoint specified in this clients implementation
+     *
+     * @param events the <code>List</code> of events that are to be released
+     * @param ServiceMetadata
+     * @return true of the release was successful and false otherwise
+     * @throws ReleaseFailureException
+     */
+	public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException;
 
 }

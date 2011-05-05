@@ -28,27 +28,28 @@ import org.slf4j.LoggerFactory;
 
 import com.rits.cloning.Cloner;
 
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class AttrributeFilterEngine {
 
-	/* class logger. */
+	/** class logger. */
 	private final Logger log = LoggerFactory.getLogger(AttrributeFilterEngine.class);
 
 	/**
 	 * Only runs against the deny rules, and only denies basic:ANY attributes,
 	 * does not deny individual values.
-	 * 
+	 *
 	 * @param attributeFilterPolicy
 	 * @param entries
 	 * @return
 	 */
-	public List<Event> filter(AttributeFilterPolicy attributeFilterPolicy, List<Event> events) {
+	public List<Event> filter(AttributeFilterPolicy attributeFilterPolicy, ServiceMetadata metadata, List<Event> events) {
 		log.debug("Applying attribute filter policy {} to event set", attributeFilterPolicy.getPolicyName());
 		List<Event> filteredEntries = clone(events);
 
@@ -64,7 +65,7 @@ public class AttrributeFilterEngine {
 	/**
 	 * Only process deny rules on the level of basic:ANY attributes. Hence will
 	 * not deny individual values
-	 * 
+	 *
 	 * @param entry
 	 * @param attributeRule
 	 */
