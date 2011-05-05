@@ -4,16 +4,14 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import uk.ac.cardiff.model.ClientMetadata;
-import uk.ac.cardiff.model.ServerMetadata;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
+import uk.ac.cardiff.model.ServiceMetadata;
+
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class Capabilities implements Serializable {
 
@@ -24,7 +22,7 @@ public class Capabilities implements Serializable {
     private List<StatisticalUnitInformation> statisticalServices;
     private String errorMessage;
     private boolean error;
-    private ServerMetadata metadata;
+    private ServiceMetadata metadata;
     private SuggestionValues suggestionValues;
 
     private int numberOfEntries;
@@ -35,7 +33,7 @@ public class Capabilities implements Serializable {
 
     /**
      * Returns all configured statistical units
-     * 
+     *
      * @return
      */
     public List<StatisticalUnitInformation> getStatisticalServices() {
@@ -88,24 +86,24 @@ public class Capabilities implements Serializable {
         return suggestionValues;
     }
 
-    public void setMetadata(ServerMetadata metadata) {
+    public void setMetadata(ServiceMetadata metadata) {
         this.metadata = metadata;
     }
 
-    public ServerMetadata getMetadata() {
+    public ServiceMetadata getMetadata() {
         return metadata;
     }
 
     public void setNumberOfAuthenticationsStored(int numberOfEntries) {
         this.numberOfEntries = numberOfEntries;
-        
+
     }
-    
+
     public int getNumberOfAuthenticationsStored(){
         return numberOfEntries;
     }
-    
- 
-       
+
+
+
 
 }
