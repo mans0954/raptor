@@ -109,16 +109,18 @@ public class CountEntryPerInterval extends Statistic{
 		long testCount = 0;
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		for (Bucket bucket : buckets) {
-			// SQL between is >= start && <= end. We want, >= start && < end, so
-			// must exclude equals end
+			/*SQL between is >= start && <= end. We want, >= start && < end, so
+			* must exclude equals end
+			*/
 			String query=null;
 			if (sqlWhere.equals(""))
-				query = "select count(*) from "+tableName+" where (eventTime between '" + bucket.getStart() + "' and '"
-							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')";
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?)";
 			else
-				query = "select count(*) from "+tableName+" where (eventTime between '" + bucket.getStart() + "' and '"
-				+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "') and "+sqlWhere;
-			Integer count = (Integer) this.getEntryHandler().queryUnique(query);// new
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and "+sqlWhere;
+			
+			Object[] params = new Object[]{bucket.getStart().toDate(),bucket.getEnd().toDate(),bucket.getEnd().toDate()};
+			
+			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);// new
 			// Object[]{start,end});
 			bucket.setValue(count);
 			testCount += bucket.getValue();

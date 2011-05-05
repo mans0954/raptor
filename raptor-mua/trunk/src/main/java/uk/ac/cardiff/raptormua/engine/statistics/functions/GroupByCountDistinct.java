@@ -30,7 +30,7 @@ public class GroupByCountDistinct extends Statistic {
 		String groupByField = methodParams.get(0).getValue();
 		String countDistinctField = methodParams.get(1).getValue();
 
-		log.debug("Performing groupByFrequency Statistical Operation");
+		log.debug("Performing GroupByCountDistinct Statistical Operation");
 		log.debug("Params for method:  {},{}", this.getClass().getSimpleName(), statisticParameters.getUnitName());
 		log.debug("Grouping field: {}, count By distinct field {}", groupByField, countDistinctField);
 
@@ -41,16 +41,20 @@ public class GroupByCountDistinct extends Statistic {
 		String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
 
 		log.debug("Select {}, tableName {}", groupByField, tableName);
+		
+		String query="";
+		
+		if (sqlWhere.equals("")) {
+			query = "select " + groupByField + ",count(distinct " + countDistinctField + ") from " + tableName + " where (eventTime between ?" +
+			" and ?) group by (" + groupByField + ")";
+		} else {
+			query = "select " + groupByField + ",count(distinct " + countDistinctField + ") from " + tableName + " where (eventTime between ?" +
+			" and ?) and "+sqlWhere+" group by (" + groupByField + ")";
+		}	
+		
+		Object[] params = new Object[]{start.toDate(),end.toDate()};
 
-		// String query ="select " + groupByField + ",count(distinct " +
-		// countDistinctField + ") from " + tableName +
-		// " where (eventTime between '" + start
-		// + "' and '" + end + "') group by (" + groupByField + ")";
-
-		String query = "select " + groupByField + ",count(distinct " + countDistinctField + ") from " + tableName + " where (eventTime between '" + start
-				+ "' and '" + end + "') group by (" + groupByField + ")";
-
-		List results = getEntryHandler().query(query);
+		List results = getEntryHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList<Group>();
 		int testCount = 0;

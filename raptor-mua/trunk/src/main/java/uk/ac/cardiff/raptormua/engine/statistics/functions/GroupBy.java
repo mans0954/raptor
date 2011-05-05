@@ -52,10 +52,17 @@ public class GroupBy extends Statistic{
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
 		
-		String query="select " + groupByField + " from "+tableName+" where (eventTime between '" + start + "' and '"
-		+ end + "') group by (" + groupByField + ")";
+		String query="";
 		
-		List results = getEntryHandler().query(query);
+		if (sqlWhere.equals("")) {
+			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
+		} else {
+			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
+		}	
+		
+		Object[] params = new Object[]{start.toDate(),end.toDate()};
+		
+		List results = getEntryHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList();
 		for (Object result : results) {
