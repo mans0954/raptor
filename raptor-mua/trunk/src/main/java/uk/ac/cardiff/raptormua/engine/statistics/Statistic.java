@@ -57,10 +57,10 @@ public abstract class Statistic {
 
 	protected StatisticParameters statisticParameters;
 
-	/* add a preprocessing module to the statistical method */
+	/** add a preprocessing module to the statistical method */
 	private StatisticsPreProcessor preprocessor;
 
-	/* add a postprocessing module to the statistical method */
+	/** add a postprocessing module to the statistical method */
 	private List<StatisticsPostProcessor> postprocessor;
 
 	private List<ObservationSeries> observationSeries;
@@ -119,10 +119,11 @@ public abstract class Statistic {
 
 		if (countGroup == observationSeries.size()) {
 			log.info("Constructing graph model for Group type");
-			//construct the groups from the first series (each series will have the same grouping)
-			Observation[] observations = observationSeries.get(0).getObservations();
+			//construct the groups from the series with the most groups
+			Observation[] observations = getObservationWithMostGroups(observationSeries);
 			Group[] groups = (Group[]) observations;
 			for (Group group : groups) {
+			        log.trace("Group {}",group.getGroupName());
 				gmodel.addGroupLabel(group.getGroupName());
 			}
 			//now add each series and their values
@@ -131,11 +132,16 @@ public abstract class Statistic {
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
 
 				List<Double> values = new ArrayList<Double>();
-				for (Group group : groups) {
-					Double valueDouble = new Double(group.getValue());
-					values.add(valueDouble);
+				for (String label : gmodel.getGroupLabels()){
+				    Double valueDouble=new Double(0);
+				    for (Group group : groups) {
+				        if (group.getGroupName().equals(label))
+                                            valueDouble = new Double(group.getValue());
+                                    }
+				    values.add(valueDouble);
 				}
-				log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
+
+				log.trace("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
 				gmodel.addGroupValue(values);
 			}
 
@@ -163,7 +169,7 @@ public abstract class Statistic {
 					Double valueDouble = new Double(bucket.getValue());
 					values.add(valueDouble);
 				}
-				//log.debug("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
+				log.trace("Adding Values {}",Arrays.toString(values.toArray(new Double[0])));
 				gmodel.addGroupValue(values);
 			}
 		}
@@ -172,6 +178,20 @@ public abstract class Statistic {
 		}
 
 		return gmodel;
+	}
+
+	private Observation[] getObservationWithMostGroups(List<ObservationSeries> observationSeries){
+	    Observation[] maxObs =null;
+	    int max=0;
+	    for (ObservationSeries series : observationSeries){
+	          Observation[] obs= series.getObservations();
+	          if (obs.length > max){
+	              max = obs.length;
+	              maxObs = obs;
+	          }
+
+	    }
+	    return maxObs;
 	}
 
 	/**

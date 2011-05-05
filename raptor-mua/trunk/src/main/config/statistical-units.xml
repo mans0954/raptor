@@ -237,7 +237,17 @@
                     <property name="series">
                         <list>
                             <bean class="uk.ac.cardiff.model.report.Series">
-                                <property name="seriesLabel" value="Number of authentications"/>
+                                <property name="seriesLabel" value="Number of authentications (ALL)"/>
+                            </bean>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of authentications (Undergraduate)"/>
+                                <property name="comparisonPredicate">
+                                        <bean class="uk.ac.cardiff.model.sql.ComparisonPredicate">
+                                                <property name="compOp" value="EQUAL"/>
+                                                <property name="fieldName" value="principalInformation.affiliation"/>
+                                                <property name="value" value="U"/>
+                                        </bean>
+                                </property>
                             </bean>
                         </list>
                     </property>
@@ -253,7 +263,7 @@
             </bean>
         </property>
     </bean>
-    
+
         <bean id="authsPerPersonAffiliation" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
         <property name="StatisticParameters">
             <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">

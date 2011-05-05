@@ -40,6 +40,7 @@ import org.mortbay.jetty.security.SslSocketConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.mortbay.log.Log;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -60,7 +61,7 @@ public class RunServer {
 	 * 1. Set the Apache CXF logger to use SLF4J
 	 * 2. Configure the logback logger
 	 * 3. Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
-	 * 
+	 *
 	 * @param args
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -70,7 +71,7 @@ public class RunServer {
 		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
-		
+
 		configureLogger(configurationFiles+"/logback.xml");
 
 		Properties props = new Properties();
@@ -82,6 +83,11 @@ public class RunServer {
 		String trustStoreLocaion = props.getProperty("jetty.trustStoreLocaion", "");
 		String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
 		String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
+
+		String useHsqldb = props.getProperty("database.useHsqldb", "true");
+		String hsqldbFileLocation = props.getProperty("database.hsqldbFileLocation", "/tmp/hsql");
+		if (useHsqldb.equals("true"))
+		    startHsqldbServer(hsqldbFileLocation);
 
 		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
 		System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
@@ -98,7 +104,7 @@ public class RunServer {
 		sslConnector.setTrustPassword(trustStorePassword);
 
 		// enable mutual authentication
-		//sslConnector.setNeedClientAuth(true);
+		sslConnector.setNeedClientAuth(true);
 
 		server.setConnectors(new Connector[] { sslConnector });
 
@@ -119,6 +125,18 @@ public class RunServer {
 			e.printStackTrace();
 			System.exit(100);
 		}
+
+	}
+
+	private static void startHsqldbServer(String fileLocation){
+	    Log.info("Starting embedded HSQLDB with path [{}]",fileLocation);
+//	    org.hsqldb.Server server = new org.hsqldb.Server();
+//	    server.setAddress("localhost");
+//	    server.setDatabaseName(0,"mua");
+//	    server.setDatabasePath(0, fileLocation);
+//	    server.setPort(1234);
+//	    server.setTrace(true);
+//	    server.start();
 
 	}
 

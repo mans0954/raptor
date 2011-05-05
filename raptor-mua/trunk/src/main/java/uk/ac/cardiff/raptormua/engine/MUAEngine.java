@@ -18,37 +18,29 @@
  */
 package uk.ac.cardiff.raptormua.engine;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.ClientMetadata;
-import uk.ac.cardiff.model.ServerMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
-import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
-import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.DataAccessRegister;
 import uk.ac.cardiff.raptor.parse.EventParserNotFoundException;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
@@ -78,7 +70,7 @@ public class MUAEngine {
     private StorageEngine storageEngine;
 
     /** Metadata about the this MUA instance */
-    private ServerMetadata muaMetadata;
+    private ServiceMetadata muaMetadata;
 
     /** Used to parse batch uploads */
     private DataAccessRegister dataAccessRegister;
@@ -228,11 +220,11 @@ public class MUAEngine {
 
     }
 
-    public void setMuaMetadata(ServerMetadata muaMetadata) {
+    public void setMuaMetadata(ServiceMetadata muaMetadata) {
         this.muaMetadata = muaMetadata;
     }
 
-    public ServerMetadata getMuaMetadata() {
+    public ServiceMetadata getMuaMetadata() {
         return muaMetadata;
     }
 

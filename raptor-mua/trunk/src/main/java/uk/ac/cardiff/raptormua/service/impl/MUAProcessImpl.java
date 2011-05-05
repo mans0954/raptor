@@ -150,7 +150,7 @@ public class MUAProcessImpl implements MUAProcess {
 		boolean success = false;
 		if (lockR.tryLock()) {
 			try {
-				log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getClientName());
+				log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServerName());
 				engine.addAuthentications(pushed);
 				success = true;
 			} catch (Exception e) {
