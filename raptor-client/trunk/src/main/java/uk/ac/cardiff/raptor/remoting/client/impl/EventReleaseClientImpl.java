@@ -17,7 +17,8 @@ package uk.ac.cardiff.raptor.remoting.client.impl;
 
 import java.util.List;
 
-import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
@@ -26,20 +27,23 @@ import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 
 
 public class EventReleaseClientImpl implements EventReleaseClient{
-	
+
+        /** Encapsulation of all endpoints this client can communication with*/
 	private EndpointRegistry endpointRegistry;
+
+	/** The engine that performs event release to a client endpoint */
 	private EventReleaseEngine eventReleaseEngine;
-	
+
 	public EventReleaseClientImpl(){
 		eventReleaseEngine = new EventReleaseEngine();
 	}
 
 
 	@Override
-	public boolean release(List<Event> events, ClientMetadata clientMetadata) throws ReleaseFailureException{
-		boolean success = eventReleaseEngine.release(endpointRegistry, events, clientMetadata);		
+	public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException{
+		boolean success = eventReleaseEngine.release(endpointRegistry, events, serviceMetadata);
 		return success;
-		
+
 	}
 
 

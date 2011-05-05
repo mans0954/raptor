@@ -19,11 +19,8 @@
 package uk.ac.cardiff.raptor.registry;
 
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
-import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
@@ -31,7 +28,7 @@ import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 
@@ -41,7 +38,10 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
  */
 public class EventReleaseEngine {
 
+        /** Engine that provides attribute filtering before events are released */
 	private AttrributeFilterEngine attributeFilterEngine;
+
+	/** Class that handles the transport of events to the endpoint */
 	private ServiceEndpointClient serviceEndpointInterface;
 
 
@@ -56,14 +56,14 @@ public class EventReleaseEngine {
 	 *
 	 * @param authenticationModules
 	 */
-	public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ClientMetadata clientMetadata) {
+	public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ServiceMetadata serviceMetadata) {
 		boolean releasedtoAll = true;
 		int releaseCount = 0;
 		for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
 			boolean shouldRelease = shouldRelease(endpoint,events);//(endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
-			List<Event> filteredEntries = filterAttributes(endpoint, events);
-			EventPushMessage pushMessage = constructEventPush(clientMetadata, filteredEntries);
+			List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, events);
+			EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
 			if (shouldRelease) {
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
 				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint);
@@ -83,11 +83,11 @@ public class EventReleaseEngine {
 		return releasedtoAll;
 
 	}
-	
+
 	/**
 	 * Iterates through all push policies attached to the <code>endpoint</code> parameter
 	 * to determine if events should be released to this endpoint
-	 * 
+	 *
 	 * @param endpoint the endpoint to evaluate the policy on
 	 * @param events the events ready to be released.
 	 * @return true iff at least one push policy evaluates to true, false otherwise
@@ -97,7 +97,7 @@ public class EventReleaseEngine {
 		for (PushPolicy policy : endpoint.getPushPolicies()){
 			if (policy.evaluatePolicy(events))
 				shouldRelease = true;
-		}		
+		}
 		return shouldRelease;
 	}
 
@@ -110,10 +110,10 @@ public class EventReleaseEngine {
 	 * @param allEvents
 	 * @return
 	 */
-	private List<Event> filterAttributes(Endpoint endpoint, List<Event> allEvents) {
+	private List<Event> filterAttributes(ServiceMetadata metadata, Endpoint endpoint, List<Event> allEvents) {
 		if (endpoint.getAttributeFilterPolicy() == null)
 			return allEvents;
-		return attributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(), allEvents);
+		return attributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(), metadata, allEvents);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class EventReleaseEngine {
 	 * @param events
 	 * @return
 	 */
-	private EventPushMessage constructEventPush(ClientMetadata clientMetadata, List<Event> events) {
+	private EventPushMessage constructEventPush(ServiceMetadata clientMetadata, List<Event> events) {
 		EventPushMessage pushMessage = new EventPushMessage();
 		pushMessage.setClientMetadata(clientMetadata);
 		pushMessage.setEvents(events);
