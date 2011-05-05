@@ -179,6 +179,13 @@ public class MemoryEntryHandler implements EntryHandler{
 
     }
 
+    /**
+     * This is a no-op method for the memory entry handler
+     */
+	public List query(String query, Object[] parameters) {
+		return null;
+	}
+
 
 
 
