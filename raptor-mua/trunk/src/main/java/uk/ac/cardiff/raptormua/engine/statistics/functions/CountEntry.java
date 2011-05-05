@@ -93,12 +93,18 @@ public class CountEntry extends Statistic{
 
 		long testCount = 0;
 		for (Bucket bucket : buckets) {
-			// SQL between is >= start && <= end. We want, >= start && < end, so
-			// must exclude equals end
-			Integer count = (Integer) this.getEntryHandler().queryUnique(
-					"select count(*) from "+statisticParameters.getEventType().getHibernateSimpleClassName()+" where (eventTime between '" + bucket.getStart() + "' and '"
-							+ bucket.getEnd() + "') and (eventTime !='" + bucket.getEnd() + "')");// new
-			// Object[]{start,end});
+			/* SQL between is >= start && <= end. We want, >= start && < end, so
+			* must exclude equals end
+			*/
+			String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
+			String query="";
+			if (sqlWhere.equals(""))
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?)";
+			else
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and "+sqlWhere;
+			
+			Object[] params = new Object[]{bucket.getStart().toDate(),bucket.getEnd().toDate(),bucket.getEnd().toDate()};
+			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
 		}

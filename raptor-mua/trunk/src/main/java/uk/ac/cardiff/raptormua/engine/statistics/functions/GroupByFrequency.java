@@ -54,14 +54,14 @@ public class GroupByFrequency extends Statistic {
 
 		String query = "";
 		if (sqlWhere.equals("")) {
-			query = "select " + groupByField + ", count(*) from " + tableName + " where (eventTime between '" + start + "' and '" + end + "') group by ("
-					+ groupByField + ")";
+			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
 		} else {
-			query = "select " + groupByField + ", count(*) from " + tableName + " where (eventTime between '" + start + "' and '" + end + "') and " + sqlWhere
-					+ " group by (" + groupByField + ")";
-		}
+			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
+		}		
+		
+		Object[] params = new Object[]{start.toDate(),end.toDate()};
 
-		List results = getEntryHandler().query(query);
+		List results = getEntryHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList<Group>();
 		int testCount = 0;
