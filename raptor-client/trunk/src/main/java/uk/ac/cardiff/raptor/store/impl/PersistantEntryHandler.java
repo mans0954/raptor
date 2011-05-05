@@ -58,11 +58,6 @@ public class PersistantEntryHandler implements EntryHandler {
 	/** data connection used to persist entries */
 	private RaptorDataConnection dataConnection;
 
-	/**
-	 * set of all entries stored by this EntryHandler should never be used as
-	 * memory overhead is too high for large databases
-	 */
-	//private Set<Event> entries;
 
 	/** Used to hold events temporarily before they are persisted, allows
 	 * resilience if events can not be immediately stored, for example
@@ -95,6 +90,11 @@ public class PersistantEntryHandler implements EntryHandler {
 	public Object queryUnique(String query) {
 		 log.trace("SQL query to entry handler [{}]",query);
 		return dataConnection.runQueryUnique(query, null);
+	}
+	
+	public List query(String query, Object[] parameters) {
+		log.trace("SQL query to entry handler [{}], with parameters [{}]",query,Arrays.asList(parameters));
+		return dataConnection.runQuery(query, parameters);
 	}
 
 	public Object queryUnique(String query, Object[] parameters) {
@@ -202,6 +202,8 @@ public class PersistantEntryHandler implements EntryHandler {
 	public DateTime getLatestEntryTime(){
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
+
+
 
 
 }

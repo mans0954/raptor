@@ -21,7 +21,6 @@
 
 package uk.ac.cardiff.raptor.store;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -81,6 +80,13 @@ public interface EntryHandler {
 	 */
 	public List query(String query);
 
+	/**
+	 *
+	 * @param query
+	 * @return
+	 */
+	public List query(String query, Object[] parameters);
+	
 	/**
 	 *
 	 * @param query

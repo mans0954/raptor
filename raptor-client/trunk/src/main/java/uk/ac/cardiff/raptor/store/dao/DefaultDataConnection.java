@@ -15,6 +15,7 @@
  */
 package uk.ac.cardiff.raptor.store.dao;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,6 +54,8 @@ public class DefaultDataConnection implements RaptorDataConnection {
 	}
 
 	public Object runQueryUnique(String query, Object[] parameters) {
+		if (parameters!=null)
+			log.trace("Query to db, {}, with params [{}]",query,Arrays.asList(parameters));
 		Object object = DataAccessUtils.uniqueResult(getHibernateTemplate().find(query, parameters));
 		return object;
 	}
