@@ -38,7 +38,7 @@
     </bean>
 
 	<!-- MUA Metadata -->
-	<bean id="webMetadata" class="uk.ac.cardiff.model.ServerMetadata">
+	<bean id="webMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
 		<property name="serverName"><value>Cardiff University's RaptorWeb Instance</value></property>
 		<property name="organisationName"><value>Cardiff University</value></property>
 		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
@@ -91,7 +91,7 @@
             <property name="saveDirectory"><value>/graphs/</value></property>
             <property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
     </bean>
-    
+
 
 	<!-- Set up the start page background stats generator -->
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

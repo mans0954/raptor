@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.ServerMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
@@ -49,7 +49,7 @@ public class RaptorWebEngine {
     private Capabilities currentlyAttachedCapabilities;
 
     /** holds basic metadata about this particular RaptorWeb engine instance*/
-    private ServerMetadata webMetadata;
+    private ServiceMetadata webMetadata;
 
     /** The client used to set up, connect to, action and return results from the attached MUA*/
     private ServiceEndpointClient serviceEndpointClient;
@@ -221,11 +221,11 @@ public class RaptorWebEngine {
 	else if (success) model.setProcessingResult("Operation Successful");
     }
 
-    public void setWebMetadata(ServerMetadata webMetadata) {
+    public void setWebMetadata(ServiceMetadata webMetadata) {
 	this.webMetadata = webMetadata;
     }
 
-    public ServerMetadata getWebMetadata() {
+    public ServiceMetadata getWebMetadata() {
 	return webMetadata;
     }
 
