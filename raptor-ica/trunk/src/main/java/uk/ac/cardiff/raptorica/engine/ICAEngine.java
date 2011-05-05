@@ -30,7 +30,7 @@ import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.ClientMetadata;
+import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 
 /**
@@ -45,12 +45,12 @@ public class ICAEngine {
 
 	/** The register that holds parsing agents and their configuration*/
 	private DataAccessRegister dataAccessRegister;
-	
+
 	/** Client for sending events to a Raptor server component. For example, an MUA*/
 	private EventReleaseClient eventReleaseClient;
-	
-	/** Meatadata about this client*/ 
-	private ClientMetadata icaMetadata;
+
+	/** Meatadata about this client*/
+	private ServiceMetadata icaMetadata;
 
 	public ICAEngine() {
 		log.info("ICA Capture Engine is running...");
@@ -102,11 +102,11 @@ public class ICAEngine {
 		return success;
 	}
 
-	public void setIcaMetadata(ClientMetadata icaMetadata) {
+	public void setIcaMetadata(ServiceMetadata icaMetadata) {
 		this.icaMetadata = icaMetadata;
 	}
 
-	public ClientMetadata getIcaMetadata() {
+	public ServiceMetadata getIcaMetadata() {
 		return icaMetadata;
 	}
 
