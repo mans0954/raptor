@@ -152,12 +152,6 @@
 												<h:inputText style="width:100%;"
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
 
-												<h:outputText value="Preprocessors:"
-													style="font-weight: bold; width:100%" />
-												<h:inputText style="width:100%;"
-													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.preProcessorsAsString}" />
-
-
 												<h:outputText value="Postprocessors:"
 													style="font-weight: bold;" />
 												<h:inputText style="width:100%;"
@@ -260,10 +254,10 @@
 												</rich:column>
 
 											</rich:dataTable>
-											
+
 											<h:outputText value="Processing Status:" style="font-weight: bold;"/>
 											<h:outputText value="#{flowScope.websession.graphmodel.processingResult}"/>
-											
+
 										</rich:layoutPanel>
 									</rich:layout>
 								</rich:panel>
