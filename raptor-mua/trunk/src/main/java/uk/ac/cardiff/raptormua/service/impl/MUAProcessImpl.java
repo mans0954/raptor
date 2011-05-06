@@ -154,7 +154,7 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.addAuthentications(pushed);
 				success = true;
 			} catch (Exception e) {
-				log.error("Error trying to add authentications to this MUA, {}",e.getMessage());
+				log.error("Error trying to add authentications to this MUA",e);
 
 			} finally {
 				lockR.unlock();
