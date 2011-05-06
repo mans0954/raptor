@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+    <property name="USER_HOME" value="/tmp/" />
+
+
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%5p %d \(%C:%L\) ---&gt; %m%n</pattern>
+    </encoder>
+  </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>${USER_HOME}/raptor-web-process.log</file>
+    <encoder>
+      <pattern>%5p %d \(%C:%L\) ---&gt; %m%n</pattern>
+    </encoder>
+  </appender>
+
+  <logger name="org.springframework" level="ERROR">
+    <appender-ref ref="stdout"/>
+  </logger>
+  <logger name="uk" level="DEBUG">
+    <appender-ref ref="stdout"/>
+    <appender-ref ref="FILE"/>
+  </logger>
+  <logger name="org.mortbay" level="INFO">
+    <appender-ref ref="stdout"/>
+  </logger>
+  <logger name="org.hibernate" level="ERROR">
+    <appender-ref ref="stdout"/>
+  </logger>
+  <logger name="org.richfaces" level="ERROR">
+    <appender-ref ref="stdout"/>
+  </logger>
+</configuration>
