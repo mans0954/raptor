@@ -84,10 +84,6 @@ public class RunServer {
 		String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
 		String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
 
-		String useHsqldb = props.getProperty("database.useHsqldb", "true");
-		String hsqldbFileLocation = props.getProperty("database.hsqldbFileLocation", "/tmp/hsql");
-		if (useHsqldb.equals("true"))
-		    startHsqldbServer(hsqldbFileLocation);
 
 		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
 		System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
@@ -125,18 +121,6 @@ public class RunServer {
 			e.printStackTrace();
 			System.exit(100);
 		}
-
-	}
-
-	private static void startHsqldbServer(String fileLocation){
-	    Log.info("Starting embedded HSQLDB with path [{}]",fileLocation);
-//	    org.hsqldb.Server server = new org.hsqldb.Server();
-//	    server.setAddress("localhost");
-//	    server.setDatabaseName(0,"mua");
-//	    server.setDatabasePath(0, fileLocation);
-//	    server.setPort(1234);
-//	    server.setTrace(true);
-//	    server.start();
 
 	}
 
