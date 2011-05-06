@@ -31,7 +31,7 @@ import uk.ac.cardiff.model.event.Event;
  * @author philsmart
  *
  */
-public class EntryMetadata {
+public class EntryMetadata{
 
     /* used if a persistant db primary key is required, only one entrymetadata
      * so only id of one needed*/

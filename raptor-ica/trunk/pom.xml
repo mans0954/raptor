@@ -306,7 +306,7 @@
                     <finalName>raptor-ica-${project.version}</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>uk.ac.cardiff.raptor.raptorica.server.RunServer</mainClass>
+                            <mainClass>uk.ac.cardiff.raptorica.server.RunServer</mainClass>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
