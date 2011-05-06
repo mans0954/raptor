@@ -53,7 +53,6 @@ public class RunServer {
 	public static void main(String args[]) throws FileNotFoundException, IOException {
 		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 		
-
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 		
 		configureLogger(configurationFiles+"/logback.xml");
