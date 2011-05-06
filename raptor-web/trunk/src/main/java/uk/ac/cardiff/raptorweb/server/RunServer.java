@@ -79,10 +79,10 @@ public class RunServer {
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext webappcontext = new WebAppContext();
-		webappcontext.setDescriptor(configurationFiles + "/web.xml");
+		//webappcontext.setDescriptor(configurationFiles + "/web.xml");
 		webappcontext.setContextPath(webappContextPath);
-		webappcontext.setWar(configurationFiles);
-		//webappcontext.setWar("/Users/philsmart/Documents/Java/RaptorWorkspace/raptor-web/target/raptor-web-0.3-SNAPSHOT/");
+		//webappcontext.setWar(configurationFiles);
+		webappcontext.setWar("/Users/philsmart/Documents/Java/RaptorWorkspace/raptor-web/target/raptor-web-0.3-SNAPSHOT/");
 
 		HandlerCollection handlers = new HandlerCollection();
 		handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
