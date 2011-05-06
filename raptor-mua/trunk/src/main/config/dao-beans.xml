@@ -23,8 +23,8 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<!-- <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> database type -->
-				<prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop>
+				<!-- <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> -->
+				 <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> 
 				<prop key="hibernate.show_sql">false</prop> 
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 					
@@ -34,6 +34,7 @@
 		<property name="mappingResources">
 			<list>
 				<value>uk/ac/cardiff/model/event/event.hbm.xml</value>
+                <value>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -77,7 +78,7 @@
             <value>org.hsqldb.jdbcDriver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:hsqldb:file:/tmp/mua;hsqldb.default_table_type=cached</value>
+            <value>jdbc:hsqldb:file:data/mua;hsqldb.default_table_type=cached</value>
         </property>
         <property name="user">
             <value>sa</value>

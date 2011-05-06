@@ -4,7 +4,7 @@
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-mua</artifactId>
 	<version>0.3-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<!-- <packaging>jar</packaging> -->
 	<name>Raptor Multi-Unit Aggregator</name>
 
 
@@ -386,18 +386,38 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>uk.ac.cardiff.raptormua.server.RunServer</mainClass>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <finalName>raptor-mua-${project.version}</finalName>
+                    <archive>
+                        <manifest>
+                            <mainClass>uk.ac.cardiff.raptormua.server.RunServer</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.0</version>
