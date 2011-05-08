@@ -15,7 +15,7 @@ public class ServiceMetadata implements Serializable{
     private static final long serialVersionUID = 7439134742456852675L;
 
     /** The name of the server this metadata is constructed for */
-    private String serverName;
+    private String description;
 
     /** The name of the organisation that has authoritative control over this client */
     private String organisationName;
@@ -28,21 +28,7 @@ public class ServiceMetadata implements Serializable{
 
     /** The unique identifier for this entity*/
     private String entityId;
-
-    /**
-     * @param serverName the serverName to set
-     */
-    public void setServerName(String serverName) {
-        this.serverName = serverName;
-    }
-
-    /**
-     * @return the serverName
-     */
-    public String getServerName() {
-        return serverName;
-    }
-
+ 
     /**
      * @param organisationName the organisationName to set
      */
@@ -97,6 +83,20 @@ public class ServiceMetadata implements Serializable{
      */
     public String getEntityId() {
         return entityId;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
     }
 
 
