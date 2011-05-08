@@ -21,6 +21,7 @@ package uk.ac.cardiff.raptor.parse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
+import uk.ac.cardiff.raptor.registry.Endpoint;
+import uk.ac.cardiff.raptor.registry.EndpointRegistry;
+import uk.ac.cardiff.raptor.store.EntryHandler;
 
 /**
  * @author philsmart
@@ -87,6 +91,30 @@ public class DataAccessRegister {
         throw new EventParserNotFoundException("No parser could be found for the event type "+eventTypeFriendlyName);
 
     }
+
+    /** 
+     * Removes events from all parsing modules iff they have been released to all endpoints
+     */
+	public void garbageCollect(List<Endpoint> endpoints) {
+		DateTime earliestReleaseTime = null;
+		for (Endpoint endpoint :endpoints){
+			if (earliestReleaseTime==null){
+				earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+			}
+			if (earliestReleaseTime.isBefore(endpoint.getReleaseInformation().getLastReleasedEventTime())){
+				earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+			}
+		}
+		log.info("GC. Garbage collection has found all events previous to {} can be removed",earliestReleaseTime);
+		for (BaseEventParser parser : parsingModules){
+				EntryHandler entryHandler = parser.getEntryHandler();
+				log.info("GC. Parsing Module {} has {} events before garbage collection",parser,entryHandler.getNumberOfEntries());
+				entryHandler.removeEventsBefore(earliestReleaseTime);
+				log.info("GC. Parsing Module {} has {} events after garbage collection", parser,entryHandler.getNumberOfEntries());
+				
+		}
+				
+	}
 
 
 
