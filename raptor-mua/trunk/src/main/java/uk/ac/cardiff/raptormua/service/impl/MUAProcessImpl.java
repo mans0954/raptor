@@ -150,7 +150,7 @@ public class MUAProcessImpl implements MUAProcess {
 		boolean success = false;
 		if (lockR.tryLock()) {
 			try {
-				log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServerName());
+				log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServiceName());
 				engine.addAuthentications(pushed);
 				success = true;
 			} catch (Exception e) {
@@ -165,7 +165,7 @@ public class MUAProcessImpl implements MUAProcess {
 		    log.warn("Lock was hit for method addAuthentications");
 		if (!success){
 		    log.error("WARNING, technical fault, could not add events to this MUA");
-		    throw new SoapFault("Technical fault at the server, could not add events to MUA ["+this.getEngine().getMuaMetadata().getServerName()+"]", new QName("Server"));
+		    throw new SoapFault("Technical fault at the server, could not add events to MUA ["+this.getEngine().getMuaMetadata().getServiceName()+"]", new QName("Server"));
 		}
 
 
