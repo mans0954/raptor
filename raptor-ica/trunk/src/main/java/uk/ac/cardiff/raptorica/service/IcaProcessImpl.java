@@ -63,11 +63,38 @@ public class IcaProcessImpl implements IcaProcess {
 				long end = System.currentTimeMillis();
 				log.info("Capture Success, taking {} ms", (end - start));
 			} catch (Exception e) {
-				log.error(e.getMessage());
-				e.printStackTrace();
+				log.error("",e);
 			} finally {
 				lockR.unlock();
 			}
+		}
+		else{
+			log.warn("Lock was hit for method [capture]");
+		}
+
+	}
+	
+	/** 
+	 * Initiates a process on the <code>engine</code> that removes events from the
+	 * <code>entryHandler</code> iff they have been released to all attached 
+	 * endpoints. 
+	 */
+	public void garbageCollect() {
+		if (lockR.tryLock()) {
+			try {
+				log.info("GC. Running Event Garbage Collection");
+				long start = System.currentTimeMillis();
+				engine.garbageCollect();
+				long end = System.currentTimeMillis();
+				log.info("GC. Event Garbage Collection Success, taking {} ms", (end - start));
+			} catch (Exception e) {
+				log.error("",e);
+			} finally {
+				lockR.unlock();
+			}
+		}
+		else{
+			log.warn("Lock was hit for method [garbageCollect]");
 		}
 
 	}
@@ -84,6 +111,9 @@ public class IcaProcessImpl implements IcaProcess {
 			} finally {
 				lockR.unlock();
 			}
+		}
+		else{
+			log.warn("Lock was hit for method [release]");
 		}
 	}
 

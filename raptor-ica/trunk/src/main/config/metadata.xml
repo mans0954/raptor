@@ -22,7 +22,7 @@
 
     <!-- ICA Metadata -->
     <bean id="ICAMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
-        <property name="clientName"><value>Cardiff University IdP Shibboleth Log File Parser</value></property>
+        <property name="description"><value>Cardiff University IdP Shibboleth Log File Parser</value></property>
         <property name="organisationName"><value>Cardiff University</value></property>
         <property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
         <property name="serviceName"><value>Cardiff University Shibboleth Identity Provider</value></property>
