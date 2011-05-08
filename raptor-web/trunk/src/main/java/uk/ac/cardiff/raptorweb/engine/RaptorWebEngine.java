@@ -212,7 +212,7 @@ public class RaptorWebEngine {
 	AdministrativeFunction function = new AdministrativeFunction();
 	function.setAdministrativeFunction(AdministrativeFunction.AdministrativeFunctionType.REMOVEALL);
 	if (webMetadata!=null)
-	    function.setRequester(webMetadata.getServerName());
+	    function.setRequester(webMetadata.getServiceName());
 	else
 	    function.setRequester("UNKNOWN");
 	boolean success = serviceEndpointClient.invokeAdministrativeFunction(attachedMUA, function);
