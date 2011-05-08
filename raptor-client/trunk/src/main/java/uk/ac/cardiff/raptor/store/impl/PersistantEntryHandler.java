@@ -203,6 +203,11 @@ public class PersistantEntryHandler implements EntryHandler {
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
 
+	public void removeEventsBefore(DateTime earliestReleaseTime) {
+		dataConnection.runQueryUnique("delete from Event where eventTime <= ?", new Object[]{earliestReleaseTime.toDate()});
+		
+	}
+
 
 
 

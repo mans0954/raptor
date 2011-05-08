@@ -22,6 +22,9 @@ import java.util.List;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.registry.Endpoint;
+import uk.ac.cardiff.raptor.registry.EndpointRegistry;
+import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
 
 /**
  * Sends event records using the CXF SOAP libraries
@@ -39,5 +42,14 @@ public interface EventReleaseClient {
      * @throws ReleaseFailureException
      */
 	public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException;
+	
+	/** All concrete implementations of the <code>EventReleaseClient</code> must
+	 * provide a way of accessing the list of endpoints it is communicating with
+	 * 
+	 * @return a list of endpoints
+	 */
+	public List<Endpoint> getEndpoints();
+	
+
 
 }

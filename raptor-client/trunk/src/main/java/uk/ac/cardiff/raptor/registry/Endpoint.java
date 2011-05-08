@@ -25,30 +25,52 @@ import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
 /**
+ * 
+ * Stores information about an endpoint that a client can send events to. Also includes the Push Policy
+ * to determine if events should be sent, an attribute filter policy for determining which attributes
+ * of each event should be sent, and information about previous event releases.
+ * 
+ * This class could be subclassed if additional functionality is required.
+ * 
  * @author philsmart
- *
+ * 
  */
 public class Endpoint {
 
-    private String serviceEndpoint;
-    private List<PushPolicy> pushPolicies;
-    private AttributeFilterPolicy attributeFilterPolicy;
+	/** The URL of the service endpoint */
+	private String serviceEndpoint;
 
-    public void setServiceEndpoint(String serviceEndpoint) {
-	this.serviceEndpoint = serviceEndpoint;
-    }
+	/** A List of the PushPolicies defined for this endpoint */
+	private List<PushPolicy> pushPolicies;
 
-    public String getServiceEndpoint() {
-	return serviceEndpoint;
-    }
+	/** The filter policy defined for this endpoint **/
+	private AttributeFilterPolicy attributeFilterPolicy;
 
-    public void setAttributeFilterPolicy(AttributeFilterPolicy attributeFilterPolicy) {
-	this.attributeFilterPolicy = attributeFilterPolicy;
-    }
+	/** Information about what information has been released to this endpoint */
+	private ReleaseInformation releaseInformation;
+	
+	/**
+	 * Default constructor. Instantiate <code>releaseInformation</code>
+	 */
+	public Endpoint(){
+		releaseInformation = new ReleaseInformation();
+	}
 
-    public AttributeFilterPolicy getAttributeFilterPolicy() {
-	return attributeFilterPolicy;
-    }
+	public void setServiceEndpoint(String serviceEndpoint) {
+		this.serviceEndpoint = serviceEndpoint;
+	}
+
+	public String getServiceEndpoint() {
+		return serviceEndpoint;
+	}
+
+	public void setAttributeFilterPolicy(AttributeFilterPolicy attributeFilterPolicy) {
+		this.attributeFilterPolicy = attributeFilterPolicy;
+	}
+
+	public AttributeFilterPolicy getAttributeFilterPolicy() {
+		return attributeFilterPolicy;
+	}
 
 	public void setPushPolicies(List<PushPolicy> pushPolicies) {
 		this.pushPolicies = pushPolicies;
@@ -56,6 +78,13 @@ public class Endpoint {
 
 	public List<PushPolicy> getPushPolicies() {
 		return pushPolicies;
+	}
+
+	/**
+	 * @return the releaseInformation
+	 */
+	public ReleaseInformation getReleaseInformation() {
+		return releaseInformation;
 	}
 
 }

@@ -27,24 +27,23 @@ import org.slf4j.LoggerFactory;
  */
 public class EndpointRegistry {
 
-    /** Class logger. */
-    private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
+	/** Class logger. */
+	private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
 
+	/** List of endpoints for invoking methods on */
+	private List<Endpoint> endpoints;
 
-    /** List of endpoints for invoking methods on*/
-    private List<Endpoint> endpoints;
+	public EndpointRegistry() {
+		setEndpoints(new ArrayList<Endpoint>());
+	}
 
-    public EndpointRegistry() {
-	setEndpoints(new ArrayList<Endpoint>());
-    }
+	public void setEndpoints(List<Endpoint> endpoints) {
+		for (Endpoint entry : endpoints)
+			log.info("Registering Service Endpoint: {}", entry.getServiceEndpoint());
+		this.endpoints = endpoints;
+	}
 
-    public void setEndpoints(List<Endpoint> endpoints) {
-	for (Endpoint entry : endpoints)
-	    log.info("Registering Service Endpoint: {}", entry.getServiceEndpoint());
-	this.endpoints = endpoints;
-    }
-
-    public List<Endpoint> getEndpoints() {
-	return endpoints;
-    }
+	public List<Endpoint> getEndpoints() {
+		return endpoints;
+	}
 }

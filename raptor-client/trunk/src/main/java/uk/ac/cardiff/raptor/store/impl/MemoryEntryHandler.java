@@ -98,6 +98,16 @@ public class MemoryEntryHandler implements EntryHandler{
 
 		}
 	}
+	
+	public void removeEventsBefore(DateTime earliestReleaseTime) {
+		ArrayList<Event> toRemove = new ArrayList<Event>();
+		for (Event event : entries){
+			if (event.getEventTime().isBefore(earliestReleaseTime))
+					toRemove.add(event);
+		}
+		entries.removeAll(toRemove);
+	
+}
 
 	public void setLatestEntryTime(DateTime latestEntryTime) {
 		this.latestEntryTime = latestEntryTime;
