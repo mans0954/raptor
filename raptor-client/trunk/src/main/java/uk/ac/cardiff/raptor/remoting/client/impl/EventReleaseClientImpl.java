@@ -20,6 +20,7 @@ import java.util.List;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
@@ -47,6 +48,11 @@ public class EventReleaseClientImpl implements EventReleaseClient{
 	}
 
 
+	public List<Endpoint> getEndpoints() {
+		return endpointRegistry.getEndpoints();
+	}
+
+
 	public void setEndpointRegistry(EndpointRegistry endpointRegistry) {
 		this.endpointRegistry = endpointRegistry;
 	}
@@ -65,6 +71,7 @@ public class EventReleaseClientImpl implements EventReleaseClient{
 	public EventReleaseEngine getEventReleaseEngine() {
 		return eventReleaseEngine;
 	}
+
 
 
 }

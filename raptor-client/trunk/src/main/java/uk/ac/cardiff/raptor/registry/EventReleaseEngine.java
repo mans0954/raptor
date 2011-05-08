@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptor.registry;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,18 +62,23 @@ public class EventReleaseEngine {
 		boolean releasedtoAll = true;
 		int releaseCount = 0;
 		for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
-			boolean shouldRelease = shouldRelease(endpoint,events);//(endpoint.getPushPolicy().getPushOnOrAfterNoEntries() <= events.size());
+			List<Event> applicableEvents = chronologicalFilter(endpoint, events);
+			boolean shouldRelease = shouldRelease(endpoint,applicableEvents);
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
-			List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, events);
+			List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, applicableEvents);
 			EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
-			if (shouldRelease) {
+			if (shouldRelease) {				
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
 				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint);
 				log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
 				if (releaseSuccess == false)
 					releasedtoAll = false;
-				else
+				else if (releaseSuccess ==true){
 					releaseCount++;
+					endpoint.getReleaseInformation().setLastReleasedEventTime(getLatestEvent(events));
+					log.debug("Endpoint [{}] has been sent events up to and including {}",endpoint.getServiceEndpoint(),
+							endpoint.getReleaseInformation().getLastReleasedEventTime());
+				}
 			} else {
 				releasedtoAll = false;
 			}
@@ -82,6 +89,26 @@ public class EventReleaseEngine {
 
 		return releasedtoAll;
 
+	}
+	
+	/**
+	 * Filters the input list of events (<code>events</code>) such that only those that are after (chronological)
+	 * the <code>latestPublishedEventTime</code> of the input <code>Endpoint</code> remain
+	 * 
+	 * @param endpoint the endpoint that is to be filtered on
+	 * @param events the list of events that are filtered chronologically
+	 * @return the list of filtered events
+	 */
+	private List<Event> chronologicalFilter(Endpoint endpoint, List<Event> events){
+		ArrayList<Event> applicableEvents = new ArrayList<Event>();
+		
+		for (Event event : events){
+			if (event.getEventTime().isAfter(endpoint.getReleaseInformation().getLastReleasedEventTime())){
+				applicableEvents.add(event);
+			}
+		}
+		log.info("There are {} events to send to the endpoint [{}] after {}",new Object[]{applicableEvents.size(),endpoint.getServiceEndpoint(),endpoint.getReleaseInformation().getLastReleasedEventTime()});
+		return applicableEvents;
 	}
 
 	/**
@@ -117,7 +144,8 @@ public class EventReleaseEngine {
 	}
 
 	/**
-	 * Constructs an event push message, which encapsulates the events to send
+	 * Constructs an event push message, which encapsulates the events to send and some
+	 * metadata about the list of events.
 	 *
 	 * @param clientMetadata
 	 * @param events
@@ -129,6 +157,27 @@ public class EventReleaseEngine {
 		pushMessage.setEvents(events);
 		pushMessage.setTimeOfPush(new Date(System.currentTimeMillis()));
 		return pushMessage;
+	}
+	
+	/**
+	 * Gets the latest (chronologically) event by <code>eventTime</code> from the 
+	 * <code>events</code> list parameter.
+	 * 
+	 * @param events the list of events from which to find the latest
+	 * @return the <code>DateTime</code> of the latest event
+	 */
+	private DateTime getLatestEvent(List<Event> events){
+		DateTime latest = null;
+		for (Event event : events){
+			if (latest==null)
+				latest=event.getEventTime();
+			else{
+				if (event.getEventTime().isAfter(latest)){
+					latest = event.getEventTime();
+				}
+			}
+		}
+		return latest;
 	}
 
 	public void setAttributeFilterEngine(AttrributeFilterEngine attributeFilterEngine) {

@@ -107,5 +107,7 @@ public interface EntryHandler {
 	 */
 	public Object queryUnique(String query, Object[] parameters);
 
+	public void removeEventsBefore(DateTime earliestReleaseTime);
+
 
 }
