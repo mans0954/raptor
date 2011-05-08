@@ -63,16 +63,44 @@
             <value>false</value>
         </property>
     </bean>
+    
+    <!-- event sweep (garbage collection) trigger setup -->
+    <bean id="icaGarbageCollectionQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="icaGarbageCollectionJobDetail" />
+        </property>
+        <property name="startDelay" value="15000" />
+        <property name="repeatInterval" value="55000" />
+    </bean>
 
+    <bean id="icaGarbageCollectionJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="ICAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>garbageCollect</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <!--  DONE -->
+
+    <!--  Trigger setup -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref local="ICAProcessQuickTrigger" />
                 <ref local="icaReleaseQuickTrigger" />
+                <ref local="icaGarbageCollectionQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
 	<!--  DONE -->
+    
+     
 
 
 	<bean id="ICAProcess" class="uk.ac.cardiff.raptorica.service.IcaProcessImpl">

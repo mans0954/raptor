@@ -62,6 +62,11 @@ public class ICAEngine {
 			parser.parse();
 		}
 	}
+	
+
+	public void garbageCollect() {
+		dataAccessRegister.garbageCollect(eventReleaseClient.getEndpoints());
+	}
 
 
 	/**
@@ -97,8 +102,8 @@ public class ICAEngine {
 		} catch (ReleaseFailureException e) {
 			log.error("Release failed ", e);
 		}
-		if (success)
-			retrieveTransactionFinished();
+//		if (success)
+//			retrieveTransactionFinished();
 		return success;
 	}
 
@@ -125,5 +130,6 @@ public class ICAEngine {
 	public DataAccessRegister getDataAccessRegister() {
 		return dataAccessRegister;
 	}
+
 
 }

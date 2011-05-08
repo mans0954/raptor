@@ -73,7 +73,7 @@
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
 					<property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib2comb-2011-04.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-2010-10-20.idp2.log
 						</value>
 					</property>
 					<property name="format">
@@ -103,7 +103,7 @@
 	</bean>
 
 	<!-- Create the entry handler -->
-	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.MemoryEntryHandler"></bean>
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileMemoryEntryHandler"></bean>
 	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
