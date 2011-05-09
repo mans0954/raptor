@@ -21,6 +21,7 @@ package uk.ac.cardiff.raptormua.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,9 @@ import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.DataAccessRegister;
 import uk.ac.cardiff.raptor.parse.EventParserNotFoundException;
 import uk.ac.cardiff.raptor.parse.ParserException;
+import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
+import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
@@ -49,7 +52,7 @@ import uk.ac.cardiff.raptormua.model.Users;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class MUAEngine {
 
@@ -85,7 +88,7 @@ public class MUAEngine {
 
 	/**
 	 * Sets the statisticalhandler.
-	 * 
+	 *
 	 * @param statisticsHandler
 	 *            the statistichandler to set
 	 */
@@ -107,10 +110,46 @@ public class MUAEngine {
 
 	}
 
+
+	    /**
+	     * First, find the earliest event that needs to be retrieved from the
+	     * storage engine - which may contain duplicates to those already sent,
+	     * but these are filtered by the releaseClient later.
+	     * Then send those events to the event release client.
+	     *
+	     * @return
+	     */
+	 public final boolean release() {
+	     List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
+	     DateTime earliestReleaseTime = null;
+             Endpoint endpointWithEarliestReleaseTime=null;
+             for (Endpoint endpoint :endpoints){
+                     if (earliestReleaseTime==null){
+                             earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                             endpointWithEarliestReleaseTime = endpoint;
+                     }
+                     if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)){
+                             earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                             endpointWithEarliestReleaseTime = endpoint;
+                     }
+             }
+
+	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime);
+
+	        boolean success = false;
+	        try {
+	                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
+	        } catch (ReleaseFailureException e) {
+	                log.error("Event Release failed ", e);
+	        }
+	        return success;
+	}
+
+
 	/**
 	 * Gets the capabilities of this MUA, also sets some default values and
 	 * possible values for the calling component to use
-	 * 
+	 *
 	 * @return
 	 */
 	public final Capabilities getCapabilities() {
@@ -157,7 +196,7 @@ public class MUAEngine {
 	/**
 	 * Use the configured raptor parsing library to store the incomming
 	 * <code>uploadFiles</code>
-	 * 
+	 *
 	 * @param uploadFiles
 	 *            the files to parse and store
 	 * @throws TransactionInProgressException
@@ -187,7 +226,7 @@ public class MUAEngine {
 				result.setProcessed(false);
 			} catch (EventParserNotFoundException e) {
 				log.error("Event parser could not be found for {}, with reason {}", logfileUpload.getName(), e.getMessage());
-				
+
 				result.setStatus("Failed To Parse");
 				result.setProcessed(false);
 			}

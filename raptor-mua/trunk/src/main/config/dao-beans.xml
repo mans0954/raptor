@@ -24,10 +24,10 @@
 		<property name="hibernateProperties">
 			<props>
 				<!-- <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> -->
-				 <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> 
-				<prop key="hibernate.show_sql">false</prop> 
+				 <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-					
+
 			</props>
 		</property>
 		<!-- OR mapping files. -->
@@ -78,7 +78,7 @@
             <value>org.hsqldb.jdbcDriver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:hsqldb:file:data/mua;hsqldb.default_table_type=cached</value>
+            <value>jdbc:hsqldb:file:data/mua-second;hsqldb.default_table_type=cached</value>
         </property>
         <property name="user">
             <value>sa</value>
