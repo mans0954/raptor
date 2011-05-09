@@ -29,7 +29,7 @@ import uk.ac.cardiff.raptorica.engine.ICAEngine;
  *         main service suite for the ICA
  */
 public class IcaProcessImpl implements IcaProcess {
-	
+
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(IcaProcessImpl.class);
 
@@ -57,11 +57,11 @@ public class IcaProcessImpl implements IcaProcess {
 	public void capture() {
 		if (lockR.tryLock()) {
 			try {
-				log.info("Running Capture");
+				log.info("[--Running Capture--]");
 				long start = System.currentTimeMillis();
 				engine.capturePerform();
 				long end = System.currentTimeMillis();
-				log.info("Capture Success, taking {} ms", (end - start));
+				log.info("[--Capture Success, taking {} ms--]", (end - start));
 			} catch (Exception e) {
 				log.error("",e);
 			} finally {
@@ -73,20 +73,20 @@ public class IcaProcessImpl implements IcaProcess {
 		}
 
 	}
-	
-	/** 
+
+	/**
 	 * Initiates a process on the <code>engine</code> that removes events from the
-	 * <code>entryHandler</code> iff they have been released to all attached 
-	 * endpoints. 
+	 * <code>entryHandler</code> iff they have been released to all attached
+	 * endpoints.
 	 */
 	public void garbageCollect() {
 		if (lockR.tryLock()) {
 			try {
-				log.info("GC. Running Event Garbage Collection");
+				log.info("[--GC. Running Event Garbage Collection--]");
 				long start = System.currentTimeMillis();
 				engine.garbageCollect();
 				long end = System.currentTimeMillis();
-				log.info("GC. Event Garbage Collection Success, taking {} ms", (end - start));
+				log.info("[--GC. Event Garbage Collection Success, taking {} ms--]", (end - start));
 			} catch (Exception e) {
 				log.error("",e);
 			} finally {
@@ -98,13 +98,11 @@ public class IcaProcessImpl implements IcaProcess {
 		}
 
 	}
-	
+
 	public void release(){
 		if (lockR.tryLock()) {
 			try {
-				log.info("Running Event Release");
-				boolean released = engine.release();
-				log.info("Events released to all listening endpoints {}", released);
+				engine.release();
 			} catch (Exception e) {
 				log.error(e.getMessage());
 				e.printStackTrace();

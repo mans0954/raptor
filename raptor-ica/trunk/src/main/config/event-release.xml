@@ -42,6 +42,18 @@
                     </property>
                     <!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property> -->
                 </bean>
+
+                <bean id="cardiffRaptorMUA-Second" class="uk.ac.cardiff.raptor.registry.Endpoint">
+                    <property name="serviceEndpoint">
+                        <value>https://localhost:8444/MUA/MultiUnitAggregator</value>
+                    </property>
+                    <property name="pushPolicies">
+                        <list>
+                            <ref bean="entryNoElapsedTimePushPolicy"></ref>
+                        </list>
+                    </property>
+                    <!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property> -->
+                </bean>
             </list>
         </property>
     </bean>
