@@ -92,28 +92,31 @@ public class DataAccessRegister {
 
     }
 
-    /** 
+    /**
      * Removes events from all parsing modules iff they have been released to all endpoints
      */
 	public void garbageCollect(List<Endpoint> endpoints) {
 		DateTime earliestReleaseTime = null;
+		Endpoint endpointWithEarliestReleaseTime=null;
 		for (Endpoint endpoint :endpoints){
 			if (earliestReleaseTime==null){
 				earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+				endpointWithEarliestReleaseTime = endpoint;
 			}
-			if (earliestReleaseTime.isBefore(endpoint.getReleaseInformation().getLastReleasedEventTime())){
+			if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)){
 				earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+				endpointWithEarliestReleaseTime = endpoint;
 			}
 		}
 		log.info("GC. Garbage collection has found all events previous to {} can be removed",earliestReleaseTime);
 		for (BaseEventParser parser : parsingModules){
 				EntryHandler entryHandler = parser.getEntryHandler();
 				log.info("GC. Parsing Module {} has {} events before garbage collection",parser,entryHandler.getNumberOfEntries());
-				entryHandler.removeEventsBefore(earliestReleaseTime);
+				entryHandler.removeEventsBefore(earliestReleaseTime,endpointWithEarliestReleaseTime.getReleaseInformation().getLatestEqualEntries());
 				log.info("GC. Parsing Module {} has {} events after garbage collection", parser,entryHandler.getNumberOfEntries());
-				
+
 		}
-				
+
 	}
 
 
