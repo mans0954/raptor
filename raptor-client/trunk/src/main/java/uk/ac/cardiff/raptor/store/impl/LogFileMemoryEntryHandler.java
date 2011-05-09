@@ -75,7 +75,7 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 	 * has already been added. If not add. Importantly, we do not just add to
 	 * the entries set (which would not allow duplicates) because the set is
 	 * cleared when information is sent to the UA.
-	 * 
+	 *
 	 * @return true if this event was added to the entry handler, false otherwise
 	 */
 	public boolean addEntry(Event event) {
@@ -100,15 +100,21 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 		return false;
 
 	}
-	
-	public void removeEventsBefore(DateTime earliestReleaseTime) {
+
+	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Event> latestEqualEntries) {
+	                log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)",earliestReleaseTime,
+	                        latestEqualEntries.size());
 			ArrayList<Event> toRemove = new ArrayList<Event>();
 			for (Event event : entries){
 				if (event.getEventTime().isBefore(earliestReleaseTime))
 						toRemove.add(event);
+				if (event.getEventTime().isEqual(earliestReleaseTime) && latestEqualEntries.contains(event)){
+
+				    toRemove.add(event);
+				}
 			}
 			entries.removeAll(toRemove);
-		
+
 	}
 
 	private void updateLastEntry(Event entry) {

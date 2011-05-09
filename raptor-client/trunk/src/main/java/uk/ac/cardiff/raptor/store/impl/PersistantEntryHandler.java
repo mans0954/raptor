@@ -91,7 +91,7 @@ public class PersistantEntryHandler implements EntryHandler {
 		 log.trace("SQL query to entry handler [{}]",query);
 		return dataConnection.runQueryUnique(query, null);
 	}
-	
+
 	public List query(String query, Object[] parameters) {
 		log.trace("SQL query to entry handler [{}], with parameters [{}]",query,Arrays.asList(parameters));
 		return dataConnection.runQuery(query, parameters);
@@ -203,9 +203,10 @@ public class PersistantEntryHandler implements EntryHandler {
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
 
-	public void removeEventsBefore(DateTime earliestReleaseTime) {
+	//TODO Implementation does not work
+	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Event> latestEqualEntries) {
 		dataConnection.runQueryUnique("delete from Event where eventTime <= ?", new Object[]{earliestReleaseTime.toDate()});
-		
+
 	}
 
 

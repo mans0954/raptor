@@ -65,9 +65,9 @@ public class EventReleaseEngine {
 			List<Event> applicableEvents = chronologicalFilter(endpoint, events);
 			boolean shouldRelease = shouldRelease(endpoint,applicableEvents);
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
-			List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, applicableEvents);
-			EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
-			if (shouldRelease) {				
+			if (shouldRelease) {
+			        List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, applicableEvents);
+	                        EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
 				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint);
 				log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
@@ -75,7 +75,7 @@ public class EventReleaseEngine {
 					releasedtoAll = false;
 				else if (releaseSuccess ==true){
 					releaseCount++;
-					endpoint.getReleaseInformation().setLastReleasedEventTime(getLatestEvent(events));
+					endpoint.getReleaseInformation().releasePerformed(filteredEntries);
 					log.debug("Endpoint [{}] has been sent events up to and including {}",endpoint.getServiceEndpoint(),
 							endpoint.getReleaseInformation().getLastReleasedEventTime());
 				}
@@ -90,20 +90,20 @@ public class EventReleaseEngine {
 		return releasedtoAll;
 
 	}
-	
+
 	/**
 	 * Filters the input list of events (<code>events</code>) such that only those that are after (chronological)
 	 * the <code>latestPublishedEventTime</code> of the input <code>Endpoint</code> remain
-	 * 
+	 *
 	 * @param endpoint the endpoint that is to be filtered on
 	 * @param events the list of events that are filtered chronologically
 	 * @return the list of filtered events
 	 */
 	private List<Event> chronologicalFilter(Endpoint endpoint, List<Event> events){
 		ArrayList<Event> applicableEvents = new ArrayList<Event>();
-		
+
 		for (Event event : events){
-			if (event.getEventTime().isAfter(endpoint.getReleaseInformation().getLastReleasedEventTime())){
+		    if (endpoint.getReleaseInformation().hasNotBeenReleased(event)){
 				applicableEvents.add(event);
 			}
 		}
@@ -158,27 +158,7 @@ public class EventReleaseEngine {
 		pushMessage.setTimeOfPush(new Date(System.currentTimeMillis()));
 		return pushMessage;
 	}
-	
-	/**
-	 * Gets the latest (chronologically) event by <code>eventTime</code> from the 
-	 * <code>events</code> list parameter.
-	 * 
-	 * @param events the list of events from which to find the latest
-	 * @return the <code>DateTime</code> of the latest event
-	 */
-	private DateTime getLatestEvent(List<Event> events){
-		DateTime latest = null;
-		for (Event event : events){
-			if (latest==null)
-				latest=event.getEventTime();
-			else{
-				if (event.getEventTime().isAfter(latest)){
-					latest = event.getEventTime();
-				}
-			}
-		}
-		return latest;
-	}
+
 
 	public void setAttributeFilterEngine(AttrributeFilterEngine attributeFilterEngine) {
 		this.attributeFilterEngine = attributeFilterEngine;

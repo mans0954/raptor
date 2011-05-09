@@ -86,7 +86,7 @@ public interface EntryHandler {
 	 * @return
 	 */
 	public List query(String query, Object[] parameters);
-	
+
 	/**
 	 *
 	 * @param query
@@ -107,7 +107,7 @@ public interface EntryHandler {
 	 */
 	public Object queryUnique(String query, Object[] parameters);
 
-	public void removeEventsBefore(DateTime earliestReleaseTime);
+	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Event> latestEqualEntries);
 
 
 }

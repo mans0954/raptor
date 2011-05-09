@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,15 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     }
 
     /**
+     * @param earliestReleaseTime
+     * @return
+     */
+    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
+        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?",new Object[]{earliestReleaseTime.toDate()});
+        return query;
+    }
+
+    /**
      *
      */
     public void removeAllEntries() {
@@ -121,10 +131,6 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
     }
-
-
-
-
 
 
 
