@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="uk.ac.cardiff.raptor.registry.ReleaseInformation" table="release_information" dynamic-update="true"
+        dynamic-insert="false">
+        
+        
+        <id name="persistantId" column="persistantId" type="long"
+            unsaved-value="null">
+            <generator class="native">
+                <param name="sequence">hib_entity_seq</param>
+            </generator>
+        </id>
+
+
+        <property name="serviceEndpoint" column="serviceEndpoint" type="string"/>
+
+
+        <property name="lastReleasedEventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime"
+            update="true" insert="true" column="lastReleasedEventTime" not-null="false" />
+
+
+        <set name="latestEqualEntries" inverse="true">
+            <key column="latestEqualEntries_id" />
+            <one-to-many class="uk.ac.cardiff.model.event.Event" />
+        </set>
+
+    </class>
+
+</hibernate-mapping>

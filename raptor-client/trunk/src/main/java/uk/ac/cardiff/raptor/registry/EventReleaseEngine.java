@@ -75,7 +75,7 @@ public class EventReleaseEngine {
 					releasedtoAll = false;
 				else if (releaseSuccess ==true){
 					releaseCount++;
-					endpoint.getReleaseInformation().releasePerformed(filteredEntries);
+					endpoint.releasePerformed(filteredEntries);
 					log.debug("Endpoint [{}] has been sent events up to and including {}",endpoint.getServiceEndpoint(),
 							endpoint.getReleaseInformation().getLastReleasedEventTime());
 				}

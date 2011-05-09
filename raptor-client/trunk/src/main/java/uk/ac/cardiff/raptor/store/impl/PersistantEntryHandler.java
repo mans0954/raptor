@@ -174,13 +174,12 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	public List<Event> getEntries() {
-		return  dataConnection.runQuery("from Event",null);
+		List runQuery = dataConnection.runQuery("from Event",null);
+		return runQuery;
 	}
 
 	public void removeAllEntries() {
-//		log.debug("Removing all entries from this entry handler");
-//		dataConnection.deleteAllEntries(entries);
-//		entries.clear();
+		log.error("Method removeAllEntries not yet implemented");
 	}
 
 	public void setDataConnection(RaptorDataConnection dataConnection) {

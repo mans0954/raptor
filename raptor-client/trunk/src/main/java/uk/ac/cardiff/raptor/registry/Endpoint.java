@@ -21,8 +21,13 @@ package uk.ac.cardiff.raptor.registry;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
+import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
  * 
@@ -36,6 +41,10 @@ import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
  * 
  */
 public class Endpoint {
+	
+	/** class logger */
+	private final Logger log = LoggerFactory.getLogger(Endpoint.class);
+
 
 	/** The URL of the service endpoint */
 	private String serviceEndpoint;
@@ -48,14 +57,25 @@ public class Endpoint {
 
 	/** Information about what information has been released to this endpoint */
 	private ReleaseInformation releaseInformation;
+
 	
 	/**
 	 * Default constructor. Instantiate <code>releaseInformation</code>
 	 */
 	public Endpoint(){
-		releaseInformation = new ReleaseInformation();
+		releaseInformation = new ReleaseInformation(serviceEndpoint);
 	}
+	
 
+	/** 
+	 * Actions the <code>releasedPerformed</code> on the <code>releaseInformation</code> object.
+	 * 
+	 * @param filteredEntries
+	 */
+	public void releasePerformed(List<Event> filteredEntries) {
+		releaseInformation.releasePerformed(filteredEntries);
+	}
+	
 	public void setServiceEndpoint(String serviceEndpoint) {
 		this.serviceEndpoint = serviceEndpoint;
 	}
@@ -86,5 +106,17 @@ public class Endpoint {
 	public ReleaseInformation getReleaseInformation() {
 		return releaseInformation;
 	}
+	
+
+	/**
+	 * Sets the releaseInformation
+	 * 
+	 * @param releaseInformation
+	 */
+	public void setReleaseInformation(ReleaseInformation releaseInformation) {
+		this.releaseInformation = releaseInformation;
+	}
+
+
 
 }
