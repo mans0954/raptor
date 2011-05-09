@@ -39,6 +39,8 @@
 
 
 	<bean id="endpointRegistry" class="uk.ac.cardiff.raptor.registry.EndpointRegistry">
+        <property name="persistReleaseInformation"><value>true</value></property>
+        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
 		<property name ="endpoints">
 			<list>
 				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
