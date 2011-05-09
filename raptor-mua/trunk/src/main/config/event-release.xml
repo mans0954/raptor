@@ -24,28 +24,46 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
+	 <!-- Configure how the client talks to the MUA, setting appropriate trust and keystore locations  -->
+
+    <bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient">
+       <property name="tlsParameters">
+           <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
+                 <property name="trustStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value></property>
+                 <property name="trustStorePassword"><value>phil11</value></property>
+                 <property name="keyStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value></property>
+                 <property name="keyStorePassword"><value>phil11</value></property>
+           </bean>
+       </property>
+    </bean>
+
 
 	<bean id="endpointRegistry" class="uk.ac.cardiff.raptor.registry.EndpointRegistry">
 		<property name ="endpoints">
 			<list>
 				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
-					<property name="serviceEndpoint"><value>http://ipower.insrv.cf.ac.uk:8080/MUA/MultiUnitAggregator</value></property>
+					<property name="serviceEndpoint"><value>https://ipower.insrv.cf.ac.uk:8443/MUA/MultiUnitAggregator</value></property>
 					<property name="pushPolicies">
                         <list>
-                            <ref bean="entryNoPushPolicy"></ref>
+                            <ref bean="entryNoElapsedTimePushPolicy"></ref>
                         </list>
                     </property>
-					<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>
-				</bean>
+					<!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property>
+				--></bean>
 			</list>
 		</property>
 	</bean>
 
 	<!--  policy for release of events -->
 
-	<bean id="entryNoPushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.EntryNoPushPolicy">
-		<property name="pushOnOrAfterNoEntries"><value>10</value></property>
-	</bean>
+	<bean id="entryNoElapsedTimePushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.EntryNoElapsedTimePushPolicy">
+        <property name="pushOnOrAfterNoEntries">
+            <value>10</value>
+        </property>
+        <property name="pushInterval">
+            <value>100000</value>
+        </property>
+    </bean>
 
 	<!-- Attribute filter policies -->
 

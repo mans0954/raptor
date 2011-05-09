@@ -70,4 +70,10 @@ public interface MUAProcess {
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault;
 
 	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault;
+
+	/**
+	 *  An internal function that releases events upwards to other aggregators
+	 *
+	 */
+	public void release();
 }

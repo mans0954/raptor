@@ -6,17 +6,17 @@
 
   <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%5p %t %d \(%C:%L\) ---&gt; %m%n</pattern>
+      <pattern>%5p %t %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
     </encoder>
   </appender>
-  
+
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>${USER_HOME}/raptor-mua-process.log</file>
     <encoder>
-      <pattern>%5p %d \(%C:%L\) ---&gt; %m%n</pattern>
+      <pattern>%5p %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
     </encoder>
   </appender>
-  
+
   <logger name="org.springframework" level="ERROR">
     <appender-ref ref="stdout"/>
   </logger>
@@ -35,6 +35,6 @@
     <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
-  
+
 
 </configuration>

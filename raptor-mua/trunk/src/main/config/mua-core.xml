@@ -102,6 +102,7 @@
 	 <bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
         <property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
         <property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
+        <property name="enableEventRelease"><value>true</value></property>
     </bean>
 
     <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
@@ -110,8 +111,6 @@
     </bean>
 
     <bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
-
-    <bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient"/>
 
 
 	<!-- MUA Metadata -->
@@ -122,6 +121,38 @@
 		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
 		<property name="entityId"><value>https://HOSTNAME/raptor-mua</value></property>
 	</bean>
+
+	<!-- release trigger setup -->
+    <bean id="muaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="muaReleaseJobDetail" />
+        </property>
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="10000" />
+    </bean>
+
+    <bean id="muaReleaseJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="MUAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>release</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <!--  Trigger setup -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref local="muaReleaseQuickTrigger" />
+            </list>
+        </property>
+    </bean>
+    <!--  DONE -->
 
 	<!-- Create the storage engine and entry handler -->
 	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.StorageEngine">

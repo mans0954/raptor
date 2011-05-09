@@ -78,17 +78,32 @@ public class MUAProcessImpl implements MUAProcess {
 				log.info("WebSservice call for perform statistic {} ", statisticName);
 				return engine.performStatistic(statisticName);
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
-				log.error(e.getMessage());
-				e.printStackTrace();
+				log.error("{}",e);
 			} finally {
 				lockR.unlock();
 			}
 		}
-		log.warn("Lock was hit for method performStatistic");
+		log.warn("Lock was hit for method [performStatistic]");
 		throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
 
 	}
+
+	public void release()  {
+            if (lockR.tryLock()) {
+                    try {
+                        engine.release();
+
+                    } catch (Exception e) {
+                            log.error(e.getMessage());
+                            e.printStackTrace();
+                    } finally {
+                            lockR.unlock();
+                    }
+            }
+            else{
+                log.warn("Lock was hit for method [release]");
+            }
+       }
 
 
 	public Capabilities getCapabilities() {
@@ -106,15 +121,13 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.updateStatisticalUnit(statisticalUnitInformation);
 				success = true;
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
-				log.error(e.getMessage());
-				e.printStackTrace();
+			        log.error("{}",e);
 			} finally {
 				lockR.unlock();
 			}
 		}
 		if (!success) {
-			log.warn("Lock was hit for method updateStatisticalUnit");
+			log.warn("Lock was hit for method [updateStatisticalUnit]");
 			throw new SoapFault("lock was hit on method updateStatisticalUnit", new QName("Server"));
 		}
 	}
@@ -128,9 +141,7 @@ public class MUAProcessImpl implements MUAProcess {
 						function.getAdministrativeFunction(), function.getRequester());
 				return engine.performAdministrativeFunction(function);
 			} catch (Exception e) {
-				// TODO either throw as service output, or deal with here
-				log.error(e.getMessage());
-				e.printStackTrace();
+			        log.error("{}",e);
 				return false;
 			} finally {
 				lockR.unlock();
@@ -138,7 +149,7 @@ public class MUAProcessImpl implements MUAProcess {
 			}
 
 		}
-		log.warn("Lock was hit for method performAdministrativeFunction");
+		log.warn("Lock was hit for method [performAdministrativeFunction]");
 		throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
 	}
 
@@ -162,7 +173,7 @@ public class MUAProcessImpl implements MUAProcess {
 			}
 		}
 		else
-		    log.warn("Lock was hit for method addAuthentications");
+		    log.warn("Lock was hit for method [addAuthentications]");
 		if (!success){
 		    log.error("WARNING, technical fault, could not add events to this MUA");
 		    throw new SoapFault("Technical fault at the server, could not add events to MUA ["+this.getEngine().getMuaMetadata().getServiceName()+"]", new QName("Server"));
@@ -181,13 +192,12 @@ public class MUAProcessImpl implements MUAProcess {
 				engine.updateStatisticalUnit(statisticalUnitInformation);
 				return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
 			} catch (Exception e) {
-				log.error(e.getMessage());
-				e.printStackTrace();
+			        log.error("{}",e);
 			} finally {
 				lockR.unlock();
 			}
 		}
-		log.warn("Lock was hit for method updateAndInvokeStatisticalUnit");
+		log.warn("Lock was hit for method [updateAndInvokeStatisticalUnit]");
 		throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
 
 	}
