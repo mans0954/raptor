@@ -101,6 +101,11 @@ public class PersistantEntryHandler implements EntryHandler {
 		return dataConnection.runQueryUnique(query, parameters);
 	}
 
+
+	public List query(String query, Object[] parameters, int maxNoResults) {
+	      return dataConnection.runQuery(query, parameters, maxNoResults);
+	}
+
 	/**
 	 * The <code>entries</code> are stored in the <code>persistQueue</code> until they are persisted. If an exception is thrown before
 	 * they are persisted, they remain in the <code>persistQueue</code>. This method then saves this collection in batch, as opposed to the
@@ -128,11 +133,15 @@ public class PersistantEntryHandler implements EntryHandler {
 			    log.error("Could not get hashcode for event {}, event not stored", event);
 			    continue;
 			}
-			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
-			Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
-			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
+			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = '"+event.getEventTime()+"' and hashCode =?";
+			Object[] parameters= new Object[]{hashcode};
+			//int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
+			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
+                                     + " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'", null)).intValue();
 
 			if (numberOfDuplicates == 0){
+			    log.debug("dups [{}], params {} ",numberOfDuplicates, "select count(*) from " + event.getClass().getSimpleName()
+                                    + " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'");
 			    persist.add(event);
 			}
 			else{
@@ -207,6 +216,8 @@ public class PersistantEntryHandler implements EntryHandler {
 		dataConnection.runQueryUnique("delete from Event where eventTime <= ?", new Object[]{earliestReleaseTime.toDate()});
 
 	}
+
+
 
 
 

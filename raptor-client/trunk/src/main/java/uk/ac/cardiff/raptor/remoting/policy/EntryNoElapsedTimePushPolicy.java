@@ -30,9 +30,9 @@ import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
  * elapses, the <code>lastReleasedTime</code> is updated. In effect, the
  * <code>pushInterval</code> is only effective if the number of entries does not
  * suppress the threshold in the given time interval.
- * 
+ *
  * @author philsmart
- * 
+ *
  */
 public class EntryNoElapsedTimePushPolicy extends PushPolicy {
 
@@ -58,10 +58,10 @@ public class EntryNoElapsedTimePushPolicy extends PushPolicy {
 
 	public boolean evaluatePolicy(List<Event> events) {
 		long currentTime = System.currentTimeMillis();
-		if (pushOnOrAfterNoEntries < events.size()) {
+		if (pushOnOrAfterNoEntries <= events.size()) {
 			lastReleasedTime = currentTime;
 			return true;
-		} else {			
+		} else {
 			long difference = currentTime - lastReleasedTime;
 			//log.debug("ElapsedTime difference {}, pushInterval {}", difference, pushInterval);
 			if (difference >= getPushInterval()) {

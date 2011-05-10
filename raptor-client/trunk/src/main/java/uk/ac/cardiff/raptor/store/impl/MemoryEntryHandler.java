@@ -162,7 +162,7 @@ public class MemoryEntryHandler implements EntryHandler{
 	}
 
 	/**
-	 * This is a no-op method for the memory entry handler
+	 *  This is a no-op method for all in-memory entry handlers
 	 */
 	public void initialise() {
 
@@ -174,21 +174,21 @@ public class MemoryEntryHandler implements EntryHandler{
     }
 
     /**
-     * This is a no-op method for the memory entry handler
+     *  This is a no-op method for all in-memory entry handlers
      */
     public List query(String query) {
         return null;
     }
 
     /**
-     * This is a no-op method for the memory entry handler
+     * T This is a no-op method for all in-memory entry handlers
      */
     public Object queryUnique(String query) {
         return null;
     }
 
     /**
-     * This is a no-op method for the memory entry handler
+     *  This is a no-op method for all in-memory entry handlers
      */
     public Object queryUnique(String query, Object[] parameters) {
         return null;
@@ -200,11 +200,18 @@ public class MemoryEntryHandler implements EntryHandler{
     }
 
     /**
-     * This is a no-op method for the memory entry handler
+     *  This is a no-op method for all in-memory entry handlers
      */
 	public List query(String query, Object[] parameters) {
 		return null;
 	}
+
+	/**
+	 *  This is a no-op method for all in-memory entry handlers
+	 */
+    public List query(String query, Object[] parameters, int maxNoResults) {
+        return null;
+    }
 
 
 

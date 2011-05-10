@@ -82,11 +82,26 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     }
 
     /**
+     * Returns events on or after the input time <code>earliestReleaseTime</code>.
+     *
      * @param earliestReleaseTime
      * @return
      */
     public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
         List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?",new Object[]{earliestReleaseTime.toDate()});
+        return query;
+    }
+
+    /**
+     * Returns events on or after the input time <code>earliestReleaseTime</code>, but with a maximum of
+     * <code>maxNoResults</code> results (in chronological order).
+     *
+     * @param earliestReleaseTime
+     * @param maxNoResults
+     * @return
+     */
+    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
+        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc",new Object[]{earliestReleaseTime.toDate()},maxNoResults);
         return query;
     }
 
@@ -131,6 +146,8 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
     }
+
+
 
 
 

@@ -90,6 +90,14 @@ public interface EntryHandler {
 	/**
 	 *
 	 * @param query
+	 * @param parameters
+	 * @return
+	 */
+	public List query(String query, Object[] parameters, int maxNoResults);
+
+	/**
+	 *
+	 * @param query
 	 * @return
 	 */
 	public Object queryUnique(String query);

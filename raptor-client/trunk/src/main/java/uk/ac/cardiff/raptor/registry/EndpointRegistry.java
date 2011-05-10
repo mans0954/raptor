@@ -34,10 +34,10 @@ public class EndpointRegistry {
 
 	/** List of endpoints for invoking methods on */
 	private List<Endpoint> endpoints;
-	
+
 	/** Whether release information should be persisted. */
 	private boolean persistReleaseInformation;
-	
+
 	/** The data connection class to use for persisting
 	 * release information
 	 */
@@ -56,7 +56,7 @@ public class EndpointRegistry {
 					endpoint.setReleaseInformation(releaseInformation);
 				}
 			}
-			
+
 		}
 		this.endpoints = endpoints;
 	}
@@ -64,34 +64,40 @@ public class EndpointRegistry {
 	public List<Endpoint> getEndpoints() {
 		return endpoints;
 	}
-	
+
 
 	public void storeReleaseInformationIfEnabled() {
 		if (!isPersistReleaseInformation())
 			return;
-			
+
 		for (Endpoint entry : endpoints){
+		    log.debug("Saving release information for the endpoint [{}], has persistentId {} and {} latestEqualEntrie(s)",
+		            new Object[]{entry.getServiceEndpoint(),entry.getReleaseInformation().getPersistantId(), entry.getReleaseInformation().getLatestEqualEntries().size()});
 			dataConnection.save(entry.getReleaseInformation());
 		}
-		
+
 	}
-	
-	
+
+
 	public ReleaseInformation loadReleaseInformation(Endpoint endpoint){
 		List releaseInfoResults = dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",new Object[]{endpoint.getServiceEndpoint()});
 		if (releaseInfoResults==null){
-			log.error("Loading error...no release information found, blank release information used");
+			log.warn("Loading error...no release information found, blank release information used");
 		}
 		if (releaseInfoResults.size()>1){
 			log.error("Loading error...ambiguity in the persisted release information, too many results");
 		}
 		if (releaseInfoResults.size()==1){
-			return (ReleaseInformation) releaseInfoResults.get(0);
+		        ReleaseInformation releaseInformaiton = (ReleaseInformation) releaseInfoResults.get(0);
+		        log.info("Loaded ReleaseInformation for {}, with latest event released time of {}, and {} latest equal entrie(s)",
+		                new Object[]{releaseInformaiton.getServiceEndpoint(),releaseInformaiton.getLastReleasedEventTime(),
+		                releaseInformaiton.getLatestEqualEntries().size()});
+			return releaseInformaiton;
 		}
 		return null;
-		
+
 	}
-	
+
 
 	/**
 	 * @param persistReleaseInformation the persistReleaseInformation to set

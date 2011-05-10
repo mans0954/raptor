@@ -30,18 +30,18 @@ import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
- * 
+ *
  * Stores information about an endpoint that a client can send events to. Also includes the Push Policy
  * to determine if events should be sent, an attribute filter policy for determining which attributes
  * of each event should be sent, and information about previous event releases.
- * 
+ *
  * This class could be subclassed if additional functionality is required.
- * 
+ *
  * @author philsmart
- * 
+ *
  */
 public class Endpoint {
-	
+
 	/** class logger */
 	private final Logger log = LoggerFactory.getLogger(Endpoint.class);
 
@@ -58,26 +58,27 @@ public class Endpoint {
 	/** Information about what information has been released to this endpoint */
 	private ReleaseInformation releaseInformation;
 
-	
+
 	/**
 	 * Default constructor. Instantiate <code>releaseInformation</code>
 	 */
 	public Endpoint(){
-		releaseInformation = new ReleaseInformation(serviceEndpoint);
+		releaseInformation = new ReleaseInformation();
 	}
-	
 
-	/** 
+
+	/**
 	 * Actions the <code>releasedPerformed</code> on the <code>releaseInformation</code> object.
-	 * 
+	 *
 	 * @param filteredEntries
 	 */
 	public void releasePerformed(List<Event> filteredEntries) {
 		releaseInformation.releasePerformed(filteredEntries);
 	}
-	
+
 	public void setServiceEndpoint(String serviceEndpoint) {
 		this.serviceEndpoint = serviceEndpoint;
+		releaseInformation.setServiceEndpoint(serviceEndpoint);
 	}
 
 	public String getServiceEndpoint() {
@@ -106,11 +107,11 @@ public class Endpoint {
 	public ReleaseInformation getReleaseInformation() {
 		return releaseInformation;
 	}
-	
+
 
 	/**
 	 * Sets the releaseInformation
-	 * 
+	 *
 	 * @param releaseInformation
 	 */
 	public void setReleaseInformation(ReleaseInformation releaseInformation) {
