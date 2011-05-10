@@ -36,6 +36,7 @@ public interface RaptorDataConnection {
 	public void save(Object object) throws DataAccessException;
 	public void deleteAllEntries(Collection entries) throws DataAccessException;
 	public void saveAll(Collection collection) throws DataAccessException;
+	public List runQuery(String query, Object[] parameters, int maxResultSize)throws DataAccessException;
 
 
 

@@ -14,7 +14,7 @@ public class ReleaseInformation {
 
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(ReleaseInformation.class);
-    
+
     /** Unique identifier for the persistance layer*/
     private long persistantId;
 
@@ -26,7 +26,7 @@ public class ReleaseInformation {
 	 * and same DateTime, but different state (attribute values).
 	 */
 	private Set<Event> latestEqualEntries;
-	
+
 	/**
 	 * This field is the primary key of this releaseInformation instance
 	 * that is used to store and retrieve this object.
@@ -38,9 +38,9 @@ public class ReleaseInformation {
 	/**
 	 * Default constructor. Instantiate <code>latestEqualEntries</code>
 	 */
-	public ReleaseInformation(String forServiceEndpoint){
+	public ReleaseInformation(){
 	    latestEqualEntries = new HashSet<Event>();
-	    this.setServiceEndpoint(forServiceEndpoint);
+
 	}
 
     /**

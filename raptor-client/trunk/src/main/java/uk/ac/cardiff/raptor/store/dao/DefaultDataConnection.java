@@ -53,6 +53,13 @@ public class DefaultDataConnection implements RaptorDataConnection {
 		return hibernateTemplate.find(query, parameters);
 	}
 
+	public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException {
+	    hibernateTemplate.setMaxResults(maxResultSize);
+            List result =  hibernateTemplate.find(query, parameters);
+            hibernateTemplate.setMaxResults(0);
+            return result;
+        }
+
 	public Object runQueryUnique(String query, Object[] parameters) {
 		if (parameters!=null)
 			log.trace("Query to db, {}, with params [{}]",query,Arrays.asList(parameters));

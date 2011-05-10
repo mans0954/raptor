@@ -7,28 +7,29 @@
 
     <class name="uk.ac.cardiff.raptor.registry.ReleaseInformation" table="release_information" dynamic-update="true"
         dynamic-insert="false">
-        
-        
+
+
         <id name="persistantId" column="persistantId" type="long"
-            unsaved-value="null">
+            unsaved-value="0">
             <generator class="native">
-                <param name="sequence">hib_entity_seq</param>
+                <param name="sequence">hib_release_information_seq</param>
             </generator>
         </id>
 
 
-        <property name="serviceEndpoint" column="serviceEndpoint" type="string"/>
+        <property name="serviceEndpoint" column="serviceEndpoint" type="string" not-null="true"/>
 
 
         <property name="lastReleasedEventTime" type="org.joda.time.contrib.hibernate.PersistentDateTime"
-            update="true" insert="true" column="lastReleasedEventTime" not-null="false" />
+            update="true" insert="true" column="lastReleasedEventTime"  />
 
 
-        <set name="latestEqualEntries" inverse="true">
+    <!--  Set is mapped through a collections table -->
+        <set name="latestEqualEntries" lazy="false">
             <key column="latestEqualEntries_id" />
-            <one-to-many class="uk.ac.cardiff.model.event.Event" />
+              <many-to-many  class="uk.ac.cardiff.model.event.Event"/>
         </set>
 
-    </class>
+       </class>
 
 </hibernate-mapping>
