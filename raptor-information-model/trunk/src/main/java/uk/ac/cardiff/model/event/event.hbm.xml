@@ -10,7 +10,7 @@
 
 
 		<id name="persistantId" column="persistantId" type="long"
-			unsaved-value="null">
+			unsaved-value="0">
 			<generator class="native">
 				<param name="sequence">hib_entity_seq</param>
 			</generator>
