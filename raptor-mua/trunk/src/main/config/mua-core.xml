@@ -97,14 +97,6 @@
 
 
 
-	<!--  the event release client, for sending events to other MUA's -->
-
-	 <bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
-        <property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
-        <property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
-        <property name="enableEventRelease"><value>true</value></property>
-    </bean>
-
     <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
         <property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
         <property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>

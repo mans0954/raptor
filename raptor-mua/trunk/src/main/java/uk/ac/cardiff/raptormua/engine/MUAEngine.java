@@ -81,6 +81,8 @@ public class MUAEngine {
 	/** Used to parse batch uploads. */
 	private DataAccessRegister dataAccessRegister;
 
+	private final int MAX_RELEASE_EVENT_SET_SIZE=15;
+
 	public MUAEngine() {
 		log.info("Setup Multi-Unit Aggregator Engine...");
 		log.info("Mulit-Unit Aggregator Engine is running...");
@@ -134,7 +136,12 @@ public class MUAEngine {
                      }
              }
 
-	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime);
+	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime,MAX_RELEASE_EVENT_SET_SIZE);
+
+
+//	        for (Event e : eventsToSend){
+//	            log.debug("EventTime [{}] - {}",e.getEventTime(),e);
+//	        }
 
 	        boolean success = false;
 	        try {

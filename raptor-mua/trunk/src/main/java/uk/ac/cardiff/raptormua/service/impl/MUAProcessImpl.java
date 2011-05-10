@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptormua.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -41,185 +42,187 @@ import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
 /**
- * All operations should go through this service class, so as to obey locks and
- * synchronisation issues. Locks collisions are thrown use a
- * <code>SoapFault</code>. Fault codes are: Client (if a malformed input e.g.
- * statistic name is wrong) Server (we use for locks, as server side issue)
- * VersionMismatch MustUnderstand
+ * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions are thrown use a <code>SoapFault</code>
+ * . Fault codes are: Client (if a malformed input e.g. statistic name is wrong) Server (we use for locks, as server side issue) VersionMismatch MustUnderstand
  *
  * @author philsmart
  *
  */
 public class MUAProcessImpl implements MUAProcess {
 
-	/** class logger */
-	private final Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
+    /** class logger */
+    private final Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
-	/** main engine of the MultiUnitAggregator */
-	private MUAEngine engine;
+    /** main engine of the MultiUnitAggregator */
+    private MUAEngine engine;
 
-	/**
-	 * ReentrantLock to prevent more than one operation at the same time
-	 */
-	final Lock lockR = new ReentrantLock();
+    /**
+     * ReentrantLock to prevent more than one operation at the same time
+     */
+    final Lock lockR = new ReentrantLock();
 
-	public void setEngine(MUAEngine engine) {
-		this.engine = engine;
-	}
+    public void setEngine(MUAEngine engine) {
+        this.engine = engine;
+    }
 
-	public MUAEngine getEngine() {
-		return engine;
-	}
+    public MUAEngine getEngine() {
+        return engine;
+    }
 
-
-	public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
-		if (lockR.tryLock()) {
-			try {
-				log.info("WebSservice call for perform statistic {} ", statisticName);
-				return engine.performStatistic(statisticName);
-			} catch (Exception e) {
-				log.error("{}",e);
-			} finally {
-				lockR.unlock();
-			}
-		}
-		log.warn("Lock was hit for method [performStatistic]");
-		throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
-
-	}
-
-	public void release()  {
-            if (lockR.tryLock()) {
-                    try {
-                        engine.release();
-
-                    } catch (Exception e) {
-                            log.error(e.getMessage());
-                            e.printStackTrace();
-                    } finally {
-                            lockR.unlock();
-                    }
+    public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
+        if (lockR.tryLock()) {
+            try {
+                log.info("WebSservice call for perform statistic {} ", statisticName);
+                return engine.performStatistic(statisticName);
+            } catch (Exception e) {
+                log.error("{}", e);
+            } finally {
+                lockR.unlock();
             }
-            else{
-                log.warn("Lock was hit for method [release]");
+        }
+        log.warn("Lock was hit for method [performStatistic]");
+        throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
+
+    }
+
+    public void release() {
+        if (lockR.tryLock()) {
+            try {
+                engine.release();
+
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
+            } finally {
+                lockR.unlock();
             }
-       }
+        } else {
+            log.warn("Lock was hit for method [release]");
+        }
+    }
 
+    public Capabilities getCapabilities() {
+        log.info("WebSservice call for get capabilities");
+        return engine.getCapabilities();
+    }
 
-	public Capabilities getCapabilities() {
-		log.info("WebSservice call for get capabilities");
-		return engine.getCapabilities();
-	}
+    @Override
+    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
+        boolean success = false;
+        if (lockR.tryLock()) {
+            try {
+                log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+                engine.updateStatisticalUnit(statisticalUnitInformation);
+                success = true;
+            } catch (Exception e) {
+                log.error("{}", e);
+            } finally {
+                lockR.unlock();
+            }
+        }
+        if (!success) {
+            log.warn("Lock was hit for method [updateStatisticalUnit]");
+            throw new SoapFault("lock was hit on method updateStatisticalUnit", new QName("Server"));
+        }
+    }
 
+    @Override
+    public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
+        if (lockR.tryLock()) {
+            try {
+                log.info("Performing administrative function {}, request orginates from {}", function.getAdministrativeFunction(), function.getRequester());
+                return engine.performAdministrativeFunction(function);
+            } catch (Exception e) {
+                log.error("{}", e);
+                return false;
+            } finally {
+                lockR.unlock();
 
-	@Override
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
-		boolean success = false;
-		if (lockR.tryLock()) {
-			try {
-				log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
-				engine.updateStatisticalUnit(statisticalUnitInformation);
-				success = true;
-			} catch (Exception e) {
-			        log.error("{}",e);
-			} finally {
-				lockR.unlock();
-			}
-		}
-		if (!success) {
-			log.warn("Lock was hit for method [updateStatisticalUnit]");
-			throw new SoapFault("lock was hit on method updateStatisticalUnit", new QName("Server"));
-		}
-	}
+            }
 
+        }
+        log.warn("Lock was hit for method [performAdministrativeFunction]");
+        throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
+    }
 
-	@Override
-	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
-		if (lockR.tryLock()) {
-			try {
-				log.info("Performing administrative function {}, request orginates from {}",
-						function.getAdministrativeFunction(), function.getRequester());
-				return engine.performAdministrativeFunction(function);
-			} catch (Exception e) {
-			        log.error("{}",e);
-				return false;
-			} finally {
-				lockR.unlock();
+    /**
+     * Because this is perform async, the lock is not useful, its the exceptions that are.
+     */
+    @Override
+    public void addAuthentications(EventPushMessage pushed) throws SoapFault {
+        boolean success = false;
+        if (lockR.tryLock()) {
+            try {
+                log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServiceName());
+                engine.addAuthentications(pushed);
+                success = true;
+            } catch (Exception e) {
+                log.error("Error trying to add authentications to this MUA", e);
 
-			}
+            } finally {
+                lockR.unlock();
 
-		}
-		log.warn("Lock was hit for method [performAdministrativeFunction]");
-		throw new SoapFault("lock was hit on method performAdministrativeFunction", new QName("Server"));
-	}
+            }
+        } else
+            log.warn("Lock was hit for method [addAuthentications]");
+        if (!success) {
+            log.error("WARNING, technical fault, could not add events to this MUA");
+            throw new SoapFault("Technical fault at the server, could not add events to MUA [" + this.getEngine().getMuaMetadata().getServiceName() + "]", new QName("Server"));
+        }
 
-	/**
-	 * Because this is perform async, the lock is not useful, its the exceptions that are.
+    }
+
+    @Override
+    public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
+        if (lockR.tryLock()) {
+            try {
+                log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+                engine.updateStatisticalUnit(statisticalUnitInformation);
+                return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
+            } catch (Exception e) {
+                log.error("{}", e);
+            } finally {
+                lockR.unlock();
+            }
+        }
+        log.warn("Lock was hit for method [updateAndInvokeStatisticalUnit]");
+        throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
+
+    }
+
+    /**
+	 *
 	 */
-	@Override
-	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
-		boolean success = false;
-		if (lockR.tryLock()) {
-			try {
-				log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServiceName());
-				engine.addAuthentications(pushed);
-				success = true;
-			} catch (Exception e) {
-				log.error("Error trying to add authentications to this MUA",e);
+    @Override
+    public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
+        List<LogFileUploadResult> result= new ArrayList<LogFileUploadResult>();
+        boolean success = false;
+        if (lockR.tryLock()) {
+            try {
+                log.info("Webservice call to parse {} batch log file(s)", uploadFiles.size());
 
-			} finally {
-				lockR.unlock();
+                for (LogFileUpload logfile : uploadFiles) {
+                    log.debug("Log File details: name [{}], MIME type [{}], Length [{}], ID [{}]", new Object[] { logfile.getName(), logfile.getMime(), logfile.getData().length, logfile.getId() });
+                }
+                result = engine.batchParse(uploadFiles);
+                success = true;
+            } catch (TransactionInProgressException e) {
+                log.error("Could not parse and store batch upload {}", e.getMessage());
 
-			}
-		}
-		else
-		    log.warn("Lock was hit for method [addAuthentications]");
-		if (!success){
-		    log.error("WARNING, technical fault, could not add events to this MUA");
-		    throw new SoapFault("Technical fault at the server, could not add events to MUA ["+this.getEngine().getMuaMetadata().getServiceName()+"]", new QName("Server"));
-		}
+            } finally {
+                lockR.unlock();
+            }
+        }
+        else{
+            log.warn("Lock was hit for method [batchUpload]");
+            throw new SoapFault("lock was hit on method batchUpload", new QName("Server"));
+        }
+        if (!success){
+            throw new SoapFault("Could not parse and store batch upload", new QName("Server"));
+        }
+        return result;
 
 
-	}
-
-	@Override
-	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation)
-			throws SoapFault {
-		if (lockR.tryLock()) {
-			try {
-				log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation
-						.getStatisticParameters().getUnitName());
-				engine.updateStatisticalUnit(statisticalUnitInformation);
-				return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
-			} catch (Exception e) {
-			        log.error("{}",e);
-			} finally {
-				lockR.unlock();
-			}
-		}
-		log.warn("Lock was hit for method [updateAndInvokeStatisticalUnit]");
-		throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
-
-	}
-
-	/**
-	 * Batch upload does not employ a lock on the MUA
-	 */
-	@Override
-	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
-		log.info("Webservice call to parse {} batch log file(s)",uploadFiles.size());
-
-		for (LogFileUpload logfile : uploadFiles){
-			log.debug("Log File details: name [{}], MIME type [{}], Length [{}], ID [{}]",new Object[]{logfile.getName(),logfile.getMime(),logfile.getData().length, logfile.getId()});
-		}
-		try{
-		    return engine.batchParse(uploadFiles);
-		}
-		catch (TransactionInProgressException e){
-		    log.error("Could not parse and store batch upload {}",e.getMessage());
-		    throw new SoapFault("Could not parse and store batch upload "+e.getMessage(),new QName("Server"));
-		}
-
-	}
+    }
 
 }
