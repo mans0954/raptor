@@ -22,7 +22,7 @@
 					<h:panelGrid columns="7" columnClasses="verticalAlignMiddle">
 
 						<h:outputText style="font-size:150%"
-							value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.metadata.serverName}, and showing statistics for: " />
+							value="Currently Attached to #{flowScope.websession.startmodel.attachedMUACapabilities.metadata.serviceName}, and showing statistics for: " />
 
 						<rich:inplaceSelect id="quickStatsRangeSelector"
 							value="#{flowScope.websession.startmodel.statsRangeSelectorString}"
@@ -34,11 +34,11 @@
 							<a4j:support ajaxSingle="true" event="onviewactivated"
 								action="refreshStartStats" reRender="statsSelectionForm, startTables, startGraph,shortStats" />
 						</rich:inplaceSelect>
-						
+
 						<h:outputText style="font-size:150%"
                             value=" For" />
-						
-						
+
+
 						<rich:inplaceSelect id="eventTypeSelector"
                             value="#{flowScope.websession.startmodel.eventTypeString}"
                             style="font-size:150%">
