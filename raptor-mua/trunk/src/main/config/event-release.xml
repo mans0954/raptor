@@ -24,6 +24,14 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
+	  <!--  the event release client, for sending events to other MUA's -->
+
+     <bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
+        <property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
+        <property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
+        <property name="enableEventRelease"><value>false</value></property>
+    </bean>
+
 	 <!-- Configure how the client talks to the MUA, setting appropriate trust and keystore locations  -->
 
     <bean id="serviceEndpointInterface" class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient">
