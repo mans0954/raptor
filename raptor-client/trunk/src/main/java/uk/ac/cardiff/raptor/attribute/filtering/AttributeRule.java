@@ -45,7 +45,8 @@ public abstract class AttributeRule {
     }
 
     protected Object getValueForObject(Event event, String attributeID) {
-        return ReflectionHelper.getValueFromObject(attributeID, event);
+        Object result = ReflectionHelper.getValueFromObject(attributeID, event);
+        return result;
     }
 
     protected void setValueForObject(Event event, String value, String attributeID) {
