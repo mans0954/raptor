@@ -18,40 +18,51 @@
  */
 package uk.ac.cardiff.raptor.attribute.filtering;
 
+import uk.ac.cardiff.model.ServiceMetadata;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
- * This is a poor implementation of an attributeRule as taken from the ShibbolethIDP
+ * This is a poor implementation of an attributeRule.
  *
  * @author philsmart
  *
  */
-public class AttributeRule {
+public abstract class AttributeRule {
 
-    /* needs to be the exact field name of the attribute */
-    //TODO change all these to proper regulated values with OIDs.
-    private String attributeID;
     private MatchRule permitValueRule;
     private MatchRule denyValueRule;
 
+    public abstract void filterAttribute(Event event, ServiceMetadata metadata) throws AttributeFilterException;
 
-    public void setAttributeID(String attributeID) {
-	this.attributeID = attributeID;
+    protected void nullAttribute(Event event, String attributeID) {
+        ReflectionHelper.nullAttribute(event, attributeID);
     }
-    public String getAttributeID() {
-	return attributeID;
+
+    protected boolean classHasAttribute(Event event, String attributeID) {
+        return ReflectionHelper.classHasAttribute(event, attributeID);
     }
+
+    protected Object getValueForObject(Event event, String attributeID) {
+        return ReflectionHelper.getValueFromObject(attributeID, event);
+    }
+
+    protected void setValueForObject(Event event, String value, String attributeID) {
+         ReflectionHelper.setValueOnObject(attributeID, value, event);
+    }
+
     public void setPermitValueRule(MatchRule permitValueRule) {
-	this.permitValueRule = permitValueRule;
+        this.permitValueRule = permitValueRule;
     }
     public MatchRule getPermitValueRule() {
-	return permitValueRule;
+        return permitValueRule;
     }
     public void setDenyValueRule(MatchRule denyValueRule) {
-	this.denyValueRule = denyValueRule;
+        this.denyValueRule = denyValueRule;
     }
     public MatchRule getDenyValueRule() {
-	return denyValueRule;
+        return denyValueRule;
     }
 
 

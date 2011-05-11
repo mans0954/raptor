@@ -63,7 +63,7 @@ public class ReflectionHelper {
 			Method getter = id.getMethod(fieldAsMethod, new Class[] {});
 			return true;
 		} catch (Throwable e) {
-			e.printStackTrace();
+			log.error("{}",e.getMessage());
 			return false;
 
 		}
@@ -125,7 +125,7 @@ public class ReflectionHelper {
 	/**
 	 * This is terrible code. Finds all fieldnames of all classes that are subclasses of
 	 * the <code>uk.ac.cardiff.model.event.Event</code> class.
-	 * 
+	 *
 	 * @return
 	 */
 	public static List<Suggestion> getFieldsFromEntrySubClasses() {
@@ -154,7 +154,7 @@ public class ReflectionHelper {
 		}
 		for (Object object : allclasses) {
 			Field[] fields = object.getClass().getDeclaredFields();
-			for (Field field : fields) {			    
+			for (Field field : fields) {
 			    //if field is another class in the same package, then expand its methods
 			    if (field.getType().getCanonicalName().contains(EVENT_PACKAGE_NAME)){
 			    	Object o=null;
@@ -169,7 +169,7 @@ public class ReflectionHelper {
 							//format it for hibernate
 							allFields.add(new Suggestion(object.getClass().getCanonicalName(),fieldName+"."+newField.getName()));
 						}
-						
+
 					}
 			    }
 			    else{
