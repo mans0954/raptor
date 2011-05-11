@@ -80,6 +80,20 @@ public class Event {
 
     }
 
+    /**
+     * Gets the event time in milliseconds since EPOCH. Used for consistent hashing
+     * of the <code>eventTime<code> field.
+     *
+     * @return
+     */
+    public long getEventTimeMillis(){
+        return eventTime.getMillis();
+    }
+
+    public void setEventTimeMillis(long millis){
+        eventTime = new DateTime(millis);
+    }
+
     public void setPersistantId(Long persistantId) {
 	this.persistantId = persistantId;
     }
