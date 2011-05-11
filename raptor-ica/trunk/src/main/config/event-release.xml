@@ -40,7 +40,7 @@
                             <ref bean="entryNoElapsedTimePushPolicy"></ref>
                         </list>
                     </property>
-                    <!--<property name="attributeFilterPolicy"><ref bean="removePrincipleFilterPolicy"></ref></property> -->
+                    <property name="attributeFilterPolicy"><ref bean="hashPrincipleFilterPolicy"></ref></property>
                 </bean>
 
                 <bean id="cardiffRaptorMUA-Second" class="uk.ac.cardiff.raptor.registry.Endpoint">
@@ -84,14 +84,36 @@
 
     <!-- Attribute filter policies -->
 
+    <bean id="hashPrincipleFilterPolicy" class="uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy">
+        <property name="policyName">
+            <value>hash_Principal_Name_With_Service_EntityId</value>
+        </property>
+        <property name="attributeRules">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.HashAttributeRule">
+                    <property name="attributeId">
+                        <value>principalName</value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
     <bean id="removePrincipleFilterPolicy" class="uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy">
         <property name="policyName">
             <value>removePrincipleName</value>
         </property>
         <property name="attributeRules">
             <list>
-                <bean class="uk.ac.cardiff.raptor.attribute.filtering.AttributeRule">
-                    <property name="attributeID">
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
                         <value>requestHost</value>
                     </property>
                     <property name="denyValueRule">
