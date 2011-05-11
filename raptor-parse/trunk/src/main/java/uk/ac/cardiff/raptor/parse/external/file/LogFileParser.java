@@ -449,15 +449,6 @@ public class LogFileParser extends BaseEventParser {
 	 */
 	private void addDate(String value, String format, String timezone, String fieldName, Object object) {
 		try {
-			/*
-			 * first check the end of the date, if it has a Z it should have
-			 * time zone information e.g. -0800 or +0500 but if it ends in just
-			 * Z, there is not valid timezone information supplied, so remove
-			 */
-			// TODO check this
-			if (value.endsWith("Z"))
-				value = value.substring(0, value.length() - 1);
-
 			DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
 			dtf = dtf.withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone(timezone)));
 			DateTime dt = dtf.parseDateTime(value.substring(0, value.length()));
