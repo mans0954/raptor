@@ -112,62 +112,6 @@
 
 	<!-- accepted types are DATE, STRING, INTEGER -->
 
-	<bean id="shibIDPAccessFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
-		<property name="headers">
-			<list>
-				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
-					<property name="fieldName">
-						<value>eventTime</value>
-					</property>
-					<property name="fieldNo">
-						<value>0</value>
-					</property>
-					<property name="fieldType">
-						<value>DATE</value>
-					</property>
-					<property name="dateTimeFormat">
-						<value>yyyyMMdd'T'HHmmss</value>
-					</property> <!--  Atom (ISO 8601) -->
-				</bean>
-				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
-					<property name="fieldName">
-						<value>serviceHost</value>
-					</property>
-					<property name="fieldNo">
-						<value>1</value>
-					</property>
-					<property name="fieldType">
-						<value>STRING</value>
-					</property>
-				</bean>
-				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
-					<property name="fieldName">
-						<value>requestID</value>
-					</property>
-					<property name="fieldNo">
-						<value>2</value>
-					</property>
-					<property name="fieldType">
-						<value>STRING</value>
-					</property>
-				</bean>
-				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
-					<property name="fieldName">
-						<value>requestPath</value>
-					</property>
-					<property name="fieldNo">
-						<value>3</value>
-					</property>
-					<property name="fieldType">
-						<value>STRING</value>
-					</property>
-				</bean>
-			</list>
-		</property>
-		<property name="delimeter">
-			<value>|</value>
-		</property>
-	</bean>
 
      <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
         <property name="headers">
@@ -183,6 +127,9 @@
                         <list>
                             <value>1</value>
                         </list>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
                     </property>
                     <property name="fieldType">
                         <value>DATE</value>
@@ -264,8 +211,11 @@
 					<property name="fieldType">
 						<value>DATE</value>
 					</property>
+					<property name="timeZone">
+                        <value>UTC</value>
+                    </property>
 					<property name="dateTimeFormat">
-						<value>yyyyMMdd'T'HHmmss</value>
+						<value>yyyyMMdd'T'HHmmss'Z'</value>
 					</property> <!--  Atom (ISO 8601) -->
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
@@ -447,6 +397,9 @@
                     </property>
                     <property name="fieldType">
                         <value>DATE</value>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
                     </property>
                     <property name="dateTimeFormat">
                         <value>dd/MMM/yyyy:HH:mm:ssZ</value>
