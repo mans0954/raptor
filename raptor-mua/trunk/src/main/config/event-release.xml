@@ -81,8 +81,8 @@
 		<property name="policyName"><value>removePrincipleName</value></property>
 		<property name="attributeRules">
 		<list>
-			<bean class="uk.ac.cardiff.raptor.attribute.filtering.AttributeRule">
-				<property name="attributeID"><value>requestHost</value></property>
+			<bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+				<property name="attributeId"><value>requestHost</value></property>
 				<property name="denyValueRule">
 					<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
 						<property name="enabled"><value>true</value></property>

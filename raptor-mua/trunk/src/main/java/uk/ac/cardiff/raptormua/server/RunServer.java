@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.xml.ws.Endpoint;
 
@@ -69,7 +70,7 @@ public class RunServer {
 	 */
 	public static void main(String args[]) throws FileNotFoundException, IOException {
 		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
-
+		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 
 		configureLogger(configurationFiles+"/logback.xml");
