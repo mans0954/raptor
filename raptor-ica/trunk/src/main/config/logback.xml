@@ -32,4 +32,5 @@
   <logger name="org.mortbay" level="INFO">
     <appender-ref ref="stdout"/>
   </logger>
+
 </configuration>
