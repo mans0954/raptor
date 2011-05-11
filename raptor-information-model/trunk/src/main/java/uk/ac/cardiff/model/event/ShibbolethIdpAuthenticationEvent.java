@@ -101,7 +101,7 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 		return false;
 	    ShibbolethIdpAuthenticationEvent that = (ShibbolethIdpAuthenticationEvent)obj;
 	    boolean areEqual =
-	      EqualsUtil.areEqual(this.getEventTime(), that.getEventTime()) &&
+	      EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) &&
 	      EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
 	      EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
 	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
@@ -149,7 +149,7 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	public int hashCode(){
 	    int hash = HashCodeUtil.SEED;
 
-	    hash = HashCodeUtil.hash(hash,getEventTime());
+	    hash = HashCodeUtil.hash(hash,getEventTimeMillis());
 	    hash = HashCodeUtil.hash(hash,getAuthenticationType());
 	    hash = HashCodeUtil.hash(hash,getServiceHost());
 	    hash = HashCodeUtil.hash(hash,getRequestId());
