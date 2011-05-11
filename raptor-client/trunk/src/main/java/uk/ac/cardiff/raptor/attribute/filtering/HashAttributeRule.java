@@ -35,13 +35,10 @@ public class HashAttributeRule extends AttributeRule{
      * @throws AttributeFilterException
      */
     public void filterAttribute(Event event, ServiceMetadata metadata) throws AttributeFilterException {
-        log.debug("Filtering event {}",event);
         try{
             if (classHasAttribute(event, getAttributeId())) {
                 MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
-                md.reset();
                 Object value = getValueForObject(event, getAttributeId());
-                log.debug("Value [{}]",metadata.getEntityId()+value);
                 if (value instanceof String){
                     String valueAsString = (String) value;
                     String toHash = metadata.getEntityId()+valueAsString;
@@ -51,6 +48,9 @@ public class HashAttributeRule extends AttributeRule{
                     String hashedValue = number.toString(16);
                     this.setValueForObject(event, hashedValue, getAttributeId());
                     log.debug("hash: "+number.toString(16));
+                }
+                else{
+                	throw new AttributeFilterException("The hash filter requires attributes of type String");
                 }
 
             }

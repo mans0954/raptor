@@ -82,13 +82,12 @@ public class AttrributeFilterEngine {
 	private  List<Event> clone(List<Event> events) {
 
 		List<Event> clonedSet = new ArrayList<Event>();
-
+		
 		log.debug("Events cloned");
-		for (Event entry : events) {
-			//Event newEntry = cloner.deepClone(entry);
-			//clonedSet.add(newEntry);
+		for (Event event : events) {			
+			clonedSet.add(event.newInstance());
 		}
-		return events;
+		return clonedSet;
 	}
 
 }
