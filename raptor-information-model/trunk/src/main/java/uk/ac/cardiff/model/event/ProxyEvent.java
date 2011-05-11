@@ -17,6 +17,23 @@ public class ProxyEvent extends Event{
     private long responseSize;
     private DateTime responseTime;
     private String requesterIp;
+    
+    public ProxyEvent(){
+        super();
+    }
+    
+    /**
+     * Copy constructor
+     * @param event
+     */
+    public ProxyEvent(ProxyEvent event){
+        super(event);
+        this.requestURL = event.getRequestURL();
+        this.httpResponseCode = event.getHttpResponseCode();
+        this.responseSize = event.getResponseSize();
+        this.responseTime = event.getResponseTime();
+        this.requesterIp = event.getRequesterIp();
+    }
 
 
     public void setRequestURL(String requestURL) {
@@ -40,8 +57,14 @@ public class ProxyEvent extends Event{
     public void setResponseTime(DateTime responseTime) {
 	this.responseTime = responseTime;
     }
+    
+    /**
+     * Get response time, using a defensive copy
+     * 
+     * @return
+     */
     public DateTime getResponseTime() {
-	return responseTime;
+	return new DateTime(responseTime);
     }
     /**
      * @param requesterIp the requesterIp to set

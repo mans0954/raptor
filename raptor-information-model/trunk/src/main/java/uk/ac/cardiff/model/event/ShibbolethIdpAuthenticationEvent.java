@@ -28,7 +28,34 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	private String[] assertionId;
 	private String[] releasedAttributes;
 
+	
+	public ShibbolethIdpAuthenticationEvent(){
+	    super();
+	}
+	
+	public static ShibbolethIdpAuthenticationEvent newInstance() {
+	    return new ShibbolethIdpAuthenticationEvent();
+	  }
 
+	/** 
+	 * Copy constructor 
+	 * 
+	 * @param event
+	 */
+	public ShibbolethIdpAuthenticationEvent(ShibbolethIdpAuthenticationEvent event){
+	    super (event);
+	    this.requestPath = event.getRequestPath();
+	    this.requestId = event.getRequestId();
+	    this.messageProfileId = event.getMessageProfileId();
+	    this.responseBinding = event.getResponseBinding();
+	    this.responseId = event.getResponseId();
+	    this.requestBinding = event.getRequestBinding();
+	    this.nameIdentifier = event.getNameIdentifier();
+	    
+	    //shallow copy is OK here, as a new array is created with immutable objects (String).
+	    this.assertionId = event.getAssertionId().clone();
+	    this.releasedAttributes = event.getReleasedAttributes().clone();
+	}
 
 	public void setRequestPath(String requestPath) {
 		this.requestPath = requestPath;
@@ -80,6 +107,10 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 			    Object object = method.invoke(this, (Object[]) null);
 			    if (object instanceof Collection){
 				 builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
+			    }
+			    else if (object.getClass().isArray()){
+			        Object[] array = (Object[])object;
+			        builder.append(method.getName() + " [" + Arrays.asList(array) + "],");
 			    }
 			    else{
 				builder.append(method.getName() + " [" + object + "],");

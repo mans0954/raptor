@@ -43,17 +43,40 @@ public class Event {
     /** User defined category for this event for this resourceId, e.g. internal resource or external resource*/
     private int resourceIdCategory;
 
+    
+    public Event(){
+        
+    }
+    
+    /** A Copy constructor */
+    public Event(Event event){
+        //this has a defensive getter, so a direct assignment is possible
+        this.eventTime = event.getEventTime();
+        this.eventId = event.getEventId();
+        this.serviceId = event.getServiceId();
+        this.eventType = event.getEventType();
+        this.serviceHost = event.getServiceHost();
+        this.resourceHost = event.getServiceHost();
+        this.resourceId = event.getResourceId();
+        this.resourceIdCategory = event.getResourceIdCategory();
+    }
+    
+    public static Event newInstance() {
+        return new Event();
+      }
+    
+    
     public void setEventTime(DateTime eventTime) {
 	this.eventTime = eventTime;
     }
 
+    /**
+     * Returns the eventTime using a defensive copy
+     * @return
+     */
     public DateTime getEventTime() {
-	return eventTime;
+	return new DateTime(eventTime);
     }
-
-     public String toString() {
-	 return getClass().getName()+"@[" + this.getEventTime() + "," + this.getServiceHost() + "," + this.getResourceHost() + "]";
-     }
 
     /**
      * Only XML DATE or XML DATETIME objects can be sent through XML WS hence, the joda.DateTime property is ignored, instead a proxy getDate method is used to
@@ -88,10 +111,6 @@ public class Event {
      */
     public long getEventTimeMillis(){
         return eventTime.getMillis();
-    }
-
-    public void setEventTimeMillis(long millis){
-        eventTime = new DateTime(millis);
     }
 
     public void setPersistantId(Long persistantId) {
@@ -162,5 +181,10 @@ public class Event {
 
     public String getServiceId() {
         return serviceId;
+    }
+    
+
+    public String toString() {
+        return getClass().getName()+"@[" + this.getEventTime() + "," + this.getServiceHost() + "," + this.getResourceHost() + "]";
     }
 }

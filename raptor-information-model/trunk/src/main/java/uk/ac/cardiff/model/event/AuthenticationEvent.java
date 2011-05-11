@@ -20,43 +20,65 @@ package uk.ac.cardiff.model.event;
 
 import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
 
-
 /**
  * @author philsmart
- *
+ * 
  */
-public class AuthenticationEvent extends Event{
+public class AuthenticationEvent extends Event {
 
-	private String authenticationType;
-	private String principalName;
-
-	/**This is fixed to a principal expansion */
-	private PrincipalInformation principalInformation;
-
-	public void setPrincipalName(String principalName) {
-	    this.principalName = principalName;
-	}
-	public String getPrincipalName() {
-	    return principalName;
-	}
-	public void setAuthenticationType(String authenticationType) {
-	    this.authenticationType = authenticationType;
-	}
-	public String getAuthenticationType() {
-	    return authenticationType;
-	}
+    private String authenticationType;
+    private String principalName;
+    
+    /** This is fixed to a principal expansion */
+    private PrincipalInformation principalInformation;
+    
+    
+    public AuthenticationEvent(){
+        super();
+    }
+    
     /**
-     * @param principalInformation the principalInformation to set
+     * Copy constructor
+     * 
+     * @param event
+     */
+    public AuthenticationEvent(AuthenticationEvent event){
+        super(event);
+        this.authenticationType = event.getAuthenticationType();
+        this.principalName = event.getPrincipalName();
+        this.principalInformation = new PrincipalInformation(event.getPrincipalInformation());
+        
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
+    }
+
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setAuthenticationType(String authenticationType) {
+        this.authenticationType = authenticationType;
+    }
+
+    public String getAuthenticationType() {
+        return authenticationType;
+    }
+
+    /**
+     * @param principalInformation
+     *            the principalInformation to set
      */
     public void setPrincipalInformation(PrincipalInformation principalInformation) {
         this.principalInformation = principalInformation;
     }
+
     /**
      * @return the principalInformation
      */
     public PrincipalInformation getPrincipalInformation() {
         return principalInformation;
     }
-
 
 }
