@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -137,11 +139,15 @@ public class PersistantEntryHandler implements EntryHandler {
 			Object[] parameters= new Object[]{hashcode};
 			//int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
 			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
-                                     + " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'", null)).intValue();
+                                     + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'", null)).intValue();
 
 			if (numberOfDuplicates == 0){
 			    log.debug("dups [{}], params {} ",numberOfDuplicates, "select count(*) from " + event.getClass().getSimpleName()
-                                    + " where eventTime = '" + event.getEventTime() + "' and hashCode ='" + hashcode + "'");
+                                    + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'");
+			    Date local = new Date(event.getEventTime().getMillis());
+			    DateTime newTime = new DateTime(local);
+			    log.debug("Before: {} [{}] Local:{} [{}], back {} [{}]",new Object[]
+			            {event.getEventTime(),event.getEventTime().getMillis(), local, local.getTime(), newTime, newTime.getMillis()});
 			    persist.add(event);
 			}
 			else{

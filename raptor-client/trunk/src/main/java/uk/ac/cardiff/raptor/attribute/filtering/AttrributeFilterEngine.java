@@ -19,18 +19,16 @@
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rits.cloning.Cloner;
+import com.rits.cloning.CloningException;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
@@ -52,10 +50,9 @@ public class AttrributeFilterEngine {
 	public List<Event> filter(AttributeFilterPolicy attributeFilterPolicy, ServiceMetadata metadata, List<Event> events) {
 		log.debug("Applying attribute filter policy {} to event set", attributeFilterPolicy.getPolicyName());
 		List<Event> filteredEntries = clone(events);
-
 		for (Event entry : filteredEntries) {
 			for (AttributeRule attributeRule : attributeFilterPolicy.getAttributeRules()) {
-				filterAttributes(entry, attributeRule);
+				filterAttributes(entry, attributeRule, metadata);
 			}
 		}
 
@@ -68,35 +65,30 @@ public class AttrributeFilterEngine {
 	 *
 	 * @param entry
 	 * @param attributeRule
+	 * @param metadata
 	 */
-	private void filterAttributes(Event entry, AttributeRule attributeRule) {
-		String attributeID = attributeRule.getAttributeID();
-		if (classHasAttribute(entry, attributeID)) {
-			if (attributeRule.getDenyValueRule().isEnabled()) {
-				nullAttribute(entry, attributeID);
-			}
-		} else {
-
+	private void filterAttributes(Event event, AttributeRule attributeRule, ServiceMetadata metadata) {
+	    try{
+		if (attributeRule.getDenyValueRule().isEnabled()) {
+			attributeRule.filterAttribute(event, metadata);
 		}
-
+	    }
+	    catch(AttributeFilterException e){
+	        log.error("Could not filter attribute",e);
+	    }
 	}
 
-	private static void nullAttribute(Event event, String attributeID) {
-		ReflectionHelper.nullAttribute(event, attributeID);
-	}
 
-	private static boolean classHasAttribute(Event entry, String attributeID) {
-		return ReflectionHelper.classHasAttribute(entry, attributeID);
-	}
+	private  List<Event> clone(List<Event> events) {
 
-	private static List<Event> clone(List<Event> events) {
 		List<Event> clonedSet = new ArrayList<Event>();
-		Cloner cloner = new Cloner();
+
+		log.debug("Events cloned");
 		for (Event entry : events) {
-			Event newEntry = cloner.deepClone(entry);
-			clonedSet.add(newEntry);
+			//Event newEntry = cloner.deepClone(entry);
+			//clonedSet.add(newEntry);
 		}
-		return clonedSet;
+		return events;
 	}
 
 }
