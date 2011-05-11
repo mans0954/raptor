@@ -17,6 +17,16 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 
     private String requesterIp;
     private String sessionId;
+    
+    public EzproxyAuthenticationEvent(){
+        super();
+    }
+    
+    public EzproxyAuthenticationEvent(EzproxyAuthenticationEvent event){
+        super(event);
+        this.requesterIp = event.getRequesterIp();
+        this.sessionId = event.getSessionId();
+    }
 
     public void setRequesterIp(String requesterIp) {
 	this.requesterIp = requesterIp;
