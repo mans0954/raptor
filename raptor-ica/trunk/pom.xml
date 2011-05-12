@@ -303,7 +303,7 @@
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <finalName>raptor-ica-${project.version}</finalName>
+                    <finalName>raptor-ica</finalName> <!--  removed -${project.version} -->
                     <archive>
                         <manifest>
                             <mainClass>uk.ac.cardiff.raptorica.server.RunServer</mainClass>
@@ -343,7 +343,7 @@
                         </goals>
                         <configuration>
                         <appendAssemblyId>false</appendAssemblyId>
-                            <finalName>raptor-ica</finalName>
+                            <finalName>raptor-ica-${project.version}</finalName>
                             <descriptors>
                                 <descriptor>src/main/resources/package.xml</descriptor>
                             </descriptors>

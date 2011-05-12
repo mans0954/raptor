@@ -63,7 +63,7 @@
             <value>false</value>
         </property>
     </bean>
-    
+
     <!-- event sweep (garbage collection) trigger setup -->
     <bean id="icaGarbageCollectionQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
@@ -99,8 +99,6 @@
 		</property>
 	</bean>
 	<!--  DONE -->
-    
-     
 
 
 	<bean id="ICAProcess" class="uk.ac.cardiff.raptorica.service.IcaProcessImpl">
@@ -133,11 +131,11 @@
 
 	<bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
 
-	
+
 
     <import resource="metadata.xml"/>
-	<import resource="dao-beans.xml"/>
-	<import resource="data-access.xml" />
+	<import resource="database.xml"/>
+	<import resource="event-parse.xml" />
 	<import resource="event-release.xml" />
 
 </beans>

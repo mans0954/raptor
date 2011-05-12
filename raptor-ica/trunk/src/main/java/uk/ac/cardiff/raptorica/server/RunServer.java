@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
+import java.util.TimeZone;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
@@ -37,14 +38,14 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
 public class RunServer {
-	
-	
+
+
 	/**
 	 * Programmatically do the following:
 	 * 1. Set the Apache CXF logger to use SLF4J
 	 * 2. Configure the logback logger
 	 * 3. Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
-	 * 
+	 *
 	 * @param args
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -52,11 +53,11 @@ public class RunServer {
 	 */
 	public static void main(String args[]) throws FileNotFoundException, IOException {
 		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
-		
+		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
-		
-		configureLogger(configurationFiles+"/logback.xml");
-		
+
+		configureLogger(configurationFiles+"/logging.xml");
+
 		int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
 
 		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
