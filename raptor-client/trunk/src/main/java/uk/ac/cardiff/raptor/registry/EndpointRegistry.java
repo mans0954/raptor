@@ -92,6 +92,9 @@ public class EndpointRegistry {
 		        log.info("Loaded ReleaseInformation for {}, with latest event released time of {}, and {} latest equal entrie(s)",
 		                new Object[]{releaseInformaiton.getServiceEndpoint(),releaseInformaiton.getLastReleasedEventTime(),
 		                releaseInformaiton.getLatestEqualEntries().size()});
+		        if (releaseInformaiton.getLatestEqualEntries().size()>0){
+		            log.debug("Latest Equal Entry Is {}",releaseInformaiton.getLatestEqualEntries().iterator().next());
+		        }
 			return releaseInformaiton;
 		}
 		return null;

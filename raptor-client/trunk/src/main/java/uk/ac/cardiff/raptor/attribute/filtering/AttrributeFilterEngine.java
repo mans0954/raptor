@@ -69,8 +69,8 @@ public class AttrributeFilterEngine {
 	 */
 	private void filterAttributes(Event event, AttributeRule attributeRule, ServiceMetadata metadata) {
 	    try{
-		if (attributeRule.getDenyValueRule().isEnabled()) {
-			attributeRule.filterAttribute(event, metadata);
+		if (attributeRule.shouldApply(event.getClass())){
+		    attributeRule.filterAttribute(event, metadata);
 		}
 	    }
 	    catch(AttributeFilterException e){
@@ -80,13 +80,11 @@ public class AttrributeFilterEngine {
 
 
 	private  List<Event> clone(List<Event> events) {
-
 		List<Event> clonedSet = new ArrayList<Event>();
-		
-		log.debug("Events cloned");
-		for (Event event : events) {			
-			clonedSet.add(event.newInstance());
+		for (Event event : events) {
+			clonedSet.add(event.copy());
 		}
+		log.trace("The event set of {} events has been cloned into the event set of {} events",events.size(),clonedSet.size());
 		return clonedSet;
 	}
 
