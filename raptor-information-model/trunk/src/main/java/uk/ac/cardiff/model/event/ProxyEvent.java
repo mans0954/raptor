@@ -17,11 +17,11 @@ public class ProxyEvent extends Event{
     private long responseSize;
     private DateTime responseTime;
     private String requesterIp;
-    
+
     public ProxyEvent(){
         super();
     }
-    
+
     /**
      * Copy constructor
      * @param event
@@ -33,6 +33,13 @@ public class ProxyEvent extends Event{
         this.responseSize = event.getResponseSize();
         this.responseTime = event.getResponseTime();
         this.requesterIp = event.getRequesterIp();
+    }
+
+    /**
+     * Copy method. Alternative to clone.
+     */
+    public ProxyEvent cop(){
+        return new ProxyEvent(this);
     }
 
 
@@ -57,10 +64,10 @@ public class ProxyEvent extends Event{
     public void setResponseTime(DateTime responseTime) {
 	this.responseTime = responseTime;
     }
-    
+
     /**
      * Get response time, using a defensive copy
-     * 
+     *
      * @return
      */
     public DateTime getResponseTime() {

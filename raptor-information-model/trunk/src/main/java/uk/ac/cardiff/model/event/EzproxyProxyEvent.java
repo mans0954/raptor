@@ -13,19 +13,26 @@ import java.lang.reflect.Method;
 public class EzproxyProxyEvent extends ProxyEvent{
 
     private String sessionId;
-    
+
     public EzproxyProxyEvent(){
         super();
     }
-    
+
     /**
      * Copy constructor
-     * 
+     *
      * @param event
      */
-    public EzproxyProxyEvent(EzproxyProxyEvent event){
+    protected EzproxyProxyEvent(EzproxyProxyEvent event){
         super(event);
         this.sessionId = event.getSessionId();
+    }
+
+    /**
+     * Copy method. Alternative to clone.
+     */
+    public EzproxyProxyEvent copy(){
+        return new EzproxyProxyEvent(this);
     }
 
     /**

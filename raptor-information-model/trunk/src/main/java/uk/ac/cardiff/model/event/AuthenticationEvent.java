@@ -22,32 +22,41 @@ import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class AuthenticationEvent extends Event {
 
     private String authenticationType;
     private String principalName;
-    
+
     /** This is fixed to a principal expansion */
     private PrincipalInformation principalInformation;
-    
-    
+
+
     public AuthenticationEvent(){
         super();
     }
-    
+
     /**
      * Copy constructor
-     * 
+     *
      * @param event
      */
-    public AuthenticationEvent(AuthenticationEvent event){
+    protected AuthenticationEvent(AuthenticationEvent event){
         super(event);
         this.authenticationType = event.getAuthenticationType();
         this.principalName = event.getPrincipalName();
-        this.principalInformation = new PrincipalInformation(event.getPrincipalInformation());
-        
+        if (event.getPrincipalInformation()!=null){
+            this.principalInformation = new PrincipalInformation(event.getPrincipalInformation());
+        }
+
+    }
+
+    /**
+     * Copy method. Alternative to clone.
+     */
+    public AuthenticationEvent copy(){
+        return new AuthenticationEvent(this);
     }
 
     public void setPrincipalName(String principalName) {
