@@ -76,22 +76,10 @@ public class ReleaseInformation {
                         if (event.getEventTime().isAfter(lastReleasedEventTime)){
                                 lastReleasedEventTime = event.getEventTime();
                                 latestEqualEntries.clear();
-                                int hashcode = 0;
-                                try {
-                                        hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-                                } catch (Exception e) {
-                                    log.error("Could not get hashcode for event {}", event);
-                                }
-                                latestEqualEntries.add(hashcode);
+                                latestEqualEntries.add(event.getEventId());
                         }
                         else if (event.getEventTime().isEqual(lastReleasedEventTime)){
-                            int hashcode = 0;
-                            try {
-                                    hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-                            } catch (Exception e) {
-                                log.error("Could not get hashcode for event {}", event);
-                            }
-                            latestEqualEntries.add(hashcode);
+                            latestEqualEntries.add(event.getEventId());
                         }
                 }
         }
@@ -117,13 +105,7 @@ public class ReleaseInformation {
             return true;
 
         else if (event.getEventTime().isEqual(getLastReleasedEventTime())){
-            int hashcode = 0;
-            try {
-                    hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-            } catch (Exception e) {
-                log.error("Could not get hashcode for event {}, event not stored", event);
-            }
-            return !latestEqualEntries.contains(hashcode);
+            return !latestEqualEntries.contains(event.getEventId());
         }
 
         return false;

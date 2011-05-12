@@ -16,13 +16,15 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.registry;
+package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
+import uk.ac.cardiff.raptor.registry.Endpoint;
+import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
@@ -104,7 +106,7 @@ public class EventReleaseEngine {
     private List<Event> eventTypeFilter(Endpoint endpoint, List<Event> events) {
         ArrayList<Event> applicableEvents = new ArrayList<Event>();
 
-        return applicableEvents;
+        return events;
     }
 
 

@@ -24,7 +24,6 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
-import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
 
 /**
  * Sends event records using the CXF SOAP libraries

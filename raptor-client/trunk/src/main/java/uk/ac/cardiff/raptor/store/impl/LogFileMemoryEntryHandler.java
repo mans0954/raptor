@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 
@@ -72,15 +73,16 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 	}
 
 	/**
-	 * If newer entry, just add to the set. If equal, first check the
-	 * <code>latestEqualEntries</code> set, if contained in this set, then it
-	 * has already been added. If not add. Importantly, we do not just add to
-	 * the entries set (which would not allow duplicates) because the set is
-	 * cleared when information is sent to the UA.
-	 *
-	 * @return true if this event was added to the entry handler, false otherwise
+	 * First copy the hash of this entry into the <code>eventId</code> column if
+	 * its empty. Then, add to the entry set iff its a newer entry. If equal,
+	 * first check the <code>latestEqualEntries</code> set, if contained in this
+	 * set, then it has already been added, if not add.
+	 * 
+	 * @return true if this event was added to the entry handler, false
+	 *         otherwise
 	 */
 	public boolean addEntry(Event event) {
+		addEventIdIfNull(event);
 		boolean isAfter = isAfter(event);
 		boolean isEqual = isEqual(event);
 		if (isAfter) {
@@ -103,26 +105,35 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 
 	}
 
+	/**
+	 * Stores the hashcode of the event as the <code>eventId</code> iff there is
+	 * no existing eventId (defined as 0), and the event has a valid hashcode.
+	 * 
+	 * @param event
+	 */
+	private void addEventIdIfNull(Event event) {
+		if (event.getEventId() != 0) {
+			return;
+		}
+		int hashCode = ReflectionHelper.getHashCodeFromEventOrNull(event);
+		if (hashCode != 0) {
+			event.setEventId(hashCode);
+		}
+	}
+
 	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
-	                log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)",earliestReleaseTime,
-	                        latestEqualEntries.size());
-			ArrayList<Event> toRemove = new ArrayList<Event>();
-			for (Event event : entries){
-				if (event.getEventTime().isBefore(earliestReleaseTime))
-						toRemove.add(event);
-				if (event.getEventTime().isEqual(earliestReleaseTime)){
-				    int hashcode = 0;
-                                    try {
-                                            hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-                                    } catch (Exception e) {
-                                        log.error("Could not get hashcode for event {}", event);
-                                    }
-                                    if (latestEqualEntries.contains(hashcode)){
-                                        toRemove.add(event);
-                                    }
+		log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)", earliestReleaseTime, latestEqualEntries.size());
+		ArrayList<Event> toRemove = new ArrayList<Event>();
+		for (Event event : entries) {
+			if (event.getEventTime().isBefore(earliestReleaseTime))
+				toRemove.add(event);
+			if (event.getEventTime().isEqual(earliestReleaseTime)) {
+				if (latestEqualEntries.contains(event.getEventId())) {
+					toRemove.add(event);
 				}
 			}
-			entries.removeAll(toRemove);
+		}
+		entries.removeAll(toRemove);
 
 	}
 
@@ -241,13 +252,11 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 		return null;
 	}
 
-   /**
-    * This is a no-op method for all in-memory entry handlers
-    */
-    public List query(String query, Object[] parameters, int maxNoResults) {
-        return null;
-    }
-
-
+	/**
+	 * This is a no-op method for all in-memory entry handlers
+	 */
+	public List query(String query, Object[] parameters, int maxNoResults) {
+		return null;
+	}
 
 }

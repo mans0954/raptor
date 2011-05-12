@@ -130,14 +130,8 @@ public class PersistantEntryHandler implements EntryHandler {
 		Set<Event> persist = new HashSet<Event>();
 
 		for (Event event : persistQueue) {
-		        Integer hashcodeInteger =  ReflectionHelper.getHashCodeFromEventOrNull(event);
-			if (hashcodeInteger==null){
-			    log.error("Could not get hashcode for event {}, event not stored", event);
-			    continue;
-			}
-			int hashcode = hashcodeInteger.intValue();
-			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
-			Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
+			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
+			Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
 			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
 //			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
 //                                     + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'", null)).intValue();
@@ -168,15 +162,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	public boolean addEntry(Event event) {
-		int hashcode = 0;
-		try {
-			hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-		} catch (Exception e) {
-		    log.error("Could not get hashcode for event {}, event not stored");
-		    return false;
-		}
-		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
-		Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
+		
+		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
+		Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
 		int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
 
 		if (numberOfDuplicates == 0){
