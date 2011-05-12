@@ -37,7 +37,7 @@
 			insert="true" column="serviceId" not-null="false" index="serviceid_index" />
 		<property name="resourceId" type="string" update="true"
 			insert="true" column="resourceId" not-null="false" />
-		<property name="eventId" type="long" update="true" insert="true"
+		<property name="eventId" type="integer" update="true" insert="true"
 			column="eventId" not-null="false" />
 		<property name="eventType" type="string" update="true"
 			insert="true" column="eventType" not-null="false" />
@@ -79,7 +79,7 @@
 			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 		<property name="nameIdentifier" column="nameIdentifier" type="string" />
 		<property name="responseId" column="responseId" type="string" />
-		<property name="hashCode" column="hashCode" type="integer"
+		<property name="hashCode" column=" current_hashCode" type="integer"
 			index="hashcode_index" />
 	</union-subclass>
 
@@ -88,7 +88,7 @@
 
 		<property name="requesterIp" column="requesterIp" type="string" />
 		<property name="sessionId" column="sessionId" type="string" />
-		<property name="hashCode" column="hashCode" type="integer"
+		<property name="hashCode" column="current_hashCode" type="integer"
 			index="hashcode_index" />
 
 	</union-subclass>
