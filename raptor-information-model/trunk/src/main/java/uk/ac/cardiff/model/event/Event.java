@@ -23,17 +23,26 @@ import java.util.Date;
 import org.joda.time.DateTime;
 
 /**
+ * For any class that extends this class, equality must be computed for the
+ * same fields as the hash. Otherwise a discrepancy will occur when checking
+ * containment through object equality (e.g. set containment), and through hashcodes.
+ * 
  * @author philsmart
  *
  */
 public class Event {
 
-    /** used if a persistant db primary key is required */
+    /** used if a persistant db primary key is required. Not to 
+     * be used in the computation of the hash or equals methods */
     private Long persistantId;
 
     /** attributes generic to all entries */
     private DateTime eventTime;
-    private long eventId;
+    
+    /** Event id, as generated and added by the hashcode of this method.
+     * Not to be used in computation of the hash or equals methods.
+     */
+    private int eventId;
     private String serviceId;
     private String eventType;
     private String serviceHost;
@@ -171,11 +180,11 @@ public class Event {
 	return resourceIdCategory;
     }
 
-    public void setEventId(long eventId) {
+    public void setEventId(int eventId) {
         this.eventId = eventId;
     }
 
-    public long getEventId() {
+    public int getEventId() {
         return eventId;
     }
 

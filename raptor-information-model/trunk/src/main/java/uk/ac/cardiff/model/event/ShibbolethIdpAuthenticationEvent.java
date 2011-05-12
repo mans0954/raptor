@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
 
@@ -17,6 +20,7 @@ import uk.ac.cardiff.utility.HashCodeUtil;
  *
  */
 public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
+
 
 	private String requestId;
 	private String messageProfileId;
@@ -143,7 +147,6 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	      EqualsUtil.areEqual(this.getResponseId(), that.getResponseId()) &&
 	      EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) &&
 	      EqualsUtil.areEqual(this.getEventType(), that.getEventType()) &&
-	      EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
 	      EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) &&
 	      Arrays.equals(this.getAssertionId(), that.getAssertionId()) &&
 	      Arrays.equals(this.getReleasedAttributes(), that.getReleasedAttributes());
@@ -190,11 +193,9 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	    hash = HashCodeUtil.hash(hash,getNameIdentifier());
 	    hash = HashCodeUtil.hash(hash,getResponseId());
 	    hash = HashCodeUtil.hash(hash,getAssertionId());
-	    hash = HashCodeUtil.hash(hash,getEventId());
 	    hash = HashCodeUtil.hash(hash,getEventType());
 	    hash = HashCodeUtil.hash(hash,getServiceId());
 	    hash = HashCodeUtil.hash(hash,getResourceId());
-
 	    return hash;
 
 	}

@@ -91,7 +91,6 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
         hash = HashCodeUtil.hash(hash,getSessionId());
         hash = HashCodeUtil.hash(hash,getResourceHost());
         hash = HashCodeUtil.hash(hash,getPrincipalName());
-        hash = HashCodeUtil.hash(hash,getEventId());
         hash = HashCodeUtil.hash(hash,getEventType());
         hash = HashCodeUtil.hash(hash,getServiceId());
         hash = HashCodeUtil.hash(hash,getResourceId());
@@ -133,7 +132,6 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
           EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
           EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) &&
           EqualsUtil.areEqual(this.getEventType(), that.getEventType()) &&
-          EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
           EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) &&
           EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName());
 
