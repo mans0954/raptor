@@ -534,12 +534,12 @@ public class ReflectionHelper {
     /**
      * @param event
      */
-    public static Integer getHashCodeFromEventOrNull(Event event) {
+    public static int getHashCodeFromEventOrNull(Event event) {
         try {
-                int hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+                int hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event));
                 return hashcode;
         } catch (Exception e) {
-            return null;
+            return 0;
         }
 
     }

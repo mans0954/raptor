@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.registry.EventReleaseEngine;
+import uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine;
 
 /**
  * This class combines both the number of events needed before release (
