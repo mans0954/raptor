@@ -40,7 +40,7 @@
                             <ref bean="entryNoElapsedTimePushPolicy"></ref>
                         </list>
                     </property>
-                    <property name="attributeFilterPolicy"><ref bean="hashPrincipleFilterPolicy"></ref></property>
+                    <!-- <property name="attributeFilterPolicy"><ref bean="hashPrincipleFilterPolicy"></ref></property>-->
                 </bean>
 
                 <bean id="cardiffRaptorMUA-Second" class="uk.ac.cardiff.raptor.registry.Endpoint">

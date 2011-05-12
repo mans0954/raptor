@@ -2,7 +2,7 @@
 
 <configuration>
 
-   <property name="USER_HOME" value="/tmp/" />
+   <property name="LOG_HOME" value="/tmp/" />
 
   <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
