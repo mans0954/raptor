@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package uk.ac.cardiff.raptor.registry;
 
 import java.util.HashSet;
@@ -9,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 public class ReleaseInformation {
 
@@ -22,10 +38,10 @@ public class ReleaseInformation {
 	private DateTime lastReleasedEventTime;
 
 	/**
-	 * Stores the set of latest unique entries. That is, those with the latest
+	 * Stores a set of the latest equal entries hashcodes. That is, those with the latest
 	 * and same DateTime, but different state (attribute values).
 	 */
-	private Set<Event> latestEqualEntries;
+	private Set<Integer> latestEqualEntries;
 
 	/**
 	 * This field is the primary key of this releaseInformation instance
@@ -39,7 +55,7 @@ public class ReleaseInformation {
 	 * Default constructor. Instantiate <code>latestEqualEntries</code>
 	 */
 	public ReleaseInformation(){
-	    latestEqualEntries = new HashSet<Event>();
+	    latestEqualEntries = new HashSet<Integer>();
 
 	}
 
@@ -60,10 +76,22 @@ public class ReleaseInformation {
                         if (event.getEventTime().isAfter(lastReleasedEventTime)){
                                 lastReleasedEventTime = event.getEventTime();
                                 latestEqualEntries.clear();
-                                latestEqualEntries.add(event);
+                                int hashcode = 0;
+                                try {
+                                        hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+                                } catch (Exception e) {
+                                    log.error("Could not get hashcode for event {}", event);
+                                }
+                                latestEqualEntries.add(hashcode);
                         }
                         else if (event.getEventTime().isEqual(lastReleasedEventTime)){
-                            latestEqualEntries.add(event);
+                            int hashcode = 0;
+                            try {
+                                    hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+                            } catch (Exception e) {
+                                log.error("Could not get hashcode for event {}", event);
+                            }
+                            latestEqualEntries.add(hashcode);
                         }
                 }
         }
@@ -89,7 +117,13 @@ public class ReleaseInformation {
             return true;
 
         else if (event.getEventTime().isEqual(getLastReleasedEventTime())){
-            return !latestEqualEntries.contains(event);
+            int hashcode = 0;
+            try {
+                    hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+            } catch (Exception e) {
+                log.error("Could not get hashcode for event {}, event not stored", event);
+            }
+            return !latestEqualEntries.contains(hashcode);
         }
 
         return false;
@@ -116,14 +150,14 @@ public class ReleaseInformation {
     /**
      * @param latestEqualEntries the latestEqualEntries to set
      */
-    public void setLatestEqualEntries(Set<Event> latestEqualEntries) {
+    public void setLatestEqualEntries(Set<Integer> latestEqualEntries) {
             this.latestEqualEntries = latestEqualEntries;
     }
 
     /**
      * @return the latestEqualEntries
      */
-    public Set<Event> getLatestEqualEntries() {
+    public Set<Integer> getLatestEqualEntries() {
             return latestEqualEntries;
     }
 

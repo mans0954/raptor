@@ -34,7 +34,24 @@ public abstract class AttributeRule {
     private MatchRule permitValueRule;
     private MatchRule denyValueRule;
 
+    /** The class type that this attribute rule is defined for*/
+    private Class<?> eventType;
+
     public abstract void filterAttribute(Event event, ServiceMetadata metadata) throws AttributeFilterException;
+
+
+    /**
+     * @return true if this attribute rule is enabled, and should be applied to the input class type.
+     */
+    public boolean shouldApply(Class<?> eventType) {
+        boolean enabled = getDenyValueRule().isEnabled();
+        boolean classEquivelent = (this.eventType==eventType);
+        if (enabled && classEquivelent){
+            return true;
+        }
+        return false;
+
+    }
 
     protected void nullAttribute(Event event, String attributeID) {
         ReflectionHelper.nullAttribute(event, attributeID);
@@ -65,6 +82,21 @@ public abstract class AttributeRule {
     public MatchRule getDenyValueRule() {
         return denyValueRule;
     }
+
+    /**
+     * @param eventType the eventType to set
+     */
+    public void setEventType(Class<?> eventType) {
+        this.eventType = eventType;
+    }
+
+    /**
+     * @return the eventType
+     */
+    public Class<?> getEventType() {
+        return eventType;
+    }
+
 
 
 }

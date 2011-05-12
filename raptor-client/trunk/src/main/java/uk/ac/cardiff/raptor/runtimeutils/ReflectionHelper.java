@@ -531,5 +531,18 @@ public class ReflectionHelper {
         return result;
     }
 
+    /**
+     * @param event
+     */
+    public static Integer getHashCodeFromEventOrNull(Event event) {
+        try {
+                int hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+                return hashcode;
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
 
 }

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
+import org.jaxen.function.LastFunction;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
@@ -128,33 +130,33 @@ public class PersistantEntryHandler implements EntryHandler {
 		Set<Event> persist = new HashSet<Event>();
 
 		for (Event event : persistQueue) {
-			int hashcode = 0;
-			try {
-				hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
-			} catch (Exception e) {
+		        Integer hashcodeInteger =  ReflectionHelper.getHashCodeFromEventOrNull(event);
+			if (hashcodeInteger==null){
 			    log.error("Could not get hashcode for event {}, event not stored", event);
 			    continue;
 			}
-			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = '"+event.getEventTime()+"' and hashCode =?";
-			Object[] parameters= new Object[]{hashcode};
-			//int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
-			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
-                                     + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'", null)).intValue();
+			int hashcode = hashcodeInteger.intValue();
+			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and hashCode =?";
+			Object[] parameters= new Object[]{event.getEventTime().toDate(),hashcode};
+			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
+//			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
+//                                     + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'", null)).intValue();
 
 			if (numberOfDuplicates == 0){
-			    log.debug("dups [{}], params {} ",numberOfDuplicates, "select count(*) from " + event.getClass().getSimpleName()
-                                    + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'");
-			    Date local = new Date(event.getEventTime().getMillis());
-			    DateTime newTime = new DateTime(local);
-			    log.debug("Before: {} [{}] Local:{} [{}], back {} [{}]",new Object[]
-			            {event.getEventTime(),event.getEventTime().getMillis(), local, local.getTime(), newTime, newTime.getMillis()});
+			    //log.debug("dups [{}], params {} ",numberOfDuplicates, "select count(*) from " + event.getClass().getSimpleName()
+                            //        + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'");
+			    //Date local = new Date(event.getEventTime().getMillis());
+			   // DateTime newTime = new DateTime(local);
+			   // log.debug("Before: {} [{}] Local:{} [{}], back {} [{}]",new Object[]
+			    //        {event.getEventTime(),event.getEventTime().getMillis(), local, local.getTime(), newTime, newTime.getMillis()});
 			    persist.add(event);
 			}
 			else{
 			    duplicates++;
 			}
 		}
-
+		log.debug("After both internal (from the list of events send) and external (from the store) duplicate checking" +
+				"there are {} events left to persit",persist.size());
 		try{
 		    dataConnection.saveAll(persist);
 		}
@@ -217,9 +219,14 @@ public class PersistantEntryHandler implements EntryHandler {
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
 
-	//TODO Implementation does not work
-	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Event> latestEqualEntries) {
-		dataConnection.runQueryUnique("delete from Event where eventTime <= ?", new Object[]{earliestReleaseTime.toDate()});
+	//TODO Implementation may not work - PLEASE DO USE
+	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
+		dataConnection.runQueryUnique("delete from Event where eventTime < ?", new Object[]{earliestReleaseTime.toDate()});
+		for (Iterator<Integer> entries = latestEqualEntries.iterator();entries.hasNext();){
+		    Integer hash = entries.next();
+		    dataConnection.runQueryUnique("delete from Event where hashCode = ?", new Object[]{hash});
+		}
+
 
 	}
 

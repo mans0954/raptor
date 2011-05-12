@@ -95,4 +95,8 @@ public class EventReleaseClientImpl implements EventReleaseClient {
 		return enableEventRelease;
 	}
 
+	public boolean isEnabled(){
+	    return isEnableEventRelease();
+	}
+
 }

@@ -24,11 +24,13 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 
 import org.joda.time.DateTime;
@@ -101,16 +103,23 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 
 	}
 
-	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Event> latestEqualEntries) {
+	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
 	                log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)",earliestReleaseTime,
 	                        latestEqualEntries.size());
 			ArrayList<Event> toRemove = new ArrayList<Event>();
 			for (Event event : entries){
 				if (event.getEventTime().isBefore(earliestReleaseTime))
 						toRemove.add(event);
-				if (event.getEventTime().isEqual(earliestReleaseTime) && latestEqualEntries.contains(event)){
-
-				    toRemove.add(event);
+				if (event.getEventTime().isEqual(earliestReleaseTime)){
+				    int hashcode = 0;
+                                    try {
+                                            hashcode = ((Integer) ReflectionHelper.getValueFromObject("hashCode", event)).intValue();
+                                    } catch (Exception e) {
+                                        log.error("Could not get hashcode for event {}", event);
+                                    }
+                                    if (latestEqualEntries.contains(hashcode)){
+                                        toRemove.add(event);
+                                    }
 				}
 			}
 			entries.removeAll(toRemove);

@@ -31,7 +31,7 @@ public class ReflectionHelperTest {
 			System.out.println("ShibbolethEntry = "+classForField);
 			equals(classForField.equals("ShibbolethIdpAuthenticationEvent"));
 
-			classForField = ReflectionHelper.findEntrySubclassForMethod("serviceHost");
+			classForField = ReflectionHelper.findEntrySubclassForMethod("serviceId");
 			System.out.println("Event = "+classForField);
 			equals(classForField.equals("Event"));
 

@@ -42,14 +42,17 @@ public interface EventReleaseClient {
      * @throws ReleaseFailureException
      */
 	public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException;
-	
+
 	/** All concrete implementations of the <code>EventReleaseClient</code> must
 	 * provide a way of accessing the list of endpoints it is communicating with
-	 * 
+	 *
 	 * @return a list of endpoints
 	 */
 	public List<Endpoint> getEndpoints();
-	
+
+	/** Used to determine if the event release client has been enabled*/
+	public boolean isEnabled();
+
 
 
 }
