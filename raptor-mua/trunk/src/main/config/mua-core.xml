@@ -98,7 +98,7 @@
 
 
 
-    <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.registry.EventReleaseEngine">
+    <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine">
         <property name="attributeFilterEngine"><ref bean="attributeFilterEngine"/></property>
         <property name="serviceEndpointInterface"><ref bean="serviceEndpointInterface"/></property>
     </bean>
