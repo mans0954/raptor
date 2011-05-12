@@ -13,7 +13,7 @@ import uk.ac.cardiff.raptorweb.model.MUAEntry;
 
 /**
  * @author philsmart
- * 
+ *
  */
 public class MUARegistry {
 
@@ -34,7 +34,7 @@ public class MUARegistry {
         this.MUAEntries = MUAEntries;
     }
 
-    public List<MUAEntry> getUAEntries() {
+    public List<MUAEntry> getMUAEntries() {
         return MUAEntries;
     }
 }

@@ -60,7 +60,6 @@ public class RaptorWebEngine {
      * @param serviceEndpointClient
      */
     private RaptorWebEngine(ServiceEndpointClient serviceEndpointClient){
-	//TODO initialise all values after spring bean creation,
 	this.serviceEndpointClient = serviceEndpointClient;
     }
 
@@ -68,13 +67,12 @@ public class RaptorWebEngine {
      * @return
      */
     public List getAttached() {
-
-	return registry.getUAEntries();
+	return registry.getMUAEntries();
     }
 
     public void setRegistry(MUARegistry registry) {
 	this.registry = registry;
-	for (MUAEntry entry : registry.getUAEntries()){
+	for (MUAEntry entry : registry.getMUAEntries()){
 	    if (entry.getIsAttached()) setAttached(entry);
 	}
     }
@@ -113,7 +111,7 @@ public class RaptorWebEngine {
 	    if (attachedMUA!=null){
 		attached =attachedMUA;
 	    }
-	    for (MUAEntry entry : registry.getUAEntries()) {
+	    for (MUAEntry entry : registry.getMUAEntries()) {
 		if (entry.getIsAttached()) {
 		    attached = entry;
 		}
@@ -141,7 +139,7 @@ public class RaptorWebEngine {
     }
 
     public MUAEntry getCurrentlyAttached() {
-	for (MUAEntry entry : registry.getUAEntries()) {
+	for (MUAEntry entry : registry.getMUAEntries()) {
 	    if (entry.getIsAttached()) {
 		return entry;
 	    }
