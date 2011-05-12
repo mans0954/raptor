@@ -101,7 +101,7 @@ public class EventReleaseEngine {
      * @param applicableEvents
      * @return
      */
-    private List<Event> eventTypeFilter(Endpoint endpoint, List<Event> applicableEvents) {
+    private List<Event> eventTypeFilter(Endpoint endpoint, List<Event> events) {
         ArrayList<Event> applicableEvents = new ArrayList<Event>();
 
         return applicableEvents;
