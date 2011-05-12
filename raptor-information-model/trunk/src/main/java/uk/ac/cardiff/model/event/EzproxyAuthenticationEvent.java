@@ -17,15 +17,22 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 
     private String requesterIp;
     private String sessionId;
-    
+
     public EzproxyAuthenticationEvent(){
         super();
     }
-    
-    public EzproxyAuthenticationEvent(EzproxyAuthenticationEvent event){
+
+    protected EzproxyAuthenticationEvent(EzproxyAuthenticationEvent event){
         super(event);
         this.requesterIp = event.getRequesterIp();
         this.sessionId = event.getSessionId();
+    }
+
+    /**
+     * Copy method. Alternative to clone.
+     */
+    public EzproxyAuthenticationEvent copy(){
+        return new EzproxyAuthenticationEvent(this);
     }
 
     public void setRequesterIp(String requesterIp) {

@@ -67,7 +67,6 @@
 		name="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent" >
 
 
-		<property name="requestPath" column="requestPath" type="string" />
 		<property name="requestId" column="requestID" type="string" />
 		<property name="messageProfileId" column="messageProfileId"
 			type="string" />

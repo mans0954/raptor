@@ -18,7 +18,6 @@ import uk.ac.cardiff.utility.HashCodeUtil;
  */
 public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 
-	private String requestPath;
 	private String requestId;
 	private String messageProfileId;
 	private String responseBinding;
@@ -28,41 +27,40 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	private String[] assertionId;
 	private String[] releasedAttributes;
 
-	
+
 	public ShibbolethIdpAuthenticationEvent(){
 	    super();
 	}
-	
+
 	public static ShibbolethIdpAuthenticationEvent newInstance() {
 	    return new ShibbolethIdpAuthenticationEvent();
 	  }
 
-	/** 
-	 * Copy constructor 
-	 * 
+	/**
+	 * Copy constructor
+	 *
 	 * @param event
 	 */
-	public ShibbolethIdpAuthenticationEvent(ShibbolethIdpAuthenticationEvent event){
+	protected ShibbolethIdpAuthenticationEvent(ShibbolethIdpAuthenticationEvent event){
 	    super (event);
-	    this.requestPath = event.getRequestPath();
 	    this.requestId = event.getRequestId();
 	    this.messageProfileId = event.getMessageProfileId();
 	    this.responseBinding = event.getResponseBinding();
 	    this.responseId = event.getResponseId();
 	    this.requestBinding = event.getRequestBinding();
 	    this.nameIdentifier = event.getNameIdentifier();
-	    
+
 	    //shallow copy is OK here, as a new array is created with immutable objects (String).
 	    this.assertionId = event.getAssertionId().clone();
 	    this.releasedAttributes = event.getReleasedAttributes().clone();
 	}
 
-	public void setRequestPath(String requestPath) {
-		this.requestPath = requestPath;
-	}
-	public String getRequestPath() {
-		return requestPath;
-	}
+	    /**
+	     * Copy method. Alternative to clone.
+	     */
+	 public ShibbolethIdpAuthenticationEvent copy(){
+	      return new ShibbolethIdpAuthenticationEvent(this);
+	 }
 
 	public void setResponseBinding(String responseBinding) {
 		this.responseBinding = responseBinding;
@@ -136,7 +134,6 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	      EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
 	      EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
 	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
-	      EqualsUtil.areEqual(this.getRequestPath(), that.getRequestPath()) &&
 	      EqualsUtil.areEqual(this.getResponseBinding(), that.getResponseBinding()) &&
 	      EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
 	      EqualsUtil.areEqual(this.getMessageProfileId(), that.getMessageProfileId()) &&
@@ -184,7 +181,6 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	    hash = HashCodeUtil.hash(hash,getAuthenticationType());
 	    hash = HashCodeUtil.hash(hash,getServiceHost());
 	    hash = HashCodeUtil.hash(hash,getRequestId());
-	    hash = HashCodeUtil.hash(hash,getRequestPath());
 	    hash = HashCodeUtil.hash(hash,getResponseBinding());
 	    hash = HashCodeUtil.hash(hash,getResourceHost());
 	    hash = HashCodeUtil.hash(hash,getReleasedAttributes());

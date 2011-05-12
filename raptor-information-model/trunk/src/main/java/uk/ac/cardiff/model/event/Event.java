@@ -43,11 +43,11 @@ public class Event {
     /** User defined category for this event for this resourceId, e.g. internal resource or external resource*/
     private int resourceIdCategory;
 
-    
+
     public Event(){
-        
+
     }
-    
+
     /** A Copy constructor */
     public Event(Event event){
         //this has a defensive getter, so a direct assignment is possible
@@ -60,12 +60,16 @@ public class Event {
         this.resourceId = event.getResourceId();
         this.resourceIdCategory = event.getResourceIdCategory();
     }
-    
+
+    public Event copy(){
+        return new Event(this);
+    }
+
     public static Event newInstance() {
         return new Event();
       }
-    
-    
+
+
     public void setEventTime(DateTime eventTime) {
 	this.eventTime = eventTime;
     }
@@ -182,7 +186,7 @@ public class Event {
     public String getServiceId() {
         return serviceId;
     }
-    
+
 
     public String toString() {
         return getClass().getName()+"@[" + this.getEventTime() + "," + this.getServiceHost() + "," + this.getResourceHost() + "]";

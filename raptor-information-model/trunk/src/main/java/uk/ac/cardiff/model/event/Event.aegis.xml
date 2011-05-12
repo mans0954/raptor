@@ -6,5 +6,6 @@ property using the getDate and setDate methods -->
 	<mapping>
 		<property name="eventTime" ignore="true"/>
 		<property name="persistantId" ignore="true"/>
+		<property name="eventTimeMillis" ignore="true"/>
 	</mapping>
 </mappings>
