@@ -58,6 +58,9 @@ public class Endpoint {
 	/** Information about what information has been released to this endpoint */
 	private ReleaseInformation releaseInformation;
 
+	/** Which event types can be sent to this endpoint */
+	private Class<?>[] supportedEvents;
+
 
 	/**
 	 * Default constructor. Instantiate <code>releaseInformation</code>
@@ -117,6 +120,22 @@ public class Endpoint {
 	public void setReleaseInformation(ReleaseInformation releaseInformation) {
 		this.releaseInformation = releaseInformation;
 	}
+
+
+    /**
+     * @param supportedEvents the supportedEvents to set
+     */
+    public void setSupportedEvents(Class<?>[] supportedEvents) {
+        this.supportedEvents = supportedEvents;
+    }
+
+
+    /**
+     * @return the supportedEvents
+     */
+    public Class<?>[] getSupportedEvents() {
+        return supportedEvents;
+    }
 
 
 
