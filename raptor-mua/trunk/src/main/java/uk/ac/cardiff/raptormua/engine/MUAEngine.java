@@ -81,10 +81,14 @@ public class MUAEngine {
 	/** Used to parse batch uploads. */
 	private DataAccessRegister dataAccessRegister;
 
-	private final int MAX_RELEASE_EVENT_SET_SIZE=15;
+	/** The Maximum number of events that can be released (e.g. to another MUA)
+	 * at any one time.
+	 */
+	private int maxReleaseEventSize;
 
 	public MUAEngine() {
 		log.info("Setup Multi-Unit Aggregator Engine...");
+		maxReleaseEventSize=100;
 		log.info("Mulit-Unit Aggregator Engine is running...");
 	}
 
@@ -122,34 +126,37 @@ public class MUAEngine {
 	     * @return
 	     */
 	 public final boolean release() {
-	     List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
-	     DateTime earliestReleaseTime = null;
-             Endpoint endpointWithEarliestReleaseTime=null;
-             for (Endpoint endpoint :endpoints){
-                     if (earliestReleaseTime==null){
-                             earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
-                             endpointWithEarliestReleaseTime = endpoint;
+	     if (eventReleaseClient.isEnabled()){
+        	     List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
+        	     DateTime earliestReleaseTime = null;
+                     Endpoint endpointWithEarliestReleaseTime=null;
+                     for (Endpoint endpoint :endpoints){
+                             if (earliestReleaseTime==null){
+                                     earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                                     endpointWithEarliestReleaseTime = endpoint;
+                             }
+                             if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)){
+                                     earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                                     endpointWithEarliestReleaseTime = endpoint;
+                             }
                      }
-                     if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)){
-                             earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
-                             endpointWithEarliestReleaseTime = endpoint;
-                     }
-             }
 
-	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime,MAX_RELEASE_EVENT_SET_SIZE);
+        	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime,maxReleaseEventSize);
 
 
-//	        for (Event e : eventsToSend){
-//	            log.debug("EventTime [{}] - {}",e.getEventTime(),e);
-//	        }
+        	        for (Event e : eventsToSend){
+        	            log.debug("EventTime [{}] - {}",e.getEventTime(),e);
+        	        }
 
-	        boolean success = false;
-	        try {
-	                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
-	        } catch (ReleaseFailureException e) {
-	                log.error("Event Release failed ", e);
-	        }
-	        return success;
+        	        boolean success = false;
+        	        try {
+        	                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
+        	        } catch (ReleaseFailureException e) {
+        	                log.error("Event Release failed ", e);
+        	        }
+        	        return success;
+	     }
+	     return false;
 	}
 
 
@@ -326,5 +333,25 @@ public class MUAEngine {
 	public final DataAccessRegister getDataAccessRegister() {
 		return dataAccessRegister;
 	}
+
+    /**
+     * @param maxReleaseEventSize the maxReleaseEventSize to set
+     */
+    public void setMaxReleaseEventSize(int maxReleaseEventSize) {
+        if (maxReleaseEventSize>3000){
+            log.warn("Max Release Event size can not be set higher than 3000, defaulting to 3000");
+            this.maxReleaseEventSize=3000;
+        }
+        else{
+            this.maxReleaseEventSize = maxReleaseEventSize;
+        }
+    }
+
+    /**
+     * @return the maxReleaseEventSize
+     */
+    public int getMaxReleaseEventSize() {
+        return maxReleaseEventSize;
+    }
 
 }

@@ -16,26 +16,19 @@
     limitations under the License.
 
 -->
-
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- NOT USED AT PRESENT -->
 
-	<bean id="raptorUsers" class=" uk.ac.cardiff.raptormua.model.Users">
-		<property name="raptorUsers">
-			<list>
-				<ref local="systemUser"/>
-			</list>
-		</property>
-
-	</bean>
-
-	<bean id="systemUser" class="uk.ac.cardiff.raptormua.model.RaptorUser">
-		<property name="username"><value>philsmart</value></property>
-	</bean>
-
+        <!-- MUA Metadata -->
+    <bean id="MUAMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
+        <property name="serviceName"><value>Cardiff University's MUA</value></property>
+        <property name="description"><value>Cardiff University's MUA</value></property>
+        <property name="organisationName"><value>Cardiff University</value></property>
+        <property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
+        <property name="entityId"><value>https://HOSTNAME/raptor-mua</value></property>
+    </bean>
 
 </beans>

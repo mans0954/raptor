@@ -93,6 +93,7 @@
 		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
+		<property name="maxReleaseEventSize"><value>2000</value></property> <!-- Max Size is 3000 -->
 	</bean>
 
 
@@ -104,15 +105,6 @@
 
     <bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine"/>
 
-
-	<!-- MUA Metadata -->
-	<bean id="MUAMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
-		<property name="serviceName"><value>Cardiff University's MUA</value></property>
-        <property name="description"><value>Cardiff University's MUA</value></property>
-		<property name="organisationName"><value>Cardiff University</value></property>
-		<property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
-		<property name="entityId"><value>https://HOSTNAME/raptor-mua</value></property>
-	</bean>
 
 	<!-- release trigger setup -->
     <bean id="muaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
@@ -158,11 +150,12 @@
 
 	<!--  Load all other bean definitions -->
 
-	  <import resource="dao-beans.xml"/>
+	  <import resource="database.xml"/>
+	  <import resource="metadata.xml"/>
 	  <import resource="statistical-units.xml" />
 	  <import resource="event-release.xml"/>
 	  <import resource="users.xml" />
 	  <import resource="attribute-association.xml"/>
-	  <import resource="batch-parser.xml"/>
+	  <import resource="batch-event-parse.xml"/>
 
 </beans>
