@@ -63,6 +63,7 @@ public class EventReleaseEngine {
 		int releaseCount = 0;
 		for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
 			List<Event> applicableEvents = chronologicalFilter(endpoint, events);
+			applicableEvents = eventTypeFilter(endpoint,applicableEvents);
 			boolean shouldRelease = shouldRelease(endpoint,applicableEvents);
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
 			if (shouldRelease) {
@@ -94,6 +95,21 @@ public class EventReleaseEngine {
 	}
 
 	/**
+     * Method that returns those events that are supported by the <code>endpoint</code parameter.
+     *
+     * @param endpoint
+     * @param applicableEvents
+     * @return
+     */
+    private List<Event> eventTypeFilter(Endpoint endpoint, List<Event> applicableEvents) {
+        ArrayList<Event> applicableEvents = new ArrayList<Event>();
+
+        return applicableEvents;
+    }
+
+
+
+    /**
 	 * Filters the input list of events (<code>events</code>) such that only those that are after (chronological)
 	 * the <code>latestPublishedEventTime</code> of the input <code>Endpoint</code> remain
 	 *
