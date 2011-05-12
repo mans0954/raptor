@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
-import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
@@ -91,8 +90,7 @@ public class MUAProcessImpl implements MUAProcess {
                 engine.release();
 
             } catch (Exception e) {
-                log.error(e.getMessage());
-                e.printStackTrace();
+                log.error("Error trying to release events {}",e.getMessage());
             } finally {
                 lockR.unlock();
             }
@@ -116,6 +114,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (Exception e) {
                 log.error("{}", e);
+                success=false;
             } finally {
                 lockR.unlock();
             }
@@ -158,6 +157,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (Exception e) {
                 log.error("Error trying to add authentications to this MUA", e);
+                success=false;
 
             } finally {
                 lockR.unlock();
@@ -208,6 +208,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (TransactionInProgressException e) {
                 log.error("Could not parse and store batch upload {}", e.getMessage());
+                success=false;
 
             } finally {
                 lockR.unlock();

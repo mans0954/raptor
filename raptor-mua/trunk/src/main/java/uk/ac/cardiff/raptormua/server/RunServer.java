@@ -73,7 +73,7 @@ public class RunServer {
 		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 
-		configureLogger(configurationFiles+"/logback.xml");
+		configureLogger(configurationFiles+"/logging.xml");
 
 		Properties props = new Properties();
 		props.load(new FileInputStream(configurationFiles + "/server.properties"));
@@ -81,7 +81,7 @@ public class RunServer {
 		int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8443"));
 		String keyStoreLocaion = props.getProperty("jetty.keyStoreLocation", "");
 		String keyStorePassword = props.getProperty("jetty.keyStorePassword", "changeit");
-		String trustStoreLocaion = props.getProperty("jetty.trustStoreLocaion", "");
+		String trustStoreLocaion = props.getProperty("jetty.trustStoreLocation", "");
 		String trustStorePassword = props.getProperty("jetty.trustStorePassword", "changeit");
 		String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/MUA");
 

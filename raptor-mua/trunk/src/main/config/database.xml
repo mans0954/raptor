@@ -9,10 +9,8 @@
 	governing permissions and limitations under the License. -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
-	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
 	<!-- HIBERNATE DAO -->
@@ -26,8 +24,7 @@
 				 <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>
 			<!--<prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop>
 				--><prop key="hibernate.show_sql">false</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
-
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 		<!-- OR mapping files. -->
@@ -47,7 +44,7 @@
             <value>org.postgresql.Driver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:postgresql://localhost/mua</value>
+            <value>jdbc:postgresql://localhost/mua2</value>
         </property>
         <property name="user">
             <value>postgres</value>
