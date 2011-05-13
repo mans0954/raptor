@@ -37,6 +37,7 @@ import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
+import uk.ac.cardiff.raptormua.engine.BackgroundServices;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
@@ -52,21 +53,18 @@ public class MUAProcessImpl implements MUAProcess {
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
-    /** main engine of the MultiUnitAggregator */
+    /** main engine of the MultiUnitAggregator, that handles all
+     * common functions */
     private MUAEngine engine;
+
+    /** Engine to handle background tasks */
+    private BackgroundServices backgroundServices;
 
     /**
      * ReentrantLock to prevent more than one operation at the same time
      */
     final Lock lockR = new ReentrantLock();
 
-    public void setEngine(MUAEngine engine) {
-        this.engine = engine;
-    }
-
-    public MUAEngine getEngine() {
-        return engine;
-    }
 
     public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
         if (lockR.tryLock()) {
@@ -224,6 +222,33 @@ public class MUAProcessImpl implements MUAProcess {
         return result;
 
 
+    }
+
+    public void resourceClassification(){
+          log.info("Resource classification background thread called");
+          backgroundServices.resourceClassification();
+    }
+
+    /**
+     * @param backgroundServices the backgroundServices to set
+     */
+    public void setBackgroundServices(BackgroundServices backgroundServices) {
+        this.backgroundServices = backgroundServices;
+    }
+
+    /**
+     * @return the backgroundServices
+     */
+    public BackgroundServices getBackgroundServices() {
+        return backgroundServices;
+    }
+
+    public void setEngine(MUAEngine engine) {
+        this.engine = engine;
+    }
+
+    public MUAEngine getEngine() {
+        return engine;
     }
 
 }

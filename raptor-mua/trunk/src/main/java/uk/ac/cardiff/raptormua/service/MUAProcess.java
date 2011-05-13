@@ -76,4 +76,7 @@ public interface MUAProcess {
 	 *
 	 */
 	public void release();
+
+
+	public void resourceClassification();
 }

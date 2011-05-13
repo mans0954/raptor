@@ -13,15 +13,24 @@
     <bean id="attributeAssociationEngine" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine">
         <property name="attributeAssociationDefinitions">
             <list>
-                <ref bean="shibAttributeAssociationDefinition"/>
-                <ref bean="ezproxyAttributeAssociationDefinition"/>
+                <ref bean="shibPrincipalAttributeAssociationDefinition"/>
+                <ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>
              </list>
         </property>
     </bean>
 
+    <!-- Association policies to mark resources as internal or external -->
+    <bean id="shibResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
+        <property name="definiationName"><value>ShibAssociationDefinition</value></property>
+        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
+    </bean>
+
 
     <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->
-    <bean id="shibAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
+    <bean id="shibPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
         <property name="definiationName"><value>ShibAssociationDefinition</value></property>
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
@@ -44,7 +53,7 @@
         </property>
     </bean>
 
-    <bean id="ezproxyAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationDefinition">
+    <bean id="ezproxyPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
         <property name="definiationName"><value>EzproxyAssociationDefinition</value></property>
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>

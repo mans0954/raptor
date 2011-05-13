@@ -72,6 +72,12 @@
 		<property name="endpoints">
 			<list>
 				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
+					<property name="supportedEvents">
+						<list>
+							<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+							</value>
+						</list>
+					</property>
 					<property name="serviceEndpoint">
 						<value>https://localhost:8443/MUA/MultiUnitAggregator</value>
 					</property>
@@ -109,54 +115,55 @@
 		</property>
 		<property name="attributeRules">
 			<list>
-				<bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
-					<property name="attributeId">
-						<value>assertionId</value>
-					</property>
-					<property name="eventType">
-						<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
-						</value>
-					</property>
-					<property name="denyValueRule">
-						<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
-							<property name="enabled">
-								<value>true</value>
-							</property>
-						</bean>
-					</property>
-				</bean>
-				<bean class="uk.ac.cardiff.raptor.attribute.filtering.HashAttributeRule">
-					<property name="attributeId">
-						<value>requestId</value>
-					</property>
-					<property name="eventType">
-						<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
-						</value>
-					</property>
-					<property name="denyValueRule">
-						<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
-							<property name="enabled">
-								<value>true</value>
-							</property>
-						</bean>
-					</property>
-				</bean>
-				<bean class="uk.ac.cardiff.raptor.attribute.filtering.HashAttributeRule">
-					<property name="attributeId">
-						<value>responseId</value>
-					</property>
-					<property name="eventType">
-						<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
-						</value>
-					</property>
-					<property name="denyValueRule">
-						<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
-							<property name="enabled">
-								<value>true</value>
-							</property>
-						</bean>
-					</property>
-				</bean>
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>assertionId</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>requestId</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>responseId</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
 
 				<bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
 					<property name="attributeId">
