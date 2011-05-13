@@ -20,6 +20,8 @@ package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.event.auxiliary.EventMetadata;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 
 /**
@@ -70,6 +73,7 @@ public class EventReleaseEngine {
 			log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
 			if (shouldRelease) {
 			        List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, applicableEvents);
+			        appendMetadata(filteredEntries,serviceMetadata);
 	                        EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
 				log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),endpoint.getServiceEndpoint());
 				boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage,endpoint);
@@ -79,7 +83,7 @@ public class EventReleaseEngine {
 				else if (releaseSuccess ==true){
 					releaseCount++;
 					/* Saves the state of the event before modification e.g. <code>applicableEvents</code>
-					 * not <code>applicableEvents</code> */
+					 * not <code>filteredEntries</code> */
 					endpoint.releasePerformed(applicableEvents);
 					log.debug("Endpoint [{}] has been sent events up to and including {}",endpoint.getServiceEndpoint(),
 							endpoint.getReleaseInformation().getLastReleasedEventTime());
@@ -96,6 +100,7 @@ public class EventReleaseEngine {
 
 	}
 
+
 	/**
      * Method that returns those events that are supported by the <code>endpoint</code parameter.
      *
@@ -104,12 +109,39 @@ public class EventReleaseEngine {
      * @return
      */
     private List<Event> eventTypeFilter(Endpoint endpoint, List<Event> events) {
-        ArrayList<Event> applicableEvents = new ArrayList<Event>();
+        if (endpoint.getSupportedEvents()==null){
+            log.info("There are 0 events to send to the endpoint [{}] after event type filtering. Has the endpoint been set" +
+            		" with the correct supported event types?",endpoint.getServiceEndpoint());
+            return new ArrayList<Event>();
+        }
 
-        return events;
+        ArrayList<Event> applicableEvents = new ArrayList<Event>();
+        for (Event event : events){
+            boolean supported = false;
+            for (Class<?> supportedClass : endpoint.getSupportedEvents()){
+                if (event.getClass()==supportedClass){
+                    supported = true;
+                }
+            }
+            if (supported){
+                applicableEvents.add(event);
+            }
+
+        }
+        log.info("There are {} events to send to the endpoint [{}] after event type filtering",applicableEvents.size(),endpoint.getServiceEndpoint());
+        return applicableEvents;
     }
 
 
+    private void appendMetadata(List<Event> events, ServiceMetadata metadata){
+        for (Event event : events){
+            EventMetadata eventMetadata = new EventMetadata();
+            eventMetadata.setEntityId(metadata.getEntityId());
+            eventMetadata.setServiceName(metadata.getServiceName());
+            eventMetadata.setOrganisationName(metadata.getOrganisationName());
+            event.setEventMetadata(eventMetadata);
+        }
+    }
 
     /**
 	 * Filters the input list of events (<code>events</code>) such that only those that are after (chronological)
