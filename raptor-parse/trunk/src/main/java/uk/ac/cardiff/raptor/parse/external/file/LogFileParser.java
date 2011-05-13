@@ -43,6 +43,8 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ibm.icu.text.SimpleDateFormat;
+
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.ParserException;
@@ -108,18 +110,21 @@ public class LogFileParser extends BaseEventParser {
 
 	@Override
 	public void parse() throws ParserException {
+	    String usedLogFile=null;
 	    try{
-	        log.info("parsing log file: {}", logfile);
-    	        URL logfileURL = new URL(logfile);
+	        DateTime todaysDate = new DateTime();
+	        usedLogFile = logfile.replace("DATE",todaysDate.toString("yyyymmdd"));
+	        log.info("parsing log file: {}", usedLogFile);
+    	        URL logfileURL = new URL(usedLogFile);
                 URLConnection logfileconnection = logfileURL.openConnection();
                 BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
                 int totalNoLines = count(logfileURL);
                 doParse(in, totalNoLines);
 	    }
 	    catch (MalformedURLException e1) {
-	        throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
+	        throw new ParserException("Could not find the source file [" + usedLogFile + "] for parsing", e1);
 	    } catch (IOException e2) {
-                throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
+                throw new ParserException("Could not read from the source file [" + usedLogFile + "] during parsing", e2);
 	    }
 
 	}
