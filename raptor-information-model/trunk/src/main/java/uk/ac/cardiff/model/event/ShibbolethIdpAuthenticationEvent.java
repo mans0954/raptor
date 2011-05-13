@@ -126,7 +126,6 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 		return builder.toString();
 	 }
 
-
 	@Override
 	public boolean equals(Object obj){
 	    if ( this == obj ) return true;
@@ -135,6 +134,7 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 	    ShibbolethIdpAuthenticationEvent that = (ShibbolethIdpAuthenticationEvent)obj;
 	    boolean areEqual =
 	      EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) &&
+	      EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
 	      EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
 	      EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
 	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
@@ -182,6 +182,7 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
 
 	    hash = HashCodeUtil.hash(hash,getEventTimeMillis());
 	    hash = HashCodeUtil.hash(hash,getAuthenticationType());
+	    hash = HashCodeUtil.hash(hash,getEventId());
 	    hash = HashCodeUtil.hash(hash,getServiceHost());
 	    hash = HashCodeUtil.hash(hash,getRequestId());
 	    hash = HashCodeUtil.hash(hash,getResponseBinding());

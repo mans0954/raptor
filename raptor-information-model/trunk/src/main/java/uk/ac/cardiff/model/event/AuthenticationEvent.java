@@ -29,7 +29,8 @@ public class AuthenticationEvent extends Event {
     private String authenticationType;
     private String principalName;
 
-    /** This is fixed to a principal expansion */
+    /** This is fixed to a principal expansion. Not used in
+     * Hash or Equality methods */
     private PrincipalInformation principalInformation;
 
 

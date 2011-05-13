@@ -22,23 +22,25 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 
+import uk.ac.cardiff.model.event.auxiliary.EventMetadata;
+
 /**
  * For any class that extends this class, equality must be computed for the
  * same fields as the hash. Otherwise a discrepancy will occur when checking
  * containment through object equality (e.g. set containment), and through hashcodes.
- * 
+ *
  * @author philsmart
  *
  */
 public class Event {
 
-    /** used if a persistant db primary key is required. Not to 
+    /** used if a persistant db primary key is required. Not to
      * be used in the computation of the hash or equals methods */
     private Long persistantId;
 
     /** attributes generic to all entries */
     private DateTime eventTime;
-    
+
     /** Event id, as generated and added by the hashcode of this method.
      * Not to be used in computation of the hash or equals methods.
      */
@@ -49,8 +51,14 @@ public class Event {
     private String resourceHost;
     private String resourceId;
 
-    /** User defined category for this event for this resourceId, e.g. internal resource or external resource*/
+    /** User defined category for this event for this resourceId, e.g. internal resource or external resource.
+     * 1 - Internal
+     * 2 - External*/
     private int resourceIdCategory;
+
+    /** Metadata about the service this event was generated from. Not used in
+     * Hash or Equality methods. */
+    private EventMetadata eventMetadata;
 
 
     public Event(){
@@ -199,5 +207,19 @@ public class Event {
 
     public String toString() {
         return getClass().getName()+"@[" + this.getEventTime() + "," + this.getServiceHost() + "," + this.getResourceHost() + "]";
+    }
+
+    /**
+     * @param eventMetadata the eventMetadata to set
+     */
+    public void setEventMetadata(EventMetadata eventMetadata) {
+        this.eventMetadata = eventMetadata;
+    }
+
+    /**
+     * @return the eventMetadata
+     */
+    public EventMetadata getEventMetadata() {
+        return eventMetadata;
     }
 }

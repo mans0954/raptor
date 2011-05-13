@@ -30,17 +30,29 @@
 
 
 		--><property name="serviceHost" type="string" update="true"
-			insert="true" column="serviceHost" not-null="false" index="requesthost_index" />
+			insert="true" column="serviceHost" not-null="false" index="requesthost_indx" />
 		<property name="resourceHost" type="string" update="true"
 			insert="true" column="resourceHost" not-null="false" />
 		<property name="serviceId" type="string" update="true"
-			insert="true" column="serviceId" not-null="false" index="serviceid_index" />
+			insert="true" column="serviceId" not-null="false" index="serviceid_indx" />
 		<property name="resourceId" type="string" update="true"
 			insert="true" column="resourceId" not-null="false" />
 		<property name="eventId" type="integer" update="true" insert="true"
-			column="eventId" not-null="false" />
+			column="eventId" not-null="true" index="eventid_indx"/>
 		<property name="eventType" type="string" update="true"
 			insert="true" column="eventType" not-null="false" />
+
+			<property name="resourceIdCategory" type="integer" update="true"
+            insert="true" column="resourceIdCategory" not-null="false" />
+
+		<component name="eventMetadata">
+            <property name="entityId" type="string" update="true" insert="true"
+            column="entityId" index="entityId_index" />
+            <property name="serviceName" type="string" update="true"
+            insert="true" column="serviceName" index="serviceName_indx" />
+            <property name="organisationName" type="string" update="true"
+            insert="true" column="organisationName" index="organisationName_indx" />
+        </component>
 
 
 
@@ -52,13 +64,13 @@
 		<property name="authenticationType" column="authenticationType"
 			type="string" />
 		<property name="principalName" column="principalName" type="string"
-			index="principalname_index" />
+			index="principalname_indx" />
 
         <component name="principalInformation">
             <property name="school" type="string" update="true" insert="true"
             column="school" index="school_index" />
             <property name="affiliation" type="string" update="true"
-            insert="true" column="affiliation" index="affiliation_index" />
+            insert="true" column="affiliation" index="affiliation_indx" />
         </component>
 
 	</union-subclass>
@@ -79,8 +91,8 @@
 			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 		<property name="nameIdentifier" column="nameIdentifier" type="string" />
 		<property name="responseId" column="responseId" type="string" />
-		<property name="hashCode" column=" current_hashCode" type="integer"
-			index="hashcode_index" />
+		<property name="hashCode" column="current_hashCode" type="integer"
+			index="hashcode_indx" />
 	</union-subclass>
 
 	<union-subclass  extends="uk.ac.cardiff.model.event.AuthenticationEvent"
@@ -89,7 +101,7 @@
 		<property name="requesterIp" column="requesterIp" type="string" />
 		<property name="sessionId" column="sessionId" type="string" />
 		<property name="hashCode" column="current_hashCode" type="integer"
-			index="hashcode_index" />
+			index="hashcode_indx" />
 
 	</union-subclass>
 
