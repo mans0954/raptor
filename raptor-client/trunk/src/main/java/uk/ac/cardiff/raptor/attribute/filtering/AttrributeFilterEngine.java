@@ -19,6 +19,8 @@
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -50,12 +52,12 @@ public class AttrributeFilterEngine {
 	public List<Event> filter(AttributeFilterPolicy attributeFilterPolicy, ServiceMetadata metadata, List<Event> events) {
 		log.debug("Applying attribute filter policy {} to event set", attributeFilterPolicy.getPolicyName());
 		List<Event> filteredEntries = clone(events);
-		for (Event entry : filteredEntries) {
+		for (Event event : filteredEntries) {
 			for (AttributeRule attributeRule : attributeFilterPolicy.getAttributeRules()) {
-				filterAttributes(entry, attributeRule, metadata);
+				filterAttributes(event, attributeRule, metadata);
+
 			}
 		}
-
 		return filteredEntries;
 	}
 
@@ -87,5 +89,6 @@ public class AttrributeFilterEngine {
 		log.trace("The event set of {} events has been cloned into the event set of {} events",events.size(),clonedSet.size());
 		return clonedSet;
 	}
+
 
 }

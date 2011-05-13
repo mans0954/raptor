@@ -128,29 +128,18 @@ public class PersistantEntryHandler implements EntryHandler {
 		persistQueue.addAll(entries);
 
 		Set<Event> persist = new HashSet<Event>();
-
 		for (Event event : persistQueue) {
 			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
 			Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
-			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
-//			int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique("select count(*) from " + event.getClass().getSimpleName()
-//                                     + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'", null)).intValue();
+			int storedDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
 
-			if (numberOfDuplicates == 0){
-			    //log.debug("dups [{}], params {} ",numberOfDuplicates, "select count(*) from " + event.getClass().getSimpleName()
-                            //        + " where eventTime = '" + event.getEventTime().toDate() + "' and hashCode ='" + hashcode + "'");
-			    //Date local = new Date(event.getEventTime().getMillis());
-			   // DateTime newTime = new DateTime(local);
-			   // log.debug("Before: {} [{}] Local:{} [{}], back {} [{}]",new Object[]
-			    //        {event.getEventTime(),event.getEventTime().getMillis(), local, local.getTime(), newTime, newTime.getMillis()});
+			if (storedDuplicates == 0){
 			    persist.add(event);
 			}
 			else{
 			    duplicates++;
 			}
 		}
-		log.debug("After both internal (from the list of events send) and external (from the store) duplicate checking" +
-				"there are {} events left to persit",persist.size());
 		try{
 		    dataConnection.saveAll(persist);
 		}
@@ -162,7 +151,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	public boolean addEntry(Event event) {
-		
+
 		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
 		Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
 		int numberOfDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();

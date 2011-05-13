@@ -53,7 +53,6 @@ public class AttributeAssociationEngine {
      * Gets associated attributes for the given ...
      */
     public void associateAttributes(List<Event> events) throws AttributeAssociationException{
-
         for (AttributeAssociationDefinition attributeAssociationDefinition: attributeAssociationDefinitions){
             log.info("Attribute Association Definition [{}], is enabled [{}]",attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
 
@@ -79,6 +78,7 @@ public class AttributeAssociationEngine {
             log.info("Attribute Association Definition {} finished, associated information to {} events, where {} events where not of a valid class type or did not have the correct principal",
                     new Object[]{attributeAssociationDefinition.getDefiniationName(),attached,noPrincipal});
         }
+
     }
 
 
