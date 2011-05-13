@@ -32,7 +32,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 public class GroupBy extends Statistic{
-	
+
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(GroupByCountDistinct.class);
 
@@ -50,13 +50,13 @@ public class GroupBy extends Statistic{
 	 * @return true if the statistic succeeds successfully
 	 * @throws StatisticalUnitException
 	 */
-	public Boolean  performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException { 
-	
+	public Boolean  performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
+
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");
-		
+
 		String groupByField = methodParams.get(0).getValue();
-		
+
 		log.debug("Performing groupByFrequency Statistical Operation");
 		log.debug("Params for method:  {},{}", this.getClass().getSimpleName(), statisticParameters.getUnitName());
 		log.debug("Grouping field: {}", groupByField);
@@ -66,17 +66,17 @@ public class GroupBy extends Statistic{
 		log.debug("groupBy between [start:{}] [end:{}]", start, end);
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
-		
+
 		String query="";
-		
+
 		if (sqlWhere.equals("")) {
 			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
 		} else {
 			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
-		}	
-		
+		}
+
 		Object[] params = new Object[]{start.toDate(),end.toDate()};
-		
+
 		List results = getEntryHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList();
@@ -84,7 +84,12 @@ public class GroupBy extends Statistic{
 			Object resultAsArray = (Object) result;
 			Group group = new Group();
 			group.setValue(0);
-			group.setGroupName((String) resultAsArray);
+			if (resultAsArray!=null){
+			    group.setGroupName((String) resultAsArray);
+			}
+			else{
+			    group.setGroupName("NA");
+			}
 			groups.add(group);
 
 		}
@@ -111,13 +116,13 @@ public class GroupBy extends Statistic{
 		List<MethodParameter> methodParams = statisticParameters.getMethodParams();
 		if (methodParams.size()==1){
 			methodParams.get(0).setParameterName("Group By Field");
-			methodParams.get(0).setParameterType(ParameterType.FIELD);			
+			methodParams.get(0).setParameterType(ParameterType.FIELD);
 		}
 		else{
 			log.error("Unable to set parameter type for statistic {}, incorrect number of parameters",this.getClass().getSimpleName());
 		}
 		this.statisticParameters = statisticParameters;
-		
+
 	}
 
 }

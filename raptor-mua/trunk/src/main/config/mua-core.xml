@@ -79,6 +79,9 @@
 		<property name="engine">
 			<ref bean="MUAEngine"></ref>
 		</property>
+		<property name="backgroundServices">
+		   <ref bean="backgroundServices"/>
+		</property>
 	</bean>
 
 
@@ -128,11 +131,34 @@
         </property>
     </bean>
 
+        <!-- release trigger setup -->
+    <bean id="muaResourceClassificationQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="muaResourceClassificationJobDetail" />
+        </property>
+        <property name="startDelay" value="5000" />
+        <property name="repeatInterval" value="100000" />
+    </bean>
+
+    <bean id="muaResourceClassificationJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="MUAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>resourceClassification</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
+
     <!--  Trigger setup -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref local="muaReleaseQuickTrigger" />
+                <ref local="muaResourceClassificationQuickTrigger"/>
             </list>
         </property>
     </bean>
@@ -143,6 +169,12 @@
         <property name="entryHandler"><ref bean="persistantEntryHandler"/></property>
         <property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
+
+
+	<!-- Class to handle processing of background services -->
+    <bean name="backgroundServices" class="uk.ac.cardiff.raptormua.engine.BackgroundServices">
+            <property name="dataConnection"><ref bean="dataConnectionImpl"></ref></property>
+    </bean>
 
 	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>

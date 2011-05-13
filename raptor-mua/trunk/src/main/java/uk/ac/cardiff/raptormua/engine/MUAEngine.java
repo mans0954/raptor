@@ -144,10 +144,6 @@ public class MUAEngine {
         	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime,maxReleaseEventSize);
 
 
-        	        for (Event e : eventsToSend){
-        	            log.debug("EventTime [{}] - {}",e.getEventTime(),e);
-        	        }
-
         	        boolean success = false;
         	        try {
         	                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
@@ -158,6 +154,7 @@ public class MUAEngine {
 	     }
 	     return false;
 	}
+
 
 
 	/**
@@ -353,5 +350,7 @@ public class MUAEngine {
     public int getMaxReleaseEventSize() {
         return maxReleaseEventSize;
     }
+
+
 
 }

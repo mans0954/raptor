@@ -44,8 +44,8 @@ public class GroupByFrequency extends Statistic {
 	 * false if the statistic functioned correctly, but there are no valid
 	 * observations, or true if the statistic succeeds and there are valid
 	 * observations.
-	 * 
-	 * 
+	 *
+	 *
 	 * @param groupByField
 	 * @return
 	 * @throws StatisticalUnitException
@@ -72,8 +72,8 @@ public class GroupByFrequency extends Statistic {
 			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
 		} else {
 			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
-		}		
-		
+		}
+
 		Object[] params = new Object[]{start.toDate(),end.toDate()};
 
 		List results = getEntryHandler().query(query,params);
@@ -89,7 +89,13 @@ public class GroupByFrequency extends Statistic {
 				throw new StatisticalUnitException("Results were not of the correct type");
 			}
 			try {
-				group.setGroupName((String) resultAsArray[0]);
+				if (resultAsArray==null || resultAsArray[0]==null){
+				    group.setGroupName("NA");
+				}
+				else{
+				    group.setGroupName((String) resultAsArray[0]);
+				}
+
 			} catch (ClassCastException e) {
 				throw new StatisticalUnitException("Results were not of the correct type");
 			}

@@ -24,8 +24,7 @@
 
         <!-- MUA Metadata -->
     <bean id="MUAMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
-        <property name="serviceName"><value>Cardiff University's MUA</value></property>
-        <property name="description"><value>Cardiff University's MUA</value></property>
+        <property name="serviceName"><value>Cardiff Universitys MUA</value></property>
         <property name="organisationName"><value>Cardiff University</value></property>
         <property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
         <property name="entityId"><value>https://HOSTNAME/raptor-mua</value></property>
