@@ -134,7 +134,6 @@
 
 
     <import resource="metadata.xml"/>
-	<import resource="database.xml"/>
 	<import resource="event-parse.xml" />
 	<import resource="event-release.xml" />
 

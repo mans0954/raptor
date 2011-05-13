@@ -32,6 +32,12 @@
         <property name="endpoints">
             <list>
                 <bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
+                <property name="supportedEvents">
+                        <list>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </list>
+                    </property>
                     <property name="serviceEndpoint">
                         <value>https://localhost:8443/MUA/MultiUnitAggregator</value>
                     </property>
@@ -44,6 +50,12 @@
                 </bean>
 
                 <bean id="cardiffRaptorMUA-Second" class="uk.ac.cardiff.raptor.registry.Endpoint">
+                <property name="supportedEvents">
+                        <list>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </list>
+                    </property>
                     <property name="serviceEndpoint">
                         <value>https://localhost:8444/MUA/MultiUnitAggregator</value>
                     </property>

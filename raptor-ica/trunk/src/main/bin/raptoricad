@@ -8,20 +8,20 @@
 # 2006-06-27 Christian d'Heureuse: Script created.
 # 2006-07-02 chdh: Minor improvements.
 # 2006-07-10 chdh: Changes for SUSE 10.0.
+# 2009-03-04 Josh Davis: Ubuntu/Redhat version.
+# 2010-09-21 Josh Davis: Changed 'sudo' to 'su', fix some typos, removed unused variables
+# 2011-05-12 Rhys Smith: Changed for RaptorICA
 
 ### BEGIN INIT INFO
-# Provides:                   javaDaemonTest
+# Provides:                   raptoricad
 # Required-Start:             $network $local_fs $remote_fs
-# X-UnitedLinux-Should-Start: $named sendmail
 # Required-Stop:              $network $local_fs $remote_fs
-# X-UnitedLinux-Should-Stop:  $named sendmail
 # Default-Start:              3 5
 # Default-Stop:               0 1 2 6
-# Short-Description:          JavaDaemonTest
-# Description:                A Java daemon for testing.
+# Short-Description: initscript to start/stop the Raptor ICA
+# Description:       initscript to start/stop the Raptor ICA
 ### END INIT INFO
 
-#. /etc/rc.status                                           # load start/stop script "rc" definitions
 if [ -z "$JAVA_HOME" ]; then                               # if JAVA_HOME is undefined
    if [ -f /usr/share/java-utils/java-functions ]; then
       . /usr/share/java-utils/java-functions; set_jvm      # JPackage standard method to set JAVA_HOME
@@ -30,27 +30,31 @@ if [ -z "$JAVA_HOME" ]; then                               # if JAVA_HOME is und
    if [ -z "$JAVA_HOME" ]; then echo Unable to set JAVA_HOME environment variable; exit 1; fi
    fi
 
+serviceNameLo="raptoricad"                                 # service name with the first letter in lowercase
+serviceName="raptoricad"                                   # service name
+serviceUser="root"                                         # OS user name for the service
+serviceGroup="root"                                        # OS group name for the service
+
+applDir="/opt/raptor/ica"                                  # home directory of the service application
+serviceUserHome="$applDir"                                 # home directory of the service user
+
 scriptFile=$(readlink -fn $(type -p $0))                   # the absolute, dereferenced path of this script file
 scriptDir=$(dirname $scriptFile)                           # absolute path of the script directory
-applDir="/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/"                                       # home directory of the service application
-serviceName="RaptorICA"                    # service name
-serviceNameLo="raptorICA"                  # service name with the first letter in lowercase
-serviceUser="root"                                          # OS user name for the service
-serviceUserHome="$applDir"                                 # home directory of the service user
-serviceGroup="root"                                    # OS group name for the service
+
 serviceLogFile="/var/log/$serviceNameLo.log"               # log file for StdOut/StdErr
 maxShutdownTime=15                                         # maximum number of seconds to wait for the daemon to terminate normally
-pidFile="/var/run/$serviceNameLo.pid"                      # name of PID file (PID = process ID number)
-javaCommand="java"                                         # name of the Java launcher without the path
-javaExe="/usr/local/java/jre1.6.0_23/bin/$javaCommand"                      # file name of the Java application launcher executable
 
-javaArgs="-Xmx128M -jar -DconfigurationFiles=/usr/local/raptor/raptor-ica-embedded-0.0.1-SNAPSHOT/conf/ica-core.xml raptor-ica-embedded-0.0.1-SNAPSHOT.jar"
-      # arguments for Java launcher
+pidFile="/var/run/$serviceNameLo.pid"                      # name of PID file (PID = process ID number)
+
+javaCommand="java"                                         # name of the Java launcher without the path
+javaExe="$JAVA_HOME/bin/$javaCommand"                      # file name of the Java application launcher executable
+javaArgs="-DconfigurationFiles=/opt/raptor/ica/conf/ -jar raptor-ica.jar -server -Xmx64M"
+                                                           # arguments for Java launcher
 javaCommandLine="$javaExe $javaArgs"                       # command line to start the Java service application
-javaCommandLineKeyword="com.sharemail.cfdev.idmpublicinterfaces.init.ApplicationInit"                    # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others
-rcFileBaseName="rc$serviceNameLo"                          # basename of the "rc" symlink file for this script
-rcFileName="/usr/local/sbin/$rcFileBaseName"               # full path of the "rc" symlink file for this script
-etcInitDFile="/etc/init.d/$serviceNameLo"                  # symlink to this script from /etc/init.d
+javaCommandLineKeyword="raptor-ica.jar"                    # a keyword that occurs on the commandline, used to detect an already running service process and to distinguish it from others
+rcFileBaseName="rcraptoricad"                              # basename of the "rc" symlink file for this script
+rcFileName="/usr/local/sbin/rcraptoricad"                  # full path of the "rc" symlink file for this script
+etcInitDFile="/etc/init.d/raptoricad"                      # symlink to this script from /etc/init.d
 
 # Makes the file $1 writable by the group $serviceGroup.
 function makeFileWritable {
@@ -89,16 +93,13 @@ function startServiceProcess {
    makeFileWritable $pidFile || return 1
    makeFileWritable $serviceLogFile || return 1
    cmd="nohup $javaCommandLine >>$serviceLogFile 2>&1 & echo \$! >$pidFile"
-   echo $cmd
-   echo "\n"
-   echo $javaCommandLine
-   $SHELL -c "$cmd" || return 1
+   su -m $serviceUser -s $SHELL -c "$cmd" || return 1
    sleep 0.1
    pid="$(<$pidFile)"
    if checkProcessIsRunning $pid; then :; else
       echo -ne "\n$serviceName start failed, see logfile."
       return 1
-      fi
+   fi
    return 0; }
 
 function stopServiceProcess {
@@ -112,7 +113,7 @@ function stopServiceProcess {
       sleep 0.1
       done
    echo -e "\n$serviceName did not terminate within $maxShutdownTime seconds, sending SIGKILL..."
-   kill -s SIGKILL $pid || return 1
+   kill -s KILL $pid || return 1
    local killWaitTime=15
    for ((i=0; i<killWaitTime*10; i++)); do
       checkProcessIsRunning $pid
@@ -135,61 +136,39 @@ function runInConsoleMode {
 
 function startService {
    getServicePID
-   if [ $? -eq 0 ]; then echo -n "$serviceName is already running"; return 0; fi
+   if [ $? -eq 0 ]; then echo -n "$serviceName is already running"; RETVAL=0; return 0; fi
    echo -n "Starting $serviceName   "
    startServiceProcess
-   if [ $? -ne 0 ]; then return 1; fi
+   if [ $? -ne 0 ]; then RETVAL=1; echo "failed"; return 1; fi
+   echo "started PID=$pid"
+   RETVAL=0
    return 0; }
 
 function stopService {
    getServicePID
-   if [ $? -ne 0 ]; then echo -n "$serviceName is not running"; return 0; fi
+   if [ $? -ne 0 ]; then echo -n "$serviceName is not running"; RETVAL=0; echo ""; return 0; fi
    echo -n "Stopping $serviceName   "
    stopServiceProcess
-   if [ $? -ne 0 ]; then return 1; fi
+   if [ $? -ne 0 ]; then RETVAL=1; echo "failed"; return 1; fi
+   echo "stopped PID=$pid"
+   RETVAL=0
    return 0; }
 
 function checkServiceStatus {
    echo -n "Checking for $serviceName:   "
    if getServicePID; then
-      rc_failed 0
-    else
-      rc_failed 3
-      fi
-   rc_status -v
+	echo "running PID=$pid"
+	RETVAL=0
+   else
+	echo "stopped"
+	RETVAL=3
+   fi
    return 0; }
 
-function installService {
-   getent group $serviceGroup >/dev/null 2>&1
-   if [ $? -ne 0 ]; then
-      echo Creating group $serviceGroup
-      groupadd -r $serviceGroup || return 1
-      fi
-   id -u $serviceUser >/dev/null 2>&1
-   if [ $? -ne 0 ]; then
-      echo Creating user $serviceUser
-      useradd -r -c "user for $serviceName service" -g $serviceGroup -G users -d $serviceUserHome $serviceUser
-      fi
-   ln -s $scriptFile $rcFileName || return 1
-   ln -s $scriptFile $etcInitDFile || return 1
-   insserv $serviceNameLo || return 1
-   echo $serviceName installed.
-   echo You may now use $rcFileBaseName to call this script.
-   return 0; }
-
-function uninstallService {
-   insserv -r $serviceNameLo || return 1
-   rm -f $rcFileName
-   rm -f $etcInitDFile
-   echo $serviceName uninstalled.
-   return 0; }
 
 function main {
-
+   RETVAL=0
    case "$1" in
-      console)                                             # runs the Java program in console mode
-         runInConsoleMode
-         ;;
       start)                                               # starts the Java program as a Linux service
          startService
          ;;
@@ -199,21 +178,19 @@ function main {
       restart)                                             # stops and restarts the service
          stopService && startService
          ;;
+      console)                                             # runs in console mode
+        runInConsoleMode
+        ;;
       status)                                              # displays the service status
          checkServiceStatus
          ;;
-      install)                                             # installs the service in the OS
-         installService
-         ;;
-      uninstall)                                           # uninstalls the service in the OS
-         uninstallService
-         ;;
       *)
-         echo "Usage: $0 {console|start|stop|restart|status|install|uninstall}"
+         echo "Usage: $0 {start|stop|restart|console|status}"
          exit 1
          ;;
       esac
-    }
+   exit $RETVAL
+}
 
 main $1
 
