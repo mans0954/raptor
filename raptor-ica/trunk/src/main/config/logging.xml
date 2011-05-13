@@ -11,7 +11,7 @@
   </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${USER_HOME}/raptor-ica-process.log</file>
+    <file>${LOG_HOME}/raptor-ica-process.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>${USER_HOME}/raptor-ica-process-%d{yyyy-MM-dd}.log</FileNamePattern>
     </rollingPolicy>
@@ -22,15 +22,17 @@
 
   <logger name="org.springframework" level="ERROR">
     <appender-ref ref="stdout"/>
+    <appender-ref ref="FILE"/>
   </logger>
 
-  <logger name="uk" level="DEBUG">
+  <logger name="uk.ac.cardiff" level="DEBUG">
     <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
 
   <logger name="org.mortbay" level="INFO">
     <appender-ref ref="stdout"/>
+    <appender-ref ref="FILE"/>
   </logger>
 
 </configuration>

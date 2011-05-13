@@ -16,10 +16,12 @@
 package uk.ac.cardiff.raptorica.server;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import org.mortbay.jetty.Connector;
@@ -58,7 +60,10 @@ public class RunServer {
 
 		configureLogger(configurationFiles+"/logging.xml");
 
-		int portNumber = Integer.parseInt(System.getProperty("port", "8089"));
+		Properties props = new Properties();
+                props.load(new FileInputStream(configurationFiles + "/server.properties"));
+
+                int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8110"));
 
 		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
 		System.out.println("[INFO] Spring Config: Configuration files at " + configurationFiles);
