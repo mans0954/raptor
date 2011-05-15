@@ -128,7 +128,9 @@
             <evaluate expression="setupService.batchUpload(flowScope.websession)" />
         </transition>
 
-
+        <transition on="sendResourceClassification">
+            <evaluate expression="setupService.sendResourceClassification()" />
+        </transition>
 
 	</view-state>
 

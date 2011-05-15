@@ -52,135 +52,139 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
     @Override
     public void generateReport(WebSession session) {
-	//TODO there are common setup and store aspects to all reports that should be pushed higher
-	log.info("Generating PDF report for both graph and chart, for {}", session.getGraphmodel().getSelectedStatisticalUnit());
+        // TODO there are common setup and store aspects to all reports that should be pushed higher
+        log.info("Generating PDF report for both graph and chart, for {}", session.getGraphmodel().getSelectedStatisticalUnit());
 
-	try {
-	    File baseGraphDirectory = saveDirectory.getFile();
-	    if (!baseGraphDirectory.exists())
-		baseGraphDirectory.mkdir();
+        try {
+            File baseGraphDirectory = saveDirectory.getFile();
+            if (!baseGraphDirectory.exists())
+                baseGraphDirectory.mkdir();
 
-	    // append username, to create username specific directories
-	    File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
-	    log.debug("Save Directory exists: " + dir.exists());
-	    if (!dir.exists())
-		dir.mkdir();
+            // append username, to create username specific directories
+            File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
+            log.debug("Save Directory exists: " + dir.exists());
+            if (!dir.exists())
+                dir.mkdir();
 
-	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".pdf");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+            java.util.Date date = new java.util.Date();
 
-	    File reportTemplateXMLFile = new File(baseDirectory.getFile().getCanonicalPath() + "/report-templates/" + reportXMLFile);
-	    log.debug("Creating PDF in file {}", reportTemplateXMLFile);
+            String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
+                    + dateFormat.format(date) + ".pdf";
+            if (!session.getGraphmodel().getDownloadFilename().equals("")) {
+                fileName = session.getGraphmodel().getDownloadFilename()+".pdf";
+            }
+            dir = new File(dir.getAbsoluteFile() + "/" + fileName);
 
-	    JasperPrint jp = constructReport(reportTemplateXMLFile, session);
-	    JasperExportManager.exportReportToPdfFile(jp, dir.getCanonicalPath());
+            File reportTemplateXMLFile = new File(baseDirectory.getFile().getCanonicalPath() + "/report-templates/" + reportXMLFile);
+            log.debug("Creating PDF in file {}", reportTemplateXMLFile);
 
-	    String relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
-	    Date now = new Date(System.currentTimeMillis());
-	    session.getReportmodel().addReportForDownload(dir, relativePath,now, this.getHandledReportType().displayName);
-	    log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit());
+            JasperPrint jp = constructReport(reportTemplateXMLFile, session);
+            JasperExportManager.exportReportToPdfFile(jp, dir.getCanonicalPath());
 
-	} catch (JRException e) {
-	    log.error("Error Creating JasperReport", e);
-	} catch (IOException e) {
-	    log.error("File expection when creating JasperReport", e);
-	} catch (ColumnBuilderException e) {
-	    log.error("Could not build columns in JasperReport", e);
-	}
+            String relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
+            Date now = new Date(System.currentTimeMillis());
+            session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
+            log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit());
+
+        } catch (JRException e) {
+            log.error("Error Creating JasperReport", e);
+        } catch (IOException e) {
+            log.error("File expection when creating JasperReport", e);
+        } catch (ColumnBuilderException e) {
+            log.error("Could not build columns in JasperReport", e);
+        }
 
     }
 
     private JasperPrint constructReport(File reportTemplateXMLFile, WebSession session) throws IOException, JRException, ColumnBuilderException {
-	log.info("Constructing Report Using DynamicJasper");
+        log.info("Constructing Report Using DynamicJasper");
 
-	// construct the table
-	String[] columns = new String[session.getGraphmodel().getCurrentTableGraph().getTableSeries().size() + 1];
-	columns[0] = "Group";// always group
-	int headerCount = 1;
-	for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
-	    columns[headerCount++] = tseries.getSeriesLabel();
-	}
+        // construct the table
+        String[] columns = new String[session.getGraphmodel().getCurrentTableGraph().getTableSeries().size() + 1];
+        columns[0] = "Group";// always group
+        int headerCount = 1;
+        for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
+            columns[headerCount++] = tseries.getSeriesLabel();
+        }
 
-	Object[][] data = new Object[maxNoRows(session.getGraphmodel().getCurrentTableGraph())][columns.length];
+        Object[][] data = new Object[maxNoRows(session.getGraphmodel().getCurrentTableGraph())][columns.length];
 
-	int rowCount = 0;
-	for (ManyRow mrow : session.getGraphmodel().getCurrentTableGraph().getRowsForView()) {
-	    data[rowCount][0] = mrow.getGroupLabel();
-	    Iterator<?> it = mrow.getValues().iterator();
-	    headerCount = 1;
-	    while (it.hasNext()) {
-		String value = it.next().toString();
-		data[rowCount][headerCount++] = value;
-	    }
-	    rowCount++;
-	}
+        int rowCount = 0;
+        for (ManyRow mrow : session.getGraphmodel().getCurrentTableGraph().getRowsForView()) {
+            data[rowCount][0] = mrow.getGroupLabel();
+            Iterator<?> it = mrow.getValues().iterator();
+            headerCount = 1;
+            while (it.hasNext()) {
+                String value = it.next().toString();
+                data[rowCount][headerCount++] = value;
+            }
+            rowCount++;
+        }
 
-	DynamicTableModel model = new DynamicTableModel();
-	model.setColumnNames(columns);
-	model.setData(data);
+        DynamicTableModel model = new DynamicTableModel();
+        model.setColumnNames(columns);
+        model.setData(data);
 
-	// construct report and set the template
-	DynamicReportBuilder drb = new DynamicReportBuilder();
-	drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
+        // construct report and set the template
+        DynamicReportBuilder drb = new DynamicReportBuilder();
+        drb.setTemplateFile(reportTemplateXMLFile.getCanonicalPath());
 
-	Style columDetailWhite = new Style();
-	columDetailWhite.setBorder(Border.THIN);
-	columDetailWhite.setBackgroundColor(Color.WHITE);
-	columDetailWhite.setHorizontalAlign(HorizontalAlign.CENTER);
-	Style columDetailWhiteBold = new Style();
-	columDetailWhiteBold.setBorder(Border.THIN);
-	columDetailWhiteBold.setBackgroundColor(Color.WHITE);
+        Style columDetailWhite = new Style();
+        columDetailWhite.setBorder(Border.THIN);
+        columDetailWhite.setBackgroundColor(Color.WHITE);
+        columDetailWhite.setHorizontalAlign(HorizontalAlign.CENTER);
+        Style columDetailWhiteBold = new Style();
+        columDetailWhiteBold.setBorder(Border.THIN);
+        columDetailWhiteBold.setBackgroundColor(Color.WHITE);
 
+        Style titleStyle = new Style();
+        titleStyle.setFont(new Font(12, Font._FONT_VERDANA, true));
+        titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+        titleStyle.setBorder(Border.THIN);
+        Style oddRowStyle = new Style();
+        oddRowStyle.setBorder(Border.NO_BORDER);
+        Color veryLightGrey = new Color(230, 230, 230);
+        oddRowStyle.setBackgroundColor(veryLightGrey);
+        oddRowStyle.setTransparency(Transparency.OPAQUE);
 
+        // table name column
+        String[] headings = model.getColumnNames();
+        for (int i = 0; i < headings.length; i++) {
+            if (i == 0) {
+                // group category
+                String key = headings[i];
+                AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhiteBold).build();
+                column.setHeaderStyle(titleStyle);
+                drb.addColumn(column);
+            } else {
+                String key = headings[i];
+                AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhite).build();
+                column.setHeaderStyle(titleStyle);
+                drb.addColumn(column);
+            }
 
-	Style titleStyle = new Style();
-	titleStyle.setFont(new Font(12, Font._FONT_VERDANA, true));
-	titleStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-	titleStyle.setBorder(Border.THIN);
-	Style oddRowStyle = new Style();
-	oddRowStyle.setBorder(Border.NO_BORDER);
-	Color veryLightGrey = new Color(230, 230, 230);
-	oddRowStyle.setBackgroundColor(veryLightGrey);
-	oddRowStyle.setTransparency(Transparency.OPAQUE);
+        }
 
-	// table name column
-	String[] headings = model.getColumnNames();
-	for (int i = 0; i < headings.length; i++) {
-	    if (i == 0) {
-		// group category
-		String key = headings[i];
-		AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhiteBold).build();
-		column.setHeaderStyle(titleStyle);
-		drb.addColumn(column);
-	    } else {
-		String key = headings[i];
-		AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhite).build();
-		column.setHeaderStyle(titleStyle);
-		drb.addColumn(column);
-	    }
+        drb.setPrintBackgroundOnOddRows(true);
+        drb.setOddRowBackgroundStyle(oddRowStyle);
+        drb.setColumnsPerPage(new Integer(1));
+        drb.setUseFullPageWidth(true);
+        drb.setColumnSpace(new Integer(5));
+        drb.setDetailHeight(new Integer(15));
 
-	}
+        // add any additional parameters that are mapped to the template
+        BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session.getGraphmodel().getChartOptions());
 
-	drb.setPrintBackgroundOnOddRows(true);
-	drb.setOddRowBackgroundStyle(oddRowStyle);
-	drb.setColumnsPerPage(new Integer(1));
-	drb.setUseFullPageWidth(true);
-	drb.setColumnSpace(new Integer(5));
-	drb.setDetailHeight(new Integer(15));
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("image", image);
+        parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
+        log.debug("Map: " + parameters);
 
-	// add any additional parameters that are mapped to the template
-	BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session.getGraphmodel().getChartOptions());
-
-	Map<String, Object> parameters = new HashMap<String, Object>();
-	parameters.put("image", image);
-	parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
-	log.debug("Map: " + parameters);
-
-	DynamicReport dr = drb.build();
-	JRDataSource ds = new JRTableModelDataSource(model);
-	JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds, parameters);
-	return jp;
+        DynamicReport dr = drb.build();
+        JRDataSource ds = new JRTableModelDataSource(model);
+        JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds, parameters);
+        return jp;
     }
 
     /**
@@ -188,33 +192,33 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
      * @return
      */
     private int maxNoRows(RaptorTableChartModel currentTableGraph) {
-	int maxRows = 0;
-	for (TableSeries tseries : currentTableGraph.getTableSeries()) {
-	    if (tseries.getRows().size() > maxRows)
-		maxRows = tseries.getRows().size();
-	}
-	return maxRows;
+        int maxRows = 0;
+        for (TableSeries tseries : currentTableGraph.getTableSeries()) {
+            if (tseries.getRows().size() > maxRows)
+                maxRows = tseries.getRows().size();
+        }
+        return maxRows;
     }
 
     @Override
     protected HandledReportTypes getRegisterHandledReportType() {
-	return HandledReportTypes.pdf;
+        return HandledReportTypes.pdf;
     }
 
     public void setReportBean(GenericReportBean reportBean) {
-	this.reportBean = reportBean;
+        this.reportBean = reportBean;
     }
 
     public GenericReportBean getReportBean() {
-	return reportBean;
+        return reportBean;
     }
 
     public void setReportXMLFile(String reportXMLFile) {
-	this.reportXMLFile = reportXMLFile;
+        this.reportXMLFile = reportXMLFile;
     }
 
     public String getReportXMLFile() {
-	return reportXMLFile;
+        return reportXMLFile;
     }
 
 }

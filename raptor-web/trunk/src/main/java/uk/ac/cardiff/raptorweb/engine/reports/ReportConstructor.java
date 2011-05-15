@@ -17,13 +17,14 @@ import uk.ac.cardiff.raptorweb.model.WebSession;
  */
 public abstract class ReportConstructor {
     
-    	static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
+        /** Class logger */
+    	private final Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
-	/* the location of the directory within the application that reports are saved to*/
+	/** the location of the directory within the application that reports are saved to*/
 	protected Resource saveDirectory;
 	protected Resource baseDirectory;
 	
-	/* the enum list of the report types this handler can deal with e.g. excel or csv */
+	/** the enum list of the report types this handler can deal with e.g. excel or csv */
 	public enum HandledReportTypes {excel("xls","excel"),csv("csv","CSV"),pdf("pdf","PDF");
 
 		public String fileExtension;
@@ -36,7 +37,7 @@ public abstract class ReportConstructor {
 
 	};
 
-	/* the actual stored value of the enum*/
+	/** the actual stored value of the enum*/
 	private HandledReportTypes handledReportType;
 	
 	public ReportConstructor(){
@@ -50,8 +51,6 @@ public abstract class ReportConstructor {
 	
 	protected abstract HandledReportTypes getRegisterHandledReportType();
 
-	//TODO should test for and create a download directory before invocation of
-	//the overriden method 
 	public abstract void generateReport(WebSession session);
 
 	public void setSaveDirectory(Resource saveDirectory) {

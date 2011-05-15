@@ -45,27 +45,68 @@ public class StartServiceImpl implements StartService {
     /** A <code>List</code> of all the dashboard statistics to compute */
     private List<AbstractDashboardStatistic> dashboardStatistics;
 
+    // TODO FIX THE MESS OF CachedStartStatistics in this class (URGENT)
     /** holds the statistics for the front page gathered from the background worker thread */
-    private CachedStartStatistics cachedStartModelTodayShib;
-    private CachedStartStatistics cachedStartModelLastWeekShib;
-    private CachedStartStatistics cachedStartModelLastMonthShib;
-    private CachedStartStatistics cachedStartModelLastYearShib;
+    private CachedStartStatistics cachedStartModelTodayShibExternal;
+    private CachedStartStatistics cachedStartModelLastWeekShibExternal;
+    private CachedStartStatistics cachedStartModelLastMonthShibExternal;
+    private CachedStartStatistics cachedStartModelLastYearShibExternal;
 
-    private CachedStartStatistics cachedStartModelTodayEzproxy;
-    private CachedStartStatistics cachedStartModelLastWeekEzproxy;
-    private CachedStartStatistics cachedStartModelLastMonthEzproxy;
-    private CachedStartStatistics cachedStartModelLastYearEzproxy;
+    private CachedStartStatistics cachedStartModelTodayShibInternal;
+    private CachedStartStatistics cachedStartModelLastWeekShibInternal;
+    private CachedStartStatistics cachedStartModelLastMonthShibInternal;
+    private CachedStartStatistics cachedStartModelLastYearShibInternal;
+
+    private CachedStartStatistics cachedStartModelTodayShibAll;
+    private CachedStartStatistics cachedStartModelLastWeekShibAll;
+    private CachedStartStatistics cachedStartModelLastMonthShibAll;
+    private CachedStartStatistics cachedStartModelLastYearShibAll;
+
+    private CachedStartStatistics cachedStartModelTodayEzproxyInternal;
+    private CachedStartStatistics cachedStartModelLastWeekEzproxyInternal;
+    private CachedStartStatistics cachedStartModelLastMonthEzproxyInternal;
+    private CachedStartStatistics cachedStartModelLastYearEzproxyInternal;
+
+    private CachedStartStatistics cachedStartModelTodayEzproxyExternal;
+    private CachedStartStatistics cachedStartModelLastWeekEzproxyExternal;
+    private CachedStartStatistics cachedStartModelLastMonthEzproxyExternal;
+    private CachedStartStatistics cachedStartModelLastYearEzproxyExternal;
+
+    private CachedStartStatistics cachedStartModelTodayEzproxyAll;
+    private CachedStartStatistics cachedStartModelLastWeekEzproxyAll;
+    private CachedStartStatistics cachedStartModelLastMonthEzproxyAll;
+    private CachedStartStatistics cachedStartModelLastYearEzproxyAll;
 
     public StartServiceImpl() {
-        cachedStartModelTodayShib = new CachedStartStatistics();
-        cachedStartModelLastWeekShib = new CachedStartStatistics();
-        cachedStartModelLastMonthShib = new CachedStartStatistics();
-        cachedStartModelLastYearShib = new CachedStartStatistics();
+        cachedStartModelTodayShibInternal = new CachedStartStatistics();
+        cachedStartModelLastWeekShibInternal = new CachedStartStatistics();
+        cachedStartModelLastMonthShibInternal = new CachedStartStatistics();
+        cachedStartModelLastYearShibInternal = new CachedStartStatistics();
 
-        cachedStartModelTodayEzproxy = new CachedStartStatistics();
-        cachedStartModelLastWeekEzproxy = new CachedStartStatistics();
-        cachedStartModelLastMonthEzproxy = new CachedStartStatistics();
-        cachedStartModelLastYearEzproxy = new CachedStartStatistics();
+        cachedStartModelTodayShibExternal = new CachedStartStatistics();
+        cachedStartModelLastWeekShibExternal = new CachedStartStatistics();
+        cachedStartModelLastMonthShibExternal = new CachedStartStatistics();
+        cachedStartModelLastYearShibExternal = new CachedStartStatistics();
+
+        cachedStartModelTodayShibAll = new CachedStartStatistics();
+        cachedStartModelLastWeekShibAll = new CachedStartStatistics();
+        cachedStartModelLastMonthShibAll = new CachedStartStatistics();
+        cachedStartModelLastYearShibAll = new CachedStartStatistics();
+
+        cachedStartModelTodayEzproxyInternal = new CachedStartStatistics();
+        cachedStartModelLastWeekEzproxyInternal = new CachedStartStatistics();
+        cachedStartModelLastMonthEzproxyInternal = new CachedStartStatistics();
+        cachedStartModelLastYearEzproxyInternal = new CachedStartStatistics();
+
+        cachedStartModelTodayEzproxyExternal = new CachedStartStatistics();
+        cachedStartModelLastWeekEzproxyExternal = new CachedStartStatistics();
+        cachedStartModelLastMonthEzproxyExternal = new CachedStartStatistics();
+        cachedStartModelLastYearEzproxyExternal = new CachedStartStatistics();
+
+        cachedStartModelTodayEzproxyAll = new CachedStartStatistics();
+        cachedStartModelLastWeekEzproxyAll = new CachedStartStatistics();
+        cachedStartModelLastMonthEzproxyAll = new CachedStartStatistics();
+        cachedStartModelLastYearEzproxyAll = new CachedStartStatistics();
     }
 
     public void generateStatisticsBackground() {
@@ -74,19 +115,45 @@ public class StartServiceImpl implements StartService {
 
         StatisticParameters.EventType shibEventType = StatisticParameters.EventType.SHIBBOLETH_AUTHENTICATION;
         StatisticParameters.EventType ezproxyEventType = StatisticParameters.EventType.EZPROXY_AUTHENTICATION;
+        StatisticParameters.ResourceCategory resourceCategoryAll = StatisticParameters.ResourceCategory.ALL;
+        StatisticParameters.ResourceCategory resourceCategoryExternal = StatisticParameters.ResourceCategory.EXTERNAL;
+        StatisticParameters.ResourceCategory resourceCategoryInternal = StatisticParameters.ResourceCategory.INTERNAL;
 
         log.debug("Background start page worker getting today");
-        generateStatistics(cachedStartModelTodayShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, shibEventType);
-        generateStatistics(cachedStartModelTodayEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, ezproxyEventType);
+        generateStatistics(cachedStartModelTodayShibAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, shibEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelTodayShibInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, shibEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelTodayShibExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, shibEventType, resourceCategoryExternal);
+
+        generateStatistics(cachedStartModelTodayEzproxyAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, ezproxyEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelTodayEzproxyInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, ezproxyEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelTodayEzproxyExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startToday, ezproxyEventType, resourceCategoryExternal);
+
         log.debug("Background start page worker getting last week");
-        generateStatistics(cachedStartModelLastWeekShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, shibEventType);
-        generateStatistics(cachedStartModelLastWeekEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, ezproxyEventType);
+        generateStatistics(cachedStartModelLastWeekShibAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, shibEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastWeekShibInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, shibEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastWeekShibExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, shibEventType, resourceCategoryExternal);
+
+        generateStatistics(cachedStartModelLastWeekEzproxyAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, ezproxyEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastWeekEzproxyInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, ezproxyEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastWeekEzproxyExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startWeek, ezproxyEventType, resourceCategoryExternal);
+
         log.debug("Background start page worker getting last month");
-        generateStatistics(cachedStartModelLastMonthShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, shibEventType);
-        generateStatistics(cachedStartModelLastMonthEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, ezproxyEventType);
+        generateStatistics(cachedStartModelLastMonthShibAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, shibEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastMonthShibInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, shibEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastMonthShibExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, shibEventType, resourceCategoryExternal);
+
+        generateStatistics(cachedStartModelLastMonthEzproxyAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, ezproxyEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastMonthEzproxyInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, ezproxyEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastMonthEzproxyExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startMonth, ezproxyEventType, resourceCategoryExternal);
+
         log.debug("Background start page worker getting last year");
-        generateStatistics(cachedStartModelLastYearShib.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, shibEventType);
-        generateStatistics(cachedStartModelLastYearEzproxy.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, ezproxyEventType);
+        generateStatistics(cachedStartModelLastYearShibAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, shibEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastYearShibInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, shibEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastYearShibExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, shibEventType, resourceCategoryExternal);
+
+        generateStatistics(cachedStartModelLastYearEzproxyAll.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, ezproxyEventType, resourceCategoryAll);
+        generateStatistics(cachedStartModelLastYearEzproxyInternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, ezproxyEventType, resourceCategoryInternal);
+        generateStatistics(cachedStartModelLastYearEzproxyExternal.getCached(), currentTimeRange.currentTime, currentTimeRange.startYear, ezproxyEventType, resourceCategoryExternal);
 
         log.info("Generating background statistics for the start page...done");
     }
@@ -95,23 +162,107 @@ public class StartServiceImpl implements StartService {
     public void generateStatistics(WebSession websession) {
         log.debug("Getting start statistics for {} from {}", websession.getStartmodel().getStatsRangeSelector(), this);
 
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShib.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShib.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelTodayShib.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShib.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShibAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShibAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayShibAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShibAll.getCached());
+        
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShibExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShibExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayShibExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShibExternal.getCached());
+        
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthShibInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekShibInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayShibInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.SHIBBOLETH_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearShibInternal.getCached());
 
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelTodayEzproxy.getCached());
-        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION)
-            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearEzproxy.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthEzproxyAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekEzproxyAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayEzproxyAll.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.ALL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearEzproxyAll.getCached());
+        
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthEzproxyInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekEzproxyInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayEzproxyInternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.INTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearEzproxyInternal.getCached());
+        
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTMONTH && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastMonthEzproxyExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTWEEK && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastWeekEzproxyExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.TODAY && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelTodayEzproxyExternal.getCached());
+        if (websession.getStartmodel().getStatsRangeSelector() == StartModel.TimeRange.LASTYEAR && 
+                websession.getStartmodel().getEventType() == StartModel.EventType.EZPROXY_AUTHENTICATION &&
+                websession.getStartmodel().getResourceCategory() == StatisticParameters.ResourceCategory.EXTERNAL)
+            websession.getStartmodel().setStartStatistics(cachedStartModelLastYearEzproxyExternal.getCached());
 
         // so we could output the name of the attached MUA
         Capabilities capabilities = getAttachedCapabilities();
@@ -151,15 +302,16 @@ public class StartServiceImpl implements StartService {
     /**
      * Adds the following statistical information from the attached MUA: 1. Number of authentications per <RANGE> 2.
      */
-    private void generateStatistics(StartStatistics startstats, DateTime currentDateTime, DateTime chosenStartTime, StatisticParameters.EventType eventType) {
+    private void generateStatistics(StartStatistics startstats, DateTime currentDateTime, DateTime chosenStartTime, StatisticParameters.EventType eventType,
+            StatisticParameters.ResourceCategory resourceCategory) {
 
         List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
         log.info("Dashboard statistics are to be computed from a possible {} MUA statistics", statisticalUnits.size());
 
-        int computed=0;
-        int toCompute =0;
+        int computed = 0;
+        int toCompute = 0;
         for (AbstractDashboardStatistic dashboardStatistic : dashboardStatistics) {
-            if (dashboardStatistic.isEnabled() && dashboardStatistic.getEventType()==eventType) {
+            if (dashboardStatistic.isEnabled() && dashboardStatistic.getEventType() == eventType) {
                 toCompute++;
                 for (StatisticalUnitInformation unit : statisticalUnits) {
                     if (unit.getStatisticParameters().getType() == StatisticParameters.StatisticType.SYSTEM) {
@@ -167,10 +319,11 @@ public class StartServiceImpl implements StartService {
                             unit.getStatisticParameters().setEndTime(currentDateTime);
                             unit.getStatisticParameters().setStartTime(chosenStartTime);
                             unit.getStatisticParameters().setEventType(dashboardStatistic.getEventType());
-                            log.debug("Invoking statistic {} for the dasboard page",unit.getStatisticParameters().getUnitName());
+                            unit.getStatisticParameters().setResourceCategory(resourceCategory);
+                            log.debug("Invoking statistic {} for the dasboard page", unit.getStatisticParameters().getUnitName());
                             AggregatorGraphModel model = webEngine.updateAndInvokeStatisticalUnit(unit);
                             try {
-                                Object result = dashboardStatistic.getProcessedStatistic(model,unit);
+                                Object result = dashboardStatistic.getProcessedStatistic(model, unit);
                                 cacheStatistic(startstats, result, dashboardStatistic.getDashboardStatisticType());
                                 computed++;
                             } catch (DashboardStatisticException e) {
@@ -184,19 +337,19 @@ public class StartServiceImpl implements StartService {
                 }
             }
         }
-        log.info("{} out of a possible {} dashboard statistics computed",computed,toCompute);
+        log.info("{} out of a possible {} dashboard statistics computed", computed, toCompute);
         startstats.setAccurateOf(new DateTime(System.currentTimeMillis()));
 
     }
 
-    private void cacheStatistic(StartStatistics startstats, Object result, StartStatistics.StartStatisticType statisticType) throws ClassCastException  {
-        log.debug("Setting cached start statistic, for type {}",statisticType);
-        
-        if (statisticType==null){
+    private void cacheStatistic(StartStatistics startstats, Object result, StartStatistics.StartStatisticType statisticType) throws ClassCastException {
+        log.debug("Setting cached start statistic, for type {}", statisticType);
+
+        if (statisticType == null) {
             log.error("StatisticType not set for this statistic");
             return;
         }
-        
+
         switch (statisticType) {
             case NO_AUTHS:
                 startstats.setNumberOfAuthenticationsPer(((Double) result).doubleValue());

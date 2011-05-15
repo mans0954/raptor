@@ -11,13 +11,13 @@
 			<list>
 				<bean id="cardiffShibMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
 					<property name="serviceEndpoint"><value>https://localhost:8443/MUA/MultiUnitAggregator</value></property>
-					<property name="isAttached" value="false"></property>
+					<property name="isAttached" value="true"></property>
 					<property name="publicKey"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value></property>
                     <property name="publicKeyPassword"><value>phil11</value></property>
 				</bean>
 				<bean id="cardiffShib2MUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
                     <property name="serviceEndpoint"><value>https://localhost:8444/MUA/MultiUnitAggregator</value></property>
-                    <property name="isAttached" value="true"></property>
+                    <property name="isAttached" value="false"></property>
                     <property name="publicKey"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value></property>
                     <property name="publicKeyPassword"><value>phil11</value></property>
                 </bean>
@@ -103,7 +103,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			  <!--  <ref local="SystemStatsQuickTrigger"/>-->
+			   <ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>

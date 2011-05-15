@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
@@ -196,6 +197,22 @@ public class ServiceEndpointClient {
         }
 
     }
+    
+
+    public void sendResourceMetadata(List<ResourceMetadata> resourceMetadata, MUAEntry endpoint) {
+        try {
+            MultiUnitAggregator client = getEndpointConnection(endpoint);
+            log.debug("Accessing the MUA version " + client.getVersion());
+            log.debug("Sending resource classification to MUA");
+            client.saveResourceMetadata(resourceMetadata);
+        } catch (SoapFault e) {
+            log.error("Problem trying to send resource metadata to MUA with error {}", e.getMessage());
+        } catch (Exception e) {
+            log.error("Problem trying to send resource metadata to MUA with error {} ",e.getMessage());
+        }
+
+    }
+
 
     public AggregatorGraphModel updateAndinvokeStatisticalUnit(MUAEntry endpoint, StatisticalUnitInformation statisticalUnit) {
 	try {

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
@@ -278,6 +279,15 @@ public class RaptorWebEngine {
         }
 
 
+    }
+
+    /**
+     * Sends back to the attached MUA the current resource classification
+     */
+    public void sendResourceClassification() {
+        List<ResourceMetadata> resourceMetadata = currentlyAttachedCapabilities.getResourceMetadata();
+        serviceEndpointClient.sendResourceMetadata(resourceMetadata,attachedMUA);
+        
     }
 
 
