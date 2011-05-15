@@ -32,7 +32,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
-public interface EntryHandler {
+public interface IncrementalEntryHandler {
 
 	/**
 	 *
@@ -69,59 +69,26 @@ public interface EntryHandler {
 	 */
 	public void removeAllEntries();
 	
-	public void update(String query, Object[] parameters) throws StorageException;
-
 	/**
 	 *
 	 */
 	public void initialise();
-
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public List query(String query);
-
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public List query(String query, Object[] parameters);
-
-	/**
-	 *
-	 * @param query
-	 * @param parameters
-	 * @return
-	 */
-	public List query(String query, Object[] parameters, int maxNoResults);
 	
-	public void save(Object object) throws StorageException;
-	
-	public void saveAll(Collection object) throws StorageException;
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public Object queryUnique(String query);
-
 	/**
 	 *
 	 * @return
 	 */
 	public int getNumberOfEntries();
-
-	/**
-	 * @param query
-	 * @param parameters
-	 * @return
-	 */
-	public Object queryUnique(String query, Object[] parameters);
-
+	
 	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries);
+
+	/** 
+	 * Rests this <code>IncrementalEntryHandler</code> back to its initial state
+	 * 
+	 */
+	public void reset();
+
+
 
 
 }

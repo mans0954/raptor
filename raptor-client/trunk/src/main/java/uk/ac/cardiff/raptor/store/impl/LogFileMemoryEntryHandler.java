@@ -24,21 +24,19 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LogFileMemoryEntryHandler implements EntryHandler {
+public class LogFileMemoryEntryHandler implements IncrementalEntryHandler {
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
@@ -103,6 +101,12 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 		}
 		return false;
 
+	}
+	
+	public void reset() {
+		entries.clear();
+		latestEqualEntries.clear();
+		latestEntryTime = null;	
 	}
 
 	/**
@@ -219,44 +223,12 @@ public class LogFileMemoryEntryHandler implements EntryHandler {
 		return entries.size();
 	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query, Object[] parameters) {
-		return null;
-	}
 
 	public void setEntries(Set<Event> entries) {
 		this.entries = entries;
 
 	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters) {
-		return null;
-	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters, int maxNoResults) {
-		return null;
-	}
 
 }
