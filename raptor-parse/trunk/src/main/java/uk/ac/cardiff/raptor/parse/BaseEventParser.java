@@ -24,188 +24,195 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.CleanupFailureDataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.parse.filter.ExclusionList;
 import uk.ac.cardiff.raptor.parse.filter.InclusionList;
 import uk.ac.cardiff.raptor.store.EntryHandler;
-
-
-
+import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public abstract class BaseEventParser {
 
-    /** class logger */
-    private final Logger log = LoggerFactory.getLogger(BaseEventParser.class);
+	/** class logger */
+	private final Logger log = LoggerFactory.getLogger(BaseEventParser.class);
 
-    /** The handler that is responsible for storing events */
-    protected EntryHandler entryHandler;
+	/** The handler that is responsible for storing events */
+	protected IncrementalEntryHandler entryHandler;
 
-    /** A list of <fieldname,value> pairs that should be excluded during parsing */
-    private ExclusionList exclusionList;
+	/** A list of <fieldname,value> pairs that should be excluded during parsing */
+	private ExclusionList exclusionList;
 
-    /** A list of <fieldname, value> pairs that should be included during parsing */
-    private InclusionList inclusionList;
+	/**
+	 * A list of <fieldname, value> pairs that should be included during parsing
+	 */
+	private InclusionList inclusionList;
 
-    /** The fully qualified name of the event type class */
-    protected String eventType;
+	/** The fully qualified name of the event type class */
+	protected String eventType;
 
-    /** A human readable name of the types of events this parser handles*/
-    private String eventTypeFriendlyName;
+	/** A human readable name of the types of events this parser handles */
+	private String eventTypeFriendlyName;
 
-    /**
-     * Default constructor
-     */
-    public BaseEventParser() {
-    }
-
-    /**
-     * The method that must be provided to parse events from the <code>bytes</code> parameter
-     *
-     * @throws ParserException
-     */
-    public abstract void parse(byte[] bytes) throws ParserException;
-
-    /**
-     * The method that must be provided to parse events from the internally configured
-     * log file location e.g. <code>logfile</code>
-     *
-     * @throws ParserException
-     */
-    public abstract void parse() throws ParserException;
-
-
-    /**
-     * Creates a new object from a class name. Could be removed to a helper class
-     *
-     * @param className the fully qualified class name
-     * @return the new object instantiated as the type <code>className</code>
-     */
-    public Object createObject(String className) {
-	Object object = null;
-	try {
-	    Class classDefinition = Class.forName(className);
-	    object = classDefinition.newInstance();
-	} catch (InstantiationException e) {
-	    log.warn(e.getMessage());
-	} catch (IllegalAccessException e) {
-	    log.warn(e.getMessage());
-	} catch (ClassNotFoundException e) {
-	    log.warn(e.getMessage());
+	/**
+	 * Default constructor
+	 */
+	public BaseEventParser() {
 	}
-	return object;
-    }
 
-    /**
-     * Method to remove all entries from the entry handler
-     */
-    public void removeAllEntries() {
-	entryHandler.removeAllEntries();
+	/**
+	 * The method that must be provided to parse events from the
+	 * <code>bytes</code> parameter
+	 * 
+	 * @throws ParserException
+	 */
+	public abstract void parse(byte[] bytes) throws ParserException;
 
-    }
+	/**
+	 * The method that must be provided to parse events from the internally
+	 * configured log file location e.g. <code>logfile</code>
+	 * 
+	 * @throws ParserException
+	 */
+	public abstract void parse() throws ParserException;
+	
+	/** Method to reset this event parser back to its initial state.This involves
+	 * removing all entries from the <code>IncrementalEntryHandler</code> and 
+	 * reseting all references to the last event(s) parsed.*/
+	public void reset(){
+		entryHandler.reset();
+	}
 
-    /**
-     * Sets and initialises the entry handler
-     *
-     * @param entryHandler
-     */
-    public void setEntryHandler(EntryHandler entryHandler) {
-	this.entryHandler = entryHandler;
-	entryHandler.initialise();
-    }
+	/**
+	 * Creates a new object from a class name. Could be removed to a helper
+	 * class
+	 * 
+	 * @param className
+	 *            the fully qualified class name
+	 * @return the new object instantiated as the type <code>className</code>
+	 */
+	public Object createObject(String className) {
+		Object object = null;
+		try {
+			Class classDefinition = Class.forName(className);
+			object = classDefinition.newInstance();
+		} catch (InstantiationException e) {
+			log.warn(e.getMessage());
+		} catch (IllegalAccessException e) {
+			log.warn(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			log.warn(e.getMessage());
+		}
+		return object;
+	}
 
-    /**
-     * Gets the entry handler
-     *
-     * @return
-     */
-    public EntryHandler getEntryHandler() {
-	return entryHandler;
-    }
+	/**
+	 * Method to remove all entries from the entry handler
+	 */
+	public void removeAllEntries() {
+		entryHandler.removeAllEntries();
 
+	}
 
-    /**
-     * Sets the exclusion list
-     *
-     * @param exclusionList
-     */
-    public void setExclusionList(ExclusionList exclusionList) {
-	this.exclusionList = exclusionList;
-    }
+	/**
+	 * Sets and initialises the entry handler
+	 * 
+	 * @param entryHandler
+	 */
+	public void setEntryHandler(IncrementalEntryHandler entryHandler) {
+		this.entryHandler = entryHandler;
+		entryHandler.initialise();
+	}
 
-    /**
-     * Gets the exclusion list
-     *
-     * @return
-     */
-    public ExclusionList getExclusionList() {
-	return exclusionList;
-    }
+	/**
+	 * Gets the entry handler
+	 * 
+	 * @return
+	 */
+	public IncrementalEntryHandler getEntryHandler() {
+		return entryHandler;
+	}
 
+	/**
+	 * Sets the exclusion list
+	 * 
+	 * @param exclusionList
+	 */
+	public void setExclusionList(ExclusionList exclusionList) {
+		this.exclusionList = exclusionList;
+	}
 
-    /**
-     * Sets the inclusion list
-     *
-     * @param inclusionList
-     */
-    public void setInclusionList(InclusionList inclusionList) {
-	this.inclusionList = inclusionList;
-    }
+	/**
+	 * Gets the exclusion list
+	 * 
+	 * @return
+	 */
+	public ExclusionList getExclusionList() {
+		return exclusionList;
+	}
 
+	/**
+	 * Sets the inclusion list
+	 * 
+	 * @param inclusionList
+	 */
+	public void setInclusionList(InclusionList inclusionList) {
+		this.inclusionList = inclusionList;
+	}
 
-    /**
-     * Gets the inclusion list
-     *
-     * @return
-     */
-    public InclusionList getInclusionList() {
-	return inclusionList;
-    }
+	/**
+	 * Gets the inclusion list
+	 * 
+	 * @return
+	 */
+	public InclusionList getInclusionList() {
+		return inclusionList;
+	}
 
+	/**
+	 * Gets all the entries currently stored by this entry handler
+	 * 
+	 * @return
+	 */
+	public List<Event> getAuthentications() {
+		return entryHandler.getEntries();
 
-    /**
-     * Gets all the entries currently stored by this entry handler
-     *
-     * @return
-     */
-    public List<Event> getAuthentications() {
-	return entryHandler.getEntries();
+	}
 
-    }
+	/**
+	 * @param eventType
+	 *            the eventType to set
+	 */
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
 
-    /**
-     * @param eventType
-     *            the eventType to set
-     */
-    public void setEventType(String eventType) {
-            this.eventType = eventType;
-    }
+	/**
+	 * @return the eventType
+	 */
+	public String getEventType() {
+		return eventType;
+	}
 
-    /**
-     * @return the eventType
-     */
-    public String getEventType() {
-            return eventType;
-    }
+	/**
+	 * @param eventTypeFriendlyName
+	 *            the eventTypeFriendlyName to set
+	 */
+	public void setEventTypeFriendlyName(String eventTypeFriendlyName) {
+		this.eventTypeFriendlyName = eventTypeFriendlyName;
+	}
 
-    /**
-     * @param eventTypeFriendlyName the eventTypeFriendlyName to set
-     */
-    public void setEventTypeFriendlyName(String eventTypeFriendlyName) {
-        this.eventTypeFriendlyName = eventTypeFriendlyName;
-    }
-
-    /**
-     * @return the eventTypeFriendlyName
-     */
-    public String getEventTypeFriendlyName() {
-        return eventTypeFriendlyName;
-    }
+	/**
+	 * @return the eventTypeFriendlyName
+	 */
+	public String getEventTypeFriendlyName() {
+		return eventTypeFriendlyName;
+	}
 
 
 
