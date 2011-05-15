@@ -32,6 +32,7 @@ import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 /**
  * @author philsmart
@@ -110,7 +111,7 @@ public class DataAccessRegister {
 		}
 		log.info("GC. Garbage collection has found all events previous to {} can be removed",earliestReleaseTime);
 		for (BaseEventParser parser : parsingModules){
-				EntryHandler entryHandler = parser.getEntryHandler();
+				IncrementalEntryHandler entryHandler = parser.getEntryHandler();
 				log.info("GC. Parsing Module {} has {} events before garbage collection",parser,entryHandler.getNumberOfEntries());
 				entryHandler.removeEventsBefore(earliestReleaseTime,endpointWithEarliestReleaseTime.getReleaseInformation().getLatestEqualEntries());
 				log.info("GC. Parsing Module {} has {} events after garbage collection", parser,entryHandler.getNumberOfEntries());
