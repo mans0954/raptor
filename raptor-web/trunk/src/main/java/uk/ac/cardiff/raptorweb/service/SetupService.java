@@ -45,5 +45,7 @@ public interface SetupService {
 	 * @param websession
 	 */
         public void batchUpload(WebSession websession);
+        
+        public void sendResourceClassification();
 
 }

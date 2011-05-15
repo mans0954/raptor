@@ -65,5 +65,9 @@ public class SetupServiceImpl implements SetupService {
         webEngine.batchUpload(websession);
 
     }
+    
+    public void sendResourceClassification(){
+        webEngine.sendResourceClassification();
+    }
 
 }

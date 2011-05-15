@@ -35,87 +35,93 @@ import org.springframework.core.io.Resource;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class ExcelReportGenerator extends ReportConstructor {
     static Logger log = LoggerFactory.getLogger(ExcelReportGenerator.class);
 
     @Override
     public void generateReport(WebSession session) {
-	log.info("Generating Excel Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
-	String relativePath = null;
-	try {
-	    // make sure base directory exists first
-	    File baseGraphDirectory = saveDirectory.getFile();
-	    if (!baseGraphDirectory.exists())
-		baseGraphDirectory.mkdir();
+        log.info("Generating Excel Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
+        String relativePath = null;
+        try {
+            // make sure base directory exists first
+            File baseGraphDirectory = saveDirectory.getFile();
+            if (!baseGraphDirectory.exists())
+                baseGraphDirectory.mkdir();
 
-	    File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
-	    log.debug("Save Directory exists: " + dir.exists());
-	    if (!dir.exists())
-		dir.mkdir();
+            File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
+            log.debug("Save Directory exists: " + dir.exists());
+            if (!dir.exists())
+                dir.mkdir();
 
-	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".xls");
-	    WorkbookSettings ws = new WorkbookSettings();
-	    ws.setLocale(new Locale("en", "EN"));
-	    WritableWorkbook workbook = Workbook.createWorkbook(dir, ws);
-	    WritableSheet s = workbook.createSheet("RaptorWeb Report " + session.getGraphmodel().getSelectedStatisticalUnit(), 0);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+            java.util.Date date = new java.util.Date();
+            
+            String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
+                    + dateFormat.format(date) + ".xls";
+            if (!session.getGraphmodel().getDownloadFilename().equals("")) {
+                fileName = session.getGraphmodel().getDownloadFilename()+".xls";
+            }
+            dir = new File(dir.getAbsoluteFile() + "/" + fileName);
 
-	    int rowCount = 0;
-	    for (int lineCount = 0; lineCount < maxNoRows(session.getGraphmodel().getCurrentTableGraph())+1; lineCount++) {
-		int cellPosition = 0;
-		if (lineCount == 0) {
-		    // do headers
-		    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
-			WritableFont wf = new WritableFont(WritableFont.ARIAL, 12, WritableFont.BOLD);
-			WritableCellFormat cf = new WritableCellFormat(wf);
-			cf.setWrap(false);
-			Label h1 = new Label(cellPosition, 0, tseries.getSeriesLabel(), cf);
-			s.addCell(h1);
-			cellPosition++;
-			Label h2 = new Label(cellPosition, 0, "Value", cf);
-			s.addCell(h2);
-			cellPosition++;
-		    }
-		} else {
-		    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
-			if (tseries.getRows().size() > rowCount) {
-			    WritableFont wf = new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD);
-			    WritableCellFormat cf = new WritableCellFormat(wf);
-			    WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.FLOAT);
-			    cf.setWrap(false);
-			    Label l = new Label(cellPosition, lineCount, tseries.getRows().get(rowCount).getGroup(), cf);
-			    s.addCell(l);
-			    cellPosition++;
-			    Number l2 = new Number(cellPosition, lineCount, ((Double) tseries.getRows().get(rowCount).getValue()), cf2);
-			    s.addCell(l2);
-			    cellPosition++;
+            WorkbookSettings ws = new WorkbookSettings();
+            ws.setLocale(new Locale("en", "EN"));
+            WritableWorkbook workbook = Workbook.createWorkbook(dir, ws);
+            WritableSheet s = workbook.createSheet("RaptorWeb Report " + session.getGraphmodel().getSelectedStatisticalUnit(), 0);
 
-			}
-		    }
-		    rowCount++;
-		}
+            int rowCount = 0;
+            for (int lineCount = 0; lineCount < maxNoRows(session.getGraphmodel().getCurrentTableGraph()) + 1; lineCount++) {
+                int cellPosition = 0;
+                if (lineCount == 0) {
+                    // do headers
+                    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
+                        WritableFont wf = new WritableFont(WritableFont.ARIAL, 12, WritableFont.BOLD);
+                        WritableCellFormat cf = new WritableCellFormat(wf);
+                        cf.setWrap(false);
+                        Label h1 = new Label(cellPosition, 0, tseries.getSeriesLabel(), cf);
+                        s.addCell(h1);
+                        cellPosition++;
+                        Label h2 = new Label(cellPosition, 0, "Value", cf);
+                        s.addCell(h2);
+                        cellPosition++;
+                    }
+                } else {
+                    for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
+                        if (tseries.getRows().size() > rowCount) {
+                            WritableFont wf = new WritableFont(WritableFont.ARIAL, 10, WritableFont.NO_BOLD);
+                            WritableCellFormat cf = new WritableCellFormat(wf);
+                            WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.FLOAT);
+                            cf.setWrap(false);
+                            Label l = new Label(cellPosition, lineCount, tseries.getRows().get(rowCount).getGroup(), cf);
+                            s.addCell(l);
+                            cellPosition++;
+                            Number l2 = new Number(cellPosition, lineCount, ((Double) tseries.getRows().get(rowCount).getValue()), cf2);
+                            s.addCell(l2);
+                            cellPosition++;
 
+                        }
+                    }
+                    rowCount++;
+                }
 
-	    }
+            }
 
-	    relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
-	    Date now = new Date(System.currentTimeMillis());
-	    session.getReportmodel().addReportForDownload(dir, relativePath,now, this.getHandledReportType().displayName);
-	    log.debug("Excel Report Created At: " + relativePath);
-	    workbook.write();
-	    workbook.close();
+            relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
+            Date now = new Date(System.currentTimeMillis());
+            session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
+            log.debug("Excel Report Created At: " + relativePath);
+            workbook.write();
+            workbook.close();
 
-	} catch (IOException e) {
-	    log.error("Problem generating excel report {}", e.getMessage());
+        } catch (IOException e) {
+            log.error("Problem generating excel report {}", e.getMessage());
 
-	} catch (WriteException e) {
-	    log.error("Problem generating excel report {}", e.getMessage());
-	}
+        } catch (WriteException e) {
+            log.error("Problem generating excel report {}", e.getMessage());
+        }
 
-	log.info("Excel Created..." + session.getGraphmodel().getSelectedStatisticalUnit());
+        log.info("Excel Report Created" + session.getGraphmodel().getSelectedStatisticalUnit());
     }
 
     /**
@@ -123,16 +129,16 @@ public class ExcelReportGenerator extends ReportConstructor {
      * @return
      */
     private int maxNoRows(RaptorTableChartModel currentTableGraph) {
-	int maxRows = 0;
-	for (TableSeries tseries : currentTableGraph.getTableSeries()) {
-	    if (tseries.getRows().size() > maxRows)
-		maxRows = tseries.getRows().size();
-	}
-	return maxRows;
+        int maxRows = 0;
+        for (TableSeries tseries : currentTableGraph.getTableSeries()) {
+            if (tseries.getRows().size() > maxRows)
+                maxRows = tseries.getRows().size();
+        }
+        return maxRows;
     }
 
     @Override
     protected HandledReportTypes getRegisterHandledReportType() {
-	return HandledReportTypes.excel;
+        return HandledReportTypes.excel;
     }
 }

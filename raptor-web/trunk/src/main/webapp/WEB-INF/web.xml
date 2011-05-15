@@ -147,7 +147,7 @@
         <filter-class>org.ajax4jsf.Filter</filter-class>
         <init-param>
             <param-name>maxRequestSize</param-name>
-            <param-value>50240000</param-value>
+            <param-value>10000000</param-value>
         </init-param>
         <init-param>
             <param-name>createTempFiles</param-name>

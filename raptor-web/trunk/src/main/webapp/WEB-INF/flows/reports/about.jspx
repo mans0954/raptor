@@ -12,37 +12,45 @@
 
 
 			<f:verbatim>
-			<br/>
-				<center><h1 style="font-size:300%">Raptor</h1></center>
-				<br/>
-				<p style="padding-left: 20pt;padding-right: 30pt; font-size:150%">
-					The RAPTOR project (Retreival, Analysis, and Presentation Toolkit for usage of Online Resources) is a JISC
-					funded project creating software to help analyse usage statistics for electronic resource management
-				</p>
-				<br/>
-				<br/>
-				<center><h2 style="font-size:200%">Project Aims</h2></center>
-				<br/>
-				<ul style="padding-left: 20pt;padding-right: 60pt; font-size:150%">
-					<li>1. Understand institutional and national accounting and
-					reporting requirements around statistics of e-resource access via
-					Shibboleth and Ezproxy.</li>
+				<br />
+				<center>
+					<h1 style="font-size: 300%">Raptor</h1>
+					<img src="/raptor-web/image/raptor-large.png" />
+				</center>				
 
-					<li>2. Build a free-to-use, open source software toolkit which
-					aims to present statistical accounting information about e-resource
-					usage to non-technical users, and makes basic aggregated usage
-					information available to external organisations.</li>
+				<br />
+				<p style="padding-left: 20pt; padding-right: 30pt; font-size: 150%">
+					The RAPTOR project (Retreival, Analysis, and Presentation Toolkit
+					for usage of Online Resources) is a JISC funded project creating
+					software to help analyse usage statistics for electronic resource
+					management</p>
+				<br />
+				<br />
+				<center>
+					<h2 style="font-size: 200%">Project Aims</h2>
+				</center>
+				<br />
+				<ul style="padding-left: 20pt; padding-right: 60pt; font-size: 150%">
+					<li>Understand institutional and national accounting and
+						reporting requirements around statistics of e-resource access via
+						Shibboleth and Ezproxy.</li>
 
-					<li>3. To implement the RAPTOR software toolkit through a process
-					of a quickly developed initial release and subsequent regular
-					updates during the lifetime of the project, through a group of
-					around 8-10 pilot institutions, using their feedback regarding both
-					bugs and desired features to inform the regular updates.</li>
+					<li>Build a free-to-use, open source software toolkit which
+						aims to present statistical accounting information about
+						e-resource usage to non-technical users, and makes basic
+						aggregated usage information available to external organisations.</li>
+
+					<li>To implement the RAPTOR software toolkit through a
+						process of a quickly developed initial release and subsequent
+						regular updates during the lifetime of the project, through a
+						group of around 8-10 pilot institutions, using their feedback
+						regarding both bugs and desired features to inform the regular
+						updates.</li>
 				</ul>
 
 
 			</f:verbatim>
-			<br/>
+			<br />
 
 
 		</ui:define>

@@ -20,7 +20,7 @@
 				<a4j:status id="stateStatus" startText="Working..."
 					startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" />
 
-				<rich:simpleTogglePanel switchType="client" label="Control Panel"
+				<rich:simpleTogglePanel switchType="server" label="Control Panel"
 					opened="true">
 
 					<rich:layout>
@@ -107,6 +107,14 @@
                                                          <f:selectItem itemLabel="Ezproxy" itemValue="EZPROXY_AUTHENTICATION" />
                                                 </rich:inplaceSelect>
 
+                                                 <h:outputText value="Resource Category"
+                                                    style="font-weight: bold;" />
+                                                    
+                                                    <rich:inplaceSelect value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.resourceCategoryString}">
+                                                         <f:selectItem itemLabel="Internal" itemValue="INTERNAL" />
+                                                         <f:selectItem itemLabel="External" itemValue="EXTERNAL" />
+                                                         <f:selectItem itemLabel="All" itemValue="ALL" />
+                                                </rich:inplaceSelect>
 
 												<h:outputText value="Start Time:" style="font-weight: bold;" />
 
@@ -278,7 +286,7 @@
 
 
 					<rich:tabPanel id="chartTabPanel" height="450" selectedTab="graph"
-						switchType="client">
+						switchType="server">
 
 
 						<rich:tab name="graph" label="Graph">
@@ -332,7 +340,7 @@
 
 
 						<rich:tab name="table" label="Table">
-							<!-- <rich:datascroller for="currentTableGraphTable" maxPages="10" />-->
+							
 							<rich:dataTable id="currentTableGraphTable"
 								value="#{flowScope.websession.graphmodel.currentTableGraph.rowList}"
 								bandingInterval="2" banding="row" rows="25" var="unit"
@@ -345,7 +353,7 @@
 								<rich:columns
 									value="#{flowScope.websession.graphmodel.currentTableGraph.series}"
 									var="columns" index="index" id="column#{index}"
-									sortBy="#{columns}" filterBy="#{columns}" filterEvent="onkeyup">
+									 filterEvent="onkeyup">
 									<f:facet name="header">
 										<h:outputText value="#{columns}" />
 									</f:facet>
@@ -362,13 +370,17 @@
 
 							<rich:panel style="padding:0" headerClass="outpanelHeader">
 								<f:facet name="header">
-									<rich:spacer height="1" />
+									
 								</f:facet>
-								<h:panelGrid columns="3">
+								<rich:spacer height="5px" />
+								<h:outputText value="Enter a filename, or leave blank if you want one to be automatically generated"/>
+								<rich:spacer height="5px" />
+								<h:panelGrid columns="3">								    
+								   
 									<h:graphicImage style="cursor: pointer"
 												value="/image/arrow.png"/>
 									<h:outputText value="Filename:"/>
-									<h:inputText/>
+									<h:inputText value="#{flowScope.websession.graphmodel.downloadFilename}"/>
 								</h:panelGrid>
 
 								<h:panelGrid id="reportTypePanel" columns="3">
@@ -462,8 +474,6 @@
 
 				</a4j:form>
 
-				<!-- RESULTS TABLE -->
-				<!-- ________________________________ -->
 
 
 

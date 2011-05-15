@@ -37,10 +37,13 @@ public class GraphModel implements Serializable{
 	private RaptorJFreeChartModel currentJFreeGraph;
 	private String controlPanelSize;
 	private List<StatisticalUnitInformationView> statisticalUnitsForView;
+	
+	/** The filename to use for report downloads.*/
+	private String downloadFilename;
 
 	private SuggestionValues suggestionValues;
 
-	/* Selected series modal panel*/
+	/** Selected series modal panel*/
 	private Series selectedSeries;
 
 
@@ -201,6 +204,20 @@ public class GraphModel implements Serializable{
 	public AggregatorGraphModel getRawGraphModel() {
 	    return rawGraphModel;
 	}
+
+    /**
+     * @param downloadFilename the downloadFilename to set
+     */
+    public void setDownloadFilename(String downloadFilename) {
+        this.downloadFilename = downloadFilename;
+    }
+
+    /**
+     * @return the downloadFilename
+     */
+    public String getDownloadFilename() {
+        return downloadFilename;
+    }
 
 
 

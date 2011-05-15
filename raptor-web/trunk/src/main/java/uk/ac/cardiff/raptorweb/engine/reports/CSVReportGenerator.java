@@ -40,7 +40,9 @@ import org.springframework.core.io.Resource;
  *
  */
 public class CSVReportGenerator extends ReportConstructor {
-    static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
+    
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
     public void generateReport(WebSession session) {
 	log.info("Generating CSV Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
@@ -59,7 +61,12 @@ public class CSVReportGenerator extends ReportConstructor {
 
 	    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 	    java.util.Date date = new java.util.Date();
-	    dir = new File(dir.getAbsoluteFile() + "/" + session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".csv");
+	    
+	    String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-" + dateFormat.format(date) + ".csv";
+	    if (!session.getGraphmodel().getDownloadFilename().equals("")){
+	        fileName = session.getGraphmodel().getDownloadFilename()+".csv";
+	    }	    
+	    dir = new File(dir.getAbsoluteFile() + "/"+fileName);
 
 
 	    StringBuilder document = new StringBuilder();

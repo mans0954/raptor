@@ -25,7 +25,7 @@ public class FileUpload implements Serializable{
 
     private ArrayList<LogFileUpload> files = new ArrayList<LogFileUpload>();
     private int uploadsAvailable;
-    private int MAX_UPLOADS = 5;
+    private int MAX_UPLOADS = 2;
     private boolean autoUpload = false;
     private boolean useFlash = false;
 
