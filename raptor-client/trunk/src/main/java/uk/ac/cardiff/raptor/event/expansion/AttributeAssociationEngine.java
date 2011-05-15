@@ -61,7 +61,7 @@ public class AttributeAssociationEngine {
             }
 
             int attached=0;
-            int noPrincipal=0;
+            int failedToAssociate=0;
             int current=0;
             final int noOfEvents = events.size();
             for (Event event : events){
@@ -71,12 +71,12 @@ public class AttributeAssociationEngine {
                     attached++;
                 }
                 else{
-                    noPrincipal++;
+                	failedToAssociate++;
                 }
                 current++;
             }
-            log.info("Attribute Association Definition {} finished, associated information to {} events, where {} events where not of a valid class type or did not have the correct principal",
-                    new Object[]{attributeAssociationDefinition.getDefiniationName(),attached,noPrincipal});
+            log.info("Attribute Association Definition {} finished, associated information to {} events, where {} events had no attributes associated",
+                    new Object[]{attributeAssociationDefinition.getDefiniationName(),attached,failedToAssociate});
         }
 
     }

@@ -20,6 +20,7 @@ package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,6 +32,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
+import org.hibernate.exception.DataException;
 import org.jaxen.function.LastFunction;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -105,9 +107,35 @@ public class PersistantEntryHandler implements EntryHandler {
 		return dataConnection.runQueryUnique(query, parameters);
 	}
 
+	public void update(String query, Object[] parameters) throws StorageException{
+		try{
+			dataConnection.runUpdate(query, parameters);
+		}
+		catch(DataAccessException e){
+			throw new StorageException("Could not perform entry handler update",e);
+		}
+	}
 
 	public List query(String query, Object[] parameters, int maxNoResults) {
 	      return dataConnection.runQuery(query, parameters, maxNoResults);
+	}
+	
+	public void save(Object object) throws StorageException {
+		try{
+			dataConnection.save(object);
+		}
+		catch (DataException e){
+			throw new StorageException("Could not save object",e);
+		}
+	}
+
+	public void saveAll(Collection object) throws StorageException {
+		try{
+			dataConnection.saveAll(object);
+		}
+		catch (DataException e){
+			throw new StorageException("Could not save collection",e);
+		}	
 	}
 
 	/**
@@ -206,10 +234,5 @@ public class PersistantEntryHandler implements EntryHandler {
 
 
 	}
-
-
-
-
-
 
 }

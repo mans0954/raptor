@@ -31,12 +31,13 @@ import uk.ac.cardiff.model.event.Event;
  */
 public interface RaptorDataConnection {
 
-	public List runQuery(String query, Object[] parameters);
-	public Object runQueryUnique(String query, Object[] parameters);
+	public List runQuery(String query, Object[] parameters)  throws DataAccessException;
+	public Object runQueryUnique(String query, Object[] parameters)  throws DataAccessException;
 	public void save(Object object) throws DataAccessException;
 	public void deleteAllEntries(Collection entries) throws DataAccessException;
 	public void saveAll(Collection collection) throws DataAccessException;
 	public List runQuery(String query, Object[] parameters, int maxResultSize)throws DataAccessException;
+	public void runUpdate(String query, Object[] parameters)  throws DataAccessException;
 
 
 

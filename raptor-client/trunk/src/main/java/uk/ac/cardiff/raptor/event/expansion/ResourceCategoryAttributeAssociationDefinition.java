@@ -42,9 +42,6 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(ResourceCategoryAttributeAssociationDefinition.class);
 
-
-    private List<AttributeLookup> lookupAttributes;
-
     /** The data connector used to acquire the attributes*/
     private RaptorDataConnection dataConnection;
 
@@ -58,7 +55,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
      * @param event
      */
     public boolean associate(Event event) {
-
+    
        ResourceMetadata resourceMetadata = null;
        Object result =  dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?", new Object[]{event.getResourceId()});
        if (result !=null && result instanceof ResourceMetadata){
@@ -76,6 +73,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
            resourceNew.setExternal(true);
            resourceNew.setInternal(false);
            resourceNew.setResourceId(event.getResourceId());
+           event.setResourceIdCategory(2);
            try{
                dataConnection.save(resourceNew);
            }
@@ -87,22 +85,6 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
        }
 
     }
-
-
-    /**
-     * @param lookupAttributes the lookupAttributes to set
-     */
-    public void setLookupAttributes(List<AttributeLookup> lookupAttributes) {
-        this.lookupAttributes = lookupAttributes;
-    }
-
-    /**
-     * @return the lookupAttributes
-     */
-    public List<AttributeLookup> getLookupAttributes() {
-        return lookupAttributes;
-    }
-
 
 
     /**

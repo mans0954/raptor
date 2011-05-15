@@ -49,8 +49,12 @@ public class DefaultDataConnection implements RaptorDataConnection {
 		hibernateTemplate.saveOrUpdateAll(collection);
 	}
 
-	public List runQuery(String query, Object[] parameters) {
+	public List runQuery(String query, Object[] parameters)  throws DataAccessException{
 		return hibernateTemplate.find(query, parameters);
+	}
+	
+	public void runUpdate(String query, Object[] parameters) throws DataAccessException{
+		hibernateTemplate.bulkUpdate(query,parameters);
 	}
 
 	public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException {
@@ -60,7 +64,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
             return result;
         }
 
-	public Object runQueryUnique(String query, Object[] parameters) {
+	public Object runQueryUnique(String query, Object[] parameters)  throws DataAccessException{
 		if (parameters!=null)
 			log.trace("Query to db, {}, with params [{}]",query,Arrays.asList(parameters));
 		Object object = DataAccessUtils.uniqueResult(getHibernateTemplate().find(query, parameters));

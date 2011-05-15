@@ -24,6 +24,7 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -219,6 +220,27 @@ public class MemoryEntryHandler implements EntryHandler {
 	 */
 	public List query(String query, Object[] parameters, int maxNoResults) {
 		return null;
+	}
+
+	/**
+	 * This is a no-op method for all in-memory entry handlers
+	 */
+	public void save(Object object) {
+		
+	}
+
+	/**
+	 * This is a no-op method for all in-memory entry handlers
+	 */
+	public void saveAll(Collection object) {
+		
+	}
+
+	/**
+	 * This is a no-op method for all in-memory entry handlers
+	 */
+	public void update(String query, Object[] parameters) {
+		
 	}
 
 }

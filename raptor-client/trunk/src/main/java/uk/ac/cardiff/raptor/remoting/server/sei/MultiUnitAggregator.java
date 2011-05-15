@@ -27,6 +27,7 @@ import org.apache.cxf.binding.soap.SoapFault;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
@@ -43,7 +44,6 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 public interface MultiUnitAggregator {
 
 	public String getVersion();
-
 
 	public Capabilities getCapabilities();
 
@@ -67,5 +67,8 @@ public interface MultiUnitAggregator {
 
 	/** Send a batch of log files to the MUA to store */
 	public List<LogFileUploadResult>  batchUpload(List<LogFileUpload> uploadFiles);
+
+
+	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata);
 
 }
