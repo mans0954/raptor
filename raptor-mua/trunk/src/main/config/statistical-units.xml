@@ -158,6 +158,11 @@
                     </property>
 			</bean>
 		</property>
+        <property name="postprocessor">
+            <list>
+                <ref bean="groupNameSort"></ref>
+            </list>
+        </property>
 	</bean>
 
 
@@ -262,6 +267,11 @@
                     </property>
             </bean>
         </property>
+        <property name="postprocessor">
+            <list>
+                <ref bean="groupNameSort"></ref>
+            </list>
+        </property>
     </bean>
 
         <bean id="authsPerPersonAffiliation" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
@@ -298,12 +308,20 @@
                     </property>
             </bean>
         </property>
+        <property name="postprocessor">
+            <list>
+                <ref bean="groupNameSort"></ref>
+            </list>
+        </property>
     </bean>
 
 	<!--  Support statistical workflows -->
 
 	<bean id="percentagePost" class = "uk.ac.cardiff.raptormua.engine.statistics.PercentagePostProcessor">
 	</bean>
+    
+    <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.SortGroupsAlphabeticallyPostProcessor">
+    </bean>
 
 	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.ShibbolethMetadataNameFormatter">
 		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>

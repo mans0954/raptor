@@ -66,12 +66,15 @@ public class GroupByFrequency extends Statistic {
 		log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
 		String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
+		
+		String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();
+		log.debug("Resource Category Filter {}",resourceCategoryFilter);
 
 		String query = "";
 		if (sqlWhere.equals("")) {
-			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
+			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" group by ("+groupByField+")";
 		} else {
-			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
+			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere+" group by ("+groupByField+")";
 		}
 
 		Object[] params = new Object[]{start.toDate(),end.toDate()};

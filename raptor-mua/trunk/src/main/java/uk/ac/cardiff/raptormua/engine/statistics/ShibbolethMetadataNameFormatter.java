@@ -46,11 +46,11 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
 
-    /* use SAML metadata off the filesystem */
+    /** use SAML metadata off the filesystem */
     private FilesystemMetadataProvider provider;
 
-    /* class logger */
-    static Logger log = LoggerFactory.getLogger(ShibbolethMetadataNameFormatter.class);
+    /** class logger */
+    private final Logger log = LoggerFactory.getLogger(ShibbolethMetadataNameFormatter.class);
 
     /** this is not a proper URI at the moment, just a UNC path */
     private String SAMLMetadataURI;
@@ -69,7 +69,6 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
     }
 
 
-	@Override
 	public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
 		log.debug("Entries into postprocessor: {}",observations.length);
 		for (Observation obs : observations) {

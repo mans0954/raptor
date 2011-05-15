@@ -15,13 +15,14 @@
             <list>
                 <ref bean="shibPrincipalAttributeAssociationDefinition"/>
                 <ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>
+                <ref bean="shibResourceCategoryAttributeAssociationDefinition"/>
              </list>
         </property>
     </bean>
 
     <!-- Association policies to mark resources as internal or external -->
     <bean id="shibResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
-        <property name="definiationName"><value>ShibAssociationDefinition</value></property>
+        <property name="definiationName"><value>Shib Resource Category Definition</value></property>
         <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>

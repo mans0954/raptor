@@ -29,6 +29,7 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
@@ -43,8 +44,10 @@ import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
+import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
+import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
@@ -175,6 +178,11 @@ public class MUAEngine {
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 		capabilities.setSuggestionValues(suggestionValues);
 		capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
+		
+		//set resource metadata
+		List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
+		log.debug("Setting {} resource metadata",resourceMetadata.size());
+		capabilities.setResourceMetadata(resourceMetadata);
 
 		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
 		for (Statistic entry : su) {
@@ -226,7 +234,7 @@ public class MUAEngine {
 				log.debug("Parsing {} using parser {} for type {}", new Object[] { logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType() });
 				parser.parse(logfileUpload.getData());
 				allEvents.addAll(parser.getEntryHandler().getEntries());
-				parser.removeAllEntries();
+				parser.reset();
 				result.setStatus("Parsed On the MUA");
 				result.setProcessed(true);
 
@@ -258,6 +266,11 @@ public class MUAEngine {
 		log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
 		statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
 
+	}
+	
+	public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata){
+		ResourceClassificationBackgroundService backgroundService = new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
+		backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
 	}
 
 	/**
