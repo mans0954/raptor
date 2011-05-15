@@ -11,9 +11,12 @@
 
 		<id name="persistantId" column="persistantId" type="long"
 			unsaved-value="0">
-			<generator class="native">
+			<!-- <generator class="native">
 				<param name="sequence">hib_entity_seq</param>
-			</generator>
+			</generator> -->
+            <generator class="hilo">
+
+            </generator>
 		</id>
 
 		<property name="eventTime"

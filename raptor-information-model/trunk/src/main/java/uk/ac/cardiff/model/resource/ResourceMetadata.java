@@ -1,6 +1,18 @@
 package uk.ac.cardiff.model.resource;
 
-public class ResourceMetadata {
+import java.io.Serializable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+public class ResourceMetadata implements Serializable{
+    
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(ResourceMetadata.class);
+
+    /** Generated Serial UID */
+    private static final long serialVersionUID = -6007311260031942309L;
 
     /** Identifier for hibernate. */
     private long persistantId;
@@ -13,6 +25,62 @@ public class ResourceMetadata {
     
     /** Whether this resourceId represents a resource external to the organisation. */
     private boolean external;
+    
+    
+    public String getInternalExternal(){        
+        if (internal==true){
+            return "Internal";
+        }
+        else if (external==true){
+            return "External";
+        }
+        return "Unknown";
+    }
+    
+    public void setInternalExternal(String option){
+        if (option.equals("Internal")){
+            internal = true;
+            external = false;            
+        }
+        else if (option.equals("External")){
+            internal = false;
+            external = true;
+        }
+        else{
+            internal = false;
+            external = true;
+        }
+    }
+    
+    public int getResourceCategory() {
+        if (internal==true){
+            return 1;
+        }
+        else if (external==true){
+            return 2;
+        }
+        return 0;
+    }
+    
+    public void setResourceCategory(int resourceCategory){
+        
+    }
+    
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getName());
+        sb.append("[");
+        sb.append(persistantId);
+        sb.append(":");
+        sb.append(resourceId);
+        sb.append(":");
+        sb.append(internal);
+        sb.append(":");
+        sb.append(external);
+        sb.append("]");
+        return sb.toString();
+        
+    }
 
     /**
      * @param resourceId the resourceId to set
@@ -69,6 +137,8 @@ public class ResourceMetadata {
     public long getPersistantId() {
         return persistantId;
     }
+
+
     
     
 }

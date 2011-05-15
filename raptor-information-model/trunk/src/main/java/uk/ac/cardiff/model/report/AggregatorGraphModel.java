@@ -2,96 +2,99 @@ package uk.ac.cardiff.model.report;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-
 
 /*
  * based on the Apache Trinidad ChartModel, for compatibility. However, does not extend the Apache Trinidad Model
  * so as to remain view agnostic.
  */
 
-public class AggregatorGraphModel implements Serializable{
+public class AggregatorGraphModel implements Serializable {
 
-    	/** Class logger */
-        private static final long serialVersionUID = 5372664739350074383L;
-    
-    	/** The list of <code>String</code> labels for the groups*/
-	private List<String> groupLabels;
-	
-	/** The list of <code>String</code> labels for each series*/
-	private List<String> seriesLabels;
-	
-	/** The list of <code>Double</code> values assigned to each series */
-	private List<List<Double>> chartValues;
+    /** Class logger */
+    private static final long serialVersionUID = 5372664739350074383L;
 
-	/** A class that holds presentation information for this graph model*/
-	private Presentation presentation;
+    /** The list of <code>String</code> labels for the groups */
+    private List<String> groupLabels;
 
-	public AggregatorGraphModel(){
-	    seriesLabels= new ArrayList<String>();
-	}
+    /** The list of <code>String</code> labels for each series */
+    private List<String> seriesLabels;
 
+    /** The list of <code>Double</code> values assigned to each series */
+    private List<List<Double>> chartValues;
 
-	public List<String> getGroupLabels() {
-		  return groupLabels;
+    /** A class that holds presentation information for this graph model */
+    private Presentation presentation;
 
-	}
+    public AggregatorGraphModel() {
+        seriesLabels = new ArrayList<String>();
+    }
 
-	public void addGroupLabel(String label){
-		if (getGroupLabels()==null)setGroupLabels(new ArrayList<String>());
-		getGroupLabels().add(label);
-	}
+    public List<String> getGroupLabels() {
+        return groupLabels;
 
-	public void addSeriesLabel(String label){
-		if (getSeriesLabels()==null)setSeriesLabels(new ArrayList<String>());
-		getSeriesLabels().add(label);
-	}
+    }
 
+    public void addGroupLabel(String label) {
+        if (getGroupLabels() == null)
+            setGroupLabels(new ArrayList<String>());
+        getGroupLabels().add(label);
+    }
 
-	public List<String> getSeriesLabels() {
-	    return seriesLabels;
+    public void addSeriesLabel(String label) {
+        if (getSeriesLabels() == null)
+            setSeriesLabels(new ArrayList<String>());
+        getSeriesLabels().add(label);
+    }
 
-	}
+    public void sortGroupLabelsAlphabetically() {
+        Collections.sort(groupLabels);
 
-	public void addGroupValue(List<Double> values){
-		if (chartValues==null) setChartValues(new ArrayList<List<Double>>());
-		chartValues.add(values);
-	}
+    }
 
+    public List<String> getSeriesLabels() {
+        return seriesLabels;
 
-	public List<List<Double>> getYValues() {
-		    return chartValues;
-	}
+    }
 
-	public void setYValues(List<List<Double>> values) {
+    public void addGroupValue(List<Double> values) {
+        if (chartValues == null)
+            setChartValues(new ArrayList<List<Double>>());
+        chartValues.add(values);
+    }
 
-	}
+    public List<List<Double>> getYValues() {
+        return chartValues;
+    }
 
+    public void setYValues(List<List<Double>> values) {
 
-	public void setGroupLabels(List<String> groupLabels) {
-		this.groupLabels = groupLabels;
-	}
+    }
 
-	public void setSeriesLabels(List<String> seriesLabels) {
-		this.seriesLabels = seriesLabels;
-	}
+    public void setGroupLabels(List<String> groupLabels) {
+        this.groupLabels = groupLabels;
+    }
 
-	public void setChartValues(List<List<Double>> chartValues) {
-		this.chartValues = chartValues;
-	}
+    public void setSeriesLabels(List<String> seriesLabels) {
+        this.seriesLabels = seriesLabels;
+    }
 
-	public List<List<Double>> getChartValues() {
-		return chartValues;
-	}
+    public void setChartValues(List<List<Double>> chartValues) {
+        this.chartValues = chartValues;
+    }
 
-	public void setPresentation(Presentation presentation) {
-	    this.presentation = presentation;
-	}
+    public List<List<Double>> getChartValues() {
+        return chartValues;
+    }
 
-	public Presentation getPresentation() {
-	    return presentation;
-	}
+    public void setPresentation(Presentation presentation) {
+        this.presentation = presentation;
+    }
 
+    public Presentation getPresentation() {
+        return presentation;
+    }
 
 }
