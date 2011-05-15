@@ -44,6 +44,20 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>target/data</directory>
+            <outputDirectory>data</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>target/keys</directory>
+            <outputDirectory>keys</outputDirectory>
+            <includes>
+                <include>*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>target/bin</directory>
             <outputDirectory>bin</outputDirectory>
             <includes>

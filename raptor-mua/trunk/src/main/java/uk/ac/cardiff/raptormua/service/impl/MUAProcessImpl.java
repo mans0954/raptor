@@ -31,14 +31,15 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
-import uk.ac.cardiff.raptormua.engine.BackgroundServices;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
+import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
 /**
@@ -57,8 +58,6 @@ public class MUAProcessImpl implements MUAProcess {
      * common functions */
     private MUAEngine engine;
 
-    /** Engine to handle background tasks */
-    private BackgroundServices backgroundServices;
 
     /**
      * ReentrantLock to prevent more than one operation at the same time
@@ -102,7 +101,6 @@ public class MUAProcessImpl implements MUAProcess {
         return engine.getCapabilities();
     }
 
-    @Override
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
@@ -123,7 +121,6 @@ public class MUAProcessImpl implements MUAProcess {
         }
     }
 
-    @Override
     public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
         if (lockR.tryLock()) {
             try {
@@ -145,7 +142,6 @@ public class MUAProcessImpl implements MUAProcess {
     /**
      * Because this is perform async, the lock is not useful, its the exceptions that are.
      */
-    @Override
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
@@ -170,7 +166,6 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
-    @Override
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
         if (lockR.tryLock()) {
             try {
@@ -191,7 +186,6 @@ public class MUAProcessImpl implements MUAProcess {
     /**
 	 *
 	 */
-    @Override
     public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
         List<LogFileUploadResult> result= new ArrayList<LogFileUploadResult>();
         boolean success = false;
@@ -226,22 +220,15 @@ public class MUAProcessImpl implements MUAProcess {
 
     public void resourceClassification(){
           log.info("Resource classification background thread called");
-          backgroundServices.resourceClassification();
+          //backgroundServices.resourceClassification();
     }
+    
+	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
+		log.info("Saving resource metadata (classification) for {} resources",resourceMetadata.size());
+		engine.saveAndApplyResourceClassification(resourceMetadata);
+		
+	}
 
-    /**
-     * @param backgroundServices the backgroundServices to set
-     */
-    public void setBackgroundServices(BackgroundServices backgroundServices) {
-        this.backgroundServices = backgroundServices;
-    }
-
-    /**
-     * @return the backgroundServices
-     */
-    public BackgroundServices getBackgroundServices() {
-        return backgroundServices;
-    }
 
     public void setEngine(MUAEngine engine) {
         this.engine = engine;
@@ -250,5 +237,6 @@ public class MUAProcessImpl implements MUAProcess {
     public MUAEngine getEngine() {
         return engine;
     }
+
 
 }

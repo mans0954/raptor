@@ -66,14 +66,18 @@ public class GroupBy extends Statistic{
 		log.debug("groupBy between [start:{}] [end:{}]", start, end);
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
+		
+		String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();
+		log.debug("Resource Category Filter {}",resourceCategoryFilter);
 
 		String query="";
 
 		if (sqlWhere.equals("")) {
-			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) group by ("+groupByField+")";
+			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" group by ("+groupByField+")";
 		} else {
-			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and "+sqlWhere+" group by ("+groupByField+")";
+			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere+" group by ("+groupByField+")";
 		}
+	
 
 		Object[] params = new Object[]{start.toDate(),end.toDate()};
 
@@ -94,9 +98,6 @@ public class GroupBy extends Statistic{
 
 		}
 
-		// add the series label or if none specified, add a default
-//		if (statisticParameters.getSeries().getSeriesLabel() == null)
-//			statisticParameters.getSeries().setSeriesLabel("Distinct Values " + groupByField);
 
 		if (groups.size() == 0)
 			return false;

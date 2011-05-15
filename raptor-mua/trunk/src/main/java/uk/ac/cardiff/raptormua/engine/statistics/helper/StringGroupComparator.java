@@ -18,27 +18,34 @@
  */
 package uk.ac.cardiff.raptormua.engine.statistics.helper;
 
+import java.text.Collator;
 import java.util.Comparator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
+import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
 /**
  * @author philsmart
  *
  */
-public class ObservationComparator implements Comparator<Observation>{
+public class StringGroupComparator implements Comparator<Group>{
+	
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(StringGroupComparator.class);
 
     private boolean asc;
 
-	public ObservationComparator(boolean asc){
+	public StringGroupComparator(boolean asc){
 		this.asc = asc;
     }
 
-    public int compare(Observation arg0, Observation arg1) {
-	if (asc)
-	    return (int)(arg0.getValue() - arg1.getValue()); //if =0 same, < 0 smaller, >0 bigger
-	else
-	    return (int)(arg1.getValue() - arg0.getValue());
+    public int compare(Group arg0, Group arg1) {
+    	Collator c = Collator.getInstance();
+    	return c.compare(arg0.getGroupName(),arg1.getGroupName());
     }
 
 }

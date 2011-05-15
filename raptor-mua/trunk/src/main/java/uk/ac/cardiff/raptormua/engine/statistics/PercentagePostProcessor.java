@@ -37,14 +37,13 @@ public class PercentagePostProcessor implements StatisticsPostProcessor{
 	private final Logger log = LoggerFactory.getLogger(PercentagePostProcessor.class);
 
 
-	/*
+	/**
 	 * <p> performs all actions directly ('live') on the input object, and passes that back as a reference
 	 * to conform with the <code>StatisticsPostProcessor</code> interface </p>
 	 *
 	 * (non-Javadoc)
 	 * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
 	 */
-	@Override
 	public Observation[] postProcess(Observation[] observations)	throws PostprocessorException {
 		log.debug("Entries into postprocessor: "+observations.length);
 		log.info("Post Processor "+this.getClass());

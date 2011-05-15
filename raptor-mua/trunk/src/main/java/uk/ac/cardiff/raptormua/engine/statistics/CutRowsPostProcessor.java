@@ -51,7 +51,7 @@ public class CutRowsPostProcessor implements StatisticsPostProcessor {
      *
      * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
      */
-    @Override
+
     public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
 	log.debug("Entries into postprocessor: " + observations.length);
 	log.info("Post Processor " + this.getClass());

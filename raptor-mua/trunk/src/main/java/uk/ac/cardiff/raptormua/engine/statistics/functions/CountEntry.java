@@ -59,6 +59,9 @@ public class CountEntry extends Statistic{
 			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
 			throw new StatisticalUnitException("negative time difference");
 		}
+		
+		String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();
+		log.debug("Resource Category Filter {}",resourceCategoryFilter);
 
 		/* now create that many buckets of length timeIntervalInt */
 		Bucket[] buckets = null;
@@ -114,9 +117,9 @@ public class CountEntry extends Statistic{
 			String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
 			String query="";
 			if (sqlWhere.equals(""))
-				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?)";
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter;
 			else
-				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and "+sqlWhere;
+				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere;
 			
 			Object[] params = new Object[]{bucket.getStart().toDate(),bucket.getEnd().toDate(),bucket.getEnd().toDate()};
 			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);

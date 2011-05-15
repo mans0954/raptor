@@ -53,8 +53,12 @@ public abstract class Statistic {
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(Statistic.class);
 
+	/** The <code>EntryHandler</code> that allows access to all <code>Event</code>s this
+	 * statistic works off.
+	 */
 	private EntryHandler entryHandler;
 
+	/** The parameters used to configure this statistic*/
 	protected StatisticParameters statisticParameters;
 
 	/** add a preprocessing module to the statistical method */
@@ -63,12 +67,26 @@ public abstract class Statistic {
 	/** add a postprocessing module to the statistical method */
 	private List<StatisticsPostProcessor> postprocessor;
 
+	/** After each statistic has been invoked, the results of each series
+	 * are stored as <code>ObservationSeries</code> in this list.
+	 */
 	private List<ObservationSeries> observationSeries;
 
+	/** 
+	 * Default constructor.
+	 */
 	public Statistic() {
 		setObservationSeries(new ArrayList<ObservationSeries>());
 	}
 
+	/**
+	 * Method that performs the statistical operation. Overridden by each concrete statistic class.
+	 * 
+	 * @param methodParams
+	 * @param sqlWhere
+	 * @return
+	 * @throws StatisticalUnitException
+	 */
 	public abstract Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException;
 
 
@@ -126,6 +144,8 @@ public abstract class Statistic {
 			        log.trace("Group {}",group.getGroupName());
 				gmodel.addGroupLabel(group.getGroupName());
 			}
+			
+			
 			//now add each series and their values
 			for (int i=0; i < observationSeries.size(); i++){
 				groups = (Group[]) observationSeries.get(i).getObservations();
@@ -159,6 +179,7 @@ public abstract class Statistic {
 			for (Bucket bucket : buckets) {
 				gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "  " + endParser.print(bucket.getEnd()));
 			}
+			//Buckets are time series, and so are already sorted chronologically.
 
 			for (int i=0; i < observationSeries.size(); i++){
 				buckets = (Bucket[]) observationSeries.get(i).getObservations();

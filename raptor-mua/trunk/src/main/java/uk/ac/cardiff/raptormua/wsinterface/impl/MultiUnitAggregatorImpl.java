@@ -28,6 +28,7 @@ import org.apache.cxf.binding.soap.SoapFault;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
@@ -69,32 +70,33 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator{
 	}
 
 
-	@Override
 	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 	    processService.updateStatisticalUnit(statisticalUnitInformation);
 
 	}
 
 
-	@Override
 	public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
 	    return processService.performAdministrativeFunction(function);
 	}
 
 
-	@Override
 	public void addAuthentications(EventPushMessage pushed) throws SoapFault{
 	    processService.addAuthentications(pushed);
 
 	}
 
-	@Override
 	public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
 		return processService.updateAndInvokeStatisticalUnit(statisticalUnitInformation);
 	}
 
 	public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault{
 		return processService.batchUpload(uploadFiles);
+	}
+
+	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
+		processService.saveResourceMetadata(resourceMetadata);
+		
 	}
 
 

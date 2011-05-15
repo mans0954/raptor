@@ -28,6 +28,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
 					<property name="methodParams">
 						<list>
@@ -61,6 +62,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
 					<property name="methodParams">
 						<list>
@@ -93,6 +95,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
 					<property name="methodParams">
 						<list>
@@ -126,6 +129,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>top5Resources</value></property>
 					<property name="methodParams">
 						<list>
@@ -166,6 +170,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
 					<property name="methodParams">
 						<list>
@@ -210,6 +215,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
 					<property name="unitName"><value>bottom5Resources</value></property>
 					<property name="methodParams">
 						<list>

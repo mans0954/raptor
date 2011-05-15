@@ -101,7 +101,7 @@
 	</bean>
 
 	<!-- Create the entry handler -->
-	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.MemoryEntryHandler"></bean>
+	<bean name="memoryEntryHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileMemoryEntryHandler"></bean>
 
 	<!--
 		definition of the log file format, where some standard log file

@@ -13,32 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
-package uk.ac.cardiff.raptormua.engine.statistics.helper;
+package uk.ac.cardiff.raptormua.engine.classification;
 
-import java.util.Comparator;
-
-import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
-
-/**
- * @author philsmart
- *
- */
-public class ObservationComparator implements Comparator<Observation>{
-
-    private boolean asc;
-
-	public ObservationComparator(boolean asc){
-		this.asc = asc;
-    }
-
-    public int compare(Observation arg0, Observation arg1) {
-	if (asc)
-	    return (int)(arg0.getValue() - arg1.getValue()); //if =0 same, < 0 smaller, >0 bigger
-	else
-	    return (int)(arg1.getValue() - arg0.getValue());
-    }
+public interface SaveAndApplyResourceClassificationCallbackInterface {
+	
+	public void callback(Object result);
 
 }

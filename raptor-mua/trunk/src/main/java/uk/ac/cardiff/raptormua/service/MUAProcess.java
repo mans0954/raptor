@@ -25,6 +25,7 @@ import org.apache.cxf.binding.soap.SoapFault;
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.AdministrativeFunction.AdministrativeFunctionType;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
@@ -79,4 +80,6 @@ public interface MUAProcess {
 
 
 	public void resourceClassification();
+
+	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata);
 }
