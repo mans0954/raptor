@@ -51,10 +51,54 @@ public class StatisticParameters implements Serializable{
     /** the end time from which to produce the starts, defining the temporal extent */
     private DateTime endTime;
 
-    /** Its important that these dates (used for display in trinidad) are kept in sync with the
+    /** Its important that these dates (used for display in the view) are kept in sync with the
      * Joda DateTime classes above*/
     private Date startTimeJava;
     private Date endTimeJava;
+    
+    public enum ResourceCategory{
+        /** For resources that are internal to the organisation*/
+        INTERNAL(new int[]{1}), 
+        /** For resources that are external to the organisation*/
+        EXTERNAL(new int[]{2}),
+        /** For all resource categories */
+        ALL(new int[]{1,2});
+        
+        private int[] resourceIdCategory;
+        
+        ResourceCategory(int[] resourceIdCategory){
+            this.resourceIdCategory = resourceIdCategory;
+        }
+
+        /**
+         * @return the resourceIdCategory
+         */
+        public int[] getResourceIdCategory() {
+            return resourceIdCategory;
+        }
+
+        /** 
+         * Returns a <code>String</code> value that represents
+         * an IN SQL operator which specifies the resourceIdCategory(s)
+         * for this <code>ResourceCategory</code> for use in SQL WHERE clauses
+         * 
+         * @return an SQL IN clause
+         */
+        public String getSql() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("in (");
+            for (int i=0; i < resourceIdCategory.length; i++){
+                sb.append(resourceIdCategory[i]);
+                if (i < resourceIdCategory.length-1){
+                    sb.append(",");
+                }
+            }
+            sb.append(")");
+            return sb.toString();
+        }
+    }
+    
+    private ResourceCategory resourceCategory;
 
     /** either system or user types */
     public enum StatisticType {
@@ -108,12 +152,14 @@ public class StatisticParameters implements Serializable{
     /* A series to plot on the graph*/
      private List<Series> series;
 
+     /** Default constructor. */
      public StatisticParameters(){
 	 presentation = new Presentation();
 	 presentation.setGraphTitle("");
 	 presentation.setxAxisLabel("");
 	 presentation.setyAxisLabel("");
 	 setSeries(new ArrayList<Series>());
+	 resourceCategory = ResourceCategory.ALL;
      }
 
     public void setUnitName(String unitName) {
@@ -396,7 +442,31 @@ public class StatisticParameters implements Serializable{
         return eventType;
     }
 
+    /**
+     * @param resourceCategory the resourceCategory to set
+     */
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
+    }
 
+    /**
+     * @return the resourceCategory
+     */
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
+    }
+    
+    public void setResourceCategoryString(String resourceCategory){
+        for (ResourceCategory type : ResourceCategory.values()){
+            if (type.toString().equals(resourceCategory)){
+                this.resourceCategory = type;
+            }
+        }
+    }
+
+    public String getResourceCategoryString(){
+        return resourceCategory.toString();
+    }
 
 
 

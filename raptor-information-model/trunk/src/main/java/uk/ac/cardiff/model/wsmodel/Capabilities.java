@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import uk.ac.cardiff.model.ServiceMetadata;
+import uk.ac.cardiff.model.resource.ResourceMetadata;
 
 
 /**
@@ -24,6 +25,7 @@ public class Capabilities implements Serializable {
     private boolean error;
     private ServiceMetadata metadata;
     private SuggestionValues suggestionValues;
+    private List<ResourceMetadata> resourceMetadata;
 
     private int numberOfEntries;
 
@@ -101,6 +103,20 @@ public class Capabilities implements Serializable {
 
     public int getNumberOfAuthenticationsStored(){
         return numberOfEntries;
+    }
+
+    /**
+     * @param resourceMetadata the resourceMetadata to set
+     */
+    public void setResourceMetadata(List<ResourceMetadata> resourceMetadata) {
+        this.resourceMetadata = resourceMetadata;
+    }
+
+    /**
+     * @return the resourceMetadata
+     */
+    public List<ResourceMetadata> getResourceMetadata() {
+        return resourceMetadata;
     }
 
 
