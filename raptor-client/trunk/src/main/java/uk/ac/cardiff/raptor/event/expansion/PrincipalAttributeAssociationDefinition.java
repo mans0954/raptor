@@ -25,11 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
 import uk.ac.cardiff.raptor.event.expansion.connector.DataConnector;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
  * @author philsmart

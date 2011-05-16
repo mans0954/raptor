@@ -15,25 +15,17 @@
  */
 package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.security.KeyStore;
+
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
+
 
 import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.aegis.type.TypeUtil;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.common.classloader.ClassLoaderUtils;
-import org.apache.cxf.configuration.jsse.TLSClientParameters;
-import org.apache.cxf.configuration.security.ClientAuthentication;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.frontend.ClientProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -43,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.AuthenticationEvent;
 import uk.ac.cardiff.model.event.EzproxyAuthenticationEvent;
-import uk.ac.cardiff.model.event.EzproxyProxyEvent;
 import uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;

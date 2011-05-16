@@ -80,7 +80,7 @@ public class EndpointRegistry {
 
 
 	public ReleaseInformation loadReleaseInformation(Endpoint endpoint){
-		List releaseInfoResults = dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",new Object[]{endpoint.getServiceEndpoint()});
+		List<?> releaseInfoResults = dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",new Object[]{endpoint.getServiceEndpoint()});
 		if (releaseInfoResults==null){
 			log.warn("Loading error...no release information found, blank release information used");
 		}

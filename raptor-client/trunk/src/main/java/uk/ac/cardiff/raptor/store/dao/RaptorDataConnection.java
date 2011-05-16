@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
-import uk.ac.cardiff.model.event.Event;
-
 /**
  * @author philsmart
  *

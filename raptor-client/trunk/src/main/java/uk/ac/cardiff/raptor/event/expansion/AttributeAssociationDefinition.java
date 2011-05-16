@@ -18,16 +18,11 @@
  */
 package uk.ac.cardiff.raptor.event.expansion;
 
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
-import uk.ac.cardiff.raptor.event.expansion.connector.DataConnector;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
+
 
 /**
  * @author philsmart

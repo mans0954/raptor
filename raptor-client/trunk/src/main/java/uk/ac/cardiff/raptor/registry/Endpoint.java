@@ -19,7 +19,6 @@
 package uk.ac.cardiff.raptor.registry;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
-import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
  *

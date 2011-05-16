@@ -18,7 +18,6 @@
  */
 package uk.ac.cardiff.raptor.remoting.server.sei;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.jws.WebService;

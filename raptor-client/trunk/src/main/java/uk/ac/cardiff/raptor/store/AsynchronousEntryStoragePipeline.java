@@ -18,7 +18,6 @@ package uk.ac.cardiff.raptor.store;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

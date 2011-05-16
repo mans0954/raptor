@@ -68,13 +68,6 @@
         <!-- DONE -->
 
 
-        <!-- Deep clone library -->
-		<dependency>
-			<groupId>clonable</groupId>
-			<artifactId>cloning</artifactId>
-			<version>1.7</version>
-		</dependency>
-
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-information-model</artifactId>

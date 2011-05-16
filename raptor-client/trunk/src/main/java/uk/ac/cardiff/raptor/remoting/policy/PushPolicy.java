@@ -21,7 +21,6 @@ package uk.ac.cardiff.raptor.remoting.policy;
 import java.util.List;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.registry.Endpoint;
 
 /**
  * @author philsmart

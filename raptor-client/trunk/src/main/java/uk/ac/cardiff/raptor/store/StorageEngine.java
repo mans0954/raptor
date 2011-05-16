@@ -19,16 +19,12 @@
 package uk.ac.cardiff.raptor.store;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 /**
