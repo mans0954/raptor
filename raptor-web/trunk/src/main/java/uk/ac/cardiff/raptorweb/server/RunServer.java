@@ -62,7 +62,7 @@ public class RunServer {
 		Properties props = new Properties();
 		props.load(new FileInputStream(configurationFiles + "/server.properties"));
 
-		int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8443"));
+		int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8112"));
 		String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/raptor-web");
 
 
@@ -79,10 +79,10 @@ public class RunServer {
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext webappcontext = new WebAppContext();
-		//webappcontext.setDescriptor(configurationFiles + "/web.xml");
+		//webappcontext.setDescriptor(configurationFiles + "/WEB-INF/web.xml");
 		webappcontext.setContextPath(webappContextPath);
-		//webappcontext.setWar(configurationFiles);
-		webappcontext.setWar("/Users/philsmart/Documents/Java/RaptorWorkspace/raptor-web/target/raptor-web-0.3-SNAPSHOT/");
+		webappcontext.setWar(configurationFiles);
+		webappcontext.setWar("/Users/philsmart/Documents/Java/RaptorWorkspace/raptor-web/target/raptor-web/");
 
 		HandlerCollection handlers = new HandlerCollection();
 		handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });

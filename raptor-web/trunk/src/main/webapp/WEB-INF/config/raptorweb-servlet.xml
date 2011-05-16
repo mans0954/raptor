@@ -8,19 +8,20 @@
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-	<!-- Scans for application @Components to deploy -->
-	<!--<context:component-scan base-package="com.sharemail.idm25idweb.model"/>
 
-
-	--><!-- Imports the configurations of the different infrastructure systems of the application -->
+	<!-- Imports the configurations of the different infrastructure systems of the application -->
 	<import resource="webflow-config.xml" />
 
 
 	<!--  Import the setup for the web interface -->
-	 <import resource="web-setup.xml" />
-     
+	 <!-- <import resource="file:///${configurationFiles}/conf/web-core.xml" />-->
+
+	 <import resource="web-core.xml" />
+
      <!--  Import the setup of the front page dashboard statistics -->
-     <import resource="dashboard-statistics.xml"/>
+     <!-- <import resource="file:///${configurationFiles}/conf/dashboard-statistics.xml"/>-->
+
+    <import resource="dashboard-statistics.xml"/>
 
 
 
