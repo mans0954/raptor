@@ -21,11 +21,9 @@
 
 package uk.ac.cardiff.raptor.store;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.exception.DataException;
 import org.joda.time.DateTime;
 
 import uk.ac.cardiff.model.event.Event;
@@ -68,23 +66,23 @@ public interface IncrementalEntryHandler {
 	 *
 	 */
 	public void removeAllEntries();
-	
+
 	/**
 	 *
 	 */
 	public void initialise();
-	
+
 	/**
 	 *
 	 * @return
 	 */
 	public int getNumberOfEntries();
-	
+
 	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries);
 
-	/** 
+	/**
 	 * Rests this <code>IncrementalEntryHandler</code> back to its initial state
-	 * 
+	 *
 	 */
 	public void reset();
 

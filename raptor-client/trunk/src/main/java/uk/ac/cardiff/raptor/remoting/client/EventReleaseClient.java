@@ -23,7 +23,6 @@ import java.util.List;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.registry.Endpoint;
-import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 
 /**
  * Sends event records using the CXF SOAP libraries

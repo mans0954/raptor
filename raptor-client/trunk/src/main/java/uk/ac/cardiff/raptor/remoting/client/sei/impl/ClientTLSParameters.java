@@ -35,7 +35,6 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 
-import uk.ac.cardiff.raptor.registry.Endpoint;
 
 /**
  * Raptor client specific class to hold TLS parameters for easy configuration. Will then

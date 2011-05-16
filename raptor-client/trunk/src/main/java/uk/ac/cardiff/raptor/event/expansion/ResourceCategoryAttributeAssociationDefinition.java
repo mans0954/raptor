@@ -18,8 +18,6 @@
  */
 package uk.ac.cardiff.raptor.event.expansion;
 
-import java.util.List;
-import java.util.Map;
 
 import org.hibernate.exception.DataException;
 import org.slf4j.Logger;
@@ -27,9 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
-import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
-import uk.ac.cardiff.raptor.event.expansion.connector.DataConnector;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
@@ -55,7 +50,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
      * @param event
      */
     public boolean associate(Event event) {
-    
+
        ResourceMetadata resourceMetadata = null;
        Object result =  dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?", new Object[]{event.getResourceId()});
        if (result !=null && result instanceof ResourceMetadata){

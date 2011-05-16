@@ -20,8 +20,6 @@ package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
@@ -30,7 +28,6 @@ import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

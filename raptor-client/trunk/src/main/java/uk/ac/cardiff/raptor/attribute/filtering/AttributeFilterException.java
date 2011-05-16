@@ -25,6 +25,9 @@ package uk.ac.cardiff.raptor.attribute.filtering;
 public class AttributeFilterException extends Exception {
 
 
+    /** Generated SeruialUID */
+    private static final long serialVersionUID = -2194640593279397599L;
+
     /** Constructor. */
     public AttributeFilterException() {
         super();

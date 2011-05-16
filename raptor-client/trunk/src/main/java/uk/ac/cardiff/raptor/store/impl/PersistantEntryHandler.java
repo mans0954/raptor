@@ -18,34 +18,21 @@
  */
 package uk.ac.cardiff.raptor.store.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 import org.hibernate.exception.DataException;
-import org.jaxen.function.LastFunction;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.AsynchronousEntryStoragePipeline;
 import uk.ac.cardiff.raptor.store.EntryHandler;
-import uk.ac.cardiff.raptor.store.StoreEntriesPipelineTask;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
@@ -119,7 +106,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	public List query(String query, Object[] parameters, int maxNoResults) {
 	      return dataConnection.runQuery(query, parameters, maxNoResults);
 	}
-	
+
 	public void save(Object object) throws StorageException {
 		try{
 			dataConnection.save(object);
@@ -135,7 +122,7 @@ public class PersistantEntryHandler implements EntryHandler {
 		}
 		catch (DataException e){
 			throw new StorageException("Could not save collection",e);
-		}	
+		}
 	}
 
 	/**
