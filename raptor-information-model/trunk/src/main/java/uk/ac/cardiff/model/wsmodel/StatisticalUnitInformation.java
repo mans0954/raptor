@@ -4,12 +4,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 
 /**
@@ -29,7 +24,7 @@ public class StatisticalUnitInformation implements Serializable {
 
     /** Simple string values (representing names) of the configured pre-processors*/
     private List<String> preprocessors;
-    
+
     /** Simple string values (representing names) of the configured post-processors*/
     private List<String> postprocessors;
 

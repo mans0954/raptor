@@ -4,7 +4,6 @@
 package uk.ac.cardiff.model.event;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;

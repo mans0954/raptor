@@ -8,10 +8,13 @@ import java.io.Serializable;
  *
  */
 public class BooleanFactor implements Serializable{
-    
+
+    /** Generated SerialUID*/
+    private static final long serialVersionUID = 3862662680037988213L;
+
     private boolean not;
     private BooleanTest booleanTest;
-    
+
     public void setNot(boolean not) {
 	this.not = not;
     }
@@ -24,6 +27,6 @@ public class BooleanFactor implements Serializable{
     public BooleanTest getBooleanTest() {
 	return booleanTest;
     }
-    
-    
+
+
 }

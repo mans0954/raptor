@@ -14,19 +14,19 @@ public class PrincipalInformation {
 
     /** The affiliation this principal has with their current school or department */
     private String affiliation;
-    
-    
+
+
     /**
      * Default constructor
-     * 
+     *
      */
     public PrincipalInformation(){
-        
+
     }
-    
+
     /**
      * Copy constructor
-     * 
+     *
      * @param principalInformation
      */
     public PrincipalInformation(PrincipalInformation principalInformation){

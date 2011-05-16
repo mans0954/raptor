@@ -3,7 +3,7 @@ package uk.ac.cardiff.model.sql;
 import java.io.Serializable;
 
 /**
- * [  <predicate>    ::= 
+ * [  <predicate>    ::=
          <comparison predicate>
      |     <between predicate>
      |     <in predicate>
@@ -18,14 +18,17 @@ import java.io.Serializable;
      |     <distinct predicate>
      |     <type predicate>
      ]
-     
+
    We only allow a simplified comparison predicate
-   
+
  * @author philsmart
  *
  */
 public class Predicate implements Serializable{
-    
+
+    /** Generated SerialUID */
+    private static final long serialVersionUID = 4283734426422664602L;
+
     private ComparisonPredicate comparisonPredicate;
 
     public void setComparisonPredicate(ComparisonPredicate comparisonPredicate) {

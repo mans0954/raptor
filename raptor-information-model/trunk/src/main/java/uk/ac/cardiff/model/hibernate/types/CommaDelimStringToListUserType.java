@@ -5,12 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -24,19 +19,16 @@ public class CommaDelimStringToListUserType implements UserType {
 	@Override
 	public Object assemble(Serializable arg0, Object arg1)
 			throws HibernateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	public Object deepCopy(Object arg0) throws HibernateException {
-		// TODO Auto-generated method stub
 		return arg0;
 	}
 
 
 	public Serializable disassemble(Object arg0) throws HibernateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -54,23 +46,19 @@ public class CommaDelimStringToListUserType implements UserType {
 
 
 	public int hashCode(Object arg0) throws HibernateException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 
 	public boolean isMutable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 
 	public Object nullSafeGet(ResultSet resultSet, String[] names, Object owner)
 			throws HibernateException, SQLException {
-		//System.out.println("Delimited Conversion...");
 	    	String[] result = null;
 		String value = resultSet.getString(names[0]);
-		//System.out.println("Value: "+value);
 		if (!resultSet.wasNull()) {
 			result = value == "" ? null : convertToArray(value);
 		}
@@ -78,15 +66,9 @@ public class CommaDelimStringToListUserType implements UserType {
 	}
 
 	private String[] convertToArray(String value){
-		//System.out.println("DelimitingL "+value);
-
 		List<String> values = new ArrayList<String>();
-
 		String[] splitValue = value.split(delimiter);
 		for (String v : splitValue)values.add(v);
-
-		//for (String v : splitValue)System.out.println(v);
-
 		return values.toArray(new String[0]);
 	}
 
@@ -110,19 +92,16 @@ public class CommaDelimStringToListUserType implements UserType {
 
 	public Object replace(Object arg0, Object arg1, Object arg2)
 			throws HibernateException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	public Class returnedClass() {
-		// TODO Auto-generated method stub
 		return List.class;
 	}
 
 
 	public int[] sqlTypes() {
-		// TODO Auto-generated method stub
 		return SQL_TYPES;
 	}
 
