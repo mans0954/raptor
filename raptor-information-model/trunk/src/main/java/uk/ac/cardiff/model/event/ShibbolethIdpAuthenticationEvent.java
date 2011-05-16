@@ -4,13 +4,9 @@
 package uk.ac.cardiff.model.event;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;

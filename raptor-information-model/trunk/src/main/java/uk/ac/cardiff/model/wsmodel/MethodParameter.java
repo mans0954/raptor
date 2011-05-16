@@ -15,21 +15,27 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MethodParameter implements Serializable{
-    static Logger log = LoggerFactory.getLogger(MethodParameter.class);
 
-    /* enum, which holds information about the parameter
+
+    /** Generated SerialUID*/
+    private static final long serialVersionUID = -290473614440091625L;
+
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(MethodParameter.class);
+
+    /** enum, which holds information about the parameter
      * FIELD - name of a field in the model
      * VALUE - a primitive data type value*/
     public enum ParameterType{FIELD, VALUE};
-    
+
     private ParameterType parameterType;
-    
-    /* friendly name of the parameter, for the benefit of the view*/
+
+    /** friendly name of the parameter, for the benefit of the view*/
     private String parameterName;
 
-    /* value of the parameter */
+    /** value of the parameter */
     private String value;
-    
+
 
 
     public void setValue(String value) {
@@ -59,5 +65,5 @@ public class MethodParameter implements Serializable{
 
 
 
- 
+
 }

@@ -11,16 +11,19 @@ import java.io.Serializable;
  */
 public class Presentation implements Serializable{
 
-    /* the title of the graph */
+    /** Generated Serial UID*/
+    private static final long serialVersionUID = -4241388640686604177L;
+
+    /** the title of the graph */
     private String graphTitle;
 
-    /* the label displayed on the xAxis*/
+    /** the label displayed on the xAxis*/
     private String xAxisLabel;
 
-    /* the label displayed on the yAxis */
+    /** the label displayed on the yAxis */
     private String yAxisLabel;
 
-    /* the user can specify a date format per graph if the graph is a time series*/
+    /** the user can specify a date format per graph if the graph is a time series*/
     private String dateFormat;
 
 

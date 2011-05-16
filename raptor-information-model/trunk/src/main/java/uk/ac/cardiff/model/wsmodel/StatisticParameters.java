@@ -5,12 +5,8 @@ package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +14,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.Presentation;
 import uk.ac.cardiff.model.report.Series;
-import uk.ac.cardiff.model.sql.SQLFilter;
 
 /**
  * @author philsmart
@@ -55,17 +49,17 @@ public class StatisticParameters implements Serializable{
      * Joda DateTime classes above*/
     private Date startTimeJava;
     private Date endTimeJava;
-    
+
     public enum ResourceCategory{
         /** For resources that are internal to the organisation*/
-        INTERNAL(new int[]{1}), 
+        INTERNAL(new int[]{1}),
         /** For resources that are external to the organisation*/
         EXTERNAL(new int[]{2}),
         /** For all resource categories */
         ALL(new int[]{1,2});
-        
+
         private int[] resourceIdCategory;
-        
+
         ResourceCategory(int[] resourceIdCategory){
             this.resourceIdCategory = resourceIdCategory;
         }
@@ -77,11 +71,11 @@ public class StatisticParameters implements Serializable{
             return resourceIdCategory;
         }
 
-        /** 
+        /**
          * Returns a <code>String</code> value that represents
          * an IN SQL operator which specifies the resourceIdCategory(s)
          * for this <code>ResourceCategory</code> for use in SQL WHERE clauses
-         * 
+         *
          * @return an SQL IN clause
          */
         public String getSql() {
@@ -97,7 +91,7 @@ public class StatisticParameters implements Serializable{
             return sb.toString();
         }
     }
-    
+
     private ResourceCategory resourceCategory;
 
     /** either system or user types */
@@ -125,7 +119,7 @@ public class StatisticParameters implements Serializable{
         EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent", new String[]{"uk.ac.cardiff.model.event.EzproxyAuthenticationEvent","uk.ac.cardiff.model.event.AuthenticationEvent","uk.ac.cardiff.model.event.Event"});
 
         private String hibernateSimpleClassName;
-        
+
         private String[] classHierarchy;
 
         private EventType(String hibernateSimpleClassName, String[] classHierarchy){
@@ -136,7 +130,7 @@ public class StatisticParameters implements Serializable{
         public String getHibernateSimpleClassName(){
             return hibernateSimpleClassName;
         }
-        
+
         public String[] getClassHierarchy(){
             return classHierarchy;
         }
@@ -455,7 +449,7 @@ public class StatisticParameters implements Serializable{
     public ResourceCategory getResourceCategory() {
         return resourceCategory;
     }
-    
+
     public void setResourceCategoryString(String resourceCategory){
         for (ResourceCategory type : ResourceCategory.values()){
             if (type.toString().equals(resourceCategory)){
