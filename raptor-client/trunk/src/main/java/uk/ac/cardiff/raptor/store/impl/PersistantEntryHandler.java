@@ -204,7 +204,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	public int getNumberOfEntries() {
-		return (Integer) dataConnection.runQueryUnique("select count(*) from Event", null);
+		Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
+		log.debug("Number of entries {}, with class {}",result,result.getClass());
+		return (Integer) result;
 	}
 
 	public DateTime getLatestEntryTime(){
