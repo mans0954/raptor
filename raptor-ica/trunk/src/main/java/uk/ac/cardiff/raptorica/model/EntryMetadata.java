@@ -19,13 +19,10 @@
 package uk.ac.cardiff.raptorica.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.joda.time.DateTime;
 
-import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
