@@ -44,7 +44,6 @@ import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
@@ -178,7 +177,7 @@ public class MUAEngine {
 		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
 		capabilities.setSuggestionValues(suggestionValues);
 		capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
-		
+
 		//set resource metadata
 		List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
 		log.debug("Setting {} resource metadata",resourceMetadata.size());
@@ -267,7 +266,7 @@ public class MUAEngine {
 		statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
 
 	}
-	
+
 	public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata){
 		ResourceClassificationBackgroundService backgroundService = new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
 		backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
