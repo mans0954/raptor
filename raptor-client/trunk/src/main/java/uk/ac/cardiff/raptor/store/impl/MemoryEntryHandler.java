@@ -72,7 +72,7 @@ public class MemoryEntryHandler implements EntryHandler {
 	/**
 	 * Checks whether this event is already stored, if not, then it adds the
 	 * <code>event</code> to the <code>entries<code> set.
-	 * 
+	 *
 	 * @param event
 	 *            the event to store
 	 */
@@ -91,7 +91,7 @@ public class MemoryEntryHandler implements EntryHandler {
 	/**
 	 * Stores the hashcode of the event as the <code>eventId</code> iff there is
 	 * no existing eventId (defined as 0), and the event has a valid hashcode.
-	 * 
+	 *
 	 * @param event
 	 */
 	private void addEventIdIfNull(Event event) {
@@ -178,7 +178,7 @@ public class MemoryEntryHandler implements EntryHandler {
 
 	}
 
-	public int getNumberOfEntries() {
+	public long getNumberOfEntries() {
 		return entries.size();
 	}
 
@@ -226,21 +226,21 @@ public class MemoryEntryHandler implements EntryHandler {
 	 * This is a no-op method for all in-memory entry handlers
 	 */
 	public void save(Object object) {
-		
+
 	}
 
 	/**
 	 * This is a no-op method for all in-memory entry handlers
 	 */
 	public void saveAll(Collection object) {
-		
+
 	}
 
 	/**
 	 * This is a no-op method for all in-memory entry handlers
 	 */
 	public void update(String query, Object[] parameters) {
-		
+
 	}
 
 }

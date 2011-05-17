@@ -111,7 +111,7 @@ public interface EntryHandler {
 	 *
 	 * @return
 	 */
-	public int getNumberOfEntries();
+	public long getNumberOfEntries();
 
 	/**
 	 * @param query
