@@ -14,12 +14,12 @@
     </scm>
     <distributionManagement>
         <repository>
-            <uniqueVersion>true</uniqueVersion>
+            <uniqueVersion>false</uniqueVersion>
             <id>raptor-release</id>
             <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
         </repository>
         <snapshotRepository>
-            <uniqueVersion>true</uniqueVersion>
+            <uniqueVersion>false</uniqueVersion>
             <id>raptor-snapshot</id>
             <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
         </snapshotRepository>
