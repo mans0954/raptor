@@ -19,9 +19,9 @@
 package uk.ac.cardiff.raptor.event.expansion;
 
 
-import org.hibernate.exception.DataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
@@ -72,7 +72,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
            try{
                dataConnection.save(resourceNew);
            }
-           catch(DataException e){
+           catch(DataAccessException e){
                log.error("Could not save new resource metadata {}",e.getMessage());
                return false;
            }

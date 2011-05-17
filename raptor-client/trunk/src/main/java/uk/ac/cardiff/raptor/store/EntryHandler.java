@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.exception.DataException;
 import org.joda.time.DateTime;
 
 import uk.ac.cardiff.model.event.Event;
@@ -68,7 +67,7 @@ public interface EntryHandler {
 	 *
 	 */
 	public void removeAllEntries();
-	
+
 	public void update(String query, Object[] parameters) throws StorageException;
 
 	/**
@@ -97,9 +96,9 @@ public interface EntryHandler {
 	 * @return
 	 */
 	public List query(String query, Object[] parameters, int maxNoResults);
-	
+
 	public void save(Object object) throws StorageException;
-	
+
 	public void saveAll(Collection object) throws StorageException;
 	/**
 	 *
