@@ -25,11 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.exception.DataException;
+import org.springframework.dao.DataAccessException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.EntryHandler;
@@ -111,7 +110,7 @@ public class PersistantEntryHandler implements EntryHandler {
 		try{
 			dataConnection.save(object);
 		}
-		catch (DataException e){
+		catch (DataAccessException e){
 			throw new StorageException("Could not save object",e);
 		}
 	}
@@ -120,7 +119,7 @@ public class PersistantEntryHandler implements EntryHandler {
 		try{
 			dataConnection.saveAll(object);
 		}
-		catch (DataException e){
+		catch (DataAccessException e){
 			throw new StorageException("Could not save collection",e);
 		}
 	}
@@ -146,8 +145,12 @@ public class PersistantEntryHandler implements EntryHandler {
 		for (Event event : persistQueue) {
 			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
 			Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
-			int storedDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
-
+			log.debug("Using parameters {}",Arrays.asList(parameters));
+			Object result = dataConnection.runQueryUnique(query, parameters);
+			log.debug("Result {}",result);
+			int storedDuplicates = 0;
+			//int storedDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
+			log.debug("Found {} duplicates ",storedDuplicates);
 			if (storedDuplicates == 0){
 			    persist.add(event);
 			}
