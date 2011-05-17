@@ -77,7 +77,7 @@ public class GroupByFrequency extends Statistic {
 			query = "select "+groupByField+", count(*) from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere+" group by ("+groupByField+")";
 		}
 
-		Object[] params = new Object[]{start.toDate(),end.toDate()};
+		Object[] params = new Object[]{start,end};
 
 		List results = getEntryHandler().query(query,params);
 
@@ -87,9 +87,9 @@ public class GroupByFrequency extends Statistic {
 			Object[] resultAsArray = (Object[]) result;
 			Group group = new Group();
 			try {
-				group.setValue((Integer) resultAsArray[1]);
+				group.setValue((Long) resultAsArray[1]);
 			} catch (ClassCastException e) {
-				throw new StatisticalUnitException("Results were not of the correct type");
+				throw new StatisticalUnitException("Results were not of the correct type, they where "+resultAsArray[1].getClass());
 			}
 			try {
 				if (resultAsArray==null || resultAsArray[0]==null){
@@ -100,7 +100,7 @@ public class GroupByFrequency extends Statistic {
 				}
 
 			} catch (ClassCastException e) {
-				throw new StatisticalUnitException("Results were not of the correct type");
+				throw new StatisticalUnitException("Results were not of the correct type, they where "+resultAsArray[1].getClass());
 			}
 			groups.add(group);
 			testCount += group.getValue();

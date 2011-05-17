@@ -138,8 +138,7 @@ public class CountEntryPerInterval extends Statistic{
 
 			Object[] params = new Object[]{bucket.getStart(),bucket.getEnd(),bucket.getEnd()};
 
-			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);// new
-			// Object[]{start,end});
+			Long count = (Long) this.getEntryHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
 		}

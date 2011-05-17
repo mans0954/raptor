@@ -79,7 +79,7 @@ public class GroupByCountDistinct extends Statistic {
 		for (Object result : results) {
 			Object[] resultAsArray = (Object[]) result;
 			Group group = new Group();
-			group.setValue((Integer) resultAsArray[1]);
+			group.setValue((Long) resultAsArray[1]);
 			group.setGroupName((String) resultAsArray[0]);
 			groups.add(group);
 			testCount += group.getValue();

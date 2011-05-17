@@ -122,7 +122,7 @@ public class CountEntry extends Statistic{
 				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere;
 
 			Object[] params = new Object[]{bucket.getStart(),bucket.getEnd(),bucket.getEnd()};
-			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);
+			Long count = (Long) this.getEntryHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
 		}
