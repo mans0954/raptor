@@ -86,7 +86,7 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
      * @return
      */
     public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
-        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?",new Object[]{earliestReleaseTime.toDate()});
+        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?",new Object[]{earliestReleaseTime});
         return query;
     }
 
@@ -99,7 +99,7 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
      * @return
      */
     public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
-        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc",new Object[]{earliestReleaseTime.toDate()},maxNoResults);
+        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc",new Object[]{earliestReleaseTime},maxNoResults);
         return query;
     }
 
