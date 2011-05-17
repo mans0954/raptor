@@ -144,13 +144,8 @@ public class PersistantEntryHandler implements EntryHandler {
 		Set<Event> persist = new HashSet<Event>();
 		for (Event event : persistQueue) {
 			String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
-			Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
-			log.debug("Using parameters {}",Arrays.asList(parameters));
-			Object result = dataConnection.runQueryUnique(query, parameters);
-			log.debug("Result {}",result);
-			int storedDuplicates = 0;
-			//int storedDuplicates = ((Integer) dataConnection.runQueryUnique(query, parameters)).intValue();
-			log.debug("Found {} duplicates ",storedDuplicates);
+			Object[] parameters= new Object[]{event.getEventTime(),event.getEventId()};
+			long storedDuplicates = ((Long) dataConnection.runQueryUnique(query, parameters)).intValue();
 			if (storedDuplicates == 0){
 			    persist.add(event);
 			}
@@ -206,10 +201,10 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	}
 
-	public int getNumberOfEntries() {
+	public long getNumberOfEntries() {
 		Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
 		log.debug("Number of entries {}, with class {}",result,result.getClass());
-		return (Integer) result;
+		return (Long) result;
 	}
 
 	public DateTime getLatestEntryTime(){

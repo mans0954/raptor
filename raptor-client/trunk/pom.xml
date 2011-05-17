@@ -173,6 +173,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
