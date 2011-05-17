@@ -27,7 +27,7 @@ public class Capabilities implements Serializable {
     private SuggestionValues suggestionValues;
     private List<ResourceMetadata> resourceMetadata;
 
-    private int numberOfEntries;
+    private long numberOfEntries;
 
     public void setStatisticalServices(List<StatisticalUnitInformation> statisticalServices) {
         this.statisticalServices = statisticalServices;
@@ -96,12 +96,12 @@ public class Capabilities implements Serializable {
         return metadata;
     }
 
-    public void setNumberOfAuthenticationsStored(int numberOfEntries) {
+    public void setNumberOfAuthenticationsStored(long numberOfEntries) {
         this.numberOfEntries = numberOfEntries;
 
     }
 
-    public int getNumberOfAuthenticationsStored(){
+    public long getNumberOfAuthenticationsStored(){
         return numberOfEntries;
     }
 
