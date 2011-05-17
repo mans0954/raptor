@@ -66,7 +66,7 @@ public class GroupBy extends Statistic{
 		log.debug("groupBy between [start:{}] [end:{}]", start, end);
 		String tableName= statisticParameters.getEventType().getHibernateSimpleClassName();
 		log.debug("Select {}, tableName {}", groupByField, tableName);
-		
+
 		String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();
 		log.debug("Resource Category Filter {}",resourceCategoryFilter);
 
@@ -77,9 +77,9 @@ public class GroupBy extends Statistic{
 		} else {
 			query = "select "+groupByField+" from "+tableName+" where (eventTime between ? and ?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere+" group by ("+groupByField+")";
 		}
-	
 
-		Object[] params = new Object[]{start.toDate(),end.toDate()};
+
+		Object[] params = new Object[]{start,end};
 
 		List results = getEntryHandler().query(query,params);
 
