@@ -59,7 +59,7 @@ public class CountEntry extends Statistic{
 			log.error("Possible statistical parameter error, negative time difference, try swapping the start and end times");
 			throw new StatisticalUnitException("negative time difference");
 		}
-		
+
 		String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();
 		log.debug("Resource Category Filter {}",resourceCategoryFilter);
 
@@ -120,8 +120,8 @@ public class CountEntry extends Statistic{
 				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter;
 			else
 				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere;
-			
-			Object[] params = new Object[]{bucket.getStart().toDate(),bucket.getEnd().toDate(),bucket.getEnd().toDate()};
+
+			Object[] params = new Object[]{bucket.getStart(),bucket.getEnd(),bucket.getEnd()};
 			Integer count = (Integer) this.getEntryHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
