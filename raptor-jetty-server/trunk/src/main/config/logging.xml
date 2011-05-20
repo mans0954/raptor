@@ -2,16 +2,11 @@
 
 <configuration>
 
-  <property name="LOG_HOME" value="/tmp/" />
+  <property name="LOG_HOME" value="/opt/raptor/web/logs" />
 
-  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-    <encoder>
-      <pattern>%5p %d \(%C:%L\) ---&gt; %m%n</pattern>
-    </encoder>
-  </appender>
 
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${LOG_HOME}/raptor-web-process.log</file>
+      <file>${LOG_HOME}/raptor-web-process.log</file>
     <encoder>
       <pattern>%5p %d \(%C:%L\) ---&gt; %m%n</pattern>
     </encoder>
@@ -20,10 +15,10 @@
   <logger name="org.springframework" level="ERROR">
     <appender-ref ref="FILE"/>
   </logger>
-  <logger name="uk" level="DEBUG">
+  <logger name="uk.ac.cardiff" level="INFO">
     <appender-ref ref="FILE"/>
   </logger>
-  <logger name="org.mortbay" level="INFO">
+  <logger name="org.mortbay" level="ERROR">
     <appender-ref ref="FILE"/>
   </logger>
 

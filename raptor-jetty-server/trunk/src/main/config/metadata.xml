@@ -7,15 +7,10 @@
 
 
 	<bean id="webMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
-		<property name="serviceName">
-			<value>Cardiff University's RaptorWeb Instance</value>
-		</property>
-		<property name="organisationName">
-			<value>Cardiff University</value>
-		</property>
-		<property name="contactEmail">
-			<value>smartp@cf.ac.uk</value>
-		</property>
+        <property name="organisationName"><value>YOUR_ORGANISATION</value></property>
+        <property name="contactEmail"><value>CONTACT_EMAIL</value></property>
+        <property name="serviceName"><value>SERVICE_NAME</value></property>       
+        <property name="entityId"><value>https://HOSTNAME/raptor-web</value></property>
 	</bean>
 
 

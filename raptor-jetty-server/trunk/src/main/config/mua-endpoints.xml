@@ -9,11 +9,11 @@
 	<bean id="muaRegistry" class="uk.ac.cardiff.raptorweb.engine.MUARegistry">
 		<property name ="MUAEntries">
 			<list>
-				<bean id="cardiffShibMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
-					<property name="serviceEndpoint"><value>https://localhost:8443/MUA/MultiUnitAggregator</value></property>
+				<bean id="localMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
+					<property name="serviceEndpoint"><value>https://localhost:8111/MUA/MultiUnitAggregator</value></property>
 					<property name="isAttached" value="true"></property>
-					<property name="publicKey"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value></property>
-                    <property name="publicKeyPassword"><value>phil11</value></property>
+					<property name="publicKey"><value>/opt/raptor/web/keys/authorised-keys.jks</value></property>
+                    <property name="publicKeyPassword"><value>changeit</value></property>
 				</bean>
 			</list>
 		</property>
@@ -22,10 +22,10 @@
 	<bean id="serviceEndpointClient" class="uk.ac.cardiff.raptorweb.sei.ServiceEndpointClient">
          <property name="tlsParameters">
            <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
-                 <property name="trustStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value></property>
-                 <property name="trustStorePassword"><value>phil11</value></property>
-                 <property name="keyStoreLocation"><value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value></property>
-                 <property name="keyStorePassword"><value>phil11</value></property>
+                 <property name="trustStoreLocation"><value>/opt/raptor/web/keys/authorised-keys.jks</value></property>
+                 <property name="trustStorePassword"><value>changeit</value></property>
+                 <property name="keyStoreLocation"><value>/opt/raptor/web/keys/raptor-web.jks</value></property>
+                 <property name="keyStorePassword"><value>changeit</value></property>
            </bean>
        </property>
     </bean>
