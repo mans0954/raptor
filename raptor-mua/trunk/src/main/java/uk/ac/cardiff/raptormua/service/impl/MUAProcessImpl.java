@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptormua.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -41,29 +42,33 @@ import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
 import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
+import uk.ac.cardiff.raptormua.upload.BatchFile;
+import uk.ac.cardiff.raptormua.upload.FileUploadEngine;
 
 /**
  * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions are thrown use a <code>SoapFault</code>
  * . Fault codes are: Client (if a malformed input e.g. statistic name is wrong) Server (we use for locks, as server side issue) VersionMismatch MustUnderstand
- *
+ * 
  * @author philsmart
- *
+ * 
  */
 public class MUAProcessImpl implements MUAProcess {
 
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(MUAProcessImpl.class);
 
-    /** main engine of the MultiUnitAggregator, that handles all
-     * common functions */
+    /**
+     * main engine of the MultiUnitAggregator, that handles all common functions
+     */
     private MUAEngine engine;
 
+    /** Engine from which to scan for files in defined upload directories from which to parse Events */
+    private FileUploadEngine fileUploadEngine;
 
     /**
      * ReentrantLock to prevent more than one operation at the same time
      */
     final Lock lockR = new ReentrantLock();
-
 
     public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
         if (lockR.tryLock()) {
@@ -87,7 +92,7 @@ public class MUAProcessImpl implements MUAProcess {
                 engine.release();
 
             } catch (Exception e) {
-                log.error("Error trying to release events {}",e.getMessage());
+                log.error("Error trying to release events {}", e.getMessage());
             } finally {
                 lockR.unlock();
             }
@@ -110,7 +115,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (Exception e) {
                 log.error("{}", e);
-                success=false;
+                success = false;
             } finally {
                 lockR.unlock();
             }
@@ -151,7 +156,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (Exception e) {
                 log.error("Error trying to add authentications to this MUA", e);
-                success=false;
+                success = false;
 
             } finally {
                 lockR.unlock();
@@ -183,11 +188,9 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
-    /**
-	 *
-	 */
+
     public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
-        List<LogFileUploadResult> result= new ArrayList<LogFileUploadResult>();
+        List<LogFileUploadResult> result = new ArrayList<LogFileUploadResult>();
         boolean success = false;
         if (lockR.tryLock()) {
             try {
@@ -200,35 +203,53 @@ public class MUAProcessImpl implements MUAProcess {
                 success = true;
             } catch (TransactionInProgressException e) {
                 log.error("Could not parse and store batch upload {}", e.getMessage());
-                success=false;
+                success = false;
 
             } finally {
                 lockR.unlock();
             }
-        }
-        else{
+        } else {
             log.warn("Lock was hit for method [batchUpload]");
             throw new SoapFault("lock was hit on method batchUpload", new QName("Server"));
         }
-        if (!success){
+        if (!success) {
             throw new SoapFault("Could not parse and store batch upload", new QName("Server"));
         }
         return result;
 
-
-    }
-
-    public void resourceClassification(){
-          log.info("Resource classification background thread called");
-          //backgroundServices.resourceClassification();
     }
     
-	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
-		log.info("Saving resource metadata (classification) for {} resources",resourceMetadata.size());
-		engine.saveAndApplyResourceClassification(resourceMetadata);
-		
-	}
 
+    public void uploadFromDirectory() {
+        List<BatchFile> files = fileUploadEngine.scanDirectories();
+        if (files!=null && files.size()>0){
+            if (lockR.tryLock()) {
+                try {
+                    log.info("Uploading {} files from directory",files.size());
+                    engine.batchParseFiles(files);
+                } catch (TransactionInProgressException e) {
+                    log.error("Could not parse and store batch uploads, will retry on next run");
+
+                } finally {
+                    lockR.unlock();
+                }
+            } else {
+                log.warn("Lock was hit for method [batchUpload]");
+            }
+        }
+    }
+    
+
+    public void resourceClassification() {
+        log.info("Resource classification background thread called");
+        // backgroundServices.resourceClassification();
+    }
+
+    public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
+        log.info("Saving resource metadata (classification) for {} resources", resourceMetadata.size());
+        engine.saveAndApplyResourceClassification(resourceMetadata);
+
+    }
 
     public void setEngine(MUAEngine engine) {
         this.engine = engine;
@@ -238,5 +259,19 @@ public class MUAProcessImpl implements MUAProcess {
         return engine;
     }
 
+    /**
+     * @param fileUploadEngine
+     *            the fileUploadEngine to set
+     */
+    public void setFileUploadEngine(FileUploadEngine fileUploadEngine) {
+        this.fileUploadEngine = fileUploadEngine;
+    }
+
+    /**
+     * @return the fileUploadEngine
+     */
+    public FileUploadEngine getFileUploadEngine() {
+        return fileUploadEngine;
+    }
 
 }
