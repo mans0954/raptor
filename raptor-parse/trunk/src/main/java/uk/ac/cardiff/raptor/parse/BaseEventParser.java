@@ -19,6 +19,7 @@
 package uk.ac.cardiff.raptor.parse;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public abstract class BaseEventParser {
 	 * The method that must be provided to parse events from the
 	 * <code>bytes</code> parameter
 	 *
-	 * @throws ParserException
+	 * @throws ParserException the logfile to parse as bytes
 	 */
 	public abstract void parse(byte[] bytes) throws ParserException;
 
@@ -79,6 +80,15 @@ public abstract class BaseEventParser {
 	 * @throws ParserException
 	 */
 	public abstract void parse() throws ParserException;
+	
+	/**
+	 * The method that must be provided to parse events from the input
+         * log file location e.g. <code>logfile</code>
+         * 
+	 * @param logFile the logfile to parse
+	 * @throws ParserException
+	 */
+	public abstract void parse(File logFile) throws ParserException;
 
 	/** Method to reset this event parser back to its initial state.This involves
 	 * removing all entries from the <code>IncrementalEntryHandler</code> and

@@ -17,6 +17,7 @@ package uk.ac.cardiff.raptor.parse.external.file;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -128,6 +129,24 @@ public class LogFileParser extends BaseEventParser {
 	    }
 
 	}
+	
+	public void parse(File logfile) throws ParserException {
+            try{           
+                log.info("parsing log file: {}", logfile.getCanonicalPath());
+                URL logfileURL = logfile.toURI().toURL();
+                log.debug("URL {}",logfileURL);
+                URLConnection logfileconnection = logfileURL.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(logfileconnection.getInputStream()));
+                int totalNoLines = count(logfileURL);
+                doParse(in, totalNoLines);
+            }
+            catch (MalformedURLException e1) {
+                throw new ParserException("Could not find the source file [" + logfile + "] for parsing", e1);
+            } catch (IOException e2) {
+                throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
+            }
+
+        }
 
 
 
