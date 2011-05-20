@@ -29,6 +29,7 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.handler.DefaultHandler;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -37,6 +38,9 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
 public class RunServer {
+    
+    /** Class Logger */
+    private static final Logger log = LoggerFactory.getLogger(RunServer.class);
 
     /**
      * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3. Start a Jetty Server instance including
@@ -85,8 +89,10 @@ public class RunServer {
         server.setHandler(handlers);
 
         try {
+              log.info("Starting Jetty Server");
                 server.start();
                 server.join();
+                log.info("Jetty has stopped");
         } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(100);
