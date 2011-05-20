@@ -11,45 +11,32 @@
 		<ui:define name="content">
 
 
-			<f:verbatim>
+		
 				<br />
 				<center>
 					<h1 style="font-size: 300%">Raptor</h1>
 					<img src="/raptor-web/image/raptor-large.png" />
-				</center>				
+				</center>
 
-				<br />
-				<p style="padding-left: 20pt; padding-right: 30pt; font-size: 150%">
-					The RAPTOR project (Retreival, Analysis, and Presentation Toolkit
-					for usage of Online Resources) is a JISC funded project creating
-					software to help analyse usage statistics for electronic resource
-					management</p>
-				<br />
 				<br />
 				<center>
-					<h2 style="font-size: 200%">Project Aims</h2>
+				<p align="justify" style="padding-left: 140pt; padding-right: 140pt; font-size: 130%">
+					Raptor is a free to use, open source software suite generally
+					designed to enable accounting within event-based systems, and
+					specifically aimed at accounting within systems that handle
+					authentication events such as the Shibboleth IdP, OpenAthens LA,
+					and EZproxy. Raptor was developed by <a style="font-size: 110%"
+						href="http://www.cardiff.ac.uk">Cardiff University</a>'s <a style="font-size: 110%"
+						href="http://www.cardiff.ac.uk/insrv">Information Services</a>
+					Directorate as part of a <a style="font-size: 110%"
+						href="http://www.jisc.ac.uk/whatwedo/programmes/aim/raptor.aspx">JISC
+						funded project</a>. For further information on Raptor, including help
+					and support information, visit <a  style="font-size: 110%" href="http://iam.cf.ac.uk/Raptor">Raptor's
+						Website</a>.
+				</p>
 				</center>
-				<br />
-				<ul style="padding-left: 20pt; padding-right: 60pt; font-size: 150%">
-					<li>Understand institutional and national accounting and
-						reporting requirements around statistics of e-resource access via
-						Shibboleth and Ezproxy.</li>
+				<br />				
 
-					<li>Build a free-to-use, open source software toolkit which
-						aims to present statistical accounting information about
-						e-resource usage to non-technical users, and makes basic
-						aggregated usage information available to external organisations.</li>
-
-					<li>To implement the RAPTOR software toolkit through a
-						process of a quickly developed initial release and subsequent
-						regular updates during the lifetime of the project, through a
-						group of around 8-10 pilot institutions, using their feedback
-						regarding both bugs and desired features to inform the regular
-						updates.</li>
-				</ul>
-
-
-			</f:verbatim>
 			<br />
 
 

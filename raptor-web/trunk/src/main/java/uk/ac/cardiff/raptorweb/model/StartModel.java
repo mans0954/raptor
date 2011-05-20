@@ -52,7 +52,7 @@ public class StartModel implements Serializable {
     public StartModel() {
         statsRangeSelector = TimeRange.TODAY;
         eventType = EventType.SHIBBOLETH_AUTHENTICATION;
-        resourceCategory = resourceCategory.EXTERNAL;
+        resourceCategory = resourceCategory.ALL;
     }
 
     public void setAttachedMUACapabilities(Capabilities attachedMUACapabilities) {
@@ -116,29 +116,30 @@ public class StartModel implements Serializable {
     }
 
     /**
-    * @param resourceCategory the resourceCategory to set
-    */
-   public void setResourceCategory(ResourceCategory resourceCategory) {
-       this.resourceCategory = resourceCategory;
-   }
+     * @param resourceCategory
+     *            the resourceCategory to set
+     */
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
+    }
 
-   /**
-    * @return the resourceCategory
-    */
-   public ResourceCategory getResourceCategory() {
-       return resourceCategory;
-   }
-   
-   public void setResourceCategoryString(String resourceCategory){
-       for (ResourceCategory type : ResourceCategory.values()){
-           if (type.toString().equals(resourceCategory)){
-               this.resourceCategory = type;
-           }
-       }
-   }
+    /**
+     * @return the resourceCategory
+     */
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
+    }
 
-   public String getResourceCategoryString(){
-       return resourceCategory.toString();
-   }
-    
+    public void setResourceCategoryString(String resourceCategory) {
+        for (ResourceCategory type : ResourceCategory.values()) {
+            if (type.toString().equals(resourceCategory)) {
+                this.resourceCategory = type;
+            }
+        }
+    }
+
+    public String getResourceCategoryString() {
+        return resourceCategory.toString();
+    }
+
 }
