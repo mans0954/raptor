@@ -51,307 +51,323 @@ import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.model.Users;
+import uk.ac.cardiff.raptormua.upload.BatchFile;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class MUAEngine {
 
-	/** Class logger. */
-	private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
-	/** Performs all statistics. */
-	private StatisticsHandler statisticsHandler;
-
-	/**
-	 * The client that is used to process, filter and send events to another MUA
-	 * instance.
-	 */
-	private EventReleaseClient eventReleaseClient;
-
-	// TODO implement user level control on the MUA?
-	/** Support for user classification on the MUA. */
-	private Users users;
-
-	/** The Storage Engine that handles all storage transactions. */
-	private StorageEngine storageEngine;
-
-	/** Metadata about the this MUA instance. */
-	private ServiceMetadata muaMetadata;
-
-	/** Used to parse batch uploads. */
-	private DataAccessRegister dataAccessRegister;
-
-	/** The Maximum number of events that can be released (e.g. to another MUA)
-	 * at any one time.
-	 */
-	private int maxReleaseEventSize;
-
-	public MUAEngine() {
-		log.info("Setup Multi-Unit Aggregator Engine...");
-		maxReleaseEventSize=100;
-		log.info("Mulit-Unit Aggregator Engine is running...");
-	}
-
-	/**
-	 * Sets the statisticalhandler.
-	 *
-	 * @param statisticsHandler
-	 *            the statistichandler to set
-	 */
-	public final void setStatisticsHandler(final StatisticsHandler statisticsHandler) {
-		this.statisticsHandler = statisticsHandler;
-	}
-
-	public final StatisticsHandler getStatisticsHandler() {
-		return statisticsHandler;
-	}
-
-	/**
-	 * @param statisticName
-	 */
-	public final AggregatorGraphModel performStatistic(final String statisticName) {
-		// TODO we do not need to set this each time
-		statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
-		return statisticsHandler.peformStatistic(statisticName);
-
-	}
-
-
-	    /**
-	     * First, find the earliest event that needs to be retrieved from the
-	     * storage engine - which may contain duplicates to those already sent,
-	     * but these are filtered by the releaseClient later.
-	     * Then send those events to the event release client.
-	     *
-	     * @return
-	     */
-	 public final boolean release() {
-	     if (eventReleaseClient.isEnabled()){
-        	     List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
-        	     DateTime earliestReleaseTime = null;
-                     Endpoint endpointWithEarliestReleaseTime=null;
-                     for (Endpoint endpoint :endpoints){
-                             if (earliestReleaseTime==null){
-                                     earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
-                                     endpointWithEarliestReleaseTime = endpoint;
-                             }
-                             if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)){
-                                     earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
-                                     endpointWithEarliestReleaseTime = endpoint;
-                             }
-                     }
-
-        	        List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime,maxReleaseEventSize);
-
-
-        	        boolean success = false;
-        	        try {
-        	                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
-        	        } catch (ReleaseFailureException e) {
-        	                log.error("Event Release failed ", e);
-        	        }
-        	        return success;
-	     }
-	     return false;
-	}
-
-
-
-	/**
-	 * Gets the capabilities of this MUA, also sets some default values and
-	 * possible values for the calling component to use
-	 *
-	 * @return
-	 */
-	public final Capabilities getCapabilities() {
-
-		List<Statistic> su = statisticsHandler.getStatisticalUnits();
-
-		Capabilities capabilities = new Capabilities();
-		capabilities.setMetadata(this.getMuaMetadata());
-
-		// set possible values
-		SuggestionValues suggestionValues = new SuggestionValues();
-		suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
-		capabilities.setSuggestionValues(suggestionValues);
-		capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
-
-		//set resource metadata
-		List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
-		log.debug("Setting {} resource metadata",resourceMetadata.size());
-		capabilities.setResourceMetadata(resourceMetadata);
-
-		ArrayList<StatisticalUnitInformation> stats = new ArrayList();
-		for (Statistic entry : su) {
-			log.debug("Setting statistical unit information as: " + entry.getStatisticParameters().getUnitName());
-			StatisticalUnitInformation information = new StatisticalUnitInformation();
-
-			information.setStatisticParameters(entry.getStatisticParameters());
-
-			ArrayList<String> postprocessors = new ArrayList<String>();
-			if (entry.getPostprocessor() != null) {
-				for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
-					postprocessors.add(postprocessor.getClass().getSimpleName());
-				}
-			}
-			information.setPostprocessors(postprocessors);
-
-			ArrayList<String> preprocessors = new ArrayList<String>();
-			if (entry.getPreprocessor() != null) {
-				preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
-			}
-			information.setPreprocessors(preprocessors);
-
-			stats.add(information);
-		}
-		capabilities.setStatisticalServices(stats);
-		log.debug("Constructed MUA Capabilities, {}", capabilities);
-		return capabilities;
-	}
-
-	/**
-	 * Use the configured raptor parsing library to store the incomming
-	 * <code>uploadFiles</code>
-	 *
-	 * @param uploadFiles
-	 *            the files to parse and store
-	 * @throws TransactionInProgressException
-	 */
-	public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles) throws TransactionInProgressException {
-		log.info("Going to parse {} batch uploaded files", uploadFiles.size());
-		ArrayList<Event> allEvents = new ArrayList<Event>();
-
-		ArrayList<LogFileUploadResult> results = new ArrayList<LogFileUploadResult>();
-
-		for (LogFileUpload logfileUpload : uploadFiles) {
-			LogFileUploadResult result = new LogFileUploadResult();
-			result.setId(logfileUpload.getId());
-			try {
-				BaseEventParser parser = dataAccessRegister.getParsingModuleForType(logfileUpload.getEventType().friendlyName);
-				log.debug("Parsing {} using parser {} for type {}", new Object[] { logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType() });
-				parser.parse(logfileUpload.getData());
-				allEvents.addAll(parser.getEntryHandler().getEntries());
-				parser.reset();
-				result.setStatus("Parsed On the MUA");
-				result.setProcessed(true);
-
-			} catch (ParserException e) {
-				log.error("Error Parsing the batch uploaded log file {}, with reason", logfileUpload.getName(), e.getMessage());
-
-				result.setStatus("Failed To Parse");
-				result.setProcessed(false);
-			} catch (EventParserNotFoundException e) {
-				log.error("Event parser could not be found for {}, with reason {}", logfileUpload.getName(), e.getMessage());
-
-				result.setStatus("Failed To Parse");
-				result.setProcessed(false);
-			}
-			results.add(result);
-		}
-		log.info("Storing all {} parsed events", allEvents.size());
-		int transactionId = (int) (Math.random() * 1000000);
-		storageEngine.performAsynchronousEntryStoragePipeline(transactionId, allEvents);
-
-		return results;
-
-	}
-
-	/**
-	 * @param statisticalUnitInformation
-	 */
-	public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
-		log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
-		statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
-
-	}
-
-	public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata){
-		ResourceClassificationBackgroundService backgroundService = new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
-		backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
-	}
-
-	/**
-	 * @param function
-	 * @return
-	 */
-	public final boolean performAdministrativeFunction(final AdministrativeFunction function) {
-		switch (function.getAdministrativeFunction()) {
-		case REMOVEALL:
-			storageEngine.removeAllEntries();
-			break;
-		default:
-			break;
-		}
-		return true;
-	}
-
-	/**
-	 * @param pushed
-	 * @throws TransactionInProgressException
-	 */
-	public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
-		int transactionId = (int) (Math.random() * 1000000);
-		storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
-
-	}
-
-	public final void setMuaMetadata(final ServiceMetadata muaMetadata) {
-		this.muaMetadata = muaMetadata;
-	}
-
-	public final ServiceMetadata getMuaMetadata() {
-		return muaMetadata;
-	}
-
-	public final void setEventReleaseClient(final EventReleaseClient eventReleaseClient) {
-		this.eventReleaseClient = eventReleaseClient;
-	}
-
-	public final EventReleaseClient getEventReleaseClient() {
-		return eventReleaseClient;
-	}
-
-	/**
-	 * @param storageEngine
-	 *            the storageEngine to set
-	 */
-	public final void setStorageEngine(final StorageEngine storageEngine) {
-		this.storageEngine = storageEngine;
-	}
-
-	/**
-	 * @return the storageEngine
-	 */
-	public final StorageEngine getStorageEngine() {
-		return storageEngine;
-	}
-
-	/**
-	 * @param dataAccessRegister
-	 *            the dataAccessRegister to set
-	 */
-	public final void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
-		this.dataAccessRegister = dataAccessRegister;
-	}
-
-	/**
-	 * @return the dataAccessRegister
-	 */
-	public final DataAccessRegister getDataAccessRegister() {
-		return dataAccessRegister;
-	}
+    /** Performs all statistics. */
+    private StatisticsHandler statisticsHandler;
 
     /**
-     * @param maxReleaseEventSize the maxReleaseEventSize to set
+     * The client that is used to process, filter and send events to another MUA instance.
+     */
+    private EventReleaseClient eventReleaseClient;
+
+    // TODO implement user level control on the MUA?
+    /** Support for user classification on the MUA. */
+    private Users users;
+
+    /** The Storage Engine that handles all storage transactions. */
+    private StorageEngine storageEngine;
+
+    /** Metadata about the this MUA instance. */
+    private ServiceMetadata muaMetadata;
+
+    /** Used to parse batch uploads. */
+    private DataAccessRegister dataAccessRegister;
+
+    /**
+     * The Maximum number of events that can be released (e.g. to another MUA) at any one time.
+     */
+    private int maxReleaseEventSize;
+
+    public MUAEngine() {
+        log.info("Setup Multi-Unit Aggregator Engine...");
+        maxReleaseEventSize = 100;
+        log.info("Mulit-Unit Aggregator Engine is running...");
+    }
+
+    /**
+     * Sets the statisticalhandler.
+     * 
+     * @param statisticsHandler
+     *            the statistichandler to set
+     */
+    public final void setStatisticsHandler(final StatisticsHandler statisticsHandler) {
+        this.statisticsHandler = statisticsHandler;
+    }
+
+    public final StatisticsHandler getStatisticsHandler() {
+        return statisticsHandler;
+    }
+
+    /**
+     * @param statisticName
+     */
+    public final AggregatorGraphModel performStatistic(final String statisticName) {
+        // TODO we do not need to set this each time
+        statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
+        return statisticsHandler.peformStatistic(statisticName);
+
+    }
+
+    /**
+     * First, find the earliest event that needs to be retrieved from the storage engine - which may contain duplicates to those already sent, but these are
+     * filtered by the releaseClient later. Then send those events to the event release client.
+     * 
+     * @return
+     */
+    public final boolean release() {
+        if (eventReleaseClient.isEnabled()) {
+            List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
+            DateTime earliestReleaseTime = null;
+            Endpoint endpointWithEarliestReleaseTime = null;
+            for (Endpoint endpoint : endpoints) {
+                if (earliestReleaseTime == null) {
+                    earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                    endpointWithEarliestReleaseTime = endpoint;
+                }
+                if (endpoint.getReleaseInformation().getLastReleasedEventTime().isBefore(earliestReleaseTime)) {
+                    earliestReleaseTime = endpoint.getReleaseInformation().getLastReleasedEventTime();
+                    endpointWithEarliestReleaseTime = endpoint;
+                }
+            }
+
+            List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime, maxReleaseEventSize);
+
+            boolean success = false;
+            try {
+                success = eventReleaseClient.release(eventsToSend, getMuaMetadata());
+            } catch (ReleaseFailureException e) {
+                log.error("Event Release failed ", e);
+            }
+            return success;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling component to use
+     * 
+     * @return
+     */
+    public final Capabilities getCapabilities() {
+
+        List<Statistic> su = statisticsHandler.getStatisticalUnits();
+
+        Capabilities capabilities = new Capabilities();
+        capabilities.setMetadata(this.getMuaMetadata());
+
+        // set possible values
+        SuggestionValues suggestionValues = new SuggestionValues();
+        suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
+        capabilities.setSuggestionValues(suggestionValues);
+        capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
+
+        // set resource metadata
+        List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
+        log.debug("Setting {} resource metadata", resourceMetadata.size());
+        capabilities.setResourceMetadata(resourceMetadata);
+
+        ArrayList<StatisticalUnitInformation> stats = new ArrayList();
+        for (Statistic entry : su) {
+            log.debug("Setting statistical unit information as: " + entry.getStatisticParameters().getUnitName());
+            StatisticalUnitInformation information = new StatisticalUnitInformation();
+
+            information.setStatisticParameters(entry.getStatisticParameters());
+
+            ArrayList<String> postprocessors = new ArrayList<String>();
+            if (entry.getPostprocessor() != null) {
+                for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
+                    postprocessors.add(postprocessor.getClass().getSimpleName());
+                }
+            }
+            information.setPostprocessors(postprocessors);
+
+            ArrayList<String> preprocessors = new ArrayList<String>();
+            if (entry.getPreprocessor() != null) {
+                preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
+            }
+            information.setPreprocessors(preprocessors);
+
+            stats.add(information);
+        }
+        capabilities.setStatisticalServices(stats);
+        log.debug("Constructed MUA Capabilities, {}", capabilities);
+        return capabilities;
+    }
+
+    /**
+     * Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
+     * 
+     * @param uploadFiles
+     *            the files to parse and store
+     * @throws TransactionInProgressException
+     */
+    public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles) throws TransactionInProgressException {
+        log.info("Going to parse {} batch uploaded files", uploadFiles.size());
+        ArrayList<Event> allEvents = new ArrayList<Event>();
+
+        ArrayList<LogFileUploadResult> results = new ArrayList<LogFileUploadResult>();
+
+        for (LogFileUpload logfileUpload : uploadFiles) {
+            LogFileUploadResult result = new LogFileUploadResult();
+            result.setId(logfileUpload.getId());
+            try {
+                BaseEventParser parser = dataAccessRegister.getParsingModuleForType(logfileUpload.getEventType().friendlyName);
+                log.debug("Parsing {} using parser {} for type {}", new Object[] { logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType() });
+                parser.parse(logfileUpload.getData());
+                allEvents.addAll(parser.getEntryHandler().getEntries());
+                parser.reset();
+                result.setStatus("Parsed On the MUA");
+                result.setProcessed(true);
+
+            } catch (ParserException e) {
+                log.error("Error Parsing the batch uploaded log file {}, with reason", logfileUpload.getName(), e.getMessage());
+
+                result.setStatus("Failed To Parse");
+                result.setProcessed(false);
+            } catch (EventParserNotFoundException e) {
+                log.error("Event parser could not be found for {}, with reason {}", logfileUpload.getName(), e.getMessage());
+
+                result.setStatus("Failed To Parse");
+                result.setProcessed(false);
+            }
+            results.add(result);
+        }
+        log.info("Storing all {} parsed events", allEvents.size());
+        int transactionId = (int) (Math.random() * 1000000);
+        storageEngine.performAsynchronousEntryStoragePipeline(transactionId, allEvents);
+
+        return results;
+
+    }
+
+    public final void batchParseFiles(final List<BatchFile> uploadFiles) throws TransactionInProgressException {
+        log.info("Going to parse {} batch uploaded files", uploadFiles.size());
+
+        for (BatchFile batchFile : uploadFiles) {
+            try {
+                BaseEventParser parser = dataAccessRegister.getParsingModuleForType(batchFile.getEventType().friendlyName);
+                log.debug("Parsing {} using parser {} for type {}", new Object[] { batchFile.getLogFile().getName(), parser.getClass(), batchFile.getEventType() });
+                parser.parse(batchFile.getLogFile());
+                List<Event> events = parser.getEntryHandler().getEntries();
+                parser.reset();
+                log.info("Storing all {} parsed events", events.size());
+                int transactionId = (int) (Math.random() * 1000000);
+                storageEngine.performSynchronousEntryStoragePipeline(transactionId, events);
+                batchFile.getLogFile().delete();
+
+            } catch (ParserException e) {
+                log.error("Error Parsing the batch uploaded log file {}, with reason", batchFile.getLogFile().getName(), e.getMessage());
+            } catch (EventParserNotFoundException e) {
+                log.error("Event parser could not be found for {}, with reason {}", batchFile.getLogFile().getName(), e.getMessage());
+            }
+        }       
+
+    }
+
+    /**
+     * @param statisticalUnitInformation
+     */
+    public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
+        log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+        statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
+
+    }
+
+    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
+        ResourceClassificationBackgroundService backgroundService = new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
+        backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
+    }
+
+    /**
+     * @param function
+     * @return
+     */
+    public final boolean performAdministrativeFunction(final AdministrativeFunction function) {
+        switch (function.getAdministrativeFunction()) {
+            case REMOVEALL:
+                storageEngine.removeAllEntries();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * @param pushed
+     * @throws TransactionInProgressException
+     */
+    public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
+        int transactionId = (int) (Math.random() * 1000000);
+        storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+
+    }
+
+    public final void setMuaMetadata(final ServiceMetadata muaMetadata) {
+        this.muaMetadata = muaMetadata;
+    }
+
+    public final ServiceMetadata getMuaMetadata() {
+        return muaMetadata;
+    }
+
+    public final void setEventReleaseClient(final EventReleaseClient eventReleaseClient) {
+        this.eventReleaseClient = eventReleaseClient;
+    }
+
+    public final EventReleaseClient getEventReleaseClient() {
+        return eventReleaseClient;
+    }
+
+    /**
+     * @param storageEngine
+     *            the storageEngine to set
+     */
+    public final void setStorageEngine(final StorageEngine storageEngine) {
+        this.storageEngine = storageEngine;
+    }
+
+    /**
+     * @return the storageEngine
+     */
+    public final StorageEngine getStorageEngine() {
+        return storageEngine;
+    }
+
+    /**
+     * @param dataAccessRegister
+     *            the dataAccessRegister to set
+     */
+    public final void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
+        this.dataAccessRegister = dataAccessRegister;
+    }
+
+    /**
+     * @return the dataAccessRegister
+     */
+    public final DataAccessRegister getDataAccessRegister() {
+        return dataAccessRegister;
+    }
+
+    /**
+     * @param maxReleaseEventSize
+     *            the maxReleaseEventSize to set
      */
     public void setMaxReleaseEventSize(int maxReleaseEventSize) {
-        if (maxReleaseEventSize>3000){
+        if (maxReleaseEventSize > 3000) {
             log.warn("Max Release Event size can not be set higher than 3000, defaulting to 3000");
-            this.maxReleaseEventSize=3000;
-        }
-        else{
+            this.maxReleaseEventSize = 3000;
+        } else {
             this.maxReleaseEventSize = maxReleaseEventSize;
         }
     }
@@ -362,7 +378,5 @@ public class MUAEngine {
     public int getMaxReleaseEventSize() {
         return maxReleaseEventSize;
     }
-
-
 
 }

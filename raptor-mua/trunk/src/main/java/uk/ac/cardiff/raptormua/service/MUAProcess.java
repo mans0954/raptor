@@ -82,4 +82,6 @@ public interface MUAProcess {
 	public void resourceClassification();
 
 	public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata);
+	
+	public void uploadFromDirectory();
 }

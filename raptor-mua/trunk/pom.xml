@@ -93,7 +93,7 @@
 		</dependency>
 
 
-		<!--  CXF for SOAP/WS-->
+		<!-- CXF for SOAP/WS -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
@@ -177,7 +177,7 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-        <!--  Open SAML -->
+		<!-- Open SAML -->
 
 
 		<dependency>
@@ -202,13 +202,9 @@
 
 
 
-		<!--
-			LOGGING
-
-			to deal with existing log4j components that do not use slf4j.
-			This bridge pushes those through slf4j and hence then through logback
-			(or the sl4fy implementation)
-		-->
+		<!-- LOGGING to deal with existing log4j components that do not use slf4j. 
+			This bridge pushes those through slf4j and hence then through logback (or 
+			the sl4fy implementation) -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
@@ -219,8 +215,13 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>1.6.1</version>
 		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.27</version>
+		</dependency>
 
-		<!--  ORM and Database -->
+		<!-- ORM and Database -->
 
 
 		<dependency>
@@ -262,44 +263,42 @@
 		</dependency>
 
 
-		 <!--  OTHER -->
+		<!-- OTHER -->
 
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>1.8.4</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.4</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.9.1</version>
-        </dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.9.1</version>
+		</dependency>
 
-              <dependency>
-            <groupId>org.apache.maven.shared</groupId>
-            <artifactId>maven-runtime</artifactId>
-            <version>1.0-alpha-2</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.maven.shared</groupId>
+			<artifactId>maven-runtime</artifactId>
+			<version>1.0-alpha-2</version>
+		</dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
-        </dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>1.6</version>
+		</dependency>
 	</dependencies>
 
 
 
-	<!--
-		Adding extra repositories for any other libs, which is hosted on Iam
-	-->
+	<!-- Adding extra repositories for any other libs, which is hosted on Iam -->
 
 
 	<repositories>

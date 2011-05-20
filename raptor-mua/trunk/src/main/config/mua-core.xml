@@ -79,9 +79,28 @@
 		<property name="engine">
 			<ref bean="MUAEngine"></ref>
 		</property>
+		<property name="fileUploadEngine">
+		    <ref bean="fileUploadFromDirectory"/>
+		</property>
 	</bean>
 
-
+    <bean id="fileUploadFromDirectory" class="uk.ac.cardiff.raptormua.upload.FileUploadEngine">
+        <property name="enabled" value="true"/>
+        <property name="uploadDirectories">
+            <list>
+	            <bean id="shibUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+	               <property name="allowedFileExtensions">
+	                   <list>
+	                       <value>txt</value>
+	                       <value>log</value>
+	                   </list>
+	               </property>
+	               <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/shib2/"/>
+	               <property name="eventType"><value>SHIBBOLETH2</value></property>
+	            </bean>
+            </list>
+        </property>
+    </bean>
 
 	<!--
 		this bean config kicks of the singleton engine instance which is then
@@ -127,12 +146,35 @@
             <value>false</value>
         </property>
     </bean>
+    
+        <!-- large file upload trigger -->
+    <bean id="muaFileUploadQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="muaFileUplaodJobDetail" />
+        </property>
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="60000" />
+    </bean>
+
+    <bean id="muaFileUplaodJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="MUAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>uploadFromDirectory</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
 
     <!--  Trigger setup -->
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <ref local="muaReleaseQuickTrigger" />              
+                <ref local="muaReleaseQuickTrigger" />    
+                <ref local="muaFileUploadQuickTrigger" />            
             </list>
         </property>
     </bean>
