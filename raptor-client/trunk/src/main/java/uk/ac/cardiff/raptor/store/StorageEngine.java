@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.dao.StorageException;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 /**
@@ -77,6 +78,21 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
         asyncEntryStorage.execute(events,this);
 
 
+    }
+    
+    public void performSynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException{
+        if (transactionInProgress){
+            throw new TransactionInProgressException("Transaction "+currentTransactionId+" currently in processing");
+        }
+        log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(),transactionId);
+        this.currentTransactionId = transactionId;
+        transactionInProgress=true;
+        try {
+            entryHandler.addEntries(events);
+        } catch (StorageException e) {
+           log.error("Could not store events for transaction id [{}]",transactionId);
+        }
+        transactionInProgress=false;
     }
 
     /**

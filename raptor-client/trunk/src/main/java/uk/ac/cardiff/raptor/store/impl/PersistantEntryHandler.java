@@ -181,7 +181,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	}
 
 	public List<Event> getEntries() {
-		List runQuery = dataConnection.runQuery("from Event",null);
+		List<Event> runQuery = dataConnection.runQuery("from Event",null);
 		return runQuery;
 	}
 
@@ -203,7 +203,6 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	public long getNumberOfEntries() {
 		Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
-		log.debug("Number of entries {}, with class {}",result,result.getClass());
 		return (Long) result;
 	}
 
