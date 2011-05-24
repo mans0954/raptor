@@ -52,6 +52,12 @@ public class ServiceEndpointClient {
 
     /** Raptor specific TLS parameters class, that can return cxf TLSParameters */
     private ClientTLSParameters tlsParameters;
+    
+    /** How long to wait, in ms, before the connection attempt times out.*/
+    private int connectionTimeout;
+    
+    /** How long to wait, in ms, for the web service call to respond before failing */
+    private int receiveTimeout;
 
     public MultiUnitAggregator getEndpointConnection(MUAEntry endpoint) throws UnrecoverableKeyException, KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException {
 	ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
@@ -64,8 +70,8 @@ public class ServiceEndpointClient {
 	org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
 	HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
 	HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	httpClientPolicy.setConnectionTimeout(1000);
-	httpClientPolicy.setReceiveTimeout(20000);
+	httpClientPolicy.setConnectionTimeout(connectionTimeout);
+	httpClientPolicy.setReceiveTimeout(receiveTimeout);
 	httpConduit.setClient(httpClientPolicy);
 
 	if (tlsParameters != null)
@@ -242,6 +248,34 @@ public class ServiceEndpointClient {
      */
     public ClientTLSParameters getTlsParameters() {
 	return tlsParameters;
+    }
+
+    /**
+     * @param connectionTimeout the connectionTimeout to set
+     */
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    /**
+     * @return the connectionTimeout
+     */
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    /**
+     * @param receiveTimeout the receiveTimeout to set
+     */
+    public void setReceiveTimeout(int receiveTimeout) {
+        this.receiveTimeout = receiveTimeout;
+    }
+
+    /**
+     * @return the receiveTimeout
+     */
+    public int getReceiveTimeout() {
+        return receiveTimeout;
     }
 
 
