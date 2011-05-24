@@ -42,7 +42,7 @@
 
 
     <!--  Set is mapped through a collections table -->
-        <set name="latestEqualEntries" lazy="false" >
+        <set name="latestEqualEntries" lazy="false" table="latestEqualEntries" >
             <key column="latestEqualEntries_id" />
               <element column="hashcode" type="integer"/>
         </set>

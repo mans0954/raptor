@@ -28,6 +28,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
+import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
 
 /**
  * @author philsmart
@@ -88,10 +89,14 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
         this.currentTransactionId = transactionId;
         transactionInProgress=true;
         try {
+        	attributeAssociationEngine.associateAttributes(events);
             entryHandler.addEntries(events);
+            log.debug("Storage task completed true, for transaction id [{}]", currentTransactionId);
         } catch (StorageException e) {
-           log.error("Could not store events for transaction id [{}]",transactionId);
-        }
+           log.error("Could not store events for transaction id [{}], {}",transactionId);
+        } catch (AttributeAssociationException e) {
+        	 log.error("Could not store events for transaction id [{}], {}",transactionId);
+		}
         transactionInProgress=false;
     }
 
