@@ -114,7 +114,7 @@ public class LogFileParser extends BaseEventParser {
 	    String usedLogFile=null;
 	    try{
 	        DateTime todaysDate = new DateTime();
-	        usedLogFile = logfile.replace("DATE",todaysDate.toString("yyyymmdd"));
+	        usedLogFile = logfile.replace("DATE",todaysDate.toString("yyyyMMdd"));
 	        log.info("parsing log file: {}", usedLogFile);
     	        URL logfileURL = new URL(usedLogFile);
                 URLConnection logfileconnection = logfileURL.openConnection();
