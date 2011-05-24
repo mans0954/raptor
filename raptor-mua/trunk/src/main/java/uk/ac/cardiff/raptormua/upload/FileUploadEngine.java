@@ -3,6 +3,7 @@
  */
 package uk.ac.cardiff.raptormua.upload;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,14 +34,16 @@ public class FileUploadEngine {
             return null;
         }
         log.debug("Scanning directories for batch log files");
+        ArrayList<BatchFile> allBatchFiles  = new ArrayList<BatchFile>();
         for (UploadDirectory uploadDirectory : uploadDirectories){
+        	log.debug("Trying directory {} for upload files",uploadDirectory.getUploadDirectory());
             try {
-                return uploadDirectory.getNewFiles();
+            	allBatchFiles.addAll(uploadDirectory.getNewFiles());
             } catch (UploadFileException e) {
                 log.error("Problem uploading files from directory, {}",e.getMessage());
             }
         }
-        return null;
+        return allBatchFiles;
     }
 
     /**

@@ -52,7 +52,7 @@ public class UploadDirectory {
             
         }
         else{
-            throw new UploadFileException("Upload Directory "+uploadDirectory+" is not a directory");
+            throw new UploadFileException("Upload Directory "+uploadDirectory+" does not exist or is not a directory");
         }
     }
 
