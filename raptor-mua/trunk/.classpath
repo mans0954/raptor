@@ -7,8 +7,8 @@
 	<classpathentry kind="src" output="target/data" path="src/main/data"/>
 	<classpathentry kind="src" output="target/keys" path="src/main/keys"/>
 	<classpathentry kind="src" output="target/bin" path="src/main/bin"/>
-	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER">
-	</classpathentry>
+	<classpathentry kind="src" output="target/ddl" path="src/main/ddl"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
