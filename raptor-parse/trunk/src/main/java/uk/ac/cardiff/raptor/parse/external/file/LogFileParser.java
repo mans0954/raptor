@@ -44,14 +44,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ibm.icu.text.SimpleDateFormat;
-
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.parse.external.file.format.Header;
 import uk.ac.cardiff.raptor.parse.external.file.format.HeaderException;
-import uk.ac.cardiff.raptor.parse.external.file.format.LineFilter;
+import uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine;
 import uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat;
 import uk.ac.cardiff.raptor.parse.filter.ExclusionEntry;
 import uk.ac.cardiff.raptor.parse.filter.InclusionEntry;
@@ -83,8 +81,8 @@ public class LogFileParser extends BaseEventParser {
 	 */
 	private boolean printParsingPosition;
 
-	/** A filter to remove a line from the raw log file */
-	private LineFilter lineFilter;
+	/** The filter engine that evaluates lineFilters to test whether a line from the raw log file should be parsed */
+	private LineFilterEngine lineFilterEngine;
 
 	/**
 	 * Default constructor
@@ -163,8 +161,8 @@ public class LogFileParser extends BaseEventParser {
 					printParsingPosition(lineCount, totalNoLines);
 				}
 				boolean parseLine = true;
-				if (lineFilter != null) {
-					parseLine = lineFilter.parsableLine(inputLine);
+				if (lineFilterEngine != null) {
+					parseLine = lineFilterEngine.isParsableLine(inputLine);
 				}
 				//log.debug("Parse [{}] - {}",parseLine,inputLine);
 				if (parseLine == true) {
@@ -188,6 +186,7 @@ public class LogFileParser extends BaseEventParser {
 
 					boolean shouldBeIncluded = isIncluded(authE);
 					boolean preventAdd = isExcluded(authE);
+					
 					//log.debug("Included {}, Veoted {}, Event: {}",new Object[]{shouldBeIncluded,preventAdd,authE.toString()});
 
 					if (shouldBeIncluded && !preventAdd) {
@@ -591,19 +590,18 @@ public class LogFileParser extends BaseEventParser {
 	}
 
 
-	/**
-	 * @param lineFilter
-	 *            the lineFilter to set
-	 */
-	public void setLineFilter(LineFilter lineFilter) {
-		this.lineFilter = lineFilter;
-	}
+    /**
+     * @param lineFilterEngine the lineFilterEngine to set
+     */
+    public void setLineFilterEngine(LineFilterEngine lineFilterEngine) {
+        this.lineFilterEngine = lineFilterEngine;
+    }
 
-	/**
-	 * @return the lineFilter
-	 */
-	public LineFilter getLineFilter() {
-		return lineFilter;
-	}
+    /**
+     * @return the lineFilterEngine
+     */
+    public LineFilterEngine getLineFilterEngine() {
+        return lineFilterEngine;
+    }
 
 }
