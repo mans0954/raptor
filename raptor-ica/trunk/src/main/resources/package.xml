@@ -37,7 +37,7 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>target/conf</directory>
+            <directory>target/conf-default</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*</include>
