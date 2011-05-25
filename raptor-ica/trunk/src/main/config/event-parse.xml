@@ -466,6 +466,7 @@
                     <property name="regexReplaceAll">
                         <map>
                          <entry key="url=" value=""/>
+                         <entry key="%2520" value=""/>
                         </map>
                     </property>
                 </bean>
