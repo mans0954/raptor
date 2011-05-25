@@ -472,11 +472,26 @@
                             <goal>assembly</goal>
                         </goals>
                         <configuration>
-
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <finalName>raptor-mua-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</finalName>
+                            <outputFileNameMapping>${artifact.artifactId}-${artifact.baseVersion}.${artifact.extension}</outputFileNameMapping>
                             <descriptors>
                                 <descriptor>src/main/resources/package.xml</descriptor>
                             </descriptors>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

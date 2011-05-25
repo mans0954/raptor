@@ -38,7 +38,7 @@
 					<property name="eventType">
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
-                     <property name="LineFilterEngine">
+                   <property name="LineFilterEngine">
                         <bean class="uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine">
                              <property name="includeLineFilters">
                                <list>
@@ -47,19 +47,14 @@
                                 </bean>
                                 </list>
                               </property>                              
-                        </bean>
-                       
+                        </bean>                       
                     </property>
 				</bean>
 
 
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
-                    <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20110306.log
-                        </value>
-                    </property>
+                    <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>                   
                     <property name="format">
                         <ref bean="ezProxyFileFormat" />
                     </property>
@@ -67,7 +62,7 @@
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                     </property>
                     <property name="LineFilterEngine">
-                        <bean class="uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine">
+                        <bean id="lineFilterEngine" class="uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine">
                              <property name="includeLineFilters">
                                <list>
                                    <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
@@ -85,8 +80,6 @@
                         </bean>
                     </property>                   
                 </bean>
-
-
 
 
 
