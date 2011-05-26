@@ -56,7 +56,7 @@
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
                     <property name="entryHandler"><ref bean="memoryEntryHandler"></ref></property>
                     <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20110306.log
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-odd.log
                         </value>
                     </property>
                     <property name="format">
@@ -458,7 +458,7 @@
                         <value>URL</value>
                     </property>
                     <property name="regexRetain">
-                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*</value>
+                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*</value>
                     </property>
                     <property name="regexRetainCaseInsensitive">
                         <value>true</value>
