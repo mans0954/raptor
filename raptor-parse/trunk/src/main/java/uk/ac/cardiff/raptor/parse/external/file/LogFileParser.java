@@ -153,7 +153,7 @@ public class LogFileParser extends BaseEventParser {
 			int lineCount = 0;
 			String inputLine;
 
-			//log.debug("Parsing file with {} lines", totalNoLines);
+			log.debug("Parsing file with {} lines", totalNoLines);
 			while ((inputLine = in.readLine()) != null) {
 				lineCount++;
 
@@ -330,11 +330,12 @@ public class LogFileParser extends BaseEventParser {
 
 	/**
 	 * Returns only the substring from <code>value</code> that matches the given <code>regexRetain<code>
-	 * variable in the <code>header</code> input.
+	 * variable in the <code>header</code> input. If no expressions match, then a value of 'error' is returned.
 	 *
 	 * @param value the string from which a regex matching group is returned
 	 * @param header the <code>Header</code> that contains the regex pattern to match
-	 * @return the substring from <code>value</code> that matches the regex pattern in <code>header</code>
+	 * @return the substring from <code>value</code> that matches the regex pattern in <code>header</code>, or 'error' is 
+	 *             no matches are found.
 	 */
 	private String retain(String value, Header header) {
 		if (header.getRegexRetain() == null)
@@ -354,7 +355,7 @@ public class LogFileParser extends BaseEventParser {
 		if (allFound.size() > 0) {
 			return allFound.get(0);
 		}
-		return value;
+		return "error";
 	}
 
 	/**
