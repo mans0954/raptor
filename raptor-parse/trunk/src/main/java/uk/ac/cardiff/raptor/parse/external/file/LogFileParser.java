@@ -280,18 +280,32 @@ public class LogFileParser extends BaseEventParser {
 	}
 
 	/**
-	 * Decodes a URL based on the ISO-8859-1 ISO-Latin character set
+	 * Decodes a URL (which must use the http(s) protocol) based on the ISO-8859-1 ISO-Latin character set. 
+	 * Keeps decoding until the literal 'http(s)://' is obtained, as some URL's are double encoded.
 	 *
-	 * @param value the URL to be decoded
+	 * @param value the URL to be decoded. Must be a URL using the http protocol.
 	 * @return the <code>value</code> URL decoded
 	 */
 	private String decode(String value) {
 		try {
-			String decodedURL = URLDecoder.decode(value, "ISO-8859-1");
-			return decodedURL;
+			int maxTries=0;
+			String decodedURL = value;
+		        while (true){
+			    decodedURL = URLDecoder.decode(decodedURL, "ISO-8859-1");
+			    if (decodedURL.contains("http://") || decodedURL.contains("https://")){
+			        return decodedURL;
+			    }
+			    if (maxTries==5){
+			        log.warn("Maximum tries have been hit to decode the URL [{}]",value);
+			        break;
+			    }
+			    maxTries++;
+			}
+			
 		} catch (UnsupportedEncodingException e) {
 			return value;
 		}
+		return value;
 	}
 
 	/**
