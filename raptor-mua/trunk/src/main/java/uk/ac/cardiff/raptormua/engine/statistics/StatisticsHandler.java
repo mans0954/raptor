@@ -37,12 +37,21 @@ import uk.ac.cardiff.raptor.store.EntryHandler;
  * @author philsmart Allows the storage and invocation of statistical units
  */
 public class StatisticsHandler {
-	static Logger log = LoggerFactory.getLogger(StatisticsHandler.class);
+    
+        /** Class Logger */
+        private final Logger log = LoggerFactory.getLogger(StatisticsHandler.class);
 
-	private List<Statistic> statisticalUnits;
+	/** List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic} that have been registered
+	 * with this handler
+	 */
+        private List<Statistic> statisticalUnits;
 
+        /** A reference to the entry handler that is used to access all underlying events*/
 	private EntryHandler entryHandler;
 
+	/** 
+	 * Registers a List of statistics with this StatisticsHandler 
+	 */
 	public void setStatisticalUnits(List<Statistic> statisticalUnits) {
 	    for (Statistic stat : statisticalUnits){
 	        log.info("Registering statistic {}, role {}",stat.getStatisticParameters().getUnitName(),stat.getStatisticParameters().getType());
@@ -86,8 +95,9 @@ public class StatisticsHandler {
 			    return null;
 			}
 		}
-		//always reset the observationseries for the statistic, so the next execution is not
-		//an accumulation of the ones before it
+		/* always reset the observationseries for the statistic, so the next execution is not
+		*  an accumulation of the ones before it
+		*/
 		statistic.reset();
 		return null;
 	}
