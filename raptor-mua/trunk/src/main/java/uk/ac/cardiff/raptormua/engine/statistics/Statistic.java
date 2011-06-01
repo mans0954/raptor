@@ -87,7 +87,7 @@ public abstract class Statistic {
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
-	public abstract Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException;
+	public abstract Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException;
 
 
 	/**

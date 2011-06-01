@@ -50,7 +50,7 @@ public class GroupByFrequency extends Statistic {
 	 * @return
 	 * @throws StatisticalUnitException
 	 */
-	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
+	public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
 
 		if (methodParams.size() != 1)
 			throw new StatisticalUnitException("incorrect method parameters");

@@ -34,7 +34,7 @@ public class CountEntry extends Statistic{
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(CountEntry.class);
 
-	public Boolean performStatistic(ArrayList<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
+	public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere) throws StatisticalUnitException {
 
 		if (methodParams.size()!=1)
 			throw new StatisticalUnitException("incorrect method parameters");

@@ -317,29 +317,29 @@
 
 	<!--  Support statistical workflows -->
 
-	<bean id="percentagePost" class = "uk.ac.cardiff.raptormua.engine.statistics.PercentagePostProcessor">
+	<bean id="percentagePost" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.PercentagePostProcessor">
 	</bean>
     
-    <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.SortGroupsAlphabeticallyPostProcessor">
+    <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor">
     </bean>
 
-	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.ShibbolethMetadataNameFormatter">
+	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.ShibbolethMetadataNameFormatter">
 		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
 	</bean>
 
-	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
+	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor">
 		<property name="ascending"><value>false</value></property>
 	</bean>
 
-	<bean id="sortAsc" class = "uk.ac.cardiff.raptormua.engine.statistics.RowSortPostProcessor">
+	<bean id="sortAsc" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor">
 		<property name="ascending"><value>true</value></property>
 	</bean>
 
-	<bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.CutRowsPostProcessor">
+	<bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.CutRowsPostProcessor">
 		<property name="numberOfRowsToKeep"><value>5</value></property>
 	</bean>
 
-	<bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.NumberFormatterPostProcessor">
+	<bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.NumberFormatterPostProcessor">
 	</bean>
 
 

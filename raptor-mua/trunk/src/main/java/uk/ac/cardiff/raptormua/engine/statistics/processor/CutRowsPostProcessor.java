@@ -16,7 +16,7 @@
 /**
  *
  */
-package uk.ac.cardiff.raptormua.engine.statistics;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
@@ -38,12 +39,12 @@ import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
  */
 public class CutRowsPostProcessor implements StatisticsPostProcessor {
 
-    /* class logger */
+    /** class logger */
     static Logger log = LoggerFactory.getLogger(CutRowsPostProcessor.class);
 
     private int numberOfRowsToKeep;
 
-    /*
+    /**
      * <p> performs all actions directly ('live') on the input object,and passes that back as a reference to conform with the
      * <code>StatisticsPostProcessor</code> interface </p>
      *
