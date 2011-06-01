@@ -16,7 +16,7 @@
 /**
  *
  */
-package uk.ac.cardiff.raptormua.engine.statistics;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 import java.io.File;
 
@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;

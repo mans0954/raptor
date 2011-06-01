@@ -16,14 +16,21 @@
 /**
  *
  */
-package uk.ac.cardiff.raptormua.engine.statistics;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
+import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 
@@ -31,13 +38,14 @@ import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
  * @author philsmart
  *
  */
-public class PercentagePostProcessor implements StatisticsPostProcessor{
+public class NumberFormatterPostProcessor implements StatisticsPostProcessor{
 
 	/* class logger */
-	private final Logger log = LoggerFactory.getLogger(PercentagePostProcessor.class);
+	static Logger log = LoggerFactory.getLogger(NumberFormatterPostProcessor.class);
 
 
-	/**
+
+	/*
 	 * <p> performs all actions directly ('live') on the input object, and passes that back as a reference
 	 * to conform with the <code>StatisticsPostProcessor</code> interface </p>
 	 *
@@ -47,20 +55,20 @@ public class PercentagePostProcessor implements StatisticsPostProcessor{
 	public Observation[] postProcess(Observation[] observations)	throws PostprocessorException {
 		log.debug("Entries into postprocessor: "+observations.length);
 		log.info("Post Processor "+this.getClass());
-
-		//find total value (sum)
-		double sum =0;
 		for (Observation obs : observations){
-			sum+= obs.getValue();
-		}
-
-		//now set all values as percentages of the max
-		for (Observation obs: observations){
-			double percentage = (obs.getValue()/sum)*100;
-			obs.setValue(percentage);
+			
 		}
 		return observations;
-
 	}
+	
+	private String formatDoubleWithCommas(double number){
+	    DecimalFormat df = new DecimalFormat();
+	    DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+	    dfs.setGroupingSeparator(',');
+	    df.setDecimalFormatSymbols(dfs);
+	    String formattedNumber = df.format((int)number);
+	    return formattedNumber;
+	}
+
 
 }

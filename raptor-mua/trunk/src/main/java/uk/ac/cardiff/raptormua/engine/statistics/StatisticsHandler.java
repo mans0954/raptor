@@ -110,19 +110,9 @@ public class StatisticsHandler {
 			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
 			boolean success = true;
 			for (Series series : listOfSeries){
-				String whereClause=series.computeComparisonAsSQL();
-				Object[] paramsO = new Object[2];
-				paramsO[0] = params;
-				if (whereClause!=null)
-					paramsO[1] = whereClause;
-				else
-					paramsO[1] = new String();
+				String whereClause=series.computeComparisonAsSQL();				
 				log.debug("statistical to invoke {}",statistic);
-//				Method[] methods = statistic.getClass().getMethods();
-//				for (Method method : methods){
-//					log.debug("Method: "+method);
-//				}
-				success= invoke("performStatistic", paramsO, statistic);
+				success = statistic.performStatistic(params, whereClause);
 			}
 			return success;
 		} catch (Exception e) {
@@ -133,26 +123,6 @@ public class StatisticsHandler {
 
 	}
 
-	private Boolean invoke(String fieldname, Object[] params, Object object) {
-		try {
-			Class id = object.getClass();
-			Class[] paramC = new Class[params.length];
-			for (int i = 0; i < params.length; i++) {
-				paramC[i] = params[i].getClass();
-			}
-			log.debug("Calling method: " + fieldname + " on " + object);
-			Method statisticalMethod = id.getMethod(fieldname, paramC);
-			// log.debug("Trying to Set :"+setter);
-			Boolean success = (Boolean) statisticalMethod.invoke(object, params);
-			return success;
-		} catch (Throwable e) {
-			log.error("Failed to invoke statistics {} -> {}",fieldname,e.getMessage());
-			e.printStackTrace();
-			// System.exit(1);
-
-		}
-		return null;
-	}
 
 	/**
 	 * updates a statistical unit based on the values in the
