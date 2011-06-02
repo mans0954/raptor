@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:s="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+<!--  allows annotations to be used to secure methods
+    <s:global-method-security secured-annotations="enabled">
+    </s:global-method-security>
+-->
+
+	<s:http  use-expressions="true">
+		<s:intercept-url pattern="/spring/**" access="isAuthenticated()" />
+		<s:form-login login-page='/login.html'/>
+		<s:logout />
+		<!-- spring will immediatly goto the logout.html before going back to the
+		applications root application path, which is then back to the login -->
+		<s:logout invalidate-session="true" logout-success-url="/timeout.jsp"/>
+		
+		<!-- the logout-success-url is the immediate page that is turned to when you logout
+		e.g. for cleanup or message, spring then forwards you back to the initial page, often
+		the login page. The invalid-session-url would however overight that value if left in
+		and you end up with the timeout page whenever you logout -->
+		<s:session-management ><!-- invalid-session-url="/timeout.jsp">-->
+			<s:concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="true" />
+		</s:session-management>
+	</s:http>
+
+	<!-- Usernames/Passwords are rod/koala dianne/emu scott/wombat peter/opal -->
+
+	<s:authentication-manager>
+		<s:authentication-provider>
+			<s:password-encoder hash="md5" />
+			<s:user-service>
+				<s:user name="phil" password="12556ad8859d3d4d5c325df208ffcd81"
+					authorities="ROLE_ADMIN" />
+				<s:user name="rhys" password="65d15fe9156f9c4bbffd98085992a44e"
+					authorities="ROLE_USER,ROLE_TELLER" />
+				<s:user name="raptor" password="1f2546b5ad29ab48d553f87bfae36dc6"
+                    authorities="ROLE_ADMIN" />
+			</s:user-service>
+		</s:authentication-provider>
+	</s:authentication-manager>
+
+
+</beans>

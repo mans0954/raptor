@@ -1,0 +1,277 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+
+	<ui:define name="content">
+
+		<rich:tabPanel id="setupTabPanel" height="450"
+			selectedTab="aggregatorSetup" switchType="client">
+
+			<rich:tab name="aggregatorSetup" label="Aggregator Setup">
+
+				<rich:layout>
+
+					<rich:layoutPanel position="left" width="10%">
+					</rich:layoutPanel>
+
+					<rich:layoutPanel position="top">
+						<center>
+							<h2>Aggregators</h2>
+						</center>
+					</rich:layoutPanel>
+					<rich:layoutPanel position="right">
+
+						<rich:spacer height="15px" />
+
+						<h:form id="serviceTableForm">
+							<rich:dataTable value="#{setupService.attached}"
+								bandingInterval="2" banding="row" var="attached" width="90%">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Aggregator Location" />
+									</f:facet>
+									<h:outputText value="#{attached.serviceEndpoint}" />
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Attached" />
+									</f:facet>
+									<h:outputText value="#{attached.isAttached}" />
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Actions" />
+									</f:facet>
+									<h:commandLink value="Attach" action="attachMUA">
+										<f:setPropertyActionListener value="#{attached}"
+											target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
+									</h:commandLink>
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Statistical Capabilities" />
+									</f:facet>
+									<h:commandLink action="getAggregatorCapabilities"
+										value="Check Now"
+										rendered="#{empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}"
+										reRender="serviceTableForm">
+										<f:setPropertyActionListener value="#{attached}"
+											target="#{flowScope.websession.setupmodel.selectedEndpoint}" />
+									</h:commandLink>
+									<h:panelGrid columns="1"
+										rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}">
+										<h:outputText
+											value="ERROR: #{flowScope.websession.setupmodel.selectEndpointCapabilities.errorMessage}" />
+									</h:panelGrid>
+									<h:panelGrid columns="2"
+										rendered="#{not empty flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
+										<c:forEach var="item"
+											items="#{flowScope.websession.setupmodel.selectEndpointCapabilities.statisticalServices}">
+											<h:outputText value="#{item.statisticParameters.unitName}" />
+										</c:forEach>
+
+
+									</h:panelGrid>
+								</rich:column>
+								<rich:column align="center">
+									<f:facet name="header">
+										<h:outputText value="Online" />
+									</f:facet>
+
+									<center>
+										<h:graphicImage value="/image/red-circle.gif"
+											rendered="#{flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+										<h:graphicImage value="/image/green-circle.png"
+											shortDesc="help"
+											rendered="#{!flowScope.websession.setupmodel.selectEndpointCapabilities.error}" />
+									</center>
+								</rich:column>
+							</rich:dataTable>
+
+						</h:form>
+
+						<rich:spacer height="15px" />
+
+					</rich:layoutPanel>
+				</rich:layout>
+
+				<rich:separator />
+				<rich:spacer height="10px" />
+				<center>
+					<h2>Attached Aggregator Information</h2>
+				</center>
+				<rich:spacer height="5px" />
+				<h:panelGrid columns="1">
+					<h:outputText
+						value="Organisation Name: #{setupService.attachedCapabilities.metadata.organisationName}" />
+					<h:outputText
+						value="Contact: #{setupService.attachedCapabilities.metadata.contactEmail}" />
+					<h:outputText
+						value="Endpoint: #{setupService.currentlyAttached.serviceEndpoint}" />
+					<h:outputText
+						value="Stored Events #{setupService.attachedCapabilities.numberOfAuthenticationsStored}" />
+				</h:panelGrid>
+
+				<rich:separator />
+				<rich:spacer height="10px" />
+				<center>
+					<h2>Resource Classification</h2>
+
+
+					<h:form id="resourceClassificationForm">
+						<rich:scrollableDataTable
+							value="#{setupService.attachedCapabilities.resourceMetadata}"
+							bandingInterval="2" height="400px" banding="row" var="resource"
+							width="570px">
+
+							<rich:column width="400px">
+								<f:facet name="header" width="400px">
+									<h:outputText value="Resource Id" />
+								</f:facet>
+								<h:outputText value="#{resource.resourceId}" />
+							</rich:column>
+							<rich:column width="150px">
+								<f:facet name="header" width="150px">
+									<h:outputText value="Internal Or External Resource" />
+								</f:facet>
+								<rich:inplaceSelect value="#{resource.internalExternal}">
+									<f:selectItem itemValue="External" itemLabel="External" />
+									<f:selectItem itemValue="Internal" itemLabel="Internal" />
+								</rich:inplaceSelect>
+							</rich:column>
+						</rich:scrollableDataTable>
+						<a4j:commandButton ajaxSingle="false" value="Save Classification" action="sendResourceClassification">						
+						</a4j:commandButton>
+					</h:form>
+				</center>
+
+				<rich:spacer height="15px" />
+				<rich:separator />
+				<rich:spacer height="15px" />
+				<center>
+					<h2>Batch Log File Upload</h2>
+				</center>
+                
+				<center>
+				    <h:outputText value="Upload existing Shibboleth Audit or Ezproxy log files (ending .txt of .log) to the attached aggregator. 
+				    Only 2 files can be upload at once, where each file can not be bigger than 10mb. This limited is there
+				    to ensure the correct operation of the web interface."/>
+					<h:form id="uploadPanelForm">
+
+						<h:panelGrid id="uploadPanelGrid" columns="2"
+							style="border: 1px solid black; vertical-align:top; background-color:white;">
+							<rich:fileUpload
+								fileUploadListener="#{flowScope.websession.setupmodel.fileUpload.listener}"
+								maxFilesQuantity="#{flowScope.websession.setupmodel.fileUpload.uploadsAvailable}"
+								id="upload"
+								immediateUpload="#{flowScope.websession.setupmodel.fileUpload.autoUpload}"
+								acceptedTypes="txt, log" allowFlash="true">
+								<a4j:support event="onuploadcomplete" reRender="uploadPanelForm" />
+							</rich:fileUpload>
+							<h:panelGroup id="info">
+								<rich:panel bodyClass="info">
+									<f:facet name="header">
+										<h:outputText value="Uploaded Files Info" />
+									</f:facet>
+									<h:outputText value="No files currently uploaded"
+										rendered="#{flowScope.websession.setupmodel.fileUpload.size==0}" />
+									<rich:dataTable
+										value="#{flowScope.websession.setupmodel.fileUpload.files}"
+										var="file" rowKeyVar="row">
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="File Name" />
+											</f:facet>
+											<h:outputText value="#{file.name}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="File Length(bytes)" />
+											</f:facet>
+											<h:outputText value="#{file.length}" />
+										</rich:column>
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Status" />
+											</f:facet>
+											<h:outputText value="#{file.processingStatus}" />
+										</rich:column>
+
+										<rich:column>
+											<f:facet name="header">
+												<h:outputText value="Event Type" />
+											</f:facet>
+											<rich:comboBox defaultLabel="Not Selected, Please Select"
+												value="#{file.eventTypeString}">
+												<f:selectItem itemLabel="Shibboleth 1.3"
+													itemValue="Shibboleth 1.3" />
+												<f:selectItem itemLabel="Shibboleth2"
+													itemValue="Shibboleth 2" />
+												<f:selectItem itemLabel="Ezproxy" itemValue="Ezproxy" />
+												<f:selectItem itemLabel="Not Selected. Please Select"
+													itemValue="Not Selected. Please Select" />
+											</rich:comboBox>
+										</rich:column>
+
+
+									</rich:dataTable>
+								</rich:panel>
+								<rich:spacer height="3" />
+								<br />
+								<center>
+									<a4j:commandButton
+										action="#{flowScope.websession.setupmodel.fileUpload.clearAllData}"
+										reRender="info, upload" value="Clear All"
+										rendered="#{flowScope.websession.setupmodel.fileUpload.size>0}" />
+									<a4j:commandButton
+										action="#{flowScope.websession.setupmodel.fileUpload.clearUploadData}"
+										reRender="info, upload" value="Clear Parsed Data"
+										rendered="#{flowScope.websession.setupmodel.fileUpload.size>0}" />
+									<a4j:commandButton action="batchUpload" reRender="info, upload"
+										value="Upload To MUA"
+										rendered="#{flowScope.websession.setupmodel.fileUpload.size>0}" />
+								</center>
+
+							</h:panelGroup>
+						</h:panelGrid>
+
+					</h:form>
+				</center>
+
+
+			</rich:tab>
+
+			<!--<rich:tab name="preferencesSetup" label="User Preferences" />
+
+		-->
+		</rich:tabPanel>
+
+
+	</ui:define>
+</ui:composition>
