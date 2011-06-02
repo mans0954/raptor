@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-client</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>Raptor Client for Remoting</name>
 	<description>Raptor Library for sending and Receiving Model Events</description>
 
