@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-ica</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<name>Raptor Information Collector Agent</name>
 	<description>	</description>
 
@@ -61,8 +61,8 @@
 	<!-- done -->
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-ica/tags/raptor-ica-0.1.0</developerConnection>
-		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-ica/tags/raptor-ica-0.1.0</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-ica/trunk</developerConnection>
+		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-ica</url>
 	</scm>
 
 	<distributionManagement>
