@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<!--  System level statistics that must be present for RaptorWeb to work -->
+
+	<bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>numberOfAuthenticationsPer</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>1</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Number Of Authentications Per"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of Authentications"/>
+                            </bean>
+                        </list>
+                    </property>
+
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="numberOfUniqueUsersPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupBy">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>numberOfUnqiueUsersPer</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>principalName</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Number of unique users for"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of Authentications"/>
+                            </bean>
+                        </list>
+                    </property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="numberOfAuthenticationsPerIntervalNumber" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>numberOfAuthenticationsPerIntervalNumber</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>40</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value=""/>
+                            <property name="xAxisLabel" value=""/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                             <property name="dateFormat" value="ddMMyy (HH:mm)"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of Authentications"/>
+                            </bean>
+                        </list>
+                    </property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="top5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>top5Resources</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>resourceId</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Top 5 Resources"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of auths"/>
+                            </bean>
+                        </list>
+                    </property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sortDsc"/>
+				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="numberOfUniqueAuthenticationsPerSP" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByCountDistinct">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>numberOfUniqueAuthenticationsPerSP</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>resourceId</value></property>
+
+							</bean>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+							     <property name="value"><value>principalName</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Number of Unique Authentications Per Service Provider"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of Users"/>
+                            </bean>
+                        </list>
+                    </property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sortDsc"/>
+				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="bottom5Resources" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
+		<property name="StatisticParameters">
+			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+					<property name="statisticType"><value>System</value></property>
+                    <property name="resourceCategory"><value>EXTERNAL</value></property>
+					<property name="unitName"><value>bottom5Resources</value></property>
+					<property name="methodParams">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="value"><value>resourceId</value></property>
+							</bean>
+						</list>
+					</property>
+
+					 <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Bottom 5 Resources"/>
+                            <property name="xAxisLabel" value="Time"/>
+                             <property name="yAxisLabel" value="Frequency"/>
+                        </bean>
+                    </property>
+
+					<property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Number of auths"/>
+                            </bean>
+                        </list>
+                    </property>
+
+			</bean>
+		</property>
+		<property name="postprocessor">
+			<list>
+				<ref bean="sortAsc"/>
+				<ref bean="cut"/>
+				<ref bean="ShibbolethMetadataNameFormatter"/>
+			</list>
+		</property>
+	</bean>
+
+
+
+</beans>
