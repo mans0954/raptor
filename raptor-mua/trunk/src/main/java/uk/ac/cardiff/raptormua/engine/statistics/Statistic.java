@@ -140,17 +140,16 @@ public abstract class Statistic {
 			//construct the groups from the series with the most groups
 			Observation[] observations = getObservationWithMostGroups(observationSeries);
 			Group[] groups = (Group[]) observations;
+			log.trace("Has {} groups",groups.length);
 			for (Group group : groups) {
-			        log.trace("Group {}",group.getGroupName());
-				gmodel.addGroupLabel(group.getGroupName());
+			        log.trace("Group {}",group.getGroupName());			        
+				gmodel.addGroupLabel(group.getGroupName());				
 			}
-			
 			
 			//now add each series and their values
 			for (int i=0; i < observationSeries.size(); i++){
 				groups = (Group[]) observationSeries.get(i).getObservations();
 				gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
-
 				List<Double> values = new ArrayList<Double>();
 				for (String label : gmodel.getGroupLabels()){
 				    Double valueDouble=new Double(0);
