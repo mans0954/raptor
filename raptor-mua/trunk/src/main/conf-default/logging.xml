@@ -22,12 +22,19 @@
   <property name="LOG_HOME" value="/opt/raptor/mua/logs" />
 
 
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOG_HOME}/raptor-mua-process.log</file>
+     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${LOG_HOME}/raptor-mua-process.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
     <encoder>
       <pattern>%5p %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
     </encoder>
   </appender>
+
 
   <logger name="org.springframework" level="ERROR">
       <appender-ref ref="FILE"/>

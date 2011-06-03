@@ -90,8 +90,7 @@ public class StatisticsHandler {
 			catch(Exception e){
 			    //must catch this error here, so we can clear the observations that the statistic has generated
 			    statistic.reset();
-			    log.error("Problem constructing graph model for statistic {}",statistic.getStatisticParameters().getUnitName(),e);
-			    e.printStackTrace();
+			    log.error("Problem constructing graph model for statistic {}, {}",statistic.getStatisticParameters().getUnitName(),e.getMessage());
 			    return null;
 			}
 		}
@@ -120,7 +119,9 @@ public class StatisticsHandler {
 			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
 			boolean success = true;
 			for (Series series : listOfSeries){
-				String whereClause=series.computeComparisonAsSQL();				
+				String whereClause=series.computeComparisonAsSQL();	
+				if (whereClause==null)
+				    whereClause ="";
 				log.debug("statistical to invoke {}",statistic);
 				success = statistic.performStatistic(params, whereClause);
 			}

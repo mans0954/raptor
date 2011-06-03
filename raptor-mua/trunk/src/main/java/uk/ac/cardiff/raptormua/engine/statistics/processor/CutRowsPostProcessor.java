@@ -40,12 +40,12 @@ import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 public class CutRowsPostProcessor implements StatisticsPostProcessor {
 
     /** class logger */
-    static Logger log = LoggerFactory.getLogger(CutRowsPostProcessor.class);
+    private final Logger log = LoggerFactory.getLogger(CutRowsPostProcessor.class);
 
     private int numberOfRowsToKeep;
 
     /**
-     * <p> performs all actions directly ('live') on the input object,and passes that back as a reference to conform with the
+     * <p> performs all actions directly (inplace or 'live') on the input object,and passes that back as a reference to conform with the
      * <code>StatisticsPostProcessor</code> interface </p>
      *
      * (non-Javadoc)
@@ -56,19 +56,20 @@ public class CutRowsPostProcessor implements StatisticsPostProcessor {
     public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
 	log.debug("Entries into postprocessor: " + observations.length);
 	log.info("Post Processor " + this.getClass());
-	log.debug("Keeping {} rows", numberOfRowsToKeep);
-	if (numberOfRowsToKeep > 0) {
+	int rowsToKeep = (observations.length < numberOfRowsToKeep) ? observations.length : numberOfRowsToKeep;
+	log.debug("Keeping {} rows", rowsToKeep);
+	if (rowsToKeep > 0) {
 	    if (observations instanceof Group[]) {
-		Group[] cut = new Group[numberOfRowsToKeep];
-		for (int i = 0; (i < observations.length) && (i < numberOfRowsToKeep); i++) {
+		Group[] cut = new Group[rowsToKeep];
+		for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
 		    cut[i] = (Group) observations[i];
 		}
 		log.debug("Cut has {} rows", cut.length);
 		return cut;
 	    }
 	    if (observations instanceof Bucket[]) {
-		Bucket[] cut = new Bucket[numberOfRowsToKeep];
-		for (int i = 0; (i < observations.length) && (i < numberOfRowsToKeep); i++) {
+		Bucket[] cut = new Bucket[rowsToKeep];
+		for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
 		    cut[i] = (Bucket) observations[i];
 		}
 		log.debug("Cut has {} rows", cut.length);
