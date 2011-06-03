@@ -45,10 +45,10 @@
         <param-name>facelets.DEVELOPMENT</param-name>
         <param-value>true</param-value>
     </context-param>
-    <!-- Causes Facelets to refresh templates during development -->
+    <!-- Causes Facelets to refresh templates during development, 1 - on, -1  off -->
     <context-param>
         <param-name>facelets.REFRESH_PERIOD</param-name>
-        <param-value>1</param-value>
+        <param-value>-1</param-value>
     </context-param>
 
     <!-- Enforce UTF-8 Character Encoding -->
