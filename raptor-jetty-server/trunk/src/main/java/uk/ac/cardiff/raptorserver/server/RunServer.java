@@ -54,7 +54,7 @@ public class RunServer {
     public static void main(String args[]) throws FileNotFoundException, IOException {
         System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 
-        String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
+        String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target");
 
         configureLogger(configurationFiles+"conf/logging.xml");
 
@@ -78,10 +78,10 @@ public class RunServer {
         server.setConnectors(new Connector[] { connector });
 
         WebAppContext webappcontext = new WebAppContext();
-        //webappcontext.setDescriptor(configurationFiles + "/WEB-INF/web.xml");
         webappcontext.setContextPath(webappContextPath);
         webappcontext.setWar(configurationFiles);
         webappcontext.setWar(configurationFiles+"/webapp/raptor-web/");
+        System.out.println("[INFO] Configured RaptorWeb To: " + configurationFiles+"/webapp/raptor-web/");
 
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
