@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+         "http://www.jboss.org/dtd/hibernate/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="uk.ac.cardiff.model.resource.ResourceMetadata" table="resource_metadata"
+		dynamic-update="true" dynamic-insert="false" >
+
+
+		<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">hib_resource_metadata_seq</param>
+			</generator>
+		</id>
+
+
+
+		<property name="resourceId" type="string" update="true"
+			insert="true" column="resourceId" not-null="false" index="requesthost_index" />
+		<property name="internal" type="boolean" update="true"
+			insert="true" column="internal" not-null="false" />
+		<property name="external" type="boolean" update="true"
+			insert="true" column="external" not-null="false" index="serviceid_index" />
+
+	</class>
+
+</hibernate-mapping>
