@@ -27,6 +27,7 @@ import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
 public class AuthenticationEvent extends Event {
 
     private String authenticationType;
+    
     private String principalName;
 
     /** This is fixed to a principal expansion. Not used in
