@@ -28,7 +28,8 @@ import uk.ac.cardiff.raptorweb.service.PreferenceService;
 
 public class PreferenceServiceImpl implements PreferenceService{
 
-    static Logger log = LoggerFactory.getLogger(StartServiceImpl.class);
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(StartServiceImpl.class);
 
     @Override
     public WebSession loadUserPrefs() {
