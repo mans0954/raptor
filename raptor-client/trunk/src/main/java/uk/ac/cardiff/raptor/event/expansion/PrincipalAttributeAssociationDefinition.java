@@ -190,6 +190,7 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
      * @param searchFilterTemplate the searchFilterTemplate to set
      */
     public void setSearchFilterTemplate(String searchFilterTemplate) {
+        log.debug("Attribute Association Search Filter Template Set To [{}]",searchFilterTemplate);
         this.searchFilterTemplate = searchFilterTemplate;
     }
 
