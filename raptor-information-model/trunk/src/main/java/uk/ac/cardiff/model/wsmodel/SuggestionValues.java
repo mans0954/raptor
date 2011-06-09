@@ -17,7 +17,11 @@ public class SuggestionValues implements Serializable {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(SuggestionValues.class);
 
+    /** The names of all fields from the information model*/
     private List<Suggestion> possibleFieldNameValues;
+    
+    /** The names of all known resourceIds*/
+    private List<String> possibleResourceIds;
 
     public void setPossibleFieldNameValues(List<Suggestion> possibleFieldNameValues) {
         this.possibleFieldNameValues = possibleFieldNameValues;
@@ -49,6 +53,24 @@ public class SuggestionValues implements Serializable {
             }
         }
         return fields;
+    }
+    
+    public ArrayList<String> autocomplete(Object suggest){
+        return (ArrayList<String>) possibleResourceIds;
+    }
+
+    /**
+     * @param possibleResourceIds the possibleResourceIds to set
+     */
+    public void setPossibleResourceIds(List<String> possibleResourceIds) {
+        this.possibleResourceIds = possibleResourceIds;
+    }
+
+    /**
+     * @return the possibleResourceIds
+     */
+    public List<String> getPossibleResourceIds() {
+        return possibleResourceIds;
     }
 
 }
