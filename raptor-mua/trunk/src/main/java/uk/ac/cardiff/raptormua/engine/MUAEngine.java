@@ -170,6 +170,8 @@ public class MUAEngine {
         suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
         capabilities.setSuggestionValues(suggestionValues);
         capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
+        
+        suggestionValues.setPossibleResourceIds(storageEngine.getKnownResourceIds());
 
         // set resource metadata
         List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
