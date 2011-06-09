@@ -69,7 +69,12 @@
 					<f:facet name="header">
 						<h:outputText value="Value" />
 					</f:facet>
-					<h:inputText style="width:100%" value="#{series.value}" />
+					<h:inputText id="valueInput" style="width:100%" value="#{series.value}" />
+					<rich:suggestionbox zindex="901" for="valueInput" var="result" suggestionAction="#{flowScope.websession.graphmodel.suggestionValues.autocomplete}">
+					<h:column>
+                         <h:outputText value="#{result}" />
+                    </h:column>
+					</rich:suggestionbox>
 				</rich:column>
 				<!--  can not remove or add filters for the v1.0 so this is redundent -->
 				<rich:column>
