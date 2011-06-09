@@ -18,6 +18,7 @@
  */
 package uk.ac.cardiff.raptor.store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -166,6 +167,18 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
     }
+
+	public List<String> getKnownResourceIds() {
+		List results = entryHandler.query("select resourceId from Event group by (resourceId)");
+		ArrayList<String> allResources = new ArrayList<String>();		
+		for (Object result : results){
+			if (result instanceof String){
+				allResources.add((String)result);
+			}
+		}
+		return allResources;
+		
+	}
 
 
 
