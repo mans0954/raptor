@@ -32,6 +32,7 @@ import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 /**
  * @author philsmart Allows the storage and invocation of statistical units
@@ -126,9 +127,9 @@ public class StatisticsHandler {
 				success = statistic.performStatistic(params, whereClause);
 			}
 			return success;
-		} catch (Exception e) {
-			log.error("Failed to invoke statistics {} -> {}",statistic.getStatisticParameters().getUnitName(),e.getMessage());
-			e.printStackTrace();
+		} catch (StatisticalUnitException e) {
+			log.error("Failed to invoke statistics {}",statistic.getStatisticParameters().getUnitName(),e);
+			
 		}
 		return false;
 

@@ -131,10 +131,24 @@
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
+		<property name="capabilitiesConstructor"><ref bean="capabilitiesConstructor"/></property>
 		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
 		<property name="maxReleaseEventSize"><value>2000</value></property> <!-- Max Size is 3000 -->
 	</bean>
 
+    <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
+        <property name="cacheEnabled"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>1800000</value></property>
+        <property name="excludeFieldNames">
+            <set>
+                <value>principalName</value>
+                <value>responseId</value>
+                <value>requestId</value>
+                <value>sessionId</value>
+                <value>requesterIp</value>
+            </set>
+        </property>
+    </bean>
 
 
     <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine">
