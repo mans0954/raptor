@@ -110,13 +110,13 @@ public class ServiceEndpointClient {
 	    capabilities = client.getCapabilities();
 	    log.debug("Retrieved capabilities from the MUA [{}]", endpoint);
 	} catch (SoapFault e) {
-	    log.error("SOAP Fault, Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[] { endpoint, e.getMessage() });
+	    log.error("SOAP Fault, Problem trying to retrieving capabilities from MUA [{}]", new Object[] { endpoint},e);
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());
 	     e.printStackTrace();
 	} catch (Exception e) {
-	    log.error("Problem trying to retrieving capabilities from MUA [{}] -> {}", new Object[] { endpoint, e.getMessage() });
+	    log.error("Problem trying to retrieving capabilities from MUA [{}]", new Object[] { endpoint},e);
 	    capabilities = new Capabilities();
 	    capabilities.setError(true);
 	    capabilities.setErrorMessage(e.getMessage());

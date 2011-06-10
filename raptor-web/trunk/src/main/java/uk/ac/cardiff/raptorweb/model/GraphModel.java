@@ -15,9 +15,9 @@
  */
 package uk.ac.cardiff.raptorweb.model;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,9 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
-import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
@@ -36,6 +34,9 @@ public class GraphModel implements Serializable {
 
     /** Generated SerialVersionUID */
     private static final long serialVersionUID = -2803349385469406219L;
+    
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(GraphModel.class);
 
     /** The raw graph model, for later reconstruction */
     private AggregatorGraphModel rawGraphModel;
@@ -100,6 +101,32 @@ public class GraphModel implements Serializable {
         EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
         String[] classFilter = eventType.getClassHierarchy();
         return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
+    }
+    
+    public ArrayList<String> autocompleteFieldValues(Object suggest){
+        if (selectedSeries.getComparisonPredicate().getFieldName()==null || selectedSeries.getComparisonPredicate().getFieldName().equals("")){
+            log.warn("No field values to return, is field selected?");
+            ArrayList<String> dummy = new ArrayList<String>();
+            dummy.add("No field selected");
+            return dummy;
+        }
+        String pref = (String) suggest;
+        ArrayList<String> possibles = new ArrayList<String>();        
+        List<String> allPossibles = suggestionValues.autocomplete(selectedSeries.getComparisonPredicate().getFieldName());       
+        for (String possible : allPossibles){
+            if ((possible !=null && possible.toLowerCase().contains(pref.toLowerCase())) || "".equals(pref)){
+                possibles.add(possible);
+            }
+        }
+        
+        /* add something for output if none returned*/
+        if (possibles.size()==0){
+            possibles.add("No suggestions");
+        }
+        
+        Collections.sort(possibles);
+        
+        return possibles;
     }
 
 
