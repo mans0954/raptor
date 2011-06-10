@@ -196,6 +196,10 @@
                     <artifactId>jcl-over-slf4j</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
+                <exclusion>
+                	<artifactId>jul-to-slf4j</artifactId>
+                	<groupId>org.slf4j</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 

@@ -87,6 +87,9 @@ public class MUAEngine {
      * The Maximum number of events that can be released (e.g. to another MUA) at any one time.
      */
     private int maxReleaseEventSize;
+    
+    /** Constructor for creating and storing this MUAs capabilities */
+    private CapabilitiesConstructor capabilitiesConstructor;
 
     public MUAEngine() {
         log.info("Setup Multi-Unit Aggregator Engine...");
@@ -154,56 +157,17 @@ public class MUAEngine {
     }
 
     /**
-     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling component to use
+     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling view component to
+     * display to the user
      * 
-     * @return
+     * @return the capabilities of this MUA
      */
-    public final Capabilities getCapabilities() {
-
-        List<Statistic> su = statisticsHandler.getStatisticalUnits();
-
-        Capabilities capabilities = new Capabilities();
-        capabilities.setMetadata(this.getMuaMetadata());
-
-        // set possible values
-        SuggestionValues suggestionValues = new SuggestionValues();
-        suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
-        capabilities.setSuggestionValues(suggestionValues);
-        capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
-        
-        suggestionValues.setPossibleResourceIds(storageEngine.getKnownResourceIds());
-
-        // set resource metadata
-        List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
-        log.debug("Setting {} resource metadata", resourceMetadata.size());
-        capabilities.setResourceMetadata(resourceMetadata);
-
-        ArrayList<StatisticalUnitInformation> stats = new ArrayList();
-        for (Statistic entry : su) {
-            log.debug("Setting statistical unit information as: " + entry.getStatisticParameters().getUnitName());
-            StatisticalUnitInformation information = new StatisticalUnitInformation();
-
-            information.setStatisticParameters(entry.getStatisticParameters());
-
-            ArrayList<String> postprocessors = new ArrayList<String>();
-            if (entry.getPostprocessor() != null) {
-                for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
-                    postprocessors.add(postprocessor.getClass().getSimpleName());
-                }
-            }
-            information.setPostprocessors(postprocessors);
-
-            ArrayList<String> preprocessors = new ArrayList<String>();
-            if (entry.getPreprocessor() != null) {
-                preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
-            }
-            information.setPreprocessors(preprocessors);
-
-            stats.add(information);
-        }
-        capabilities.setStatisticalServices(stats);
-        log.debug("Constructed MUA Capabilities, {}", capabilities);
-        return capabilities;
+    public final Capabilities getCapabilities() {   
+        if (capabilitiesConstructor!=null)
+            return capabilitiesConstructor.constructCapabilities(statisticsHandler, storageEngine, muaMetadata);
+        else
+            log.error("No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
+        return null;
     }
 
     /**
@@ -379,6 +343,20 @@ public class MUAEngine {
      */
     public int getMaxReleaseEventSize() {
         return maxReleaseEventSize;
+    }
+
+    /**
+     * @param capabilitiesConstructor the capabilitiesConstructor to set
+     */
+    public void setCapabilitiesConstructor(CapabilitiesConstructor capabilitiesConstructor) {
+        this.capabilitiesConstructor = capabilitiesConstructor;
+    }
+
+    /**
+     * @return the capabilitiesConstructor
+     */
+    public CapabilitiesConstructor getCapabilitiesConstructor() {
+        return capabilitiesConstructor;
     }
 
 }

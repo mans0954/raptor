@@ -99,9 +99,12 @@ public class RunServer {
 		sslConnector.setKeyPassword(keyStorePassword);
 		sslConnector.setTruststore(trustStoreLocaion);
 		sslConnector.setTrustPassword(trustStorePassword);
+		
+		//SocketConnector connector = new SocketConnector();
+                //connector.setPort(portNumber);
 
 		// enable mutual authentication
-		//sslConnector.setNeedClientAuth(true);
+		sslConnector.setNeedClientAuth(true);
 
 		server.setConnectors(new Connector[] { sslConnector });
 
