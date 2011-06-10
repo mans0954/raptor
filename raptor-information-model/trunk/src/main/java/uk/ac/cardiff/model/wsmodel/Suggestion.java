@@ -41,6 +41,13 @@ public class Suggestion  implements Serializable{
         return value;
     }
     
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.getClass() + "@[");
+        builder.append(base); builder.append(":"); builder.append(value);        
+        builder.append("]");
+        return builder.toString();
+    }
     
 
 }

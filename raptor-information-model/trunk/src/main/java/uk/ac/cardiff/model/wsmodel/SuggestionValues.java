@@ -20,8 +20,8 @@ public class SuggestionValues implements Serializable {
     /** The names of all fields from the information model*/
     private List<Suggestion> possibleFieldNameValues;
     
-    /** The names of all known resourceIds*/
-    private List<String> possibleResourceIds;
+    /** The possible values of all known fields from the information model*/
+    private List<Suggestion> possibleFieldValues;
 
     public void setPossibleFieldNameValues(List<Suggestion> possibleFieldNameValues) {
         this.possibleFieldNameValues = possibleFieldNameValues;
@@ -55,22 +55,33 @@ public class SuggestionValues implements Serializable {
         return fields;
     }
     
-    public ArrayList<String> autocomplete(Object suggest){
-        return (ArrayList<String>) possibleResourceIds;
+    public ArrayList<String> autocomplete(String fieldName){
+        log.debug("Suggesting values for selectedfield {}",fieldName);
+        ArrayList<String> possibles = new ArrayList<String>();
+        for (Suggestion suggestion : possibleFieldValues){
+            if (suggestion.getBase().equals(fieldName)){
+                log.debug("Adding possible value {}",suggestion.getValue());
+                possibles.add(suggestion.getValue());
+            }
+        }
+        return possibles;
     }
 
     /**
-     * @param possibleResourceIds the possibleResourceIds to set
+     * @param possibleFieldValues the possibleFieldValues to set
      */
-    public void setPossibleResourceIds(List<String> possibleResourceIds) {
-        this.possibleResourceIds = possibleResourceIds;
+    public void setPossibleFieldValues(List<Suggestion> possibleFieldValues) {
+        this.possibleFieldValues = possibleFieldValues;
     }
 
     /**
-     * @return the possibleResourceIds
+     * @return the possibleFieldValues
      */
-    public List<String> getPossibleResourceIds() {
-        return possibleResourceIds;
+    public List<Suggestion> getPossibleFieldValues() {
+        return possibleFieldValues;
     }
+
+
+  
 
 }

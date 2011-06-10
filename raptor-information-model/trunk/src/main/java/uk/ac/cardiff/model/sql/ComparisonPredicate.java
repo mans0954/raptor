@@ -17,7 +17,8 @@ public class ComparisonPredicate implements Serializable{
      */
     private static final long serialVersionUID = 4721780920444284628L;
 
-    static Logger log = LoggerFactory.getLogger(ComparisonPredicate.class);
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(ComparisonPredicate.class);
 
     public enum CompOp {EQUAL,NOT_EQUAL}
 
@@ -34,6 +35,7 @@ public class ComparisonPredicate implements Serializable{
 	return compOp;
     }
     public void setFieldName(String fieldName) {
+        log.debug("Setting fieldName {}",fieldName);
 	this.fieldName = fieldName;
     }
     public String getFieldName() {
