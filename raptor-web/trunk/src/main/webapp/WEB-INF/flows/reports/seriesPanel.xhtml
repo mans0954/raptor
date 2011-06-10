@@ -55,6 +55,7 @@
 					</f:facet>
 					<rich:comboBox style="width:100%" value="#{series.fieldName}"
 						suggestionValues="#{flowScope.websession.graphmodel.possibleFieldNameValues}">
+						<a4j:support event="onselect" ajaxSingle="true"/>
 					</rich:comboBox>
 				</rich:column>
 				<rich:column>
@@ -69,11 +70,14 @@
 					<f:facet name="header">
 						<h:outputText value="Value" />
 					</f:facet>
-					<h:inputText id="valueInput" style="width:100%" value="#{series.value}" />
-					<rich:suggestionbox zindex="901" for="valueInput" var="result" suggestionAction="#{flowScope.websession.graphmodel.suggestionValues.autocomplete}">
-					<h:column>
-                         <h:outputText value="#{result}" />
-                    </h:column>
+					<h:inputText id="valueInput" style="width:100%"
+						value="#{series.value}" />
+					<rich:suggestionbox zindex="901" for="valueInput" var="result"
+						suggestionAction="#{flowScope.websession.graphmodel.autocompleteFieldValues}">
+						<h:column>
+							<h:outputText value="#{result}" />
+						</h:column>
+						
 					</rich:suggestionbox>
 				</rich:column>
 				<!--  can not remove or add filters for the v1.0 so this is redundent -->
@@ -84,8 +88,9 @@
 
 					<a4j:commandLink immediate="true"
 						action="removeSelectedFilterFromSelectedStatistic"
-						id="removeFilterLink" reRender="filterTableForm,seriesModalPanel,optionsPanelForm"
-						oncomplete="#{rich:component('seriesModalPanel')}.hide()" >
+						id="removeFilterLink"
+						reRender="filterTableForm,seriesModalPanel,optionsPanelForm"
+						oncomplete="#{rich:component('seriesModalPanel')}.hide()">
 						<h:graphicImage
 							style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 							value="/image/icon/onebit_33.png" />
