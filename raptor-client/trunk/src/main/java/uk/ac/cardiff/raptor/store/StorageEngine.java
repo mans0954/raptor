@@ -21,11 +21,16 @@ package uk.ac.cardiff.raptor.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.QueryException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate3.HibernateQueryException;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.wsmodel.Suggestion;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
@@ -167,18 +172,37 @@ public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
     public AttributeAssociationEngine getAttributeAssociationEngine() {
         return attributeAssociationEngine;
     }
+	
+    /**
+     * Returns the possible values that each of the input field names can take
+     * 
+     * @param possibleFieldNameValuesList
+     * @return
+     */
+    public List<Suggestion> getPossibleValuesFor(List<String> possibleFieldNameValuesList) {
+        ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
+        
+        for (String fieldName : possibleFieldNameValuesList){
+            try{
+            List results = entryHandler.query("select "+fieldName+" from Event group by ("+fieldName+")");
+            for (Object result : results){
+                if (result instanceof String){
+                        Suggestion suggestion = new Suggestion();
+                        suggestion.setBase(fieldName);
+                        suggestion.setValue((String)result);
+                        suggestions.add(suggestion);
+                }
+            }
+            }
+            catch(RuntimeException e){
+                log.warn("Caught a runtime exception. Error trying to find possible values for {}, probably nothing to worry about",fieldName);
+            }
 
-	public List<String> getKnownResourceIds() {
-		List results = entryHandler.query("select resourceId from Event group by (resourceId)");
-		ArrayList<String> allResources = new ArrayList<String>();		
-		for (Object result : results){
-			if (result instanceof String){
-				allResources.add((String)result);
-			}
-		}
-		return allResources;
-		
-	}
+        }
+        
+        
+        return suggestions;
+    }
 
 
 
