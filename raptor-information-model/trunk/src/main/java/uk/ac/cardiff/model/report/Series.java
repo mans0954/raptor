@@ -16,14 +16,14 @@ import uk.ac.cardiff.model.sql.ComparisonPredicate.CompOp;
 public class Series implements Serializable{
 
 
-    /* Generated serialUID */
+    /** Generated serialUID */
     private static final long serialVersionUID = 2842224280017951256L;
 
-    /* The textual description of the series, as attached to the x-axis */
+    /** The textual description of the series, as attached to the x-axis */
     private String seriesLabel;
-    /* A formatted textual description of the series, typically formatted by the logic of the authentication statistic*/
+    /** A formatted textual description of the series, typically formatted by the logic of the authentication statistic*/
     private String SeriesLabelFormatted;
-    /* a comparison predicate that forms the where clause*/
+    /** a comparison predicate that forms the where clause*/
     private ComparisonPredicate comparisonPredicate;
 
 
