@@ -21,10 +21,14 @@
 
    <property name="LOG_HOME" value="/opt/raptor/ica/logs" />
 
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+  
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOG_HOME}/raptor-ica-process.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${USER_HOME}/raptor-ica-process-%d{yyyy-MM-dd}.log</FileNamePattern>
+     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${LOG_HOME}/raptor-ica-process.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <!-- keep 30 days' worth of history -->
+      <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
       <pattern>%5p %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
