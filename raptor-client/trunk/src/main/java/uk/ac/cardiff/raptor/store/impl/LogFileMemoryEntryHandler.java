@@ -90,7 +90,7 @@ public class LogFileMemoryEntryHandler implements IncrementalEntryHandler {
 		} else if (isEqual) {
 			boolean isAlreadyInLatest = latestEqualEntries.contains(event);
 			if (isAlreadyInLatest) {
-				log.warn("Duplicated [{}]", event);
+				log.trace("Duplicated, probably same event [{}]", event);
 				return false;
 			}
 			if (!isAlreadyInLatest) {
