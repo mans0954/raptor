@@ -4,6 +4,7 @@
 package uk.ac.cardiff.raptormua.engine;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
+import uk.ac.cardiff.raptormua.runtimeutils.ResourceMetadataComparator;
 
 /**
  * @author philsmart
@@ -90,6 +92,7 @@ public class CapabilitiesConstructor {
             // set resource metadata
             List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
             log.debug("Setting {} resource metadata", resourceMetadata.size());
+            Collections.sort(resourceMetadata,new ResourceMetadataComparator());
             capabilities.setResourceMetadata(resourceMetadata);
 
             ArrayList<StatisticalUnitInformation> stats = new ArrayList();
