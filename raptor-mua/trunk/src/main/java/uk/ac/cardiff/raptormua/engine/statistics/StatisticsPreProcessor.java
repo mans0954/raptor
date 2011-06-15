@@ -23,7 +23,7 @@ import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.EntryHandler;
-import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 
 /**
  * @author philsmart

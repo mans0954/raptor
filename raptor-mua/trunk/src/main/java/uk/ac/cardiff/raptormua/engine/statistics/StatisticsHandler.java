@@ -32,7 +32,6 @@ import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.EntryHandler;
-import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 
 /**
  * @author philsmart Allows the storage and invocation of statistical units

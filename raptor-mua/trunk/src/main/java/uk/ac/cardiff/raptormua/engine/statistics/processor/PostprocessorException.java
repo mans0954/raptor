@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptormua.exceptions;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 public class PostprocessorException extends Exception{
 

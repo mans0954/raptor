@@ -36,12 +36,11 @@ import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
-import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
-import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
-import uk.ac.cardiff.raptormua.exceptions.StatisticalUnitException;
 import uk.ac.cardiff.raptormua.runtimeutils.EntryClone;
 
 /**
