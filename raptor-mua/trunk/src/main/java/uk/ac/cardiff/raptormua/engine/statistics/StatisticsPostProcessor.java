@@ -21,9 +21,9 @@ package uk.ac.cardiff.raptormua.engine.statistics;
 import java.util.List;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
-import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
-import uk.ac.cardiff.raptormua.exceptions.PreprocessorException;
 
 /**
  * @author philsmart

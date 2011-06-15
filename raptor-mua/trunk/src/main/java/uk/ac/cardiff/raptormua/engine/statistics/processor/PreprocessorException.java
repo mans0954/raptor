@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptormua.exceptions;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
-public class StatisticalUnitException extends Exception{
+public class PreprocessorException extends Exception{
 
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = -4614661463043866258L;
-	
-	public StatisticalUnitException (String message){
+	private static final long serialVersionUID = -4614661463043866256L;
+
+	public PreprocessorException (String message){
 			super(message);
-	}
-	
-	public StatisticalUnitException (String message, Exception wrappedException){
-		super(message, wrappedException);
 	}
 
 

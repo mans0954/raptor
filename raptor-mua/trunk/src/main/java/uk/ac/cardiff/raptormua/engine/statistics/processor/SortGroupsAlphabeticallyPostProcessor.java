@@ -31,7 +31,6 @@ import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.helper.StringGroupComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
-import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 
 /**
  * @author philsmart

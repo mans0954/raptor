@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
-import uk.ac.cardiff.raptormua.exceptions.PostprocessorException;
 
 
 /**
