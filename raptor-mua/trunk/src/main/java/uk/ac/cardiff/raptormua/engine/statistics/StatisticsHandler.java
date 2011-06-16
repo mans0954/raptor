@@ -30,6 +30,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.EntryHandler;
 
@@ -163,6 +164,11 @@ public class StatisticsHandler {
 	 */
 	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
 		statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
+		//now deal with the post processors
+		List<ProcessorInformation> postprocessors = statisticalUnitInformation.getPostprocessors();
+		for (ProcessorInformation processor : postprocessors){
+			log.debug("Post processor {}, added to {}",processor.getBeanName(),statisticalUnitInformation.getStatisticParameters().getUnitName());
+		}
 	}
 
 	/**

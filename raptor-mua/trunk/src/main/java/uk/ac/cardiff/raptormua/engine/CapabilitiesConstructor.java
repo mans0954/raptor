@@ -10,11 +10,16 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.Suggestion;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.StorageEngine;
@@ -27,7 +32,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.ResourceMetadataComparator;
  * @author philsmart
  * 
  */
-public class CapabilitiesConstructor {
+public class CapabilitiesConstructor implements ApplicationContextAware{
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(CapabilitiesConstructor.class);
@@ -45,6 +50,9 @@ public class CapabilitiesConstructor {
 
     /** Set containing the names of fields that should not be included in the list of possible field values */
     private Set<String> excludeFieldNames;
+
+    /** Springs application context*/
+	private ApplicationContext applicationContext;
 
     /**
      * @return
@@ -74,6 +82,9 @@ public class CapabilitiesConstructor {
             suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
             capabilities.setSuggestionValues(suggestionValues);
             capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
+            List<Suggestion> possiblePostProcessors = findPostProcessors();
+            log.debug("Has set {} possible post processor suggestion values",possiblePostProcessors.size());
+            suggestionValues.setPossiblePostProcessors(possiblePostProcessors);
 
             // set possible values for field names
             List<String> possibleFieldNames = new ArrayList<String>();
@@ -103,20 +114,15 @@ public class CapabilitiesConstructor {
                 information.setStatisticParameters(entry.getStatisticParameters());
 
                 /* the below should be changed */
-                ArrayList<String> postprocessors = new ArrayList<String>();
+                ArrayList<ProcessorInformation> postprocessors = new ArrayList<ProcessorInformation>();
                 if (entry.getPostprocessor() != null) {
                     for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
-                        postprocessors.add(postprocessor.getClass().getSimpleName());
+                    	ProcessorInformation processorInformation = new ProcessorInformation();
+                    	processorInformation.setBeanName(postprocessor.getClass().getSimpleName());
+                        postprocessors.add(processorInformation);
                     }
                 }
                 information.setPostprocessors(postprocessors);
-
-                ArrayList<String> preprocessors = new ArrayList<String>();
-                if (entry.getPreprocessor() != null) {
-                    preprocessors.add(entry.getPreprocessor().getClass().getSimpleName());
-                }
-                information.setPreprocessors(preprocessors);
-
                 stats.add(information);
             }
             capabilities.setStatisticalServices(stats);
@@ -130,6 +136,20 @@ public class CapabilitiesConstructor {
         log.info("Constructed MUA Capabilities for [{}]", capabilities.getMetadata().getEntityId());
 
         return capabilities;
+    }
+    
+    private List<Suggestion> findPostProcessors(){
+    	String[] postProcessors = applicationContext.getBeanNamesForType(StatisticsPostProcessor.class);
+    	ArrayList<Suggestion> postProcessorSuggestions = new ArrayList<Suggestion>();
+    	for (String processor : postProcessors){
+    		Suggestion suggestion = new Suggestion();
+    		suggestion.setBase("postprocessor");
+    		suggestion.setValue(processor);
+    		postProcessorSuggestions.add(suggestion);
+    		log.trace("Postprocessor, {}",processor);
+    	}
+    	return postProcessorSuggestions;
+    	
     }
 
     private void checkCacheValidity() {
@@ -192,5 +212,10 @@ public class CapabilitiesConstructor {
     public Set<String> getExcludeFieldNames() {
         return excludeFieldNames;
     }
+
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+		
+	}
 
 }
