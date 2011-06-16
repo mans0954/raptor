@@ -17,11 +17,13 @@ public class SuggestionValues implements Serializable {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(SuggestionValues.class);
 
-    /** The names of all fields from the information model*/
+    /** The names of all fields from the information model */
     private List<Suggestion> possibleFieldNameValues;
-    
-    /** The possible values of all known fields from the information model*/
+
+    /** The possible values of all known fields from the information model */
     private List<Suggestion> possibleFieldValues;
+
+    private List<Suggestion> possiblePostProcessors;
 
     public void setPossibleFieldNameValues(List<Suggestion> possibleFieldNameValues) {
         this.possibleFieldNameValues = possibleFieldNameValues;
@@ -54,13 +56,13 @@ public class SuggestionValues implements Serializable {
         }
         return fields;
     }
-    
-    public ArrayList<String> autocomplete(String fieldName){
-        log.debug("Suggesting values for selectedfield {}",fieldName);
+
+    public ArrayList<String> autocomplete(String fieldName) {
+        log.debug("Suggesting values for selectedfield {}", fieldName);
         ArrayList<String> possibles = new ArrayList<String>();
-        for (Suggestion suggestion : possibleFieldValues){
-            if (suggestion.getBase().equals(fieldName)){
-                log.debug("Adding possible value {}",suggestion.getValue());
+        for (Suggestion suggestion : possibleFieldValues) {
+            if (suggestion.getBase().equals(fieldName)) {
+                log.debug("Adding possible value {}", suggestion.getValue());
                 possibles.add(suggestion.getValue());
             }
         }
@@ -68,7 +70,8 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
-     * @param possibleFieldValues the possibleFieldValues to set
+     * @param possibleFieldValues
+     *            the possibleFieldValues to set
      */
     public void setPossibleFieldValues(List<Suggestion> possibleFieldValues) {
         this.possibleFieldValues = possibleFieldValues;
@@ -81,7 +84,29 @@ public class SuggestionValues implements Serializable {
         return possibleFieldValues;
     }
 
+    /**
+     * @param possiblePostProcessors
+     *            the possiblePostProcessors to set
+     */
+    public void setPossiblePostProcessors(List<Suggestion> possiblePostProcessors) {
+        this.possiblePostProcessors = possiblePostProcessors;
+    }
 
-  
+    /**
+     * @return the possiblePostProcessors
+     */
+    public List<Suggestion> getPossiblePostProcessors() {
+        return possiblePostProcessors;
+    }
+
+    public ArrayList<String> getPossiblePostProcessorValuesList() {
+        ArrayList<String> fields = new ArrayList<String>();
+        if (possiblePostProcessors == null)
+            return fields;
+        for (Suggestion entry : possiblePostProcessors) {
+            fields.add(entry.getValue());
+        }
+        return fields;
+    }
 
 }
