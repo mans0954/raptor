@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
@@ -41,14 +42,33 @@ public class GraphModel implements Serializable {
     /** The raw graph model, for later reconstruction */
     private AggregatorGraphModel rawGraphModel;
 
+    /** The current graph (as the internal Raptor model) for display */
     private RaptorGraphModel currentGraph;
+    
+    /** The current set of graph options applied to the <code>currentGraph</code>*/
     private ChartOptions chartOptions;
+    
+    /** The current table relating to the <code>selectedStatisticalUnit</code>*/
     private RaptorTableChartModel currentTableGraph;
+    
+    /** The currently selected statistical unit */
     private StatisticalUnitInformationView selectedStatisticalUnit;
+    
+    /** A <code>String</code> that holds the results of processing */
     private String processingResult;
+    
+    /** Whether to show the control panel on the view */
     private boolean showControlPanel;
+    
+    /** The current graph (as an image) to display */
     private RaptorJFreeChartModel currentJFreeGraph;
+    
+    /** The size of the control panel -  not used */
     private String controlPanelSize;
+    
+    /** A <code>List</code> of <code>{@link uk.ac.cardiff.wsmodel.StatisticalUnitInformationView}</code>s that have been
+     * acquired from the attached MUA
+     */
     private List<StatisticalUnitInformationView> statisticalUnitsForView;
 
     /** The filename to use for report downloads. */
@@ -58,6 +78,9 @@ public class GraphModel implements Serializable {
 
     /** Selected series modal panel */
     private Series selectedSeries;
+    
+    /** The selected post processor, as a reference for removal*/
+    private ProcessorInformation selectedPostProcessor;
 
     /**
      * Set some sensible defaults for this graphs models chart options
@@ -101,6 +124,11 @@ public class GraphModel implements Serializable {
         EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
         String[] classFilter = eventType.getClassHierarchy();
         return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
+    }
+    
+    public List<String> getPossiblePostProcessorValues() {
+        log.debug("Possible Post Values {}",suggestionValues.getPossiblePostProcessorValuesList().size());
+        return (ArrayList<String>) suggestionValues.getPossiblePostProcessorValuesList();
     }
     
     public ArrayList<String> autocompleteFieldValues(Object suggest){
@@ -252,5 +280,20 @@ public class GraphModel implements Serializable {
     public String getDownloadFilename() {
         return downloadFilename;
     }
+
+    /**
+     * @param selectedPostProcessor the selectedPostProcessor to set
+     */
+    public void setSelectedPostProcessor(ProcessorInformation selectedPostProcessor) {
+        this.selectedPostProcessor = selectedPostProcessor;
+    }
+
+    /**
+     * @return the selectedPostProcessor
+     */
+    public ProcessorInformation getSelectedPostProcessor() {
+        return selectedPostProcessor;
+    }
+
 
 }

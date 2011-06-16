@@ -27,6 +27,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
@@ -69,6 +70,21 @@ public class GraphServiceImpl implements GraphService{
 
 	public MUAEntry getCurrentlyAttached(){
 		return webEngine.getCurrentlyAttached();
+	}
+	
+	public void removePostProcessorFromSelectedStatistic(WebSession websession){
+	    websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().remove(
+	            websession.getGraphmodel().getSelectedPostProcessor());
+	}
+	
+	public void addPostProcessorToSelectedStatistic(WebSession websession){
+	    ProcessorInformation information = new ProcessorInformation();
+	    information.setBeanName("Please Change");	   
+	    if (websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList()!=null &&
+	            websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList().size()>0){
+	        information.setBeanName(websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList().get(0));
+	    }
+	    websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().add(information);
 	}
 
 	public void populateStatisticalUnits(WebSession websession){
