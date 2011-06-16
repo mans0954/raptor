@@ -30,6 +30,7 @@
 	<ui:define name="content">
 		<a4j:include viewId="working-panel.xhtml" />
 		<a4j:include viewId="seriesPanel.xhtml" />
+		<a4j:include viewId="postProcessorPanel.xhtml" />
 
 		<rich:layout>
 
@@ -116,22 +117,25 @@
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.unitName}" />
 
 
-                                                <h:outputText value="Event Type"
-                                                    style="font-weight: bold;" />
+												<h:outputText value="Event Type" style="font-weight: bold;" />
 
-                                                <rich:inplaceSelect value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventTypeString}">
-                                                         <f:selectItem itemLabel="Shibboleth" itemValue="SHIBBOLETH_AUTHENTICATION" />
-                                                         <f:selectItem itemLabel="Ezproxy" itemValue="EZPROXY_AUTHENTICATION" />
-                                                </rich:inplaceSelect>
+												<rich:inplaceSelect
+													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventTypeString}">
+													<f:selectItem itemLabel="Shibboleth"
+														itemValue="SHIBBOLETH_AUTHENTICATION" />
+													<f:selectItem itemLabel="Ezproxy"
+														itemValue="EZPROXY_AUTHENTICATION" />
+												</rich:inplaceSelect>
 
-                                                 <h:outputText value="Resource Category"
-                                                    style="font-weight: bold;" />
-                                                    
-                                                    <rich:inplaceSelect value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.resourceCategoryString}">
-                                                         <f:selectItem itemLabel="Internal" itemValue="INTERNAL" />
-                                                         <f:selectItem itemLabel="External" itemValue="EXTERNAL" />
-                                                         <f:selectItem itemLabel="All" itemValue="ALL" />
-                                                </rich:inplaceSelect>
+												<h:outputText value="Resource Category"
+													style="font-weight: bold;" />
+
+												<rich:inplaceSelect
+													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.resourceCategoryString}">
+													<f:selectItem itemLabel="Internal" itemValue="INTERNAL" />
+													<f:selectItem itemLabel="External" itemValue="EXTERNAL" />
+													<f:selectItem itemLabel="All" itemValue="ALL" />
+												</rich:inplaceSelect>
 
 												<h:outputText value="Start Time:" style="font-weight: bold;" />
 
@@ -155,16 +159,16 @@
 													var="parameter" width="95%" labelWidth="5%"
 													style="width:100%;">
 
-													<rich:column inlineStyle="border-style: hidden;">
+													<rich:column style="border-style: hidden;">
 														<h:outputText value="#{parameter.parameterName}">
 														</h:outputText>
 													</rich:column>
-													<rich:column inlineStyle="border-style: hidden;">
+													<rich:column style="border-style: hidden;">
 														<h:inputText
 															rendered="#{parameter.parameterType=='VALUE'}"
 															value="#{parameter.value}">
 														</h:inputText>
-														<rich:comboBox
+														<rich:comboBox width="200px"
 															rendered="#{parameter.parameterType=='FIELD'}"
 															value="#{parameter.value}"
 															suggestionValues="#{flowScope.websession.graphmodel.possibleFieldNameValues}" />
@@ -176,13 +180,6 @@
 													style="font-weight: bold;" />
 												<h:inputText style="width:100%;"
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
-
-												<h:outputText value="Postprocessors:"
-													style="font-weight: bold;" />
-												<h:inputText style="width:100%;"
-													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.postProcessorsAsString}" />
-
-
 
 												<f:facet name="footer">
 													<h:panelGroup style="display:block; text-align:center">
@@ -202,6 +199,49 @@
 
 
 										<rich:layoutPanel position="right">
+											<rich:dataTable id="postProcessorTable"
+												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.postprocessors}"
+												var="processor" width="100%" style="width:100%;">
+
+												<rich:column style="width:100%">
+													<f:facet name="header">
+														<h:outputText value="Post Processors" />
+													</f:facet>
+													<rich:comboBox value="#{processor.beanName}" width="290px"
+														suggestionValues="#{flowScope.websession.graphmodel.possiblePostProcessorValues}" >
+														<a4j:support event="onselect" ajaxSingle="true"/>
+														</rich:comboBox>
+												</rich:column>
+
+												<rich:column>
+													<f:facet name="header">
+														<h:outputText value="Remove" />
+													</f:facet>
+													<a4j:commandLink immediate="true"
+														action="removePostProcessorFromSelectedStatistic"
+														id="removePostProcessorLink" reRender="optionsPanelForm,postProcessorTable">
+														<h:graphicImage
+															style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+															value="/image/icon/onebit_33.png" />
+														<f:setPropertyActionListener value="#{processor}"
+															target="#{flowScope.websession.graphmodel.selectedPostProcessor}" />
+													</a4j:commandLink>
+
+												</rich:column>
+
+												<f:facet name="footer">
+													<a4j:commandLink immediate="true"														
+														id="postProcessorLink" action="addPostProcessorToSelectedStatistic"
+														reRender="optionsPanelForm,postProcessorTable">
+														<h:graphicImage id="addPostProcessorImage"
+															style="width:20px;" value="/image/icon/onebit_31.png" />													  
+													</a4j:commandLink>
+
+												</f:facet>
+											</rich:dataTable>
+
+											<rich:spacer height="15px" />
+
 											<rich:dataTable id="seriesTable"
 												value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.series}"
 												bandingInterval="2" banding="row" var="series" width="100%"
@@ -280,8 +320,10 @@
 
 											</rich:dataTable>
 
-											<h:outputText value="Processing Status:" style="font-weight: bold;"/>
-											<h:outputText value="#{flowScope.websession.graphmodel.processingResult}"/>
+											<h:outputText value="Processing Status:"
+												style="font-weight: bold;" />
+											<h:outputText
+												value="#{flowScope.websession.graphmodel.processingResult}" />
 
 										</rich:layoutPanel>
 									</rich:layout>
@@ -357,7 +399,7 @@
 
 
 						<rich:tab name="table" label="Table">
-							
+
 							<rich:dataTable id="currentTableGraphTable"
 								value="#{flowScope.websession.graphmodel.currentTableGraph.rowList}"
 								bandingInterval="2" banding="row" rows="25" var="unit"
@@ -370,7 +412,7 @@
 								<rich:columns
 									value="#{flowScope.websession.graphmodel.currentTableGraph.series}"
 									var="columns" index="index" id="column#{index}"
-									 filterEvent="onkeyup">
+									filterEvent="onkeyup">
 									<f:facet name="header">
 										<h:outputText value="#{columns}" />
 									</f:facet>
@@ -387,50 +429,52 @@
 
 							<rich:panel style="padding:0" headerClass="outpanelHeader">
 								<f:facet name="header">
-									
+
 								</f:facet>
 								<rich:spacer height="5px" />
-								<h:outputText value="Enter a filename, or leave blank if you want one to be automatically generated"/>
+								<h:outputText
+									value="Enter a filename, or leave blank if you want one to be automatically generated" />
 								<rich:spacer height="5px" />
-								<h:panelGrid columns="3">								    
-								   
+								<h:panelGrid columns="3">
+
 									<h:graphicImage style="cursor: pointer"
-												value="/image/arrow.png"/>
-									<h:outputText value="Filename:"/>
-									<h:inputText value="#{flowScope.websession.graphmodel.downloadFilename}"/>
+										value="/image/arrow.png" />
+									<h:outputText value="Filename:" />
+									<h:inputText
+										value="#{flowScope.websession.graphmodel.downloadFilename}" />
 								</h:panelGrid>
 
 								<h:panelGrid id="reportTypePanel" columns="3">
-											<h:graphicImage style="cursor: pointer"
-													value="/image/arrow.png"/>
-											<h:outputText value="Create table only report: "/>
-											<h:panelGrid columns="2">
-												<a4j:commandLink id="generateExcelReport"
-													action="generateExcelReport" reRender="chartForm">
-													<h:graphicImage value="/image/excel-icon.gif"
-														style="border:0">
-													</h:graphicImage>
-												</a4j:commandLink>
+									<h:graphicImage style="cursor: pointer"
+										value="/image/arrow.png" />
+									<h:outputText value="Create table only report: " />
+									<h:panelGrid columns="2">
+										<a4j:commandLink id="generateExcelReport"
+											action="generateExcelReport" reRender="chartForm">
+											<h:graphicImage value="/image/excel-icon.gif"
+												style="border:0">
+											</h:graphicImage>
+										</a4j:commandLink>
 
-												<a4j:commandLink action="generateCSVReport"
-													reRender="chartForm">
-													<h:graphicImage value="/image/csv-icon.png" style="border:0">
-													</h:graphicImage>
-												</a4j:commandLink>
-											</h:panelGrid>
-
-										<h:graphicImage style="cursor: pointer"
-												value="/image/arrow.png"/>
-										<h:outputText value="Create table and graph report: "/>
-										<h:panelGrid columns="1">
-											<a4j:commandLink action="generatePDFReport"
-												reRender="chartForm">
-												<h:graphicImage value="/image/pdf.png" width="35px"
-													style="border:0">
-												</h:graphicImage>
-											</a4j:commandLink>
-										</h:panelGrid>
+										<a4j:commandLink action="generateCSVReport"
+											reRender="chartForm">
+											<h:graphicImage value="/image/csv-icon.png" style="border:0">
+											</h:graphicImage>
+										</a4j:commandLink>
 									</h:panelGrid>
+
+									<h:graphicImage style="cursor: pointer"
+										value="/image/arrow.png" />
+									<h:outputText value="Create table and graph report: " />
+									<h:panelGrid columns="1">
+										<a4j:commandLink action="generatePDFReport"
+											reRender="chartForm">
+											<h:graphicImage value="/image/pdf.png" width="35px"
+												style="border:0">
+											</h:graphicImage>
+										</a4j:commandLink>
+									</h:panelGrid>
+								</h:panelGrid>
 							</rich:panel>
 
 

@@ -101,6 +101,14 @@
 		<transition on="addSeriesToSelectedStatistic">
 		  <evaluate expression="graphService.addSeriesToSelectedStatistic(flowScope.websession)"></evaluate>
 		</transition>
+        
+        <transition on="addPostProcessorToSelectedStatistic">
+            <evaluate expression="graphService.addPostProcessorToSelectedStatistic(flowScope.websession)"></evaluate>
+        </transition>
+        
+        <transition on="removePostProcessorFromSelectedStatistic">
+            <evaluate expression="graphService.removePostProcessorFromSelectedStatistic(flowScope.websession)"></evaluate>
+        </transition>
 		
 		<transition on="addFilterToSelectedSeries">
 			<evaluate expression="graphService.addFilterToSelectedSeries(flowScope.websession)"></evaluate>

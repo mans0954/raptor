@@ -26,6 +26,9 @@ import uk.ac.cardiff.model.sql.ComparisonPredicate;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
+ * Wraps a <code>StatiticalUnitInformation</code> for the view component, adding a 
+ * <code>boolean</code> value which tells the view if the statistic is currently active
+ * 
  * @author philsmart
  *
  */
@@ -33,7 +36,10 @@ public class StatisticalUnitInformationView implements Serializable{
 
     private static final long serialVersionUID = 4655547623449270295L;
 
+    /** Whether this statistic is selected*/
     private boolean selected;
+    
+    /** The wrapped statistical unit information */
     private StatisticalUnitInformation statisticalUnitInformation;
 
 
