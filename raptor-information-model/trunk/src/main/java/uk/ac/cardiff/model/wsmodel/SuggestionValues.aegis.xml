@@ -5,5 +5,6 @@ property using the getDate and setDate methods -->
 <mappings xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 	<mapping>
 		<property name="possibleFieldNameValuesList" ignore="true"/>
+        <property name="possiblePostProcessorValuesList" ignore="true"/>
 	</mapping>
 </mappings>

@@ -22,11 +22,11 @@ public class StatisticalUnitInformation implements Serializable {
     /** Class representing all parameters for this statistical unit */
     private StatisticParameters statisticParameters;
 
-    /** Simple string values (representing names) of the configured pre-processors*/
-    private List<String> preprocessors;
+    /** Simple list (representing names) of the configured pre-processors*/
+    private List<ProcessorInformation> preprocessors;
 
-    /** Simple string values (representing names) of the configured post-processors*/
-    private List<String> postprocessors;
+    /** Simple list (representing names) of the configured post-processors*/
+    private List<ProcessorInformation> postprocessors;
 
 
 
@@ -38,21 +38,6 @@ public class StatisticalUnitInformation implements Serializable {
 	return statisticParameters;
     }
 
-    public void setPreprocessors(List<String> preprocessors) {
-	this.preprocessors = preprocessors;
-    }
-
-    public List<String> getPreprocessors() {
-	return preprocessors;
-    }
-
-    public void setPostprocessors(List<String> postprocessors) {
-	this.postprocessors = postprocessors;
-    }
-
-    public List<String> getPostprocessors() {
-	return postprocessors;
-    }
 
     /**
      * human consumable output method for array of preprocessors
@@ -63,8 +48,8 @@ public class StatisticalUnitInformation implements Serializable {
 	if (preprocessors==null)
 	    return output.toString();
 	int count=0;
-	for (String preprocessor : preprocessors){
-	    output.append(preprocessor);
+	for (ProcessorInformation preprocessor : preprocessors){
+	    output.append(preprocessor.getBeanName());
 	    if (count < preprocessors.size()-1)output.append(", ");
 	    count++;
 	}
@@ -80,12 +65,40 @@ public class StatisticalUnitInformation implements Serializable {
 	if (preprocessors==null)
 	    return output.toString();
 	int count=0;
-	for (String postprocessor : postprocessors){
-	    output.append(postprocessor);
+	for (ProcessorInformation postprocessor : postprocessors){
+	    output.append(postprocessor.getBeanName());
 	    if (count < postprocessors.size()-1)output.append(", ");
 	    count++;
 	}
 	return output.toString();
+    }
+
+    /**
+     * @param preprocessors the preprocessors to set
+     */
+    public void setPreprocessors(List<ProcessorInformation> preprocessors) {
+        this.preprocessors = preprocessors;
+    }
+
+    /**
+     * @return the preprocessors
+     */
+    public List<ProcessorInformation> getPreprocessors() {
+        return preprocessors;
+    }
+
+    /**
+     * @param postprocessors the postprocessors to set
+     */
+    public void setPostprocessors(List<ProcessorInformation> postprocessors) {
+        this.postprocessors = postprocessors;
+    }
+
+    /**
+     * @return the postprocessors
+     */
+    public List<ProcessorInformation> getPostprocessors() {
+        return postprocessors;
     }
 
 
