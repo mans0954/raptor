@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptor.remoting.client.impl;
+package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.List;
 
@@ -24,25 +24,22 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
-import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
-import uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine;
-import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 
-public class EventReleaseClientImpl implements EventReleaseClient {
+public class DefaultEventReleaseClient implements EventReleaseClient {
 
 	/** Class logger. */
-	private final Logger log = LoggerFactory.getLogger(EventReleaseClientImpl.class);
+	private final Logger log = LoggerFactory.getLogger(DefaultEventReleaseClient.class);
 
-	/** Encapsulation of all endpoints this client can communication with */
+	/** Encapsulation of all endpoints this client can communication with. */
 	private EndpointRegistry endpointRegistry;
 
-	/** The engine that performs event release to a client endpoint */
+	/** The engine that performs event release to a client endpoint. */
 	private EventReleaseEngine eventReleaseEngine;
 
 	/** Whether events should be released. Defaults to true. */
 	private boolean enableEventRelease;
 
-	public EventReleaseClientImpl() {
+	public DefaultEventReleaseClient() {
 		eventReleaseEngine = new EventReleaseEngine();
 		enableEventRelease = true;
 	}

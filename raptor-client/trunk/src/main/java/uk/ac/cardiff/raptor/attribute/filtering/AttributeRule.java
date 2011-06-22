@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 import uk.ac.cardiff.model.ServiceMetadata;
@@ -25,28 +26,28 @@ import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
  * This is a poor implementation of an attributeRule.
- *
+ * 
  * @author philsmart
- *
+ * 
  */
 public abstract class AttributeRule {
 
     private MatchRule permitValueRule;
+
     private MatchRule denyValueRule;
 
-    /** The class type that this attribute rule is defined for*/
+    /** The class type that this attribute rule is defined for */
     private Class<?> eventType;
 
     public abstract void filterAttribute(Event event, ServiceMetadata metadata) throws AttributeFilterException;
-
 
     /**
      * @return true if this attribute rule is enabled, and should be applied to the input class type.
      */
     public boolean shouldApply(Class<?> eventType) {
         boolean enabled = getDenyValueRule().isEnabled();
-        boolean classEquivelent = (this.eventType==eventType);
-        if (enabled && classEquivelent){
+        boolean classEquivelent = (this.eventType == eventType);
+        if (enabled && classEquivelent) {
             return true;
         }
         return false;
@@ -67,18 +68,21 @@ public abstract class AttributeRule {
     }
 
     protected void setValueForObject(Event event, String value, String attributeID) {
-         ReflectionHelper.setValueOnObject(attributeID, value, event);
+        ReflectionHelper.setValueOnObject(attributeID, value, event);
     }
 
     public void setPermitValueRule(MatchRule permitValueRule) {
         this.permitValueRule = permitValueRule;
     }
+
     public MatchRule getPermitValueRule() {
         return permitValueRule;
     }
+
     public void setDenyValueRule(MatchRule denyValueRule) {
         this.denyValueRule = denyValueRule;
     }
+
     public MatchRule getDenyValueRule() {
         return denyValueRule;
     }
@@ -96,7 +100,5 @@ public abstract class AttributeRule {
     public Class<?> getEventType() {
         return eventType;
     }
-
-
 
 }

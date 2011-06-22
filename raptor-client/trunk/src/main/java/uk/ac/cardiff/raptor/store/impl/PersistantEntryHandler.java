@@ -44,10 +44,10 @@ public class PersistantEntryHandler implements EntryHandler {
 	// bean after all properties set etc, rather than initialising on the set
 	// method of the engine class
 
-	/** class logger */
+	/** class logger. */
 	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
 
-	/** data connection used to persist entries */
+	/** data connection used to persist entries. */
 	private RaptorDataConnection dataConnection;
 
 
@@ -216,9 +216,8 @@ public class PersistantEntryHandler implements EntryHandler {
 		for (Iterator<Integer> entries = latestEqualEntries.iterator();entries.hasNext();){
 		    Integer hash = entries.next();
 		    dataConnection.runQueryUnique("delete from Event where hashCode = ?", new Object[]{hash});
-		}
+        }
 
-
-	}
+    }
 
 }
