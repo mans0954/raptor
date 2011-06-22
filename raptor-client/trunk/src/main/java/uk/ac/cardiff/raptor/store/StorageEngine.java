@@ -38,178 +38,170 @@ import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationExcept
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class StorageEngine  implements StoreEntriesTaskCallbackInterface{
+public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 
-    /** Class logger*/
-    private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
 
-    /** Responsible for storing all entries (e.g. events) */
-    private EntryHandler entryHandler;
+	/** Responsible for storing all entries (e.g. events) */
+	private EntryHandler entryHandler;
 
+	/** Engine used to associate attributes to existing events in the MUA */
+	private AttributeAssociationEngine attributeAssociationEngine;
 
-    /** Engine used to associate attributes to existing events in the MUA */
-    private AttributeAssociationEngine attributeAssociationEngine;
+	/** The ID of the currently executing transaction */
+	private int currentTransactionId;
 
-    /** The ID of the currently executing transaction */
-    private int currentTransactionId;
+	/** Whether a transaction is currently in progress */
+	private boolean transactionInProgress;
 
+	/** Default Constructor */
+	public StorageEngine() {
 
-    /** Whether a transaction is currently in progress*/
-    private boolean transactionInProgress;
+	}
 
+	public void storageResultCallback(Object result) {
+		log.debug("Storage task completed {}, for transaction id [{}]", result, currentTransactionId);
+		transactionInProgress = false;
 
-    /** Default Constructor*/
-    public StorageEngine(){
+	}
 
-    }
-
-    public void storageResultCallback(Object result) {
-        log.debug("Storage task completed {}, for transaction id [{}]",result, currentTransactionId);
-        transactionInProgress=false;
-
-    }
-
-    /**
-     * @param events
-     */
-    public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException{
-        if (transactionInProgress){
-            throw new TransactionInProgressException("Transaction "+currentTransactionId+" currently in processing");
-        }
-        log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(),transactionId);
-        this.currentTransactionId = transactionId;
-        transactionInProgress=true;
-        AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, entryHandler,attributeAssociationEngine);
-        asyncEntryStorage.execute(events,this);
-
-
-    }
-    
-    public void performSynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException{
-        if (transactionInProgress){
-            throw new TransactionInProgressException("Transaction "+currentTransactionId+" currently in processing");
-        }
-        log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(),transactionId);
-        this.currentTransactionId = transactionId;
-        transactionInProgress=true;
-        try {
-        	attributeAssociationEngine.associateAttributes(events);
-            entryHandler.addEntries(events);
-            log.debug("Storage task completed true, for transaction id [{}]", currentTransactionId);
-        } catch (StorageException e) {
-           log.error("Could not store events for transaction id [{}], {}",transactionId);
-        } catch (AttributeAssociationException e) {
-        	 log.error("Could not store events for transaction id [{}], {}",transactionId);
+	/**
+	 * @param events
+	 */
+	public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException {
+		if (transactionInProgress) {
+			throw new TransactionInProgressException("Transaction " + currentTransactionId + " currently in processing");
 		}
-        transactionInProgress=false;
-    }
+		log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(), transactionId);
+		this.currentTransactionId = transactionId;
+		transactionInProgress = true;
+		AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, entryHandler, attributeAssociationEngine);
+		asyncEntryStorage.execute(events, this);
 
-    /**
-     * Returns events on or after the input time <code>earliestReleaseTime</code>.
+	}
+
+	public void performSynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException {
+		if (transactionInProgress) {
+			throw new TransactionInProgressException("Transaction " + currentTransactionId + " currently in processing");
+		}
+		log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(), transactionId);
+		this.currentTransactionId = transactionId;
+		transactionInProgress = true;
+		try {
+			attributeAssociationEngine.associateAttributes(events);
+			entryHandler.addEntries(events);
+			log.debug("Storage task completed true, for transaction id [{}]", currentTransactionId);
+		} catch (StorageException e) {
+			log.error("Could not store events for transaction id [{}], {}", transactionId);
+		} catch (AttributeAssociationException e) {
+			log.error("Could not store events for transaction id [{}], {}", transactionId);
+		}
+		transactionInProgress = false;
+	}
+
+	/**
+	 * Returns events on or after the input time
+	 * <code>earliestReleaseTime</code>.
+	 * 
+	 * @param earliestReleaseTime
+	 * @return
+	 */
+	public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
+		List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?", new Object[] { earliestReleaseTime });
+		return query;
+	}
+
+	/**
+	 * Returns events on or after the input time
+	 * <code>earliestReleaseTime</code>, but with a maximum of
+	 * <code>maxNoResults</code> results (in chronological order).
+	 * 
+	 * @param earliestReleaseTime
+	 * @param maxNoResults
+	 * @return
+	 */
+	public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
+		List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc", new Object[] { earliestReleaseTime },
+				maxNoResults);
+		return query;
+	}
+
+	/**
      *
-     * @param earliestReleaseTime
-     * @return
      */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
-        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?",new Object[]{earliestReleaseTime});
-        return query;
-    }
+	public void removeAllEntries() {
+		entryHandler.removeAllEntries();
+	}
 
-    /**
-     * Returns events on or after the input time <code>earliestReleaseTime</code>, but with a maximum of
-     * <code>maxNoResults</code> results (in chronological order).
-     *
-     * @param earliestReleaseTime
-     * @param maxNoResults
-     * @return
-     */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
-        List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc",new Object[]{earliestReleaseTime},maxNoResults);
-        return query;
-    }
+	/**
+	 * Sets the configured entry handler. Must also then initialise that entry
+	 * handler
+	 * 
+	 * @param entryHandler
+	 *            the entryHandler to set
+	 */
+	public void setEntryHandler(EntryHandler entryHandler) {
+		this.entryHandler = entryHandler;
+		entryHandler.initialise();
+	}
 
+	/**
+	 * @return the entryHandler
+	 */
+	public EntryHandler getEntryHandler() {
+		return entryHandler;
+	}
 
-    /**
-     *
-     */
-    public void removeAllEntries() {
-        entryHandler.removeAllEntries();
-    }
+	/**
+	 * @param attributeAssociationEngine
+	 *            the attributeAssociationEngine to set
+	 */
+	public void setAttributeAssociationEngine(AttributeAssociationEngine attributeAssociationEngine) {
+		this.attributeAssociationEngine = attributeAssociationEngine;
+	}
 
+	/**
+	 * @return the attributeAssociationEngine
+	 */
+	public AttributeAssociationEngine getAttributeAssociationEngine() {
+		return attributeAssociationEngine;
+	}
 
+	/**
+	 * Returns the possible values that each of the input field names can take
+	 * 
+	 * @param possibleFieldNameValuesList
+	 * @return
+	 */
+	public List<Suggestion> getPossibleValuesFor(List<String> possibleFieldNameValuesList) {
+		ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
 
-    /**
-     * Sets the configured entry handler. Must also then initialise that entry
-     * handler
-     *
-     * @param entryHandler the entryHandler to set
-     */
-    public void setEntryHandler(EntryHandler entryHandler) {
-        this.entryHandler = entryHandler;
-        entryHandler.initialise();
-    }
+		for (String fieldName : possibleFieldNameValuesList) {
+			try {
+				String query = "select " + fieldName + " from Event group by (" + fieldName + ")";
+				List results = entryHandler.query(query);
+				log.trace("Looking for possible values for field {} using query [{}]",fieldName, query);
+				int noResults=0;
+				for (Object result : results) {
+					if (result instanceof String) {
+						Suggestion suggestion = new Suggestion();
+						suggestion.setBase(fieldName);
+						suggestion.setValue((String) result);
+						suggestions.add(suggestion);
+						noResults++;
+					}
+				}
+				log.debug("Field {} has {} suggestion values",fieldName,noResults);
+			} catch (RuntimeException e) {
+				log.warn("Caught a runtime exception. Error trying to find possible values for {}, probably nothing to worry about", fieldName);
+			}
 
+		}
 
-    /**
-     * @return the entryHandler
-     */
-    public EntryHandler getEntryHandler() {
-        return entryHandler;
-    }
-
-    /**
-     * @param attributeAssociationEngine the attributeAssociationEngine to set
-     */
-    public void setAttributeAssociationEngine(AttributeAssociationEngine attributeAssociationEngine) {
-        this.attributeAssociationEngine = attributeAssociationEngine;
-    }
-
-    /**
-     * @return the attributeAssociationEngine
-     */
-    public AttributeAssociationEngine getAttributeAssociationEngine() {
-        return attributeAssociationEngine;
-    }
-	
-    /**
-     * Returns the possible values that each of the input field names can take
-     * 
-     * @param possibleFieldNameValuesList
-     * @return
-     */
-    public List<Suggestion> getPossibleValuesFor(List<String> possibleFieldNameValuesList) {
-        ArrayList<Suggestion> suggestions = new ArrayList<Suggestion>();
-        
-        for (String fieldName : possibleFieldNameValuesList){
-            try{
-            List results = entryHandler.query("select "+fieldName+" from Event group by ("+fieldName+")");
-            for (Object result : results){
-                if (result instanceof String){
-                        Suggestion suggestion = new Suggestion();
-                        suggestion.setBase(fieldName);
-                        suggestion.setValue((String)result);
-                        suggestions.add(suggestion);
-                }
-            }
-            }
-            catch(RuntimeException e){
-                log.warn("Caught a runtime exception. Error trying to find possible values for {}, probably nothing to worry about",fieldName);
-            }
-
-        }
-        
-        
-        return suggestions;
-    }
-
-
-
-
-
-
-
-
+		return suggestions;
+	}
 
 }
