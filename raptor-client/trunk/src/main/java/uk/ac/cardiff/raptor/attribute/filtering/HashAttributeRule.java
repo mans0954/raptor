@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 import java.io.UnsupportedEncodingException;
@@ -31,47 +32,44 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class HashAttributeRule extends AttributeRule{
+public final class HashAttributeRule extends BaseAttributeRule {
 
     /** class logger. */
     private final Logger log = LoggerFactory.getLogger(HashAttributeRule.class);
 
     private String attributeId;
 
-    /** The hashing algorithm used, this property is not user definable, its fixed to SHA-256*/
-    private final String HASH_ALGORITHM="SHA-256";
+    /** The hashing algorithm used, this property is not user definable, its fixed to SHA-256 */
+    private final String HASH_ALGORITHM = "SHA-256";
 
     /**
-     * Hash the attribute defined by the <code>attributeId</code> tag, with the
-     * entityId name of this service.
-     *
+     * Hash the attribute defined by the <code>attributeId</code> tag, with the entityId name of this service.
+     * 
      * @throws AttributeFilterException
      */
-    public void filterAttribute(Event event, ServiceMetadata metadata) throws AttributeFilterException {
-        try{
+    public void filterAttribute(final Event event, final ServiceMetadata metadata) throws AttributeFilterException {
+        try {
             if (classHasAttribute(event, getAttributeId())) {
-                MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
-                Object value = getValueForObject(event, getAttributeId());
-                if (value instanceof String){
-                    String valueAsString = (String) value;
-                    String toHash = metadata.getEntityId()+valueAsString;
+                final MessageDigest md = MessageDigest.getInstance(HASH_ALGORITHM);
+                final Object value = getValueForObject(event, getAttributeId());
+                if (value instanceof String) {
+                    final String valueAsString = (String) value;
+                    final String toHash = metadata.getEntityId() + valueAsString;
                     md.update(toHash.getBytes("UTF-8"));
-                    byte[] digest = md.digest();
-                    BigInteger number = new BigInteger(1,digest);
-                    String hashedValue = number.toString(16);
+                    final byte[] digest = md.digest();
+                    final BigInteger number = new BigInteger(1, digest);
+                    final String hashedValue = number.toString(16);
                     this.setValueForObject(event, hashedValue, getAttributeId());
-                }
-                else{
-                	throw new AttributeFilterException("The hash filter requires attributes of type String");
+                } else {
+                    throw new AttributeFilterException("The hash filter requires attributes of type String");
                 }
 
             }
-        }
-        catch (NoSuchAlgorithmException e){
+        } catch (final NoSuchAlgorithmException e) {
             throw new AttributeFilterException(e);
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             throw new AttributeFilterException(e);
         }
 
@@ -80,7 +78,7 @@ public class HashAttributeRule extends AttributeRule{
     /**
      * @param attributeId the attributeId to set
      */
-    public void setAttributeId(String attributeId) {
+    public void setAttributeId(final String attributeId) {
         this.attributeId = attributeId;
     }
 
@@ -90,7 +88,5 @@ public class HashAttributeRule extends AttributeRule{
     public String getAttributeId() {
         return attributeId;
     }
-
-
 
 }

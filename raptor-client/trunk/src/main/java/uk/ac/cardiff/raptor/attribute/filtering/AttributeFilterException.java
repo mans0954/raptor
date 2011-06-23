@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
+
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class AttributeFilterException extends Exception {
-
 
     /** Generated SeruialUID */
     private static final long serialVersionUID = -2194640593279397599L;
@@ -35,7 +32,7 @@ public class AttributeFilterException extends Exception {
 
     /**
      * Constructor.
-     *
+     * 
      * @param message exception message
      */
     public AttributeFilterException(final String message) {
@@ -44,7 +41,7 @@ public class AttributeFilterException extends Exception {
 
     /**
      * Constructor.
-     *
+     * 
      * @param wrappedException exception to be wrapped by this one
      */
     public AttributeFilterException(final Exception wrappedException) {
@@ -53,13 +50,12 @@ public class AttributeFilterException extends Exception {
 
     /**
      * Constructor.
-     *
+     * 
      * @param message exception message
      * @param wrappedException exception to be wrapped by this one
      */
     public AttributeFilterException(final String message, final Exception wrappedException) {
         super(message, wrappedException);
     }
-
 
 }
