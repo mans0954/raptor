@@ -22,9 +22,8 @@ import uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
- * This is a poor implementation of an attributeRule.
+ * A naive implementation of an attributeRule.
  * 
- * @author philsmart
  * 
  */
 public abstract class BaseAttributeRule {
@@ -35,7 +34,7 @@ public abstract class BaseAttributeRule {
     /** The deny value rule. */
     private MatchRule denyValueRule;
 
-    /** The class type that this attribute rule is defined for. */
+    /** The <code>Class</code> type that this attribute rule applies to. */
     private Class<?> eventType;
 
     /**
