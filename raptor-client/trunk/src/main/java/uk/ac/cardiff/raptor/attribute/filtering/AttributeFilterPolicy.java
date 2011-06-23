@@ -19,27 +19,48 @@ package uk.ac.cardiff.raptor.attribute.filtering;
 import java.util.List;
 
 /**
- * @author philsmart
- * 
+ * The Class AttributeFilterPolicy.
  */
 public class AttributeFilterPolicy {
 
+    /** The policy name. */
     private String policyName;
 
-    private List<AttributeRule> attributeRules;
+    /** A <code>List</code> of attribute rules. */
+    private List<BaseAttributeRule> attributeRules;
 
-    public void setAttributeRules(List<AttributeRule> attributeRules) {
+    /**
+     * Sets the attribute rules.
+     * 
+     * @param attributeRules the new attribute rules
+     */
+    public void setAttributeRules(final List<BaseAttributeRule> attributeRules) {
         this.attributeRules = attributeRules;
     }
 
-    public List<AttributeRule> getAttributeRules() {
+    /**
+     * Gets the attribute rules.
+     * 
+     * @return the attribute rules
+     */
+    public List<BaseAttributeRule> getAttributeRules() {
         return attributeRules;
     }
 
-    public void setPolicyName(String policyName) {
+    /**
+     * Sets the policy name.
+     * 
+     * @param policyName the new policy name
+     */
+    public void setPolicyName(final String policyName) {
         this.policyName = policyName;
     }
 
+    /**
+     * Gets the policy name.
+     * 
+     * @return the policy name
+     */
     public String getPolicyName() {
         return policyName;
     }

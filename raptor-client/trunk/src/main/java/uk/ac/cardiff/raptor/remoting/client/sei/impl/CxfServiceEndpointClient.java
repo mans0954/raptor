@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
+package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
 import java.util.HashSet;
 import java.util.Set;
-
-
 
 import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
@@ -47,68 +45,65 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(CxfServiceEndpointClient.class);
 
-    /** Raptor specific TLS parameters class, that can return cxf TLSParameters*/
+    /** Raptor specific TLS parameters class, that can return cxf TLSParameters */
     private ClientTLSParameters tlsParameters;
 
     @Override
     public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint) {
-	try {
-	    ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
-	    factory.setServiceClass(MultiUnitAggregator.class);
-	    AegisDatabinding databinding = new AegisDatabinding();
+        try {
+            ClientProxyFactoryBean factory = new ClientProxyFactoryBean();
+            factory.setServiceClass(MultiUnitAggregator.class);
+            AegisDatabinding databinding = new AegisDatabinding();
 
-	    org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
-	    context.setWriteXsiTypes(true);
+            org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
+            context.setWriteXsiTypes(true);
 
-	    Set<Class<?>> rootClasses = new HashSet<Class<?>>();
+            Set<Class<?>> rootClasses = new HashSet<Class<?>>();
 
-	    Set<String> overrides = new HashSet<String>();
-	    overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
-	    overrides.add(AuthenticationEvent.class.getName());
-	    overrides.add(EzproxyAuthenticationEvent.class.getName());
-	    overrides.add(OpenathenslaAuthenticationEvent.class.getName());
-	    databinding.setOverrideTypes(overrides);
+            Set<String> overrides = new HashSet<String>();
+            overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
+            overrides.add(AuthenticationEvent.class.getName());
+            overrides.add(EzproxyAuthenticationEvent.class.getName());
+            overrides.add(OpenathenslaAuthenticationEvent.class.getName());
+            databinding.setOverrideTypes(overrides);
 
-	    for (String typeName : overrides) {
-		Class<?> c = null;
-		try {
-		    c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
-		} catch (ClassNotFoundException e) {
-		    throw new DatabindingException("Could not find override type class: " + typeName, e);
-		}
-		rootClasses.add(c);
-	    }
+            for (String typeName : overrides) {
+                Class<?> c = null;
+                try {
+                    c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
+                } catch (ClassNotFoundException e) {
+                    throw new DatabindingException("Could not find override type class: " + typeName, e);
+                }
+                rootClasses.add(c);
+            }
 
-	    context.setRootClasses(rootClasses);
-	    databinding.setAegisContext(context);
+            context.setRootClasses(rootClasses);
+            databinding.setAegisContext(context);
 
-	    factory.setAddress(endpoint.getServiceEndpoint());
-	    factory.getServiceFactory().setDataBinding(databinding);
+            factory.setAddress(endpoint.getServiceEndpoint());
+            factory.getServiceFactory().setDataBinding(databinding);
 
-	    MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
-	    org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
-	    HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
-	    HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
-	    httpConduit.setClient(httpClientPolicy);
+            MultiUnitAggregator client = (MultiUnitAggregator) factory.create();
+            org.apache.cxf.endpoint.Client cl = ClientProxy.getClient(client);
+            HTTPConduit httpConduit = (HTTPConduit) cl.getConduit();
+            HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+            httpConduit.setClient(httpClientPolicy);
 
+            if (getTlsParameters() != null)
+                httpConduit.setTlsClientParameters(getTlsParameters().getTlsClientParameters());
 
-	    if (getTlsParameters()!=null)
-	    	httpConduit.setTlsClientParameters(getTlsParameters().getTlsClientParameters());
+            log.debug("Accessing the endpoint version " + client.getVersion());
+            client.addAuthentications(pushed);
+            log.debug("Sent {} events", pushed.getEvents().size());
 
-	    log.debug("Accessing the endpoint version " + client.getVersion());
-	    client.addAuthentications(pushed);
-	    log.debug("Sent {} events", pushed.getEvents().size());
-
-	    return true;
-	} catch (SoapFault e) {
-	    log.error("Could not send events to endpoint [{}] -> {}", new Object[] { endpoint.getServiceEndpoint(), e.getMessage() });
-	    //e.printStackTrace();
-	    return false;
-	} catch (Exception e) {
-	    log.error("Could not send events to endpoint [{}] -> {}", new Object[] { endpoint.getServiceEndpoint(), e.getMessage() });
-	    //e.printStackTrace();
-	    return false;
-	}
+            return true;
+        } catch (SoapFault e) {
+            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
+            return false;
+        } catch (Exception e) {
+            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
+            return false;
+        }
 
     }
 
@@ -116,14 +111,14 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
      * @param tlsParameters the tlsParameters to set
      */
     public void setTlsParameters(ClientTLSParameters tlsParameters) {
-	this.tlsParameters = tlsParameters;
+        this.tlsParameters = tlsParameters;
     }
 
     /**
      * @return the tlsParameters
      */
     public ClientTLSParameters getTlsParameters() {
-	return tlsParameters;
+        return tlsParameters;
     }
 
 }

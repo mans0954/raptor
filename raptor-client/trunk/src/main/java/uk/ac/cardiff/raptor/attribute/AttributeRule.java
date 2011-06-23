@@ -16,43 +16,80 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.attribute;
 
 import uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule;
 
 /**
- * This is a poor implementation of an attributeRule as taken from the ShibbolethIDP
- *
- * @author philsmart
- *
+ * This is a poor implementation of an attributeRule as taken from the ShibbolethIDP.
  */
 public class AttributeRule {
 
-    /* needs to be the exact field name of the attribute */
-    //TODO change all these to proper regulated values with OIDs.
+    /**
+     * The name of the field in the {@link uk.ac.cardiff.model.event.Event} or a subclass thereof that this rule applies
+     * to e.g principalName.
+     */
     private String attributeID;
+
+    /** A permit value rule. */
     private MatchRule permitValueRule;
+
+    /** A deny value rule. */
     private MatchRule denyValueRule;
 
-
-    public void setAttributeID(String attributeID) {
-	this.attributeID = attributeID;
+    /**
+     * Sets the attribute id.
+     * 
+     * @param attributeID the new attribute id
+     */
+    public void setAttributeID(final String attributeID) {
+        this.attributeID = attributeID;
     }
+
+    /**
+     * Gets the attribute id.
+     * 
+     * @return the attribute id
+     */
     public String getAttributeID() {
-	return attributeID;
-    }
-    public void setPermitValueRule(MatchRule permitValueRule) {
-	this.permitValueRule = permitValueRule;
-    }
-    public MatchRule getPermitValueRule() {
-	return permitValueRule;
-    }
-    public void setDenyValueRule(MatchRule denyValueRule) {
-	this.denyValueRule = denyValueRule;
-    }
-    public MatchRule getDenyValueRule() {
-	return denyValueRule;
+        return attributeID;
     }
 
+    /**
+     * Sets the permit value rule.
+     * 
+     * @param permitValueRule the new permit value rule
+     */
+    public void setPermitValueRule(final MatchRule permitValueRule) {
+        this.permitValueRule = permitValueRule;
+    }
+
+    /**
+     * Gets the permit value rule.
+     * 
+     * @return the permit value rule
+     */
+    public MatchRule getPermitValueRule() {
+        return permitValueRule;
+    }
+
+    /**
+     * Sets the deny value rule.
+     * 
+     * @param denyValueRule the new deny value rule
+     */
+    public void setDenyValueRule(final MatchRule denyValueRule) {
+        this.denyValueRule = denyValueRule;
+    }
+
+    /**
+     * Gets the deny value rule.
+     * 
+     * @return the deny value rule
+     */
+    public MatchRule getDenyValueRule() {
+        return denyValueRule;
+    }
 
 }

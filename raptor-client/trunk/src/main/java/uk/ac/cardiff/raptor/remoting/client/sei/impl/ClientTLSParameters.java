@@ -58,35 +58,35 @@ public class ClientTLSParameters {
 	private String keyStorePassword;
 
 	public TLSClientParameters getTlsClientParameters() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException{
-	    TLSClientParameters tls = new TLSClientParameters();
+	    final TLSClientParameters tls = new TLSClientParameters();
 
   	    tls.setDisableCNCheck(true);//disable URL and CN on cert match
 
   	    //clients private key / public key
-  	    KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
-  	    File keyStoreFile = new File(keyStoreLocation);
+  	    final KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
+  	    final File keyStoreFile = new File(keyStoreLocation);
   	    keyStoreKeyManager.load(new FileInputStream(keyStoreFile),  keyStorePassword.toCharArray());
-  	    KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+  	    final KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
   	    keyFactory.init(keyStoreKeyManager, keyStorePassword.toCharArray());
 
-  	    KeyManager[] km = keyFactory.getKeyManagers();
+  	    final KeyManager[] km = keyFactory.getKeyManagers();
   	    tls.setKeyManagers(km);
 
   	    //servers public key
-  	    KeyStore keyStore = KeyStore.getInstance("JKS");
-  	    File truststore = new File(trustStoreLocation);
+  	    final KeyStore keyStore = KeyStore.getInstance("JKS");
+  	    final File truststore = new File(trustStoreLocation);
   	    keyStore.load(new FileInputStream(truststore),  trustStorePassword.toCharArray());
-  	    TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+  	    final TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
   	    trustFactory.init(keyStore);
 
-  	    TrustManager[] tm = trustFactory.getTrustManagers();
+  	    final TrustManager[] tm = trustFactory.getTrustManagers();
   	    tls.setTrustManagers(tm);
 
   	    return tls;
 
 	}
 
-	public void setTrustStoreLocation(String trustStoreLocation) {
+	public void setTrustStoreLocation(final String trustStoreLocation) {
 		this.trustStoreLocation = trustStoreLocation;
 	}
 
@@ -94,7 +94,7 @@ public class ClientTLSParameters {
 		return trustStoreLocation;
 	}
 
-	public void setKeyStoreLocation(String keyStoreLocation) {
+	public void setKeyStoreLocation(final String keyStoreLocation) {
 		this.keyStoreLocation = keyStoreLocation;
 	}
 
@@ -102,7 +102,7 @@ public class ClientTLSParameters {
 		return keyStoreLocation;
 	}
 
-	public void setTrustStorePassword(String trustStorePassword) {
+	public void setTrustStorePassword(final String trustStorePassword) {
 		this.trustStorePassword = trustStorePassword;
 	}
 
@@ -110,7 +110,7 @@ public class ClientTLSParameters {
 		return trustStorePassword;
 	}
 
-	public void setKeyStorePassword(String keyStorePassword) {
+	public void setKeyStorePassword(final String keyStorePassword) {
 		this.keyStorePassword = keyStorePassword;
 	}
 

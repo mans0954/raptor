@@ -13,38 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
+
 package uk.ac.cardiff.raptor.attribute.filtering;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class NullAttributeRule extends AttributeRule{
+public final class NullAttributeRule extends BaseAttributeRule {
 
-    /* needs to be the exact field name of the attribute */
     private String attributeId;
 
-
-    public void filterAttribute(Event event, ServiceMetadata metadata) {
-        String attributeID = getAttributeId();
+    public void filterAttribute(final Event event, final ServiceMetadata metadata) {
+        final String attributeID = getAttributeId();
         if (classHasAttribute(event, attributeID)) {
-               nullAttribute(event, attributeID);
+            nullAttribute(event, attributeID);
         }
     }
 
+    /**
+     * Null the attribute specified by the parameter <code>attributeID</code>.
+     * 
+     * @param event the event
+     * @param attributeID the attribute id
+     */
+    protected void nullAttribute(final Event event, final String attributeID) {
+        ReflectionHelper.nullAttribute(event, attributeID);
+    }
 
-    public void setAttributeId(String attributeId) {
+    public void setAttributeId(final String attributeId) {
         this.attributeId = attributeId;
     }
+
     public String getAttributeId() {
         return attributeId;
     }
-
 
 }
