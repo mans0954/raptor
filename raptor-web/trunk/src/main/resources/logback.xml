@@ -34,19 +34,29 @@
       <pattern>%5p %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
     </encoder>
   </appender>
+  
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%5p %d \(%C{3}:%L\) ---&gt; %m%n</pattern>
+    </encoder>
+  </appender>
 
 
   <logger name="org.springframework" level="ERROR">
+    <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
   <logger name="uk.ac.cardiff" level="DEBUG">
+    <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
   <logger name="org.mortbay" level="ERROR">
+    <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
 
   <logger name="  org.apache.cxf" level="ERROR">
+    <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
 
