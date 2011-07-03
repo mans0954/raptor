@@ -44,7 +44,7 @@
             <value>org.postgresql.Driver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:postgresql://localhost/mua</value>
+            <value>jdbc:postgresql://localhost/mua_all</value>
         </property>
         <property name="user">
             <value>postgres</value>
