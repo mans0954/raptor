@@ -5,7 +5,7 @@
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
+	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine" init-method="initialise">
 		<property name="registry"><ref bean="muaRegistry"></ref></property>
 		<property name="reportHandler"><ref bean="reportHandler"></ref></property>
 		<property name="webMetadata"><ref bean="webMetadata"></ref></property>
