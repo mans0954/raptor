@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorica.server;
 
 import java.io.File;
@@ -35,67 +36,67 @@ import ch.qos.logback.core.util.StatusPrinter;
 
 public class RunServer {
 
+    /**
+     * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3.
+     * Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
+     * to initialise the servlet.
+     * 
+     * @param args
+     * @throws IOException
+     * @throws FileNotFoundException
+     * @throws Exception
+     */
+    public static void main(final String args[]) throws FileNotFoundException, IOException {
+        System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
+        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+        final String configurationFiles =
+                System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
 
-	/**
-	 * Programmatically do the following:
-	 * 1. Set the Apache CXF logger to use SLF4J
-	 * 2. Configure the logback logger
-	 * 3. Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
-	 *
-	 * @param args
-	 * @throws IOException
-	 * @throws FileNotFoundException
-	 * @throws Exception
-	 */
-	public static void main(String args[]) throws FileNotFoundException, IOException {
-		System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
-		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
-		String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/conf");
+        configureLogger(configurationFiles + "/logging.xml");
 
-		configureLogger(configurationFiles+"/logging.xml");
+        final Properties props = new Properties();
+        props.load(new FileInputStream(configurationFiles + "/server.properties"));
 
-		Properties props = new Properties();
-                props.load(new FileInputStream(configurationFiles + "/server.properties"));
+        final int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8110"));
 
-                int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8110"));
+        System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
+        System.out.println("[INFO] Spring Config: Configuration files at " + configurationFiles);
 
-		System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
-		System.out.println("[INFO] Spring Config: Configuration files at " + configurationFiles);
+        final Server server = new Server(portNumber);
+        final Context context = new Context(server, "/ICA", Context.SESSIONS);
 
-		Server server = new Server(portNumber);
-		Context context = new Context(server, "/ICA", Context.SESSIONS);
+        final DispatcherServlet dispatcherServlet = new DispatcherServlet();
+        // dispatcherServlet.setContextConfigLocation("classpath:beans.xml");
+        final File springBeans = new File(configurationFiles + "/ica-core.xml");
+        System.out.println("[INFO] Dispatcher Servlet Configuration Files at " + springBeans.toURI().toString());
+        dispatcherServlet.setContextConfigLocation(springBeans.toURI().toString());
 
-		DispatcherServlet dispatcherServlet = new DispatcherServlet();
-		// dispatcherServlet.setContextConfigLocation("classpath:beans.xml");
-		File springBeans = new File(configurationFiles+"/ica-core.xml");
-		dispatcherServlet.setContextConfigLocation("file://" + springBeans.getCanonicalPath());
+        final ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
+        context.addServlet(servletHolder, "/*");
 
-		ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
-		context.addServlet(servletHolder, "/*");
+        try {
+            server.start();
+            server.join();
+        } catch (final Exception e) {
+            e.printStackTrace();
+            System.exit(100);
+        }
 
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
+    }
 
-	}
+    private static void configureLogger(final String logback) {
+        final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 
-	private static void configureLogger(String logback) {
-		LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+        try {
+            final JoranConfigurator configurator = new JoranConfigurator();
+            configurator.setContext(lc);
+            lc.reset();
+            configurator.doConfigure(logback);
+        } catch (final JoranException je) {
+            // StatusPrinter will handle thiss
+        }
+        StatusPrinter.print(lc);
 
-		try {
-			JoranConfigurator configurator = new JoranConfigurator();
-			configurator.setContext(lc);
-			lc.reset();
-			configurator.doConfigure(logback);
-		} catch (JoranException je) {
-			// StatusPrinter will handle thiss
-		}
-		StatusPrinter.print(lc);
-
-	}
+    }
 
 }

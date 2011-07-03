@@ -119,7 +119,7 @@
 
 
 
-	<bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
+	<bean id="eventReleaseClient" class="uk.ac.cardiff.raptor.remoting.client.DefaultEventReleaseClient">
 		<property name="endpointRegistry"><ref bean="endpointRegistry"/></property>
 		<property name="eventReleaseEngine"><ref bean="eventReleaseEngine"></ref></property>
 	</bean>
