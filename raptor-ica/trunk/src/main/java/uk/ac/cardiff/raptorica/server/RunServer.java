@@ -37,9 +37,13 @@ import ch.qos.logback.core.util.StatusPrinter;
 public class RunServer {
 
     /**
-     * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3.
-     * Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
-     * to initialise the servlet.
+     * Programmatically do the following:
+     * <ol>
+     * <li>Set the Apache CXF logger to use SLF4J</li>
+     * <li>Configure the logback logger</li>
+     * <li>Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration
+     * directory to initialise the servlet.</li>
+     * </ol>
      * 
      * @param args
      * @throws IOException
@@ -84,6 +88,11 @@ public class RunServer {
 
     }
 
+    /**
+     * Configures the logger to use the logging.xml file from the applicants conf/ directory
+     * 
+     * @param logback the location UNC of the logging.xml file
+     */
     private static void configureLogger(final String logback) {
         final LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
 
@@ -93,7 +102,7 @@ public class RunServer {
             lc.reset();
             configurator.doConfigure(logback);
         } catch (final JoranException je) {
-            // StatusPrinter will handle thiss
+            // StatusPrinter will handle this
         }
         StatusPrinter.print(lc);
 
