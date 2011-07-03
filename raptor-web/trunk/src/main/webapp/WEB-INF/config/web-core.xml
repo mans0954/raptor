@@ -24,7 +24,7 @@
 
 
 
-	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine">
+	<bean id="webEngine" class="uk.ac.cardiff.raptorweb.engine.RaptorWebEngine" init-method="initialise">
 		<property name="registry"><ref bean="muaRegistry"></ref></property>
 		<property name="reportHandler"><ref bean="reportHandler"></ref></property>
 		<property name="webMetadata"><ref bean="webMetadata"></ref></property>
@@ -85,7 +85,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			 <!--   <ref local="SystemStatsQuickTrigger"/>-->
+			   <ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>
@@ -94,8 +94,8 @@
 		<property name="jobDetail">
 			<ref local="SystemStatsJobDetail" />
 		</property>
-		<property name="startDelay" value="5000"/>
-		<property name="repeatInterval" value="1800000"/>
+		<property name="startDelay" value="10000"/>
+		<property name="repeatInterval" value="18000000"/>
 	</bean>
 
 	<bean id="SystemStatsJobDetail"

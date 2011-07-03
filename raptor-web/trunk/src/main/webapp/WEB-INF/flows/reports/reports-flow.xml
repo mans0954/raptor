@@ -23,7 +23,6 @@
 	<var name="common" class="uk.ac.cardiff.raptorweb.model.CommonModel" />
 
 
-
 	<on-start>
 	   <!-- websession holds all variables for a particualar user, for a particular instance-->
 		<!-- load the user preferences -->
@@ -32,6 +31,12 @@
 		<evaluate expression="graphService.loadSavedReports(flowScope.websession)"/>
 
 	</on-start>
+    
+    
+    <!-- <global-transitions>
+    <transition on="login" to="login" />
+    <transition on="logout" to="logout" />
+    </global-transitions> -->
 
 
 	<view-state id="startReport" view="startReport.xhtml">
