@@ -59,12 +59,13 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
      */
     public Capabilities constructCapabilities(StatisticsHandler statisticsHandler, StorageEngine storageEngine, ServiceMetadata metadata) {
         log.info("Capabilities Constructor Called");
+        long startTime = System.currentTimeMillis();
 
         Capabilities capabilities = null;
 
         checkCacheValidity();
 
-        if (cacheEnabled) {
+        if (cacheEnabled && cachedCapabilities!=null) {
             log.info("Capabilities retrieved from cache, cache will timeout in {} milliseconds",cacheTimeoutMs-(System.currentTimeMillis()-cacheResetTimeMs));
             capabilities = cachedCapabilities;
         }
@@ -132,8 +133,8 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
                 cacheResetTimeMs = System.currentTimeMillis();
             }
         }
-        
-        log.info("Constructed MUA Capabilities for [{}]", capabilities.getMetadata().getEntityId());
+        long endTime = System.currentTimeMillis();
+        log.info("Constructed MUA Capabilities for [{}] in {}s", capabilities.getMetadata().getEntityId(),((endTime-startTime)/1000));
 
         return capabilities;
     }

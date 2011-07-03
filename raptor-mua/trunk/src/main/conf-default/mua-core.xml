@@ -148,6 +148,11 @@
                 <value>requestId</value>
                 <value>sessionId</value>
                 <value>requesterIp</value>
+                <value>nameIdentifier</value>
+                 <value>persistantId</value>
+                <value>eventTime</value>
+                <value>eventId</value>
+                <value>assertionId</value>
             </set>
         </property>
     </bean>

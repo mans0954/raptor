@@ -104,7 +104,7 @@ public class RunServer {
                 //connector.setPort(portNumber);
 
 		// enable mutual authentication
-		sslConnector.setNeedClientAuth(true);
+		//sslConnector.setNeedClientAuth(true);
 
 		server.setConnectors(new Connector[] { sslConnector });
 

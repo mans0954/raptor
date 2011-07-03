@@ -23,7 +23,7 @@
 	<!--  the event release client, for sending events to other MUA's -->
 
 	<bean id="eventReleaseClient"
-		class="uk.ac.cardiff.raptor.remoting.client.impl.EventReleaseClientImpl">
+		class="uk.ac.cardiff.raptor.remoting.client.DefaultEventReleaseClient">
 		<property name="endpointRegistry">
 			<ref bean="endpointRegistry" />
 		</property>
