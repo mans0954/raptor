@@ -19,7 +19,7 @@
 
 <configuration>
 
-   <property name="LOG_HOME" value="/tmp/" />
+   <property name="LOG_HOME" value="/opt/raptor/ica/logs/" />
 
   <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
