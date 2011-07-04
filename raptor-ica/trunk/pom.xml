@@ -337,11 +337,25 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- <plugin> <artifactId>maven-assembly-plugin</artifactId> <executions> 
-				<execution> <id>assembly</id> <phase>package</phase> <goals> <goal>assembly</goal> 
-				</goals> <configuration> <appendAssemblyId>false</appendAssemblyId> <finalName>raptor-ica-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</finalName> 
-				<descriptors> <descriptor>src/main/resources/package.xml</descriptor> </descriptors> 
-				</configuration> </execution> </executions> </plugin> -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>assembly</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>raptor-ica-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</finalName>
+							<descriptors>
+								<descriptor>src/main/resources/package.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>appassembler-maven-plugin</artifactId>
@@ -349,10 +363,12 @@
 				<configuration>
 					<repositoryLayout>flat</repositoryLayout>
 					<includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-
+                    <assembleDirectory>${project.build.directory}/default-wrapper</assembleDirectory>  
+                    <configurationDirectory>conf</configurationDirectory>
+                    <binPrefix>raptor</binPrefix>  
 					<daemons>
 						<daemon>
-							<id>app1</id>
+							<id>ICA</id>
 							<mainClass>uk.ac.cardiff.raptorica.server.RunServer</mainClass>
 							<commandLineArguments>
 								<commandLineArgument>start</commandLineArgument>
@@ -373,7 +389,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
