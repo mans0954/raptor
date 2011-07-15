@@ -34,8 +34,7 @@ public class ComparisonPredicate implements Serializable{
     public CompOp getCompOp() {
 	return compOp;
     }
-    public void setFieldName(String fieldName) {
-        log.debug("Setting fieldName {}",fieldName);
+    public void setFieldName(String fieldName) {        
 	this.fieldName = fieldName;
     }
     public String getFieldName() {
