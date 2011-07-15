@@ -46,7 +46,7 @@
     <appender-ref ref="FILE"/>
   </logger>
 
-  <logger name="uk.ac.cardiff" level="DEBUG">
+  <logger name="uk.ac.cardiff" level="TRACE">
     <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>

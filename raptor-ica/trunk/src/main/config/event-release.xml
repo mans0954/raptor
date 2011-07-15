@@ -67,7 +67,7 @@
             <value>10</value>
         </property>
         <property name="pushInterval">
-            <value>100000</value>
+            <value>30000</value>
         </property>
     </bean>
 
