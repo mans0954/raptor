@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 
 /**
@@ -35,7 +35,7 @@ public interface StatisticsPreProcessor {
 	 * @param entryHandler
 	 * @throws PreprocessorException
 	 */
-	public void preProcess(EntryHandler entryHandler) throws PreprocessorException;
+	public void preProcess(EventHandler entryHandler) throws PreprocessorException;
 
 
 

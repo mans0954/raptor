@@ -144,7 +144,7 @@ public class CountEntryPerInterval extends Statistic{
 		}
 
 
-		log.debug("Entries: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
+		log.debug("Entries: " + this.getEntryHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
 
 
 		ObservationSeries series=  new ObservationSeries();

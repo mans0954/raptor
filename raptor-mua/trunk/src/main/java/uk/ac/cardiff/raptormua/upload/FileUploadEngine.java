@@ -48,10 +48,10 @@ public class FileUploadEngine {
         if (!enabled){
             return null;
         }
-        log.debug("Scanning directories for batch log files");
+        log.trace("Scanning directories for batch log files");
         ArrayList<BatchFile> allBatchFiles  = new ArrayList<BatchFile>();
         for (UploadDirectory uploadDirectory : uploadDirectories){
-        	log.debug("Trying directory {} for upload files",uploadDirectory.getUploadDirectory());
+        	log.trace("Trying directory {} for upload files",uploadDirectory.getUploadDirectory());
             try {
             	allBatchFiles.addAll(uploadDirectory.getNewFiles());
             } catch (UploadFileException e) {

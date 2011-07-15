@@ -35,7 +35,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
@@ -55,7 +55,7 @@ public abstract class Statistic {
 	/** The <code>EntryHandler</code> that allows access to all <code>Event</code>s this
 	 * statistic works off.
 	 */
-	private EntryHandler entryHandler;
+	private EventHandler entryHandler;
 
 	/** The parameters used to configure this statistic*/
 	protected StatisticParameters statisticParameters;
@@ -98,7 +98,7 @@ public abstract class Statistic {
 	}
 
 
-	public void setEntryHandler(EntryHandler entryHandler) {
+	public void setEntryHandler(EventHandler entryHandler) {
 		if (preprocessor != null)
 			try {
 				log.info("Invoking statistical preprocessor " + preprocessor.getClass());
@@ -277,7 +277,7 @@ public abstract class Statistic {
 		return statisticParameters;
 	}
 
-	public EntryHandler getEntryHandler() {
+	public EventHandler getEntryHandler() {
 		return entryHandler;
 	}
 

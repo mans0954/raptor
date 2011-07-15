@@ -28,7 +28,7 @@ import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 
 /**
  *
@@ -41,13 +41,13 @@ public class ResourceClassificationBackgroundService implements SaveAndApplyReso
     private final Logger log = LoggerFactory.getLogger(ResourceClassificationBackgroundService.class);
 
     /** The MUA's data connection */
-    private EntryHandler entryHandler;
+    private EventHandler entryHandler;
     
     /** The ID of the currently executing service */
     private int currentExecutionId;
     
 
-    public ResourceClassificationBackgroundService(EntryHandler entryHandler){
+    public ResourceClassificationBackgroundService(EventHandler entryHandler){
     	this.entryHandler = entryHandler;        
     }
     

@@ -145,7 +145,7 @@ public class MUAProcessImpl implements MUAProcess {
     }
 
     /**
-     * Because this is perform async, the lock is not useful, its the exceptions that are.
+     * Because this is perform async, the lock is not useful (it will be released immediately), its the immediate exceptions that are.
      */
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;

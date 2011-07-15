@@ -227,7 +227,7 @@
 
 
 
-	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEntryHandler">
+	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEventHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
 	</bean>
 
