@@ -31,42 +31,42 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
-public interface EntryHandler {
+public interface EventHandler {
 
 	/**
 	 *
 	 * @param entries
 	 */
-	public void addEntries(List<Event> entries) throws StorageException;
+	public void addEvents(List<Event> entries) throws StorageException;
 
 	/**
 	 *
 	 * @param event
 	 */
-	public boolean addEntry(Event event);
+	public boolean addEvent(Event event);
 
 	/**
 	 *
 	 * @return
 	 */
-	public DateTime getLatestEntryTime();
+	public DateTime getLatestEventTime();
 
 	/**
 	 *
 	 * @return
 	 */
-	public List<Event> getEntries();
+	public List<Event> getEvents();
 
 	/**
 	 *
 	 * @param entries
 	 */
-	public void setEntries(Set<Event> entries);
+	public void setEvents(Set<Event> entries);
 
 	/**
 	 *
 	 */
-	public void removeAllEntries();
+	public void removeAllEvents();
 
 	public void update(String query, Object[] parameters) throws StorageException;
 
@@ -111,7 +111,7 @@ public interface EntryHandler {
 	 *
 	 * @return
 	 */
-	public long getNumberOfEntries();
+	public long getNumberOfEvents();
 
 	/**
 	 * @param query

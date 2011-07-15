@@ -26,7 +26,7 @@ import uk.ac.cardiff.model.event.Event;
  * @author philsmart
  *
  */
-public abstract class PushPolicy {
+public abstract class AbstractPushPolicy {
 
     public abstract boolean evaluatePolicy(List<Event> events);
 

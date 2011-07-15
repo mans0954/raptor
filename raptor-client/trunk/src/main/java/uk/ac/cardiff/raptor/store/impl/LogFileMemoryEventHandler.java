@@ -24,74 +24,95 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MemoryEntryHandler implements EntryHandler {
+public class LogFileMemoryEventHandler implements IncrementalEntryHandler {
 
 	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(MemoryEntryHandler.class);
+	private final Logger log = LoggerFactory.getLogger(MemoryEventHandler.class);
 
-	/** pointer to the last recorded entry, for incremental update */
+	/** Pointer to the last recorded entry, for incremental update. */
 	private DateTime latestEntryTime;
 
-	/** record of the last entry that was sent over SOAP */
-	private DateTime lastPublishedEntryTime;
-
-	/** set of all entries stored by this EntryHandler */
+	/** Set of all entries stored by this EntryHandler. */
 	private Set<Event> entries;
 
-	public MemoryEntryHandler() {
+	/**
+	 * Stores the set of latest unique entries. That is, those with the latest
+	 * and same DateTime, but different state (attribute values). This set is
+	 * checked when adding new entries, and is not removed when records are
+	 * removed.
+	 */
+	private Set<Event> latestEqualEntries;
+
+	public LogFileMemoryEventHandler() {
 		entries = new LinkedHashSet<Event>();
+		latestEqualEntries = new LinkedHashSet<Event>();
 	}
 
 	public void addEntries(List<Event> entries) {
 		log.debug("Current: " + this.entries.size() + " in: " + entries.size());
-		int notAdded = 0;
+
 		for (Event event : entries) {
-			boolean didAdd = addEntry(event);
-			if (didAdd == false)
-				notAdded++;
+			addEntry(event);
 
 		}
-		log.debug("Total No. of Entries {}, Lastest Entry at: {}, with {} duplicates", new Object[] { this.entries.size(), getLatestEntryTime(), notAdded });
+		log.debug("Total No. of Entries " + this.entries.size() + " Latest Entry at: " + getLatestEntryTime());
 	}
 
 	/**
-	 * Checks whether this event is already stored, if not, then it adds the
-	 * <code>event</code> to the <code>entries<code> set.
-	 *
-	 * @param event
-	 *            the event to store
+	 * First copy the hash of this entry into the <code>eventId</code> column if
+	 * its empty. Then, add to the entry set iff its a newer entry. If equal,
+	 * first check the <code>latestEqualEntries</code> set, if contained in this
+	 * set, then it has already been added, if not add.
+	 * 
+	 * @return true if this event was added to the entry handler, false
+	 *         otherwise
 	 */
 	public boolean addEntry(Event event) {
 		addEventIdIfNull(event);
-		if (!entries.contains(event)) {
+		boolean isAfter = isAfter(event);
+		boolean isEqual = isEqual(event);
+		if (isAfter) {
 			entries.add(event);
 			updateLastEntry(event);
 			return true;
-		} else {
-			return false;
+		} else if (isEqual) {
+			boolean isAlreadyInLatest = latestEqualEntries.contains(event);
+			if (isAlreadyInLatest) {
+				log.trace("Duplicated, probably same event [{}]", event);
+				return false;
+			}
+			if (!isAlreadyInLatest) {
+				entries.add(event);
+				updateLastEntry(event);
+				return true;
+			}
 		}
+		return false;
 
+	}
+	
+	public void reset() {
+		entries.clear();
+		latestEqualEntries.clear();
+		latestEntryTime = null;	
 	}
 
 	/**
 	 * Stores the hashcode of the event as the <code>eventId</code> iff there is
 	 * no existing eventId (defined as 0), and the event has a valid hashcode.
-	 *
+	 * 
 	 * @param event
 	 */
 	private void addEventIdIfNull(Event event) {
@@ -101,16 +122,6 @@ public class MemoryEntryHandler implements EntryHandler {
 		int hashCode = ReflectionHelper.getHashCodeFromEventOrNull(event);
 		if (hashCode != 0) {
 			event.setEventId(hashCode);
-		}
-	}
-
-	private void updateLastEntry(Event event) {
-		DateTime entryTime = event.getEventTime();
-		if (getLatestEntryTime() == null)
-			setLatestEntryTime(entryTime);
-		if (entryTime.isAfter(getLatestEntryTime())) {
-			setLatestEntryTime(entryTime);
-
 		}
 	}
 
@@ -130,12 +141,50 @@ public class MemoryEntryHandler implements EntryHandler {
 
 	}
 
+	private void updateLastEntry(Event entry) {
+		DateTime entryTime = entry.getEventTime();
+		if (getLatestEntryTime() == null)
+			setLatestEntryTime(entryTime);
+		if (entryTime.isAfter(getLatestEntryTime())) {
+			setLatestEntryTime(entryTime);
+			latestEqualEntries.clear();
+			latestEqualEntries.add(entry);
+		}
+		if (entryTime.isEqual(getLatestEntryTime())) {
+			latestEqualEntries.add(entry);
+		}
+	}
+
 	public void setLatestEntryTime(DateTime latestEntryTime) {
 		this.latestEntryTime = latestEntryTime;
 	}
 
 	public DateTime getLatestEntryTime() {
 		return latestEntryTime;
+	}
+
+	/**
+	 * @param authE
+	 * @return
+	 */
+	public boolean isNewerOrEqual(Event event) {
+		if (latestEntryTime == null)
+			return true;
+		if (!event.getEventTime().isBefore(latestEntryTime))
+			return true;
+		return false;
+	}
+
+	public boolean isEqual(Event event) {
+		if (latestEntryTime == null)
+			return false;
+		return event.getEventTime().isEqual(latestEntryTime);
+	}
+
+	public boolean isAfter(Event event) {
+		if (latestEntryTime == null)
+			return true;
+		return event.getEventTime().isAfter(latestEntryTime);
 	}
 
 	/**
@@ -163,84 +212,23 @@ public class MemoryEntryHandler implements EntryHandler {
 		entries.clear();
 	}
 
-	public void setLastPublishedEntryTime(DateTime lastPublishedEntryTime) {
-		this.lastPublishedEntryTime = lastPublishedEntryTime;
-	}
-
-	public DateTime getLastPublishedEntryTime() {
-		return lastPublishedEntryTime;
-	}
-
 	/**
-	 * This is a no-op method for all in-memory entry handlers
+	 * This is a no-op method for the memory entry handler
 	 */
 	public void initialise() {
 
 	}
 
-	public long getNumberOfEntries() {
+	public int getNumberOfEntries() {
 		return entries.size();
 	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query) {
-		return null;
-	}
-
-	/**
-	 * T This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query, Object[] parameters) {
-		return null;
-	}
 
 	public void setEntries(Set<Event> entries) {
 		this.entries = entries;
 
 	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters) {
-		return null;
-	}
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters, int maxNoResults) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void save(Object object) {
-
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void saveAll(Collection object) {
-
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void update(String query, Object[] parameters) {
-
-	}
 
 }

@@ -19,7 +19,7 @@ import java.util.List;
 
 import uk.ac.cardiff.model.event.Event;
 
-public class EntryNoPushPolicy extends PushPolicy{
+public class EntryNoPushPolicy extends AbstractPushPolicy{
 	
 	/** The threshold on the number of events needed before release*/
 	private int pushOnOrAfterNoEntries;

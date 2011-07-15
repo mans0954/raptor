@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
@@ -39,13 +39,10 @@ import uk.ac.cardiff.raptor.store.dao.StorageException;
  * @author philsmart
  *
  */
-public class PersistantEntryHandler implements EntryHandler {
-	// TODO can use the spring initialisation callback methods to initials the
-	// bean after all properties set etc, rather than initialising on the set
-	// method of the engine class
-
+public class PersistantEventHandler implements EventHandler {
+    
 	/** class logger. */
-	private final Logger log = LoggerFactory.getLogger(PersistantEntryHandler.class);
+	private final Logger log = LoggerFactory.getLogger(PersistantEventHandler.class);
 
 	/** data connection used to persist entries. */
 	private RaptorDataConnection dataConnection;
@@ -57,7 +54,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * prevents the addition of duplicate values */
 	private Set<Event> persistQueue;
 
-	public PersistantEntryHandler(RaptorDataConnection dataConnection) {
+	public PersistantEventHandler(RaptorDataConnection dataConnection) {
 		this.setDataConnection(dataConnection);
 		persistQueue = new HashSet<Event>();
 
@@ -69,7 +66,7 @@ public class PersistantEntryHandler implements EntryHandler {
 	 */
 	public void initialise() {
 		log.info("Persistant entry handler [{}] initialising", this);
-		log.info("Persistent data store has {} entries for [{}]", this.getNumberOfEntries(),this);
+		log.info("Persistent data store has {} entries for [{}]", this.getNumberOfEvents(),this);
 		log.info("Persistant entry handler [{}] started", this);
 	}
 
@@ -134,9 +131,9 @@ public class PersistantEntryHandler implements EntryHandler {
 	 * @param entries the list of events that are to be stored
 	 * @throws
 	 */
-	public void addEntries(List<Event> entries) throws StorageException{
+	public void addEvents(List<Event> entries) throws StorageException{
 		log.info("Persistent Entry Handler has {} entries, with {} new entries inputted, and {} exist in the queue",
-				new Object[]{this.getNumberOfEntries(), entries.size(),persistQueue.size()});
+				new Object[]{this.getNumberOfEvents(), entries.size(),persistQueue.size()});
 
 		int duplicates = 0;
 		persistQueue.addAll(entries);
@@ -160,10 +157,10 @@ public class PersistantEntryHandler implements EntryHandler {
 		    throw new StorageException("Could not persist events",e);
 		}
 		persistQueue.clear();
-		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEntries(), duplicates);
+		log.info("Total No. of Entries after addition = {}, finding {} duplicates", this.getNumberOfEvents(), duplicates);
 	}
 
-	public boolean addEntry(Event event) {
+	public boolean addEvent(Event event) {
 
 		String query ="select count(*) from "+event.getClass().getSimpleName()+" where eventTime = ? and eventId =?";
 		Object[] parameters= new Object[]{event.getEventTime().toDate(),event.getEventId()};
@@ -180,12 +177,12 @@ public class PersistantEntryHandler implements EntryHandler {
 
 	}
 
-	public List<Event> getEntries() {
+	public List<Event> getEvents() {
 		List<Event> runQuery = dataConnection.runQuery("from Event",null);
 		return runQuery;
 	}
 
-	public void removeAllEntries() {
+	public void removeAllEvents() {
 		log.error("Method removeAllEntries not yet implemented");
 	}
 
@@ -197,16 +194,16 @@ public class PersistantEntryHandler implements EntryHandler {
 		return dataConnection;
 	}
 
-	public void setEntries(Set<Event> entries) {
+	public void setEvents(Set<Event> entries) {
 
 	}
 
-	public long getNumberOfEntries() {
+	public long getNumberOfEvents() {
 		Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
 		return (Long) result;
 	}
 
-	public DateTime getLatestEntryTime(){
+	public DateTime getLatestEventTime(){
 		return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
 	}
 

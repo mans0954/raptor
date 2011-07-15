@@ -25,43 +25,42 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
-
 public class AsynchronousEntryStoragePipeline {
 
-	/** class logger */
-	private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStoragePipeline.class);
+    /** class logger */
+    private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStoragePipeline.class);
 
-	/** An ID used to track the progress of any transaction */
-	private int transactionId;
+    /** An ID used to track the progress of any transaction */
+    private int transactionId;
 
-	/** entry handler used to store entries (e.g. events)*/
-    private EntryHandler entryHandler;
+    /** entry handler used to store entries (e.g. events) */
+    private EventHandler eventHandler;
 
     /** Attribute association engine, used to attach additional attributes to events */
     private AttributeAssociationEngine attributeAssociationEngine;
 
-	public AsynchronousEntryStoragePipeline(int transactionId, EntryHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine){
-	    this.entryHandler = entryHandler;
-	    this.attributeAssociationEngine = attributeAssociationEngine;
-	    this.transactionId=transactionId;
-	}
-
-	/**
-         * Starts and shuts down the <code>storeEntryTask</code> immediately, so that when it completes
-         * it can be re-used.
-         *
-	 * @param events
-	 */
-	public void execute(List<Event> events, StoreEntriesTaskCallbackInterface callback){
-	    StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(entryHandler, attributeAssociationEngine, events,callback);
-            ExecutorService es = Executors.newSingleThreadExecutor();
-            es.submit(storeEntryTask);
-            es.shutdown();
-	}
-
+    public AsynchronousEntryStoragePipeline(int transactionId, EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine) {
+        this.eventHandler = entryHandler;
+        this.attributeAssociationEngine = attributeAssociationEngine;
+        this.transactionId = transactionId;
+    }
 
     /**
-     * @param transactionId the transactionId to set
+     * Starts and shuts down the <code>storeEntryTask</code> immediately, so that when it completes it can be re-used.
+     * 
+     * @param events
+     *            the events to store
+     */
+    public void execute(List<Event> events, StoreEntriesTaskCallbackInterface callback) {
+        StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(eventHandler, attributeAssociationEngine, events, callback);
+        ExecutorService es = Executors.newSingleThreadExecutor();
+        es.submit(storeEntryTask);
+        es.shutdown();
+    }
+
+    /**
+     * @param transactionId
+     *            the transactionId to set
      */
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
