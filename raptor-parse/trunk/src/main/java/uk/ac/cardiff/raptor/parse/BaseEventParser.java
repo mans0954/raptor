@@ -30,7 +30,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.parse.filter.ExclusionList;
 import uk.ac.cardiff.raptor.parse.filter.InclusionList;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 /**
