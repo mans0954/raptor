@@ -31,7 +31,7 @@ import org.springframework.orm.hibernate3.HibernateQueryException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.wsmodel.Suggestion;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
@@ -46,7 +46,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
 
 	/** Responsible for storing all entries (e.g. events) */
-	private EntryHandler entryHandler;
+	private EventHandler entryHandler;
 
 	/** Engine used to associate attributes to existing events in the MUA */
 	private AttributeAssociationEngine attributeAssociationEngine;
@@ -92,7 +92,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 		transactionInProgress = true;
 		try {
 			attributeAssociationEngine.associateAttributes(events);
-			entryHandler.addEntries(events);
+			entryHandler.addEvents(events);
 			log.debug("Storage task completed true, for transaction id [{}]", currentTransactionId);
 		} catch (StorageException e) {
 			log.error("Could not store events for transaction id [{}], {}", transactionId);
@@ -133,7 +133,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
      *
      */
 	public void removeAllEntries() {
-		entryHandler.removeAllEntries();
+		entryHandler.removeAllEvents();
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	 * @param entryHandler
 	 *            the entryHandler to set
 	 */
-	public void setEntryHandler(EntryHandler entryHandler) {
+	public void setEntryHandler(EventHandler entryHandler) {
 		this.entryHandler = entryHandler;
 		entryHandler.initialise();
 	}
@@ -151,7 +151,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	/**
 	 * @return the entryHandler
 	 */
-	public EntryHandler getEntryHandler() {
+	public EventHandler getEntryHandler() {
 		return entryHandler;
 	}
 

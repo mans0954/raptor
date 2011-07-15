@@ -27,7 +27,7 @@ import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
-import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
+import uk.ac.cardiff.raptor.remoting.policy.AbstractPushPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,7 +173,7 @@ public class EventReleaseEngine {
      */
     private boolean shouldRelease(Endpoint endpoint, List<Event> events) {
         boolean shouldRelease = false;
-        for (PushPolicy policy : endpoint.getPushPolicies()) {
+        for (AbstractPushPolicy policy : endpoint.getPushPolicies()) {
             if (policy.evaluatePolicy(events))
                 shouldRelease = true;
         }

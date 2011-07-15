@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine;
 
-public class ElapsedTimePushPolicy extends PushPolicy{
+public class ElapsedTimePushPolicy extends AbstractPushPolicy{
 	
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(ElapsedTimePushPolicy.class);

@@ -29,21 +29,19 @@ import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
-
-
 /**
- * @author philsmart
- *
+ * 
+ * 
  */
-public class StoreEntriesPipelineTask implements Callable<Boolean>{
+public class StoreEntriesPipelineTask implements Callable<Boolean> {
 
-	/** class logger */
-	private final Logger log = LoggerFactory.getLogger(StoreEntriesPipelineTask.class);
+    /** class logger */
+    private final Logger log = LoggerFactory.getLogger(StoreEntriesPipelineTask.class);
 
-	/** The entry handler used to store entries (e.g. events)*/
-    private EntryHandler entryHandler;
+    /** The entry handler used to store entries (e.g. events) */
+    private EventHandler eventHandler;
 
-    /** The callback interface that is called once the <code>call</code> method has completed*/
+    /** The callback interface that is called once the <code>call</code> method has completed */
     private StoreEntriesTaskCallbackInterface storeCallback;
 
     /** Attribute association engine, used to attach additional attributes to events */
@@ -52,38 +50,44 @@ public class StoreEntriesPipelineTask implements Callable<Boolean>{
     /** The events that need to be stored */
     private List<Event> events;
 
-    public StoreEntriesPipelineTask(EntryHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine,List<Event> events, StoreEntriesTaskCallbackInterface storeCallback){
+    public StoreEntriesPipelineTask(EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine, List<Event> events, StoreEntriesTaskCallbackInterface storeCallback) {
         this.storeCallback = storeCallback;
         this.attributeAssociationEngine = attributeAssociationEngine;
-        this.entryHandler = entryHandler;
+        this.eventHandler = entryHandler;
         this.events = events;
     }
 
+    /**
+     * Called to perform both attribute association using the {@link uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine} and then
+     * store the <code>events</code> using the {@link  uk.ac.cardiff.raptor.store.EventHandler}.
+     */
     public Boolean call() throws Exception {
-    	try{
-
-    	    associate();
-    	    store();
-
-    	}
-    	catch(StorageException e){
-    	    log.error("Failed to store events asynchronously {}",e.getMessage(),e);
-    	    storeCallback.storageResultCallback(new Boolean("false"));
-    	    return false;
-    	}
+        try {
+            associate();
+            store();
+        } catch (StorageException e) {
+            log.error("Failed to store events asynchronously", e);
+            storeCallback.storageResultCallback(new Boolean("false"));
+            return false;
+        }
         storeCallback.storageResultCallback(new Boolean("true"));
         return true;
     }
 
-    private void store() throws StorageException{
-        entryHandler.addEntries(events);
+    /**
+     * Stores the <code>events</code> with the configured {@link  uk.ac.cardiff.raptor.store.EventHandler}
+     * 
+     * @throws StorageException
+     */
+    private void store() throws StorageException {
+        eventHandler.addEvents(events);
     }
 
-    private void associate(){
+    private void associate() {
         try {
             attributeAssociationEngine.associateAttributes(events);
         } catch (AttributeAssociationException e) {
-            log.warn("{}",e.getMessage());
+            log.warn("{}", e.getMessage());
         }
     }
 

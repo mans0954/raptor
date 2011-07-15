@@ -28,12 +28,13 @@ import uk.ac.cardiff.model.event.Event;
  * In this way, if the number of events threshold is met before the duration
  * elapses, the <code>lastReleasedTime</code> is updated. In effect, the
  * <code>pushInterval</code> is only effective if the number of entries does not
- * suppress the threshold in the given time interval.
+ * suppress the threshold in the given time interval. However, the elapsed time will
+ * only send events if there are more than 0 events to send.
  *
  * @author philsmart
  *
  */
-public class EntryNoElapsedTimePushPolicy extends PushPolicy {
+public class EntryNoElapsedTimePushPolicy extends AbstractPushPolicy {
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(EntryNoElapsedTimePushPolicy.class);
@@ -55,6 +56,14 @@ public class EntryNoElapsedTimePushPolicy extends PushPolicy {
 		lastReleasedTime = System.currentTimeMillis();
 	}
 
+	/**
+	 * Evaluates this push policy based on both time interval since last release, and number of events.
+	 * 
+	 * @param events the events with which to evaluate the push policy.
+	 * @return true if the number of <code>events</code> are >= <code>pushOnOrAfterNoEntries</code>, or true if 
+	 *     the time since the last release exceeds <code>pushInterval</code> and the number of <code>events</code
+	 *     is greater than 0, false otherwise. 
+	 */
 	public boolean evaluatePolicy(List<Event> events) {
 		long currentTime = System.currentTimeMillis();
 		if (pushOnOrAfterNoEntries <= events.size()) {
@@ -62,13 +71,20 @@ public class EntryNoElapsedTimePushPolicy extends PushPolicy {
 			return true;
 		} else {
 			long difference = currentTime - lastReleasedTime;
-			//log.debug("ElapsedTime difference {}, pushInterval {}", difference, pushInterval);
-			if (difference >= getPushInterval()) {
+			log.trace("ElapsedTime difference {}, pushInterval {}", difference, pushInterval);
+			if (difference >= getPushInterval() && events.size()>0) {
+			        log.trace("Elapsed time passed and {} events to send",events.size());
 				lastReleasedTime = currentTime;
 				return true;
 			}
+			else if (difference >= getPushInterval() && events.size()==0){
+			    log.trace("Elapsed time passed but no events to send",events.size());
+			    lastReleasedTime = currentTime;
+			    return false;
+			}
 		}
 		return false;
+		
 	}
 
 	public void setPushInterval(long pushInterval) {

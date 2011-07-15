@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
-import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
+import uk.ac.cardiff.raptor.remoting.policy.AbstractPushPolicy;
 
 /**
  *
@@ -48,7 +48,7 @@ public class Endpoint {
 	private String serviceEndpoint;
 
 	/** A List of the PushPolicies defined for this endpoint */
-	private List<PushPolicy> pushPolicies;
+	private List<AbstractPushPolicy> pushPolicies;
 
 	/** The filter policy defined for this endpoint **/
 	private AttributeFilterPolicy attributeFilterPolicy;
@@ -94,11 +94,11 @@ public class Endpoint {
 		return attributeFilterPolicy;
 	}
 
-	public void setPushPolicies(List<PushPolicy> pushPolicies) {
+	public void setPushPolicies(List<AbstractPushPolicy> pushPolicies) {
 		this.pushPolicies = pushPolicies;
 	}
 
-	public List<PushPolicy> getPushPolicies() {
+	public List<AbstractPushPolicy> getPushPolicies() {
 		return pushPolicies;
 	}
 
