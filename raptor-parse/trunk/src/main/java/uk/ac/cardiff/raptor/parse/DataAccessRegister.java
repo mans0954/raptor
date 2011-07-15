@@ -31,7 +31,7 @@ import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
 
 /**
