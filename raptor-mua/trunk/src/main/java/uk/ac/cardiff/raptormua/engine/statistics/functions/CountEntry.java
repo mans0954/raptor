@@ -132,7 +132,7 @@ public class CountEntry extends Statistic{
 		 * reminder, or the specified start time and endtime does not completely
 		 * contain the entries.
 		 */
-		log.debug("Events: " + this.getEntryHandler().getNumberOfEntries() + ", total in buckets: " + testCount);
+		log.debug("Events: " + this.getEntryHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
 
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);

@@ -270,13 +270,17 @@ public class MUAEngine {
     }
 
     /**
-     * @param pushed
+     * If <code>pushed</code contains events to add then sent them to the <code>storageEngine</code> for
+     * processing, otherwise do nothing.
+     * 
+     * @param pushed the {@link uk.ac.cardiff.model.wsmodel.EventPushMessage} received from the client.
      * @throws TransactionInProgressException
      */
     public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
-        int transactionId = (int) (Math.random() * 1000000);
-        storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
-
+        if (pushed.getEvents().size() > 0){
+            int transactionId = (int) (Math.random() * 1000000);
+            storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+        }
     }
 
     public final void setMuaMetadata(final ServiceMetadata muaMetadata) {

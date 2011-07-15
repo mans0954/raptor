@@ -29,7 +29,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationException;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
@@ -44,7 +44,7 @@ public class SaveAndApplyResourceClassificationTask implements Callable<Boolean>
 	private final Logger log = LoggerFactory.getLogger(SaveAndApplyResourceClassificationTask.class);
 
 	/** The entry handler used to store entries (e.g. events)*/
-    private EntryHandler entryHandler;
+    private EventHandler entryHandler;
 
     /** The callback interface that is called once the <code>call</code> method has completed*/
     private SaveAndApplyResourceClassificationCallbackInterface storeCallback;
@@ -52,7 +52,7 @@ public class SaveAndApplyResourceClassificationTask implements Callable<Boolean>
     /** The list of resource metadata used to attribute resource classifications to stored events*/
     List<ResourceMetadata> resourceMetadata;
 
-    public SaveAndApplyResourceClassificationTask(EntryHandler entryHandler,List<ResourceMetadata> resourceMetadata, SaveAndApplyResourceClassificationCallbackInterface callback){
+    public SaveAndApplyResourceClassificationTask(EventHandler entryHandler,List<ResourceMetadata> resourceMetadata, SaveAndApplyResourceClassificationCallbackInterface callback){
         this.storeCallback = callback;
         this.entryHandler = entryHandler;
         this.resourceMetadata = resourceMetadata;

@@ -85,7 +85,7 @@ public class GroupByCountDistinct extends Statistic {
 			testCount += group.getValue();
 		}
 
-		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEntries(), testCount);
+		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEvents(), testCount);
 
 		if (groups.size() == 0)
 			return false;

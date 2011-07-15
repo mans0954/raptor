@@ -32,7 +32,7 @@ import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.raptor.store.EntryHandler;
+import uk.ac.cardiff.raptor.store.EventHandler;
 
 /**
  * @author philsmart Allows the storage and invocation of statistical units
@@ -48,7 +48,7 @@ public class StatisticsHandler {
         private List<Statistic> statisticalUnits;
 
         /** A reference to the entry handler that is used to access all underlying events*/
-	private EntryHandler entryHandler;
+	private EventHandler entryHandler;
 
 	/** 
 	 * Registers a List of statistics with this StatisticsHandler 
@@ -107,10 +107,10 @@ public class StatisticsHandler {
 	 */
 	private Boolean invoke(Statistic statistic) {
 		if (this.getEntryHandler() != null)
-			log.debug("Working off " + this.getEntryHandler().getNumberOfEntries() + " entries");
+			log.debug("Working off " + this.getEntryHandler().getNumberOfEvents() + " entries");
 
 		/* stop processing if there are no valid entries */
-		if (this.getEntryHandler() == null || this.getEntryHandler().getNumberOfEntries() == 0) {
+		if (this.getEntryHandler() == null || this.getEntryHandler().getNumberOfEvents() == 0) {
 			log.error("Not enough entries to perform statistic countEntryPerInterval");
 			return false;
 		}
@@ -175,7 +175,7 @@ public class StatisticsHandler {
 	 *
 	 * @param entryHandler
 	 */
-	public void setEntryHandler(EntryHandler entryHandler) {
+	public void setEntryHandler(EventHandler entryHandler) {
 		this.entryHandler = entryHandler;
 	}
 
@@ -183,7 +183,7 @@ public class StatisticsHandler {
 	 *
 	 * @return
 	 */
-	public EntryHandler getEntryHandler() {
+	public EventHandler getEntryHandler() {
 		return entryHandler;
 	}
 

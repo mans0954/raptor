@@ -82,7 +82,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
             SuggestionValues suggestionValues = new SuggestionValues();
             suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
             capabilities.setSuggestionValues(suggestionValues);
-            capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEntries());
+            capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEvents());
             List<Suggestion> possiblePostProcessors = findPostProcessors();
             log.debug("Has set {} possible post processor suggestion values",possiblePostProcessors.size());
             suggestionValues.setPossiblePostProcessors(possiblePostProcessors);
