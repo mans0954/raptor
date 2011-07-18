@@ -21,13 +21,10 @@ package uk.ac.cardiff.raptor.store;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.QueryException;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.HibernateQueryException;
+
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.wsmodel.Suggestion;
@@ -46,7 +43,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
 
 	/** Responsible for storing all entries (e.g. events) */
-	private EventHandler entryHandler;
+	private EventHandler eventHandler;
 
 	/** Engine used to associate attributes to existing events in the MUA */
 	private AttributeAssociationEngine attributeAssociationEngine;
@@ -69,7 +66,10 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	}
 
 	/**
-	 * @param events
+	 * Stores the <code>events</code> asynchronously through the {@link uk.ac.cardiff.raptor.store.EventHandler}
+	 * 
+	 * @param transactionId the numerical Id of this transaction
+	 * @param events the events to store
 	 */
 	public void performAsynchronousEntryStoragePipeline(int transactionId, List<Event> events) throws TransactionInProgressException {
 		if (transactionInProgress) {
@@ -78,7 +78,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 		log.info("Committing {} entries to the storage engine, with transaction id [{}]", events.size(), transactionId);
 		this.currentTransactionId = transactionId;
 		transactionInProgress = true;
-		AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, entryHandler, attributeAssociationEngine);
+		AsynchronousEntryStoragePipeline asyncEntryStorage = new AsynchronousEntryStoragePipeline(transactionId, eventHandler, attributeAssociationEngine);
 		asyncEntryStorage.execute(events, this);
 
 	}
@@ -92,7 +92,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 		transactionInProgress = true;
 		try {
 			attributeAssociationEngine.associateAttributes(events);
-			entryHandler.addEvents(events);
+			eventHandler.addEvents(events);
 			log.debug("Storage task completed true, for transaction id [{}]", currentTransactionId);
 		} catch (StorageException e) {
 			log.error("Could not store events for transaction id [{}], {}", transactionId);
@@ -110,7 +110,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	 * @return
 	 */
 	public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
-		List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ?", new Object[] { earliestReleaseTime });
+		List<Event> query = (List<Event>) eventHandler.query("from Event where eventTime >= ?", new Object[] { earliestReleaseTime });
 		return query;
 	}
 
@@ -124,7 +124,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	 * @return
 	 */
 	public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
-		List<Event> query = (List<Event>) entryHandler.query("from Event where eventTime >= ? order by eventTime asc", new Object[] { earliestReleaseTime },
+		List<Event> query = (List<Event>) eventHandler.query("from Event where eventTime >= ? order by eventTime asc", new Object[] { earliestReleaseTime },
 				maxNoResults);
 		return query;
 	}
@@ -133,7 +133,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
      *
      */
 	public void removeAllEntries() {
-		entryHandler.removeAllEvents();
+		eventHandler.removeAllEvents();
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	 *            the entryHandler to set
 	 */
 	public void setEntryHandler(EventHandler entryHandler) {
-		this.entryHandler = entryHandler;
+		this.eventHandler = entryHandler;
 		entryHandler.initialise();
 	}
 
@@ -152,7 +152,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 	 * @return the entryHandler
 	 */
 	public EventHandler getEntryHandler() {
-		return entryHandler;
+		return eventHandler;
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
 		for (String fieldName : possibleFieldNameValuesList) {
 			try {
 				String query = "select " + fieldName + " from Event group by (" + fieldName + ")";
-				List results = entryHandler.query(query);
+				List results = eventHandler.query(query);
 				log.trace("Looking for possible values for field {} using query [{}]",fieldName, query);
 				int noResults=0;
 				for (Object result : results) {
