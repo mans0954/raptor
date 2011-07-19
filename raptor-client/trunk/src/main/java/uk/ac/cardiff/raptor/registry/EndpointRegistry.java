@@ -25,109 +25,142 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
- * @author philsmart handles the list of attached ICAs as injected by Spring
+ * handles the list of attached endpoints as injected by Spring.
  */
 public class EndpointRegistry {
 
-	/** Class logger. */
-	private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(EndpointRegistry.class);
 
-	/** List of endpoints for invoking methods on */
-	private List<Endpoint> endpoints;
+    /** List of endpoints for invoking methods on. */
+    private List<Endpoint> endpoints;
 
-	/** Whether release information should be persisted. */
-	private boolean persistReleaseInformation;
+    /** Whether release information should be persisted. */
+    private boolean persistReleaseInformation;
 
-	/** The data connection class to use for persisting
-	 * release information
-	 */
-	private RaptorDataConnection dataConnection;
+    /** The data connection class to use for persisting release information. */
+    private RaptorDataConnection dataConnection;
 
-	public EndpointRegistry() {
-		setEndpoints(new ArrayList<Endpoint>());
-	}
+    /**
+     * Instantiates a new endpoint registry.
+     */
+    public EndpointRegistry() {
+        setEndpoints(new ArrayList<Endpoint>());
+    }
 
-	public void setEndpoints(List<Endpoint> endpoints) {
-		for (Endpoint endpoint : endpoints){
-			log.info("Registering Service Endpoint: {}, persisting event release information {}", endpoint.getServiceEndpoint(),isPersistReleaseInformation());
-			if (isPersistReleaseInformation()){
-				ReleaseInformation releaseInformation = loadReleaseInformation(endpoint);
-				if (releaseInformation!=null){
-					endpoint.setReleaseInformation(releaseInformation);
-				}
-			}
+    /**
+     * Sets the endpoints and loads {@link ReleaseInformation} for those endpoints where
+     * <code>persistReleaseInformation</code> is true.
+     * 
+     * @param endpoints the new endpoints
+     */
+    public void setEndpoints(List<Endpoint> endpoints) {
+        for (Endpoint endpoint : endpoints) {
+            log.info("Registering Service Endpoint: {}, persisting event release information {}",
+                    endpoint.getServiceEndpoint(), isPersistReleaseInformation());
+            if (isPersistReleaseInformation()) {
+                ReleaseInformation releaseInformation = loadReleaseInformation(endpoint);
+                if (releaseInformation != null) {
+                    endpoint.setReleaseInformation(releaseInformation);
+                }
+            }
 
-		}
-		this.endpoints = endpoints;
-	}
+        }
+        this.endpoints = endpoints;
+    }
 
-	public List<Endpoint> getEndpoints() {
-		return endpoints;
-	}
+    /**
+     * Gets the endpoints.
+     * 
+     * @return the endpoints
+     */
+    public List<Endpoint> getEndpoints() {
+        return endpoints;
+    }
 
+    /**
+     * Persists release information through the configured data connection if enabled.
+     */
+    public void storeReleaseInformationIfEnabled() {
+        if (!isPersistReleaseInformation()) {
+            return;
+        }
+        for (Endpoint entry : endpoints) {
+            log.debug(
+                    "Saving release information for the endpoint [{}], has persistentId {} and {} latestEqualEntrie(s)",
+                    new Object[] {entry.getServiceEndpoint(), entry.getReleaseInformation().getPersistantId(),
+                            entry.getReleaseInformation().getLatestEqualEntries().size()});
+            dataConnection.save(entry.getReleaseInformation());
+        }
 
-	public void storeReleaseInformationIfEnabled() {
-		if (!isPersistReleaseInformation())
-			return;
+    }
 
-		for (Endpoint entry : endpoints){
-		    log.debug("Saving release information for the endpoint [{}], has persistentId {} and {} latestEqualEntrie(s)",
-		            new Object[]{entry.getServiceEndpoint(),entry.getReleaseInformation().getPersistantId(), entry.getReleaseInformation().getLatestEqualEntries().size()});
-			dataConnection.save(entry.getReleaseInformation());
-		}
+    /**
+     * Loads release information for this endpoint from the configured data connection.
+     * 
+     * @param endpoint the endpoint to load release information for
+     * @return the release information
+     */
+    public ReleaseInformation loadReleaseInformation(Endpoint endpoint) {
+        List<?> releaseInfoResults =
+                dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",
+                        new Object[] {endpoint.getServiceEndpoint()});
+        if (releaseInfoResults == null) {
+            log.warn("Loading error...no release information found, new release information used");
+        }
+        if (releaseInfoResults.size() > 1) {
+            log.error("Loading error...ambiguity in the persisted release information, too many results");
+        }
+        if (releaseInfoResults.size() == 1) {
+            ReleaseInformation releaseInformaiton = (ReleaseInformation) releaseInfoResults.get(0);
+            log.info(
+                    "Loaded ReleaseInformation for {}, with latest event released time of {}, and {} latest equal entrie(s)",
+                    new Object[] {releaseInformaiton.getServiceEndpoint(),
+                            releaseInformaiton.getLastReleasedEventTime(),
+                            releaseInformaiton.getLatestEqualEntries().size()});
+            if (releaseInformaiton.getLatestEqualEntries().size() > 0) {
+                log.debug("Latest Equal Entry Is {}", releaseInformaiton.getLatestEqualEntries().iterator().next());
+            }
+            return releaseInformaiton;
+        }
+        return null;
 
-	}
+    }
 
+    /**
+     * Sets the persist release information.
+     * 
+     * @param persistReleaseInformation the persistReleaseInformation to set
+     */
+    public void setPersistReleaseInformation(boolean persistReleaseInformation) {
+        this.persistReleaseInformation = persistReleaseInformation;
+    }
 
-	public ReleaseInformation loadReleaseInformation(Endpoint endpoint){
-		List<?> releaseInfoResults = dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",new Object[]{endpoint.getServiceEndpoint()});
-		if (releaseInfoResults==null){
-			log.warn("Loading error...no release information found, blank release information used");
-		}
-		if (releaseInfoResults.size()>1){
-			log.error("Loading error...ambiguity in the persisted release information, too many results");
-		}
-		if (releaseInfoResults.size()==1){
-		        ReleaseInformation releaseInformaiton = (ReleaseInformation) releaseInfoResults.get(0);
-		        log.info("Loaded ReleaseInformation for {}, with latest event released time of {}, and {} latest equal entrie(s)",
-		                new Object[]{releaseInformaiton.getServiceEndpoint(),releaseInformaiton.getLastReleasedEventTime(),
-		                releaseInformaiton.getLatestEqualEntries().size()});
-		        if (releaseInformaiton.getLatestEqualEntries().size()>0){
-		            log.debug("Latest Equal Entry Is {}",releaseInformaiton.getLatestEqualEntries().iterator().next());
-		        }
-			return releaseInformaiton;
-		}
-		return null;
+    /**
+     * Checks if is persist release information.
+     * 
+     * @return the persistReleaseInformation
+     */
+    public boolean isPersistReleaseInformation() {
+        return persistReleaseInformation;
+    }
 
-	}
+    /**
+     * Sets the data connection.
+     * 
+     * @param dataConnection the dataConnection to set
+     */
+    public void setDataConnection(RaptorDataConnection dataConnection) {
+        this.dataConnection = dataConnection;
+    }
 
-
-	/**
-	 * @param persistReleaseInformation the persistReleaseInformation to set
-	 */
-	public void setPersistReleaseInformation(boolean persistReleaseInformation) {
-		this.persistReleaseInformation = persistReleaseInformation;
-	}
-
-	/**
-	 * @return the persistReleaseInformation
-	 */
-	public boolean isPersistReleaseInformation() {
-		return persistReleaseInformation;
-	}
-
-	/**
-	 * @param dataConnection the dataConnection to set
-	 */
-	public void setDataConnection(RaptorDataConnection dataConnection) {
-		this.dataConnection = dataConnection;
-	}
-
-	/**
-	 * @return the dataConnection
-	 */
-	public RaptorDataConnection getDataConnection() {
-		return dataConnection;
-	}
+    /**
+     * Gets the data connection.
+     * 
+     * @return the dataConnection
+     */
+    public RaptorDataConnection getDataConnection() {
+        return dataConnection;
+    }
 
 }

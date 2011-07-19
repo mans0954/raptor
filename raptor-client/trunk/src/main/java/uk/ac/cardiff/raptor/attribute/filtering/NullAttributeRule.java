@@ -21,13 +21,21 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
- * @author philsmart
+ * The Class NullAttributeRule.
  * 
+ * @author philsmart
  */
 public final class NullAttributeRule extends BaseAttributeRule {
 
+    /** The attribute id. */
     private String attributeId;
 
+    /**
+     * 
+     * 
+     * @see uk.ac.cardiff.raptor.attribute.filtering.BaseAttributeRule#filterAttribute(uk.ac.cardiff.model.event.Event,
+     *      uk.ac.cardiff.model.ServiceMetadata)
+     */
     public void filterAttribute(final Event event, final ServiceMetadata metadata) {
         final String attributeID = getAttributeId();
         if (classHasAttribute(event, attributeID)) {
@@ -36,7 +44,7 @@ public final class NullAttributeRule extends BaseAttributeRule {
     }
 
     /**
-     * Null the attribute specified by the parameter <code>attributeID</code>.
+     * Null the attribute (using reflection) specified by the parameter <code>attributeID</code>.
      * 
      * @param event the event
      * @param attributeID the attribute id
@@ -45,10 +53,20 @@ public final class NullAttributeRule extends BaseAttributeRule {
         ReflectionHelper.nullAttribute(event, attributeID);
     }
 
+    /**
+     * Sets the attribute id.
+     * 
+     * @param attributeId the new attribute id
+     */
     public void setAttributeId(final String attributeId) {
         this.attributeId = attributeId;
     }
 
+    /**
+     * Gets the attribute id.
+     * 
+     * @return the attribute id
+     */
     public String getAttributeId() {
         return attributeId;
     }

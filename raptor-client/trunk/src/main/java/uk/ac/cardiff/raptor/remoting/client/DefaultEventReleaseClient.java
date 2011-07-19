@@ -23,25 +23,17 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.registry.Endpoint;
-import uk.ac.cardiff.raptor.registry.EndpointRegistry;
 
 /**
  * The Class DefaultEventReleaseClient.
  */
-public class DefaultEventReleaseClient implements EventReleaseClient {
+public class DefaultEventReleaseClient extends AbstractEventReleaseClient {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(DefaultEventReleaseClient.class);
 
-    /** Encapsulation of all endpoints this client can communication with. */
-    private EndpointRegistry endpointRegistry;
-
-    /** The engine that performs event release to a client endpoint. */
+    /** The engine that releases events to a client endpoint. */
     private EventReleaseEngine eventReleaseEngine;
-
-    /** Whether events should be released. Defaults to true. */
-    private boolean enableEventRelease;
 
     /**
      * Instantiates a new default event release client.
@@ -69,33 +61,6 @@ public class DefaultEventReleaseClient implements EventReleaseClient {
         return success;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see uk.ac.cardiff.raptor.remoting.client.EventReleaseClient#getEndpoints()
-     */
-    public List<Endpoint> getEndpoints() {
-        return endpointRegistry.getEndpoints();
-    }
-
-    /**
-     * Sets the endpoint registry.
-     * 
-     * @param endpointRegistry the new endpoint registry
-     */
-    public void setEndpointRegistry(EndpointRegistry endpointRegistry) {
-        this.endpointRegistry = endpointRegistry;
-    }
-
-    /**
-     * Gets the endpoint registry.
-     * 
-     * @return the endpoint registry
-     */
-    public EndpointRegistry getEndpointRegistry() {
-        return endpointRegistry;
-    }
-
     /**
      * Sets the event release engine.
      * 
@@ -112,33 +77,6 @@ public class DefaultEventReleaseClient implements EventReleaseClient {
      */
     public EventReleaseEngine getEventReleaseEngine() {
         return eventReleaseEngine;
-    }
-
-    /**
-     * Sets the enable event release.
-     * 
-     * @param enableEventRelease the enableEventRelease to set
-     */
-    public void setEnableEventRelease(boolean enableEventRelease) {
-        this.enableEventRelease = enableEventRelease;
-    }
-
-    /**
-     * Checks if is enable event release.
-     * 
-     * @return the enableEventRelease
-     */
-    public boolean isEnableEventRelease() {
-        return enableEventRelease;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see uk.ac.cardiff.raptor.remoting.client.EventReleaseClient#isEnabled()
-     */
-    public boolean isEnabled() {
-        return isEnableEventRelease();
     }
 
 }

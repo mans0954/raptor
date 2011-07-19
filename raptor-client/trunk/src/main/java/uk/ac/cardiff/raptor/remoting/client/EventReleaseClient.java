@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.remoting.client;
 
 import java.util.List;
@@ -25,32 +26,29 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 
 /**
- * Sends event records using the CXF SOAP libraries
- * @author philsmart
- *
+ * Sends event records to a client endpoint
+ * 
  */
 public interface EventReleaseClient {
 
     /**
      * Release the <code>events</code> to the endpoint specified in this clients implementation
-     *
+     * 
      * @param events the <code>List</code> of events that are to be released
-     * @param ServiceMetadata
+     * @param ServiceMetadata the metadata associated to the sending service
      * @return true of the release was successful and false otherwise
      * @throws ReleaseFailureException
      */
-	public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException;
+    public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException;
 
-	/** All concrete implementations of the <code>EventReleaseClient</code> must
-	 * provide a way of accessing the list of endpoints it is communicating with
-	 *
-	 * @return a list of endpoints
-	 */
-	public List<Endpoint> getEndpoints();
+    /** Used to determine if the event release client has been enabled */
+    public boolean isEnabled();
 
-	/** Used to determine if the event release client has been enabled*/
-	public boolean isEnabled();
-
-
+    /**
+     * A way of accessing the list of endpoints it is communicating with
+     * 
+     * @return a list of endpoints
+     */
+    public List<Endpoint> getEndpoints();
 
 }

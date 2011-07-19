@@ -37,7 +37,7 @@ public class AttributeAssociationEngine {
     private final Logger log = LoggerFactory.getLogger(AttributeAssociationEngine.class);
 
     /** Defines which attributes to add, and what principal to attach to*/
-    private List<AttributeAssociationDefinition> attributeAssociationDefinitions;
+    private List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions;
 
     /**
      * Default Constructor
@@ -50,7 +50,7 @@ public class AttributeAssociationEngine {
      * Gets associated attributes for the given ...
      */
     public void associateAttributes(List<Event> events) throws AttributeAssociationException{
-        for (AttributeAssociationDefinition attributeAssociationDefinition: attributeAssociationDefinitions){
+        for (BaseAttributeAssociationDefinition attributeAssociationDefinition: attributeAssociationDefinitions){
             log.info("Attribute Association Definition [{}], is enabled [{}]",attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
 
             if (!attributeAssociationDefinition.isEnabled()){
@@ -96,9 +96,9 @@ public class AttributeAssociationEngine {
      *
      * @param attributeAssociationDefinitions the attributeAssociationDefinitions to set
      */
-    public void setAttributeAssociationDefinitions(List<AttributeAssociationDefinition> attributeAssociationDefinitions) {
+    public void setAttributeAssociationDefinitions(List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions) {
         this.attributeAssociationDefinitions = attributeAssociationDefinitions;
-        for (AttributeAssociationDefinition definition : attributeAssociationDefinitions){
+        for (BaseAttributeAssociationDefinition definition : attributeAssociationDefinitions){
               definition.initialise();
         }
     }
@@ -106,7 +106,7 @@ public class AttributeAssociationEngine {
     /**
      * @return the attributeAssociationDefinitions
      */
-    public List<AttributeAssociationDefinition> getAttributeAssociationDefinitions() {
+    public List<BaseAttributeAssociationDefinition> getAttributeAssociationDefinitions() {
         return attributeAssociationDefinitions;
     }
 

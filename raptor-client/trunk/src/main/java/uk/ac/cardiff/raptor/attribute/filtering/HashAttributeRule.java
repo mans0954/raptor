@@ -31,23 +31,27 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 
 /**
- * @author philsmart
+ * The Class HashAttributeRule.
  * 
+ * @author philsmart
  */
 public final class HashAttributeRule extends BaseAttributeRule {
 
     /** class logger. */
     private final Logger log = LoggerFactory.getLogger(HashAttributeRule.class);
 
+    /** The attribute id. */
     private String attributeId;
 
-    /** The hashing algorithm used, this property is not user definable, its fixed to SHA-256 */
+    /** The hashing algorithm used, this property is not user definable, its fixed to SHA-256. */
     private final String HASH_ALGORITHM = "SHA-256";
 
     /**
      * Hash the attribute defined by the <code>attributeId</code> tag, with the entityId name of this service.
      * 
-     * @throws AttributeFilterException
+     * @param event the event
+     * @param metadata the metadata
+     * @throws AttributeFilterException the attribute filter exception
      */
     public void filterAttribute(final Event event, final ServiceMetadata metadata) throws AttributeFilterException {
         try {
@@ -76,6 +80,8 @@ public final class HashAttributeRule extends BaseAttributeRule {
     }
 
     /**
+     * Sets the attribute id.
+     * 
      * @param attributeId the attributeId to set
      */
     public void setAttributeId(final String attributeId) {
@@ -83,6 +89,8 @@ public final class HashAttributeRule extends BaseAttributeRule {
     }
 
     /**
+     * Gets the attribute id.
+     * 
      * @return the attributeId
      */
     public String getAttributeId() {
