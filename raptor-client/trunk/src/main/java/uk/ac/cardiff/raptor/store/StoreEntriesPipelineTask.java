@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.store;
 
 import java.util.List;
@@ -50,7 +51,8 @@ public class StoreEntriesPipelineTask implements Callable<Boolean> {
     /** The events that need to be stored */
     private List<Event> events;
 
-    public StoreEntriesPipelineTask(EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine, List<Event> events, StoreEntriesTaskCallbackInterface storeCallback) {
+    public StoreEntriesPipelineTask(EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine,
+            List<Event> events, StoreEntriesTaskCallbackInterface storeCallback) {
         this.storeCallback = storeCallback;
         this.attributeAssociationEngine = attributeAssociationEngine;
         this.eventHandler = entryHandler;
@@ -58,8 +60,9 @@ public class StoreEntriesPipelineTask implements Callable<Boolean> {
     }
 
     /**
-     * Called to perform both attribute association using the {@link uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine} and then
-     * store the <code>events</code> using the {@link  uk.ac.cardiff.raptor.store.EventHandler}.
+     * Called to perform both attribute association using the
+     * {@link uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine} and then store the <code>events</code>
+     * using the {@link uk.ac.cardiff.raptor.store.EventHandler}.
      */
     public Boolean call() throws Exception {
         try {
@@ -75,7 +78,7 @@ public class StoreEntriesPipelineTask implements Callable<Boolean> {
     }
 
     /**
-     * Stores the <code>events</code> with the configured {@link  uk.ac.cardiff.raptor.store.EventHandler}
+     * Stores the <code>events</code> with the configured {@link uk.ac.cardiff.raptor.store.EventHandler}
      * 
      * @throws StorageException
      */
@@ -83,6 +86,10 @@ public class StoreEntriesPipelineTask implements Callable<Boolean> {
         eventHandler.addEvents(events);
     }
 
+    /**
+     * Processes the set <code>events</code> through the
+     * {@link uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine}
+     */
     private void associate() {
         try {
             attributeAssociationEngine.associateAttributes(events);
