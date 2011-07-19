@@ -111,7 +111,7 @@
 		this bean config kicks of the singleton engine instance which is then
 		used by all services of the ICA
 	-->
-	<bean id="CaptureEngine" class="uk.ac.cardiff.raptorica.engine.ICAEngine">
+	<bean id="CaptureEngine" class="uk.ac.cardiff.raptorica.engine.ICAEngine" init-method="initialise">
 		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
 		<property name="eventReleaseClient"><ref bean="eventReleaseClient"></ref></property>
 		<property name="icaMetadata"><ref bean="ICAMetadata"></ref></property>
