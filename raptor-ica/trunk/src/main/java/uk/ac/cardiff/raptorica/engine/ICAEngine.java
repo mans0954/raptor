@@ -16,118 +16,144 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorica.engine;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-import uk.ac.cardiff.raptor.parse.BaseEventParser;
-import uk.ac.cardiff.raptor.parse.DataAccessRegister;
-import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
-import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.parse.BaseEventParser;
+import uk.ac.cardiff.raptor.parse.DataAccessRegister;
+import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
+import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 
 /**
+ * The Class ICAEngine.
+ * 
  * @author philsmart
- *
+ * 
  *         Responsible for ALL low level capture operations
  */
 public class ICAEngine {
 
-	/** Class Logger */
-	private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
+    /** Class Logger. */
+    private final Logger log = LoggerFactory.getLogger(ICAEngine.class);
 
-	/** The register that holds parsing agents and their configuration*/
-	private DataAccessRegister dataAccessRegister;
+    /** The register that holds parsing agents and their configuration. */
+    private DataAccessRegister dataAccessRegister;
 
-	/** Client for sending events to a Raptor server component. For example, an MUA*/
-	private EventReleaseClient eventReleaseClient;
+    /** Client for sending events to a Raptor server component. For example, an MUA */
+    private EventReleaseClient eventReleaseClient;
 
-	/** Meatadata about this client*/
-	private ServiceMetadata icaMetadata;
+    /** Meatadata about this client. */
+    private ServiceMetadata icaMetadata;
 
-	public ICAEngine() {
-		log.info("ICA Capture Engine is running...");
-	}
+    /**
+     * Instantiates a new iCA engine.
+     */
+    public ICAEngine() {
 
-	public void capturePerform() throws Exception {
-		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
-			log.info("Capturing from {}", parser);
-			parser.parse();
-		}
-	}
+    }
 
+    public void initialise() {
+        log.info("ICA Capture Engine [{}] is running for {}", icaMetadata.getEntityId(), icaMetadata.getServiceName());
+    }
 
-	public void garbageCollect() {
-		dataAccessRegister.garbageCollect(eventReleaseClient.getEndpoints());
-	}
+    /**
+     * Capture perform.
+     * 
+     * @throws Exception the exception
+     */
+    public void capturePerform() throws Exception {
+        for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
+            log.info("Capturing from {}", parser);
+            parser.parse();
+        }
+    }
 
+    /**
+     * Garbage collect.
+     */
+    public void garbageCollect() {
+        dataAccessRegister.garbageCollect(eventReleaseClient.getEndpoints());
+    }
 
-	/**
-	 * This method removes all stored entries, in this way the ICA must only
-	 * talk to one endpoint, otherwise the operation is nonmonotoinc whereas it
-	 * should be monotonic remove this method if more sophisticated operation is
-	 * desired.
-	 */
-	private void retrieveTransactionFinished() {
-		log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...");
-		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
-		    parser.removeAllEntries();
-		}
-		log.debug("Retrieve Transaction Finished, entries are being removed from the ICA...done");
+    /**
+     * Converts all information from all modules into a single list that is sent to the release engine.
+     * 
+     * @return true, if successful
+     */
+    public boolean release() {
+        List<Event> eventsToSend = new ArrayList<Event>();
+        for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
+            eventsToSend.addAll(parser.getAuthentications());
+        }
+        boolean success = false;
+        try {
+            success = eventReleaseClient.release(eventsToSend, getIcaMetadata());
+        } catch (ReleaseFailureException e) {
+            log.error("Release failed ", e);
+        }
+        return success;
+    }
 
-	}
+    /**
+     * Sets the ica metadata.
+     * 
+     * @param icaMetadata the new ica metadata
+     */
+    public void setIcaMetadata(ServiceMetadata icaMetadata) {
+        this.icaMetadata = icaMetadata;
+    }
 
-	/**
-	 * Converts all information from all modules into a single list that is sent
-	 * to the release engine
-	 *
-	 * @return
-	 */
-	public boolean release() {
-		List<Event> eventsToSend = new ArrayList<Event>();
-		for (BaseEventParser parser : getDataAccessRegister().getParsingModules()){
-			eventsToSend.addAll(parser.getAuthentications());
-		}
+    /**
+     * Gets the ica metadata.
+     * 
+     * @return the ica metadata
+     */
+    public ServiceMetadata getIcaMetadata() {
+        return icaMetadata;
+    }
 
-		boolean success = false;
-		try {
-			success = eventReleaseClient.release(eventsToSend, getIcaMetadata());
-		} catch (ReleaseFailureException e) {
-			log.error("Release failed ", e);
-		}
-		return success;
-	}
+    /**
+     * Sets the event release client.
+     * 
+     * @param eventReleaseClient the new event release client
+     */
+    public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
+        this.eventReleaseClient = eventReleaseClient;
+    }
 
-	public void setIcaMetadata(ServiceMetadata icaMetadata) {
-		this.icaMetadata = icaMetadata;
-	}
+    /**
+     * Gets the event release client.
+     * 
+     * @return the event release client
+     */
+    public EventReleaseClient getEventReleaseClient() {
+        return eventReleaseClient;
+    }
 
-	public ServiceMetadata getIcaMetadata() {
-		return icaMetadata;
-	}
+    /**
+     * Sets the data access register.
+     * 
+     * @param dataAccessRegister the new data access register
+     */
+    public void setDataAccessRegister(DataAccessRegister dataAccessRegister) {
+        this.dataAccessRegister = dataAccessRegister;
+    }
 
-	public void setEventReleaseClient(EventReleaseClient eventReleaseClient) {
-		this.eventReleaseClient = eventReleaseClient;
-	}
-
-	public EventReleaseClient getEventReleaseClient() {
-		return eventReleaseClient;
-	}
-
-	public void setDataAccessRegister(DataAccessRegister dataAccessRegister) {
-		this.dataAccessRegister = dataAccessRegister;
-	}
-
-	public DataAccessRegister getDataAccessRegister() {
-		return dataAccessRegister;
-	}
-
+    /**
+     * Gets the data access register.
+     * 
+     * @return the data access register
+     */
+    public DataAccessRegister getDataAccessRegister() {
+        return dataAccessRegister;
+    }
 
 }

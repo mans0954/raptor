@@ -529,7 +529,7 @@
 				<version>2.5</version>
 				<executions>
 					<execution>
-						<id>copy-resources-keys</id>
+						<id>copy-resources-conf</id>
 						<!-- here the phase you need -->
 						<phase>prepare-package</phase>
 						<goals>

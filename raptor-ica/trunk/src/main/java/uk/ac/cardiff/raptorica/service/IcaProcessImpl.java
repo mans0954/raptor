@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorica.service;
 
 import java.util.concurrent.locks.Lock;
@@ -24,104 +25,111 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.raptorica.engine.ICAEngine;
 
 /**
+ * The Class IcaProcessImpl.
+ * 
  * @author philsmart
- *
+ * 
  *         main service suite for the ICA
  */
 public class IcaProcessImpl implements IcaProcess {
 
-	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(IcaProcessImpl.class);
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(IcaProcessImpl.class);
 
-	/** The engine responsible for all core ICA functions*/
-	private ICAEngine engine;
+    /** The engine responsible for all core ICA functions. */
+    private ICAEngine engine;
 
-	/** how long any retrieve method should wait before it returns an empty set */
-	private final int TIMEOUT = 10000;
+    /** How long any retrieve method should wait before it returns an empty set. */
+    private final int TIMEOUT = 10000;
 
-	/**
-	 * ReentrantLock to prevent both capture and retrieve at the same time
-	 */
-	private final Lock lockR = new ReentrantLock();
+    /** ReentrantLock to prevent both capture and retrieve at the same time. */
+    private final Lock lockR = new ReentrantLock();
 
-	/**
-	 * This class initiates the <code>CapturePerform</code> method of the
-	 * <code>CaptureEngine</code> once it obtains a lock from the
-	 * <code>Lock</code> object. Hence, the processImpl can not both capture and
-	 * send entries at the same time. Which prevents concurrency issues.
-	 *
-	 * (non-Javadoc)
-	 *
-	 * @see main.uk.ac.cf.service.ICAProcess#capture()
-	 */
-	public void capture() {
-		if (lockR.tryLock()) {
-			try {
-				log.info("[--Running Capture--]");
-				long start = System.currentTimeMillis();
-				engine.capturePerform();
-				long end = System.currentTimeMillis();
-				log.info("[--Capture Success, taking {} ms--]", (end - start));
-			} catch (Exception e) {
-				log.error("",e);
-			} finally {
-				lockR.unlock();
-			}
-		}
-		else{
-			log.warn("Lock was hit for method [capture]");
-		}
+    /**
+     * This class initiates the <code>CapturePerform</code> method of the <code>CaptureEngine</code> once it obtains a
+     * lock from the <code>lockR</code> object. Hence, the <code>processImpl</code> can not both capture and send
+     * entries at the same time - which prevents concurrency issues.
+     * 
+     * 
+     * @see main.uk.ac.cf.service.ICAProcess#capture()
+     */
+    public void capture() {
+        if (lockR.tryLock()) {
+            try {
+                log.info("[--Running Capture--]");
+                long start = System.currentTimeMillis();
+                engine.capturePerform();
+                long end = System.currentTimeMillis();
+                log.info("[--Capture Success, taking {} ms--]", (end - start));
+            } catch (Exception e) {
+                log.error("", e);
+            } finally {
+                lockR.unlock();
+            }
+        } else {
+            log.trace("Lock was hit for method [capture]");
+        }
 
-	}
+    }
 
-	/**
-	 * Initiates a process on the <code>engine</code> that removes events from the
-	 * <code>entryHandler</code> iff they have been released to all attached
-	 * endpoints.
-	 */
-	public void garbageCollect() {
-		if (lockR.tryLock()) {
-			try {
-				log.info("[--GC. Running Event Garbage Collection--]");
-				long start = System.currentTimeMillis();
-				engine.garbageCollect();
-				long end = System.currentTimeMillis();
-				log.info("[--GC. Event Garbage Collection Success, taking {} ms--]", (end - start));
-			} catch (Exception e) {
-				log.error("",e);
-			} finally {
-				lockR.unlock();
-			}
-		}
-		else{
-			log.warn("Lock was hit for method [garbageCollect]");
-		}
+    /**
+     * Initiates a process on the <code>engine</code> that removes events from the <code>eventHandler</code> iff they
+     * have been released to all attached <code>Endpoint</code>s.
+     */
+    public void garbageCollect() {
+        if (lockR.tryLock()) {
+            try {
+                log.info("[--EGC. Running Event Garbage Collection--]");
+                long start = System.currentTimeMillis();
+                engine.garbageCollect();
+                long end = System.currentTimeMillis();
+                log.info("[--EGC. Event Garbage Collection Success, taking {} ms--]", (end - start));
+            } catch (Exception e) {
+                log.error("", e);
+            } finally {
+                lockR.unlock();
+            }
+        } else {
+            log.trace("Lock was hit for method [garbageCollect]");
+        }
 
-	}
+    }
 
-	public void release(){
-		if (lockR.tryLock()) {
-			try {
-				engine.release();
-			} catch (Exception e) {
-				log.error(e.getMessage());
-				e.printStackTrace();
-			} finally {
-				lockR.unlock();
-			}
-		}
-		else{
-			log.warn("Lock was hit for method [release]");
-		}
-	}
+    /**
+     * Release the currently stored set of <code>Event<code>s to the registered
+     * set of <code>Endpoint</code>s if they match the policies set on them.
+     */
+    public void release() {
+        if (lockR.tryLock()) {
+            try {
+                engine.release();
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                e.printStackTrace();
+            } finally {
+                lockR.unlock();
+            }
+        } else {
+            log.trace("Lock was hit for method [release]");
+        }
+    }
 
-	public void setEngine(ICAEngine engine) {
-		log.debug("Setting ICA CORE Engine");
-		this.engine = engine;
-	}
+    /**
+     * Sets the engine.
+     * 
+     * @param engine the new engine
+     */
+    public void setEngine(ICAEngine engine) {
+        this.engine = engine;
+    }
 
-	public ICAEngine getEngine() {
-		return engine;
-	}
+    /**
+     * Gets the engine.
+     * 
+     * @return the engine
+     */
+    public ICAEngine getEngine() {
+        return engine;
+    }
 
 }
