@@ -31,7 +31,7 @@ import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.parse.filter.ExclusionList;
 import uk.ac.cardiff.raptor.parse.filter.InclusionList;
 import uk.ac.cardiff.raptor.store.EventHandler;
-import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
+import uk.ac.cardiff.raptor.store.IncrementalEventHandler;
 
 /**
  * @author philsmart
@@ -43,7 +43,7 @@ public abstract class BaseEventParser {
 	private final Logger log = LoggerFactory.getLogger(BaseEventParser.class);
 
 	/** The handler that is responsible for storing events */
-	protected IncrementalEntryHandler entryHandler;
+	protected IncrementalEventHandler entryHandler;
 
 	/** A list of <fieldname,value> pairs that should be excluded during parsing */
 	private ExclusionList exclusionList;
@@ -133,7 +133,7 @@ public abstract class BaseEventParser {
 	 *
 	 * @param entryHandler
 	 */
-	public void setEntryHandler(IncrementalEntryHandler entryHandler) {
+	public void setEntryHandler(IncrementalEventHandler entryHandler) {
 		this.entryHandler = entryHandler;
 		entryHandler.initialise();
 	}
@@ -143,7 +143,7 @@ public abstract class BaseEventParser {
 	 *
 	 * @return
 	 */
-	public IncrementalEntryHandler getEntryHandler() {
+	public IncrementalEventHandler getEntryHandler() {
 		return entryHandler;
 	}
 
