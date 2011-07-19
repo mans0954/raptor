@@ -30,13 +30,13 @@ import java.util.Set;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.IncrementalEntryHandler;
+import uk.ac.cardiff.raptor.store.IncrementalEventHandler;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LogFileMemoryEventHandler implements IncrementalEntryHandler {
+public class LogFileMemoryEventHandler implements IncrementalEventHandler {
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(MemoryEventHandler.class);

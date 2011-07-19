@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.store.dao;
 
 import java.sql.SQLException;
@@ -40,6 +41,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
     /** hibernate template to persist classes */
     private HibernateTemplate hibernateTemplate;
 
+    @SuppressWarnings("unused")
     private SessionFactory sessionFactory;
 
     /** class logger */
@@ -91,7 +93,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
             }
         });
     }
-    
+
     public Object runQueryUnique(String query, Object[] parameters) throws DataAccessException {
         if (parameters != null)
             log.trace("Query to db, {}, with params [{}]", query, Arrays.asList(parameters));
@@ -111,7 +113,6 @@ public class DefaultDataConnection implements RaptorDataConnection {
         this.sessionFactory = sessionFactory;
         this.hibernateTemplate = new HibernateTemplate(sessionFactory);
     }
-
 
     @SuppressWarnings("rawtypes")
     @Override

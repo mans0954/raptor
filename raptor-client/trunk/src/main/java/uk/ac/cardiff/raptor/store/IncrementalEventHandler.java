@@ -30,7 +30,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
 
-public interface IncrementalEntryHandler {
+public interface IncrementalEventHandler {
 
 	/**
 	 *
