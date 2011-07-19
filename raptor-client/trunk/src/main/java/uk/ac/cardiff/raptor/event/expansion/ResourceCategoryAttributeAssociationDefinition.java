@@ -16,8 +16,8 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.event.expansion;
 
+package uk.ac.cardiff.raptor.event.expansion;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,61 +28,59 @@ import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 
 /**
+ * The Class ResourceCategoryAttributeAssociationDefinition.
+ * 
  * @author philsmart
- *
  */
-public class ResourceCategoryAttributeAssociationDefinition extends AttributeAssociationDefinition{
-
+public class ResourceCategoryAttributeAssociationDefinition extends BaseAttributeAssociationDefinition {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(ResourceCategoryAttributeAssociationDefinition.class);
 
-    /** The data connector used to acquire the attributes*/
+    /** The data connector used to acquire the attributes. */
     private RaptorDataConnection dataConnection;
 
-
-    public void initialise(){
+    /**
+     * @see uk.ac.cardiff.raptor.event.expansion.BaseAttributeAssociationDefinition#initialise()
+     */
+    public void initialise() {
     }
 
-
-
-    /**
-     * @param event
-     */
+    @Override
     public boolean associate(Event event) {
 
-       ResourceMetadata resourceMetadata = null;
-       Object result =  dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?", new Object[]{event.getResourceId()});
-       if (result !=null && result instanceof ResourceMetadata){
-           resourceMetadata = (ResourceMetadata) result;
-           if (resourceMetadata.isExternal()){
-               event.setResourceIdCategory(2);
-           }
-           else if (resourceMetadata.isInternal()){
-               event.setResourceIdCategory(1);
-           }
-           return true;
-       }
-       else{
-           ResourceMetadata resourceNew = new ResourceMetadata();
-           resourceNew.setExternal(true);
-           resourceNew.setInternal(false);
-           resourceNew.setResourceId(event.getResourceId());
-           event.setResourceIdCategory(2);
-           try{
-               dataConnection.save(resourceNew);
-           }
-           catch(DataAccessException e){
-               log.error("Could not save new resource metadata {}",e.getMessage());
-               return false;
-           }
-           return true;
-       }
+        ResourceMetadata resourceMetadata = null;
+        Object result =
+                dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?",
+                        new Object[] {event.getResourceId()});
+        if (result != null && result instanceof ResourceMetadata) {
+            resourceMetadata = (ResourceMetadata) result;
+            if (resourceMetadata.isExternal()) {
+                event.setResourceIdCategory(2);
+            } else if (resourceMetadata.isInternal()) {
+                event.setResourceIdCategory(1);
+            }
+            return true;
+        } else {
+            ResourceMetadata resourceNew = new ResourceMetadata();
+            resourceNew.setExternal(true);
+            resourceNew.setInternal(false);
+            resourceNew.setResourceId(event.getResourceId());
+            event.setResourceIdCategory(2);
+            try {
+                dataConnection.save(resourceNew);
+            } catch (DataAccessException e) {
+                log.error("Could not save new resource metadata {}", e.getMessage());
+                return false;
+            }
+            return true;
+        }
 
     }
 
-
     /**
+     * Sets the class to add.
+     * 
      * @param classToAdd the classToAdd to set
      */
     public void setClassToAdd(Class<?> classToAdd) {
@@ -90,6 +88,8 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
     }
 
     /**
+     * Gets the class to add.
+     * 
      * @return the classToAdd
      */
     public Class<?> getClassToAdd() {
@@ -97,6 +97,8 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
     }
 
     /**
+     * Sets the associate with class.
+     * 
      * @param associateWithClass the associateWithClass to set
      */
     public void setAssociateWithClass(String associateWithClass) {
@@ -104,31 +106,30 @@ public class ResourceCategoryAttributeAssociationDefinition extends AttributeAss
     }
 
     /**
+     * Gets the associate with class.
+     * 
      * @return the associateWithClass
      */
     public String getAssociateWithClass() {
         return associateWithClass;
     }
 
-
-
     /**
+     * Sets the data connection.
+     * 
      * @param dataConnection the dataConnection to set
      */
     public void setDataConnection(RaptorDataConnection dataConnection) {
         this.dataConnection = dataConnection;
     }
 
-
-
     /**
+     * Gets the data connection.
+     * 
      * @return the dataConnection
      */
     public RaptorDataConnection getDataConnection() {
         return dataConnection;
     }
-
-
-
 
 }

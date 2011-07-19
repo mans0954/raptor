@@ -16,22 +16,35 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.attribute.filtering.match;
 
 /**
+ * The Class MatchRule.
+ * 
  * @author philsmart
- *
  */
 public class MatchRule {
 
+    /** The enabled. */
     private boolean enabled;
 
-    public void setEnabled(boolean enabled) {
-	this.enabled = enabled;
+    /**
+     * Sets whether this rule is enabled.
+     * 
+     * @param enabled the new enabled
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
 
+    /**
+     * Checks if this rule is enabled.
+     * 
+     * @return true, if is enabled
+     */
     public boolean isEnabled() {
-	return enabled;
+        return enabled;
     }
 
 }

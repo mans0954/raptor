@@ -63,7 +63,8 @@ public class AttrributeFilterEngine {
      * @param attributeRule
      * @param metadata
      */
-    private void filterAttributes(final Event event, final BaseAttributeRule attributeRule, final ServiceMetadata metadata) {
+    private void filterAttributes(final Event event, final BaseAttributeRule attributeRule,
+            final ServiceMetadata metadata) {
         try {
             if (attributeRule.shouldApply(event.getClass())) {
                 attributeRule.filterAttribute(event, metadata);
@@ -73,7 +74,13 @@ public class AttrributeFilterEngine {
         }
     }
 
-    private List<Event> clone(final List<Event> events) {
+    /**
+     * Clones the list <code>events</code>
+     * 
+     * @param events the events to clone
+     * @return a deep cloned set of <code>Event</code>s
+     */
+    private final List<Event> clone(final List<Event> events) {
         final List<Event> clonedSet = new ArrayList<Event>();
         for (final Event event : events) {
             clonedSet.add(event.copy());

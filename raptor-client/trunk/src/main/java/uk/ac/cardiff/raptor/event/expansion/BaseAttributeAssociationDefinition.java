@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.event.expansion;
 
 import org.slf4j.Logger;
@@ -23,67 +24,80 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 
-
 /**
+ * The Class AttributeAssociationDefinition.
+ * 
  * @author philsmart
- *
  */
-public abstract class AttributeAssociationDefinition {
+public abstract class BaseAttributeAssociationDefinition {
 
     /** Class logger. */
-    private final Logger log = LoggerFactory.getLogger(AttributeAssociationDefinition.class);
+    private final Logger log = LoggerFactory.getLogger(BaseAttributeAssociationDefinition.class);
 
-    /** Human readable name for this definition*/
-    private String definiationName;
+    /** Human readable name for this definition. */
+    private String definitionName;
 
-    /** Whether to apply the attribute association*/
+    /** Whether to apply the attribute association. */
     private boolean enabled;
 
-    /** The class type that these attribute definitions are attached to*/
+    /** The class type that these attribute definitions are attached to. */
     protected Class<?> classToAdd;
 
-    /** The class type that this attribute association is applicable for */
+    /** The class type that this attribute association is applicable for. */
     protected String associateWithClass;
 
+    /**
+     * Associate additional attributes to the <code>event</code>
+     * 
+     * @param event the event
+     * @return true, if successful, false otherwise
+     */
     public abstract boolean associate(Event event);
 
+    /**
+     * Initialise this definition.
+     */
     public abstract void initialise();
 
-
     /**
+     * Sets whether this definition is enabled.
+     * 
      * @param enabled the enabled to set
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-
-
     /**
+     * Checks if this definition is enabled.
+     * 
      * @return the enabled
      */
     public boolean isEnabled() {
         return enabled;
     }
 
-
     /**
+     * Sets the definition name.
+     * 
      * @param definiationName the definiationName to set
      */
     public void setDefiniationName(String definiationName) {
-        this.definiationName = definiationName;
+        this.definitionName = definiationName;
     }
 
-
-
     /**
+     * Gets the definition name.
+     * 
      * @return the definiationName
      */
     public String getDefiniationName() {
-        return definiationName;
+        return definitionName;
     }
 
     /**
+     * Sets the class to add.
+     * 
      * @param classToAdd the classToAdd to set
      */
     public void setClassToAdd(Class<?> classToAdd) {
@@ -91,6 +105,8 @@ public abstract class AttributeAssociationDefinition {
     }
 
     /**
+     * Gets the class to add.
+     * 
      * @return the classToAdd
      */
     public Class<?> getClassToAdd() {
@@ -98,6 +114,8 @@ public abstract class AttributeAssociationDefinition {
     }
 
     /**
+     * Sets the associate with class.
+     * 
      * @param associateWithClass the associateWithClass to set
      */
     public void setAssociateWithClass(String associateWithClass) {
@@ -105,12 +123,12 @@ public abstract class AttributeAssociationDefinition {
     }
 
     /**
+     * Gets the associate with class.
+     * 
      * @return the associateWithClass
      */
     public String getAssociateWithClass() {
         return associateWithClass;
     }
-
-
 
 }

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
+
 package uk.ac.cardiff.raptor.event.expansion;
 
 import java.util.List;
@@ -30,116 +28,131 @@ import uk.ac.cardiff.raptor.event.expansion.connector.DataConnector;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
 /**
+ * The Class PrincipalAttributeAssociationDefinition.
+ * 
  * @author philsmart
- *
  */
-public class PrincipalAttributeAssociationDefinition extends AttributeAssociationDefinition{
+public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssociationDefinition {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(ResourceCategoryAttributeAssociationDefinition.class);
 
-    /** The name of the field the subject's principal should be extracted from*/
+    /** The name of the field the subject's principal should be extracted from. */
     private String subjectPrincipalField;
 
+    /** The list of lookup attributes. */
     private List<AttributeLookup> lookupAttributes;
 
-    /** The data connector used to acquire the attributes*/
+    /** The data connector used to acquire the attributes. */
     private DataConnector dataConnector;
 
-    /** The ldap search filter template*/
+    /** The ldap search filter template. */
     private String searchFilterTemplate;
 
     /**
-     * @return
+     * Gets the source attributes as an array.
+     * 
+     * @return the source attributes as array
      */
     public String[] getSourceAttributesAsArray() {
         String[] sourceAttributes = new String[lookupAttributes.size()];
-        int i=0;
-        for (AttributeLookup lookupAttribute : lookupAttributes){
+        int i = 0;
+        for (AttributeLookup lookupAttribute : lookupAttributes) {
             sourceAttributes[i++] = lookupAttribute.getSourceAttributeName();
         }
         return sourceAttributes;
     }
 
-    public void initialise(){
+    /**
+     * 
+     * @see uk.ac.cardiff.raptor.event.expansion.BaseAttributeAssociationDefinition#initialise()
+     */
+    public void initialise() {
         dataConnector.initialise();
 
     }
 
-
     /**
-     * @param attributeSourceName
-     * @return
+     * Gets the internal attribute name.
+     * 
+     * @param attributeSourceName the attribute source name
+     * @return the internal attribute name
+     * @throws AttributeAssociationException the attribute association exception
      */
-    public String getInternalAttributeName(String attributeSourceName) throws AttributeAssociationException{
-        for (AttributeLookup lookupAttribute : lookupAttributes){
-               if (lookupAttribute.getSourceAttributeName().equals(attributeSourceName))
-                   return lookupAttribute.getInternalAttributeName();
+    public String getInternalAttributeName(String attributeSourceName) throws AttributeAssociationException {
+        for (AttributeLookup lookupAttribute : lookupAttributes) {
+            if (lookupAttribute.getSourceAttributeName().equals(attributeSourceName)) {
+                return lookupAttribute.getInternalAttributeName();
+            }
         }
-        throw new AttributeAssociationException("Source attribute "+attributeSourceName+" was not found in the attribute association mappings");
+        throw new AttributeAssociationException("Source attribute " + attributeSourceName
+                + " was not found in the attribute association mappings");
     }
 
-
-    private void populate(Map<String,String> attributes, Event event) throws InstantiationException, IllegalAccessException{
+    /**
+     * Populates fields in the <code>event</code> from the values in <code>attributes</code>
+     * 
+     * @param attributes the attributes
+     * @param event the event
+     * @throws InstantiationException the instantiation exception
+     * @throws IllegalAccessException the illegal access exception
+     */
+    private void populate(Map<String, String> attributes, Event event) throws InstantiationException,
+            IllegalAccessException {
 
         Object classToPopulate = getClassToAdd().newInstance();
 
-        for (Map.Entry<String,String> entry : attributes.entrySet()){
+        for (Map.Entry<String, String> entry : attributes.entrySet()) {
             String attributeSourceName = entry.getKey();
             String attributeValue = entry.getValue();
-            log.trace("source [{}], value [{}]",attributeSourceName,attributeValue);
-            try{
+            log.trace("source [{}], value [{}]", attributeSourceName, attributeValue);
+            try {
                 String internalFieldName = getInternalAttributeName(attributeSourceName);
                 ReflectionHelper.setValueOnObject(internalFieldName, attributeValue, classToPopulate);
-            }
-            catch(AttributeAssociationException e){
-                log.warn("Error trying to populate internal model. {}",e.getMessage());
+            } catch (AttributeAssociationException e) {
+                log.warn("Error trying to populate internal model. {}", e.getMessage());
             }
         }
 
-        //now attach the object where appropriate on the current <code>Event</code> object
-        ReflectionHelper.attachObjectTo(classToPopulate,event);
+        // now attach the object where appropriate on the current <code>Event</code> object
+        ReflectionHelper.attachObjectTo(classToPopulate, event);
 
-       // log.debug("{}",event);
     }
 
-    /**
-     * @param event
-     */
+    @Override
     public boolean associate(Event event) {
-       // log.debug("{},v {}",event.getClass().getCanonicalName(),associateWithClass.getClass().getCanonicalName());
-        if (!event.getClass().getCanonicalName().equals(associateWithClass)){
+
+        if (!event.getClass().getCanonicalName().equals(associateWithClass)) {
             return false;
         }
 
         Object principalObject = ReflectionHelper.getValueFromObject(getSubjectPrincipalField(), event);
         String principal = null;
-        if (principalObject instanceof String){
-            principal = (String)principalObject;
+        if (principalObject instanceof String) {
+            principal = (String) principalObject;
         }
-        if (principal!=null){
+        if (principal != null) {
             try {
-                 dataConnector.setReturnAttributes(getSourceAttributesAsArray());
-                 dataConnector.setSearchFilterTemplate(searchFilterTemplate);
-                 Map<String, String> attributes = dataConnector.lookup(principal);
-                 populate(attributes,event);
-
-                 return true;
+                dataConnector.setReturnAttributes(getSourceAttributesAsArray());
+                dataConnector.setSearchFilterTemplate(searchFilterTemplate);
+                Map<String, String> attributes = dataConnector.lookup(principal);
+                populate(attributes, event);
+                return true;
             } catch (AttributeAssociationException e) {
-                log.error("Association error for principal [{}], {}",principal,e.getMessage());
+                log.error("Association error for principal [{}], {}", principal, e.getMessage());
             } catch (InstantiationException e) {
-                log.warn("Could not populate event [{}], {}",event,e.getMessage());
+                log.warn("Could not populate event [{}], {}", event, e.getMessage());
             } catch (IllegalAccessException e) {
-                log.warn("Could not populate event [{}], {}",event,e.getMessage());
+                log.warn("Could not populate event [{}], {}", event, e.getMessage());
             }
         }
         return false;
 
     }
 
-
-
     /**
+     * Sets the subject principal field.
+     * 
      * @param subjectPrincipalField the subjectPrincipalField to set
      */
     public void setSubjectPrincipalField(String subjectPrincipalField) {
@@ -147,6 +160,8 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Gets the subject principal field.
+     * 
      * @return the subjectPrincipalField
      */
     public String getSubjectPrincipalField() {
@@ -154,6 +169,8 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Sets the lookup attributes.
+     * 
      * @param lookupAttributes the lookupAttributes to set
      */
     public void setLookupAttributes(List<AttributeLookup> lookupAttributes) {
@@ -161,42 +178,45 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Gets the lookup attributes.
+     * 
      * @return the lookupAttributes
      */
     public List<AttributeLookup> getLookupAttributes() {
         return lookupAttributes;
     }
 
-
     /**
+     * Sets the data connector.
+     * 
      * @param dataConnector the dataConnector to set
      */
     public void setDataConnector(DataConnector dataConnector) {
         this.dataConnector = dataConnector;
     }
 
-
-
     /**
+     * Gets the data connector.
+     * 
      * @return the dataConnector
      */
     public DataConnector getDataConnector() {
         return dataConnector;
     }
 
-
-
     /**
+     * Sets the search filter template.
+     * 
      * @param searchFilterTemplate the searchFilterTemplate to set
      */
     public void setSearchFilterTemplate(String searchFilterTemplate) {
-        log.debug("Attribute Association Search Filter Template Set To [{}]",searchFilterTemplate);
+        log.debug("Attribute Association Search Filter Template Set To [{}]", searchFilterTemplate);
         this.searchFilterTemplate = searchFilterTemplate;
     }
 
-
-
     /**
+     * Gets the search filter template.
+     * 
      * @return the searchFilterTemplate
      */
     public String getSearchFilterTemplate() {
@@ -204,6 +224,8 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Sets the class to add.
+     * 
      * @param classToAdd the classToAdd to set
      */
     public void setClassToAdd(Class<?> classToAdd) {
@@ -211,6 +233,8 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Gets the class to add.
+     * 
      * @return the classToAdd
      */
     public Class<?> getClassToAdd() {
@@ -218,6 +242,8 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Sets the associate with class.
+     * 
      * @param associateWithClass the associateWithClass to set
      */
     public void setAssociateWithClass(String associateWithClass) {
@@ -225,12 +251,12 @@ public class PrincipalAttributeAssociationDefinition extends AttributeAssociatio
     }
 
     /**
+     * Gets the associate with class.
+     * 
      * @return the associateWithClass
      */
     public String getAssociateWithClass() {
         return associateWithClass;
     }
-
-
 
 }
