@@ -51,7 +51,6 @@
         <property name="mappings">
             <value>
                 /reports=flowController
-                /test=flowController
             </value>
         </property>
         <property name="defaultHandler">
