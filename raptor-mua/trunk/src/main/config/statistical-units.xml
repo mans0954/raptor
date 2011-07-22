@@ -218,7 +218,7 @@
 		</property>
 		<property name="postprocessor">
 			<list>
-				<ref bean="ShibbolethMetadataNameFormatter"></ref>
+				<ref bean="SamlMetadataNameFormatter"></ref>
 			</list>
 		</property>
 	</bean>
@@ -323,8 +323,13 @@
     <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor">
     </bean>
 
-	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.ShibbolethMetadataNameFormatter">
-		<constructor-arg index="0"><value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value></constructor-arg>
+	<bean id="SamlMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter">
+		<constructor-arg index="0">
+		  <list>
+		   <value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value>
+		   <value>/Users/philsmart/Documents/DataSets/shib/metadata.cufederation.xml</value>
+		  </list>		
+		</constructor-arg>
 	</bean>
 
 	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor">

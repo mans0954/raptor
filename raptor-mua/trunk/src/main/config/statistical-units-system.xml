@@ -160,7 +160,7 @@
 			<list>
 				<ref bean="sortDsc"/>
 				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
+				<ref bean="SamlMetadataNameFormatter"/>
 			</list>
 		</property>
 	</bean>
@@ -206,7 +206,7 @@
 			<list>
 				<ref bean="sortDsc"/>
 				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
+				<ref bean="SamlMetadataNameFormatter"/>
 			</list>
 		</property>
 	</bean>
@@ -247,7 +247,7 @@
 			<list>
 				<ref bean="sortAsc"/>
 				<ref bean="cut"/>
-				<ref bean="ShibbolethMetadataNameFormatter"/>
+				<ref bean="SamlMetadataNameFormatter"/>
 			</list>
 		</property>
 	</bean>

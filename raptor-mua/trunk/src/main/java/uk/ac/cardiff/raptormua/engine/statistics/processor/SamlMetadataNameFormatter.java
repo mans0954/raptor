@@ -19,12 +19,18 @@
 package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 import org.opensaml.DefaultBootstrap;
+import org.opensaml.saml2.metadata.EntitiesDescriptor;
+import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.Organization;
 import org.opensaml.saml2.metadata.OrganizationName;
 import org.opensaml.saml2.metadata.OrganizationDisplayName;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
+import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool; //import org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider;
@@ -41,31 +47,44 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  * @author philsmart
  *
  */
-public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor {
+public class SamlMetadataNameFormatter implements StatisticsPostProcessor {
 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
 
-    /** use SAML metadata off the filesystem */
-    private FilesystemMetadataProvider provider;
+    /** Registered providers. */
+    private List<MetadataProvider> providers;
 
     /** class logger */
-    private final Logger log = LoggerFactory.getLogger(ShibbolethMetadataNameFormatter.class);
+    private final Logger log = LoggerFactory.getLogger(SamlMetadataNameFormatter.class);
 
     /** this is not a proper URI at the moment, just a UNC path */
     private String SAMLMetadataURI;
 
-    public ShibbolethMetadataNameFormatter(String SAMLMetadataURI) {
-	this.SAMLMetadataURI = SAMLMetadataURI;
+    public SamlMetadataNameFormatter(List<String> SAMLMetadataURIs) {	
 	try {
-	    loadSAMLMetadata();
+	    providers = new ArrayList<MetadataProvider>();
+	    loadSAMLMetadata(SAMLMetadataURIs);
 	} catch (MetadataProviderException e) {
-	    log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file " + e.getMessage());
-	    // e.printStackTrace();
+	    log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file",e);
+	  
 	} catch (ConfigurationException e) {
-	    log.error("Error parsing SAML metadata file " + e.getMessage());
-	    // e.printStackTrace();
+	    log.error("Error parsing SAML metadata file ",e);
 	}
+    }
+    
+    public SamlMetadataNameFormatter(String SAMLMetadataURI) {       
+        try {
+            providers = new ArrayList<MetadataProvider>();
+            ArrayList<String> SAMLMetadataURIs = new ArrayList<String>();
+            SAMLMetadataURIs.add(SAMLMetadataURI);
+            loadSAMLMetadata(SAMLMetadataURIs);
+        } catch (MetadataProviderException e) {
+            log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file",e);
+          
+        } catch (ConfigurationException e) {
+            log.error("Error parsing SAML metadata file ",e);
+        }
     }
 
 
@@ -79,9 +98,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
 			    try {
 			    	mapTo = getOrganisationDisplayName(oldName);
 			    } catch (Exception e) {
-				// if the mapping fails, keep the original, so leave as original non mapped resultAsString
-				// log.error("Failed to map "+oldName);
-				//e.printStackTrace();
+			          //do nothing, so keep original
 			    }
 			    if (mapTo!=null)
 			    	obsG.setGroupName(mapTo);
@@ -101,9 +118,7 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
      * @throws MetadataProviderException
      */
     private String getOrganisationName(String entityID) throws MetadataProviderException, NullPointerException {
-	// log.debug("Getting organisationName for "+entityID);
-	OrganizationName org = (OrganizationName) provider.getEntityDescriptor(entityID).getOrganization().getOrganizationNames().get(0);
-        log.debug("Found organisationName '"+org.getName().getLocalString()+"'");
+	OrganizationName org = (OrganizationName) getEntityDescriptor(entityID).getOrganization().getOrganizationNames().get(0);
 	return org.getName().getLocalString();
     }
 
@@ -116,32 +131,64 @@ public class ShibbolethMetadataNameFormatter implements StatisticsPostProcessor 
      * @throws MetadataProviderException
      */
     private String getOrganisationDisplayName(String entityID) throws MetadataProviderException, NullPointerException {
-	// log.debug("Getting organisationName for "+entityID);
-	//Organization org = provider.getEntityDescriptor(entityID).getOrganization();
-	OrganizationDisplayName orgName = (OrganizationDisplayName) provider.getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
-	// log.debug("Found organisationName '"+orgName.getName().getLocalString()+"'");
+	OrganizationDisplayName orgName = (OrganizationDisplayName) getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
 	return orgName.getName().getLocalString();
     }
+    
+    /**
+     * Gets the valid metadata for a given entity.
+     * 
+     * @param entityID the ID of the entity
+     * 
+     * @return the entity's metadata or null if there is no metadata or no valid metadata
+     * 
+     * @throws MetadataProviderException thrown if the provider can not fetch the metadata, must not be thrown if there
+     *             is simply no EntityDescriptor with the given ID
+     */
+    public EntityDescriptor getEntityDescriptor(String entityID) throws MetadataProviderException {      
+        EntityDescriptor descriptor = null;
+        try {
+            for (MetadataProvider provider : providers) {
+                log.debug("Checking child metadata provider for entity descriptor with entity ID: {}", entityID);
+                descriptor = provider.getEntityDescriptor(entityID);
+                if (descriptor != null) {
+                    break;
+                }
+            }
+        } catch (MetadataProviderException e) {
+            throw e;
+        }
+        return descriptor;
+    }
 
-    private void loadSAMLMetadata() throws MetadataProviderException, ConfigurationException {
+    private void loadSAMLMetadata(List<String> SAMLMetadataURIs) throws MetadataProviderException, ConfigurationException {
 	DefaultBootstrap.bootstrap();
 	parser = new BasicParserPool();
 	parser.setNamespaceAware(true);
-	// FileBackedHTTPMetadataProvider fileprovider = new FileBackedHTTPMetadataProvider("http://iam.cf.ac.uk/cufederation/metadata.cufederation.xml",
-	// 100,"/Users/philsmart/shibMetadata.xml");
-	provider = new FilesystemMetadataProvider(new File(SAMLMetadataURI));
-	provider.setParserPool(parser);
-	provider.initialize();
-	log.debug("Loaded SAML metatada " + provider + " into " + this.getClass());
+	
+	for (String metadataURI : SAMLMetadataURIs){
+        	FilesystemMetadataProvider provider = new FilesystemMetadataProvider(new File(metadataURI));
+        	provider.setParserPool(parser);
+        	provider.initialize();
+        	providers.add(provider);
+        	log.debug("Loaded SAML metatada {}",metadataURI);
+	}
     }
 
 
-    public void setSAMLMetadataURI(String sAMLMetadataURI) {
-	SAMLMetadataURI = sAMLMetadataURI;
+    /**
+     * @param providers the providers to set
+     */
+    public void setProviders(List<MetadataProvider> providers) {
+        this.providers = providers;
     }
 
-    public String getSAMLMetadataURI() {
-	return SAMLMetadataURI;
+
+    /**
+     * @return the providers
+     */
+    public List<MetadataProvider> getProviders() {
+        return providers;
     }
 
 
