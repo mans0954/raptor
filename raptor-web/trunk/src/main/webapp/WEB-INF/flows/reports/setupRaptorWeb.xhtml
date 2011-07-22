@@ -137,12 +137,15 @@
 					<h:outputText
 						value="Stored Events #{setupService.attachedCapabilities.numberOfAuthenticationsStored}" />
 				</h:panelGrid>
+			</rich:tab>
+			<rich:tab name="resourceClassification"
+				label="Resource Classification">
 
-				<rich:separator />
+
 				<rich:spacer height="10px" />
 				<center>
 					<h2>Resource Classification</h2>
-
+                    <rich:spacer height="15px" />
 
 					<h:form id="resourceClassificationForm">
 						<rich:scrollableDataTable
@@ -166,22 +169,27 @@
 								</rich:inplaceSelect>
 							</rich:column>
 						</rich:scrollableDataTable>
-						<a4j:commandButton ajaxSingle="false" value="Save Classification" action="sendResourceClassification">						
+						<rich:spacer height="10px" />
+						<a4j:commandButton ajaxSingle="false" value="Save Classification"
+							action="sendResourceClassification">
 						</a4j:commandButton>
 					</h:form>
 				</center>
+			</rich:tab>
+			<rich:tab name="batchUpload" label="Batch Upload">
+				<rich:spacer height="15px" />
 
-				<rich:spacer height="15px" />
-				<rich:separator />
-				<rich:spacer height="15px" />
+
 				<center>
 					<h2>Batch Log File Upload</h2>
 				</center>
-                
-				<center>
-				    <h:outputText value="Upload existing Shibboleth Audit or Ezproxy log files (ending .txt of .log) to the attached aggregator. 
+				<rich:spacer height="15px" />
+
+				<h:outputText
+					value="Upload existing Shibboleth Audit or Ezproxy log files (ending .txt of .log) to the attached aggregator. 
 				    Only 2 files can be upload at once, where each file can not be bigger than 10mb. This limited is there
-				    to ensure the correct operation of the web interface."/>
+				    to ensure the correct operation of the web interface." />
+				<center>
 					<h:form id="uploadPanelForm">
 
 						<h:panelGrid id="uploadPanelGrid" columns="2"
