@@ -36,8 +36,6 @@ import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
-import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
-import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.model.SetupModel;
 import uk.ac.cardiff.raptorweb.model.WebSession;
@@ -95,7 +93,7 @@ public final class RaptorWebEngine {
      * 
      * @return the list of <code>MUAEntries</code> from the <code>MUARegistry</code>
      */
-    public List getAttached() {
+    public List<MUAEntry> getAttached() {
         return registry.getMUAEntries();
     }
 

@@ -21,11 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRDataSource;
@@ -37,6 +35,13 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
+import uk.ac.cardiff.raptorweb.engine.reports.beans.DynamicTableModel;
+import uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean;
+import uk.ac.cardiff.raptorweb.model.ManyRow;
+import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
+import uk.ac.cardiff.raptorweb.model.TableSeries;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.DynamicReport;
@@ -50,21 +55,25 @@ import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.Transparency;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
-import uk.ac.cardiff.raptorweb.engine.reports.beans.DynamicTableModel;
-import uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean;
-import uk.ac.cardiff.raptorweb.model.ManyRow;
-import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
-import uk.ac.cardiff.raptorweb.model.TableSeries;
-import uk.ac.cardiff.raptorweb.model.WebSession;
-
+/**
+ * The Class GraphAndChartPDFReportGenerator.
+ */
 public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
+    /** The report bean. */
     private GenericReportBean reportBean;
+
+    /** The report xml file. */
     private String reportXMLFile;
 
+    /** The log. */
     static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.raptorweb.engine.reports.ReportConstructor#generateReport(uk.ac.cardiff.raptorweb.model.WebSession)
+     */
     @Override
     public void generateReport(WebSession session) {
         // TODO there are common setup and store aspects to all reports that should be pushed higher
@@ -87,7 +96,7 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
             String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
                     + dateFormat.format(date) + ".pdf";
             if (!session.getGraphmodel().getDownloadFilename().equals("")) {
-                fileName = session.getGraphmodel().getDownloadFilename()+".pdf";
+                fileName = session.getGraphmodel().getDownloadFilename() + ".pdf";
             }
             dir = new File(dir.getAbsoluteFile() + "/" + fileName);
 
@@ -112,6 +121,21 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
     }
 
+    /**
+     * Construct report.
+     * 
+     * @param reportTemplateXMLFile
+     *            the report template xml file
+     * @param session
+     *            the session
+     * @return the jasper print
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws JRException
+     *             the jR exception
+     * @throws ColumnBuilderException
+     *             the column builder exception
+     */
     private JasperPrint constructReport(File reportTemplateXMLFile, WebSession session) throws IOException, JRException, ColumnBuilderException {
         log.info("Constructing Report Using DynamicJasper");
 
@@ -203,8 +227,11 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
     }
 
     /**
+     * Max no rows.
+     * 
      * @param currentTableGraph
-     * @return
+     *            the current table graph
+     * @return the int
      */
     private int maxNoRows(RaptorTableChartModel currentTableGraph) {
         int maxRows = 0;
@@ -215,23 +242,50 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
         return maxRows;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.raptorweb.engine.reports.ReportConstructor#getRegisterHandledReportType()
+     */
     @Override
     protected HandledReportTypes getRegisterHandledReportType() {
         return HandledReportTypes.pdf;
     }
 
+    /**
+     * Sets the report bean.
+     * 
+     * @param reportBean
+     *            the new report bean
+     */
     public void setReportBean(GenericReportBean reportBean) {
         this.reportBean = reportBean;
     }
 
+    /**
+     * Gets the report bean.
+     * 
+     * @return the report bean
+     */
     public GenericReportBean getReportBean() {
         return reportBean;
     }
 
+    /**
+     * Sets the report xml file.
+     * 
+     * @param reportXMLFile
+     *            the new report xml file
+     */
     public void setReportXMLFile(String reportXMLFile) {
         this.reportXMLFile = reportXMLFile;
     }
 
+    /**
+     * Gets the report xml file.
+     * 
+     * @return the report xml file
+     */
     public String getReportXMLFile() {
         return reportXMLFile;
     }
