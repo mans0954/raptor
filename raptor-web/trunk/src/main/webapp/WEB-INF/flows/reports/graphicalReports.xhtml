@@ -208,9 +208,9 @@
 														<h:outputText value="Post Processors" />
 													</f:facet>
 													<rich:comboBox value="#{processor.beanName}" width="220px"
-														suggestionValues="#{flowScope.websession.graphmodel.possiblePostProcessorValues}" >
-														<a4j:support event="onselect" ajaxSingle="true"/>
-														</rich:comboBox>
+														suggestionValues="#{flowScope.websession.graphmodel.possiblePostProcessorValues}">
+														<a4j:support event="onselect" ajaxSingle="true" />
+													</rich:comboBox>
 												</rich:column>
 
 												<rich:column>
@@ -219,7 +219,8 @@
 													</f:facet>
 													<a4j:commandLink immediate="true"
 														action="removePostProcessorFromSelectedStatistic"
-														id="removePostProcessorLink" reRender="optionsPanelForm,postProcessorTable">
+														id="removePostProcessorLink"
+														reRender="optionsPanelForm,postProcessorTable">
 														<h:graphicImage
 															style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 															value="/image/icon/onebit_33.png" />
@@ -230,11 +231,11 @@
 												</rich:column>
 
 												<f:facet name="footer">
-													<a4j:commandLink immediate="true"														
-														id="postProcessorLink" action="addPostProcessorToSelectedStatistic"
+													<a4j:commandLink immediate="true" id="postProcessorLink"
+														action="addPostProcessorToSelectedStatistic"
 														reRender="optionsPanelForm,postProcessorTable">
 														<h:graphicImage id="addPostProcessorImage"
-															style="width:20px;" value="/image/icon/onebit_31.png" />													  
+															style="width:20px;" value="/image/icon/onebit_31.png" />
 													</a4j:commandLink>
 
 												</f:facet>
@@ -319,11 +320,13 @@
 												</rich:column>
 
 											</rich:dataTable>
-
-											<h:outputText value="Processing Status:"
-												style="font-weight: bold;" />
-											<h:outputText
-												value="#{flowScope.websession.graphmodel.processingResult}" />
+											<rich:spacer height="10px"/>
+											<rich:panel>
+												<h:outputText value="Processing Status:"
+													style="font-weight: bold;" />
+												<h:outputText
+													value="#{flowScope.websession.graphmodel.processingResult}" />
+											</rich:panel>
 
 										</rich:layoutPanel>
 									</rich:layout>

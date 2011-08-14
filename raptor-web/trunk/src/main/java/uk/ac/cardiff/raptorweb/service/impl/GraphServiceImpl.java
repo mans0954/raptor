@@ -102,7 +102,7 @@ public class GraphServiceImpl implements GraphService {
     /**
      * Only retrieves USER level units from those retrieved by the MUA. Encapsulates them in a view object
      */
-    public List getStatisticalUnits() {
+    public List<StatisticalUnitInformation> getStatisticalUnits() {
         List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
         List<StatisticalUnitInformation> unitsForUser = new ArrayList<StatisticalUnitInformation>();
 
@@ -112,11 +112,6 @@ public class GraphServiceImpl implements GraphService {
             }
         }
         return unitsForUser;
-    }
-
-    @Override
-    public List getChartData(String statisticalUnitName) {
-        return null;
     }
 
     public void generateExcelReport(WebSession websession) {
@@ -143,30 +138,36 @@ public class GraphServiceImpl implements GraphService {
         webEngine.loadSavedReports(websession);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see uk.ac.cardiff.raptorweb.service.GraphService#invokeStatisticalUnit(uk.ac.cardiff.raptorweb.model.GraphModel) Adds the trinidad GraphModel into the
-     * Raptor Web Model
-     */
     @Override
     public void invokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
-        log.info("Graph Service Invoking " + model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
+        log.info("Graph Service Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
         AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
+        setGraphModel(model, gmodel);
+
+    }
+
+    public void updateAndInvokeStatisticalUnit(WebSession websession) {
+        GraphModel model = websession.getGraphmodel();
+        log.info("Graph Service Updating and Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
+        AggregatorGraphModel gmodel = webEngine.updateAndInvokeStatisticalUnit(websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation());
+        setGraphModel(model, gmodel);
+
+    }
+
+    private void setGraphModel(GraphModel model, AggregatorGraphModel gmodel) {
         model.setRawGraphModel(gmodel);
         if (gmodel != null) {
             model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
-            model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel, websession.getGraphmodel().getChartOptions()));
-            model.setProcessingResult("Done");
+            model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel, model.getChartOptions()));
+            model.setProcessingResult("Updated [" + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
 
         } else {
-            log.error("Chart model came back from the MUA as null");
+            log.warn("Chart model came back from the MUA as null, nothing to display");
             model.setCurrentTableGraph(null);
             model.setCurrentGraph(null);
-            model.setProcessingResult("The statistic failed to produce a graphable result");
+            model.setProcessingResult("The statistic failed to produce a graphable result [" + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
         }
-
     }
 
     /*

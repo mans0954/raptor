@@ -35,7 +35,7 @@ public class GraphModel implements Serializable {
 
     /** Generated SerialVersionUID */
     private static final long serialVersionUID = -2803349385469406219L;
-    
+
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(GraphModel.class);
 
@@ -44,30 +44,30 @@ public class GraphModel implements Serializable {
 
     /** The current graph (as the internal Raptor model) for display */
     private RaptorGraphModel currentGraph;
-    
-    /** The current set of graph options applied to the <code>currentGraph</code>*/
+
+    /** The current set of graph options applied to the <code>currentGraph</code> */
     private ChartOptions chartOptions;
-    
-    /** The current table relating to the <code>selectedStatisticalUnit</code>*/
+
+    /** The current table relating to the <code>selectedStatisticalUnit</code> */
     private RaptorTableChartModel currentTableGraph;
-    
+
     /** The currently selected statistical unit */
     private StatisticalUnitInformationView selectedStatisticalUnit;
-    
+
     /** A <code>String</code> that holds the results of processing */
     private String processingResult;
-    
+
     /** Whether to show the control panel on the view */
     private boolean showControlPanel;
-    
+
     /** The current graph (as an image) to display */
     private RaptorJFreeChartModel currentJFreeGraph;
-    
-    /** The size of the control panel -  not used */
+
+    /** The size of the control panel - not used */
     private String controlPanelSize;
-    
-    /** A <code>List</code> of <code>{@link uk.ac.cardiff.wsmodel.StatisticalUnitInformationView}</code>s that have been
-     * acquired from the attached MUA
+
+    /**
+     * A <code>List</code> of <code>{@link uk.ac.cardiff.wsmodel.StatisticalUnitInformationView}</code>s that have been acquired from the attached MUA
      */
     private List<StatisticalUnitInformationView> statisticalUnitsForView;
 
@@ -78,8 +78,8 @@ public class GraphModel implements Serializable {
 
     /** Selected series modal panel */
     private Series selectedSeries;
-    
-    /** The selected post processor, as a reference for removal*/
+
+    /** The selected post processor, as a reference for removal */
     private ProcessorInformation selectedPostProcessor;
 
     /**
@@ -125,38 +125,37 @@ public class GraphModel implements Serializable {
         String[] classFilter = eventType.getClassHierarchy();
         return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
     }
-    
+
     public List<String> getPossiblePostProcessorValues() {
-        log.debug("Possible Post Values {}",suggestionValues.getPossiblePostProcessorValuesList().size());
+        // log.debug("Possible Post Values {}",suggestionValues.getPossiblePostProcessorValuesList().size());
         return (ArrayList<String>) suggestionValues.getPossiblePostProcessorValuesList();
     }
-    
-    public ArrayList<String> autocompleteFieldValues(Object suggest){
-        if (selectedSeries.getComparisonPredicate().getFieldName()==null || selectedSeries.getComparisonPredicate().getFieldName().equals("")){
+
+    public ArrayList<String> autocompleteFieldValues(Object suggest) {
+        if (selectedSeries.getComparisonPredicate().getFieldName() == null || selectedSeries.getComparisonPredicate().getFieldName().equals("")) {
             log.warn("No field values to return, is field selected?");
             ArrayList<String> dummy = new ArrayList<String>();
             dummy.add("No field selected");
             return dummy;
         }
         String pref = (String) suggest;
-        ArrayList<String> possibles = new ArrayList<String>();        
-        List<String> allPossibles = suggestionValues.autocomplete(selectedSeries.getComparisonPredicate().getFieldName());       
-        for (String possible : allPossibles){
-            if ((possible !=null && possible.toLowerCase().contains(pref.toLowerCase())) || "".equals(pref)){
+        ArrayList<String> possibles = new ArrayList<String>();
+        List<String> allPossibles = suggestionValues.autocomplete(selectedSeries.getComparisonPredicate().getFieldName());
+        for (String possible : allPossibles) {
+            if ((possible != null && possible.toLowerCase().contains(pref.toLowerCase())) || "".equals(pref)) {
                 possibles.add(possible);
             }
         }
-        
-        /* add something for output if none returned*/
-        if (possibles.size()==0){
+
+        /* add something for output if none returned */
+        if (possibles.size() == 0) {
             possibles.add("No suggestions");
         }
-        
+
         Collections.sort(possibles);
-        
+
         return possibles;
     }
-
 
     /**
      * @return the selectedStatisticalUnit
@@ -282,7 +281,8 @@ public class GraphModel implements Serializable {
     }
 
     /**
-     * @param selectedPostProcessor the selectedPostProcessor to set
+     * @param selectedPostProcessor
+     *            the selectedPostProcessor to set
      */
     public void setSelectedPostProcessor(ProcessorInformation selectedPostProcessor) {
         this.selectedPostProcessor = selectedPostProcessor;
@@ -294,6 +294,5 @@ public class GraphModel implements Serializable {
     public ProcessorInformation getSelectedPostProcessor() {
         return selectedPostProcessor;
     }
-
 
 }
