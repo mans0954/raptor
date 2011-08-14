@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.engine;
 
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.DataAccessRegister;
 import uk.ac.cardiff.raptor.parse.EventParserNotFoundException;
@@ -43,13 +43,10 @@ import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
-import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
 import uk.ac.cardiff.raptormua.model.Users;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
@@ -87,7 +84,7 @@ public class MUAEngine {
      * The Maximum number of events that can be released (e.g. to another MUA) at any one time.
      */
     private int maxReleaseEventSize;
-    
+
     /** Constructor for creating and storing this MUAs capabilities */
     private CapabilitiesConstructor capabilitiesConstructor;
 
@@ -100,8 +97,7 @@ public class MUAEngine {
     /**
      * Sets the statisticalhandler.
      * 
-     * @param statisticsHandler
-     *            the statistichandler to set
+     * @param statisticsHandler the statistichandler to set
      */
     public final void setStatisticsHandler(final StatisticsHandler statisticsHandler) {
         this.statisticsHandler = statisticsHandler;
@@ -122,8 +118,9 @@ public class MUAEngine {
     }
 
     /**
-     * First, find the earliest event that needs to be retrieved from the storage engine - which may contain duplicates to those already sent, but these are
-     * filtered by the releaseClient later. Then send those events to the event release client.
+     * First, find the earliest event that needs to be retrieved from the storage engine - which may contain duplicates
+     * to those already sent, but these are filtered by the releaseClient later. Then send those events to the event
+     * release client.
      * 
      * @return
      */
@@ -157,13 +154,13 @@ public class MUAEngine {
     }
 
     /**
-     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling view component to
-     * display to the user
+     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling view
+     * component to display to the user
      * 
      * @return the capabilities of this MUA
      */
-    public final Capabilities getCapabilities() {   
-        if (capabilitiesConstructor!=null)
+    public final Capabilities getCapabilities() {
+        if (capabilitiesConstructor != null)
             return capabilitiesConstructor.constructCapabilities(statisticsHandler, storageEngine, muaMetadata);
         else
             log.error("No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
@@ -173,11 +170,11 @@ public class MUAEngine {
     /**
      * Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
      * 
-     * @param uploadFiles
-     *            the files to parse and store
+     * @param uploadFiles the files to parse and store
      * @throws TransactionInProgressException
      */
-    public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles) throws TransactionInProgressException {
+    public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles)
+            throws TransactionInProgressException {
         log.info("Going to parse {} batch uploaded files", uploadFiles.size());
         ArrayList<Event> allEvents = new ArrayList<Event>();
 
@@ -187,8 +184,10 @@ public class MUAEngine {
             LogFileUploadResult result = new LogFileUploadResult();
             result.setId(logfileUpload.getId());
             try {
-                BaseEventParser parser = dataAccessRegister.getParsingModuleForType(logfileUpload.getEventType().friendlyName);
-                log.debug("Parsing {} using parser {} for type {}", new Object[] { logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType() });
+                BaseEventParser parser =
+                        dataAccessRegister.getParsingModuleForType(logfileUpload.getEventType().friendlyName);
+                log.debug("Parsing {} using parser {} for type {}",
+                        new Object[] {logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType()});
                 parser.parse(logfileUpload.getData());
                 allEvents.addAll(parser.getEntryHandler().getEntries());
                 parser.reset();
@@ -196,12 +195,14 @@ public class MUAEngine {
                 result.setProcessed(true);
 
             } catch (ParserException e) {
-                log.error("Error Parsing the batch uploaded log file {}, with reason", logfileUpload.getName(), e.getMessage());
+                log.error("Error Parsing the batch uploaded log file {}, with reason", logfileUpload.getName(),
+                        e.getMessage());
 
                 result.setStatus("Failed To Parse");
                 result.setProcessed(false);
             } catch (EventParserNotFoundException e) {
-                log.error("Event parser could not be found for {}, with reason {}", logfileUpload.getName(), e.getMessage());
+                log.error("Event parser could not be found for {}, with reason {}", logfileUpload.getName(),
+                        e.getMessage());
 
                 result.setStatus("Failed To Parse");
                 result.setProcessed(false);
@@ -221,8 +222,10 @@ public class MUAEngine {
 
         for (BatchFile batchFile : uploadFiles) {
             try {
-                BaseEventParser parser = dataAccessRegister.getParsingModuleForType(batchFile.getEventType().friendlyName);
-                log.debug("Parsing {} using parser {} for type {}", new Object[] { batchFile.getLogFile().getName(), parser.getClass(), batchFile.getEventType() });
+                BaseEventParser parser =
+                        dataAccessRegister.getParsingModuleForType(batchFile.getEventType().friendlyName);
+                log.debug("Parsing {} using parser {} for type {}", new Object[] {batchFile.getLogFile().getName(),
+                        parser.getClass(), batchFile.getEventType()});
                 parser.parse(batchFile.getLogFile());
                 List<Event> events = parser.getEntryHandler().getEntries();
                 parser.reset();
@@ -232,11 +235,13 @@ public class MUAEngine {
                 batchFile.getLogFile().delete();
 
             } catch (ParserException e) {
-                log.error("Error Parsing the batch uploaded log file {}, with reason", batchFile.getLogFile().getName(), e.getMessage());
+                log.error("Error Parsing the batch uploaded log file {}, with reason",
+                        batchFile.getLogFile().getName(), e.getMessage());
             } catch (EventParserNotFoundException e) {
-                log.error("Event parser could not be found for {}, with reason {}", batchFile.getLogFile().getName(), e.getMessage());
+                log.error("Event parser could not be found for {}, with reason {}", batchFile.getLogFile().getName(),
+                        e.getMessage());
             }
-        }       
+        }
 
     }
 
@@ -244,13 +249,13 @@ public class MUAEngine {
      * @param statisticalUnitInformation
      */
     public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
-        log.debug("Updating Statistical Unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
 
     }
 
     public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
-        ResourceClassificationBackgroundService backgroundService = new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
+        ResourceClassificationBackgroundService backgroundService =
+                new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
         backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
     }
 
@@ -270,14 +275,14 @@ public class MUAEngine {
     }
 
     /**
-     * If <code>pushed</code contains events to add then sent them to the <code>storageEngine</code> for
-     * processing, otherwise do nothing.
+     * If <code>pushed</code contains events to add then sent them to the <code>storageEngine</code> for processing,
+     * otherwise do nothing.
      * 
      * @param pushed the {@link uk.ac.cardiff.model.wsmodel.EventPushMessage} received from the client.
      * @throws TransactionInProgressException
      */
     public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
-        if (pushed.getEvents().size() > 0){
+        if (pushed.getEvents().size() > 0) {
             int transactionId = (int) (Math.random() * 1000000);
             storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
         }
@@ -300,8 +305,7 @@ public class MUAEngine {
     }
 
     /**
-     * @param storageEngine
-     *            the storageEngine to set
+     * @param storageEngine the storageEngine to set
      */
     public final void setStorageEngine(final StorageEngine storageEngine) {
         this.storageEngine = storageEngine;
@@ -315,8 +319,7 @@ public class MUAEngine {
     }
 
     /**
-     * @param dataAccessRegister
-     *            the dataAccessRegister to set
+     * @param dataAccessRegister the dataAccessRegister to set
      */
     public final void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
         this.dataAccessRegister = dataAccessRegister;
@@ -330,8 +333,7 @@ public class MUAEngine {
     }
 
     /**
-     * @param maxReleaseEventSize
-     *            the maxReleaseEventSize to set
+     * @param maxReleaseEventSize the maxReleaseEventSize to set
      */
     public void setMaxReleaseEventSize(int maxReleaseEventSize) {
         if (maxReleaseEventSize > 3000) {

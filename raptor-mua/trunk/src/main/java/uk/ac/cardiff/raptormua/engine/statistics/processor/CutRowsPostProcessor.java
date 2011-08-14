@@ -16,25 +16,20 @@
 /**
  *
  */
-package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
-import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class CutRowsPostProcessor implements StatisticsPostProcessor {
 
@@ -44,46 +39,47 @@ public class CutRowsPostProcessor implements StatisticsPostProcessor {
     private int numberOfRowsToKeep;
 
     /**
-     * <p> performs all actions directly (inplace or 'live') on the input object,and passes that back as a reference to conform with the
-     * <code>StatisticsPostProcessor</code> interface </p>
-     *
+     * <p>
+     * performs all actions directly (inplace or 'live') on the input object,and passes that back as a reference to
+     * conform with the <code>StatisticsPostProcessor</code> interface
+     * </p>
+     * 
      * (non-Javadoc)
-     *
+     * 
      * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
      */
 
     public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
-	log.debug("Entries into postprocessor: " + observations.length);
-	log.info("Post Processor " + this.getClass());
-	int rowsToKeep = (observations.length < numberOfRowsToKeep) ? observations.length : numberOfRowsToKeep;
-	log.debug("Keeping {} rows", rowsToKeep);
-	if (rowsToKeep > 0) {
-	    if (observations instanceof Group[]) {
-		Group[] cut = new Group[rowsToKeep];
-		for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
-		    cut[i] = (Group) observations[i];
-		}
-		log.debug("Cut has {} rows", cut.length);
-		return cut;
-	    }
-	    if (observations instanceof Bucket[]) {
-		Bucket[] cut = new Bucket[rowsToKeep];
-		for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
-		    cut[i] = (Bucket) observations[i];
-		}
-		log.debug("Cut has {} rows", cut.length);
-		return cut;
-	    }
-	}
-	return observations;
+        log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
+        int rowsToKeep = (observations.length < numberOfRowsToKeep) ? observations.length : numberOfRowsToKeep;
+        log.debug("Keeping {} rows", rowsToKeep);
+        if (rowsToKeep > 0) {
+            if (observations instanceof Group[]) {
+                Group[] cut = new Group[rowsToKeep];
+                for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
+                    cut[i] = (Group) observations[i];
+                }
+                log.debug("Cut has {} rows", cut.length);
+                return cut;
+            }
+            if (observations instanceof Bucket[]) {
+                Bucket[] cut = new Bucket[rowsToKeep];
+                for (int i = 0; (i < observations.length) && (i < rowsToKeep); i++) {
+                    cut[i] = (Bucket) observations[i];
+                }
+                log.debug("Cut has {} rows", cut.length);
+                return cut;
+            }
+        }
+        return observations;
     }
 
     public void setNumberOfRowsToKeep(int numberOfRowsToKeep) {
-	this.numberOfRowsToKeep = numberOfRowsToKeep;
+        this.numberOfRowsToKeep = numberOfRowsToKeep;
     }
 
     public int getNumberOfRowsToKeep() {
-	return numberOfRowsToKeep;
+        return numberOfRowsToKeep;
     }
 
 }
