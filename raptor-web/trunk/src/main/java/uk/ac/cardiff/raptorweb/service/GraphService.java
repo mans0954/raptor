@@ -21,54 +21,52 @@ package uk.ac.cardiff.raptorweb.service;
 import java.util.List;
 
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.raptorweb.model.GraphModel;
+import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
-import uk.ac.cardiff.raptorweb.model.RaptorGraphModel;
-import uk.ac.cardiff.raptorweb.model.ReportModel;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public interface GraphService {
 
-	public List getChartData(String statisticalUnitName);
+    public List<StatisticalUnitInformation> getStatisticalUnits();
 
-	public List getStatisticalUnits();
+    public void populateStatisticalUnits(WebSession websession);
 
-	public void populateStatisticalUnits(WebSession websession);
+    public void invokeStatisticalUnit(WebSession websession);
 
-	public void invokeStatisticalUnit(WebSession websession);
+    public void updateAndInvokeStatisticalUnit(WebSession websession);
 
-	public void generateExcelReport(WebSession websession);
+    public void generateExcelReport(WebSession websession);
 
-	public void generateCSVReport(WebSession websession);
-	
-	public void generatePDFReport(WebSession websession);
+    public void generateCSVReport(WebSession websession);
 
-	public void loadSavedReports(WebSession websession);
+    public void generatePDFReport(WebSession websession);
 
-	public void updateMUAStatistic(WebSession websession);
+    public void loadSavedReports(WebSession websession);
 
-	public void removeReport(WebSession websession);
+    public void updateMUAStatistic(WebSession websession);
 
-	public Capabilities getAttachedCapabilities();
+    public void removeReport(WebSession websession);
 
-	public MUAEntry getCurrentlyAttached();
+    public Capabilities getAttachedCapabilities();
 
-	public void removeSeriesFromSelectedStatistic(WebSession websession);
-	
-	public void removeSelectedFilterFromSelectedStatistic(WebSession websession);
+    public MUAEntry getCurrentlyAttached();
 
-	public void addSeriesToSelectedStatistic(WebSession websession);
-	
-	public void addFilterToSelectedSeries(WebSession websession);
-	
-	public void rerenderGraph(WebSession websession);
-	
-	public void addPostProcessorToSelectedStatistic(WebSession websession);
-	
-	public void removePostProcessorFromSelectedStatistic(WebSession websession);
+    public void removeSeriesFromSelectedStatistic(WebSession websession);
+
+    public void removeSelectedFilterFromSelectedStatistic(WebSession websession);
+
+    public void addSeriesToSelectedStatistic(WebSession websession);
+
+    public void addFilterToSelectedSeries(WebSession websession);
+
+    public void rerenderGraph(WebSession websession);
+
+    public void addPostProcessorToSelectedStatistic(WebSession websession);
+
+    public void removePostProcessorFromSelectedStatistic(WebSession websession);
 
 }
