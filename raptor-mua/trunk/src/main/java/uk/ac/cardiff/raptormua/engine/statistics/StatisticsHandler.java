@@ -16,19 +16,16 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics;
 
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
-import uk.ac.cardiff.model.sql.SQLFilter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -38,153 +35,152 @@ import uk.ac.cardiff.raptor.store.EventHandler;
  * @author philsmart Allows the storage and invocation of statistical units
  */
 public class StatisticsHandler {
-    
-        /** Class Logger */
-        private final Logger log = LoggerFactory.getLogger(StatisticsHandler.class);
 
-	/** List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic} that have been registered
-	 * with this handler
-	 */
-        private List<Statistic> statisticalUnits;
+    /** Class Logger */
+    private final Logger log = LoggerFactory.getLogger(StatisticsHandler.class);
 
-        /** A reference to the entry handler that is used to access all underlying events*/
-	private EventHandler entryHandler;
+    /**
+     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic} that have been registered with this handler
+     */
+    private List<Statistic> statisticalUnits;
 
-	/** 
-	 * Registers a List of statistics with this StatisticsHandler 
-	 */
-	public void setStatisticalUnits(List<Statistic> statisticalUnits) {
-	    for (Statistic stat : statisticalUnits){
-	        log.info("Registering statistic {}, role {}",stat.getStatisticParameters().getUnitName(),stat.getStatisticParameters().getType());
-	    }
-	    this.statisticalUnits = statisticalUnits;
-	}
+    /** A reference to the event handler that is used to access all underlying events */
+    private EventHandler entryHandler;
 
-	public List<Statistic> getStatisticalUnits() {
-		return statisticalUnits;
-	}
+    /**
+     * Registers a List of statistics with this StatisticsHandler
+     */
+    public void setStatisticalUnits(List<Statistic> statisticalUnits) {
+        for (Statistic stat : statisticalUnits) {
+            log.info("Registering statistic [{}], role {}", stat.getStatisticParameters().getUnitName(), stat
+                    .getStatisticParameters().getType());
+        }
+        this.statisticalUnits = statisticalUnits;
+    }
 
-	/**
-	 * @param statisticName
-	 */
-	public AggregatorGraphModel peformStatistic(String statisticName) {
-		for (Statistic statistic : statisticalUnits) {
-			if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
-				return performStatiticalPipeline(statistic);
-			}
-		}
-		return null;
-	}
+    public List<Statistic> getStatisticalUnits() {
+        return statisticalUnits;
+    }
 
-	private AggregatorGraphModel performStatiticalPipeline(Statistic statistic) {
-		statistic.setEntryHandler(entryHandler);
-		Boolean success = invoke(statistic);
-		log.info("Statistic {} succedded {}",statistic.getStatisticParameters().getUnitName(),success);
-		if (success) {
-			// now send through post processor
-			statistic.postProcess();
-			try{
-			    AggregatorGraphModel graphModel = statistic.constructGraphModel();
-			    statistic.reset();
-			    return graphModel;
-			}
-			catch(Exception e){
-			    //must catch this error here, so we can clear the observations that the statistic has generated
-			    statistic.reset();
-			    log.error("Problem constructing graph model for statistic {}, {}",statistic.getStatisticParameters().getUnitName(),e.getMessage());
-			    return null;
-			}
-		}
-		/* always reset the observationseries for the statistic, so the next execution is not
-		*  an accumulation of the ones before it
-		*/
-		statistic.reset();
-		return null;
-	}
+    /**
+     * @param statisticName
+     */
+    public AggregatorGraphModel peformStatistic(String statisticName) {
+        for (Statistic statistic : statisticalUnits) {
+            if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
+                return performStatiticalPipeline(statistic);
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * @param statistic
-	 */
-	private Boolean invoke(Statistic statistic) {
-		if (this.getEntryHandler() != null)
-			log.debug("Working off " + this.getEntryHandler().getNumberOfEvents() + " entries");
+    private AggregatorGraphModel performStatiticalPipeline(Statistic statistic) {
+        statistic.setEntryHandler(entryHandler);
+        Boolean success = invoke(statistic);
+        log.info("Statistic [{}] succedded {}", statistic.getStatisticParameters().getUnitName(), success);
+        if (success) {
+            // now send through post processor
+            statistic.postProcess();
+            try {
+                AggregatorGraphModel graphModel = statistic.constructGraphModel();
+                statistic.reset();
+                return graphModel;
+            } catch (Exception e) {
+                // must catch this error here, so we can clear the observations that the statistic has generated
+                statistic.reset();
+                log.error("Problem constructing graph model for statistic {}, {}", statistic.getStatisticParameters()
+                        .getUnitName(), e.getMessage());
+                return null;
+            }
+        }
+        /*
+         * always reset the observationseries for the statistic, so the next execution is not an accumulation of the
+         * ones before it
+         */
+        statistic.reset();
+        return null;
+    }
 
-		/* stop processing if there are no valid entries */
-		if (this.getEntryHandler() == null || this.getEntryHandler().getNumberOfEvents() == 0) {
-			log.error("Not enough entries to perform statistic countEntryPerInterval");
-			return false;
-		}
+    /**
+     * @param statistic
+     */
+    private Boolean invoke(Statistic statistic) {
+        if (this.getEntryHandler() != null)
+            log.debug("Invoking statistic [{}], working off {} entries", statistic.getStatisticParameters()
+                    .getUnitName(), this.getEntryHandler().getNumberOfEvents());
 
-		try {
-			List<MethodParameter> params = statistic.getStatisticParameters().getMethodParams();
-			List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
-			boolean success = true;
-			for (Series series : listOfSeries){
-				String whereClause=series.computeComparisonAsSQL();	
-				if (whereClause==null)
-				    whereClause ="";
-				log.debug("statistical to invoke {}",statistic);
-				success = statistic.performStatistic(params, whereClause);
-			}
-			return success;
-		} catch (StatisticalUnitException e) {
-			log.error("Failed to invoke statistics {}",statistic.getStatisticParameters().getUnitName(),e);
-			
-		}
-		return false;
+        /* stop processing if there are no valid entries */
+        if (this.getEntryHandler() == null || this.getEntryHandler().getNumberOfEvents() == 0) {
+            log.error("Not enough entries to perform statistic countEntryPerInterval");
+            return false;
+        }
 
-	}
+        try {
+            List<MethodParameter> params = statistic.getStatisticParameters().getMethodParams();
+            List<Series> listOfSeries = statistic.getStatisticParameters().getSeries();
+            boolean success = true;
+            for (Series series : listOfSeries) {
+                String whereClause = series.computeComparisonAsSQL();
+                if (whereClause == null) {
+                    whereClause = "";
+                }
+                success = statistic.performStatistic(params, whereClause);
+            }
+            return success;
+        } catch (StatisticalUnitException e) {
+            log.error("Failed to invoke statistics [{}]", statistic.getStatisticParameters().getUnitName(), e);
 
+        }
+        return false;
 
-	/**
-	 * updates a statistical unit based on the values in the
-	 * <code>statisticalUnitInformation</code> parameter Not a very good primary
-	 * key (unit name) should be something else
-	 *
-	 * @param statisticalUnitInformation
-	 */
-	public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
-		log.info("Updating statistical unit {} ", statisticalUnitInformation.getStatisticParameters().getUnitName());
-		Statistic toUpdate = null;
-		for (Statistic statistic : statisticalUnits) {
-			if (statistic.getStatisticParameters().getUnitName()
-					.equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
-				toUpdate = statistic;
-		}
-		log.debug("Found Statistic {} to update", toUpdate);
-		update(toUpdate, statisticalUnitInformation);
+    }
 
-	}
+    /**
+     * updates a statistical unit based on the values in the <code>statisticalUnitInformation</code> parameter Not a
+     * very good primary key (unit name) should be something else
+     * 
+     * @param statisticalUnitInformation
+     */
+    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
+        Statistic toUpdate = null;
+        for (Statistic statistic : statisticalUnits) {
+            if (statistic.getStatisticParameters().getUnitName()
+                    .equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
+                toUpdate = statistic;
+        }
+        log.debug("Found statistic [{}] to update", toUpdate.getStatisticParameters().getUnitName());
+        update(toUpdate, statisticalUnitInformation);
+        log.debug("Finished updating statistic [{}]", toUpdate.getStatisticParameters().getUnitName());
 
-	/**
-	 * Updates the statistical parameters of the statistic, does not yet handle the post processors
-	 *
-	 * @param statistic
-	 * @param statisticalUnitInformation
-	 */
-	private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
-		statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
-		//now deal with the post processors
-		List<ProcessorInformation> postprocessors = statisticalUnitInformation.getPostprocessors();
-		for (ProcessorInformation processor : postprocessors){
-			log.debug("Post processor {}, added to {}",processor.getBeanName(),statisticalUnitInformation.getStatisticParameters().getUnitName());
-		}
-	}
+    }
 
-	/**
-	 *
-	 * @param entryHandler
-	 */
-	public void setEntryHandler(EventHandler entryHandler) {
-		this.entryHandler = entryHandler;
-	}
+    /**
+     * Updates the statistical parameters of the passed statistic, does not yet handle the post processors
+     * 
+     * @param statistic - the statistic to update
+     * @param statisticalUnitInformation - the statistical unit information to used update the <code>statistic</code>
+     */
+    private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
+        statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
+        // now deal with the post processors
+        List<ProcessorInformation> postprocessors = statisticalUnitInformation.getPostprocessors();
+        statisticalUnitInformation.setPostprocessors(postprocessors);
+    }
 
-	/**
-	 *
-	 * @return
-	 */
-	public EventHandler getEntryHandler() {
-		return entryHandler;
-	}
+    /**
+     * 
+     * @param entryHandler
+     */
+    public void setEntryHandler(EventHandler entryHandler) {
+        this.entryHandler = entryHandler;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public EventHandler getEntryHandler() {
+        return entryHandler;
+    }
 
 }
