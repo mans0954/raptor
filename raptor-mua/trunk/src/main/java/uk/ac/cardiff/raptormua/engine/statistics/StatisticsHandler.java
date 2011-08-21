@@ -163,8 +163,22 @@ public class StatisticsHandler {
     private void update(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
         statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
         // now deal with the post processors
-        List<ProcessorInformation> postprocessors = statisticalUnitInformation.getPostprocessors();
-        statisticalUnitInformation.setPostprocessors(postprocessors);
+        List<StatisticsPostProcessor> postProcessors =
+                initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
+        statistic.setPostprocessor(postProcessors);
+    }
+
+    /**
+     * 
+     * @param postProcessorsInformation
+     * @return
+     */
+    private List<StatisticsPostProcessor>
+            initialisePostProcessors(List<ProcessorInformation> postProcessorsInformation) {
+        // TODO could be factory method, need to acquire the bean implementation now.
+        List<StatisticsPostProcessor> postprocessors = null;
+
+        return postprocessors;
     }
 
     /**
