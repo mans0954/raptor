@@ -46,7 +46,7 @@ import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.model.Users;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
@@ -60,7 +60,7 @@ public class MUAEngine {
     private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
 
     /** Performs all statistics. */
-    private StatisticsHandler statisticsHandler;
+    private StatisticHandler statisticsHandler;
 
     /**
      * The client that is used to process, filter and send events to another MUA instance.
@@ -99,11 +99,11 @@ public class MUAEngine {
      * 
      * @param statisticsHandler the statistichandler to set
      */
-    public final void setStatisticsHandler(final StatisticsHandler statisticsHandler) {
+    public final void setStatisticsHandler(final StatisticHandler statisticsHandler) {
         this.statisticsHandler = statisticsHandler;
     }
 
-    public final StatisticsHandler getStatisticsHandler() {
+    public final StatisticHandler getStatisticsHandler() {
         return statisticsHandler;
     }
 
@@ -112,8 +112,8 @@ public class MUAEngine {
      */
     public final AggregatorGraphModel performStatistic(final String statisticName) {
         // TODO we do not need to set this each time
-        statisticsHandler.setEntryHandler(storageEngine.getEntryHandler());
-        return statisticsHandler.peformStatistic(statisticName);
+        statisticsHandler.setEventHandler(storageEngine.getEntryHandler());
+        return statisticsHandler.performStatistic(statisticName);
 
     }
 
