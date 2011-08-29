@@ -24,8 +24,8 @@ import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler;
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
 import uk.ac.cardiff.raptormua.runtimeutils.ResourceMetadataComparator;
 
 /**
@@ -57,7 +57,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     /**
      * @return
      */
-    public Capabilities constructCapabilities(StatisticsHandler statisticsHandler, StorageEngine storageEngine, ServiceMetadata metadata) {
+    public Capabilities constructCapabilities(StatisticHandler statisticsHandler, StorageEngine storageEngine, ServiceMetadata metadata) {
         log.info("Capabilities Constructor Called");
         long startTime = System.currentTimeMillis();
 
@@ -117,7 +117,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
                 /* the below should be changed */
                 ArrayList<ProcessorInformation> postprocessors = new ArrayList<ProcessorInformation>();
                 if (entry.getPostprocessor() != null) {
-                    for (StatisticsPostProcessor postprocessor : entry.getPostprocessor()) {
+                    for (StatisticPostProcessor postprocessor : entry.getPostprocessor()) {
                     	ProcessorInformation processorInformation = new ProcessorInformation();
                     	processorInformation.setBeanName(postprocessor.getClass().getSimpleName());
                         postprocessors.add(processorInformation);
@@ -140,7 +140,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     }
     
     private List<Suggestion> findPostProcessors(){
-    	String[] postProcessors = applicationContext.getBeanNamesForType(StatisticsPostProcessor.class);
+    	String[] postProcessors = applicationContext.getBeanNamesForType(StatisticPostProcessor.class);
     	ArrayList<Suggestion> postProcessorSuggestions = new ArrayList<Suggestion>();
     	for (String processor : postProcessors){
     		Suggestion suggestion = new Suggestion();

@@ -16,9 +16,9 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.service.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -40,14 +40,14 @@ import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
-import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 import uk.ac.cardiff.raptormua.upload.FileUploadEngine;
 
 /**
- * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions are thrown use a <code>SoapFault</code>
- * . Fault codes are: Client (if a malformed input e.g. statistic name is wrong) Server (we use for locks, as server side issue) VersionMismatch MustUnderstand
+ * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions
+ * are thrown use a <code>SoapFault</code> . Fault codes are: Client (if a malformed input e.g. statistic name is wrong)
+ * Server (we use for locks, as server side issue) VersionMismatch MustUnderstand
  * 
  * @author philsmart
  * 
@@ -73,7 +73,7 @@ public class MUAProcessImpl implements MUAProcess {
     public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
         if (lockR.tryLock()) {
             try {
-                log.info("WebSservice call for perform statistic {} ", statisticName);
+                log.info("WebSservice call for perform statistic [{}] ", statisticName);
                 return engine.performStatistic(statisticName);
             } catch (Exception e) {
                 log.error("{}", e);
@@ -110,7 +110,8 @@ public class MUAProcessImpl implements MUAProcess {
         boolean success = false;
         if (lockR.tryLock()) {
             try {
-                log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+                log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters()
+                        .getUnitName());
                 engine.updateStatisticalUnit(statisticalUnitInformation);
                 success = true;
             } catch (Exception e) {
@@ -129,7 +130,8 @@ public class MUAProcessImpl implements MUAProcess {
     public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
         if (lockR.tryLock()) {
             try {
-                log.info("Performing administrative function {}, request orginates from {}", function.getAdministrativeFunction(), function.getRequester());
+                log.info("Performing administrative function {}, request orginates from {}",
+                        function.getAdministrativeFunction(), function.getRequester());
                 return engine.performAdministrativeFunction(function);
             } catch (Exception e) {
                 log.error("{}", e);
@@ -145,21 +147,24 @@ public class MUAProcessImpl implements MUAProcess {
     }
 
     /**
-     * Because this is perform async, the lock is not useful (it will be released immediately), its the immediate exceptions that are.
+     * Because this is perform async, the lock is not useful (it will be released immediately), its the immediate
+     * exceptions that are.
      */
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
             try {
-                log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata().getServiceName());
+                log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata()
+                        .getServiceName());
                 engine.addAuthentications(pushed);
                 success = true;
             } catch (TransactionInProgressException e) {
-                log.warn("Error trying to add authentications to this MUA, {}, client should retry automatically", e.getMessage());
+                log.warn("Error trying to add authentications to this MUA, {}, client should retry automatically",
+                        e.getMessage());
                 success = false;
-            } catch (Exception e){
-               log.error("Error trying to add authentications to this MUA",e); 
-               success = false;
+            } catch (Exception e) {
+                log.error("Error trying to add authentications to this MUA", e);
+                success = false;
             } finally {
                 lockR.unlock();
 
@@ -167,15 +172,18 @@ public class MUAProcessImpl implements MUAProcess {
         } else
             log.warn("Lock was hit for method [addAuthentications]");
         if (!success) {
-            throw new SoapFault("Technical fault at the server, could not add events to MUA [" + this.getEngine().getMuaMetadata().getServiceName() + "]", new QName("Server"));
+            throw new SoapFault("Technical fault at the server, could not add events to MUA ["
+                    + this.getEngine().getMuaMetadata().getServiceName() + "]", new QName("Server"));
         }
 
     }
 
-    public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
+    public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation)
+            throws SoapFault {
         if (lockR.tryLock()) {
             try {
-                log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation.getStatisticParameters().getUnitName());
+                log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation
+                        .getStatisticParameters().getUnitName());
                 engine.updateStatisticalUnit(statisticalUnitInformation);
                 return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
             } catch (Exception e) {
@@ -189,7 +197,6 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
-
     public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
         List<LogFileUploadResult> result = new ArrayList<LogFileUploadResult>();
         boolean success = false;
@@ -198,7 +205,8 @@ public class MUAProcessImpl implements MUAProcess {
                 log.info("Webservice call to parse {} batch log file(s)", uploadFiles.size());
 
                 for (LogFileUpload logfile : uploadFiles) {
-                    log.debug("Log File details: name [{}], MIME type [{}], Length [{}], ID [{}]", new Object[] { logfile.getName(), logfile.getMime(), logfile.getData().length, logfile.getId() });
+                    log.debug("Log File details: name [{}], MIME type [{}], Length [{}], ID [{}]", new Object[] {
+                            logfile.getName(), logfile.getMime(), logfile.getData().length, logfile.getId()});
                 }
                 result = engine.batchParse(uploadFiles);
                 success = true;
@@ -219,14 +227,13 @@ public class MUAProcessImpl implements MUAProcess {
         return result;
 
     }
-    
 
     public void uploadFromDirectory() {
         List<BatchFile> files = fileUploadEngine.scanDirectories();
-        if (files!=null && files.size()>0){
+        if (files != null && files.size() > 0) {
             if (lockR.tryLock()) {
                 try {
-                    log.info("Uploading {} files from directory",files.size());
+                    log.info("Uploading {} files from directory", files.size());
                     engine.batchParseFiles(files);
                 } catch (TransactionInProgressException e) {
                     log.error("Could not parse and store batch uploads, will retry on next run");
@@ -239,7 +246,6 @@ public class MUAProcessImpl implements MUAProcess {
             }
         }
     }
-    
 
     public void resourceClassification() {
         log.info("Resource classification background thread called");
@@ -261,8 +267,7 @@ public class MUAProcessImpl implements MUAProcess {
     }
 
     /**
-     * @param fileUploadEngine
-     *            the fileUploadEngine to set
+     * @param fileUploadEngine the fileUploadEngine to set
      */
     public void setFileUploadEngine(FileUploadEngine fileUploadEngine) {
         this.fileUploadEngine = fileUploadEngine;

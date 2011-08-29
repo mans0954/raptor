@@ -38,6 +38,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
+import uk.ac.cardiff.raptormua.engine.statistics.records.ObservationSeries;
 
 /**
  * @author philsmart Holds a statistics unit or one statistics operation on one piece of data
@@ -59,7 +60,7 @@ public abstract class Statistic {
     private StatisticsPreProcessor preprocessor;
 
     /** add a postprocessing module to the statistical method */
-    private List<StatisticsPostProcessor> postprocessor;
+    private List<StatisticPostProcessor> postprocessor;
 
     /**
      * After each statistic has been invoked, the results of each series are stored as <code>ObservationSeries</code> in
@@ -217,8 +218,8 @@ public abstract class Statistic {
         try {
             if (getPostprocessor() != null) {
                 log.info("There are {} post processors to apply, these are {}", getPostprocessor().size(),
-                        Arrays.toString(getPostprocessor().toArray(new StatisticsPostProcessor[0])));
-                for (StatisticsPostProcessor post : postprocessor) {
+                        Arrays.toString(getPostprocessor().toArray(new StatisticPostProcessor[0])));
+                for (StatisticPostProcessor post : postprocessor) {
                     // perform the same post process on each observationseries
                     for (ObservationSeries obsSeries : getObservationSeries()) {
                         obsSeries.setObservations(post.postProcess(obsSeries.getObservations()));
@@ -258,11 +259,11 @@ public abstract class Statistic {
         return preprocessor;
     }
 
-    public List<StatisticsPostProcessor> getPostprocessor() {
+    public List<StatisticPostProcessor> getPostprocessor() {
         return postprocessor;
     }
 
-    public void setPostprocessor(List<StatisticsPostProcessor> postprocessor) {
+    public void setPostprocessor(List<StatisticPostProcessor> postprocessor) {
         this.postprocessor = postprocessor;
     }
 

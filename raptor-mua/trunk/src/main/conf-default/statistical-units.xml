@@ -21,25 +21,14 @@
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!-- ALL statistical units defined must be added to the registrar of statistical units -->
-	<bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler">
-		<property name ="statisticalUnits">
-			<list>
-				<ref bean="authTimeBuckets" />
-				<ref bean="groupBy" />
-				<ref bean="authTimeBucketsCount"/>
-				<ref bean="authsPerSchool"/>
-				<ref bean="numberOfAuthenticationsPer"/>
-				<ref bean="numberOfUniqueUsersPer"/>
-				<ref bean="top5Resources"/>
-				<ref bean="bottom5Resources"/>
-				<ref bean="numberOfAuthenticationsPerIntervalNumber"/>
-				<ref bean="authenticationsForOneSP"/>
-				<ref bean="numberOfUniqueAuthenticationsPerSP"/>
-                <ref bean="authsPerPersonAffiliation"/>
-			</list>
-		</property>
-	</bean>
+	 <bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler">
+        <property name="statisticRegistry"><ref bean="statisticRegistry"/></property>
+    </bean>
+    
+    <!-- Handles all statistical units defined-->
+    <bean id="statisticRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.ContextAwareStatisticRegistry">
+        <property name="automaticallyFindStatsiticsToLoad" value="true"/>
+    </bean>
 
 
 	<!--  actual definitions of statistical units used to process the data within the MUA

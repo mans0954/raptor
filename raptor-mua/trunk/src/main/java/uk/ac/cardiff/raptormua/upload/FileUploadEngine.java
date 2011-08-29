@@ -56,7 +56,7 @@ public class FileUploadEngine {
             try {
                 allBatchFiles.addAll(uploadDirectory.getNewFiles());
             } catch (UploadFileException e) {
-                log.warn("Problem uploading files from directory, {}", e.getMessage());
+                log.warn("Problem trying to scan or upload files from directory, {}", e.getMessage());
             }
         }
         return allBatchFiles;

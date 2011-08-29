@@ -24,7 +24,7 @@ import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor;
+import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
 import uk.ac.cardiff.raptormua.engine.statistics.helper.ObservationComparator;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
@@ -32,7 +32,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  * @author philsmart
  * 
  */
-public class RowSortPostProcessor implements StatisticsPostProcessor {
+public class RowSortPostProcessor implements StatisticPostProcessor {
 
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(RowSortPostProcessor.class);
@@ -51,7 +51,7 @@ public class RowSortPostProcessor implements StatisticsPostProcessor {
      * 
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
+     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
      */
     public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
