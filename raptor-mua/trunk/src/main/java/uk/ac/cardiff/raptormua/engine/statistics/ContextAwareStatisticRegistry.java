@@ -28,7 +28,7 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
     private boolean automaticallyFindStatsiticsToLoad = false;
 
     /**
-     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic} that have been registered with this handler
+     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic}s that have been registered with this handler
      */
     private List<Statistic> statisticalUnits;
 
