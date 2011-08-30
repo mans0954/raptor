@@ -51,9 +51,9 @@ public class RowSortPostProcessor implements StatisticPostProcessor {
      * 
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
+     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor#process(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
      */
-    public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
+    public Observation[] process(Observation[] observations) throws PostprocessorException {
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
         Arrays.sort(observations, new ObservationComparator(ascending));
         return observations;

@@ -222,7 +222,7 @@ public abstract class Statistic {
                 for (StatisticPostProcessor post : postprocessor) {
                     // perform the same post process on each observationseries
                     for (ObservationSeries obsSeries : getObservationSeries()) {
-                        obsSeries.setObservations(post.postProcess(obsSeries.getObservations()));
+                        obsSeries.setObservations(post.process(obsSeries.getObservations()));
                     }
                 }
             } else {
