@@ -31,5 +31,5 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  */
 public interface StatisticPostProcessor {
 
-	public Observation[] postProcess(Observation[] observations) throws PostprocessorException;
+	public Observation[] process(Observation[] observations) throws PostprocessorException;
 }

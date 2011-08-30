@@ -83,7 +83,7 @@ public class SamlMetadataNameFormatter implements StatisticPostProcessor {
         }
     }
 
-    public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
+    public Observation[] process(Observation[] observations) throws PostprocessorException {
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
         for (Observation obs : observations) {
             if (obs instanceof Group) {

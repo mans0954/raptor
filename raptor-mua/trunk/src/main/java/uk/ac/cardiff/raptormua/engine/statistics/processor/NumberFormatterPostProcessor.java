@@ -34,20 +34,21 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  */
 public class NumberFormatterPostProcessor implements StatisticPostProcessor {
 
-    /* class logger */
-    static Logger log = LoggerFactory.getLogger(NumberFormatterPostProcessor.class);
+    /** class logger */
+    private static final Logger log = LoggerFactory.getLogger(NumberFormatterPostProcessor.class);
 
-    /*
-     * <p> performs all actions directly ('live') on the input object, and passes that back as a reference to conform
-     * with the <code>StatisticsPostProcessor</code> interface </p>
+    /**
+     * <p>
+     * performs all actions directly ('live') on the input object, and passes that back as a reference to conform with
+     * the <code>StatisticsPostProcessor</code> interface
+     * </p>
      * 
      * (non-Javadoc)
      * 
-     * @see
-     * uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.
-     * statistics.records.Observation[])
+     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticsPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.
+     *      statistics.records.Observation[])
      */
-    public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
+    public Observation[] process(Observation[] observations) throws PostprocessorException {
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
         for (Observation obs : observations) {
 

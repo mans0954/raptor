@@ -340,6 +340,7 @@
 
 
 	<import resource="statistical-units-system.xml"/>
+    <!-- <import resource="statistical-processors.xml"/> -->
 
 
 </beans>

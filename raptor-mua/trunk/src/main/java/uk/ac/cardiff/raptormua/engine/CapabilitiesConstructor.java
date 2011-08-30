@@ -1,6 +1,7 @@
 /**
  * 
  */
+
 package uk.ac.cardiff.raptormua.engine;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import uk.ac.cardiff.raptormua.runtimeutils.ResourceMetadataComparator;
  * @author philsmart
  * 
  */
-public class CapabilitiesConstructor implements ApplicationContextAware{
+public class CapabilitiesConstructor implements ApplicationContextAware {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(CapabilitiesConstructor.class);
@@ -51,13 +52,14 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     /** Set containing the names of fields that should not be included in the list of possible field values */
     private Set<String> excludeFieldNames;
 
-    /** Springs application context*/
-	private ApplicationContext applicationContext;
+    /** Springs application context */
+    private ApplicationContext applicationContext;
 
     /**
      * @return
      */
-    public Capabilities constructCapabilities(StatisticHandler statisticsHandler, StorageEngine storageEngine, ServiceMetadata metadata) {
+    public Capabilities constructCapabilities(StatisticHandler statisticsHandler, StorageEngine storageEngine,
+            ServiceMetadata metadata) {
         log.info("Capabilities Constructor Called");
         long startTime = System.currentTimeMillis();
 
@@ -65,8 +67,9 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
 
         checkCacheValidity();
 
-        if (cacheEnabled && cachedCapabilities!=null) {
-            log.info("Capabilities retrieved from cache, cache will timeout in {} milliseconds",cacheTimeoutMs-(System.currentTimeMillis()-cacheResetTimeMs));
+        if (cacheEnabled && cachedCapabilities != null) {
+            log.info("Capabilities retrieved from cache, cache will timeout in {} milliseconds", cacheTimeoutMs
+                    - (System.currentTimeMillis() - cacheResetTimeMs));
             capabilities = cachedCapabilities;
         }
 
@@ -84,7 +87,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
             capabilities.setSuggestionValues(suggestionValues);
             capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEvents());
             List<Suggestion> possiblePostProcessors = findPostProcessors();
-            log.debug("Has set {} possible post processor suggestion values",possiblePostProcessors.size());
+            log.trace("Has set {} possible post processor suggestion values", possiblePostProcessors.size());
             suggestionValues.setPossiblePostProcessors(possiblePostProcessors);
 
             // set possible values for field names
@@ -102,9 +105,10 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
             suggestionValues.setPossibleFieldValues(storageEngine.getPossibleValuesFor(possibleFieldNames));
 
             // set resource metadata
-            List<ResourceMetadata> resourceMetadata = (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
+            List<ResourceMetadata> resourceMetadata =
+                    (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
             log.debug("Setting {} resource metadata", resourceMetadata.size());
-            Collections.sort(resourceMetadata,new ResourceMetadataComparator());
+            Collections.sort(resourceMetadata, new ResourceMetadataComparator());
             capabilities.setResourceMetadata(resourceMetadata);
 
             ArrayList<StatisticalUnitInformation> stats = new ArrayList();
@@ -118,8 +122,8 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
                 ArrayList<ProcessorInformation> postprocessors = new ArrayList<ProcessorInformation>();
                 if (entry.getPostprocessor() != null) {
                     for (StatisticPostProcessor postprocessor : entry.getPostprocessor()) {
-                    	ProcessorInformation processorInformation = new ProcessorInformation();
-                    	processorInformation.setBeanName(postprocessor.getClass().getSimpleName());
+                        ProcessorInformation processorInformation = new ProcessorInformation();
+                        processorInformation.setBeanName(postprocessor.getClass().getSimpleName());
                         postprocessors.add(processorInformation);
                     }
                 }
@@ -127,30 +131,31 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
                 stats.add(information);
             }
             capabilities.setStatisticalServices(stats);
-            
+
             if (cacheEnabled) {
                 cachedCapabilities = capabilities;
                 cacheResetTimeMs = System.currentTimeMillis();
             }
         }
         long endTime = System.currentTimeMillis();
-        log.info("Constructed MUA Capabilities for [{}] in {}s", capabilities.getMetadata().getEntityId(),((endTime-startTime)/1000));
+        log.info("Constructed MUA Capabilities for [{}] in {}s", capabilities.getMetadata().getEntityId(),
+                ((endTime - startTime) / 1000));
 
         return capabilities;
     }
-    
-    private List<Suggestion> findPostProcessors(){
-    	String[] postProcessors = applicationContext.getBeanNamesForType(StatisticPostProcessor.class);
-    	ArrayList<Suggestion> postProcessorSuggestions = new ArrayList<Suggestion>();
-    	for (String processor : postProcessors){
-    		Suggestion suggestion = new Suggestion();
-    		suggestion.setBase("postprocessor");
-    		suggestion.setValue(processor);
-    		postProcessorSuggestions.add(suggestion);
-    		log.trace("Postprocessor, {}",processor);
-    	}
-    	return postProcessorSuggestions;
-    	
+
+    private List<Suggestion> findPostProcessors() {
+        String[] postProcessors = applicationContext.getBeanNamesForType(StatisticPostProcessor.class);
+        ArrayList<Suggestion> postProcessorSuggestions = new ArrayList<Suggestion>();
+        for (String processor : postProcessors) {
+            Suggestion suggestion = new Suggestion();
+            suggestion.setBase("postprocessor");
+            suggestion.setValue(processor);
+            postProcessorSuggestions.add(suggestion);
+            log.trace("Postprocessor, {}", processor);
+        }
+        return postProcessorSuggestions;
+
     }
 
     private void checkCacheValidity() {
@@ -166,15 +171,14 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     }
 
     /**
-     * Sets whether the cache is enabled, and sets a default timeout of 30 minutes
-     * in case one is not specified in the XML
+     * Sets whether the cache is enabled, and sets a default timeout of 30 minutes in case one is not specified in the
+     * XML
      * 
-     * @param cacheEnabled
-     *            the cacheEnabled to set
+     * @param cacheEnabled the cacheEnabled to set
      */
     public void setCacheEnabled(boolean cacheEnabled) {
         this.cacheEnabled = cacheEnabled;
-        cacheTimeoutMs=1800000;
+        cacheTimeoutMs = 1800000;
     }
 
     /**
@@ -185,8 +189,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     }
 
     /**
-     * @param cacheTimeoutMs
-     *            the cacheTimeoutMs to set
+     * @param cacheTimeoutMs the cacheTimeoutMs to set
      */
     public void setCacheTimeoutMs(long cacheTimeoutMs) {
         this.cacheTimeoutMs = cacheTimeoutMs;
@@ -200,8 +203,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
     }
 
     /**
-     * @param excludeFieldNames
-     *            the excludeFieldNames to set
+     * @param excludeFieldNames the excludeFieldNames to set
      */
     public void setExcludeFieldNames(Set<String> excludeFieldNames) {
         this.excludeFieldNames = excludeFieldNames;
@@ -214,9 +216,9 @@ public class CapabilitiesConstructor implements ApplicationContextAware{
         return excludeFieldNames;
     }
 
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-		
-	}
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+
+    }
 
 }

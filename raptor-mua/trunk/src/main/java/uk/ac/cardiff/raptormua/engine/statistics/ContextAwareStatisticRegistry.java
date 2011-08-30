@@ -79,9 +79,9 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
     private void performUpdate(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
         statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
         // now deal with the post processors
-        List<StatisticPostProcessor> postProcessors =
-                initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
-        statistic.setPostprocessor(postProcessors);
+        // List<StatisticPostProcessor> postProcessors =
+        // initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
+        // statistic.setPostprocessor(postProcessors);
     }
 
     /**
@@ -91,7 +91,12 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
      */
     private List<StatisticPostProcessor> initialisePostProcessors(List<ProcessorInformation> postProcessorsInformation) {
         // TODO could be factory method, need to acquire the bean implementation now.
+        StatisticProcessorFactory factory = new StatisticProcessorFactory();
         List<StatisticPostProcessor> postprocessors = null;
+
+        for (ProcessorInformation information : postProcessorsInformation) {
+            postprocessors.add(factory.getPostProcessor(information.getClassName()));
+        }
 
         return postprocessors;
     }

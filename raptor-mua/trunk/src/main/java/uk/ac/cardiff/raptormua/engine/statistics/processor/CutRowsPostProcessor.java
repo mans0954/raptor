@@ -46,10 +46,10 @@ public class CutRowsPostProcessor implements StatisticPostProcessor {
      * 
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor#postProcess(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
+     * @see uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor#process(uk.ac.cardiff.raptormua.engine.statistics.records.Observation[])
      */
 
-    public Observation[] postProcess(Observation[] observations) throws PostprocessorException {
+    public Observation[] process(Observation[] observations) throws PostprocessorException {
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
         int rowsToKeep = (observations.length < numberOfRowsToKeep) ? observations.length : numberOfRowsToKeep;
         log.debug("Keeping {} rows", rowsToKeep);
