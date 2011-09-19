@@ -62,7 +62,7 @@
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-information-model</artifactId>
-            <version>0.1.7</version>
+            <version>0.1.8-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <artifactId>hibernate</artifactId>
