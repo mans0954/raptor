@@ -26,7 +26,7 @@
 
 
 	<properties>
-		<apache.cxf.version>2.2.7</apache.cxf.version>
+		<apache.cxf.version>2.2.8</apache.cxf.version>
 		<spring.version>3.0.3.RELEASE</spring.version>
 	</properties>
 
