@@ -55,6 +55,18 @@ public class PersistantEventHandler implements EventHandler {
      */
     private Set<Event> persistQueue;
 
+    /**
+     * If true, COUNT queries to the database are seperated per table as described in <code>countTableNames</code>.
+     * Otherwise a COUNT of the highest level <code>Event</code> class is issued which uses table joins to determine
+     * counts from all subclasses thereof.
+     */
+    private boolean optimiseCountQueries;
+
+    /**
+     * The names of the classes used in count queries if <code>optimiseCountQueries</code> is set to true
+     */
+    private List<String> countClassNames;
+
     public PersistantEventHandler(RaptorDataConnection dataConnection) {
         this.setDataConnection(dataConnection);
         persistQueue = new HashSet<Event>();
@@ -196,9 +208,32 @@ public class PersistantEventHandler implements EventHandler {
 
     }
 
+    /**
+     * Retrieves the number of events stored by this persistent event handler. This is retrieved from the underlying
+     * persistent storage e.g. a database. The query can be separated to determine row counts from each individual table
+     * that is a subclass of Event before being summed together if the optimiseCountQueries is set to true - to speed up
+     * queries to certain database. Otherwise a fully automatic and higher level 'select count(*) from Event' is used
+     * where table joins are required to sum all subclasses of Event.
+     */
     public long getNumberOfEvents() {
-        Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
-        return (Long) result;
+        if (optimiseCountQueries == true) {
+            log.trace("Using optimised COUNT query, but dependent on the user defined countClassNames XML property");
+            long count = 0;
+            if (countClassNames == null) {
+                log.error("Tried to compute Event count using optimised query, but no classes specified in mua-core.xml");
+                return 0;
+            }
+            for (String className : countClassNames) {
+                Object result = dataConnection.runQueryUnique("select count(*) from " + className, null);
+                Long resultLong = (Long) result;
+                count += resultLong;
+            }
+            return count;
+        } else {
+            log.trace("Using joined COUNT query");
+            Object result = dataConnection.runQueryUnique("select count(*) from Event", null);
+            return (Long) result;
+        }
     }
 
     public DateTime getLatestEventTime() {
@@ -214,6 +249,34 @@ public class PersistantEventHandler implements EventHandler {
             dataConnection.runQueryUnique("delete from Event where hashCode = ?", new Object[] {hash});
         }
 
+    }
+
+    /**
+     * @param optimiseCountQueries the optimiseCountQueries to set
+     */
+    public void setOptimiseCountQueries(boolean optimiseCountQueries) {
+        this.optimiseCountQueries = optimiseCountQueries;
+    }
+
+    /**
+     * @return the optimiseCountQueries
+     */
+    public boolean isOptimiseCountQueries() {
+        return optimiseCountQueries;
+    }
+
+    /**
+     * @param countClassNames the countClassNames to set
+     */
+    public void setCountClassNames(List<String> countClassNames) {
+        this.countClassNames = countClassNames;
+    }
+
+    /**
+     * @return the countClassNames
+     */
+    public List<String> getCountClassNames() {
+        return countClassNames;
     }
 
 }
