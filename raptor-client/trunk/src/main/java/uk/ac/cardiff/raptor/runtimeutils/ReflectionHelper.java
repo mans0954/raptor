@@ -356,7 +356,7 @@ public class ReflectionHelper {
     }
 
     /**
-     * Code taken and adapted from the JWhich project. Finds all subclasses of the uk.ac.cardiff.model.Entry class in
+     * Code taken and adapted from the JWhich project. Finds all subclasses of the uk.ac.cardiff.model.Event class in
      * the package <code>pckgname</code> if they exist outside any JAR libraries, use
      * <code>getClasseNamesInPackageJAR</code>
      * 

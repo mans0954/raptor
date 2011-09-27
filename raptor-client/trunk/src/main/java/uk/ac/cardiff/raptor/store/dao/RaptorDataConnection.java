@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.store.dao;
 
 import java.util.Collection;
@@ -25,18 +26,22 @@ import org.springframework.dao.DataAccessException;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public interface RaptorDataConnection {
 
-	public List runQuery(String query, Object[] parameters)  throws DataAccessException;
-	public Object runQueryUnique(String query, Object[] parameters)  throws DataAccessException;
-	public void save(Object object) throws DataAccessException;
-	public void deleteAllEntries(Collection entries) throws DataAccessException;
-	public void saveAll(Collection collection) throws DataAccessException;
-	public List runQuery(String query, Object[] parameters, int maxResultSize)throws DataAccessException;
-	public void runUpdate(String query, Object[] parameters)  throws DataAccessException;
+    public List runQuery(String query, Object[] parameters) throws DataAccessException;
 
+    public Object runQueryUnique(String query, Object[] parameters) throws DataAccessException;
 
+    public void save(Object object) throws DataAccessException;
+
+    public void deleteAllEntries(Collection<?> entries) throws DataAccessException;
+
+    public void saveAll(Collection<?> collection) throws DataAccessException;
+
+    public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException;
+
+    public void runUpdate(String query, Object[] parameters) throws DataAccessException;
 
 }
