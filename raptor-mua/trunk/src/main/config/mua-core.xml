@@ -221,14 +221,21 @@
 
 	<!-- Create the storage engine and entry handler -->
 	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.StorageEngine">
-        <property name="entryHandler"><ref bean="persistantEntryHandler"/></property>
+        <property name="entryHandler"><ref bean="persistantEventHandler"/></property>
         <property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
 
 
 
-	<bean name="persistantEntryHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEventHandler">
+	<bean name="persistantEventHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEventHandler">
 		<constructor-arg index="0"><ref bean="dataConnectionImpl"></ref></constructor-arg>
+        <!-- <property name="optimiseCountQueries"><value>true</value></property>
+        <property name="countClassNames">
+            <list>
+                <value>ShibbolethIdpAuthenticationEvent</value>
+                <value>EzproxyAuthenticationEvent</value>
+            </list>
+        </property> -->
 	</bean>
 
 	<!--  Load all other bean definitions -->
