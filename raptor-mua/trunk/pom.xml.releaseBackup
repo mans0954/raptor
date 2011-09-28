@@ -2,15 +2,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.cardiff.raptor</groupId>
     <artifactId>raptor-mua</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.1-SNAPSHOT</version>
     <!-- <packaging>jar</packaging> -->
     <name>Raptor Multi-Unit Aggregator</name>
 
 
     <!-- set up of SCM and DM -->
     <scm>
-        <developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-mua/tags/raptor-mua-0.2.1</developerConnection>
-        <url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-mua/tags/raptor-mua-0.2.1</url>
+        <developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-mua/trunk</developerConnection>
+        <url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-mua</url>
     </scm>
     <distributionManagement>
         <repository>
