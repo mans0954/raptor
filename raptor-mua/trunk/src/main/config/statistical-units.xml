@@ -23,7 +23,7 @@
     
 
 
-	<bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler">
+	<bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler">
         <property name="statisticRegistry"><ref bean="statisticRegistry"/></property>
     </bean>
     
