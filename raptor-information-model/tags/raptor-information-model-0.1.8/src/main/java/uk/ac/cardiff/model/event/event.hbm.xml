@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+         "http://www.jboss.org/dtd/hibernate/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="uk.ac.cardiff.model.event.Event" table="event"
+		dynamic-update="true" dynamic-insert="false" >
+
+
+		<id name="persistantId" column="persistantId" type="long"
+			unsaved-value="0">
+			<!-- <generator class="native">
+				<param name="sequence">hib_entity_seq</param>
+			</generator> -->
+            <generator class="hilo">
+
+            </generator>
+		</id>
+
+		<property name="eventTime"
+			type="org.joda.time.contrib.hibernate.PersistentDateTime" update="true"
+			insert="true" not-null="false" index="dt_i" >
+		      <column name="eventtime"></column>
+	   </property>
+
+	   <!--<property name="date"
+            type="timestamp" update="true"
+            insert="true" not-null="false" index="dt_index" >
+              <column name="eventtime"></column>
+       </property>
+
+
+		--><property name="serviceHost" type="string" update="true"
+			insert="true" column="serviceHost" not-null="false" index="requesthost_i" />
+		<property name="resourceHost" type="string" update="true"
+			insert="true" column="resourceHost" not-null="false" />
+		<property name="serviceId" type="string" update="true"
+			insert="true" column="serviceId" not-null="false" index="serviceid_i" />
+		<property name="resourceId" type="string" update="true"
+			insert="true" column="resourceId" not-null="false" />
+		<property name="eventId" type="integer" update="true" insert="true"
+			column="eventId" not-null="true" index="eventid_i"/>
+		<property name="eventType" type="string" update="true"
+			insert="true" column="eventType" not-null="false" />
+
+			<property name="resourceIdCategory" type="integer" update="true"
+            insert="true" column="resourceIdCategory" not-null="false" />
+
+		<component name="eventMetadata">
+            <property name="entityId" type="string" update="true" insert="true"
+            column="entityId" index="entityid_i" />
+            <property name="serviceName" type="string" update="true"
+            insert="true" column="serviceName" index="servicename_i" />
+            <property name="organisationName" type="string" update="true"
+            insert="true" column="organisationName" index="orgname_i" />
+        </component>
+
+
+
+
+	</class>
+
+	<union-subclass name="uk.ac.cardiff.model.event.AuthenticationEvent" extends="uk.ac.cardiff.model.event.Event">
+
+		<property name="authenticationType" column="authenticationType"
+			type="string" />
+		<property name="principalName" column="principalName" type="string"
+			index="principalname_i" />
+
+        <component name="principalInformation">
+            <property name="school" type="string" update="true" insert="true"
+            column="school" index="school_i" />
+            <property name="affiliation" type="string" update="true"
+            insert="true" column="affiliation" index="affiliation_i" />
+        </component>
+
+	</union-subclass>
+
+	<union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent"
+		name="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent" >
+
+
+		<property name="requestId" column="requestID" type="string" />
+		<property name="messageProfileId" column="messageProfileId"
+			type="string" />
+		<property name="responseBinding" column="responseBinding"
+			type="string" />
+		<property name="requestBinding" column="requestBinding" type="string" />
+		<property name="releasedAttributes" column="releasedAttributes"
+			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+		<property name="assertionId" column="assertionId"
+			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+		<property name="nameIdentifier" column="nameIdentifier" type="string" />
+		<property name="responseId" column="responseId" type="string" />
+		<property name="hashCode" column="current_hashCode" type="integer"
+			index="hashcode_i" />
+	</union-subclass>
+
+	<union-subclass  extends="uk.ac.cardiff.model.event.AuthenticationEvent"
+	name="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent">
+
+		<property name="requesterIp" column="requesterIp" type="string" />
+		<property name="sessionId" column="sessionId" type="string" />
+		<property name="hashCode" column="current_hashCode" type="integer"
+			index="hashcode_i" />
+
+	</union-subclass>
+
+
+
+
+</hibernate-mapping>
