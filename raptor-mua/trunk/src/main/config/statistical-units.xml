@@ -314,7 +314,7 @@
     <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor">
     </bean>
 
-	<bean id="SamlMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.ShibbolethMetadataNameFormatter">
+	<bean id="SamlMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter">
 		<constructor-arg index="0">
 		  <list>
 		   <value>/Users/philsmart/Documents/DataSets/shib/ukfederation-metadata.xml</value>
