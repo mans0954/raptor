@@ -3,227 +3,321 @@
  */
 package uk.ac.cardiff.model.event;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
-
 
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
+import uk.ac.cardiff.utility.StringUtils;
 
 /**
+ * The Class ShibbolethIdpAuthenticationEvent.
+ * 
  * @author philsmart
- *
  */
-public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent{
+public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
 
+    /** The request id. */
+    private String requestId;
 
-	private String requestId;
-	private String messageProfileId;
-	private String responseBinding;
-	private String responseId;
-	private String requestBinding;
-	private String nameIdentifier;
-	private String[] assertionId;
-	private String[] releasedAttributes;
+    /** The message profile id. */
+    private String messageProfileId;
 
+    /** The response binding. */
+    private String responseBinding;
 
-	public ShibbolethIdpAuthenticationEvent(){
-	    super();
-	}
+    /** The response id. */
+    private String responseId;
 
-	public static ShibbolethIdpAuthenticationEvent newInstance() {
-	    return new ShibbolethIdpAuthenticationEvent();
-	  }
+    /** The request binding. */
+    private String requestBinding;
 
-	/**
-	 * Copy constructor
-	 *
-	 * @param event
-	 */
-	protected ShibbolethIdpAuthenticationEvent(ShibbolethIdpAuthenticationEvent event){
-	    super (event);
-	    this.requestId = event.getRequestId();
-	    this.messageProfileId = event.getMessageProfileId();
-	    this.responseBinding = event.getResponseBinding();
-	    this.responseId = event.getResponseId();
-	    this.requestBinding = event.getRequestBinding();
-	    this.nameIdentifier = event.getNameIdentifier();
+    /** The name identifier. */
+    private String nameIdentifier;
 
-	    //shallow copy is OK here, as a new array is created with immutable objects (String).
-	    this.assertionId = event.getAssertionId().clone();
-	    this.releasedAttributes = event.getReleasedAttributes().clone();
-	}
+    /** The assertion id. */
+    private String[] assertionId;
 
-	    /**
-	     * Copy method. Alternative to clone.
-	     */
-	 public ShibbolethIdpAuthenticationEvent copy(){
-	      return new ShibbolethIdpAuthenticationEvent(this);
-	 }
+    /** The released attributes. */
+    private String[] releasedAttributes;
 
-	public void setResponseBinding(String responseBinding) {
-		this.responseBinding = responseBinding;
-	}
-	public String getResponseBinding() {
-		return responseBinding;
-	}
+    /**
+     * Instantiates a new shibboleth idp authentication event.
+     */
+    public ShibbolethIdpAuthenticationEvent() {
+        super();
+    }
 
-	public void setRequestBinding(String requestBinding) {
-		this.requestBinding = requestBinding;
-	}
-	public String getRequestBinding() {
-		return requestBinding;
-	}
-	public void setMessageProfileId(String messageProfileId) {
-		this.messageProfileId = messageProfileId;
-	}
-	public String getMessageProfileId() {
-		return messageProfileId;
-	}
-	/**
-	 * @param releasedAttributes the releasedAttributes to set
-	 */
-	public void setReleasedAttributes(String[] releasedAttributes) {
-	    this.releasedAttributes = releasedAttributes;
-	}
-	/**
-	 * @return the releasedAttributes
-	 */
-	public String[] getReleasedAttributes() {
-	    return releasedAttributes;
-	}
+    /**
+     * New instance.
+     * 
+     * @return the shibboleth idp authentication event
+     */
+    public static ShibbolethIdpAuthenticationEvent newInstance() {
+        return new ShibbolethIdpAuthenticationEvent();
+    }
 
-	public String toString() {
-		Method[] methods = this.getClass().getMethods();
-		StringBuilder builder = new StringBuilder();
-		builder.append(this.getClass() + "@[");
-		for (Method method : methods) {
-		    try {
-			if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
-			    this.getClass().getMethod(method.getName(), (Class[]) null);
-			    Object object = method.invoke(this, (Object[]) null);
-			    if (object instanceof Collection){
-				 builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
-			    }
-			    else if (object.getClass().isArray()){
-			        Object[] array = (Object[])object;
-			        builder.append(method.getName() + " [" + Arrays.asList(array) + "],");
-			    }
-			    else{
-				builder.append(method.getName() + " [" + object + "],");
-			    }
-		      }
-		    } catch (Exception e){
-			//do nothing
-		    }
-		}
-		builder.append("]");
-		return builder.toString();
-	 }
+    /**
+     * Copy constructor.
+     * 
+     * @param event
+     *            the event to copy
+     */
+    protected ShibbolethIdpAuthenticationEvent(ShibbolethIdpAuthenticationEvent event) {
+        super(event);
+        this.requestId = event.getRequestId();
+        this.messageProfileId = event.getMessageProfileId();
+        this.responseBinding = event.getResponseBinding();
+        this.responseId = event.getResponseId();
+        this.requestBinding = event.getRequestBinding();
+        this.nameIdentifier = event.getNameIdentifier();
 
-	@Override
-	public boolean equals(Object obj){
-	    if ( this == obj ) return true;
-	    if((obj == null) || (obj.getClass() != this.getClass()))
-		return false;
-	    ShibbolethIdpAuthenticationEvent that = (ShibbolethIdpAuthenticationEvent)obj;
-	    boolean areEqual =
-	      EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) &&
-	      EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
-	      EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
-	      EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
-	      EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) &&
-	      EqualsUtil.areEqual(this.getResponseBinding(), that.getResponseBinding()) &&
-	      EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
-	      EqualsUtil.areEqual(this.getMessageProfileId(), that.getMessageProfileId()) &&
-	      EqualsUtil.areEqual(this.getRequestBinding(), that.getRequestBinding()) &&
-	      EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName()) &&
-	      EqualsUtil.areEqual(this.getNameIdentifier(), that.getNameIdentifier()) &&
-	      EqualsUtil.areEqual(this.getResponseId(), that.getResponseId()) &&
-	      EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) &&
-	      EqualsUtil.areEqual(this.getEventType(), that.getEventType()) &&
-	      EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) &&
-	      Arrays.equals(this.getAssertionId(), that.getAssertionId()) &&
-	      Arrays.equals(this.getReleasedAttributes(), that.getReleasedAttributes());
+        // shallow copy is OK here, as a new array is created with immutable objects (String).
+        this.assertionId = event.getAssertionId().clone();
+        this.releasedAttributes = event.getReleasedAttributes().clone();
+    }
 
-	    return areEqual;
-	}
+    /**
+     * Copy method. Alternative to clone. Returns a copied version of this event.
+     * 
+     * @return the shibboleth idp authentication event
+     */
+    public ShibbolethIdpAuthenticationEvent copy() {
+        return new ShibbolethIdpAuthenticationEvent(this);
+    }
 
-	/**
-	 * For hibernate, so the hashcode can be persisted
-	 * @return
-	 */
-	public int getHashCode(){
-	    return hashCode();
-	}
+    /**
+     * Sets the response binding.
+     * 
+     * @param responseBinding
+     *            the new response binding
+     */
+    public void setResponseBinding(String responseBinding) {
+        this.responseBinding = responseBinding;
+    }
 
-	/**
-	 * For hibernate, does nothing as the hascode is computed on the fly
-	 * from the <code>hashCode</code> method
-	 *
-	 * @param hashCode
-	 */
-	public void setHashCode(int hashCode){
+    /**
+     * Gets the response binding.
+     * 
+     * @return the response binding
+     */
+    public String getResponseBinding() {
+        return responseBinding;
+    }
 
-	}
+    /**
+     * Sets the request binding.
+     * 
+     * @param requestBinding
+     *            the new request binding
+     */
+    public void setRequestBinding(String requestBinding) {
+        this.requestBinding = requestBinding;
+    }
 
+    /**
+     * Gets the request binding.
+     * 
+     * @return the request binding
+     */
+    public String getRequestBinding() {
+        return requestBinding;
+    }
 
-	/**
-	 * create a unique hash, with as uniform a distribution as possible
-	 */
-	@Override
-	public int hashCode(){
-	    int hash = HashCodeUtil.SEED;
+    /**
+     * Sets the message profile id.
+     * 
+     * @param messageProfileId
+     *            the new message profile id
+     */
+    public void setMessageProfileId(String messageProfileId) {
+        this.messageProfileId = messageProfileId;
+    }
 
-	    hash = HashCodeUtil.hash(hash,getEventTimeMillis());
-	    hash = HashCodeUtil.hash(hash,getAuthenticationType());
-	    hash = HashCodeUtil.hash(hash,getEventId());
-	    hash = HashCodeUtil.hash(hash,getServiceHost());
-	    hash = HashCodeUtil.hash(hash,getRequestId());
-	    hash = HashCodeUtil.hash(hash,getResponseBinding());
-	    hash = HashCodeUtil.hash(hash,getResourceHost());
-	    hash = HashCodeUtil.hash(hash,getReleasedAttributes());
-	    hash = HashCodeUtil.hash(hash,getMessageProfileId());
-	    hash = HashCodeUtil.hash(hash,getRequestBinding());
-	    hash = HashCodeUtil.hash(hash,getPrincipalName());
-	    hash = HashCodeUtil.hash(hash,getNameIdentifier());
-	    hash = HashCodeUtil.hash(hash,getResponseId());
-	    hash = HashCodeUtil.hash(hash,getAssertionId());
-	    hash = HashCodeUtil.hash(hash,getEventType());
-	    hash = HashCodeUtil.hash(hash,getServiceId());
-	    hash = HashCodeUtil.hash(hash,getResourceId());
-	    return hash;
+    /**
+     * Gets the message profile id.
+     * 
+     * @return the message profile id
+     */
+    public String getMessageProfileId() {
+        return messageProfileId;
+    }
 
-	}
-	public void setNameIdentifier(String nameIdentifier) {
-	    this.nameIdentifier = nameIdentifier;
-	}
-	public String getNameIdentifier() {
-	    return nameIdentifier;
-	}
-	public void setAssertionId(String[] assertionId) {
-	    this.assertionId = assertionId;
-	}
-	public String[] getAssertionId() {
-	    return assertionId;
-	}
-	public void setResponseId(String responseId) {
-	    this.responseId = responseId;
-	}
-	public String getResponseId() {
-	    return responseId;
-	}
-	public void setRequestId(String requestId) {
-	    this.requestId = requestId;
-	}
-	public String getRequestId() {
-	    return requestId;
-	}
+    /**
+     * Sets the released attributes.
+     * 
+     * @param releasedAttributes
+     *            the releasedAttributes to set
+     */
+    public void setReleasedAttributes(String[] releasedAttributes) {
+        this.releasedAttributes = releasedAttributes;
+    }
 
+    /**
+     * Gets the released attributes.
+     * 
+     * @return the releasedAttributes
+     */
+    public String[] getReleasedAttributes() {
+        return releasedAttributes;
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.model.event.Event#toString()
+     */
+    public String toString() {
+        return StringUtils.buildToString(this);
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if ((obj == null) || (obj.getClass() != this.getClass()))
+            return false;
+        ShibbolethIdpAuthenticationEvent that = (ShibbolethIdpAuthenticationEvent) obj;
+        boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
+                && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
+                && EqualsUtil.areEqual(this.getRequestId(), that.getRequestId()) && EqualsUtil.areEqual(this.getResponseBinding(), that.getResponseBinding())
+                && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) && EqualsUtil.areEqual(this.getMessageProfileId(), that.getMessageProfileId())
+                && EqualsUtil.areEqual(this.getRequestBinding(), that.getRequestBinding()) && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName())
+                && EqualsUtil.areEqual(this.getNameIdentifier(), that.getNameIdentifier()) && EqualsUtil.areEqual(this.getResponseId(), that.getResponseId())
+                && EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) && EqualsUtil.areEqual(this.getEventType(), that.getEventType())
+                && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) && Arrays.equals(this.getAssertionId(), that.getAssertionId())
+                && Arrays.equals(this.getReleasedAttributes(), that.getReleasedAttributes());
 
+        return areEqual;
+    }
 
+    /**
+     * For hibernate, so the hashcode can be persisted.
+     * 
+     * @return the hash code
+     */
+    public int getHashCode() {
+        return hashCode();
+    }
+
+    /**
+     * For hibernate, does nothing as the hascode is computed on the fly from the <code>hashCode</code> method.
+     * 
+     * @param hashCode
+     *            the new hash code
+     */
+    public void setHashCode(int hashCode) {
+
+    }
+
+    /**
+     * create a unique hash, with as uniform a distribution as possible.
+     * 
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        int hash = HashCodeUtil.SEED;
+
+        hash = HashCodeUtil.hash(hash, getEventTimeMillis());
+        hash = HashCodeUtil.hash(hash, getAuthenticationType());
+        hash = HashCodeUtil.hash(hash, getEventId());
+        hash = HashCodeUtil.hash(hash, getServiceHost());
+        hash = HashCodeUtil.hash(hash, getRequestId());
+        hash = HashCodeUtil.hash(hash, getResponseBinding());
+        hash = HashCodeUtil.hash(hash, getResourceHost());
+        hash = HashCodeUtil.hash(hash, getReleasedAttributes());
+        hash = HashCodeUtil.hash(hash, getMessageProfileId());
+        hash = HashCodeUtil.hash(hash, getRequestBinding());
+        hash = HashCodeUtil.hash(hash, getPrincipalName());
+        hash = HashCodeUtil.hash(hash, getNameIdentifier());
+        hash = HashCodeUtil.hash(hash, getResponseId());
+        hash = HashCodeUtil.hash(hash, getAssertionId());
+        hash = HashCodeUtil.hash(hash, getEventType());
+        hash = HashCodeUtil.hash(hash, getServiceId());
+        hash = HashCodeUtil.hash(hash, getResourceId());
+        return hash;
+
+    }
+
+    /**
+     * Sets the name identifier.
+     * 
+     * @param nameIdentifier
+     *            the new name identifier
+     */
+    public void setNameIdentifier(String nameIdentifier) {
+        this.nameIdentifier = nameIdentifier;
+    }
+
+    /**
+     * Gets the name identifier.
+     * 
+     * @return the name identifier
+     */
+    public String getNameIdentifier() {
+        return nameIdentifier;
+    }
+
+    /**
+     * Sets the assertion id.
+     * 
+     * @param assertionId
+     *            the new assertion id
+     */
+    public void setAssertionId(String[] assertionId) {
+        this.assertionId = assertionId;
+    }
+
+    /**
+     * Gets the assertion id.
+     * 
+     * @return the assertion id
+     */
+    public String[] getAssertionId() {
+        return assertionId;
+    }
+
+    /**
+     * Sets the response id.
+     * 
+     * @param responseId
+     *            the new response id
+     */
+    public void setResponseId(String responseId) {
+        this.responseId = responseId;
+    }
+
+    /**
+     * Gets the response id.
+     * 
+     * @return the response id
+     */
+    public String getResponseId() {
+        return responseId;
+    }
+
+    /**
+     * Sets the request id.
+     * 
+     * @param requestId
+     *            the new request id
+     */
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    /**
+     * Gets the request id.
+     * 
+     * @return the request id
+     */
+    public String getRequestId() {
+        return requestId;
+    }
 
 }

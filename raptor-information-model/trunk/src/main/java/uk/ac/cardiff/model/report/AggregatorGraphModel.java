@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * based on the Apache Trinidad ChartModel, for compatibility. However, does not extend the Apache Trinidad Model
- * so as to remain view agnostic.
+/**
+ * based on the Apache Trinidad ChartModel, for compatibility. However, does not extend the Apache Trinidad Model so as to remain view agnostic.
  */
 
 public class AggregatorGraphModel implements Serializable {

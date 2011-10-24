@@ -5,28 +5,44 @@ package uk.ac.cardiff.model.event;
 
 import org.joda.time.DateTime;
 
+import uk.ac.cardiff.utility.StringUtils;
 
 /**
+ * The Class ProxyEvent.
+ * 
  * @author philsmart
- *
  */
-public class ProxyEvent extends Event{
+public class ProxyEvent extends Event {
 
+    /** The request url. */
     private String requestURL;
+
+    /** The http response code. */
     private int httpResponseCode;
+
+    /** The response size. */
     private long responseSize;
+
+    /** The response time. */
     private DateTime responseTime;
+
+    /** The requester ip. */
     private String requesterIp;
 
-    public ProxyEvent(){
+    /**
+     * Instantiates a new proxy event.
+     */
+    public ProxyEvent() {
         super();
     }
 
     /**
-     * Copy constructor
+     * Copy constructor.
+     * 
      * @param event
+     *            the event
      */
-    public ProxyEvent(ProxyEvent event){
+    public ProxyEvent(ProxyEvent event) {
         super(event);
         this.requestURL = event.getRequestURL();
         this.httpResponseCode = event.getHttpResponseCode();
@@ -37,53 +53,115 @@ public class ProxyEvent extends Event{
 
     /**
      * Copy method. Alternative to clone.
+     * 
+     * @return the proxy event
      */
-    public ProxyEvent cop(){
+    public ProxyEvent cop() {
         return new ProxyEvent(this);
     }
 
-
+    /**
+     * Sets the request url.
+     * 
+     * @param requestURL
+     *            the new request url
+     */
     public void setRequestURL(String requestURL) {
-	this.requestURL = requestURL;
-    }
-    public String getRequestURL() {
-	return requestURL;
-    }
-    public void setHttpResponseCode(int httpResponseCode) {
-	this.httpResponseCode = httpResponseCode;
-    }
-    public int getHttpResponseCode() {
-	return httpResponseCode;
-    }
-    public void setResponseSize(long responseSize) {
-	this.responseSize = responseSize;
-    }
-    public long getResponseSize() {
-	return responseSize;
-    }
-    public void setResponseTime(DateTime responseTime) {
-	this.responseTime = responseTime;
+        this.requestURL = requestURL;
     }
 
     /**
-     * Get response time, using a defensive copy
-     *
-     * @return
+     * Gets the request url.
+     * 
+     * @return the request url
+     */
+    public String getRequestURL() {
+        return requestURL;
+    }
+
+    /**
+     * Sets the http response code.
+     * 
+     * @param httpResponseCode
+     *            the new http response code
+     */
+    public void setHttpResponseCode(int httpResponseCode) {
+        this.httpResponseCode = httpResponseCode;
+    }
+
+    /**
+     * Gets the http response code.
+     * 
+     * @return the http response code
+     */
+    public int getHttpResponseCode() {
+        return httpResponseCode;
+    }
+
+    /**
+     * Sets the response size.
+     * 
+     * @param responseSize
+     *            the new response size
+     */
+    public void setResponseSize(long responseSize) {
+        this.responseSize = responseSize;
+    }
+
+    /**
+     * Gets the response size.
+     * 
+     * @return the response size
+     */
+    public long getResponseSize() {
+        return responseSize;
+    }
+
+    /**
+     * Sets the response time.
+     * 
+     * @param responseTime
+     *            the new response time
+     */
+    public void setResponseTime(DateTime responseTime) {
+        this.responseTime = responseTime;
+    }
+
+    /**
+     * Get response time, using a defensive copy.
+     * 
+     * @return the response time
      */
     public DateTime getResponseTime() {
-	return new DateTime(responseTime);
+        return new DateTime(responseTime);
     }
+
     /**
-     * @param requesterIp the requesterIp to set
+     * Sets the requester ip.
+     * 
+     * @param requesterIp
+     *            the requesterIp to set
      */
     public void setRequesterIp(String requesterIp) {
-	this.requesterIp = requesterIp;
+        this.requesterIp = requesterIp;
     }
+
     /**
+     * Gets the requester ip.
+     * 
      * @return the requesterIp
      */
     public String getRequesterIp() {
-	return requesterIp;
+        return requesterIp;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.model.event.Event#toString()
+     */
+    public String toString() {
+        return StringUtils.buildToString(this);
     }
 
 }
