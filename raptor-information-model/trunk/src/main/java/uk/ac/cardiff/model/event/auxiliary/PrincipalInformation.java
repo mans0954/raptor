@@ -1,8 +1,6 @@
 package uk.ac.cardiff.model.event.auxiliary;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
+import uk.ac.cardiff.utility.StringUtils;
 
 public class PrincipalInformation {
 
@@ -15,21 +13,20 @@ public class PrincipalInformation {
     /** The affiliation this principal has with their current school or department */
     private String affiliation;
 
-
     /**
      * Default constructor
-     *
+     * 
      */
-    public PrincipalInformation(){
+    public PrincipalInformation() {
 
     }
 
     /**
      * Copy constructor
-     *
+     * 
      * @param principalInformation
      */
-    public PrincipalInformation(PrincipalInformation principalInformation){
+    public PrincipalInformation(PrincipalInformation principalInformation) {
         this.school = principalInformation.getSchool();
         this.affiliation = principalInformation.getAffiliation();
     }
@@ -64,30 +61,8 @@ public class PrincipalInformation {
         return affiliation;
     }
 
-    /**
-     * Reflection based toString method that outputs all the field value pairs of this class
-     */
     public String toString() {
-        Method[] methods = this.getClass().getMethods();
-        StringBuilder builder = new StringBuilder();
-        builder.append(this.getClass() + "@[");
-        for (Method method : methods) {
-            try {
-                if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
-                    this.getClass().getMethod(method.getName(), (Class[]) null);
-                    Object object = method.invoke(this, (Object[]) null);
-                    if (object instanceof Collection) {
-                        builder.append(method.getName() + " [" + Arrays.asList(object) + "],");
-                    } else {
-                        builder.append(method.getName() + " [" + object + "],");
-                    }
-                }
-            } catch (Exception e) {
-                // do nothing
-            }
-        }
-        builder.append("]");
-        return builder.toString();
+        return StringUtils.buildToString(this);
     }
 
     public void setPrincipleId(long principleId) {

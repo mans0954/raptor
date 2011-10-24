@@ -3,9 +3,11 @@
  */
 package uk.ac.cardiff.model.event;
 
+import uk.ac.cardiff.utility.StringUtils;
+
 /**
  * @author philsmart
- *
+ * 
  */
 public class AuthenticationFailureEvent {
 
@@ -13,24 +15,32 @@ public class AuthenticationFailureEvent {
     private String errorType;
     private String errorDescription;
 
-
     public void setErrorCode(String errorCode) {
-	this.errorCode = errorCode;
+        this.errorCode = errorCode;
     }
+
     public String getErrorCode() {
-	return errorCode;
+        return errorCode;
     }
+
     public void setErrorType(String errorType) {
-	this.errorType = errorType;
+        this.errorType = errorType;
     }
+
     public String getErrorType() {
-	return errorType;
+        return errorType;
     }
+
     public void setErrorDescription(String errorDescription) {
-	this.errorDescription = errorDescription;
+        this.errorDescription = errorDescription;
     }
+
     public String getErrorDescription() {
-	return errorDescription;
+        return errorDescription;
+    }
+
+    public String toString() {
+        return StringUtils.buildToString(this);
     }
 
 }

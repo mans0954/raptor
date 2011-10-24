@@ -4,25 +4,34 @@
 package uk.ac.cardiff.model.wsmodel;
 
 /**
+ * The Class LogFileUploadResult.
+ * 
  * @author philsmart
- *
  */
 public class LogFileUploadResult {
 
+    /** The id of this <code>LogFileUploadResult</code> instance. */
     private long id;
 
+    /** The status. */
     private String status;
 
+    /** Has the upload successfully been processed. */
     private boolean processed;
 
     /**
-     * @param id the id to set
+     * Sets the id.
+     * 
+     * @param id
+     *            the id to set
      */
     public void setId(long id) {
         this.id = id;
     }
 
     /**
+     * Gets the id.
+     * 
      * @return the id
      */
     public long getId() {
@@ -30,13 +39,18 @@ public class LogFileUploadResult {
     }
 
     /**
-     * @param status the status to set
+     * Sets the status.
+     * 
+     * @param status
+     *            the status to set
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
     /**
+     * Gets the status.
+     * 
      * @return the status
      */
     public String getStatus() {
@@ -44,13 +58,18 @@ public class LogFileUploadResult {
     }
 
     /**
-     * @param processed the processed to set
+     * Sets the processed.
+     * 
+     * @param processed
+     *            the processed to set
      */
     public void setProcessed(boolean processed) {
         this.processed = processed;
     }
 
     /**
+     * Checks if is processed.
+     * 
      * @return the processed
      */
     public boolean isProcessed() {

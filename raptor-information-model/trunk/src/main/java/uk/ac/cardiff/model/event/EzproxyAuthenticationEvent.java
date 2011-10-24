@@ -3,25 +3,37 @@
  */
 package uk.ac.cardiff.model.event;
 
-import java.lang.reflect.Method;
-
 import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
+import uk.ac.cardiff.utility.StringUtils;
 
 /**
+ * The Class EzproxyAuthenticationEvent.
+ * 
  * @author philsmart
- *
  */
-public class EzproxyAuthenticationEvent extends AuthenticationEvent{
+public class EzproxyAuthenticationEvent extends AuthenticationEvent {
 
+    /** The requester ip. */
     private String requesterIp;
+
+    /** The session id. */
     private String sessionId;
 
-    public EzproxyAuthenticationEvent(){
+    /**
+     * Instantiates a new ezproxy authentication event.
+     */
+    public EzproxyAuthenticationEvent() {
         super();
     }
 
-    protected EzproxyAuthenticationEvent(EzproxyAuthenticationEvent event){
+    /**
+     * Instantiates a new ezproxy authentication event.
+     * 
+     * @param event
+     *            the event
+     */
+    protected EzproxyAuthenticationEvent(EzproxyAuthenticationEvent event) {
         super(event);
         this.requesterIp = event.getRequesterIp();
         this.sessionId = event.getSessionId();
@@ -29,112 +41,120 @@ public class EzproxyAuthenticationEvent extends AuthenticationEvent{
 
     /**
      * Copy method. Alternative to clone.
+     * 
+     * @return the ezproxy authentication event
      */
-    public EzproxyAuthenticationEvent copy(){
+    public EzproxyAuthenticationEvent copy() {
         return new EzproxyAuthenticationEvent(this);
     }
 
+    /**
+     * Sets the requester ip.
+     * 
+     * @param requesterIp
+     *            the new requester ip
+     */
     public void setRequesterIp(String requesterIp) {
-	this.requesterIp = requesterIp;
-    }
-
-    public String getRequesterIp() {
-	return requesterIp;
+        this.requesterIp = requesterIp;
     }
 
     /**
-     * @param sessionId the sessionId to set
+     * Gets the requester ip.
+     * 
+     * @return the requester ip
+     */
+    public String getRequesterIp() {
+        return requesterIp;
+    }
+
+    /**
+     * Sets the session id.
+     * 
+     * @param sessionId
+     *            the sessionId to set
      */
     public void setSessionId(String sessionId) {
-	this.sessionId = sessionId;
+        this.sessionId = sessionId;
     }
 
     /**
+     * Gets the session id.
+     * 
      * @return the sessionId
      */
     public String getSessionId() {
-	return sessionId;
+        return sessionId;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.model.event.Event#toString()
+     */
     public String toString() {
-	Method[] methods = this.getClass().getMethods();
-	StringBuilder builder = new StringBuilder();
-	builder.append(this.getClass() + "@[");
-	for (Method method : methods) {
-	    try {
-		if (method.getName().startsWith("get") && !method.getName().equals("getClass")) {
-		    this.getClass().getMethod(method.getName(), (Class[]) null);
-		    Object object = method.invoke(this, (Object[]) null);
-		    builder.append(method.getName() + " [" + object + "],");
-
-		}
-	    } catch (Exception e){
-		//do nothing
-	    }
-	}
-	builder.append("]");
-	return builder.toString();
+        return StringUtils.buildToString(this);
     }
-
 
     /**
-     * create a unique hash, with as uniform a distribution as possible
+     * create a unique hash, with as uniform a distribution as possible.
+     * 
+     * @return the int
      */
-    public int hashCode(){
+    public int hashCode() {
         int hash = HashCodeUtil.SEED;
 
-        hash = HashCodeUtil.hash(hash,getEventTimeMillis());
-        hash = HashCodeUtil.hash(hash,getEventId());
-        hash = HashCodeUtil.hash(hash,getAuthenticationType());
-        hash = HashCodeUtil.hash(hash,getServiceHost());
-        hash = HashCodeUtil.hash(hash,getRequesterIp());
-        hash = HashCodeUtil.hash(hash,getSessionId());
-        hash = HashCodeUtil.hash(hash,getResourceHost());
-        hash = HashCodeUtil.hash(hash,getPrincipalName());
-        hash = HashCodeUtil.hash(hash,getEventType());
-        hash = HashCodeUtil.hash(hash,getServiceId());
-        hash = HashCodeUtil.hash(hash,getResourceId());
-
+        hash = HashCodeUtil.hash(hash, getEventTimeMillis());
+        hash = HashCodeUtil.hash(hash, getEventId());
+        hash = HashCodeUtil.hash(hash, getAuthenticationType());
+        hash = HashCodeUtil.hash(hash, getServiceHost());
+        hash = HashCodeUtil.hash(hash, getRequesterIp());
+        hash = HashCodeUtil.hash(hash, getSessionId());
+        hash = HashCodeUtil.hash(hash, getResourceHost());
+        hash = HashCodeUtil.hash(hash, getPrincipalName());
+        hash = HashCodeUtil.hash(hash, getEventType());
+        hash = HashCodeUtil.hash(hash, getServiceId());
+        hash = HashCodeUtil.hash(hash, getResourceId());
 
         return hash;
 
     }
 
     /**
-     * For hibernate, so the hashcode can be persisted
-     * @return
+     * For hibernate, so the hashcode can be persisted.
+     * 
+     * @return the hash code
      */
-    public int getHashCode(){
+    public int getHashCode() {
         return hashCode();
     }
 
     /**
-     * For hibernate, does nothing as the hascode is computed on the fly
-     * from the <code>hashCode</code> method
-     *
+     * For hibernate, does nothing as the hascode is computed on the fly from the <code>hashCode</code> method.
+     * 
      * @param hashCode
+     *            the new hash code
      */
-    public void setHashCode(int hashCode){
+    public void setHashCode(int hashCode) {
 
     }
 
-    public boolean equals(Object obj){
-        if ( this == obj ) return true;
-        if((obj == null) || (obj.getClass() != this.getClass()))
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if ((obj == null) || (obj.getClass() != this.getClass()))
             return false;
-        EzproxyAuthenticationEvent that = (EzproxyAuthenticationEvent)obj;
-        boolean areEqual =
-          EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) &&
-          EqualsUtil.areEqual(this.getEventId(), that.getEventId()) &&
-          EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) &&
-          EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost()) &&
-          EqualsUtil.areEqual(this.getRequesterIp(), that.getRequesterIp()) &&
-          EqualsUtil.areEqual(this.getSessionId(), that.getSessionId()) &&
-          EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) &&
-          EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) &&
-          EqualsUtil.areEqual(this.getEventType(), that.getEventType()) &&
-          EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) &&
-          EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName());
+        EzproxyAuthenticationEvent that = (EzproxyAuthenticationEvent) obj;
+        boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
+                && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
+                && EqualsUtil.areEqual(this.getRequesterIp(), that.getRequesterIp()) && EqualsUtil.areEqual(this.getSessionId(), that.getSessionId())
+                && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) && EqualsUtil.areEqual(this.getServiceId(), that.getServiceId())
+                && EqualsUtil.areEqual(this.getEventType(), that.getEventType()) && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId())
+                && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName());
 
         return areEqual;
     }
