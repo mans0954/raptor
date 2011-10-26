@@ -13,15 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorica.service;
 
+public interface IcaProcess {
 
-public interface IcaProcess{
+    /**
+     * Instructs this ICA to capture events from all registered data sources.
+     */
+    public void capture();
 
-	public void capture();
-	
-	public void release();
+    /**
+     * Instructs this ICA to release events using the configured client.
+     */
+    public void release();
 
-	public void garbageCollect();
+    /**
+     * Instructs this ICA to remove any events that have already been processed and sent through the configured client.
+     */
+    public void garbageCollect();
 
 }
