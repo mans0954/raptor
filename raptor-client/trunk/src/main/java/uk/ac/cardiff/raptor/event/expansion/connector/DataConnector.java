@@ -16,22 +16,45 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.event.expansion.connector;
 
 import java.util.Map;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public interface DataConnector {
 
-    public  Map<String, String> lookup(String principal) throws AttributeAssociationException;
+    /**
+     * Use this data connector to resolve attributes about the <code>principal</code>
+     * 
+     * @param principal the principal name of the subject to resolve attributes about
+     * @return a <code>Map</code> of attribute value pairs resolved about the <code>principal</code>
+     * @throws AttributeAssociationException
+     */
+    public Map<String, String> lookup(final String principal) throws AttributeAssociationException;
 
+    /**
+     * Initiliases the concrete implementation of this data connector
+     */
     public void initialise();
 
-    public void setReturnAttributes(String[] s);
+    /**
+     * Sets which attributes should be returned by this data connector
+     * 
+     * @param attributes the set of attributes which should be returned by this data connector
+     */
+    public void setReturnAttributes(final String[] attributes);
 
-    public void setSearchFilterTemplate(String searchFilterTemplate);
+    /**
+     * Sets the search template specific to the concrete implementation of the data connector used to query this data
+     * connector.
+     * 
+     * @param searchFilterTemplate the search template specific to the concrete implementation of the data connector
+     *            used to query this data connector.
+     */
+    public void setSearchFilterTemplate(final String searchFilterTemplate);
 
 }

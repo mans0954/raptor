@@ -45,7 +45,7 @@ public interface EventReleaseClient {
     public boolean isEnabled();
 
     /**
-     * A way of accessing the list of endpoints it is communicating with
+     * A way of accessing the list of endpoints this client is communicating with
      * 
      * @return a list of endpoints
      */

@@ -16,10 +16,6 @@
 
 package uk.ac.cardiff.raptor.attribute.filtering;
 
-/**
- * @author philsmart
- * 
- */
 public class AttributeFilterException extends Exception {
 
     /** Generated SeruialUID */

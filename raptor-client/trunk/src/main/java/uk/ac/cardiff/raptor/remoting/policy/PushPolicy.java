@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.remoting.policy;
 
 import java.util.List;
@@ -24,11 +25,17 @@ import uk.ac.cardiff.model.event.Event;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public abstract class AbstractPushPolicy {
+public interface PushPolicy {
 
-    public abstract boolean evaluatePolicy(List<Event> events);
-
+    /**
+     * Determines if the list of <code>events</code> should be sent to an endpoint
+     * 
+     * @param events the list of events to evaluate
+     * @return true iff the concrete implementation of this push policy determines the list of events are appropriate to
+     *         send to an endpoint, false otherwise
+     */
+    public boolean evaluatePolicy(final List<Event> events);
 
 }

@@ -13,30 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.remoting.policy;
 
 import java.util.List;
 
 import uk.ac.cardiff.model.event.Event;
 
-public class EntryNoPushPolicy extends AbstractPushPolicy{
-	
-	/** The threshold on the number of events needed before release*/
-	private int pushOnOrAfterNoEntries;
-	
-	
-	public boolean evaluatePolicy(List<Event> events) {
-		if (pushOnOrAfterNoEntries <= events.size()) 
-			return true;
-		return false;
-	}
+public class EntryNoPushPolicy implements PushPolicy {
+
+    /** The threshold on the number of events needed before release */
+    private int pushOnOrAfterNoEntries;
+
+    public boolean evaluatePolicy(List<Event> events) {
+        if (pushOnOrAfterNoEntries <= events.size())
+            return true;
+        return false;
+    }
 
     public void setPushOnOrAfterNoEntries(int pushOnOrAfterNoEntries) {
-	this.pushOnOrAfterNoEntries = pushOnOrAfterNoEntries;
+        this.pushOnOrAfterNoEntries = pushOnOrAfterNoEntries;
     }
 
     public int getPushOnOrAfterNoEntries() {
-	return pushOnOrAfterNoEntries;
+        return pushOnOrAfterNoEntries;
     }
 
 }

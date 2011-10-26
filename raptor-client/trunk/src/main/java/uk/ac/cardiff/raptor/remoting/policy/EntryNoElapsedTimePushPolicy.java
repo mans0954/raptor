@@ -33,22 +33,22 @@ import uk.ac.cardiff.model.event.Event;
  * @author philsmart
  * 
  */
-public class EntryNoElapsedTimePushPolicy extends AbstractPushPolicy {
+public class EntryNoElapsedTimePushPolicy implements PushPolicy {
 
-    /** Class logger */
+    /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(EntryNoElapsedTimePushPolicy.class);
 
-    /** The time, in milliseconds, that this policy was last evaluated */
+    /** The time, in milliseconds, that this policy was last evaluated. */
     private long lastReleasedTime;
 
-    /** How long, in milliseconds, should elapse before release */
+    /** How long, in milliseconds, should elapse before release. */
     private long pushInterval;
 
-    /** The threshold on the number of events needed before release */
+    /** The threshold on the number of events needed before release. */
     private int pushOnOrAfterNoEntries;
 
     /**
-     * Default constructor, which sets the last evaluated time on initialisation
+     * Default constructor, which sets the last evaluated time on initialisation.
      */
     public EntryNoElapsedTimePushPolicy() {
         super();
@@ -85,18 +85,38 @@ public class EntryNoElapsedTimePushPolicy extends AbstractPushPolicy {
 
     }
 
+    /**
+     * Sets the push interval.
+     * 
+     * @param pushInterval the new push interval
+     */
     public void setPushInterval(long pushInterval) {
         this.pushInterval = pushInterval;
     }
 
+    /**
+     * Gets the push interval.
+     * 
+     * @return the push interval
+     */
     public long getPushInterval() {
         return pushInterval;
     }
 
+    /**
+     * Sets the push on or after no entries.
+     * 
+     * @param pushOnOrAfterNoEntries the new push on or after no entries
+     */
     public void setPushOnOrAfterNoEntries(int pushOnOrAfterNoEntries) {
         this.pushOnOrAfterNoEntries = pushOnOrAfterNoEntries;
     }
 
+    /**
+     * Gets the push on or after no entries.
+     * 
+     * @return the push on or after no entries
+     */
     public int getPushOnOrAfterNoEntries() {
         return pushOnOrAfterNoEntries;
     }

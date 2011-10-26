@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.store;
 
 import java.util.List;
@@ -27,40 +28,41 @@ import uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine;
 
 public class AsynchronousEntryStoragePipeline {
 
-    /** class logger */
+    /** class logger. */
     private final Logger log = LoggerFactory.getLogger(AsynchronousEntryStoragePipeline.class);
 
-    /** An ID used to track the progress of any transaction */
+    /** An ID used to track the progress of any transaction. */
     private int transactionId;
 
     /** entry handler used to store entries (e.g. events) */
     private EventHandler eventHandler;
 
-    /** Attribute association engine, used to attach additional attributes to events */
+    /** Attribute association engine, used to attach additional attributes to events. */
     private AttributeAssociationEngine attributeAssociationEngine;
 
-    public AsynchronousEntryStoragePipeline(int transactionId, EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine) {
+    public AsynchronousEntryStoragePipeline(final int transactionId, final EventHandler entryHandler,
+            final AttributeAssociationEngine attributeAssociationEngine) {
         this.eventHandler = entryHandler;
         this.attributeAssociationEngine = attributeAssociationEngine;
         this.transactionId = transactionId;
     }
 
     /**
+     * Executes the storage pipeline task to store the list of <code>events</code> into the <code>eventHandler</code> .
      * Starts and shuts down the <code>storeEntryTask</code> immediately, so that when it completes it can be re-used.
      * 
-     * @param events
-     *            the events to store
+     * @param events the events to store
      */
-    public void execute(List<Event> events, StoreEntriesTaskCallbackInterface callback) {
-        StoreEntriesPipelineTask storeEntryTask = new StoreEntriesPipelineTask(eventHandler, attributeAssociationEngine, events, callback);
+    public void execute(final List<Event> events, final StoreEntriesTaskCallbackInterface callback) {
+        StoreEventsPipelineTask storeEntryTask =
+                new StoreEventsPipelineTask(eventHandler, attributeAssociationEngine, events, callback);
         ExecutorService es = Executors.newSingleThreadExecutor();
         es.submit(storeEntryTask);
         es.shutdown();
     }
 
     /**
-     * @param transactionId
-     *            the transactionId to set
+     * @param transactionId the transactionId to set
      */
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;

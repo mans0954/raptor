@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.remoting.client.sei;
 
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
@@ -20,6 +21,14 @@ import uk.ac.cardiff.raptor.registry.Endpoint;
 
 public interface ServiceEndpointClient {
 
-	public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint);
+    /**
+     * Sends the <code>EventPushMessage</code> to the endpoint <code>endpoint</code>
+     * 
+     * @param pushed the <code>EventPushMessage</code> to send to the <code>endpoint</code>
+     * @param endpoint the endpoint to send the <code>EventPushMessage</code> to
+     * @return true iff event release was successful, false otherwise. Note, this describes success of the transmission
+     *         to the client, and not reporting successful processing of that information within the client.
+     */
+    public boolean sendEvents(final EventPushMessage pushed, final Endpoint endpoint);
 
 }

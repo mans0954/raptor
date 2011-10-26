@@ -47,7 +47,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
     }
 
     @Override
-    public boolean associate(Event event) {
+    public boolean associate(final Event event) {
 
         ResourceMetadata resourceMetadata = null;
         Object result =

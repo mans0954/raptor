@@ -34,8 +34,8 @@ public class MatchRule {
      * 
      * @param enabled the new enabled
      */
-    public void setEnabled(final boolean enabled) {
-        this.enabled = enabled;
+    public void setEnabled(final boolean isEnabled) {
+        enabled = isEnabled;
     }
 
     /**

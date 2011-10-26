@@ -26,9 +26,9 @@ import org.joda.time.format.DateTimeFormatter;
  * @author philsmart
  * 
  */
-public class DateUtils {
+public final class DateUtils {
 
-    public static String getCurrentTimeFormatted() {
+    public final static String getCurrentTimeFormatted() {
         DateTime current = new DateTime();
         DateTimeFormatter dateFormat = DateTimeFormat.forPattern("HH:mm:ss (dd/MM/yy)");
         return current.toString(dateFormat);

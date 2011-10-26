@@ -21,8 +21,8 @@ package uk.ac.cardiff.raptor.attribute;
 
 import uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule;
 
-/**
- * This is a poor implementation of an attributeRule as taken from the ShibbolethIDP.
+/*
+ * This is a poor implementation of an attributeRule as taken from the ShibbolethIDP. But as this will be replaced by Shib, leave for now
  */
 public class AttributeRule {
 

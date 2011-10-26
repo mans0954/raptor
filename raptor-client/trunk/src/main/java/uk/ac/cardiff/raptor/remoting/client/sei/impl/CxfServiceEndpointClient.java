@@ -45,7 +45,7 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(CxfServiceEndpointClient.class);
 
-    /** Raptor specific TLS parameters class, that can return cxf TLSParameters */
+    /** Raptor specific TLS parameters class, that can return cxf specific TLSParameters */
     private ClientTLSParameters tlsParameters;
 
     @Override

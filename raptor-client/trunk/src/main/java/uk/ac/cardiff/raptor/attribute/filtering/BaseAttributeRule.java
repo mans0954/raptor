@@ -21,7 +21,7 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 
-/**
+/*
  * A naive implementation of an attributeRule.
  * 
  * 
@@ -38,7 +38,8 @@ public abstract class BaseAttributeRule {
     private Class<?> eventType;
 
     /**
-     * Abstract method that Filters an attribute. This *must* be implemented by all concrete classes.
+     * Abstract method that Filters an attribute based on the concrete implementation of the AttributeRule. This *must*
+     * be implemented by all concrete classes.
      * 
      * @param event the event
      * @param metadata the metadata
