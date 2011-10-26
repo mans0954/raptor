@@ -51,10 +51,11 @@ import uk.ac.cardiff.raptormua.model.Users;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
 /**
- * @author philsmart
+ * The Class MUAEngine.
  * 
+ * @author philsmart
  */
-public class MUAEngine {
+public final class MUAEngine {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
@@ -85,9 +86,12 @@ public class MUAEngine {
      */
     private int maxReleaseEventSize;
 
-    /** Constructor for creating and storing this MUAs capabilities */
+    /** Constructor for creating and storing this MUAs capabilities. */
     private CapabilitiesConstructor capabilitiesConstructor;
 
+    /**
+     * Instantiates a new mUA engine.
+     */
     public MUAEngine() {
         log.info("Setup Multi-Unit Aggregator Engine...");
         maxReleaseEventSize = 100;
@@ -103,26 +107,33 @@ public class MUAEngine {
         this.statisticsHandler = statisticsHandler;
     }
 
+    /**
+     * Gets the statistics handler.
+     * 
+     * @return the statistics handler
+     */
     public final StatisticHandler getStatisticsHandler() {
         return statisticsHandler;
     }
 
     /**
-     * @param statisticName
+     * Perform statistic.
+     * 
+     * @param statisticName the statistic name
+     * @return the aggregator graph model
      */
     public final AggregatorGraphModel performStatistic(final String statisticName) {
-        // TODO we do not need to set this each time
         statisticsHandler.setEventHandler(storageEngine.getEntryHandler());
         return statisticsHandler.performStatistic(statisticName);
 
     }
 
     /**
-     * First, find the earliest event that needs to be retrieved from the storage engine - which may contain duplicates
-     * to those already sent, but these are filtered by the releaseClient later. Then send those events to the event
-     * release client.
+     * Release stored events to configured endpoints. First, find the earliest event that needs to be retrieved from the
+     * storage engine - which may contain duplicates to those already sent, but these are filtered by the releaseClient
+     * later. Then send those events to the event release client.
      * 
-     * @return
+     * @return true, if successful
      */
     public final boolean release() {
         if (eventReleaseClient.isEnabled()) {
@@ -154,8 +165,8 @@ public class MUAEngine {
     }
 
     /**
-     * Gets the capabilities of this MUA, also sets some default values and possible values for the calling view
-     * component to display to the user
+     * Gets the statistical capabilities of this MUA, also sets some default values and possible values for the calling
+     * view component to display to the user.
      * 
      * @return the capabilities of this MUA
      */
@@ -168,10 +179,11 @@ public class MUAEngine {
     }
 
     /**
-     * Use the configured raptor parsing library to store the incomming <code>uploadFiles</code>
+     * Use the configured raptor parsing library to store the incoming <code>uploadFiles</code>.
      * 
      * @param uploadFiles the files to parse and store
-     * @throws TransactionInProgressException
+     * @return the list
+     * @throws TransactionInProgressException the transaction in progress exception
      */
     public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles)
             throws TransactionInProgressException {
@@ -217,6 +229,12 @@ public class MUAEngine {
 
     }
 
+    /**
+     * Batch parse files.
+     * 
+     * @param uploadFiles the upload files
+     * @throws TransactionInProgressException the transaction in progress exception
+     */
     public final void batchParseFiles(final List<BatchFile> uploadFiles) throws TransactionInProgressException {
         log.info("Going to parse {} batch uploaded files", uploadFiles.size());
 
@@ -246,13 +264,20 @@ public class MUAEngine {
     }
 
     /**
-     * @param statisticalUnitInformation
+     * Update the statistical unit described in <code>statisticalUnitInformation</code>.
+     * 
+     * @param statisticalUnitInformation the statistical unit information
      */
     public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
 
     }
 
+    /**
+     * Save and apply resource classification.
+     * 
+     * @param resourceMetadata the resource metadata
+     */
     public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
         ResourceClassificationBackgroundService backgroundService =
                 new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
@@ -260,8 +285,10 @@ public class MUAEngine {
     }
 
     /**
-     * @param function
-     * @return
+     * Perform administrative function described in the <code>function<code> parameter.
+     * 
+     * @param function information about the administrative function to perform.
+     * @return true, iff the administrative function performed successfully, false otherwise
      */
     public final boolean performAdministrativeFunction(final AdministrativeFunction function) {
         switch (function.getAdministrativeFunction()) {
@@ -279,7 +306,7 @@ public class MUAEngine {
      * otherwise do nothing.
      * 
      * @param pushed the {@link uk.ac.cardiff.model.wsmodel.EventPushMessage} received from the client.
-     * @throws TransactionInProgressException
+     * @throws TransactionInProgressException the transaction in progress exception
      */
     public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
         if (pushed.getEvents().size() > 0) {
@@ -288,23 +315,45 @@ public class MUAEngine {
         }
     }
 
+    /**
+     * Sets the mua metadata.
+     * 
+     * @param muaMetadata the new mua metadata
+     */
     public final void setMuaMetadata(final ServiceMetadata muaMetadata) {
         this.muaMetadata = muaMetadata;
     }
 
+    /**
+     * Gets the mua metadata.
+     * 
+     * @return the mua metadata
+     */
     public final ServiceMetadata getMuaMetadata() {
         return muaMetadata;
     }
 
+    /**
+     * Sets the event release client.
+     * 
+     * @param eventReleaseClient the new event release client
+     */
     public final void setEventReleaseClient(final EventReleaseClient eventReleaseClient) {
         this.eventReleaseClient = eventReleaseClient;
     }
 
+    /**
+     * Gets the event release client.
+     * 
+     * @return the event release client
+     */
     public final EventReleaseClient getEventReleaseClient() {
         return eventReleaseClient;
     }
 
     /**
+     * Sets the storage engine.
+     * 
      * @param storageEngine the storageEngine to set
      */
     public final void setStorageEngine(final StorageEngine storageEngine) {
@@ -312,6 +361,8 @@ public class MUAEngine {
     }
 
     /**
+     * Gets the storage engine.
+     * 
      * @return the storageEngine
      */
     public final StorageEngine getStorageEngine() {
@@ -319,6 +370,8 @@ public class MUAEngine {
     }
 
     /**
+     * Sets the data access register.
+     * 
      * @param dataAccessRegister the dataAccessRegister to set
      */
     public final void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
@@ -326,6 +379,8 @@ public class MUAEngine {
     }
 
     /**
+     * Gets the data access register.
+     * 
      * @return the dataAccessRegister
      */
     public final DataAccessRegister getDataAccessRegister() {
@@ -333,6 +388,8 @@ public class MUAEngine {
     }
 
     /**
+     * Sets the max release event size.
+     * 
      * @param maxReleaseEventSize the maxReleaseEventSize to set
      */
     public void setMaxReleaseEventSize(int maxReleaseEventSize) {
@@ -345,6 +402,8 @@ public class MUAEngine {
     }
 
     /**
+     * Gets the max release event size.
+     * 
      * @return the maxReleaseEventSize
      */
     public int getMaxReleaseEventSize() {
@@ -352,6 +411,8 @@ public class MUAEngine {
     }
 
     /**
+     * Sets the capabilities constructor.
+     * 
      * @param capabilitiesConstructor the capabilitiesConstructor to set
      */
     public void setCapabilitiesConstructor(CapabilitiesConstructor capabilitiesConstructor) {
@@ -359,6 +420,8 @@ public class MUAEngine {
     }
 
     /**
+     * Gets the capabilities constructor.
+     * 
      * @return the capabilitiesConstructor
      */
     public CapabilitiesConstructor getCapabilitiesConstructor() {
