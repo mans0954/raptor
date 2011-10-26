@@ -13,33 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics.records;
 
-
+/**
+ * The Class ObservationSeries.
+ */
 public class ObservationSeries {
-	
-	private String seriesName;
-	
-    /*
-     * each statistical method produces objects (observations) which are stored in this array variable ready for postprocessing or construction of an
-     * <code>AggregatorGraphModel</code>
+
+    /** The series name. */
+    private String seriesName;
+
+    /**
+     * Each statistical method produces objects (observations) which are stored in this array variable ready for
+     * postprocessing or construction of an <code>AggregatorGraphModel</code>.
      */
     private Observation[] observations;
 
-	public void setSeriesName(String seriesName) {
-		this.seriesName = seriesName;
-	}
+    /**
+     * Sets the series name.
+     * 
+     * @param seriesName the new series name
+     */
+    public void setSeriesName(String seriesName) {
+        this.seriesName = seriesName;
+    }
 
-	public String getSeriesName() {
-		return seriesName;
-	}
+    /**
+     * Gets the series name.
+     * 
+     * @return the series name
+     */
+    public String getSeriesName() {
+        return seriesName;
+    }
 
-	public void setObservations(Observation[] observations) {
-		this.observations = observations;
-	}
+    /**
+     * Sets the observations.
+     * 
+     * @param observations the new observations
+     */
+    public void setObservations(Observation[] observations) {
+        this.observations = observations;
+    }
 
-	public Observation[] getObservations() {
-		return observations;
-	}
+    /**
+     * Gets the observations.
+     * 
+     * @return the observations
+     */
+    public Observation[] getObservations() {
+        return observations;
+    }
 
 }

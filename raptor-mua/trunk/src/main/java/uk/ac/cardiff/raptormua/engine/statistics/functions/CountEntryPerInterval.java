@@ -25,12 +25,12 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
-import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
+import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticalUnitException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.ObservationSeries;
 
-public class CountEntryPerInterval extends Statistic{
+public class CountEntryPerInterval extends BaseStatistic{
 
 	static Logger log = LoggerFactory.getLogger(CountEntryPerInterval.class);
 

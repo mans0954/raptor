@@ -33,7 +33,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  * 
  */
 public class NumberFormatterPostProcessor implements StatisticPostProcessor {
-
+    // TODO Not implemented...
     /** class logger */
     private static final Logger log = LoggerFactory.getLogger(NumberFormatterPostProcessor.class);
 

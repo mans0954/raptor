@@ -27,12 +27,12 @@ import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionException;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
+import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticalUnitException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.ObservationSeries;
 
-public class GroupByCountDistinct extends Statistic {
+public class GroupByCountDistinct extends BaseStatistic {
 
 	/** Class logger */
 	private final Logger log = LoggerFactory.getLogger(GroupByCountDistinct.class);

@@ -16,22 +16,35 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics.records;
 
 /**
+ * The Class Observation.
+ * 
  * @author philsmart
- *
  */
 public class Observation {
 
-	protected double value;
+    /** The value. */
+    protected double value;
 
-	public void setValue(double value) {
-		this.value = value;
-	}
+    /**
+     * Sets the value.
+     * 
+     * @param value the new value
+     */
+    public void setValue(double value) {
+        this.value = value;
+    }
 
-	public double getValue() {
-		return value;
-	}
+    /**
+     * Gets the value.
+     * 
+     * @return the value
+     */
+    public double getValue() {
+        return value;
+    }
 
 }

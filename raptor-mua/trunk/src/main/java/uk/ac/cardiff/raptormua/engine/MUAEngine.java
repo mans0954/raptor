@@ -47,7 +47,6 @@ import uk.ac.cardiff.raptor.store.StorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
-import uk.ac.cardiff.raptormua.model.Users;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
 /**
@@ -67,10 +66,6 @@ public final class MUAEngine {
      * The client that is used to process, filter and send events to another MUA instance.
      */
     private EventReleaseClient eventReleaseClient;
-
-    // TODO implement user level control on the MUA?
-    /** Support for user classification on the MUA. */
-    private Users users;
 
     /** The Storage Engine that handles all storage transactions. */
     private StorageEngine storageEngine;

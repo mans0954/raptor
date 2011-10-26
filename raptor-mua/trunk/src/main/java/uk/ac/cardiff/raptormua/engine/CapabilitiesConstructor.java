@@ -39,7 +39,7 @@ import uk.ac.cardiff.model.wsmodel.Suggestion;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.StorageEngine;
-import uk.ac.cardiff.raptormua.engine.statistics.Statistic;
+import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
 import uk.ac.cardiff.raptormua.runtimeutils.ResourceMetadataComparator;
@@ -92,7 +92,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware {
 
             capabilities = new Capabilities();
 
-            List<Statistic> su = statisticsHandler.getStatisticalUnits();
+            List<BaseStatistic> su = statisticsHandler.getStatisticalUnits();
 
             capabilities.setMetadata(metadata);
 
@@ -127,7 +127,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware {
             capabilities.setResourceMetadata(resourceMetadata);
 
             ArrayList<StatisticalUnitInformation> stats = new ArrayList();
-            for (Statistic entry : su) {
+            for (BaseStatistic entry : su) {
                 log.debug("Setting statistical unit information as: " + entry.getStatisticParameters().getUnitName());
                 StatisticalUnitInformation information = new StatisticalUnitInformation();
 

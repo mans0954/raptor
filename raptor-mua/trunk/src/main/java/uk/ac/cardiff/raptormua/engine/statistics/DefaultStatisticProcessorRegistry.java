@@ -20,6 +20,7 @@ import java.util.List;
 
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 
+//TODO NEW and not finished.
 public class DefaultStatisticProcessorRegistry implements StatisticProcessorRegistry {
 
     List<StatisticPostProcessor> postProcessors;
