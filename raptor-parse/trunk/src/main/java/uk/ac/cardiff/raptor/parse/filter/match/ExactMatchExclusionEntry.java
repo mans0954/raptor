@@ -16,18 +16,24 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse.filter.match;
 
-import uk.ac.cardiff.raptor.parse.filter.ExclusionEntry;
+import uk.ac.cardiff.raptor.parse.filter.AbstractExclusionEntry;
 
 /**
- * @author philsmart
+ * The Class ExactMatchExclusionEntry.
  * 
+ * @author philsmart
  */
-public class ExactMatchExclusionEntry extends ExclusionEntry {
+public class ExactMatchExclusionEntry extends AbstractExclusionEntry {
 
-	public boolean filter(String value) {
-		return (value.equals(this.getMatch())) ? true : false;
-	}
+    /**
+     * returns true iff the value of the parameter <code>value</code> is an exact string match for the value of the
+     * variable <code>match<code>, false otherwise
+     */
+    public boolean filter(String value) {
+        return (value.equals(getMatch())) ? true : false;
+    }
 
 }

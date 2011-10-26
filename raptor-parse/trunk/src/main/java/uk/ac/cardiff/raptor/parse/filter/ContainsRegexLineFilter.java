@@ -16,7 +16,8 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.parse.external.file.format;
+
+package uk.ac.cardiff.raptor.parse.filter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,17 +27,23 @@ import org.slf4j.LoggerFactory;
 
 
 /**
+ * The Class ContainsRegexLineFilter.
+ * 
  * @author philsmart
- *
  */
-public class ContainsRegexLineFilter implements LineFilter{
+public class ContainsRegexLineFilter implements LineFilter {
 
-    /** The class logger */
+    /** The class logger. */
     private final Logger log = LoggerFactory.getLogger(ContainsRegexLineFilter.class);
 
+    /** The regular expression to be matched. */
     private String includeIfContainsRegex;
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.raptor.parse.external.file.format.LineFilter#parsableLine(java.lang.String)
+     */
     public boolean parsableLine(String line) {
         Pattern p = Pattern.compile(includeIfContainsRegex);
         Matcher m = p.matcher(line);
@@ -44,17 +51,21 @@ public class ContainsRegexLineFilter implements LineFilter{
     }
 
     /**
-     * @param includeIfContains the includeIfContains to set
+     * Sets the include if contains regex.
+     * 
+     * @param includeIfContainsRegex the new include if contains regex
      */
     public void setIncludeIfContainsRegex(String includeIfContainsRegex) {
-	this.includeIfContainsRegex = includeIfContainsRegex;
+        this.includeIfContainsRegex = includeIfContainsRegex;
     }
 
     /**
+     * Gets the include if contains regex.
+     * 
      * @return the includeIfContains
      */
     public String getIncludeIfContainsRegex() {
-	return includeIfContainsRegex;
+        return includeIfContainsRegex;
     }
 
 }

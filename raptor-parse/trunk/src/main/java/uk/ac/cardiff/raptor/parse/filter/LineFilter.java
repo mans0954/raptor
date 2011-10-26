@@ -16,14 +16,21 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse.filter;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public interface EntryFilter {
+public interface LineFilter {
 
-    public boolean filter(String value);
+    /**
+     * Determines if <code>line</code> should be parsed or not.
+     * 
+     * @param line the line to test
+     * @return true iff <code>line</code> should be parsed, false otherwise
+     */
+    public boolean parsableLine(String line);
 
 }

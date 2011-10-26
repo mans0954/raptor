@@ -16,72 +16,78 @@
 /**
  * 
  */
-package uk.ac.cardiff.raptor.parse.external.file.format;
+
+package uk.ac.cardiff.raptor.parse.filter;
+
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class LineFilterEngine {
-    
+
+    /**
+     * Array of <code>LineFilter</code>s that describe lines (read from a file) that should be parsed
+     */
     private LineFilter[] includeLineFilters;
-    
+
+    /**
+     * Array of <code>LineFilter</code>s that describe lines (read from a file) that should not be parsed
+     */
     private LineFilter[] excludeLineFilters;
-    
-    
+
     /**
      * Iff any of the set of inclusion filters return false, or the set of exclusion filters return false, then this
-     * line <code>line</code> is not parsable. 
+     * line <code>line</code> is not parsable.
      * 
      * @param line the <code>String</code> to test
      * @return false if the line should not be parsed (blocked by one of the lineFilters), true otherwise
      */
-    public boolean isParsableLine(String line){
+    public boolean isParsableLine(String line) {
         boolean isParsableFromInclusionFilters = isParsableLineIncludes(line);
         boolean isParsableFromExclusionFilters = isParsableLineExcludes(line);
-        if (isParsableFromExclusionFilters==false || isParsableFromInclusionFilters==false){
+        if (isParsableFromExclusionFilters == false || isParsableFromInclusionFilters == false) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
-    
+
     /**
-     * If ANY of the includes line filters return true, then this line
-     * should be parsed. Hence a logical OR on inclusion filters.
+     * If ANY of the includes line filters return true, then this line should be parsed. Hence a logical OR on inclusion
+     * filters.
      * 
      * @param line the <code>String</code> to test
      * @return true if any of the line filters evaluate to true, false otherwise
      */
-    private boolean isParsableLineIncludes(String line){
-        if (includeLineFilters==null){
+    private boolean isParsableLineIncludes(String line) {
+        if (includeLineFilters == null) {
             return true;
         }
-        boolean isParsable =false;
-        for (LineFilter lineFilter : includeLineFilters){
-            if (lineFilter.parsableLine(line)==true){
-                isParsable=true;
+        boolean isParsable = false;
+        for (LineFilter lineFilter : includeLineFilters) {
+            if (lineFilter.parsableLine(line) == true) {
+                isParsable = true;
             }
         }
         return isParsable;
     }
-    
+
     /**
-     * If ANY of the includes line filters return false, then this line
-     * should not be parsed. Hence a logical OR on exclusion filters.
+     * If ANY of the includes line filters return false, then this line should not be parsed. Hence a logical OR on
+     * exclusion filters.
      * 
      * @param line the <code>String</code> to test
      * @return false if any of the line filters evaluate to false, true otherwise
      */
-    private boolean isParsableLineExcludes(String line){
-        if (excludeLineFilters==null){
+    private boolean isParsableLineExcludes(String line) {
+        if (excludeLineFilters == null) {
             return true;
         }
-        boolean isParsable =true;
-        for (LineFilter lineFilter : excludeLineFilters){
-            if (lineFilter.parsableLine(line)==false){
-                isParsable=false;
+        boolean isParsable = true;
+        for (LineFilter lineFilter : excludeLineFilters) {
+            if (lineFilter.parsableLine(line) == false) {
+                isParsable = false;
             }
         }
         return isParsable;
@@ -114,6 +120,5 @@ public class LineFilterEngine {
     public LineFilter[] getExcludeLineFilters() {
         return excludeLineFilters;
     }
-
 
 }

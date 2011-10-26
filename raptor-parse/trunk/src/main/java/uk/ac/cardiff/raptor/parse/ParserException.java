@@ -16,23 +16,49 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class ParserException extends Exception{
+public class ParserException extends Exception {
 
     /** Generated SerialUID */
     private static final long serialVersionUID = 5099204480722977726L;
 
-    public ParserException(String message){
-	super(message);
+    /** Constructor. */
+    public ParserException() {
+        super();
     }
 
-    public ParserException(String message, Exception e){
-	super(message,e);
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     */
+    public ParserException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public ParserException(final Exception wrappedException) {
+        super(wrappedException);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public ParserException(final String message, final Exception wrappedException) {
+        super(message, wrappedException);
     }
 
 }

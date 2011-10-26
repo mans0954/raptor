@@ -16,7 +16,8 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.parse.external.file.format;
+
+package uk.ac.cardiff.raptor.parse.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,37 +25,42 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class ContainsLineFilter implements LineFilter{
+public class ExcludeLineFilter implements LineFilter {
 
     /** The class logger */
-    private final Logger log = LoggerFactory.getLogger(ContainsLineFilter.class);
+    private final Logger log = LoggerFactory.getLogger(ExcludeLineFilter.class);
 
-    private String includeIfContains;
+    /**
+     * The <code>String</code> to be found.
+     */
+    private String excludeIfContains;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see uk.ac.cardiff.raptor.raptorica.dao.external.format.LineFilter#remove()
      */
     @Override
     public boolean parsableLine(String line) {
-	if (line.contains(includeIfContains))
-	    return true;
-	return false;
+        if (line.contains(excludeIfContains))
+            return false;
+        return true;
     }
 
     /**
-     * @param includeIfContains the includeIfContains to set
+     * @param excludeIfContains the excludeIfContains to set
      */
-    public void setIncludeIfContains(String includeIfContains) {
-	this.includeIfContains = includeIfContains;
+    public void setExcludeIfContains(String excludeIfContains) {
+        this.excludeIfContains = excludeIfContains;
     }
 
     /**
-     * @return the includeIfContains
+     * @return the excludeIfContains
      */
-    public String getIncludeIfContains() {
-	return includeIfContains;
+    public String getExcludeIfContains() {
+        return excludeIfContains;
     }
 
 }
