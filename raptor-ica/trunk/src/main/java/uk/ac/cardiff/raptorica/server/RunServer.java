@@ -45,7 +45,7 @@ public class RunServer {
      * directory to initialise the servlet.</li>
      * </ol>
      * 
-     * @param args
+     * @param args the program arguments
      * @throws IOException
      * @throws FileNotFoundException
      * @throws Exception
