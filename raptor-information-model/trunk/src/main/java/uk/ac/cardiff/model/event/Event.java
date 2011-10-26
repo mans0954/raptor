@@ -39,7 +39,7 @@ public class Event {
      */
     private Long persistantId;
 
-    /** attributes generic to all entries. */
+    /** The date and time the event was generated. */
     private DateTime eventTime;
 
     /**
@@ -86,7 +86,7 @@ public class Event {
      *            the event
      */
     public Event(Event event) {
-        // this has a defensive getter, so a direct assignment is possible
+        // this has a defensive getter, so direct assignment is possible
         this.eventTime = event.getEventTime();
         this.eventId = event.getEventId();
         this.serviceId = event.getServiceId();

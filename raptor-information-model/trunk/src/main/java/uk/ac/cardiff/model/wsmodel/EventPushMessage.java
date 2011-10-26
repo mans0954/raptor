@@ -23,7 +23,7 @@ public class EventPushMessage {
     /** The metadata of the client sending the events. */
     private ServiceMetadata clientMetadata;
 
-    /** The time instant the message was created push. */
+    /** The time instant the message was created. */
     private Date timeOfPush;
 
     /**
