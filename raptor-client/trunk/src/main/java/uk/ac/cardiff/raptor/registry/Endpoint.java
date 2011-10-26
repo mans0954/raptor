@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
-import uk.ac.cardiff.raptor.remoting.policy.AbstractPushPolicy;
+import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
 /**
  * 
- * Stores information about an endpoint that a client can send events to. Also includes the Push Policy to determine if
- * events should be sent, an attribute filter policy for determining which attributes of each event should be sent, and
- * information about previous event releases.
+ * Stores information about an endpoint that a client can send events to. Also includes the Push Policy used to
+ * determine if/when events should be sent, an attribute filter policy for determining which attributes of each event
+ * should be sent, and information about previous event releases.
  * 
  * This class could be subclassed if additional functionality is required.
  * 
@@ -46,7 +46,7 @@ public class Endpoint {
     private String serviceEndpoint;
 
     /** A List of the PushPolicies defined for this endpoint. */
-    private List<AbstractPushPolicy> pushPolicies;
+    private List<PushPolicy> pushPolicies;
 
     /** The filter policy defined for this endpoint *. */
     private AttributeFilterPolicy attributeFilterPolicy;
@@ -69,7 +69,7 @@ public class Endpoint {
      * 
      * @param filteredEntries the filtered entries
      */
-    public void releasePerformed(List<Event> filteredEntries) {
+    public void releasePerformed(final List<Event> filteredEntries) {
         releaseInformation.releasePerformed(filteredEntries);
     }
 
@@ -115,7 +115,7 @@ public class Endpoint {
      * 
      * @param pushPolicies the new push policies
      */
-    public void setPushPolicies(List<AbstractPushPolicy> pushPolicies) {
+    public void setPushPolicies(List<PushPolicy> pushPolicies) {
         this.pushPolicies = pushPolicies;
     }
 
@@ -124,7 +124,7 @@ public class Endpoint {
      * 
      * @return the push policies
      */
-    public List<AbstractPushPolicy> getPushPolicies() {
+    public List<PushPolicy> getPushPolicies() {
         return pushPolicies;
     }
 

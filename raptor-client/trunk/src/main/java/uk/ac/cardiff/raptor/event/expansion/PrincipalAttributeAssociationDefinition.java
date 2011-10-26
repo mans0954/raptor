@@ -79,7 +79,7 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
      * @return the internal attribute name
      * @throws AttributeAssociationException the attribute association exception
      */
-    public String getInternalAttributeName(String attributeSourceName) throws AttributeAssociationException {
+    public String getInternalAttributeName(final String attributeSourceName) throws AttributeAssociationException {
         for (AttributeLookup lookupAttribute : lookupAttributes) {
             if (lookupAttribute.getSourceAttributeName().equals(attributeSourceName)) {
                 return lookupAttribute.getInternalAttributeName();
@@ -97,7 +97,7 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
      * @throws InstantiationException the instantiation exception
      * @throws IllegalAccessException the illegal access exception
      */
-    private void populate(Map<String, String> attributes, Event event) throws InstantiationException,
+    private void populate(final Map<String, String> attributes, final Event event) throws InstantiationException,
             IllegalAccessException {
 
         Object classToPopulate = getClassToAdd().newInstance();
@@ -120,7 +120,7 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
     }
 
     @Override
-    public boolean associate(Event event) {
+    public boolean associate(final Event event) {
 
         if (!event.getClass().getCanonicalName().equals(associateWithClass)) {
             return false;

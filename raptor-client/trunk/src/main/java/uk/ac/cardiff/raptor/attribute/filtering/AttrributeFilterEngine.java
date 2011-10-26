@@ -28,9 +28,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 
-/**
- *
- */
 public class AttrributeFilterEngine {
 
     /** class logger. */
@@ -39,9 +36,10 @@ public class AttrributeFilterEngine {
     /**
      * Only runs against the deny rules, and only denies basic:ANY attributes, does not deny individual values.
      * 
-     * @param attributeFilterPolicy
-     * @param entries
-     * @return
+     * @param attributeFilterPolicy the policy used to filter attributes from the set <code>events</code>
+     * @param metadata the metadata of the service this attribute filter engine is operating within
+     * @param events the list of events to filter
+     * @return a cloned set of filtered events
      */
     public List<Event> filter(final AttributeFilterPolicy attributeFilterPolicy, final ServiceMetadata metadata,
             final List<Event> events) {
@@ -59,9 +57,9 @@ public class AttrributeFilterEngine {
     /**
      * Only process deny rules on the level of basic:ANY attributes. Hence will not deny individual values
      * 
-     * @param entry
-     * @param attributeRule
-     * @param metadata
+     * @param event the events whose attributes need filtering
+     * @param attributeRule the attribute rule used to filter these events
+     * @param metadata the service metadata passed to the attribute rule for use.
      */
     private void filterAttributes(final Event event, final BaseAttributeRule attributeRule,
             final ServiceMetadata metadata) {

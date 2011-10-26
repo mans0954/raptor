@@ -23,12 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
-import uk.ac.cardiff.raptor.registry.Endpoint;
-import uk.ac.cardiff.raptor.registry.EndpointRegistry;
-import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
-import uk.ac.cardiff.raptor.remoting.policy.AbstractPushPolicy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +30,11 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.event.auxiliary.EventMetadata;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
+import uk.ac.cardiff.raptor.registry.Endpoint;
+import uk.ac.cardiff.raptor.registry.EndpointRegistry;
+import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
+import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
 /**
  * @author philsmart
@@ -150,7 +149,7 @@ public class EventReleaseEngine {
      * @param events the list of events that are filtered chronologically
      * @return the list of filtered events
      */
-    private List<Event> chronologicalFilter(Endpoint endpoint, List<Event> events) {
+    private List<Event> chronologicalFilter(final Endpoint endpoint, final List<Event> events) {
         ArrayList<Event> applicableEvents = new ArrayList<Event>();
 
         for (Event event : events) {
@@ -171,9 +170,9 @@ public class EventReleaseEngine {
      * @param events the events ready to be released.
      * @return true iff at least one push policy evaluates to true, false otherwise
      */
-    private boolean shouldRelease(Endpoint endpoint, List<Event> events) {
+    private boolean shouldRelease(final Endpoint endpoint, final List<Event> events) {
         boolean shouldRelease = false;
-        for (AbstractPushPolicy policy : endpoint.getPushPolicies()) {
+        for (PushPolicy policy : endpoint.getPushPolicies()) {
             if (policy.evaluatePolicy(events))
                 shouldRelease = true;
         }
@@ -184,9 +183,9 @@ public class EventReleaseEngine {
      * Filters the attributes from each event being pushed to the input endpoint. If no filter policy has been defined,
      * no work is done, and the input allEvents is returned without modification
      * 
-     * @param endpoint
-     * @param allEvents
-     * @return
+     * @param endpoint the endpoint that the engine is sending to
+     * @param allEvents the list of <code>Event</code>s to filter
+     * @return a filtered set of events based on any defined attribute filter policies.
      */
     private List<Event> filterAttributes(ServiceMetadata metadata, Endpoint endpoint, List<Event> allEvents) {
         if (endpoint.getAttributeFilterPolicy() == null)

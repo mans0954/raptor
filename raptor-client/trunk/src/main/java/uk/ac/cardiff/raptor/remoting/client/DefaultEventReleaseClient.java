@@ -49,7 +49,8 @@ public class DefaultEventReleaseClient extends AbstractEventReleaseClient {
      * @see uk.ac.cardiff.raptor.remoting.client.EventReleaseClient#release(java.util.List,
      * uk.ac.cardiff.model.ServiceMetadata)
      */
-    public boolean release(List<Event> events, ServiceMetadata serviceMetadata) throws ReleaseFailureException {
+    public boolean release(final List<Event> events, final ServiceMetadata serviceMetadata)
+            throws ReleaseFailureException {
         boolean success = false;
         if (enableEventRelease) {
             log.info("[Event Release Called]");

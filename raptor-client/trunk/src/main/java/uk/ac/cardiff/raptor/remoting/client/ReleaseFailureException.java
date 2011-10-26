@@ -13,17 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.remoting.client;
 
-public class ReleaseFailureException extends Exception{
+public class ReleaseFailureException extends Exception {
 
-	/**
-	 * Generated serialUID
-	 */
-	private static final long serialVersionUID = -1091443418866759066L;
+    /**
+     * Generated serialUID
+     */
+    private static final long serialVersionUID = -1091443418866759066L;
 
-	public ReleaseFailureException (String message, Exception wrappedException){
-		super (message,wrappedException);
-	}
+    /** Constructor. */
+    public ReleaseFailureException() {
+        super();
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     */
+    public ReleaseFailureException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public ReleaseFailureException(final Exception wrappedException) {
+        super(wrappedException);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public ReleaseFailureException(final String message, final Exception wrappedException) {
+        super(message, wrappedException);
+    }
 
 }

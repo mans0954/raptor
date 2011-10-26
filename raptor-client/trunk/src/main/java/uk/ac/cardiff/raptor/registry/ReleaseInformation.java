@@ -64,7 +64,7 @@ public class ReleaseInformation {
      * 
      * @param releasedEvents
      */
-    public void releasePerformed(List<Event> releasedEvents) {
+    public void releasePerformed(final List<Event> releasedEvents) {
 
         for (Event event : releasedEvents) {
             if (lastReleasedEventTime == null) {
@@ -92,7 +92,7 @@ public class ReleaseInformation {
      * @param event the event to check for release
      * @return true if the event has not been released before, false otherwise
      */
-    public boolean hasNotBeenReleased(Event event) {
+    public boolean hasNotBeenReleased(final Event event) {
         if (event.getEventTime().isAfter(getLastReleasedEventTime())) {
             return true;
         } else if (event.getEventTime().isEqual(getLastReleasedEventTime())) {

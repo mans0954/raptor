@@ -54,7 +54,7 @@ public class EndpointRegistry {
      * 
      * @param endpoints the new endpoints
      */
-    public void setEndpoints(List<Endpoint> endpoints) {
+    public void setEndpoints(final List<Endpoint> endpoints) {
         for (Endpoint endpoint : endpoints) {
             log.info("Registering Service Endpoint: {}, persisting event release information {}",
                     endpoint.getServiceEndpoint(), isPersistReleaseInformation());
@@ -101,7 +101,7 @@ public class EndpointRegistry {
      * @param endpoint the endpoint to load release information for
      * @return the release information
      */
-    public ReleaseInformation loadReleaseInformation(Endpoint endpoint) {
+    public ReleaseInformation loadReleaseInformation(final Endpoint endpoint) {
         List<?> releaseInfoResults =
                 dataConnection.runQuery("from ReleaseInformation where serviceEndpoint=?",
                         new Object[] {endpoint.getServiceEndpoint()});

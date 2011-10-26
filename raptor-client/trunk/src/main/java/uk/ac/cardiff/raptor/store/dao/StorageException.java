@@ -13,22 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.store.dao;
 
-public class StorageException extends Exception{
+public class StorageException extends Exception {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -4614661463043866258L;
+    /**
+     * Generated serial UID.
+     */
+    private static final long serialVersionUID = -4614661463043866258L;
 
-	public StorageException (String message){
-		super(message);
-	}
-
-	public StorageException (String message, Exception wrappedException){
-            super(message,wrappedException);
+    /** Constructor. */
+    public StorageException() {
+        super();
     }
 
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     */
+    public StorageException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public StorageException(final Exception wrappedException) {
+        super(wrappedException);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public StorageException(final String message, final Exception wrappedException) {
+        super(message, wrappedException);
+    }
 
 }

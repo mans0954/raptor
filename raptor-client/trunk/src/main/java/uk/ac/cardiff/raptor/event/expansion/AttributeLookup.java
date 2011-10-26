@@ -16,24 +16,25 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.event.expansion;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class AttributeLookup {
 
-    /** The name of the attribute in the source data store */
+    /** The name of the attribute in the source data store. */
     private String sourceAttributeName;
 
-    /** The name of the attribute in the internal model that this attribute maps to*/
+    /** The name of the attribute in the internal model that this attribute maps to. */
     private String internalAttributeName;
 
     /**
      * @param sourceAttributeName the sourceAttributeName to set
      */
-    public void setSourceAttributeName(String sourceAttributeName) {
+    public void setSourceAttributeName(final String sourceAttributeName) {
         this.sourceAttributeName = sourceAttributeName;
     }
 
@@ -47,7 +48,7 @@ public class AttributeLookup {
     /**
      * @param internalAttributeName the internalAttributeName to set
      */
-    public void setInternalAttributeName(String internalAttributeName) {
+    public void setInternalAttributeName(final String internalAttributeName) {
         this.internalAttributeName = internalAttributeName;
     }
 
@@ -57,6 +58,5 @@ public class AttributeLookup {
     public String getInternalAttributeName() {
         return internalAttributeName;
     }
-
 
 }

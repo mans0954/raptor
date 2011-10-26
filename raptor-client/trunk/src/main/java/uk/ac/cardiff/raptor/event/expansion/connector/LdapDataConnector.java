@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.event.expansion.connector;
 
 import java.io.IOException;
@@ -35,12 +36,10 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
-
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import edu.vt.middleware.ldap.Ldap;
 import edu.vt.middleware.ldap.LdapConfig;
@@ -49,6 +48,9 @@ import edu.vt.middleware.ldap.LdapUtil;
 
 /**
  * <code>LdapDataConnector</code> provides a plugin to retrieve attributes from an LDAP.
+ */
+/*
+ * STOLEN from Shib, needs converting to shib attribute resolution.
  */
 public class LdapDataConnector implements DataConnector {
 
@@ -119,13 +121,13 @@ public class LdapDataConnector implements DataConnector {
     /** Whether this data connector has been initialized. */
     private boolean initialized;
 
-    /** The ldap search filter template*/
+    /** The ldap search filter template */
     private String searchFilterTemplate;
 
     /** How long the cache remains valid before it is cleared */
     private long cacheTimeoutMs;
 
-    /** The time at which the cache was last reset*/
+    /** The time at which the cache was last reset */
     private long cacheResetTimeMs;
 
     /**
@@ -139,7 +141,7 @@ public class LdapDataConnector implements DataConnector {
      * Initializes the connector and prepares it for use.
      */
     public void initialise() {
-        if (!initialized){
+        if (!initialized) {
             initialized = true;
             initializeLdapPool();
             initializeCache();
@@ -177,10 +179,9 @@ public class LdapDataConnector implements DataConnector {
         }
     }
 
-
     /**
      * This returns whether this connector will merge multiple search results into one result. The default is false.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isMergeResults() {
@@ -190,9 +191,9 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets whether this connector will merge multiple search results into one result. This method will remove any
      * cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param b <code>boolean</code>
      */
     public void setMergeResults(boolean b) {
@@ -202,7 +203,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns whether this connector will cache search results. The default is false.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isCacheResults() {
@@ -211,9 +212,9 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This sets whether this connector will cache search results.
-     *
+     * 
      * @see #initializeCache()
-     *
+     * 
      * @param b <code>boolean</code>
      */
     public void setCacheResults(boolean b) {
@@ -227,7 +228,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns whether this connector will throw an exception if no search results are found. The default is false.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isNoResultsIsError() {
@@ -236,17 +237,16 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This sets whether this connector will throw an exception if no search results are found.
-     *
+     * 
      * @param b <code>boolean</code>
      */
     public void setNoResultsIsError(boolean b) {
         noResultsIsError = b;
     }
 
-
     /**
      * This returns the URL this connector is using.
-     *
+     * 
      * @return <code>String</code>
      */
     public String getLdapUrl() {
@@ -255,7 +255,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the base DN this connector is using.
-     *
+     * 
      * @return <code>String</code>
      */
     public String getBaseDn() {
@@ -264,7 +264,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns whether this connector will start TLS for all connections to the ldap.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isUseStartTls() {
@@ -273,7 +273,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the SSL Socket Factory that will be used for all TLS and SSL connections to the ldap.
-     *
+     * 
      * @return <code>SSLSocketFactory</code>
      */
     public SSLSocketFactory getSslSocketFactory() {
@@ -283,10 +283,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the SSL Socket Factory that will be used for all TLS and SSL connections to the ldap. This method will
      * remove any cached results and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param sf <code>SSLSocketFactory</code>
      */
     public void setSslSocketFactory(SSLSocketFactory sf) {
@@ -295,7 +295,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the trust managers that will be used for all TLS and SSL connections to the ldap.
-     *
+     * 
      * @return <code>TrustManager[]</code>
      */
     public TrustManager[] getSslTrustManagers() {
@@ -305,11 +305,11 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the trust managers that will be used for all TLS and SSL connections to the ldap. This method will
      * remove any cached results and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
      * @see #setSslSocketFactory(SSLSocketFactory)
-     *
+     * 
      * @param tc <code>X509Credential</code> to create TrustManagers with
      */
     public void setSslTrustManagers(X509Credential tc) {
@@ -338,7 +338,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the key managers that will be used for all TLS and SSL connections to the ldap.
-     *
+     * 
      * @return <code>KeyManager[]</code>
      */
     public KeyManager[] getSslKeyManagers() {
@@ -348,11 +348,11 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the key managers that will be used for all TLS and SSL connections to the ldap. This method will remove
      * any cached results and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
      * @see #setSslSocketFactory(SSLSocketFactory)
-     *
+     * 
      * @param kc <code>X509Credential</code> to create KeyManagers with
      */
     public void setSslKeyManagers(X509Credential kc) {
@@ -380,7 +380,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the hostname verifier that will be used for all TLS and SSL connections to the ldap.
-     *
+     * 
      * @return <code>HostnameVerifier</code>
      */
     public HostnameVerifier getHostnameVerifier() {
@@ -390,10 +390,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the hostname verifier that will be used for all TLS and SSL connections to the ldap. This method will
      * remove any cached results and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param hv <code>HostnameVerifier</code>
      */
     public void setHostnameVerifier(HostnameVerifier hv) {
@@ -404,7 +404,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the authentication type used when binding to the ldap.
-     *
+     * 
      * @return <code>AUTHENTICATION_TYPE</code>
      */
     public AUTHENTICATION_TYPE getAuthenticationType() {
@@ -430,10 +430,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the authentication type used when binding to the ldap. This method will remove any cached results and
      * initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param type <code>AUTHENTICATION_TYPE</code>
      */
     public void setAuthenticationType(AUTHENTICATION_TYPE type) {
@@ -458,7 +458,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the search scope used when searching the ldap.
-     *
+     * 
      * @return <code>int</code>
      */
     public SEARCH_SCOPE getSearchScope() {
@@ -475,9 +475,9 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This sets the search scope used when searching the ldap. This method will remove any cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param scope directory search scope
      */
     public void setSearchScope(SEARCH_SCOPE scope) {
@@ -493,7 +493,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the attributes that all searches will request from the ldap.
-     *
+     * 
      * @return <code>String[]</code>
      */
     public String[] getReturnAttributes() {
@@ -503,19 +503,19 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the attributes that all searches will request from the ldap. This method will remove any cached
      * results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param s <code>String[]</code>
      */
     public void setReturnAttributes(String[] s) {
         returnAttributes = s;
-        //clearCache();
+        // clearCache();
     }
 
     /**
      * This sets the attributes that all searches will request from the ldap. s should be a comma delimited string.
-     *
+     * 
      * @param s <code>String[]</code> comma delimited returnAttributes
      */
     public void setReturnAttributes(String s) {
@@ -530,7 +530,7 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This returns the time in milliseconds that the ldap will wait for search results. A value of 0 means to wait
      * indefinitely.
-     *
+     * 
      * @return <code>int</code> milliseconds
      */
     public int getSearchTimeLimit() {
@@ -540,9 +540,9 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the time in milliseconds that the ldap will wait for search results. A value of 0 means to wait
      * indefinitely. This method will remove any cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param i <code>int</code> milliseconds
      */
     public void setSearchTimeLimit(int i) {
@@ -553,7 +553,7 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This returns the maximum number of search results the ldap will return. A value of 0 all entries will be
      * returned.
-     *
+     * 
      * @return <code>long</code> maximum number of search results
      */
     public long getMaxResultSize() {
@@ -563,9 +563,9 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the maximum number of search results the ldap will return. A value of 0 all entries will be returned.
      * This method will remove any cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param l <code>long</code> maximum number of search results
      */
     public void setMaxResultSize(long l) {
@@ -575,7 +575,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns whether objects will be returned in the search results. The default is false.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isReturningObjects() {
@@ -584,9 +584,9 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This sets whether objects will be returned in the search results. This method will remove any cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param b <code>boolean</code>
      */
     public void setReturningObjects(boolean b) {
@@ -596,7 +596,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns whether link dereferencing will be used during the search. The default is false.
-     *
+     * 
      * @return <code>boolean</code>
      */
     public boolean isLinkDereferencing() {
@@ -605,9 +605,9 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This sets whether link dereferencing will be used during the search. This method will remove any cached results.
-     *
+     * 
      * @see #clearCache()
-     *
+     * 
      * @param b <code>boolean</code>
      */
     public void setLinkDereferencing(boolean b) {
@@ -617,7 +617,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the principal dn used to bind to the ldap for all searches.
-     *
+     * 
      * @return <code>String</code> principal dn
      */
     public String getPrincipal() {
@@ -627,10 +627,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the principal dn used to bind to the ldap for all searches. This method will remove any cached results
      * and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param s <code>String</code> principal dn
      */
     public void setPrincipal(String s) {
@@ -639,7 +639,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns the principal credential used to bind to the ldap for all searches.
-     *
+     * 
      * @return <code>String</code> principal credential
      */
     public String getPrincipalCredential() {
@@ -649,10 +649,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets the principal credential used to bind to the ldap for all searches. This method will remove any cached
      * results and initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param s <code>String</code> principal credential
      */
     public void setPrincipalCredential(String s) {
@@ -662,10 +662,10 @@ public class LdapDataConnector implements DataConnector {
     /**
      * This sets additional ldap context environment properties. This method will remove any cached results and
      * initialize the ldap pool.
-     *
+     * 
      * @see #clearCache()
      * @see #initializeLdapPool()
-     *
+     * 
      * @param ldapProperties <code>Map</code> of name/value pairs
      */
     public void setLdapProperties(Map<String, String> ldapProperties) {
@@ -676,26 +676,25 @@ public class LdapDataConnector implements DataConnector {
         initializeLdapPool();
     }
 
-    private void checkCacheValidity(){
-        if (cacheTimeoutMs==0 || !cacheResults){
+    private void checkCacheValidity() {
+        if (cacheTimeoutMs == 0 || !cacheResults) {
             return;
         }
         long currentTimeMillis = System.currentTimeMillis();
-        boolean shouldReset  = (currentTimeMillis - cacheResetTimeMs) > cacheTimeoutMs;
-        if (shouldReset){
+        boolean shouldReset = (currentTimeMillis - cacheResetTimeMs) > cacheTimeoutMs;
+        if (shouldReset) {
             log.info("Ldap cache was cleared, timeout reached");
             clearCache();
         }
     }
 
-
     /** {@inheritDoc} */
     public Map<String, String> lookup(String principal) throws AttributeAssociationException {
 
-        String searchFilter = searchFilterTemplate.replace("[principal]",principal);
+        String searchFilter = searchFilterTemplate.replace("[principal]", principal);
         searchFilter = searchFilter.trim();
-        //log.debug("Search: "+searchFilter);
-        //check if cache is still valid
+        // log.debug("Search: "+searchFilter);
+        // check if cache is still valid
         checkCacheValidity();
 
         // create Attribute objects to return
@@ -711,23 +710,22 @@ public class LdapDataConnector implements DataConnector {
             Iterator<SearchResult> results = searchLdap(searchFilter);
             // check for empty result set
             if (noResultsIsError && !results.hasNext()) {
-                throw new AttributeAssociationException("No LDAP entry found for "+principal);
+                throw new AttributeAssociationException("No LDAP entry found for " + principal);
             }
             // build resolved attributes from LDAP attributes
             attributes = buildBaseAttributes(results);
             if (cacheResults && attributes != null) {
                 setCachedAttributes(principal, searchFilter, attributes);
-                //log.debug("Stored results in the cache");
+                // log.debug("Stored results in the cache");
             }
         }
 
         return attributes;
     }
 
-
     /**
      * This searches the LDAP with the supplied filter.
-     *
+     * 
      * @param searchFilter <code>String</code> the searchFilter that produced the attributes
      * @return <code>Iterator</code> of search results
      * @throws AttributeResolutionException if an error occurs performing the search
@@ -738,8 +736,10 @@ public class LdapDataConnector implements DataConnector {
             ldap = (Ldap) ldapPool.borrowObject();
             return ldap.search(searchFilter, returnAttributes);
         } catch (NamingException e) {
-            //log.error("An error occured when attempting to search the LDAP: {}, {}",ldapConfig.getEnvironment(), e.getMessage());
-            throw new AttributeAssociationException("An error occurred when attempting to search the LDAP "+e.getMessage());
+            // log.error("An error occured when attempting to search the LDAP: {}, {}",ldapConfig.getEnvironment(),
+            // e.getMessage());
+            throw new AttributeAssociationException("An error occurred when attempting to search the LDAP "
+                    + e.getMessage());
         } catch (Exception e) {
             log.error("Could not retrieve Ldap object from pool, {}", e.getMessage());
             throw new AttributeAssociationException(
@@ -757,7 +757,7 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This returns a map of attribute ids to attributes from the supplied search results.
-     *
+     * 
      * @param results <code>Iterator</code> of LDAP search results
      * @return <code>Map</code> of attribute ids to attributes
      * @throws AttributeResolutionException if an error occurs parsing attribute results
@@ -771,32 +771,32 @@ public class LdapDataConnector implements DataConnector {
             return attributes;
         }
 
-        do{
+        do {
             SearchResult sr = results.next();
             Map<String, List<String>> newAttrsMap = null;
-            try{
+            try {
                 newAttrsMap = LdapUtil.parseAttributes(sr.getAttributes(), true);
             } catch (NamingException e) {
                 log.error("Error parsing LDAP attributes", e);
                 throw new AttributeAssociationException("Error parsing LDAP attributes");
             }
-            //log.debug("Found {} attributes",newAttrsMap.size());
+            // log.debug("Found {} attributes",newAttrsMap.size());
             for (Map.Entry<String, List<String>> entry : newAttrsMap.entrySet()) {
-                //log.debug("Found the following attribute: {}", entry);
+                // log.debug("Found the following attribute: {}", entry);
                 String attribute = (String) attributes.get(entry.getKey());
-                if(attribute == null){
+                if (attribute == null) {
                     attribute = new String(entry.getKey());
 
                 }
 
                 List<String> values = entry.getValue();
                 StringBuilder builder = new StringBuilder();
-                if(values != null && !values.isEmpty()){
-                    int count=0;
-                    for(String value : values){
-                        if(!DatatypeHelper.isEmpty(value)){
+                if (values != null && !values.isEmpty()) {
+                    int count = 0;
+                    for (String value : values) {
+                        if (!DatatypeHelper.isEmpty(value)) {
                             builder.append(DatatypeHelper.safeTrimOrNullString(value));
-                            if (count < values.size()-1){
+                            if (count < values.size() - 1) {
                                 builder.append(",");
                             }
                             count++;
@@ -805,7 +805,7 @@ public class LdapDataConnector implements DataConnector {
                 }
                 attributes.put(entry.getKey(), builder.toString());
             }
-        }while (mergeMultipleResults && results.hasNext());
+        } while (mergeMultipleResults && results.hasNext());
 
         return attributes;
     }
@@ -823,7 +823,6 @@ public class LdapDataConnector implements DataConnector {
     public void setLdapBaseDn(String ldapBaseDn) {
         ldapConfig.setBase(ldapBaseDn);
     }
-
 
     /**
      * @param startTls the startTls to set
@@ -874,10 +873,9 @@ public class LdapDataConnector implements DataConnector {
         return searchFilterTemplate;
     }
 
-
     /**
      * This stores the supplied attributes in the cache.
-     *
+     * 
      * @param principalName
      * @param searchFiler the searchFilter that produced the attributes
      * @param attributes <code>Map</code> of attribute ids to attributes
@@ -895,14 +893,13 @@ public class LdapDataConnector implements DataConnector {
 
     /**
      * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
-     *
+     * 
      * @param principalName
      * @param searchFilter the search filter the produced the attributes
-     *
+     * 
      * @return <code>Map</code> of attributes ids to attributes
      */
-    protected Map<String, String> getCachedAttributes(String principalName,
-            String searchFilter) {
+    protected Map<String, String> getCachedAttributes(String principalName, String searchFilter) {
         Map<String, String> attributes = null;
         if (cacheResults) {
             if (cache.containsKey(principalName)) {
@@ -926,7 +923,5 @@ public class LdapDataConnector implements DataConnector {
     public long getCacheTimeoutMs() {
         return cacheTimeoutMs;
     }
-
-
 
 }

@@ -34,10 +34,10 @@ import uk.ac.cardiff.raptor.store.dao.StorageException;
  * 
  * 
  */
-public class StoreEntriesPipelineTask implements Callable<Boolean> {
+public class StoreEventsPipelineTask implements Callable<Boolean> {
 
     /** class logger */
-    private final Logger log = LoggerFactory.getLogger(StoreEntriesPipelineTask.class);
+    private final Logger log = LoggerFactory.getLogger(StoreEventsPipelineTask.class);
 
     /** The entry handler used to store entries (e.g. events) */
     private EventHandler eventHandler;
@@ -51,7 +51,7 @@ public class StoreEntriesPipelineTask implements Callable<Boolean> {
     /** The events that need to be stored */
     private List<Event> events;
 
-    public StoreEntriesPipelineTask(EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine,
+    public StoreEventsPipelineTask(EventHandler entryHandler, AttributeAssociationEngine attributeAssociationEngine,
             List<Event> events, StoreEntriesTaskCallbackInterface storeCallback) {
         this.storeCallback = storeCallback;
         this.attributeAssociationEngine = attributeAssociationEngine;

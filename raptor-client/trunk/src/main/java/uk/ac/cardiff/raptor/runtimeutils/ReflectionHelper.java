@@ -35,11 +35,11 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.wsmodel.Suggestion;
 
-/**
- * @author philsmart
+/*
+ * Complete mess of a class, but with operations fundamental to Raptor, so clean 
  * 
  */
-public class ReflectionHelper {
+public final class ReflectionHelper {
 
     /** Class logger */
     private static final Logger log = LoggerFactory.getLogger(ReflectionHelper.class);
@@ -61,7 +61,7 @@ public class ReflectionHelper {
             Method getter = id.getMethod(fieldAsMethod, new Class[] {});
             return true;
         } catch (Throwable e) {
-            log.error("{}", e.getMessage());
+            log.error("Could not determine if class has attribute", e);
             return false;
 
         }
@@ -94,9 +94,8 @@ public class ReflectionHelper {
                 log.error("Attrubute {} did not exist on object {}", attributeID, object);
             }
         } catch (Throwable e) {
-            log.error("Field name '" + attributeID + "' does not match internal model attribute");
-            e.printStackTrace();
-            System.exit(1);
+            log.error("Field name '{}' does not match internal model attribute", attributeID, e);
+
         }
 
     }
@@ -198,11 +197,9 @@ public class ReflectionHelper {
             } catch (ClassNotFoundException cnfex) {
                 log.error("{}", cnfex);
             } catch (InstantiationException iex) {
-                // We try to instantiate an interface
-                // or an object that does not have a
-                // default constructor
+                // do nothing
             } catch (IllegalAccessException iaex) {
-                // The class is not public
+                // do nothing
             }
         }
 
@@ -246,11 +243,9 @@ public class ReflectionHelper {
             } catch (ClassNotFoundException cnfex) {
                 log.error("{}", cnfex);
             } catch (InstantiationException iex) {
-                // We try to instantiate an interface
-                // or an object that does not have a
-                // default constructor
+                // do nothing
             } catch (IllegalAccessException iaex) {
-                // The class is not public
+                // do nothing
             }
         }
 
@@ -378,8 +373,6 @@ public class ReflectionHelper {
         log.debug("URL: " + url);
         File directory = new File(url.getFile());
 
-        // New code
-        // ======
         if (directory.exists()) {
             // Get the list of the files contained in the package
             String[] files = directory.list();
@@ -415,9 +408,9 @@ public class ReflectionHelper {
     /**
      * Checks whether the Object <code>object</code> has the field <code>fieldName</code>
      * 
-     * @param object
-     * @param fieldName
-     * @return
+     * @param object the object to check
+     * @param fieldName the fieldname to check if present on <code>object</code>
+     * @return true iff the object has a field name called <code>fieldName</code>, false otherwise
      */
     private static Boolean hasField(Object object, String fieldName) {
         try {
@@ -436,12 +429,10 @@ public class ReflectionHelper {
     public static String prepareMethodNameSet(String method) {
         if (method.length() > 0) {
             String name = "set";
-            // now capitalise the first letter of the method name
             Character firstLetter = method.charAt(0);
             firstLetter = Character.toUpperCase(firstLetter);
             String newMethodName = method.substring(1, method.length());
             name += firstLetter + newMethodName;
-            // System.out.println("method name: " + name);
             return name;
 
         }
@@ -456,12 +447,10 @@ public class ReflectionHelper {
     public static String prepareMethodNameGet(String method) {
         if (method.length() > 0) {
             String name = "get";
-            // now capitalise the first letter of the method name
             Character firstLetter = method.charAt(0);
             firstLetter = Character.toUpperCase(firstLetter);
             String newMethodName = method.substring(1, method.length());
             name += firstLetter + newMethodName;
-            // System.out.println("method name: " + name);
             return name;
 
         }
@@ -477,7 +466,6 @@ public class ReflectionHelper {
             return result;
         } catch (Throwable e) {
             log.error("Field name '" + fieldname + "' does not match internal model attribute");
-            e.printStackTrace();
 
         }
         return null;

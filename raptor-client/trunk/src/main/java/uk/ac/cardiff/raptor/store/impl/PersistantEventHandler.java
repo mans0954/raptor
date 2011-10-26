@@ -68,14 +68,13 @@ public class PersistantEventHandler implements EventHandler {
     private List<String> countClassNames;
 
     public PersistantEventHandler(RaptorDataConnection dataConnection) {
-        this.setDataConnection(dataConnection);
+        setDataConnection(dataConnection);
         persistQueue = new HashSet<Event>();
 
     }
 
     /**
-     * Initialises the entry handler. In particular, loads all entries from the main datastore, through the
-     * <code>dataConnection</code> instance.
+     * Initialises the entry handler.
      */
     public void initialise() {
         log.info("Persistant entry handler [{}] initialising", this);
@@ -133,7 +132,7 @@ public class PersistantEventHandler implements EventHandler {
     /**
      * The <code>entries</code> are stored in the <code>persistQueue</code> until they are persisted. If an exception is
      * thrown before they are persisted, they remain in the <code>persistQueue</code>. This method then saves this
-     * collection in batch, as opposed to the <code>addEntry</code> method which stores events one at a time. In order
+     * collection in batch, as opposed to the <code>addEvent</code> method which stores events one at a time. In order
      * to detect duplicates, a query is run over the database in order to check duplicates within already stored events,
      * as well as adding new events to a <code>Set</code> <code>persist</code> which prevents duplicates in the
      * incomming <code>List</code> of entries
@@ -181,7 +180,7 @@ public class PersistantEventHandler implements EventHandler {
             dataConnection.save(event);
             return true;
         } else {
-            log.error("Duplicated event found\n{}", event);
+            log.warn("Duplicated event found\n{}", event);
             return false;
         }
 

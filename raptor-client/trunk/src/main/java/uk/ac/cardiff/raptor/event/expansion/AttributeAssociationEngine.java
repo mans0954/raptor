@@ -16,10 +16,10 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.event.expansion;
 
 import java.util.List;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,77 +29,78 @@ import uk.ac.cardiff.raptor.event.expansion.connector.AttributeAssociationExcept
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class AttributeAssociationEngine {
+public final class AttributeAssociationEngine {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(AttributeAssociationEngine.class);
 
-    /** Defines which attributes to add, and what principal to attach to*/
+    /** Defines which attributes to add, and what principal to attach to */
     private List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions;
 
     /**
      * Default Constructor
      */
-    public AttributeAssociationEngine(){
+    public AttributeAssociationEngine() {
 
     }
 
     /**
      * Gets associated attributes for the given ...
      */
-    public void associateAttributes(List<Event> events) throws AttributeAssociationException{
-        for (BaseAttributeAssociationDefinition attributeAssociationDefinition: attributeAssociationDefinitions){
-            log.info("Attribute Association Definition [{}], is enabled [{}]",attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
+    public void associateAttributes(final List<Event> events) throws AttributeAssociationException {
+        for (BaseAttributeAssociationDefinition attributeAssociationDefinition : attributeAssociationDefinitions) {
+            log.info("Attribute Association Definition [{}], is enabled [{}]",
+                    attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
 
-            if (!attributeAssociationDefinition.isEnabled()){
+            if (!attributeAssociationDefinition.isEnabled()) {
                 continue;
             }
 
-            int attached=0;
-            int failedToAssociate=0;
-            int current=0;
+            int attached = 0;
+            int failedToAssociate = 0;
+            int current = 0;
             final int noOfEvents = events.size();
-            for (Event event : events){
+            for (Event event : events) {
                 printProgressPosition(current, noOfEvents);
                 boolean associated = attributeAssociationDefinition.associate(event);
-                if (associated){
+                if (associated) {
                     attached++;
-                }
-                else{
-                	failedToAssociate++;
+                } else {
+                    failedToAssociate++;
                 }
                 current++;
             }
-            log.info("Attribute Association Definition {} finished, associated information to {} events, where {} events had no attributes associated",
-                    new Object[]{attributeAssociationDefinition.getDefiniationName(),attached,failedToAssociate});
+            log.info(
+                    "Attribute Association Definition {} finished, associated information to {} events, where {} events had no attributes associated",
+                    new Object[] {attributeAssociationDefinition.getDefiniationName(), attached, failedToAssociate});
         }
 
     }
 
-
     /**
      * Prints, as a percentage of the total, the event currently being processed.
-     *
+     * 
      * @param lineCount
      * @param totalNoLines
      */
-    private void printProgressPosition(int lineCount, int totalNoLines) {
-            double linePercentage = (((double) lineCount / (double) totalNoLines) * 100);
-            if (linePercentage % 25 >= 0 && linePercentage % 25 <= 0.003)
-                    log.debug("Attribute Association, Complete {}%", linePercentage);
+    private void printProgressPosition(final int lineCount, final int totalNoLines) {
+        double linePercentage = (((double) lineCount / (double) totalNoLines) * 100);
+        if (linePercentage % 25 >= 0 && linePercentage % 25 <= 0.003)
+            log.debug("Attribute Association, Complete {}%", linePercentage);
     }
 
     /**
      * Also initialises the definitions
-     *
+     * 
      * @param attributeAssociationDefinitions the attributeAssociationDefinitions to set
      */
-    public void setAttributeAssociationDefinitions(List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions) {
+    public void setAttributeAssociationDefinitions(
+            final List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions) {
         this.attributeAssociationDefinitions = attributeAssociationDefinitions;
-        for (BaseAttributeAssociationDefinition definition : attributeAssociationDefinitions){
-              definition.initialise();
+        for (BaseAttributeAssociationDefinition definition : attributeAssociationDefinitions) {
+            definition.initialise();
         }
     }
 
@@ -109,8 +110,5 @@ public class AttributeAssociationEngine {
     public List<BaseAttributeAssociationDefinition> getAttributeAssociationDefinitions() {
         return attributeAssociationDefinitions;
     }
-
-
-
 
 }

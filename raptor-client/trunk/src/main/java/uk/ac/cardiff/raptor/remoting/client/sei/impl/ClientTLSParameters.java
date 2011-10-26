@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
 import java.io.File;
@@ -35,87 +36,139 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 
-
 /**
- * Raptor client specific class to hold TLS parameters for easy configuration. Will then
- * produce an implementation specific TLS parameter class. Like a factory.
- *
+ * Raptor client specific class to hold TLS parameters for easy configuration. Will then produce an implementation
+ * specific TLS parameter class. Like a factory.
+ * 
  * @author philsmart
- *
+ * 
  */
 public class ClientTLSParameters {
 
-    	/** The public certificates for trusted servers*/
-	private String trustStoreLocation;
+    /** The public certificates for trusted servers. */
+    private String trustStoreLocation;
 
-	/** The private certificate for this client */
-	private String keyStoreLocation;
+    /** The private certificate for this client. */
+    private String keyStoreLocation;
 
-	/** The password for the trust store*/
-	private String trustStorePassword;
+    /** The password for the trust store. */
+    private String trustStorePassword;
 
-	/** The password for the key store */
-	private String keyStorePassword;
+    /** The password for the key store. */
+    private String keyStorePassword;
 
-	public TLSClientParameters getTlsClientParameters() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException{
-	    final TLSClientParameters tls = new TLSClientParameters();
+    /**
+     * Gets the tls client parameters.
+     * 
+     * @return the tls client parameters
+     * @throws KeyStoreException the key store exception
+     * @throws NoSuchAlgorithmException the no such algorithm exception
+     * @throws CertificateException the certificate exception
+     * @throws FileNotFoundException the file not found exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws UnrecoverableKeyException the unrecoverable key exception
+     */
+    public TLSClientParameters getTlsClientParameters() throws KeyStoreException, NoSuchAlgorithmException,
+            CertificateException, FileNotFoundException, IOException, UnrecoverableKeyException {
+        final TLSClientParameters tls = new TLSClientParameters();
 
-  	    tls.setDisableCNCheck(true);//disable URL and CN on cert match
+        tls.setDisableCNCheck(true);// disable URL and CN on cert match
 
-  	    //clients private key / public key
-  	    final KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
-  	    final File keyStoreFile = new File(keyStoreLocation);
-  	    keyStoreKeyManager.load(new FileInputStream(keyStoreFile),  keyStorePassword.toCharArray());
-  	    final KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-  	    keyFactory.init(keyStoreKeyManager, keyStorePassword.toCharArray());
+        // clients private key / public key
+        final KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
+        final File keyStoreFile = new File(keyStoreLocation);
+        keyStoreKeyManager.load(new FileInputStream(keyStoreFile), keyStorePassword.toCharArray());
+        final KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        keyFactory.init(keyStoreKeyManager, keyStorePassword.toCharArray());
 
-  	    final KeyManager[] km = keyFactory.getKeyManagers();
-  	    tls.setKeyManagers(km);
+        final KeyManager[] km = keyFactory.getKeyManagers();
+        tls.setKeyManagers(km);
 
-  	    //servers public key
-  	    final KeyStore keyStore = KeyStore.getInstance("JKS");
-  	    final File truststore = new File(trustStoreLocation);
-  	    keyStore.load(new FileInputStream(truststore),  trustStorePassword.toCharArray());
-  	    final TrustManagerFactory trustFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-  	    trustFactory.init(keyStore);
+        // servers public key
+        final KeyStore keyStore = KeyStore.getInstance("JKS");
+        final File truststore = new File(trustStoreLocation);
+        keyStore.load(new FileInputStream(truststore), trustStorePassword.toCharArray());
+        final TrustManagerFactory trustFactory =
+                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        trustFactory.init(keyStore);
 
-  	    final TrustManager[] tm = trustFactory.getTrustManagers();
-  	    tls.setTrustManagers(tm);
+        final TrustManager[] tm = trustFactory.getTrustManagers();
+        tls.setTrustManagers(tm);
 
-  	    return tls;
+        return tls;
 
-	}
+    }
 
-	public void setTrustStoreLocation(final String trustStoreLocation) {
-		this.trustStoreLocation = trustStoreLocation;
-	}
+    /**
+     * Sets the trust store location.
+     * 
+     * @param trustStoreLocation the new trust store location
+     */
+    public void setTrustStoreLocation(final String trustStoreLocation) {
+        this.trustStoreLocation = trustStoreLocation;
+    }
 
-	public String getTrustStoreLocation() {
-		return trustStoreLocation;
-	}
+    /**
+     * Gets the trust store location.
+     * 
+     * @return the trust store location
+     */
+    public String getTrustStoreLocation() {
+        return trustStoreLocation;
+    }
 
-	public void setKeyStoreLocation(final String keyStoreLocation) {
-		this.keyStoreLocation = keyStoreLocation;
-	}
+    /**
+     * Sets the key store location.
+     * 
+     * @param keyStoreLocation the new key store location
+     */
+    public void setKeyStoreLocation(final String keyStoreLocation) {
+        this.keyStoreLocation = keyStoreLocation;
+    }
 
-	public String getKeyStoreLocation() {
-		return keyStoreLocation;
-	}
+    /**
+     * Gets the key store location.
+     * 
+     * @return the key store location
+     */
+    public String getKeyStoreLocation() {
+        return keyStoreLocation;
+    }
 
-	public void setTrustStorePassword(final String trustStorePassword) {
-		this.trustStorePassword = trustStorePassword;
-	}
+    /**
+     * Sets the trust store password.
+     * 
+     * @param trustStorePassword the new trust store password
+     */
+    public void setTrustStorePassword(final String trustStorePassword) {
+        this.trustStorePassword = trustStorePassword;
+    }
 
-	public String getTrustStorePassword() {
-		return trustStorePassword;
-	}
+    /**
+     * Gets the trust store password.
+     * 
+     * @return the trust store password
+     */
+    public String getTrustStorePassword() {
+        return trustStorePassword;
+    }
 
-	public void setKeyStorePassword(final String keyStorePassword) {
-		this.keyStorePassword = keyStorePassword;
-	}
+    /**
+     * Sets the key store password.
+     * 
+     * @param keyStorePassword the new key store password
+     */
+    public void setKeyStorePassword(final String keyStorePassword) {
+        this.keyStorePassword = keyStorePassword;
+    }
 
-	public String getKeyStorePassword() {
-		return keyStorePassword;
-	}
+    /**
+     * Gets the key store password.
+     * 
+     * @return the key store password
+     */
+    public String getKeyStorePassword() {
+        return keyStorePassword;
+    }
 
 }

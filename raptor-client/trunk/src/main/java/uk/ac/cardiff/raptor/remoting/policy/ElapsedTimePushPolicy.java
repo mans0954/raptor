@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.remoting.policy;
 
 import java.util.List;
@@ -21,45 +22,61 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine;
 
-public class ElapsedTimePushPolicy extends AbstractPushPolicy{
-	
-	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(ElapsedTimePushPolicy.class);
-	
-	/** The time, in milliseconds, that this policy was last evaluated */
-	private long lastReleasedTime;
-	
-	/** How long, in milliseconds, should elapse before release*/
-	private long pushInterval;
-	
-	
-	/**
-	 * Default constructor, which sets the last evaluated time on initialisation
-	 */
-	public ElapsedTimePushPolicy(){
-		super();
-		lastReleasedTime = System.currentTimeMillis();
-	}
+/**
+ * The Class ElapsedTimePushPolicy.
+ */
+public class ElapsedTimePushPolicy implements PushPolicy {
 
-	public boolean evaluatePolicy(List<Event> events) {
-		long currentTime = System.currentTimeMillis();
-		long difference = currentTime-lastReleasedTime;
-		log.debug("ElapsedTime difference {}, pushInterval {}",difference,pushInterval);
-		if (difference>=getPushInterval()){
-			lastReleasedTime = currentTime;
-			return true;
-		}
-		return false;
-	}
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(ElapsedTimePushPolicy.class);
 
-	public void setPushInterval(long pushInterval) {
-		this.pushInterval = pushInterval;
-	}
+    /** The time, in milliseconds, that this policy was last evaluated. */
+    private long lastReleasedTime;
 
-	public long getPushInterval() {
-		return pushInterval;
-	}
+    /** How long, in milliseconds, should elapse before release. */
+    private long pushInterval;
+
+    /**
+     * Default constructor, which sets the last evaluated time on initialisation.
+     */
+    public ElapsedTimePushPolicy() {
+        super();
+        lastReleasedTime = System.currentTimeMillis();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see uk.ac.cardiff.raptor.remoting.policy.AbstractPushPolicy#evaluatePolicy(java.util.List)
+     */
+    public boolean evaluatePolicy(List<Event> events) {
+        long currentTime = System.currentTimeMillis();
+        long difference = currentTime - lastReleasedTime;
+        log.debug("ElapsedTime difference {}, pushInterval {}", difference, pushInterval);
+        if (difference >= getPushInterval()) {
+            lastReleasedTime = currentTime;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Sets the push interval.
+     * 
+     * @param pushInterval the new push interval
+     */
+    public void setPushInterval(long pushInterval) {
+        this.pushInterval = pushInterval;
+    }
+
+    /**
+     * Gets the push interval.
+     * 
+     * @return the push interval
+     */
+    public long getPushInterval() {
+        return pushInterval;
+    }
 
 }
