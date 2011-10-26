@@ -45,7 +45,7 @@ import uk.ac.cardiff.raptormua.service.MUAProcess;
 @WebService(endpointInterface = "uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator")
 public class MultiUnitAggregatorImpl implements MultiUnitAggregator {
 
-    /** The process service. */
+    /** The mua process service. */
     private MUAProcess processService;
 
     /*
@@ -81,7 +81,6 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator {
      * @see uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator#getCapabilities()
      */
     public Capabilities getCapabilities() {
-        // TODO Auto-generated method stub
         return processService.getCapabilities();
     }
 

@@ -47,7 +47,7 @@ import uk.ac.cardiff.raptormua.upload.FileUploadEngine;
 /**
  * All operations should go through this service class, so as to obey locks and synchronisation issues. Locks collisions
  * are thrown use a <code>SoapFault</code> . Fault codes are: Client (if a malformed input e.g. statistic name is wrong)
- * Server (we use for locks, as server side issue) VersionMismatch MustUnderstand
+ * Server (we use if a lock is hit, as a server side issue).
  * 
  * @author philsmart
  * 
@@ -90,7 +90,6 @@ public class MUAProcessImpl implements MUAProcess {
         if (lockR.tryLock()) {
             try {
                 engine.release();
-
             } catch (Exception e) {
                 log.error("Error trying to release events {}", e.getMessage());
             } finally {
