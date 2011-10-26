@@ -13,36 +13,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
+
 package uk.ac.cardiff.raptor.parse.external.file.format;
 
 import java.util.List;
 
 /**
- * @author philsmart
- *
+ * The Class LogFileFormat.
+ * 
  */
 public class LogFileFormat {
-	private String delimeter;
-	private List<Header> headers;
 
+    /** The delimiter used to separate fields in this record. */
+    private String delimeter;
 
-	public void setHeaders(List headers) {
-		this.headers = headers;
-	}
+    /** The headers used to parse the fields in this record. */
+    private List<Header> headers;
 
-	public List<Header> getHeaders() {
-		return headers;
-	}
+    /**
+     * Sets the headers.
+     * 
+     * @param headers the new headers
+     */
+    public void setHeaders(List<Header> headers) {
+        this.headers = headers;
+    }
 
-	public void setDelimeter(String delimeter) {
-		this.delimeter = delimeter;
-	}
+    /**
+     * Gets the headers.
+     * 
+     * @return the headers
+     */
+    public List<Header> getHeaders() {
+        return headers;
+    }
 
-	public String getDelimeter() {
-		return delimeter;
-	}
+    /**
+     * Sets the delimeter.
+     * 
+     * @param delimeter the new delimeter
+     */
+    public void setDelimeter(String delimeter) {
+        this.delimeter = delimeter;
+    }
+
+    /**
+     * Gets the delimeter.
+     * 
+     * @return the delimeter
+     */
+    public String getDelimeter() {
+        return delimeter;
+    }
 
 }

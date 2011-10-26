@@ -16,23 +16,35 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse.filter;
 
-
 /**
+ * The Class InclusionList.
+ * 
  * @author philsmart
- *
  */
 public class InclusionList {
 
-    private InclusionEntry[] inclusionEntries;
+    /** The array of exclusion entries. */
+    private AbstractInclusionEntry[] inclusionEntries;
 
-    public void setInclusionEntries(InclusionEntry[] inclusionEntries) {
-	this.inclusionEntries = inclusionEntries;
+    /**
+     * Sets the inclusion entries.
+     * 
+     * @param inclusionEntries the new inclusion entries
+     */
+    public void setInclusionEntries(AbstractInclusionEntry[] inclusionEntries) {
+        this.inclusionEntries = inclusionEntries;
     }
 
-    public InclusionEntry[] getInclusionEntries() {
-	return inclusionEntries;
+    /**
+     * Gets the inclusion entries.
+     * 
+     * @return the inclusion entries
+     */
+    public AbstractInclusionEntry[] getInclusionEntries() {
+        return inclusionEntries;
     }
 
 }

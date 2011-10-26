@@ -16,14 +16,21 @@
 /**
  *
  */
-package uk.ac.cardiff.raptor.parse.external.file.format;
+
+package uk.ac.cardiff.raptor.parse.filter;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public interface LineFilter {
+public interface EventFilter {
 
-    public boolean parsableLine(String line);
+    /**
+     * Filter this event
+     * 
+     * @param value
+     * @return
+     */
+    public boolean filter(String value);
 
 }

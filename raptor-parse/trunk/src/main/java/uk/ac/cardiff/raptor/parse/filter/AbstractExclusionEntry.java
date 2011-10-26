@@ -16,28 +16,56 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse.filter;
 
 /**
+ * The Class ExclusionEntry.
+ * 
  * @author philsmart
- *
  */
-public abstract class InclusionEntry implements EntryFilter{
+public abstract class AbstractExclusionEntry implements EventFilter {
 
+    /** The field name. */
     private String fieldName;
+
+    /** The match. */
     private String match;
 
+    /**
+     * Sets the field name.
+     * 
+     * @param fieldName the new field name
+     */
     public void setFieldName(String fieldName) {
-    	this.fieldName = fieldName;
+        this.fieldName = fieldName;
     }
+
+    /**
+     * Gets the field name.
+     * 
+     * @return the field name
+     */
     public String getFieldName() {
-    	return fieldName;
+        return fieldName;
     }
-    public void setMatch(String match) {
-    	this.match = match;
+
+    /**
+     * Sets the match.
+     * 
+     * @param matchString the new match
+     */
+    public void setMatch(String matchString) {
+        this.match = matchString;
     }
+
+    /**
+     * Gets the match.
+     * 
+     * @return the match
+     */
     public String getMatch() {
-    	return match;
+        return match;
     }
 
 }

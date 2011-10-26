@@ -16,39 +16,52 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptor.parse.filter.match;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import uk.ac.cardiff.raptor.parse.filter.InclusionEntry;
+import uk.ac.cardiff.raptor.parse.filter.AbstractInclusionEntry;
 
 /**
- * @author philsmart
+ * The Class RegexInclusionEntry.
  * 
  */
-public class RegexInclusionEntry extends InclusionEntry {
+public class RegexInclusionEntry extends AbstractInclusionEntry {
 
-	private String regexMatch;
+    /** The regex to match with. */
+    private String regexMatch;
 
-	/**
-	 * Constructs a regex from the <code>match</code> string, and checks if this
-	 * regex is contained in the input <code>value</code>
-	 * 
-	 * @param value the value to find a match from
-	 */
-	public boolean filter(String value) {
-		Pattern p = Pattern.compile(this.getMatch());
-		Matcher m = p.matcher(value);
-		return m.find();
-	}
+    /**
+     * Constructs a regex from the <code>match</code> string, and checks if this regex is contained in the input
+     * <code>value</code>.
+     * 
+     * @param value the value to find a match from
+     * @return true, if successful
+     */
+    public boolean filter(String value) {
+        Pattern p = Pattern.compile(this.getMatch());
+        Matcher m = p.matcher(value);
+        return m.find();
+    }
 
-	public void setRegexMatch(String regexMatch) {
-		this.regexMatch = regexMatch;
-	}
+    /**
+     * Sets the regex match.
+     * 
+     * @param regexMatch the new regex match
+     */
+    public void setRegexMatch(String regexMatch) {
+        this.regexMatch = regexMatch;
+    }
 
-	public String getRegexMatch() {
-		return regexMatch;
-	}
+    /**
+     * Gets the regex match.
+     * 
+     * @return the regex match
+     */
+    public String getRegexMatch() {
+        return regexMatch;
+    }
 
 }
