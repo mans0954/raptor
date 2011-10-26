@@ -13,22 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics;
 
-public class StatisticalUnitException extends Exception{
+public class StatisticalUnitException extends Exception {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4614661463043866258L;
-	
-	public StatisticalUnitException (String message){
-			super(message);
-	}
-	
-	public StatisticalUnitException (String message, Exception wrappedException){
-		super(message, wrappedException);
-	}
+    /**
+     * Generated serial UID.
+     */
+    private static final long serialVersionUID = -4614661463043866258L;
 
+    /** Constructor. */
+    public StatisticalUnitException() {
+        super();
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     */
+    public StatisticalUnitException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public StatisticalUnitException(final Exception wrappedException) {
+        super(wrappedException);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public StatisticalUnitException(final String message, final Exception wrappedException) {
+        super(message, wrappedException);
+    }
 
 }

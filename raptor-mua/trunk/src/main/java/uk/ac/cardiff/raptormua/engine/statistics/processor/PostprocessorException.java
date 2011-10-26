@@ -13,18 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
-public class PostprocessorException extends Exception{
+public class PostprocessorException extends Exception {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -4614661463043866256L;
+    /**
+     * Generated serial UID
+     */
+    private static final long serialVersionUID = -4614661463043866256L;
 
-	public PostprocessorException (String message){
-			super(message);
-	}
+    /** Constructor. */
+    public PostprocessorException() {
+        super();
+    }
 
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     */
+    public PostprocessorException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public PostprocessorException(final Exception wrappedException) {
+        super(wrappedException);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param message exception message
+     * @param wrappedException exception to be wrapped by this one
+     */
+    public PostprocessorException(final String message, final Exception wrappedException) {
+        super(message, wrappedException);
+    }
 
 }

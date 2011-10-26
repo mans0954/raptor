@@ -43,9 +43,9 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
     private boolean automaticallyFindStatsiticsToLoad = false;
 
     /**
-     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.Statistic}s that have been registered with this handler
+     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic}s that have been registered with this handler
      */
-    private List<Statistic> statisticalUnits;
+    private List<BaseStatistic> statisticalUnits;
 
     /** Used to automatically add statistics from the application context iff automaticallyFindStatsiticsToLoad = true */
     private ApplicationContext applicationContext;
@@ -62,8 +62,8 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
     }
 
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
-        Statistic toUpdate = null;
-        for (Statistic statistic : statisticalUnits) {
+        BaseStatistic toUpdate = null;
+        for (BaseStatistic statistic : statisticalUnits) {
             if (statistic.getStatisticParameters().getUnitName()
                     .equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
                 toUpdate = statistic;
@@ -74,8 +74,8 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
 
     }
 
-    public Statistic getStatistic(String statisticName) {
-        for (Statistic statistic : statisticalUnits) {
+    public BaseStatistic getStatistic(String statisticName) {
+        for (BaseStatistic statistic : statisticalUnits) {
             if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
                 log.debug("Found statistic [{}] from statistic registry", statistic.getStatisticParameters()
                         .getUnitName());
@@ -91,7 +91,7 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
      * @param statistic - the statistic to update
      * @param statisticalUnitInformation - the statistical unit information to used update the <code>statistic</code>
      */
-    private void performUpdate(Statistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
+    private void performUpdate(BaseStatistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
         statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
         // now deal with the post processors
         // List<StatisticPostProcessor> postProcessors =
@@ -122,8 +122,8 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
      * method will be overwritten by those automatically discovered using the
      * <code>setStatisticalUnitsFromApplicationContext</code> method
      */
-    public void setStatisticalUnits(List<Statistic> statisticalUnits) {
-        for (Statistic stat : statisticalUnits) {
+    public void setStatisticalUnits(List<BaseStatistic> statisticalUnits) {
+        for (BaseStatistic stat : statisticalUnits) {
             log.info("Registering statistic [{}], role {}", stat.getStatisticParameters().getUnitName(), stat
                     .getStatisticParameters().getType());
         }
@@ -132,16 +132,16 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
     }
 
     public void setStatisticalUnitsFromApplicationContext() {
-        statisticalUnits = new ArrayList<Statistic>();
-        Map<String, ?> allStatisticBeans = applicationContext.getBeansOfType(Statistic.class);
+        statisticalUnits = new ArrayList<BaseStatistic>();
+        Map<String, ?> allStatisticBeans = applicationContext.getBeansOfType(BaseStatistic.class);
         for (Map.Entry<String, ?> entry : allStatisticBeans.entrySet()) {
-            log.debug("Registering statistic [{}], role {}", ((Statistic) entry.getValue()).getStatisticParameters()
-                    .getUnitName(), ((Statistic) entry.getValue()).getStatisticParameters().getType());
-            statisticalUnits.add((Statistic) entry.getValue());
+            log.debug("Registering statistic [{}], role {}", ((BaseStatistic) entry.getValue()).getStatisticParameters()
+                    .getUnitName(), ((BaseStatistic) entry.getValue()).getStatisticParameters().getType());
+            statisticalUnits.add((BaseStatistic) entry.getValue());
         }
     }
 
-    public List<Statistic> getStatisticalUnits() {
+    public List<BaseStatistic> getStatisticalUnits() {
         return statisticalUnits;
     }
 

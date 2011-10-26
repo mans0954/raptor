@@ -54,7 +54,7 @@ public class SamlMetadataNameFormatter implements StatisticPostProcessor {
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(SamlMetadataNameFormatter.class);
 
-    /** this is not a proper URI at the moment, just a UNC path */
+    /* this is not a proper URI at the moment, just a UNC path */
     private String SAMLMetadataURI;
 
     public SamlMetadataNameFormatter(List<String> SAMLMetadataURIs) {

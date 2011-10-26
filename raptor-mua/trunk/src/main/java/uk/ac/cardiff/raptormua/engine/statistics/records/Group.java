@@ -16,26 +16,43 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics.records;
 
 /**
+ * The Class Group.
+ * 
  * @author philsmart
- *
  */
-public class Group extends Observation{
+public class Group extends Observation {
 
-	private String groupName;
+    /** The group name. */
+    private String groupName;
 
+    /**
+     * Sets the group name.
+     * 
+     * @param groupName the new group name
+     */
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
-	public String getGroupName() {
-		return groupName;
-	}
-	public void increment() {
-		value++;
+    /**
+     * Gets the group name.
+     * 
+     * @return the group name
+     */
+    public String getGroupName() {
+        return groupName;
+    }
 
-	}
+    /**
+     * Increment.
+     */
+    public void increment() {
+        value++;
+
+    }
 
 }

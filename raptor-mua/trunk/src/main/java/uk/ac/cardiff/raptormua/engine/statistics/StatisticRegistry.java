@@ -35,20 +35,20 @@ public interface StatisticRegistry {
      * @param statisticName - the unit name of the statistic to receive.
      * @return
      */
-    public Statistic getStatistic(String statisticName);
+    public BaseStatistic getStatistic(String statisticName);
 
     /**
      * Registers a List of statistics with this StatisticsHandler
      * 
      * @param statisticalUnits - the <code>Statistic</code>s to register
      */
-    public void setStatisticalUnits(List<Statistic> statisticalUnits);
+    public void setStatisticalUnits(List<BaseStatistic> statisticalUnits);
 
     /**
      * Returns a <code>List</code> of currently registered statistics
      * 
      * @return a <code>List</code> of currently registered statistics
      */
-    public List<Statistic> getStatisticalUnits();
+    public List<BaseStatistic> getStatisticalUnits();
 
 }

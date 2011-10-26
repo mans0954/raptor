@@ -38,7 +38,7 @@ public class SaveAndApplyResourceClassificationTask implements Callable<Boolean>
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(SaveAndApplyResourceClassificationTask.class);
 
-    /** The entry handler used to store entries (e.g. events) */
+    /** The event handler used to access events */
     private EventHandler entryHandler;
 
     /** The callback interface that is called once the <code>call</code> method has completed */

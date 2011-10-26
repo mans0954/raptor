@@ -34,7 +34,6 @@ import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.raptor.store.EventHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
-import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
@@ -43,23 +42,20 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.ObservationSeries;
 /**
  * @author philsmart Holds a statistics unit or one statistics operation on one piece of data
  */
-public abstract class Statistic {
+public abstract class BaseStatistic {
 
     /** Class logger */
-    private final Logger log = LoggerFactory.getLogger(Statistic.class);
+    private final Logger log = LoggerFactory.getLogger(BaseStatistic.class);
 
     /**
-     * The <code>EntryHandler</code> that allows access to all <code>Event</code>s this statistic works off.
+     * The <code>EventHandler</code> that allows access to all <code>Event</code>s this statistic works off.
      */
     private EventHandler entryHandler;
 
-    /** The parameters used to configure this statistic */
+    /** The parameters used to configure this statistic. */
     protected StatisticParameters statisticParameters;
 
-    /** add a preprocessing module to the statistical method */
-    private StatisticsPreProcessor preprocessor;
-
-    /** add a postprocessing module to the statistical method */
+    /** A list of postprocessing modules. */
     private List<StatisticPostProcessor> postprocessor;
 
     /**
@@ -71,7 +67,7 @@ public abstract class Statistic {
     /**
      * Default constructor.
      */
-    public Statistic() {
+    public BaseStatistic() {
         setObservationSeries(new ArrayList<ObservationSeries>());
     }
 
@@ -95,13 +91,6 @@ public abstract class Statistic {
     }
 
     public void setEntryHandler(EventHandler entryHandler) {
-        if (preprocessor != null)
-            try {
-                log.info("Invoking statistical preprocessor " + preprocessor.getClass());
-                preprocessor.preProcess(entryHandler);
-            } catch (PreprocessorException e) {
-                log.error("Could not preprocess entries " + preprocessor.getClass());
-            }
         this.entryHandler = entryHandler;
     }
 
@@ -174,7 +163,6 @@ public abstract class Statistic {
                 gmodel.addGroupLabel(startParser.print(bucket.getStart()) + "  " + endParser.print(bucket.getEnd()));
             }
             // Buckets are time series, and so are already sorted chronologically.
-
             for (int i = 0; i < observationSeries.size(); i++) {
                 buckets = (Bucket[]) observationSeries.get(i).getObservations();
                 gmodel.getSeriesLabels().add(statisticParameters.getSeries().get(i).getSeriesLabel());
@@ -210,8 +198,7 @@ public abstract class Statistic {
 
     /**
      * <p>
-     * pre processing effects the entries that go into the statistical unit post processing effects the observations
-     * that result form the statistical unit
+     * Send the results of performing the statistic to the post processors.
      * </p>
      */
     public void postProcess() {
@@ -220,7 +207,6 @@ public abstract class Statistic {
                 log.info("There are {} post processors to apply, these are {}", getPostprocessor().size(),
                         Arrays.toString(getPostprocessor().toArray(new StatisticPostProcessor[0])));
                 for (StatisticPostProcessor post : postprocessor) {
-                    // perform the same post process on each observationseries
                     for (ObservationSeries obsSeries : getObservationSeries()) {
                         obsSeries.setObservations(post.process(obsSeries.getObservations()));
                     }
@@ -229,7 +215,7 @@ public abstract class Statistic {
                 log.info("There are 0 post processors to apply");
             }
         } catch (PostprocessorException e) {
-            log.error("Could not post process entries, using " + getPostprocessor().getClass());
+            log.error("Could not post process entries, using {}", getPostprocessor().getClass());
         }
     }
 
@@ -249,14 +235,6 @@ public abstract class Statistic {
 
     public void setField(String field) {
 
-    }
-
-    public void setPreprocessor(StatisticsPreProcessor preprocessor) {
-        this.preprocessor = preprocessor;
-    }
-
-    public StatisticsPreProcessor getPreprocessor() {
-        return preprocessor;
     }
 
     public List<StatisticPostProcessor> getPostprocessor() {

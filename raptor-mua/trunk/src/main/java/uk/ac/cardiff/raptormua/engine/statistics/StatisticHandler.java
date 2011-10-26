@@ -51,7 +51,7 @@ public class StatisticHandler {
      */
     public AggregatorGraphModel performStatistic(String statisticName) {
         if (statisticRegistry != null) {
-            Statistic statistic = statisticRegistry.getStatistic(statisticName);
+            BaseStatistic statistic = statisticRegistry.getStatistic(statisticName);
             if (statistic != null) {
                 return performStatiticalPipeline(statistic);
             }
@@ -61,7 +61,7 @@ public class StatisticHandler {
         return null;
     }
 
-    private AggregatorGraphModel performStatiticalPipeline(Statistic statistic) {
+    private AggregatorGraphModel performStatiticalPipeline(BaseStatistic statistic) {
         statistic.setEntryHandler(getEventHandler());
         Boolean success = invoke(statistic);
         log.info("Statistic [{}] succedded {}", statistic.getStatisticParameters().getUnitName(), success);
@@ -91,7 +91,7 @@ public class StatisticHandler {
     /**
      * @param statistic
      */
-    private Boolean invoke(Statistic statistic) {
+    private Boolean invoke(BaseStatistic statistic) {
         if (getEventHandler() != null)
             log.debug("Invoking statistic [{}], working off {} events", statistic.getStatisticParameters()
                     .getUnitName(), getEventHandler().getNumberOfEvents());
@@ -132,7 +132,7 @@ public class StatisticHandler {
 
     }
 
-    public List<Statistic> getStatisticalUnits() {
+    public List<BaseStatistic> getStatisticalUnits() {
         return statisticRegistry.getStatisticalUnits();
     }
 
@@ -157,7 +157,7 @@ public class StatisticHandler {
      * @param statisticalUnits
      */
     @Deprecated
-    public void setStatisticalUnits(List<Statistic> statisticalUnits) {
+    public void setStatisticalUnits(List<BaseStatistic> statisticalUnits) {
         if (statisticRegistry == null) {
             statisticRegistry = new ContextAwareStatisticRegistry();
         }
