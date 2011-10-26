@@ -7,32 +7,50 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The Class SuggestionValues.
+ */
 public class SuggestionValues implements Serializable {
 
-    /**
-     * default serial UId
-     */
+    /** default serial UId. */
     private static final long serialVersionUID = 7312337340123235532L;
 
-    /** Class logger */
+    /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(SuggestionValues.class);
 
-    /** The names of all fields from the information model */
+    /** The names of all fields from the information model. */
     private List<Suggestion> possibleFieldNameValues;
 
-    /** The possible values of all known fields from the information model */
+    /** The possible values of all known fields from the information model. */
     private List<Suggestion> possibleFieldValues;
 
+    /** The possible post processors. */
     private List<Suggestion> possiblePostProcessors;
 
+    /**
+     * Sets the possible field name values.
+     * 
+     * @param possibleFieldNameValues
+     *            the new possible field name values
+     */
     public void setPossibleFieldNameValues(List<Suggestion> possibleFieldNameValues) {
         this.possibleFieldNameValues = possibleFieldNameValues;
     }
 
+    /**
+     * Gets the possible field name values.
+     * 
+     * @return the possible field name values
+     */
     public List<Suggestion> getPossibleFieldNameValues() {
         return possibleFieldNameValues;
     }
 
+    /**
+     * Gets the possible field name values list.
+     * 
+     * @return the possible field name values list
+     */
     public List<String> getPossibleFieldNameValuesList() {
         ArrayList<String> fields = new ArrayList<String>();
         if (possibleFieldNameValues == null)
@@ -43,6 +61,13 @@ public class SuggestionValues implements Serializable {
         return fields;
     }
 
+    /**
+     * Gets the possible field name values list.
+     * 
+     * @param classFilters
+     *            the class filters
+     * @return the possible field name values list
+     */
     public List<String> getPossibleFieldNameValuesList(String[] classFilters) {
         ArrayList<String> fields = new ArrayList<String>();
         if (possibleFieldNameValues == null)
@@ -57,6 +82,13 @@ public class SuggestionValues implements Serializable {
         return fields;
     }
 
+    /**
+     * Autocomplete.
+     * 
+     * @param fieldName
+     *            the field name
+     * @return the array list
+     */
     public ArrayList<String> autocomplete(String fieldName) {
         log.debug("Suggesting values for selectedfield {}", fieldName);
         ArrayList<String> possibles = new ArrayList<String>();
@@ -70,6 +102,8 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
+     * Sets the possible field values.
+     * 
      * @param possibleFieldValues
      *            the possibleFieldValues to set
      */
@@ -78,6 +112,8 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
+     * Gets the possible field values.
+     * 
      * @return the possibleFieldValues
      */
     public List<Suggestion> getPossibleFieldValues() {
@@ -85,6 +121,8 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
+     * Sets the possible post processors.
+     * 
      * @param possiblePostProcessors
      *            the possiblePostProcessors to set
      */
@@ -93,12 +131,19 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
+     * Gets the possible post processors.
+     * 
      * @return the possiblePostProcessors
      */
     public List<Suggestion> getPossiblePostProcessors() {
         return possiblePostProcessors;
     }
 
+    /**
+     * Gets the possible post processor values list.
+     * 
+     * @return the possible post processor values list
+     */
     public ArrayList<String> getPossiblePostProcessorValuesList() {
         ArrayList<String> fields = new ArrayList<String>();
         if (possiblePostProcessors == null)

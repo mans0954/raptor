@@ -13,7 +13,7 @@ public class LogFileUploadResult {
     /** The id of this <code>LogFileUploadResult</code> instance. */
     private long id;
 
-    /** The status. */
+    /** The status message from the agent that processed this message. */
     private String status;
 
     /** Has the upload successfully been processed. */

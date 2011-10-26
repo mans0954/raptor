@@ -6,6 +6,14 @@ import java.util.Collection;
 
 public class StringUtils {
 
+    /**
+     * Used to construct a string representation of all field value pairs in the object <code>obj</code> passed in as a parameter to the method. It does this
+     * using reflection.
+     * 
+     * @param obj
+     *            the object from which to construct a string representation from.
+     * @return a <code>String</code> representation of this object.
+     */
     public static String buildToString(Object obj) {
         Method[] methods = obj.getClass().getMethods();
         StringBuilder builder = new StringBuilder();

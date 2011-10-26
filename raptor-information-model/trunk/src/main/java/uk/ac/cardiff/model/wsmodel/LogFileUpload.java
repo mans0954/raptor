@@ -10,13 +10,13 @@ public class LogFileUpload implements Serializable {
     /** Generated Serial UID. */
     private static final long serialVersionUID = -6283086431616419079L;
 
-    /** The Name. */
+    /** The filename of the file that has been uploaded. */
     private String Name;
 
-    /** The mime. */
+    /** The mime type. */
     private String mime;
 
-    /** The length. */
+    /** The length of the file. */
     private long length;
 
     /** Random ID that we can use for tracking. */
@@ -64,7 +64,7 @@ public class LogFileUpload implements Serializable {
      */
     private String processingStatus;
 
-    /** The processed. */
+    /** Whether this file has be proccessed (parsed and stored). */
     private boolean processed;
 
     /**
