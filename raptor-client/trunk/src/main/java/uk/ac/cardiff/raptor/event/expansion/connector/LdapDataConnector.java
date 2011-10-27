@@ -50,7 +50,8 @@ import edu.vt.middleware.ldap.LdapUtil;
 /**
  * <code>LdapDataConnector</code> provides a plugin to retrieve attributes from an LDAP.
  */
-// TODO from Shib, needs converting to shib attribute resolution.
+// TODO taken and modified from Shib, needs converting to shib attribute resolution. Not sure how the license works in
+// this situation
 public class LdapDataConnector implements DataConnector {
 
     /** Search scope values. */
