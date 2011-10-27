@@ -36,13 +36,13 @@ import uk.ac.cardiff.raptor.store.dao.StorageException;
  * @author philsmart
  * 
  */
-public class StorageEngine implements StoreEntriesTaskCallbackInterface {
+public class EventStorageEngine implements StoreEntriesTaskCallbackInterface {
 
     /** Class logger */
-    private final Logger log = LoggerFactory.getLogger(StorageEngine.class);
+    private final Logger log = LoggerFactory.getLogger(EventStorageEngine.class);
 
     /** Responsible for storing all entries (e.g. events) */
-    private EventHandler eventHandler;
+    private QueryableEventHandler eventHandler;
 
     /** Engine used to associate attributes to existing events in the MUA */
     private AttributeAssociationEngine attributeAssociationEngine;
@@ -54,7 +54,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
     private boolean transactionInProgress;
 
     /** Default Constructor */
-    public StorageEngine() {
+    public EventStorageEngine() {
 
     }
 
@@ -140,11 +140,11 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
     }
 
     /**
-     * Sets the configured entry handler. Must also then initialise that entry handler
+     * Sets the configured event handler. Must also then initialise that entry handler
      * 
      * @param entryHandler the entryHandler to set
      */
-    public void setEntryHandler(EventHandler entryHandler) {
+    public void setEventHandler(QueryableEventHandler entryHandler) {
         this.eventHandler = entryHandler;
         entryHandler.initialise();
     }
@@ -152,7 +152,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
     /**
      * @return the entryHandler
      */
-    public EventHandler getEntryHandler() {
+    public QueryableEventHandler getEventHandler() {
         return eventHandler;
     }
 
@@ -182,7 +182,7 @@ public class StorageEngine implements StoreEntriesTaskCallbackInterface {
         for (String fieldName : possibleFieldNameValuesList) {
             try {
                 String query = "select " + fieldName + " from Event group by (" + fieldName + ")";
-                List results = eventHandler.query(query);
+                List results = eventHandler.query(query, null);
                 log.trace("Looking for possible values for field {} using query [{}]", fieldName, query);
                 int noResults = 0;
                 for (Object result : results) {

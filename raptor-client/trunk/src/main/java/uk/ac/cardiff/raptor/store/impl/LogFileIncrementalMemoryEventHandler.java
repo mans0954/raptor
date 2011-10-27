@@ -24,6 +24,7 @@
 package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,17 +36,18 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.IncrementalEventHandler;
+import uk.ac.cardiff.raptor.store.dao.StorageException;
 
-public class LogFileMemoryEventHandler implements IncrementalEventHandler {
+public class LogFileIncrementalMemoryEventHandler implements IncrementalEventHandler {
 
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(MemoryEventHandler.class);
 
     /** Pointer to the last recorded entry, for incremental update. */
-    private DateTime latestEntryTime;
+    private DateTime latestEventTime;
 
     /** Set of all entries stored by this EntryHandler. */
-    private Set<Event> entries;
+    private Set<Event> events;
 
     /**
      * Stores the set of latest unique entries. That is, those with the latest and same Date and Time, but different
@@ -54,19 +56,17 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
      */
     private Set<Event> latestEqualEntries;
 
-    public LogFileMemoryEventHandler() {
-        entries = new LinkedHashSet<Event>();
+    public LogFileIncrementalMemoryEventHandler() {
+        events = new LinkedHashSet<Event>();
         latestEqualEntries = new LinkedHashSet<Event>();
     }
 
-    public void addEntries(List<Event> entries) {
-        log.debug("Current: " + this.entries.size() + " in: " + entries.size());
-
-        for (Event event : entries) {
-            addEntry(event);
-
+    public void addEvents(List<Event> events) throws StorageException {
+        log.debug("Current: " + this.events.size() + " in: " + events.size());
+        for (Event event : events) {
+            addEvent(event);
         }
-        log.debug("Total No. of Entries " + this.entries.size() + " Latest Entry at: " + getLatestEntryTime());
+        log.debug("Total No. of Entries " + this.events.size() + " Latest Entry at: " + getLatestEventTime());
     }
 
     /**
@@ -76,13 +76,13 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
      * 
      * @return true if this event was added to the entry handler, false otherwise
      */
-    public boolean addEntry(Event event) {
+    public boolean addEvent(Event event) {
         addEventIdIfNull(event);
         boolean isAfter = isAfter(event);
         boolean isEqual = isEqual(event);
         if (isAfter) {
-            entries.add(event);
-            updateLastEntry(event);
+            events.add(event);
+            updateLastEvent(event);
             return true;
         } else if (isEqual) {
             boolean isAlreadyInLatest = latestEqualEntries.contains(event);
@@ -91,8 +91,8 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
                 return false;
             }
             if (!isAlreadyInLatest) {
-                entries.add(event);
-                updateLastEntry(event);
+                events.add(event);
+                updateLastEvent(event);
                 return true;
             }
         }
@@ -105,9 +105,9 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
      * <code>latestEntryTime</code>
      */
     public void reset() {
-        entries.clear();
+        events.clear();
         latestEqualEntries.clear();
-        latestEntryTime = null;
+        latestEventTime = null;
     }
 
     /**
@@ -130,7 +130,7 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
         log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)",
                 earliestReleaseTime, latestEqualEntries.size());
         ArrayList<Event> toRemove = new ArrayList<Event>();
-        for (Event event : entries) {
+        for (Event event : events) {
             if (event.getEventTime().isBefore(earliestReleaseTime))
                 toRemove.add(event);
             if (event.getEventTime().isEqual(earliestReleaseTime)) {
@@ -139,78 +139,81 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
                 }
             }
         }
-        entries.removeAll(toRemove);
+        events.removeAll(toRemove);
 
     }
 
-    private void updateLastEntry(Event entry) {
+    private void updateLastEvent(Event entry) {
         DateTime entryTime = entry.getEventTime();
-        if (getLatestEntryTime() == null)
-            setLatestEntryTime(entryTime);
-        if (entryTime.isAfter(getLatestEntryTime())) {
-            setLatestEntryTime(entryTime);
+        if (getLatestEventTime() == null)
+            setLatestEventTime(entryTime);
+        if (entryTime.isAfter(getLatestEventTime())) {
+            setLatestEventTime(entryTime);
             latestEqualEntries.clear();
             latestEqualEntries.add(entry);
         }
-        if (entryTime.isEqual(getLatestEntryTime())) {
+        if (entryTime.isEqual(getLatestEventTime())) {
             latestEqualEntries.add(entry);
         }
     }
 
-    public void setLatestEntryTime(DateTime latestEntryTime) {
-        this.latestEntryTime = latestEntryTime;
-    }
-
-    public DateTime getLatestEntryTime() {
-        return latestEntryTime;
-    }
-
     /**
-     * @param authE
-     * @return
+     * @param event the event to check if its after or equal to the <code>latestEventTime</code> or not.
+     * @return true if the recorded date and time attribute of <code>event</code> is equal to or newer than the date and
+     *         time recorded by <code>latestEventTime</code>
      */
-    public boolean isNewerOrEqual(Event event) {
-        if (latestEntryTime == null)
+    public boolean isAfterOrEqual(Event event) {
+        if (latestEventTime == null)
             return true;
-        if (!event.getEventTime().isBefore(latestEntryTime))
+        if (!event.getEventTime().isBefore(latestEventTime))
             return true;
         return false;
     }
 
+    /**
+     * @param event the event to check if its equal to the <code>latestEventTime</code> or not.
+     * @return true if the recorded date and time attribute of <code>event</code> is equal to or newer than the date and
+     *         time recorded by <code>latestEventTime</code>
+     */
     public boolean isEqual(Event event) {
-        if (latestEntryTime == null)
+        if (latestEventTime == null)
             return false;
-        return event.getEventTime().isEqual(latestEntryTime);
+        return event.getEventTime().isEqual(latestEventTime);
     }
 
+    /**
+     * @param event the event to check if its after to the <code>latestEventTime</code> or not.
+     * @return true if the recorded date and time attribute of <code>event</code> is after the date and time recorded by
+     *         <code>latestEventTime</code>
+     */
     public boolean isAfter(Event event) {
-        if (latestEntryTime == null)
+        if (latestEventTime == null)
             return true;
-        return event.getEventTime().isAfter(latestEntryTime);
+        return event.getEventTime().isAfter(latestEventTime);
     }
 
     /**
      * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)
      */
     public void endTransaction() {
-        latestEntryTime = new DateTime(latestEntryTime.getMillis() + 1);
+        latestEventTime = new DateTime(latestEventTime.getMillis() + 1);
 
     }
 
     /**
      * @return the list of entries currently stored by the entry handler
      */
-    public List<Event> getEntries() {
-        return new ArrayList<Event>(entries);
+    public List<Event> getEvents() {
+        return new ArrayList<Event>(events);
 
     }
 
     /**
-     * Removes all entries, but does not reset last entry, as this is still used so as not to add previously parsed
+     * Removes all events, but does not reset last entry, as this is still used so as not to add previously parsed
      * entries.
      */
-    public void removeAllEntries() {
-        entries.clear();
+    public void removeAllEvents() {
+        events.clear();
     }
 
     /**
@@ -220,13 +223,27 @@ public class LogFileMemoryEventHandler implements IncrementalEventHandler {
 
     }
 
-    public int getNumberOfEntries() {
-        return entries.size();
+    public long getNumberOfEvents() {
+        return events.size();
     }
 
-    public void setEntries(Set<Event> entries) {
-        this.entries = entries;
+    public DateTime getLatestEventTime() {
+        return latestEventTime;
+    }
 
+    /**
+     * @param latestEventTime the latestEventTime to set
+     */
+    public void setLatestEventTime(DateTime latestEventTime) {
+        this.latestEventTime = latestEventTime;
+    }
+
+    public void save(Event event) throws StorageException {
+        // no-op
+    }
+
+    public void saveAll(Collection<? extends Event> object) throws StorageException {
+        // no-op
     }
 
 }
