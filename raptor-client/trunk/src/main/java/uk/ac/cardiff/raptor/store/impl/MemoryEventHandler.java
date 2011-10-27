@@ -25,222 +25,177 @@ package uk.ac.cardiff.raptor.store.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.EventHandler;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
+import uk.ac.cardiff.raptor.store.EventHandler;
+import uk.ac.cardiff.raptor.store.dao.StorageException;
+
+/**
+ * The Class MemoryEventHandler.
+ */
 public class MemoryEventHandler implements EventHandler {
 
-	/** Class logger */
-	private final Logger log = LoggerFactory.getLogger(MemoryEventHandler.class);
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(MemoryEventHandler.class);
 
-	/** pointer to the last recorded entry, for incremental update */
-	private DateTime latestEntryTime;
+    /** pointer to the last recorded entry, for incremental update. */
+    private DateTime latestEntryTime;
 
-	/** record of the last entry that was sent over SOAP */
-	private DateTime lastPublishedEntryTime;
+    /** set of all entries stored by this EntryHandler. */
+    private Set<Event> events;
 
-	/** set of all entries stored by this EntryHandler */
-	private Set<Event> entries;
+    /**
+     * Instantiates a new memory event handler.
+     */
+    public MemoryEventHandler() {
+        events = new LinkedHashSet<Event>();
+    }
 
-	public MemoryEventHandler() {
-		entries = new LinkedHashSet<Event>();
-	}
+    public void addEvents(List<Event> entries) {
+        log.debug("Current: " + this.events.size() + " in: " + entries.size());
+        int notAdded = 0;
+        for (Event event : entries) {
+            boolean didAdd = addEvent(event);
+            if (didAdd == false)
+                notAdded++;
 
-	public void addEvents(List<Event> entries) {
-		log.debug("Current: " + this.entries.size() + " in: " + entries.size());
-		int notAdded = 0;
-		for (Event event : entries) {
-			boolean didAdd = addEvent(event);
-			if (didAdd == false)
-				notAdded++;
+        }
+        log.debug("Total No. of Entries {}, Lastest Entry at: {}, with {} duplicates", new Object[] {
+                this.events.size(), getLatestEventTime(), notAdded});
+    }
 
-		}
-		log.debug("Total No. of Entries {}, Lastest Entry at: {}, with {} duplicates", new Object[] { this.entries.size(), getLatestEventTime(), notAdded });
-	}
+    /**
+     * Checks whether this event is already stored, if not, then it adds the <code>event</code> to the
+     * <code>entries<code> set.
+     * 
+     * @param event the event to store
+     * @return true, if successful
+     */
+    public boolean addEvent(Event event) {
+        addEventIdIfNull(event);
+        if (!events.contains(event)) {
+            events.add(event);
+            updateLastEntry(event);
+            return true;
+        } else {
+            return false;
+        }
 
-	/**
-	 * Checks whether this event is already stored, if not, then it adds the
-	 * <code>event</code> to the <code>entries<code> set.
-	 *
-	 * @param event
-	 *            the event to store
-	 */
-	public boolean addEvent(Event event) {
-		addEventIdIfNull(event);
-		if (!entries.contains(event)) {
-			entries.add(event);
-			updateLastEntry(event);
-			return true;
-		} else {
-			return false;
-		}
+    }
 
-	}
+    /**
+     * Stores the hashcode of the event as the <code>eventId</code> iff there is no existing eventId (defined as 0), and
+     * the event has a valid hashcode.
+     * 
+     * @param event the event
+     */
+    private void addEventIdIfNull(Event event) {
+        if (event.getEventId() != 0) {
+            return;
+        }
+        int hashCode = ReflectionHelper.getHashCodeFromEventOrNull(event);
+        if (hashCode != 0) {
+            event.setEventId(hashCode);
+        }
+    }
 
-	/**
-	 * Stores the hashcode of the event as the <code>eventId</code> iff there is
-	 * no existing eventId (defined as 0), and the event has a valid hashcode.
-	 *
-	 * @param event
-	 */
-	private void addEventIdIfNull(Event event) {
-		if (event.getEventId() != 0) {
-			return;
-		}
-		int hashCode = ReflectionHelper.getHashCodeFromEventOrNull(event);
-		if (hashCode != 0) {
-			event.setEventId(hashCode);
-		}
-	}
+    /**
+     * Update last entry.
+     * 
+     * @param event the event
+     */
+    private void updateLastEntry(Event event) {
+        DateTime entryTime = event.getEventTime();
+        if (getLatestEventTime() == null)
+            setLatestEntryTime(entryTime);
+        if (entryTime.isAfter(getLatestEventTime())) {
+            setLatestEntryTime(entryTime);
 
-	private void updateLastEntry(Event event) {
-		DateTime entryTime = event.getEventTime();
-		if (getLatestEventTime() == null)
-			setLatestEntryTime(entryTime);
-		if (entryTime.isAfter(getLatestEventTime())) {
-			setLatestEntryTime(entryTime);
+        }
+    }
 
-		}
-	}
+    public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
+        log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)",
+                earliestReleaseTime, latestEqualEntries.size());
+        ArrayList<Event> toRemove = new ArrayList<Event>();
+        for (Event event : events) {
+            if (event.getEventTime().isBefore(earliestReleaseTime))
+                toRemove.add(event);
+            if (event.getEventTime().isEqual(earliestReleaseTime)) {
+                if (latestEqualEntries.contains(event.getEventId())) {
+                    toRemove.add(event);
+                }
+            }
+        }
+        events.removeAll(toRemove);
 
-	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
-		log.debug("Removing events earlier than {}, or in the set of last equal events sent (from {} events)", earliestReleaseTime, latestEqualEntries.size());
-		ArrayList<Event> toRemove = new ArrayList<Event>();
-		for (Event event : entries) {
-			if (event.getEventTime().isBefore(earliestReleaseTime))
-				toRemove.add(event);
-			if (event.getEventTime().isEqual(earliestReleaseTime)) {
-				if (latestEqualEntries.contains(event.getEventId())) {
-					toRemove.add(event);
-				}
-			}
-		}
-		entries.removeAll(toRemove);
+    }
 
-	}
+    /**
+     * Sets the latest entry time.
+     * 
+     * @param latestEntryTime the new latest entry time
+     */
+    public void setLatestEntryTime(DateTime latestEntryTime) {
+        this.latestEntryTime = latestEntryTime;
+    }
 
-	public void setLatestEntryTime(DateTime latestEntryTime) {
-		this.latestEntryTime = latestEntryTime;
-	}
+    public DateTime getLatestEventTime() {
+        return latestEntryTime;
+    }
 
-	public DateTime getLatestEventTime() {
-		return latestEntryTime;
-	}
+    /**
+     * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for explanation)
+     */
+    public void endTransaction() {
+        latestEntryTime = new DateTime(latestEntryTime.getMillis() + 1);
 
-	/**
-	 * pushes the latestEntryTime by 1 millisecond (see LogFileParser.java for
-	 * explanation)
-	 */
-	public void endTransaction() {
-		latestEntryTime = new DateTime(latestEntryTime.getMillis() + 1);
+    }
 
-	}
+    /**
+     * Get all the events stored by the event handler.
+     * 
+     * @return the list of entries currently stored by the entry handler
+     */
+    public List<Event> getEvents() {
+        return new ArrayList<Event>(events);
 
-	/**
-	 * @return the list of entries currently stored by the entry handler
-	 */
-	public List<Event> getEvents() {
-		return new ArrayList<Event>(entries);
+    }
 
-	}
+    /**
+     * Removes all entries, but does not reset last entry, as this is still used so as not to add previously parsed
+     * entries.
+     */
+    public void removeAllEvents() {
+        events.clear();
+    }
 
-	/**
-	 * Removes all entries, but does not reset last entry, as this is still used
-	 * so as not to add previously parsed entries.
-	 */
-	public void removeAllEvents() {
-		entries.clear();
-	}
+    /**
+     * This is a no-op method for all in-memory entry handlers.
+     */
+    public void initialise() {
 
-	public void setLastPublishedEntryTime(DateTime lastPublishedEntryTime) {
-		this.lastPublishedEntryTime = lastPublishedEntryTime;
-	}
+    }
 
-	public DateTime getLastPublishedEntryTime() {
-		return lastPublishedEntryTime;
-	}
+    public long getNumberOfEvents() {
+        return events.size();
+    }
 
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void initialise() {
+    public void save(Event event) throws StorageException {
+        // no-op
 
-	}
+    }
 
-	public long getNumberOfEvents() {
-		return entries.size();
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query) {
-		return null;
-	}
-
-	/**
-	 * T This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public Object queryUnique(String query, Object[] parameters) {
-		return null;
-	}
-
-	public void setEvents(Set<Event> entries) {
-		this.entries = entries;
-
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public List query(String query, Object[] parameters, int maxNoResults) {
-		return null;
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void save(Object object) {
-
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void saveAll(Collection object) {
-
-	}
-
-	/**
-	 * This is a no-op method for all in-memory entry handlers
-	 */
-	public void update(String query, Object[] parameters) {
-
-	}
+    public void saveAll(Collection<? extends Event> object) throws StorageException {
+        // no-op
+    }
 
 }

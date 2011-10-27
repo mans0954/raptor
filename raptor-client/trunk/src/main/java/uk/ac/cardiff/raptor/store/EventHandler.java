@@ -30,97 +30,77 @@ import org.joda.time.DateTime;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
-
 public interface EventHandler {
 
-	/**
-	 *
-	 * @param entries
-	 */
-	public void addEvents(List<Event> entries) throws StorageException;
+    /**
+     * Adds a list of Events to this event handler.
+     * 
+     * @param entries a <code>List</code> of events to add to this event handler.
+     */
+    public void addEvents(List<Event> events) throws StorageException;
 
-	/**
-	 *
-	 * @param event
-	 */
-	public boolean addEvent(Event event);
+    /**
+     * Adds the <code>event</code> to this event handler.
+     * 
+     * @param event the single event to add
+     */
+    public boolean addEvent(Event event);
 
-	/**
-	 *
-	 * @return
-	 */
-	public DateTime getLatestEventTime();
+    /**
+     * Returns the date and time of the latest event (chronologically) this event handler has stored.
+     * 
+     * @return the date and time of the latest event this event handler has stored.
+     */
+    public DateTime getLatestEventTime();
 
-	/**
-	 *
-	 * @return
-	 */
-	public List<Event> getEvents();
+    /**
+     * Returns a list of ALL events this event handler as stored.
+     * 
+     * @return the <code>List</code> of events stored by this event handler
+     */
+    public List<Event> getEvents();
 
-	/**
-	 *
-	 * @param entries
-	 */
-	public void setEvents(Set<Event> entries);
+    /**
+     * Removes all events stored by the event handler.
+     */
+    public void removeAllEvents();
 
-	/**
-	 *
-	 */
-	public void removeAllEvents();
+    /**
+     * Initialises this event handler.
+     */
+    public void initialise();
 
-	public void update(String query, Object[] parameters) throws StorageException;
+    /**
+     * Saves the Event <code>event</code>.
+     * 
+     * @param event the Collection of Events to store in batch
+     * @throws StorageException
+     */
+    public void save(Event event) throws StorageException;
 
-	/**
-	 *
-	 */
-	public void initialise();
+    /**
+     * Saves (in batch) every object in the collection (Which must themselves be a subclass of {@link Event}.
+     * 
+     * @param object the Collection of Events to store in batch
+     * @throws StorageException
+     */
+    public void saveAll(Collection<? extends Event> object) throws StorageException;
 
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public List query(String query);
+    /**
+     * Returns the number of events this event handler has stored.
+     * 
+     * @return the number of events this event handler has stored
+     */
+    public long getNumberOfEvents();
 
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public List query(String query, Object[] parameters);
-
-	/**
-	 *
-	 * @param query
-	 * @param parameters
-	 * @return
-	 */
-	public List query(String query, Object[] parameters, int maxNoResults);
-
-	public void save(Object object) throws StorageException;
-
-	public void saveAll(Collection object) throws StorageException;
-	/**
-	 *
-	 * @param query
-	 * @return
-	 */
-	public Object queryUnique(String query);
-
-	/**
-	 *
-	 * @return
-	 */
-	public long getNumberOfEvents();
-
-	/**
-	 * @param query
-	 * @param parameters
-	 * @return
-	 */
-	public Object queryUnique(String query, Object[] parameters);
-
-	public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries);
-
+    /**
+     * Removes events from this event handler that are chronologically before the <code>earliestReleaseTime</code>. Also
+     * removes events from this event hanlder that are equal to <code>earliestReleaseTime</code> and are contained in
+     * the set <code>latestEqualEntries</code>
+     * 
+     * @param earliestReleaseTime the date and time used to prune the set of events this event handler holds.
+     * @param latestEqualEvents a set of events that have equal dates and times to the <code>earliestReleaseTime</code>
+     */
+    public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEvents);
 
 }

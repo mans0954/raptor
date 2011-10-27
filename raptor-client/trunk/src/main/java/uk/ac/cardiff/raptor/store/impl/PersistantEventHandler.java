@@ -22,7 +22,6 @@ package uk.ac.cardiff.raptor.store.impl;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.store.EventHandler;
+import uk.ac.cardiff.raptor.store.QueryableEventHandler;
 import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
 import uk.ac.cardiff.raptor.store.dao.StorageException;
 
@@ -40,7 +39,7 @@ import uk.ac.cardiff.raptor.store.dao.StorageException;
  * @author philsmart
  * 
  */
-public class PersistantEventHandler implements EventHandler {
+public class PersistantEventHandler implements QueryableEventHandler {
 
     /** class logger. */
     private final Logger log = LoggerFactory.getLogger(PersistantEventHandler.class);
@@ -56,7 +55,7 @@ public class PersistantEventHandler implements EventHandler {
     private Set<Event> persistQueue;
 
     /**
-     * If true, COUNT queries to the database are seperated per table as described in <code>countTableNames</code>.
+     * If true, COUNT queries to the database are separated per table as described in <code>countTableNames</code>.
      * Otherwise a COUNT of the highest level <code>Event</code> class is issued which uses table joins to determine
      * counts from all subclasses thereof.
      */
@@ -113,9 +112,9 @@ public class PersistantEventHandler implements EventHandler {
         return dataConnection.runQuery(query, parameters, maxNoResults);
     }
 
-    public void save(Object object) throws StorageException {
+    public void save(Event event) throws StorageException {
         try {
-            dataConnection.save(object);
+            dataConnection.save(event);
         } catch (DataAccessException e) {
             throw new StorageException("Could not save object", e);
         }
@@ -192,7 +191,7 @@ public class PersistantEventHandler implements EventHandler {
     }
 
     public void removeAllEvents() {
-        log.error("Method removeAllEntries not yet implemented");
+        // no-op method
     }
 
     public void setDataConnection(RaptorDataConnection dataConnection) {
@@ -201,10 +200,6 @@ public class PersistantEventHandler implements EventHandler {
 
     public RaptorDataConnection getDataConnection() {
         return dataConnection;
-    }
-
-    public void setEvents(final Set<Event> entries) {
-
     }
 
     /**
@@ -239,17 +234,6 @@ public class PersistantEventHandler implements EventHandler {
         return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
     }
 
-    // TODO Implementation may not work - PLEASE DO USE
-    public void removeEventsBefore(final DateTime earliestReleaseTime, final Set<Integer> latestEqualEntries) {
-        dataConnection.runQueryUnique("delete from Event where eventTime < ?",
-                new Object[] {earliestReleaseTime.toDate()});
-        for (Iterator<Integer> entries = latestEqualEntries.iterator(); entries.hasNext();) {
-            Integer hash = entries.next();
-            dataConnection.runQueryUnique("delete from Event where hashCode = ?", new Object[] {hash});
-        }
-
-    }
-
     /**
      * @param optimiseCountQueries the optimiseCountQueries to set
      */
@@ -276,6 +260,13 @@ public class PersistantEventHandler implements EventHandler {
      */
     public List<String> getCountClassNames() {
         return countClassNames;
+    }
+
+    /**
+     * This is a no-op method for this event handler
+     */
+    public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
+        // no op method.
     }
 
 }
