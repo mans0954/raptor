@@ -122,7 +122,7 @@ public class CountEntry extends BaseStatistic{
 				query ="select count(*) from "+tableName+" where (eventTime between ? and ?) and (eventTime !=?) and resourceIdCategory "+resourceCategoryFilter+" and "+sqlWhere;
 
 			Object[] params = new Object[]{bucket.getStart(),bucket.getEnd(),bucket.getEnd()};
-			Long count = (Long) this.getEntryHandler().queryUnique(query,params);
+			Long count = (Long) this.getEventHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
 		}
@@ -132,7 +132,7 @@ public class CountEntry extends BaseStatistic{
 		 * reminder, or the specified start time and endtime does not completely
 		 * contain the entries.
 		 */
-		log.debug("Events: " + this.getEntryHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
+		log.debug("Events: " + this.getEventHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
 
 		ObservationSeries series=  new ObservationSeries();
 		series.setObservations(buckets);
