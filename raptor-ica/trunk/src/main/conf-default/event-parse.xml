@@ -28,7 +28,7 @@
 				<!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEventHandler"></ref></property>
+					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///opt/shibboleth-idp/logs/idp-audit.log
 						</value>
@@ -60,7 +60,7 @@
                 <!-- SHIB 1.3 -->
 
 				<!--<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-					<property name="entryHandler"><ref bean="memoryEventHandler"></ref></property>
+					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///opt/shibboleth-idp/logs/shib-access.log
 						</value>
@@ -72,10 +72,10 @@
 						<value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
 					</property>
                     <property name="LineFilterEngine">
-                        <bean class="uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine">
+                        <bean class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
                              <property name="includeLineFilters">
                                <list>
-                                  <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
+                                  <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
                                      <property name="includeIfContains"><value>Authentication assertion</value></property>
                                 </bean>
                                 </list>
@@ -90,7 +90,7 @@
                 <!--  EZPROXY -->
 
                 <!--<bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="entryHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///opt/ezproxy/logs/ezproxy-DATE.log
                         </value>
@@ -102,17 +102,17 @@
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                     </property>
                     <property name="LineFilterEngine">
-                        <bean id="lineFilterEngine" class="uk.ac.cardiff.raptor.parse.external.file.format.LineFilterEngine">
+                        <bean id="lineFilterEngine" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
 		                     <property name="includeLineFilters">
 		                       <list>
-			                       <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ContainsLineFilter">
+			                       <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
 			                           <property name="includeIfContains"><value>connect?session</value></property>
 			                       </bean>
 			                    </list>
 			                  </property>
 			                   <property name="excludeLineFilters">
 	                           <list>
-	                                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.ExcludeLineFilter">
+	                                <bean class="uk.ac.cardiff.raptor.parse.filter.ExcludeLineFilter">
 	                                   <property name="excludeIfContains"><value>url=menu</value></property>
 	                               </bean>
 	                            </list>
@@ -126,7 +126,7 @@
 	</bean>
 
 	<!-- Create the entry handler -->
-	<bean name="memoryEventHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileMemoryEventHandler"></bean>
+	<bean name="memoryEventHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"></bean>
 
 
 	<!--
