@@ -43,9 +43,9 @@ import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
-import uk.ac.cardiff.raptor.store.StorageEngine;
+import uk.ac.cardiff.raptor.store.EventStorageEngine;
+import uk.ac.cardiff.raptor.store.ResourceStorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
-import uk.ac.cardiff.raptormua.engine.classification.ResourceClassificationBackgroundService;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
@@ -67,8 +67,13 @@ public final class MUAEngine {
      */
     private EventReleaseClient eventReleaseClient;
 
-    /** The Storage Engine that handles all storage transactions. */
-    private StorageEngine storageEngine;
+    /** The Storage Engine that handles all storage transactions for events. */
+    private EventStorageEngine storageEngine;
+
+    /**
+     * The storage engine that handles all storage transactions for resources.
+     */
+    private ResourceStorageEngine resourceStorageEngine;
 
     /** Metadata about the this MUA instance. */
     private ServiceMetadata muaMetadata;
@@ -118,7 +123,7 @@ public final class MUAEngine {
      * @return the aggregator graph model
      */
     public final AggregatorGraphModel performStatistic(final String statisticName) {
-        statisticsHandler.setEventHandler(storageEngine.getEntryHandler());
+        statisticsHandler.setEventHandler(storageEngine.getEventHandler());
         return statisticsHandler.performStatistic(statisticName);
 
     }
@@ -196,7 +201,7 @@ public final class MUAEngine {
                 log.debug("Parsing {} using parser {} for type {}",
                         new Object[] {logfileUpload.getName(), parser.getClass(), logfileUpload.getEventType()});
                 parser.parse(logfileUpload.getData());
-                allEvents.addAll(parser.getEntryHandler().getEntries());
+                allEvents.addAll(parser.getEventHandler().getEvents());
                 parser.reset();
                 result.setStatus("Parsed On the MUA");
                 result.setProcessed(true);
@@ -240,7 +245,7 @@ public final class MUAEngine {
                 log.debug("Parsing {} using parser {} for type {}", new Object[] {batchFile.getLogFile().getName(),
                         parser.getClass(), batchFile.getEventType()});
                 parser.parse(batchFile.getLogFile());
-                List<Event> events = parser.getEntryHandler().getEntries();
+                List<Event> events = parser.getEventHandler().getEvents();
                 parser.reset();
                 log.info("Storing all {} parsed events", events.size());
                 int transactionId = (int) (Math.random() * 1000000);
@@ -273,10 +278,11 @@ public final class MUAEngine {
      * 
      * @param resourceMetadata the resource metadata
      */
-    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
-        ResourceClassificationBackgroundService backgroundService =
-                new ResourceClassificationBackgroundService(storageEngine.getEntryHandler());
-        backgroundService.saveResourceMetadataAndApplyAsync(resourceMetadata);
+    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata)
+            throws TransactionInProgressException {
+        int transactionId = (int) (Math.random() * 1000000);
+        resourceStorageEngine.performAsynchronousResourceStoragePipeline(transactionId, resourceMetadata);
+
     }
 
     /**
@@ -351,7 +357,7 @@ public final class MUAEngine {
      * 
      * @param storageEngine the storageEngine to set
      */
-    public final void setStorageEngine(final StorageEngine storageEngine) {
+    public final void setStorageEngine(final EventStorageEngine storageEngine) {
         this.storageEngine = storageEngine;
     }
 
@@ -360,7 +366,7 @@ public final class MUAEngine {
      * 
      * @return the storageEngine
      */
-    public final StorageEngine getStorageEngine() {
+    public final EventStorageEngine getStorageEngine() {
         return storageEngine;
     }
 
@@ -421,6 +427,20 @@ public final class MUAEngine {
      */
     public CapabilitiesConstructor getCapabilitiesConstructor() {
         return capabilitiesConstructor;
+    }
+
+    /**
+     * @param resourceStorageEngine the resourceStorageEngine to set
+     */
+    public void setResourceStorageEngine(ResourceStorageEngine resourceStorageEngine) {
+        this.resourceStorageEngine = resourceStorageEngine;
+    }
+
+    /**
+     * @return the resourceStorageEngine
+     */
+    public ResourceStorageEngine getResourceStorageEngine() {
+        return resourceStorageEngine;
     }
 
 }
