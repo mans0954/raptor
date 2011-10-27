@@ -72,7 +72,7 @@ public class GroupByCountDistinct extends BaseStatistic {
 
 		Object[] params = new Object[]{start,end};
 
-		List results = getEntryHandler().query(query,params);
+		List results = getEventHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList<Group>();
 		int testCount = 0;
@@ -85,7 +85,7 @@ public class GroupByCountDistinct extends BaseStatistic {
 			testCount += group.getValue();
 		}
 
-		log.debug("Entries: {}, total in buckets:{} ", this.getEntryHandler().getNumberOfEvents(), testCount);
+		log.debug("Entries: {}, total in buckets:{} ", this.getEventHandler().getNumberOfEvents(), testCount);
 
 		if (groups.size() == 0)
 			return false;

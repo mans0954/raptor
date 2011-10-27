@@ -81,7 +81,7 @@ public class GroupBy extends BaseStatistic{
 
 		Object[] params = new Object[]{start,end};
 
-		List results = getEntryHandler().query(query,params);
+		List results = getEventHandler().query(query,params);
 
 		ArrayList<Group> groups = new ArrayList();
 		for (Object result : results) {

@@ -28,7 +28,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.raptor.store.EventHandler;
+import uk.ac.cardiff.raptor.store.QueryableEventHandler;
 
 /**
  * Allows the storage and invocation of statistical units
@@ -40,11 +40,11 @@ public class StatisticHandler {
     /** Class Logger */
     private final Logger log = LoggerFactory.getLogger(StatisticHandler.class);
 
-    /** Registry for managing statistics **/
+    /** Register for managing statistics **/
     private StatisticRegistry statisticRegistry;
 
     /** A reference to the event handler that is used to access all underlying events */
-    private EventHandler eventHandler;
+    private QueryableEventHandler eventHandler;
 
     /**
      * @param statisticName
@@ -139,14 +139,14 @@ public class StatisticHandler {
     /**
      * @param eventHandler the eventHandler to set
      */
-    public void setEventHandler(EventHandler eventHandler) {
+    public void setEventHandler(QueryableEventHandler eventHandler) {
         this.eventHandler = eventHandler;
     }
 
     /**
      * @return the eventHandler
      */
-    public EventHandler getEventHandler() {
+    public QueryableEventHandler getEventHandler() {
         return eventHandler;
     }
 

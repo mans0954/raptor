@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
-import uk.ac.cardiff.raptor.store.EventHandler;
+import uk.ac.cardiff.raptor.store.QueryableEventHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
@@ -48,9 +48,9 @@ public abstract class BaseStatistic {
     private final Logger log = LoggerFactory.getLogger(BaseStatistic.class);
 
     /**
-     * The <code>EventHandler</code> that allows access to all <code>Event</code>s this statistic works off.
+     * The <code>QueryableEventHandler</code> that allows access to all <code>Event</code>s this statistic works off.
      */
-    private EventHandler entryHandler;
+    private QueryableEventHandler eventHandler;
 
     /** The parameters used to configure this statistic. */
     protected StatisticParameters statisticParameters;
@@ -90,8 +90,8 @@ public abstract class BaseStatistic {
         observationSeries.clear();
     }
 
-    public void setEntryHandler(EventHandler entryHandler) {
-        this.entryHandler = entryHandler;
+    public void setEntryHandler(QueryableEventHandler entryHandler) {
+        this.eventHandler = entryHandler;
     }
 
     /**
@@ -222,14 +222,14 @@ public abstract class BaseStatistic {
     protected DateTime startingTime() {
         if (statisticParameters.getStartTimeAsDate() != null)
             return statisticParameters.getStartTimeAsDate();
-        DateTime start = (DateTime) this.getEntryHandler().queryUnique("select min(eventTime) from Event");
+        DateTime start = (DateTime) this.getEventHandler().queryUnique("select min(eventTime) from Event", null);
         return start;
     }
 
     protected DateTime endingTime() {
         if (statisticParameters.getEndTimeAsDate() != null)
             return statisticParameters.getEndTimeAsDate();
-        DateTime end = (DateTime) this.getEntryHandler().queryUnique("select max(eventTime) from Event");
+        DateTime end = (DateTime) this.getEventHandler().queryUnique("select max(eventTime) from Event", null);
         return end;
     }
 
@@ -251,8 +251,8 @@ public abstract class BaseStatistic {
         return statisticParameters;
     }
 
-    public EventHandler getEntryHandler() {
-        return entryHandler;
+    public QueryableEventHandler getEventHandler() {
+        return eventHandler;
     }
 
     public void setObservationSeries(List<ObservationSeries> observationSeries) {

@@ -138,13 +138,13 @@ public class CountEntryPerInterval extends BaseStatistic{
 
 			Object[] params = new Object[]{bucket.getStart(),bucket.getEnd(),bucket.getEnd()};
 
-			Long count = (Long) this.getEntryHandler().queryUnique(query,params);
+			Long count = (Long) this.getEventHandler().queryUnique(query,params);
 			bucket.setValue(count);
 			testCount += bucket.getValue();
 		}
 
 
-		log.debug("Entries: " + this.getEntryHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
+		log.debug("Entries: " + this.getEventHandler().getNumberOfEvents() + ", total in buckets: " + testCount);
 
 
 		ObservationSeries series=  new ObservationSeries();
