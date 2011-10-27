@@ -130,6 +130,7 @@
         <property name="eventReleaseClient"><ref bean="eventReleaseClient"></ref></property>
 		<property name="statisticsHandler"><ref bean="statisticalUnits"/></property>
 		<property name="storageEngine"><ref bean="storageEngine"></ref></property>
+        <property name="resourceStorageEngine"><ref bean="resourceStorageEngine"></ref></property>
 		<property name="muaMetadata"><ref bean="MUAMetadata"></ref></property>
 		<property name="capabilitiesConstructor"><ref bean="capabilitiesConstructor"/></property>
 		<property name="dataAccessRegister"><ref bean="dataAccessRegister"></ref></property>
@@ -220,10 +221,14 @@
     <!--  DONE -->
 
 	<!-- Create the storage engine and entry handler -->
-	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.StorageEngine">
-        <property name="entryHandler"><ref bean="persistantEventHandler"/></property>
+	<bean name="storageEngine" class="uk.ac.cardiff.raptor.store.EventStorageEngine">
+        <property name="eventHandler"><ref bean="persistantEventHandler"/></property>
         <property name="attributeAssociationEngine"><ref bean="attributeAssociationEngine"></ref></property>
 	</bean>
+    
+    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.ResourceStorageEngine">
+        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
+    </bean>
 
 
 
