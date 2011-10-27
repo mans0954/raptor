@@ -36,7 +36,7 @@ public final class AttributeAssociationEngine {
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(AttributeAssociationEngine.class);
 
-    /** Defines which attributes to add, and what principal to attach to */
+    /** Defines which attributes to add, and what principal to attach to. */
     private List<BaseAttributeAssociationDefinition> attributeAssociationDefinitions;
 
     /**
