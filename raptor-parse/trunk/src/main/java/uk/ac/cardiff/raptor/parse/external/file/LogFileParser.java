@@ -186,7 +186,7 @@ public class LogFileParser extends BaseEventParser {
                             new Object[] {shouldBeIncluded, preventAdd, authE.toString()});
 
                     if (shouldBeIncluded && !preventAdd) {
-                        entryHandler.addEntry(authE);
+                        eventHandler.addEvent(authE);
                     }
 
                 }
@@ -195,8 +195,8 @@ public class LogFileParser extends BaseEventParser {
             in.close();
 
             log.debug("done, walked {} lines", lineCount);
-            log.debug("LogFileParser currently has: {} entries, latestEntry: {}", entryHandler.getNumberOfEntries(),
-                    entryHandler.getLatestEntryTime());
+            log.debug("LogFileParser currently has: {} entries, latestEntry: {}", eventHandler.getNumberOfEvents(),
+                    eventHandler.getLatestEventTime());
         } catch (IOException e2) {
             throw new ParserException("Could not read from the source file [" + logfile + "] during parsing", e2);
         }

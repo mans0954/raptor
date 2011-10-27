@@ -31,7 +31,7 @@ import uk.ac.cardiff.raptor.parse.filter.InclusionList;
 import uk.ac.cardiff.raptor.store.IncrementalEventHandler;
 
 /**
- * @author philsmart
+ * This is really not a base event parser, its specific to log file event parsing.
  * 
  */
 public abstract class BaseEventParser {
@@ -40,7 +40,7 @@ public abstract class BaseEventParser {
     private final Logger log = LoggerFactory.getLogger(BaseEventParser.class);
 
     /** The handler that is responsible for storing events. */
-    protected IncrementalEventHandler entryHandler;
+    protected IncrementalEventHandler eventHandler;
 
     /** A list of <fieldname,value> pairs that should be excluded during parsing. */
     private ExclusionList exclusionList;
@@ -90,7 +90,7 @@ public abstract class BaseEventParser {
      * <code>IncrementalEntryHandler</code> and reseting all references to the last event(s) parsed.
      */
     public void reset() {
-        entryHandler.reset();
+        eventHandler.reset();
     }
 
     /**
@@ -115,10 +115,10 @@ public abstract class BaseEventParser {
     }
 
     /**
-     * Method to remove all entries from the entry handler
+     * Method to remove all entries from the event handler
      */
     public void removeAllEntries() {
-        entryHandler.removeAllEntries();
+        eventHandler.removeAllEvents();
 
     }
 
@@ -127,9 +127,9 @@ public abstract class BaseEventParser {
      * 
      * @param entryHandler
      */
-    public void setEntryHandler(IncrementalEventHandler entryHandler) {
-        this.entryHandler = entryHandler;
-        entryHandler.initialise();
+    public void setEventHandler(IncrementalEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+        eventHandler.initialise();
     }
 
     /**
@@ -137,8 +137,8 @@ public abstract class BaseEventParser {
      * 
      * @return
      */
-    public IncrementalEventHandler getEntryHandler() {
-        return entryHandler;
+    public IncrementalEventHandler getEventHandler() {
+        return eventHandler;
     }
 
     /**
@@ -183,7 +183,7 @@ public abstract class BaseEventParser {
      * @return
      */
     public List<Event> getAuthentications() {
-        return entryHandler.getEntries();
+        return eventHandler.getEvents();
 
     }
 

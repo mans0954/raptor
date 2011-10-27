@@ -107,16 +107,15 @@ public class DataAccessRegister {
         }
         log.info("EGC. Garbage collection has found all events previous to {} can be removed", earliestReleaseTime);
         for (BaseEventParser parser : parsingModules) {
-            IncrementalEventHandler entryHandler = parser.getEntryHandler();
+            IncrementalEventHandler entryHandler = parser.getEventHandler();
             log.info("EGC. Parsing Module {} has {} events before garbage collection", parser,
-                    entryHandler.getNumberOfEntries());
+                    entryHandler.getNumberOfEvents());
             entryHandler.removeEventsBefore(earliestReleaseTime, endpointWithEarliestReleaseTime
                     .getReleaseInformation().getLatestEqualEntries());
             log.info("EGC. Parsing Module {} has {} events after garbage collection", parser,
-                    entryHandler.getNumberOfEntries());
+                    entryHandler.getNumberOfEvents());
 
         }
 
     }
-
 }
