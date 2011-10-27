@@ -38,7 +38,7 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.Suggestion;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
-import uk.ac.cardiff.raptor.store.StorageEngine;
+import uk.ac.cardiff.raptor.store.EventStorageEngine;
 import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
@@ -73,7 +73,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware {
     /**
      * @return
      */
-    public Capabilities constructCapabilities(StatisticHandler statisticsHandler, StorageEngine storageEngine,
+    public Capabilities constructCapabilities(StatisticHandler statisticsHandler, EventStorageEngine storageEngine,
             ServiceMetadata metadata) {
         log.info("Capabilities Constructor Called");
         long startTime = System.currentTimeMillis();
@@ -91,16 +91,14 @@ public class CapabilitiesConstructor implements ApplicationContextAware {
         if (capabilities == null) {
 
             capabilities = new Capabilities();
-
             List<BaseStatistic> su = statisticsHandler.getStatisticalUnits();
-
             capabilities.setMetadata(metadata);
 
             // set possible field names
             SuggestionValues suggestionValues = new SuggestionValues();
             suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
             capabilities.setSuggestionValues(suggestionValues);
-            capabilities.setNumberOfAuthenticationsStored(storageEngine.getEntryHandler().getNumberOfEvents());
+            capabilities.setNumberOfAuthenticationsStored(storageEngine.getEventHandler().getNumberOfEvents());
             List<Suggestion> possiblePostProcessors = findPostProcessors();
             log.trace("Has set {} possible post processor suggestion values", possiblePostProcessors.size());
             suggestionValues.setPossiblePostProcessors(possiblePostProcessors);
@@ -121,7 +119,7 @@ public class CapabilitiesConstructor implements ApplicationContextAware {
 
             // set resource metadata
             List<ResourceMetadata> resourceMetadata =
-                    (List<ResourceMetadata>) storageEngine.getEntryHandler().query("from ResourceMetadata");
+                    (List<ResourceMetadata>) storageEngine.getEventHandler().query("from ResourceMetadata", null);
             log.debug("Setting {} resource metadata", resourceMetadata.size());
             Collections.sort(resourceMetadata, new ResourceMetadataComparator());
             capabilities.setResourceMetadata(resourceMetadata);
