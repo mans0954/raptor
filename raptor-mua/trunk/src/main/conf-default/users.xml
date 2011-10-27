@@ -24,17 +24,7 @@
 
     <!-- NOT USED AT PRESENT -->
 
-	<bean id="raptorUsers" class=" uk.ac.cardiff.raptormua.model.Users">
-		<property name="raptorUsers">
-			<list>
-				<ref local="systemUser"/>
-			</list>
-		</property>
-	</bean>
-
-	<bean id="systemUser" class="uk.ac.cardiff.raptormua.model.RaptorUser">
-		<property name="username"><value>EXAMPLE</value></property>
-	</bean>
+	
 
 
 </beans>
