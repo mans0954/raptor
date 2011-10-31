@@ -16,6 +16,7 @@
 
 package uk.ac.cardiff.raptor.remoting.client;
 
+import java.util.Collections;
 import java.util.List;
 
 import uk.ac.cardiff.raptor.registry.Endpoint;
@@ -30,7 +31,7 @@ public abstract class AbstractEventReleaseClient implements EventReleaseClient {
     protected EndpointRegistry endpointRegistry;
 
     public List<Endpoint> getEndpoints() {
-        return endpointRegistry.getEndpoints();
+        return Collections.unmodifiableList(endpointRegistry.getEndpoints());
     }
 
     public boolean isEnabled() {

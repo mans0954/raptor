@@ -45,7 +45,8 @@ public interface EventReleaseClient {
     public boolean isEnabled();
 
     /**
-     * A way of accessing the list of endpoints this client is communicating with
+     * A way of accessing the list of endpoints this client is communicating with. Implementations should ensure that
+     * returned list is unmodifiable.
      * 
      * @return a list of endpoints
      */
