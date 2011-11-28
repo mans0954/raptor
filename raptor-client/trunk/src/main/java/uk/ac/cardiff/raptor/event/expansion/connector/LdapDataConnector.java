@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.event.expansion.connector;
 
 import java.io.IOException;
@@ -860,14 +861,14 @@ public class LdapDataConnector implements DataConnector {
     /**
      * @param searchFilterTemplate the searchFilterTemplate to set
      */
-    public void setSearchFilterTemplate(String searchFilterTemplate) {
-        this.searchFilterTemplate = searchFilterTemplate;
+    public void setSearchTemplate(String searchTemplate) {
+        this.searchFilterTemplate = searchTemplate;
     }
 
     /**
      * @return the searchFilterTemplate
      */
-    public String getSearchFilterTemplate() {
+    public String getSearchTemplate() {
         return searchFilterTemplate;
     }
 
@@ -890,7 +891,7 @@ public class LdapDataConnector implements DataConnector {
     }
 
     /**
-     * This retrieves any cached attributes for the supplied resolution context. Returns null if nothing is cached.
+     * This retrieves any cached attributes. Returns null if nothing is cached.
      * 
      * @param principalName
      * @param searchFilter the search filter the produced the attributes
