@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.runtimeutils;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
@@ -25,24 +24,23 @@ import uk.ac.cardiff.model.event.auxiliary.PrincipalInformation;
 
 public class ReflectionHelperTest {
 
-	@Test
-	public void testFindClassForField(){
-			String classForField = ReflectionHelper.findEntrySubclassForMethod("principalName");
-			System.out.println("ShibbolethEntry = "+classForField);
-			equals(classForField.equals("ShibbolethIdpAuthenticationEvent"));
+    @Test
+    public void testFindClassForField() {
+        String classForField = ReflectionHelper.findEntrySubclassForMethod("principalName");
+        System.out.println("ShibbolethEntry = " + classForField);
+        equals(classForField.equals("ShibbolethIdpAuthenticationEvent"));
 
-			classForField = ReflectionHelper.findEntrySubclassForMethod("serviceId");
-			System.out.println("Event = "+classForField);
-			equals(classForField.equals("Event"));
+        classForField = ReflectionHelper.findEntrySubclassForMethod("serviceId");
+        System.out.println("Event = " + classForField);
+        equals(classForField.equals("Event"));
 
+    }
 
-	}
-
-	@Test
-	public void testAttachObjectToClass(){
-	    Event shibbotheIdpAuthenticationEvent = new ShibbolethIdpAuthenticationEvent();
-	    Object principalInformation = new PrincipalInformation();
-	    ReflectionHelper.attachObjectTo(principalInformation, shibbotheIdpAuthenticationEvent);
-	}
+    @Test
+    public void testAttachObjectToClass() {
+        Event shibbotheIdpAuthenticationEvent = new ShibbolethIdpAuthenticationEvent();
+        Object principalInformation = new PrincipalInformation();
+        ReflectionHelper.attachObjectTo(principalInformation, shibbotheIdpAuthenticationEvent);
+    }
 
 }

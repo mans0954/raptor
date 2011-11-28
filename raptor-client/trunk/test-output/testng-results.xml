@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="0" passed="0">
+<testng-results skipped="0" failed="0" total="2" passed="2">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="6" started-at="2011-04-13T22:39:16Z" finished-at="2011-04-13T22:39:16Z">
+  <suite name="Default suite" duration-ms="222" started-at="2011-11-28T22:44:42Z" finished-at="2011-11-28T22:44:42Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="6" started-at="2011-04-13T22:39:16Z" finished-at="2011-04-13T22:39:16Z">
+    <test name="Default test" duration-ms="222" started-at="2011-11-28T22:44:42Z" finished-at="2011-11-28T22:44:42Z">
+      <class name="uk.ac.cardiff.raptor.event.expansion.RDBMSDataConnectorTest">
+        <test-method status="PASS" signature="setup()" name="setup" is-config="true" duration-ms="116" started-at="2011-11-28T22:44:42Z" finished-at="2011-11-28T22:44:42Z">
+        </test-method>
+        <test-method status="PASS" signature="cacheTest()" name="cacheTest" duration-ms="92" started-at="2011-11-28T22:44:42Z" finished-at="2011-11-28T22:44:42Z">
+        </test-method>
+        <test-method status="PASS" signature="getAttributesTest()" name="getAttributesTest" duration-ms="5" started-at="2011-11-28T22:44:42Z" finished-at="2011-11-28T22:44:42Z">
+        </test-method>
+      </class>
     </test>
   </suite>
 </testng-results>

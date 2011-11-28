@@ -52,9 +52,9 @@ public interface DataConnector {
      * Sets the search template specific to the concrete implementation of the data connector used to query this data
      * connector.
      * 
-     * @param searchFilterTemplate the search template specific to the concrete implementation of the data connector
-     *            used to query this data connector.
+     * @param searchTemplate the search template specific to the concrete implementation of the data connector used to
+     *            query this data connector.
      */
-    public void setSearchFilterTemplate(final String searchFilterTemplate);
+    public void setSearchTemplate(final String searchTemplate);
 
 }

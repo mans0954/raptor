@@ -46,8 +46,8 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
     /** The data connector used to acquire the attributes. */
     private DataConnector dataConnector;
 
-    /** The ldap search filter template. */
-    private String searchFilterTemplate;
+    /** The search filter template passed to the data connector. */
+    private String searchTemplate;
 
     /**
      * Gets the source attributes as an array.
@@ -134,7 +134,7 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
         if (principal != null) {
             try {
                 dataConnector.setReturnAttributes(getSourceAttributesAsArray());
-                dataConnector.setSearchFilterTemplate(searchFilterTemplate);
+                dataConnector.setSearchTemplate(searchTemplate);
                 Map<String, String> attributes = dataConnector.lookup(principal);
                 populate(attributes, event);
                 return true;
@@ -205,25 +205,6 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
     }
 
     /**
-     * Sets the search filter template.
-     * 
-     * @param searchFilterTemplate the searchFilterTemplate to set
-     */
-    public void setSearchFilterTemplate(String searchFilterTemplate) {
-        log.debug("Attribute Association Search Filter Template Set To [{}]", searchFilterTemplate);
-        this.searchFilterTemplate = searchFilterTemplate;
-    }
-
-    /**
-     * Gets the search filter template.
-     * 
-     * @return the searchFilterTemplate
-     */
-    public String getSearchFilterTemplate() {
-        return searchFilterTemplate;
-    }
-
-    /**
      * Sets the class to add.
      * 
      * @param classToAdd the classToAdd to set
@@ -257,6 +238,20 @@ public class PrincipalAttributeAssociationDefinition extends BaseAttributeAssoci
      */
     public String getAssociateWithClass() {
         return associateWithClass;
+    }
+
+    /**
+     * @param searchTemplate the searchTemplate to set
+     */
+    public void setSearchTemplate(String searchTemplate) {
+        this.searchTemplate = searchTemplate;
+    }
+
+    /**
+     * @return the searchTemplate
+     */
+    public String getSearchTemplate() {
+        return searchTemplate;
     }
 
 }
