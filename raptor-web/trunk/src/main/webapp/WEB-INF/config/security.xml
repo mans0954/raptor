@@ -19,12 +19,12 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:s="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
 	<s:http  use-expressions="true">
 		<s:intercept-url pattern="/spring/**" access="isAuthenticated()" />
-		<s:form-login login-page='/login.html'/>
+		<s:form-login login-page='/login.jsp' authentication-failure-url="/login.jsp?login_error=1"/>
 		<s:logout />
 		<!-- spring will immediatly goto the logout.html before going back to the
 		applications root application path, which is then back to the login -->
@@ -35,8 +35,8 @@
 		the login page. The invalid-session-url would however overight that value if left in
 		and you end up with the timeout page whenever you logout -->
 		<s:session-management ><!-- invalid-session-url="/timeout.jsp">-->
-			<s:concurrency-control max-sessions="1"
-				error-if-maximum-exceeded="true" />
+			<s:concurrency-control max-sessions="5"
+				/>
 		</s:session-management>
 	</s:http>
 

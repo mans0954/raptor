@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
@@ -72,18 +73,20 @@ public class GraphServiceImpl implements GraphService {
         websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().remove(websession.getGraphmodel().getSelectedPostProcessor());
     }
 
-    public void addPostProcessorToSelectedStatistic(WebSession websession) {
-        ProcessorInformation information = new ProcessorInformation();
-        information.setBeanName("Please Change");
-        if (websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList() != null
-                && websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList().size() > 0) {
-            information.setBeanName(websession.getGraphmodel().getSuggestionValues().getPossiblePostProcessorValuesList().get(0));
+    public void addProcessorToSelectedStatistic(WebSession websession) {
+        ProcessorInformation processorToAdd = websession.getGraphmodel().getProcessorToAdd();
+        log.debug("Adding processor [{} with parameters {}]", processorToAdd.getFriendlyName(), (processorToAdd.getMethodParameters() != null));
+
+        if (processorToAdd.getMethodParameters() != null) {
+            for (MethodParameter methodParameter : processorToAdd.getMethodParameters()) {
+                log.debug("Parameter [{},{},{}]", new Object[] { methodParameter.getParameterName(), methodParameter.getValue(), methodParameter.getValue().getClass() });
+            }
         }
-        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().add(information);
+        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().add(processorToAdd);
     }
 
     public void populateStatisticalUnits(WebSession websession) {
-        ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList();
+        ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList<StatisticalUnitInformationView>();
         List<StatisticalUnitInformation> units = getStatisticalUnits();
         for (StatisticalUnitInformation unit : units) {
             StatisticalUnitInformationView unitForView = new StatisticalUnitInformationView();
@@ -138,7 +141,6 @@ public class GraphServiceImpl implements GraphService {
         webEngine.loadSavedReports(websession);
     }
 
-    @Override
     public void invokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
         log.info("Graph Service Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());

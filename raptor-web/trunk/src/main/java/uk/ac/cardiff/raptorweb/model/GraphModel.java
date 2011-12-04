@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
@@ -76,6 +77,9 @@ public class GraphModel implements Serializable {
 
     private SuggestionValues suggestionValues;
 
+    /** Record for holding information about a new processor to add */
+    private ProcessorInformation processorToAdd;
+
     /** Selected series modal panel */
     private Series selectedSeries;
 
@@ -103,6 +107,41 @@ public class GraphModel implements Serializable {
 
     }
 
+    public void initialiseNewProcessorAdd() {
+        processorToAdd = new ProcessorInformation();
+
+    }
+
+    /**
+     * Makes a copy of any method parameters from the suggestion values, into the processorToAdd
+     */
+    public void setupProcessorToAdd() {
+        if (processorToAdd != null) {
+            log.trace("Finding method parameters for {}", processorToAdd.getFriendlyName());
+            List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
+            for (ProcessorInformation information : processorsInformation) {
+                if (information.getFriendlyName().equals(processorToAdd.getFriendlyName())) {
+                    processorToAdd.setProcessorClass(information.getProcessorClass());
+                    if (information.getMethodParameters() != null) {
+                        List<MethodParameter> parameters = new ArrayList<MethodParameter>();
+                        for (MethodParameter parameter : information.getMethodParameters()) {
+                            MethodParameter parameterNew = new MethodParameter();
+                            log.debug("Setup parameter {}", parameter.getParameterName());
+                            parameterNew.setParameterName(parameter.getParameterName());
+                            parameterNew.setParameterType(parameter.getParameterType());
+                            parameterNew.setValueType(parameter.getValueType());
+                            parameters.add(parameterNew);
+                        }
+                        processorToAdd.setMethodParameters(parameters);
+                    } else {
+                        processorToAdd.setMethodParameters(null);
+                    }
+                }
+            }
+
+        }
+    }
+
     /**
      * Set the old statistical unit to false, update it with the newly selected statisticalunit and set it to selected.
      * 
@@ -127,8 +166,12 @@ public class GraphModel implements Serializable {
     }
 
     public List<String> getPossiblePostProcessorValues() {
-        // log.debug("Possible Post Values {}",suggestionValues.getPossiblePostProcessorValuesList().size());
-        return (ArrayList<String>) suggestionValues.getPossiblePostProcessorValuesList();
+        List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
+        List<String> possibles = new ArrayList<String>();
+        for (ProcessorInformation information : processorsInformation) {
+            possibles.add(information.getFriendlyName());
+        }
+        return possibles;
     }
 
     public ArrayList<String> autocompleteFieldValues(Object suggest) {
@@ -293,6 +336,21 @@ public class GraphModel implements Serializable {
      */
     public ProcessorInformation getSelectedPostProcessor() {
         return selectedPostProcessor;
+    }
+
+    /**
+     * @param processorToAdd
+     *            the processorToAdd to set
+     */
+    public void setProcessorToAdd(ProcessorInformation processorToAdd) {
+        this.processorToAdd = processorToAdd;
+    }
+
+    /**
+     * @return the processorToAdd
+     */
+    public ProcessorInformation getProcessorToAdd() {
+        return processorToAdd;
     }
 
 }

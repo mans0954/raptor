@@ -154,11 +154,23 @@ public final class RaptorWebEngine {
     }
 
     /**
+     * Gets the capabilites from the selectedEndpoint. This is a live lookup.
+     * 
      * @param selectedEndpoint
-     * @return
+     *            the endpoint to get the capabilities of.
+     * @return the {@link Capabilities} of the selected endpoint.
      */
     public Capabilities getCapabilities(MUAEntry selectedEndpoint) {
         return serviceEndpointClient.discoverMUACapabilities(selectedEndpoint);
+    }
+
+    /**
+     * Gets the capabilites from the currently selected endpoint (held in <code>attachedMUA</code>). This is a live lookup.
+     * 
+     * @return the {@link Capabilities} of the selected endpoint.
+     */
+    public Capabilities getCapabilitiesOfCurrentlyAttachedEndpoint() {
+        return serviceEndpointClient.discoverMUACapabilities(attachedMUA);
     }
 
     public MUAEntry getCurrentlyAttached() {

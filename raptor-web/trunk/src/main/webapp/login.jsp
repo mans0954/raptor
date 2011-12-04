@@ -18,6 +18,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
 <head>
@@ -87,10 +88,9 @@
 											type="submit" value="Log in" />
 										</td>
 									</tr>
-								</table>
-								<input type='checkbox' name='_spring_security_remember_me' />
-								Remember me on this computer.
+								</table>								
 							</form>
+							<c:if test="${not empty param.login_error and param.login_error eq 1}"> <div class="error"><p style="color:red">Invalid Username or Password</p></div></c:if>
 						</div></td>
 					<td width="10%"></td>
 

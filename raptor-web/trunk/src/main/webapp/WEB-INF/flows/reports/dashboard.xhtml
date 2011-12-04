@@ -146,7 +146,11 @@
 								<f:facet name="header">
 									<h:outputText value="#{columns}" />
 								</f:facet>
-								<h:outputText value="#{unit[index]}" />
+								<center>
+								<h:outputText value="#{unit[index]}">
+								    <f:convertNumber pattern="###,###,###" />
+								</h:outputText>
+								</center>
 							</rich:columns>
 						</rich:dataTable>
 						<rich:spacer width="15px" />
@@ -163,7 +167,11 @@
 								<f:facet name="header">
 									<h:outputText value="#{columns}" />
 								</f:facet>
-								<h:outputText value="#{unit[index]}" />
+								<center>
+                                <h:outputText value="#{unit[index]}">
+                                    <f:convertNumber pattern="###,###,###" />
+                                </h:outputText>
+                                </center>
 							</rich:columns>
 						</rich:dataTable>
 					</h:panelGrid>

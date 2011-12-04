@@ -23,7 +23,6 @@ import java.util.List;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
-import uk.ac.cardiff.raptorweb.model.SetupModel;
 import uk.ac.cardiff.raptorweb.model.WebSession;
 import uk.ac.cardiff.raptorweb.service.SetupService;
 
@@ -60,6 +59,10 @@ public class SetupServiceImpl implements SetupService {
         websession.getSetupmodel().setSelectEndpointCapabilities(webEngine.getCapabilities(websession.getSetupmodel().getSelectedEndpoint()));
     }
 
+    public void getCapabilitiesOfCurrentlyAttachedEndpoint(WebSession websession) {
+        websession.getSetupmodel().setSelectEndpointCapabilities(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint());
+    }
+
     public void deleteAllEntriesFromAttachedMUA(WebSession websession) {
         webEngine.deleteAllEntriesFromAttachedMUA(websession.getSetupmodel());
     }
@@ -80,8 +83,8 @@ public class SetupServiceImpl implements SetupService {
         webEngine.batchUpload(websession);
 
     }
-    
-    public void sendResourceClassification(){
+
+    public void sendResourceClassification() {
         webEngine.sendResourceClassification();
     }
 
