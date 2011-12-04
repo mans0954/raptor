@@ -70,6 +70,21 @@ public class DataAccessRegister {
     }
 
     /**
+     * Gets the list of parsing modules currently registered that are enabled.
+     * 
+     * @return list of parsing modules, all subclasses of the {@link BaseEventParser} class
+     */
+    public List<BaseEventParser> getEnabledParsingModules() {
+        List<BaseEventParser> eventParsers = new ArrayList<BaseEventParser>();
+        for (BaseEventParser eventParser : parsingModules) {
+            if (eventParser.isEnabled()) {
+                eventParsers.add(eventParser);
+            }
+        }
+        return eventParsers;
+    }
+
+    /**
      * Returns the first parsing module whos <code>eventType</code> matches the <code>eventType</code> parameter
      * 
      * @param eventTypeFriendlyName the <code>friendlyName</code> of the event parser to find
