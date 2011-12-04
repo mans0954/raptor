@@ -1,12 +1,11 @@
-/*
- * Licensed to the University Corporation for Advanced Internet Development, 
- * Inc. (UCAID) under one or more contributor license agreements.  See the 
- * NOTICE file distributed with this work for additional information regarding
- * copyright ownership. The UCAID licenses this file to You under the Apache 
- * License, Version 2.0 (the "License"); you may not use this file except in 
- * compliance with the License.  You may obtain a copy of the License at
+/**
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.cardiff.raptor.event.expansion.connector;
 
 import java.sql.Connection;
@@ -89,18 +87,9 @@ public class RDBMSDataConnector implements DataConnector {
     /**
      * Constructor.
      * 
-     * @param source data source used to retrieve connections
      */
-    public RDBMSDataConnector(DataSource source) {
+    public RDBMSDataConnector() {
         super();
-
-        dataSource = source;
-
-        readOnlyConnection = true;
-        usesStoredProcedure = false;
-        noResultIsError = false;
-
-        columnDescriptors = new HashMap<String, RDBMSColumnDescriptor>();
     }
 
     /**
@@ -122,6 +111,10 @@ public class RDBMSDataConnector implements DataConnector {
             log.debug("Initialising RDBMS data connector");
             initialized = true;
             initializeCache();
+            readOnlyConnection = true;
+            usesStoredProcedure = false;
+            noResultIsError = false;
+            columnDescriptors = new HashMap<String, RDBMSColumnDescriptor>();
         }
     }
 
@@ -207,6 +200,29 @@ public class RDBMSDataConnector implements DataConnector {
         return columnDescriptors;
     }
 
+    /**
+     * This removes all entries from the cache. {@link #initialize()} must be called first or this method does nothing.
+     */
+    protected void clearCache() {
+        if (cacheResults && initialized) {
+            cache.clear();
+            cacheResetTimeMs = System.currentTimeMillis();
+        }
+    }
+
+    private void checkCacheValidity() {
+        if (cacheTimeoutMs == 0 || !cacheResults) {
+            return;
+        }
+        long currentTimeMillis = System.currentTimeMillis();
+        boolean shouldReset = (currentTimeMillis - cacheResetTimeMs) > cacheTimeoutMs;
+        log.trace("Should reset cache?{} - time left {}", shouldReset, (currentTimeMillis - cacheResetTimeMs));
+        if (shouldReset) {
+            log.info("Ldap cache was cleared, timeout reached");
+            clearCache();
+        }
+    }
+
     /** {@inheritDoc} */
     public void validate() throws AttributeAssociationException {
         log.debug("RDBMS data connector - Validating configuration.");
@@ -257,6 +273,8 @@ public class RDBMSDataConnector implements DataConnector {
         String query = searchTemplate.replace("[principal]", principal);
         query = query.trim();
 
+        checkCacheValidity();
+
         Map<String, String> resolvedAttributes = null;
         if (cacheResults) {
             resolvedAttributes = retrieveAttributesFromCache(principal, query);
@@ -291,13 +309,17 @@ public class RDBMSDataConnector implements DataConnector {
             if (cache.containsKey(principal)) {
                 Map<String, Map<String, String>> results = cache.get(principal);
                 attributes = results.get(query);
-                log.debug("RDBMS data connector - Fetched attributes from cache for principal {}", principal);
+                log.trace("RDBMS data connector - Fetched attributes from cache for principal {}", principal);
             }
         }
         return attributes;
 
     }
 
+    /**
+     * Attributes returned from the database connector are defined by the SELECT statement in the SQL query, not through
+     * the <code>attributes</code> array. This is a no-op method.
+     */
     public void setReturnAttributes(String[] attributes) {
 
     }
@@ -322,7 +344,7 @@ public class RDBMSDataConnector implements DataConnector {
             if (readOnlyConnection) {
                 connection.setReadOnly(true);
             }
-            log.debug("RDBMS data connector - Querying database for attributes with query {}", query);
+            log.trace("RDBMS data connector - Querying database for attributes with query {}", query);
             Statement stmt = connection.createStatement();
             stmt.setQueryTimeout(queryTimeout);
             queryResult = stmt.executeQuery(query);
@@ -501,7 +523,7 @@ public class RDBMSDataConnector implements DataConnector {
         }
         results.put(query, attributes);
 
-        log.debug("RDBMS data connector - Caching attributes for principal {}", principal);
+        log.trace("RDBMS data connector - Caching attributes for principal {}", principal);
 
     }
 
@@ -559,6 +581,13 @@ public class RDBMSDataConnector implements DataConnector {
      */
     public boolean isCacheResults() {
         return cacheResults;
+    }
+
+    /**
+     * @param dataSource the dataSource to set
+     */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
 }

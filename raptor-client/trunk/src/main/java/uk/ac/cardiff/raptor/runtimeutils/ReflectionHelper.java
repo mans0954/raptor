@@ -121,8 +121,39 @@ public final class ReflectionHelper {
     }
 
     /**
+     * Uses reflection to get all the classes that are in the <code>EVENT_PACKAGE_NAME</code package.
+     * 
+     * @return a list of simple names of found classes;
+     */
+    public static List<String> getAllEventClasses() {
+        List<String> allClasses = new ArrayList<String>();
+        String forPckgName = EVENT_PACKAGE_NAME;
+        String jarFile = getJARFilePath(forPckgName);
+        jarFile = jarFile.replace("file:", "");
+        log.debug("jar {}", jarFile);
+        List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
+
+        for (String classname : classes) {
+            try {
+                Object o = Class.forName(classname.replace(".class", "")).newInstance();
+                if (o != null)
+                    if (o instanceof uk.ac.cardiff.model.event.Event) {
+                        allClasses.add(o.getClass().getSimpleName());
+                    }
+            } catch (ClassNotFoundException cnfex) {
+                log.error("error getting subclasses of Entry, {}", cnfex);
+            } catch (InstantiationException iex) {
+                // log.error("{}", iex);
+            } catch (IllegalAccessException iaex) {
+                // The class is not public
+            }
+        }
+        return allClasses;
+    }
+
+    /**
      * This is terrible code. Finds all fieldnames of all classes that are subclasses of the
-     * <code>uk.ac.cardiff.model.event.Event</code> class.
+     * {@link uk.ac.cardiff.model.event.Event} class.
      * 
      * @return
      */

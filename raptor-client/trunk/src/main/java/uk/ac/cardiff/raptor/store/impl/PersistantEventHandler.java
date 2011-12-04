@@ -92,7 +92,11 @@ public class PersistantEventHandler implements QueryableEventHandler {
     }
 
     public List query(String query, Object[] parameters) {
-        log.trace("SQL query to entry handler [{}], with parameters [{}]", query, Arrays.asList(parameters));
+        if (parameters != null) {
+            log.trace("SQL query to entry handler [{}], with parameters [{}]", query, Arrays.asList(parameters));
+        } else {
+            log.trace("SQL query to entry handler [{}], with no parameters", query);
+        }
         return dataConnection.runQuery(query, parameters);
     }
 
