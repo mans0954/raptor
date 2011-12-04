@@ -65,7 +65,7 @@ public interface GraphService {
 
     public void rerenderGraph(WebSession websession);
 
-    public void addPostProcessorToSelectedStatistic(WebSession websession);
+    public void addProcessorToSelectedStatistic(WebSession websession);
 
     public void removePostProcessorFromSelectedStatistic(WebSession websession);
 

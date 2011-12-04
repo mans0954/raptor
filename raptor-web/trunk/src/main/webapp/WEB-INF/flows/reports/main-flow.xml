@@ -15,7 +15,7 @@
     limitations under the License.
 
 -->
-<flow xmlns="http://www.springframework.org/schema/webflow"
+<flow parent="globalflow" xmlns="http://www.springframework.org/schema/webflow"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
@@ -32,14 +32,9 @@
 
 	</on-start>
     
-    
-    <!-- <global-transitions>
-    <transition on="login" to="login" />
-    <transition on="logout" to="logout" />
-    </global-transitions> -->
 
 
-	<view-state id="startReport" view="startReport.xhtml">
+	<view-state id="startReport" view="dashboard.xhtml">
 
 		<on-entry>
 			<evaluate expression="startService.generateStatistics(flowScope.websession)" />
@@ -49,20 +44,16 @@
 			<evaluate expression="startService.generateStatistics(flowScope.websession)" />
 		</transition>
 
-		<transition on="graphTrans" to="graphicalReports" />
-		<transition on="setupTrans" to="setupRaptorWeb" />
-		<transition on="aboutTrans" to="about" />
-		<transition on="homeTrans" to="startReport" />
+
 	</view-state>
 
-	<view-state id="about" view="about.jspx">
-		<transition on="graphTrans" to="graphicalReports" />
-		<transition on="setupTrans" to="setupRaptorWeb" />
-		<transition on="aboutTrans" to="about" />
-		<transition on="homeTrans" to="startReport" />
+	<view-state id="about" view="about.xhtml">
+
 	</view-state>
 
 	<view-state id="graphicalReports" view="graphicalReports.xhtml">
+    
+        <var name="processorToAdd" class="uk.ac.cardiff.model.wsmodel.ProcessorInformation"/>
 
 		<!-- populate the statisticalunit list -->
 		<on-entry>
@@ -93,6 +84,15 @@
 		<transition on="generatePDFReport">
 			<evaluate expression="graphService.generatePDFReport(flowScope.websession)"/>
 		</transition>
+        
+        <transition on="initialiseNewProcessorAdd">
+            <evaluate expression="flowScope.websession.graphmodel.initialiseNewProcessorAdd()"/>
+        </transition>
+        
+        <transition on="setupProcessorToAdd">
+            <evaluate expression="flowScope.websession.graphmodel.setupProcessorToAdd()"/>
+        </transition>
+        
 
 		<transition on="removeSeriesFromSelectedStatistic">
 		      <evaluate expression="graphService.removeSeriesFromSelectedStatistic(flowScope.websession)"/>
@@ -106,8 +106,8 @@
 		  <evaluate expression="graphService.addSeriesToSelectedStatistic(flowScope.websession)"></evaluate>
 		</transition>
         
-        <transition on="addPostProcessorToSelectedStatistic">
-            <evaluate expression="graphService.addPostProcessorToSelectedStatistic(flowScope.websession)"></evaluate>
+        <transition on="addProcessorToSelectedStatistic">
+            <evaluate expression="graphService.addProcessorToSelectedStatistic(flowScope.websession)"></evaluate>
         </transition>
         
         <transition on="removePostProcessorFromSelectedStatistic">
@@ -123,24 +123,20 @@
 		</transition>
 
 
-
-		<transition on="graphTrans" to="graphicalReports" />
-		<transition on="setupTrans" to="setupRaptorWeb" />
-		<transition on="aboutTrans" to="about" />
-		<transition on="homeTrans" to="startReport" />
-
-
 	</view-state>
 
 
 
 	<view-state id="setupRaptorWeb" view="setupRaptorWeb.xhtml">
-		<!-- used to help with the setup configuration -->
-		<transition on="graphTrans" to="graphicalReports" />
-		<transition on="setupTrans" to="setupRaptorWeb" />
-		<transition on="aboutTrans" to="about" />
-		<transition on="homeTrans" to="startReport" />
+   
+        <on-entry>
+            <!-- get capabilities every time the web page is rendered, hence resource classification is up to date -->
+            <evaluate expression="setupService.getCapabilitiesOfCurrentlyAttachedEndpoint(flowScope.websession)" />
+        </on-entry>
+        
+      
 
+        <!-- force update of capabilities -->
 		<transition on="getAggregatorCapabilities">
 			<evaluate expression="setupService.getCapabilities(flowScope.websession)" />
 		</transition>
