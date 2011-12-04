@@ -70,7 +70,7 @@ public class ICAEngine {
      * @throws Exception the exception
      */
     public void capturePerform() throws Exception {
-        for (BaseEventParser parser : getDataAccessRegister().getParsingModules()) {
+        for (BaseEventParser parser : getDataAccessRegister().getEnabledParsingModules()) {
             log.info("Capturing from {}", parser);
             parser.parse();
         }
