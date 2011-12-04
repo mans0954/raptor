@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite hostname="testkwshibb1.nerc.ac.uk" name="uk.ac.cardiff.raptor.event.expansion.RDBMSDataConnectorTest" tests="2" failures="0" timestamp="28 Nov 2011 22:44:42 GMT" time="0.222" errors="0">
+<testsuite hostname="testkwshibb1.nerc.ac.uk" name="uk.ac.cardiff.raptor.event.expansion.RDBMSDataConnectorTest" tests="2" failures="0" timestamp="29 Nov 2011 10:53:12 GMT" time="0.227" errors="0">
   <testcase name="cacheTest" time="0.092" classname="uk.ac.cardiff.raptor.event.expansion.RDBMSDataConnectorTest"/>
   <testcase name="getAttributesTest" time="0.0050" classname="uk.ac.cardiff.raptor.event.expansion.RDBMSDataConnectorTest"/>
 </testsuite>

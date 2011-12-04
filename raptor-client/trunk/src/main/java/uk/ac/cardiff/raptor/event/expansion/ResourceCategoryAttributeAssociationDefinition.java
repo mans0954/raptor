@@ -50,9 +50,12 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
     public boolean associate(final Event event) {
 
         ResourceMetadata resourceMetadata = null;
-        Object result =
-                dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?",
-                        new Object[] {event.getResourceId()});
+        Object result = null;
+        if (event.getResourceId() != null) {
+            result =
+                    dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?",
+                            new Object[] {event.getResourceId()});
+        }
         if (result != null && result instanceof ResourceMetadata) {
             resourceMetadata = (ResourceMetadata) result;
             if (resourceMetadata.isExternal()) {
