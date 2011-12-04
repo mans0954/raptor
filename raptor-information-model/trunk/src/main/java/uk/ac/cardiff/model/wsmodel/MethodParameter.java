@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class MethodParameter.
  * 
- * @author philsmart
  */
 public class MethodParameter implements Serializable {
 
@@ -34,11 +33,16 @@ public class MethodParameter implements Serializable {
     /** The parameter type. */
     private ParameterType parameterType;
 
-    /** friendly name of the parameter, for the benefit of the view. */
+    /** friendly name of the parameter. */
     private String parameterName;
 
-    /** value of the parameter. */
-    private String value;
+    /** Generic value of the parameter. */
+    private Object value;
+
+    /**
+     * The class type of the value object, used by the view component to understand the value to set. Stored as a string for remoting.
+     */
+    private String valueType;
 
     /**
      * Sets the value.
@@ -46,8 +50,23 @@ public class MethodParameter implements Serializable {
      * @param value
      *            the new value
      */
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
+    }
+
+    /**
+     * Gets the value assuming the type, throws an error if the value does not equal the type.
+     * 
+     * @param requiredType
+     *            the class that needs to match with <code>value</code>.
+     */
+    public <T> T getValue(Class<T> requiredType) throws MethodParameterNotOfRequiredTypeException {
+        if (requiredType.isAssignableFrom(value.getClass())) {
+            return (T) value;
+        } else {
+            throw new MethodParameterNotOfRequiredTypeException(parameterName, requiredType, value.getClass());
+        }
+
     }
 
     /**
@@ -55,7 +74,7 @@ public class MethodParameter implements Serializable {
      * 
      * @return the value
      */
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
@@ -95,6 +114,21 @@ public class MethodParameter implements Serializable {
      */
     public ParameterType getParameterType() {
         return parameterType;
+    }
+
+    /**
+     * @param valueType
+     *            the valueType to set
+     */
+    public void setValueType(String valueType) {
+        this.valueType = valueType;
+    }
+
+    /**
+     * @return the valueType
+     */
+    public String getValueType() {
+        return valueType;
     }
 
 }

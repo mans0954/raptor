@@ -33,7 +33,7 @@
 
 
 		--><property name="serviceHost" type="string" update="true"
-			insert="true" column="serviceHost" not-null="false" index="requesthost_i" />
+			insert="true" column="serviceHost" not-null="false" index="requesthost_i" length="400" />
 		<property name="resourceHost" type="string" update="true"
 			insert="true" column="resourceHost" not-null="false" />
 		<property name="serviceId" type="string" update="true"
@@ -89,7 +89,7 @@
 			type="string" />
 		<property name="requestBinding" column="requestBinding" type="string" />
 		<property name="releasedAttributes" column="releasedAttributes"
-			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
+			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" length="400"/>
 		<property name="assertionId" column="assertionId"
 			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 		<property name="nameIdentifier" column="nameIdentifier" type="string" />

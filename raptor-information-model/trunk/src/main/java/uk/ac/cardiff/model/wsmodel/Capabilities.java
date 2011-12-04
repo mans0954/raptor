@@ -4,6 +4,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import uk.ac.cardiff.model.ServiceMetadata;
@@ -25,10 +26,10 @@ public class Capabilities implements Serializable {
     /** The list of statistical services the attached MUA has configured. */
     private List<StatisticalUnitInformation> statisticalServices;
 
-    /** Any error message that occurs during processing. */
+    /** Any error message that occurs during processing the attached MUAs capabilities. */
     private String errorMessage;
 
-    /** If an error occured during processing. */
+    /** If an error occured during processing the attached MUAs capabilities. */
     private boolean error;
 
     /** The metadata of the attached Service e.g. the attached MUA. */
@@ -42,6 +43,18 @@ public class Capabilities implements Serializable {
 
     /** The number of events store in the attached MUA. */
     private long numberOfEntries;
+
+    /** The date of the latest event in the attached MUA. */
+    private Date latestEventTime;
+
+    /** The date of the earliest event in the attached MUA. */
+    private Date earliestEventTime;
+
+    /** A list of event types and how many events are stored for each type in the attached MUA. */
+    private List<EventTypeInformation> eventsPerType;
+
+    /** The version of the attached mua */
+    private String muaVersion;
 
     /**
      * Sets the statistical services.
@@ -194,6 +207,65 @@ public class Capabilities implements Serializable {
      */
     public List<ResourceMetadata> getResourceMetadata() {
         return resourceMetadata;
+    }
+
+    /**
+     * @param latestEventTime
+     *            the latestEventTime to set
+     */
+    public void setLatestEventTime(Date latestEventTime) {
+        this.latestEventTime = latestEventTime;
+    }
+
+    /**
+     * @return the latestEventTime
+     */
+    public Date getLatestEventTime() {
+        return latestEventTime;
+    }
+
+    /**
+     * @param earliestEventTime
+     *            the earliestEventTime to set
+     */
+    public void setEarliestEventTime(Date earliestEventTime) {
+        this.earliestEventTime = earliestEventTime;
+    }
+
+    /**
+     * @return the earliestEventTime
+     */
+    public Date getEarliestEventTime() {
+        return earliestEventTime;
+    }
+
+    /**
+     * @param eventsPerType
+     *            the eventsPerType to set
+     */
+    public void setEventsPerType(List<EventTypeInformation> eventsPerType) {
+        this.eventsPerType = eventsPerType;
+    }
+
+    /**
+     * @return the eventsPerType
+     */
+    public List<EventTypeInformation> getEventsPerType() {
+        return eventsPerType;
+    }
+
+    /**
+     * @param muaVersion the muaVersion to set
+     */
+    public void setMuaVersion(String muaVersion) {
+        this.muaVersion = muaVersion;
+    }
+
+    /**
+     * @return the muaVersion
+     */
+    public String getMuaVersion() {
+        return muaVersion;
     }
 
 }

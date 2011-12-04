@@ -47,19 +47,19 @@ public class Event {
      */
     private int eventId;
 
-    /** The service id. */
+    /** The service id. This is the service that serves the event. */
     private String serviceId;
 
     /** The event type. */
     private String eventType;
 
-    /** The service host. */
+    /** The hostname of the service that provided this event. */
     private String serviceHost;
 
-    /** The resource host. */
+    /** The hostname of the resource you are using. */
     private String resourceHost;
 
-    /** The resource id. */
+    /** The resource id. This is the resource you are using. */
     private String resourceId;
 
     /**
