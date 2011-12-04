@@ -42,44 +42,6 @@ public class StatisticalUnitInformation implements Serializable {
     }
 
     /**
-     * human consumable output method for array of preprocessors
-     * 
-     * @return
-     */
-    public String getPreProcessorsAsString() {
-        StringBuilder output = new StringBuilder();
-        if (preprocessors == null)
-            return output.toString();
-        int count = 0;
-        for (ProcessorInformation preprocessor : preprocessors) {
-            output.append(preprocessor.getBeanName());
-            if (count < preprocessors.size() - 1)
-                output.append(", ");
-            count++;
-        }
-        return output.toString();
-    }
-
-    /**
-     * human consumable output method for array of postprocessors
-     * 
-     * @return
-     */
-    public String getPostProcessorsAsString() {
-        StringBuilder output = new StringBuilder();
-        if (preprocessors == null)
-            return output.toString();
-        int count = 0;
-        for (ProcessorInformation postprocessor : postprocessors) {
-            output.append(postprocessor.getBeanName());
-            if (count < postprocessors.size() - 1)
-                output.append(", ");
-            count++;
-        }
-        return output.toString();
-    }
-
-    /**
      * @param preprocessors
      *            the preprocessors to set
      */
@@ -99,10 +61,6 @@ public class StatisticalUnitInformation implements Serializable {
      *            the postprocessors to set
      */
     public void setPostprocessors(List<ProcessorInformation> postprocessors) {
-        for (ProcessorInformation processor : postprocessors) {
-            log.debug("Post processor {} added", processor.getBeanName());
-
-        }
         this.postprocessors = postprocessors;
     }
 

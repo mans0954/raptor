@@ -1,46 +1,67 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.List;
 
+/**
+ * Used to encapsulate processor information for sending between MUA and Web. Related closely to the MUA only {@link ProcessorTemplate}.
+ * 
+ */
 public class ProcessorInformation implements Serializable {
 
     /** Generated Serial UID */
     private static final long serialVersionUID = 3004339123572624352L;
 
-    /** Bean name of the processor */
-    private String beanName;
+    /** canoncial name of the class type of this processor. Not a class type due to ageis binding. **/
+    private String processorClass;
 
-    /** Name (fully qualified) of this processors class **/
-    private String className;
+    private String friendlyName;
+
+    private List<MethodParameter> methodParameters;
 
     /**
-     * @param beanName
-     *            the beanName to set
+     * @param methodParameters
+     *            the methodParameters to set
      */
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
+    public void setMethodParameters(List<MethodParameter> methodParameters) {
+        this.methodParameters = methodParameters;
     }
 
     /**
-     * @return the beanName
+     * @return the methodParameters
      */
-    public String getBeanName() {
-        return beanName;
+    public List<MethodParameter> getMethodParameters() {
+        return methodParameters;
     }
 
     /**
-     * @param className
-     *            the className to set
+     * @param processorClass
+     *            the processorClass to set
      */
-    public void setClassName(String className) {
-        this.className = className;
+    public void setProcessorClass(String processorClass) {
+        this.processorClass = processorClass;
     }
 
     /**
-     * @return the className
+     * @return the processorClass
      */
-    public String getClassName() {
-        return className;
+    public String getProcessorClass() {
+        return processorClass;
+    }
+
+    /**
+     * @param friendlyName
+     *            the friendlyName to set
+     */
+    public void setFriendlyName(String friendlyName) {
+        this.friendlyName = friendlyName;
+    }
+
+    /**
+     * @return the friendlyName
+     */
+    public String getFriendlyName() {
+        return friendlyName;
     }
 
 }

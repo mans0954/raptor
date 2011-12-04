@@ -25,7 +25,7 @@ public class SuggestionValues implements Serializable {
     private List<Suggestion> possibleFieldValues;
 
     /** The possible post processors. */
-    private List<Suggestion> possiblePostProcessors;
+    private List<ProcessorInformation> possiblePostProcessors;
 
     /**
      * Sets the possible field name values.
@@ -121,37 +121,17 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
-     * Sets the possible post processors.
-     * 
-     * @param possiblePostProcessors
-     *            the possiblePostProcessors to set
+     * @param possiblePostProcessors the possiblePostProcessors to set
      */
-    public void setPossiblePostProcessors(List<Suggestion> possiblePostProcessors) {
+    public void setPossiblePostProcessors(List<ProcessorInformation> possiblePostProcessors) {
         this.possiblePostProcessors = possiblePostProcessors;
     }
 
     /**
-     * Gets the possible post processors.
-     * 
      * @return the possiblePostProcessors
      */
-    public List<Suggestion> getPossiblePostProcessors() {
+    public List<ProcessorInformation> getPossiblePostProcessors() {
         return possiblePostProcessors;
-    }
-
-    /**
-     * Gets the possible post processor values list.
-     * 
-     * @return the possible post processor values list
-     */
-    public ArrayList<String> getPossiblePostProcessorValuesList() {
-        ArrayList<String> fields = new ArrayList<String>();
-        if (possiblePostProcessors == null)
-            return fields;
-        for (Suggestion entry : possiblePostProcessors) {
-            fields.add(entry.getValue());
-        }
-        return fields;
     }
 
 }
