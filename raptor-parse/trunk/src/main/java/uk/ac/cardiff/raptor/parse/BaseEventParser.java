@@ -57,6 +57,11 @@ public abstract class BaseEventParser {
     private String eventTypeFriendlyName;
 
     /**
+     * Whether this event parser is enabled and should be used. Defaults to true.
+     */
+    private boolean enabled = true;
+
+    /**
      * Default constructor
      */
     public BaseEventParser() {
@@ -213,6 +218,20 @@ public abstract class BaseEventParser {
      */
     public String getEventTypeFriendlyName() {
         return eventTypeFriendlyName;
+    }
+
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * @return the enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
     }
 
 }
