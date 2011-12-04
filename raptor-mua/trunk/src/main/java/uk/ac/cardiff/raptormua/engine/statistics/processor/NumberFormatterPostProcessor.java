@@ -21,18 +21,19 @@ package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
 /**
  * @author philsmart
  * 
  */
-public class NumberFormatterPostProcessor implements StatisticPostProcessor {
+public class NumberFormatterPostProcessor extends AbstractStatisticPostProcessor {
     // TODO Not implemented...
     /** class logger */
     private static final Logger log = LoggerFactory.getLogger(NumberFormatterPostProcessor.class);
@@ -63,6 +64,11 @@ public class NumberFormatterPostProcessor implements StatisticPostProcessor {
         df.setDecimalFormatSymbols(dfs);
         String formattedNumber = df.format((int) number);
         return formattedNumber;
+    }
+
+    public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) {
+        // no-op
+
     }
 
 }

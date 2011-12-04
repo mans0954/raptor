@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.raptor.store.QueryableEventHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
@@ -40,7 +41,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 import uk.ac.cardiff.raptormua.engine.statistics.records.ObservationSeries;
 
 /**
- * @author philsmart Holds a statistics unit or one statistics operation on one piece of data
+ * Holds a statistics unit or one statistics operation on one piece of data
  */
 public abstract class BaseStatistic {
 
@@ -59,6 +60,12 @@ public abstract class BaseStatistic {
     private List<StatisticPostProcessor> postprocessor;
 
     /**
+     * A list of processors that needs to be instantiated for this class (during initialization of the MUA, or
+     * dynamically).
+     */
+    private List<ProcessorInformation> attachProcessors;
+
+    /**
      * After each statistic has been invoked, the results of each series are stored as <code>ObservationSeries</code> in
      * this list.
      */
@@ -72,10 +79,10 @@ public abstract class BaseStatistic {
     }
 
     /**
-     * Method that performs the statistical operation. Overridden by each concrete statistic class.
+     * Method that performs the statistical operation. Overridden by each concrete implementation statistic class.
      * 
      * @param methodParams
-     * @param sqlWhere
+     * @param sqlWhere essentially a filter that is applied to stored events before the statistic is performed.
      * @return
      * @throws StatisticalUnitException
      */
@@ -261,6 +268,20 @@ public abstract class BaseStatistic {
 
     public List<ObservationSeries> getObservationSeries() {
         return observationSeries;
+    }
+
+    /**
+     * @param attachProcessors the attachProcessors to set
+     */
+    public void setAttachProcessors(List<ProcessorInformation> attachProcessors) {
+        this.attachProcessors = attachProcessors;
+    }
+
+    /**
+     * @return the attachProcessors
+     */
+    public List<ProcessorInformation> getAttachProcessors() {
+        return attachProcessors;
     }
 
 }

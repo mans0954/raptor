@@ -19,10 +19,13 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.MethodParameterNotOfRequiredTypeException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Bucket;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
@@ -31,7 +34,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  * @author philsmart
  * 
  */
-public class CutRowsPostProcessor implements StatisticPostProcessor {
+public class CutRowsPostProcessor extends AbstractStatisticPostProcessor {
 
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(CutRowsPostProcessor.class);
@@ -74,12 +77,21 @@ public class CutRowsPostProcessor implements StatisticPostProcessor {
         return observations;
     }
 
-    public void setNumberOfRowsToKeep(int numberOfRowsToKeep) {
-        this.numberOfRowsToKeep = numberOfRowsToKeep;
-    }
+    public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) throws PostprocessorException {
+        if (methodParameters.size() != 1) {
+            log.error(
+                    "Post processor [{}] does not have the correct number of method parameters to work, should have 1, has {}",
+                    getFriendlyName(), methodParameters.size());
+            throw new PostprocessorException("Not enough parameters, had " + methodParameters.size() + " expected 1");
+        } else {
+            try {
+                MethodParameter parameter = methodParameters.get(0);
+                numberOfRowsToKeep = parameter.getValue(Integer.class);
+                log.debug("Set number of rows to keep as [{}]", numberOfRowsToKeep);
+            } catch (MethodParameterNotOfRequiredTypeException e) {
+                throw new PostprocessorException(e);
+            }
+        }
 
-    public int getNumberOfRowsToKeep() {
-        return numberOfRowsToKeep;
     }
-
 }

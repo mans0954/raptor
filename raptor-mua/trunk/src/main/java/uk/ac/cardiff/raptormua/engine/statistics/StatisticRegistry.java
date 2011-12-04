@@ -51,4 +51,11 @@ public interface StatisticRegistry {
      */
     public List<BaseStatistic> getStatisticalUnits();
 
+    /**
+     * Allows access to the implemented {@link StatisticProcessorRegistry} used by this statistic registry.
+     * 
+     * @return the {@link StatisticProcessorRegistry} which holds statistical processor information.
+     */
+    public StatisticProcessorRegistry getStatisticProcessorRegistry();
+
 }

@@ -16,10 +16,31 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics;
 
+import java.util.List;
+
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate;
 
 public interface StatisticProcessorRegistry {
 
-    public void addPostProcessor(ProcessorInformation processorInformation);
+    /**
+     * Gets an instantiated {@link StatisticPostProcessor} from the processor registry based on the
+     * <code>processorInformation</code>.
+     * 
+     * @param processorInformation information from which to generate a {@link StatisticPostProcessor}.
+     * @return a {@link StatisticPostProcessor}.
+     * 
+     * @throws ProcessorRegistryException
+     * @throws StatisticPostProcessorFactoryException
+     */
+    public StatisticPostProcessor getProcessor(ProcessorInformation processorInformation)
+            throws ProcessorRegistryException, StatisticPostProcessorFactoryException;
+
+    /**
+     * Gets all the registered statistic processor templates.
+     * 
+     * @return a list of {@link ProcessorTemplate}.
+     */
+    public List<ProcessorTemplate> getStatisticProcessorTemplates();
 
 }
