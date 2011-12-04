@@ -27,10 +27,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
-import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-
-public class ContextAwareStatisticRegistry implements StatisticRegistry, ApplicationContextAware, InitializingBean {
+public class ContextAwareStatisticRegistry extends AbstractStatisticRegistry implements ApplicationContextAware,
+        InitializingBean {
 
     /** Class Logger */
     private final Logger log = LoggerFactory.getLogger(ContextAwareStatisticRegistry.class);
@@ -41,11 +39,6 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
      * <code>setStatisticalUnitsFromApplicationContext</code> setter method.
      **/
     private boolean automaticallyFindStatsiticsToLoad = false;
-
-    /**
-     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic}s that have been registered with this handler
-     */
-    private List<BaseStatistic> statisticalUnits;
 
     /** Used to automatically add statistics from the application context iff automaticallyFindStatsiticsToLoad = true */
     private ApplicationContext applicationContext;
@@ -59,61 +52,6 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
             log.info("Statistic registry has been asked to register the set of statistics automatically from the application context");
             setStatisticalUnitsFromApplicationContext();
         }
-    }
-
-    public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
-        BaseStatistic toUpdate = null;
-        for (BaseStatistic statistic : statisticalUnits) {
-            if (statistic.getStatisticParameters().getUnitName()
-                    .equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
-                toUpdate = statistic;
-        }
-        log.debug("Found statistic [{}] to update", toUpdate.getStatisticParameters().getUnitName());
-        performUpdate(toUpdate, statisticalUnitInformation);
-        log.debug("Finished updating statistic [{}]", toUpdate.getStatisticParameters().getUnitName());
-
-    }
-
-    public BaseStatistic getStatistic(String statisticName) {
-        for (BaseStatistic statistic : statisticalUnits) {
-            if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
-                log.debug("Found statistic [{}] from statistic registry", statistic.getStatisticParameters()
-                        .getUnitName());
-                return statistic;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Updates the statistical parameters of the passed statistic, does not yet handle the post processors
-     * 
-     * @param statistic - the statistic to update
-     * @param statisticalUnitInformation - the statistical unit information to used update the <code>statistic</code>
-     */
-    private void performUpdate(BaseStatistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
-        statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
-        // now deal with the post processors
-        // List<StatisticPostProcessor> postProcessors =
-        // initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
-        // statistic.setPostprocessor(postProcessors);
-    }
-
-    /**
-     * 
-     * @param postProcessorsInformation
-     * @return
-     */
-    private List<StatisticPostProcessor> initialisePostProcessors(List<ProcessorInformation> postProcessorsInformation) {
-        // TODO could be factory method, need to acquire the bean implementation now.
-        StatisticProcessorFactory factory = new StatisticProcessorFactory();
-        List<StatisticPostProcessor> postprocessors = null;
-
-        for (ProcessorInformation information : postProcessorsInformation) {
-            postprocessors.add(factory.getPostProcessor(information.getClassName()));
-        }
-
-        return postprocessors;
     }
 
     /**
@@ -135,9 +73,11 @@ public class ContextAwareStatisticRegistry implements StatisticRegistry, Applica
         statisticalUnits = new ArrayList<BaseStatistic>();
         Map<String, ?> allStatisticBeans = applicationContext.getBeansOfType(BaseStatistic.class);
         for (Map.Entry<String, ?> entry : allStatisticBeans.entrySet()) {
-            log.debug("Registering statistic [{}], role {}", ((BaseStatistic) entry.getValue()).getStatisticParameters()
-                    .getUnitName(), ((BaseStatistic) entry.getValue()).getStatisticParameters().getType());
-            statisticalUnits.add((BaseStatistic) entry.getValue());
+            BaseStatistic statistic = (BaseStatistic) entry.getValue();
+            log.debug("Registering statistic [{}], role {}", statistic.getStatisticParameters().getUnitName(),
+                    statistic.getStatisticParameters().getType());
+            statistic.setPostprocessor(initialisePostProcessors(statistic.getAttachProcessors()));
+            statisticalUnits.add(statistic);
         }
     }
 

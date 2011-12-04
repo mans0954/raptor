@@ -34,6 +34,7 @@ import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator;
+import uk.ac.cardiff.raptormua.engine.Version;
 import uk.ac.cardiff.raptormua.service.MUAProcess;
 
 /**
@@ -54,7 +55,11 @@ public class MultiUnitAggregatorImpl implements MultiUnitAggregator {
      * @see uk.ac.cardiff.raptor.remoting.server.sei.MultiUnitAggregator#getVersion()
      */
     public String getVersion() {
-        return "Alpha";
+        try {
+            return Version.getMajorVersion() + "." + Version.getMinorVersion() + "." + Version.getMicroVersion();
+        } catch (Throwable e) {
+            return "Unknown";
+        }
     }
 
     /**

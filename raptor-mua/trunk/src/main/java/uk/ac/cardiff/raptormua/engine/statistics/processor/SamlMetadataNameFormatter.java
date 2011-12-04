@@ -35,7 +35,7 @@ import org.opensaml.xml.parse.BasicParserPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Group;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
@@ -43,7 +43,7 @@ import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
  * @author philsmart
  * 
  */
-public class SamlMetadataNameFormatter implements StatisticPostProcessor {
+public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
@@ -54,8 +54,16 @@ public class SamlMetadataNameFormatter implements StatisticPostProcessor {
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(SamlMetadataNameFormatter.class);
 
-    /* this is not a proper URI at the moment, just a UNC path */
+    /** this is not a proper URI at the moment, just a UNC path */
     private String SAMLMetadataURI;
+
+    /**
+     * Default constructor
+     * 
+     */
+    public SamlMetadataNameFormatter() {
+
+    }
 
     public SamlMetadataNameFormatter(List<String> SAMLMetadataURIs) {
         try {
@@ -187,6 +195,11 @@ public class SamlMetadataNameFormatter implements StatisticPostProcessor {
      */
     public List<MetadataProvider> getProviders() {
         return providers;
+    }
+
+    public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) {
+        // TODO Auto-generated method stub
+
     }
 
 }

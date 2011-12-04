@@ -16,8 +16,15 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.AbstractStatisticPostProcessor;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
+import uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate;
 
 /**
  * Factory for building post-processors and pre-processors given a set of parameters
@@ -30,24 +37,35 @@ public class StatisticProcessorFactory {
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(StatisticProcessorFactory.class);
 
-    /** the default package name for processors */
-    private static final String DEFAULT_PROCESSOR_PACKAGE = "uk.ac.cardiff.raptormua.engine.statistics.processor.";
+    public StatisticPostProcessor getPostProcessor(ProcessorTemplate template, List<MethodParameter> parameters)
+            throws StatisticPostProcessorFactoryException {
 
-    public StatisticPostProcessor getPostProcessor(String processorName) {
-        StatisticPostProcessor processor = null;
-        Object processorClass;
         try {
-            processorClass = Class.forName(DEFAULT_PROCESSOR_PACKAGE + processorName);
-            if (processorClass instanceof StatisticPostProcessor) {
-                processor = (StatisticPostProcessor) processorClass;
-                log.debug("Processor factory has constructor [{}]", processor);
-                return processor;
+            AbstractStatisticPostProcessor processor =
+                    (AbstractStatisticPostProcessor) template.getProcessorClass().newInstance();
+            processor.setFriendlyName(template.getProcessorFriendlyName());
+            processor.registerAndSetMethodParameters(parameters);
+            // add information about methods from the template to the input.
+            if (parameters != null) {
+                for (MethodParameter parameter : parameters) {
+                    for (MethodParameter templateParameter : template.getMethodParameters()) {
+                        log.debug("MethodParameter [{}], template parameter [{}]", parameter.getParameterName(),
+                                templateParameter.getParameterName());
+                        if (parameter.getParameterName().equals(templateParameter.getParameterName())) {
+                            parameter.setValueType(templateParameter.getValueType());
+                        }
+                    }
+                }
             }
-        } catch (ClassNotFoundException e) {
-            log.error("Unable to create new statistical processor", e);
+            log.debug("Returning new processor {}", processor);
+            return processor;
+        } catch (InstantiationException e) {
+            throw new StatisticPostProcessorFactoryException(e);
+        } catch (IllegalAccessException e) {
+            throw new StatisticPostProcessorFactoryException(e);
+        } catch (PostprocessorException e) {
+            throw new StatisticPostProcessorFactoryException(e);
         }
 
-        return processor;
     }
-
 }

@@ -25,6 +25,10 @@ import java.util.List;
 @Deprecated
 public class ShibbolethMetadataNameFormatter extends SamlMetadataNameFormatter {
 
+    public ShibbolethMetadataNameFormatter() {
+        super();
+    }
+
     public ShibbolethMetadataNameFormatter(List<String> SAMLMetadataURIs) {
         super(SAMLMetadataURIs);
     }

@@ -19,7 +19,6 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics.helper;
 
-import java.text.Collator;
 import java.util.Comparator;
 
 import org.slf4j.Logger;
@@ -49,14 +48,13 @@ public class StringGroupComparator implements Comparator<Group> {
         this.asc = asc;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-     */
     public int compare(Group arg0, Group arg1) {
-        Collator c = Collator.getInstance();
-        return c.compare(arg0.getGroupName(), arg1.getGroupName());
+        if (asc) {
+            return arg0.getGroupName().compareTo(arg1.getGroupName());
+        } else {
+            return arg1.getGroupName().compareTo(arg0.getGroupName());
+        }
+
     }
 
 }

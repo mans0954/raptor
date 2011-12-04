@@ -16,20 +16,25 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptormua.engine.statistics;
 
-import java.util.List;
-
-import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptormua.engine.statistics.processor.PostprocessorException;
-import uk.ac.cardiff.raptormua.engine.statistics.processor.PreprocessorException;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public interface StatisticPostProcessor {
 
-	public Observation[] process(Observation[] observations) throws PostprocessorException;
+    public Observation[] process(Observation[] observations) throws PostprocessorException;
+
+    /**
+     * Gets the friendly name of this processor.
+     * 
+     * @return the friendly name of this processor.
+     */
+    public String getFriendlyName();
+
 }

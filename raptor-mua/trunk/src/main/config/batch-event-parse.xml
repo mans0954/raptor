@@ -28,6 +28,7 @@
 			<list>
 
 				<bean id="shib13Proxy" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
 					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="eventTypeFriendlyName">
 					   <value>Shibboleth 1.3</value>
@@ -55,6 +56,7 @@
 
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                     <property name="enabled" value="true"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="eventTypeFriendlyName">
                          <value>Ezproxy</value>
@@ -90,6 +92,7 @@
 
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
 					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="eventTypeFriendlyName">
                        <value>Shibboleth 2</value>
@@ -120,7 +123,7 @@
 		</property>
 	</bean>
 
-	<!-- Create the entry handler -->
+	<!-- Create the event handler -->
 	<bean name="memoryEventHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"></bean>
 
 	<!--

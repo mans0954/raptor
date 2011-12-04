@@ -19,19 +19,21 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticPostProcessor;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.raptormua.engine.statistics.records.Observation;
 
 /**
  * @author philsmart
  * 
  */
-public class PercentagePostProcessor implements StatisticPostProcessor {
+public class PercentagePostProcessor extends AbstractStatisticPostProcessor {
 
-    /* class logger */
+    /** class logger */
     private final Logger log = LoggerFactory.getLogger(PercentagePostProcessor.class);
 
     /**
@@ -58,6 +60,13 @@ public class PercentagePostProcessor implements StatisticPostProcessor {
             obs.setValue(percentage);
         }
         return observations;
+
+    }
+
+    /**
+     * No parameters, no operation here needed.
+     */
+    public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) throws PostprocessorException {
 
     }
 

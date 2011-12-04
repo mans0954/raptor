@@ -87,7 +87,12 @@ public final class MUAEngine {
     private int maxReleaseEventSize;
 
     /** Constructor for creating and storing this MUAs capabilities. */
-    private CapabilitiesConstructor capabilitiesConstructor;
+    private BaseCapabilitiesContructor capabilitiesConstructor;
+
+    /**
+     * Whether to force all event storage to occur synchronously.
+     */
+    private boolean forceSynchronousEventStorage;
 
     /**
      * Instantiates a new mUA engine.
@@ -312,7 +317,12 @@ public final class MUAEngine {
     public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
         if (pushed.getEvents().size() > 0) {
             int transactionId = (int) (Math.random() * 1000000);
-            storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+            if (!forceSynchronousEventStorage) {
+                storageEngine.performAsynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+            } else {
+                storageEngine.performSynchronousEntryStoragePipeline(transactionId, pushed.getEvents());
+            }
+
         }
     }
 
@@ -416,7 +426,7 @@ public final class MUAEngine {
      * 
      * @param capabilitiesConstructor the capabilitiesConstructor to set
      */
-    public void setCapabilitiesConstructor(CapabilitiesConstructor capabilitiesConstructor) {
+    public void setCapabilitiesConstructor(BaseCapabilitiesContructor capabilitiesConstructor) {
         this.capabilitiesConstructor = capabilitiesConstructor;
     }
 
@@ -425,7 +435,7 @@ public final class MUAEngine {
      * 
      * @return the capabilitiesConstructor
      */
-    public CapabilitiesConstructor getCapabilitiesConstructor() {
+    public BaseCapabilitiesContructor getCapabilitiesConstructor() {
         return capabilitiesConstructor;
     }
 
@@ -441,6 +451,20 @@ public final class MUAEngine {
      */
     public ResourceStorageEngine getResourceStorageEngine() {
         return resourceStorageEngine;
+    }
+
+    /**
+     * @param forceSynchronousEventStorage the forceSynchronousEventStorage to set
+     */
+    public void setForceSynchronousEventStorage(boolean forceSynchronousEventStorage) {
+        this.forceSynchronousEventStorage = forceSynchronousEventStorage;
+    }
+
+    /**
+     * @return the forceSynchronousEventStorage
+     */
+    public boolean isForceSynchronousEventStorage() {
+        return forceSynchronousEventStorage;
     }
 
 }

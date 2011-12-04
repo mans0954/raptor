@@ -40,25 +40,21 @@
     </encoder>
   </appender>
 
-  <logger name="org.springframework" level="ERROR">
+  <logger name="org.springframework" level="INFO">
     <appender-ref ref="stdout"/>
   </logger>
   <logger name="uk.ac.cardiff" level="debug">
     <appender-ref ref="stdout"/>
-    <appender-ref ref="FILE"/>
   </logger>
-  <logger name="org.mortbay" level="INFO">
+  <logger name="org.mortbay" level="ERROR">
     <appender-ref ref="stdout"/>
-    <appender-ref ref="FILE"/>
   </logger>
   <logger name="org.hibernate" level="INFO">
     <appender-ref ref="stdout"/>
-    <appender-ref ref="FILE"/>
   </logger>
 
-  <logger name="  org.apache.cxf" level="ERROR">
+  <logger name="org.apache.cxf" level="INFO">
     <appender-ref ref="stdout"/>
-    <appender-ref ref="FILE"/>
   </logger>
 
 

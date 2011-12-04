@@ -36,7 +36,7 @@
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
         <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
-        <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
         <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
@@ -59,7 +59,7 @@
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
         <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
-        <property name="searchFilterTemplate"><value>CardiffIDManParentIdentityUid=[principal]</value></property>
+        <property name="searchTemplate"><value>CardiffIDManParentIdentityUid=[principal]</value></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
         <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>
@@ -77,11 +77,7 @@
         </property>
     </bean>
 
-
-
-
-        <!-- data connectors. Currently only LDAP. Static Singleton Connector  -->
-    <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
+   <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
          <property name="poolMaxIdle"><value>10</value></property>
          <property name="poolInitIdleCapacity"><value>10</value></property>
          <property name="ldapUrl"><value>zidman12.cf.ac.uk</value></property>
@@ -91,6 +87,20 @@
          <property name="principalCredential"><value>1hk27be</value></property>
          <property name="cacheResults"><value>true</value></property>
          <property name="cacheTimeoutMs"><value>86400000</value></property>
+    </bean>
+
+
+    <bean id="databaseConntector" class="uk.ac.cardiff.raptor.event.expansion.connector.RDBMSDataConnector">         
+         <property name="cacheResults"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>86400000</value></property>
+         <property name="dataSource">
+            <bean id="dataSourceConnectionProperties" class="org.apache.commons.dbcp.BasicDataSource">
+                <property name="driverClassName" value="org.postgresql.Driver"/>
+                <property name="url"  value="jdbc:postgresql://localhost/identities"/>
+                <property name="username"  value="postgres"/>
+                <property name="password"  value=""/>
+            </bean>
+         </property>
     </bean>
 
 

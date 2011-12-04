@@ -25,6 +25,7 @@ import java.util.TimeZone;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
+import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.handler.DefaultHandler;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.security.SslSocketConnector;
@@ -70,7 +71,6 @@ public class RunServer {
         System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
 
         Server server = new Server();
-
         SslSocketConnector sslConnector = new SslSocketConnector();
         sslConnector.setPort(portNumber);
         sslConnector.setMaxIdleTime(30000);
@@ -80,12 +80,12 @@ public class RunServer {
         sslConnector.setTruststore(trustStoreLocaion);
         sslConnector.setTrustPassword(trustStorePassword);
 
-        // SocketConnector connector = new SocketConnector();
-        // connector.setPort(portNumber);
+        SocketConnector connector = new SocketConnector();
+        connector.setPort(portNumber);
 
         // enable mutual authentication
-        sslConnector.setNeedClientAuth(true);
-
+        // sslConnector.setNeedClientAuth(true);
+        System.out.println("Using Connector " + sslConnector);
         server.setConnectors(new Connector[] {sslConnector});
 
         WebAppContext webappcontext = new WebAppContext();
@@ -101,7 +101,7 @@ public class RunServer {
         try {
             server.start();
             server.join();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             System.exit(100);
         }
