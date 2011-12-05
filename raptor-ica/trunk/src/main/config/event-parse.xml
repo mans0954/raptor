@@ -334,7 +334,7 @@
 				</bean>
 				<bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
 					<property name="fieldName">
-						<value>releasedAttributes</value>
+						<value>attributes</value>
 					</property>
 					<property name="fieldNo">
 						<value>10</value>
@@ -348,7 +348,7 @@
 				</bean>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
 					<property name="fieldName">
-						<value>assertionId</value>
+						<value>assertions</value>
 					</property>
 					<property name="fieldNo">
 						<value>12</value>
