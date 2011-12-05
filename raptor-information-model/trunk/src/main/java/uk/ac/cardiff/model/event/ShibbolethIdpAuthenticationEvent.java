@@ -34,11 +34,11 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
     /** The name identifier. */
     private String nameIdentifier;
 
-    /** The assertion id. */
-    private String[] assertionId;
+    /** The assertion ids for the released attributes. */
+    private String[] assertions;
 
     /** The released attributes. */
-    private String[] releasedAttributes;
+    private String[] attributes;
 
     /**
      * Instantiates a new shibboleth idp authentication event.
@@ -72,8 +72,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
         this.nameIdentifier = event.getNameIdentifier();
 
         // shallow copy is OK here, as a new array is created with immutable objects (String).
-        this.assertionId = event.getAssertionId().clone();
-        this.releasedAttributes = event.getReleasedAttributes().clone();
+        this.assertions = event.getAssertions().clone();
+        this.attributes = event.getAttributes().clone();
     }
 
     /**
@@ -148,8 +148,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
      * @param releasedAttributes
      *            the releasedAttributes to set
      */
-    public void setReleasedAttributes(String[] releasedAttributes) {
-        this.releasedAttributes = releasedAttributes;
+    public void setAttributes(String[] releasedAttributes) {
+        this.attributes = releasedAttributes;
     }
 
     /**
@@ -157,8 +157,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
      * 
      * @return the releasedAttributes
      */
-    public String[] getReleasedAttributes() {
-        return releasedAttributes;
+    public String[] getAttributes() {
+        return attributes;
     }
 
     /*
@@ -189,8 +189,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
                 && EqualsUtil.areEqual(this.getRequestBinding(), that.getRequestBinding()) && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName())
                 && EqualsUtil.areEqual(this.getNameIdentifier(), that.getNameIdentifier()) && EqualsUtil.areEqual(this.getResponseId(), that.getResponseId())
                 && EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) && EqualsUtil.areEqual(this.getEventType(), that.getEventType())
-                && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) && Arrays.equals(this.getAssertionId(), that.getAssertionId())
-                && Arrays.equals(this.getReleasedAttributes(), that.getReleasedAttributes());
+                && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) && Arrays.equals(this.getAssertions(), that.getAssertions())
+                && Arrays.equals(this.getAttributes(), that.getAttributes());
 
         return areEqual;
     }
@@ -230,13 +230,13 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
         hash = HashCodeUtil.hash(hash, getRequestId());
         hash = HashCodeUtil.hash(hash, getResponseBinding());
         hash = HashCodeUtil.hash(hash, getResourceHost());
-        hash = HashCodeUtil.hash(hash, getReleasedAttributes());
+        hash = HashCodeUtil.hash(hash, getAttributes());
         hash = HashCodeUtil.hash(hash, getMessageProfileId());
         hash = HashCodeUtil.hash(hash, getRequestBinding());
         hash = HashCodeUtil.hash(hash, getPrincipalName());
         hash = HashCodeUtil.hash(hash, getNameIdentifier());
         hash = HashCodeUtil.hash(hash, getResponseId());
-        hash = HashCodeUtil.hash(hash, getAssertionId());
+        hash = HashCodeUtil.hash(hash, getAssertions());
         hash = HashCodeUtil.hash(hash, getEventType());
         hash = HashCodeUtil.hash(hash, getServiceId());
         hash = HashCodeUtil.hash(hash, getResourceId());
@@ -269,8 +269,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
      * @param assertionId
      *            the new assertion id
      */
-    public void setAssertionId(String[] assertionId) {
-        this.assertionId = assertionId;
+    public void setAssertions(String[] assertionId) {
+        this.assertions = assertionId;
     }
 
     /**
@@ -278,8 +278,8 @@ public class ShibbolethIdpAuthenticationEvent extends AuthenticationEvent {
      * 
      * @return the assertion id
      */
-    public String[] getAssertionId() {
-        return assertionId;
+    public String[] getAssertions() {
+        return assertions;
     }
 
     /**

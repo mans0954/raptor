@@ -28,6 +28,7 @@ public class AuthenticationEvent extends Event {
 
     private String authenticationType;
     
+    /** The name of the identity that participated in this event. For example username. */
     private String principalName;
 
     /** This is fixed to a principal expansion. Not used in
@@ -61,8 +62,8 @@ public class AuthenticationEvent extends Event {
         return new AuthenticationEvent(this);
     }
 
-    public void setPrincipalName(String principalName) {
-        this.principalName = principalName;
+    public void setPrincipalName(String principal) {
+        this.principalName = principal;
     }
 
     public String getPrincipalName() {
