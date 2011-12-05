@@ -72,9 +72,7 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
         }
         List<StatisticPostProcessor> postProcessors =
                 initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
-        for (StatisticPostProcessor postProcessor : postProcessors) {
-            log.debug("Setting post processor {}", postProcessor);
-        }
+
         statistic.setPostprocessor(postProcessors);
     }
 
@@ -91,6 +89,7 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
         for (ProcessorInformation information : processorInformation) {
             try {
                 StatisticPostProcessor processor = processorRegistry.getProcessor(information);
+                log.debug("Initialise post processor with friendlyname [{}]", processor.getFriendlyName());
                 initlialisedPostProcessors.add(processor);
             } catch (StatisticPostProcessorFactoryException e) {
                 log.error("Could not set processor {} on statistic", information.getProcessorClass(), e);

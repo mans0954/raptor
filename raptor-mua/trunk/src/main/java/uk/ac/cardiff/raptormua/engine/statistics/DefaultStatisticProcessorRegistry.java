@@ -1,9 +1,7 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,6 @@ public class DefaultStatisticProcessorRegistry implements StatisticProcessorRegi
 
     /** Factory used to construct processors from templates */
     private StatisticProcessorFactory processorFactory;
-    
 
     /**
      * Calls the <code>processorFactory</code> to instantiate a processor based a matching template from the list
@@ -35,20 +32,21 @@ public class DefaultStatisticProcessorRegistry implements StatisticProcessorRegi
      */
     public synchronized StatisticPostProcessor getProcessor(ProcessorInformation processorInformation)
             throws ProcessorRegistryException, StatisticPostProcessorFactoryException {
-        
 
         for (ProcessorTemplate processorTemplate : postprocessors) {
             if (processorTemplate.getProcessorClass().getCanonicalName()
                     .equals(processorInformation.getProcessorClass())) {
-                
-                //check singleton
-                if (processorTemplate.getScope().equals(SCOPE.SINGLETON)){
-                    log.debug("Returning singleton bean reference [{}] for [{}]",processorTemplate.getSingletonBeanReference(),processorTemplate.getProcessorFriendlyName());
-                    StatisticPostProcessor processor =  processorTemplate.getSingletonBeanReference();
+
+                // check singleton
+                if (processorTemplate.getScope().equals(SCOPE.SINGLETON)) {
+                    log.debug("Returning singleton bean reference [{}] for [{}]",
+                            processorTemplate.getSingletonBeanReference(), processorTemplate.getProcessorFriendlyName());
+                    StatisticPostProcessor processor = processorTemplate.getSingletonBeanReference();
                     processor.setFriendlyName(processorTemplate.getProcessorFriendlyName());
+                    processorInformation.setFriendlyName(processorTemplate.getProcessorFriendlyName());
                     return processor;
                 }
-                //check else, create new (almost prototype) instance
+                // check else, create new (almost prototype) instance
                 processorInformation.setFriendlyName(processorTemplate.getProcessorFriendlyName());
                 return processorFactory.getPostProcessor(processorTemplate, processorInformation.getMethodParameters());
             }
@@ -56,8 +54,7 @@ public class DefaultStatisticProcessorRegistry implements StatisticProcessorRegi
         throw new ProcessorRegistryException("No such processor with type " + processorInformation.getProcessorClass());
 
     }
-    
-  
+
     /**
      * @param postprocessors the postprocessors to set
      */
