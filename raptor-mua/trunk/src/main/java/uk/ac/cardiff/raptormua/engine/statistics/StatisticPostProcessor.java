@@ -36,5 +36,7 @@ public interface StatisticPostProcessor {
      * @return the friendly name of this processor.
      */
     public String getFriendlyName();
+    
+    public void setFriendlyName(String friendlyName);
 
 }

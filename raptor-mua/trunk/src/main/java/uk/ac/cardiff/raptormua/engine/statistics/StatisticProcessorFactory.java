@@ -49,7 +49,7 @@ public class StatisticProcessorFactory {
             if (parameters != null) {
                 for (MethodParameter parameter : parameters) {
                     for (MethodParameter templateParameter : template.getMethodParameters()) {
-                        log.debug("MethodParameter [{}], template parameter [{}]", parameter.getParameterName(),
+                        log.trace("MethodParameter [{}], template parameter [{}]", parameter.getParameterName(),
                                 templateParameter.getParameterName());
                         if (parameter.getParameterName().equals(templateParameter.getParameterName())) {
                             parameter.setValueType(templateParameter.getValueType());

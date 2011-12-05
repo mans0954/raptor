@@ -269,12 +269,14 @@ public final class MUAEngine {
     }
 
     /**
-     * Update the statistical unit described in <code>statisticalUnitInformation</code>.
+     * Update the statistical unit described in <code>statisticalUnitInformation</code>. Invalidate the capabilities cache, as
+     * statistical unit has changed.
      * 
      * @param statisticalUnitInformation the statistical unit information
      */
     public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
+        capabilitiesConstructor.invalidateCache();
 
     }
 

@@ -27,9 +27,12 @@ import org.opensaml.DefaultBootstrap;
 import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.OrganizationDisplayName;
 import org.opensaml.saml2.metadata.OrganizationName;
+import org.opensaml.saml2.metadata.provider.ChainingMetadataProvider;
+import org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
+import org.opensaml.util.resource.Resource;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.slf4j.Logger;
@@ -47,9 +50,9 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
-
-    /** Registered providers. */
-    private List<MetadataProvider> providers;
+    
+    /** ChainingMetadataProvider to allow 1..* types of metadata providers. */
+    protected ChainingMetadataProvider metadataProvider;
 
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(SamlMetadataNameFormatter.class);
@@ -62,37 +65,68 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
      * 
      */
     public SamlMetadataNameFormatter() {
-
+        
     }
-
-    public SamlMetadataNameFormatter(List<String> SAMLMetadataURIs) {
+    
+    public ChainingMetadataProvider getProvider(){
+        return metadataProvider;
+    }
+    
+    public SamlMetadataNameFormatter(List<MetadataProvider> providers){
+        metadataProvider = new ChainingMetadataProvider();
         try {
-            providers = new ArrayList<MetadataProvider>();
-            loadSAMLMetadata(SAMLMetadataURIs);
+            loadSAMLMetadata(providers);
         } catch (MetadataProviderException e) {
-            log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file", e);
-
+            log.error("Could not load SAML metadata: {} ", e.getMessage());
         } catch (ConfigurationException e) {
-            log.error("Error parsing SAML metadata file ", e);
+            log.error("Could not load SAML metadata, configuration exception ", e);
         }
     }
 
-    public SamlMetadataNameFormatter(String SAMLMetadataURI) {
-        try {
-            providers = new ArrayList<MetadataProvider>();
-            ArrayList<String> SAMLMetadataURIs = new ArrayList<String>();
-            SAMLMetadataURIs.add(SAMLMetadataURI);
-            loadSAMLMetadata(SAMLMetadataURIs);
-        } catch (MetadataProviderException e) {
-            log.error("ShibbolethMetadataNameFormatter could not load SAML metadata file", e);
-
-        } catch (ConfigurationException e) {
-            log.error("Error parsing SAML metadata file ", e);
+    
+    /**
+     * Takes a <code>List</code> of SAML
+     * <code>MetadataProvider<code>s and adds them to the <code>metadataProvider</code>.
+     * 
+     * @param SAMLMetadataProviders list of MetadataProviders to use within this processor.
+     * @throws MetadataProviderException
+     * @throws ConfigurationException
+     */
+    private void loadSAMLMetadata(List<MetadataProvider> SAMLMetadataProviders) throws MetadataProviderException,
+            ConfigurationException {
+        DefaultBootstrap.bootstrap();
+        parser = new BasicParserPool();
+        parser.setNamespaceAware(true);
+        metadataProvider = new ChainingMetadataProvider();
+        for (MetadataProvider providerGeneric : SAMLMetadataProviders) {
+            FileBackedHTTPMetadataProvider provider = (FileBackedHTTPMetadataProvider) providerGeneric;
+//            provider.setMinRefreshDelay(1000);
+//            provider.setMaxRefreshDelay(2000);            
+            log.info("Loading SAML metadata [{}]", provider.getMetadataURI());
+            provider.setParserPool(parser);
+            provider.initialize();
+            metadataProvider.addMetadataProvider(provider);
+            log.debug("Loaded SAML metatada {}", provider.getMetadataURI());
+        }
+        List<MetadataProvider> providers = metadataProvider.getProviders();
+        log.debug("This class is {}",this);
+        for (MetadataProvider provider : providers){
+            log.debug("Provider is {}",((OrganizationDisplayName)provider.getEntityDescriptor("https://www.internurse.com/shibboleth").getOrganization().getDisplayNames().get(0)).getName().getLocalString());
         }
     }
 
     public Observation[] process(Observation[] observations) throws PostprocessorException {
+        log.debug("This class is {}",this);
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
+        List<MetadataProvider> providers = metadataProvider.getProviders();
+        log.debug("Providers {}", providers.size());
+        for (MetadataProvider provider : providers){
+            try {
+                log.debug("Provider is {}",((OrganizationDisplayName)provider.getEntityDescriptor("https://www.internurse.com/shibboleth").getOrganization().getDisplayNames().get(0)).getName().getLocalString());
+            } catch (MetadataProviderException e) {
+               log.error("{}",e);
+            }
+        }
         for (Observation obs : observations) {
             if (obs instanceof Group) {
                 Group obsG = (Group) obs;
@@ -113,21 +147,6 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
     }
 
     /**
-     * This method returns the organizational name of the entityID passed into it from the SAML metadata This will fail
-     * if the organizational name is not the first name in the list of organizational names can use
-     * https://idp.cardiff.ac.uk/shibboleth for testing.
-     * 
-     * @param entityID
-     * @return
-     * @throws MetadataProviderException
-     */
-    private String getOrganisationName(String entityID) throws MetadataProviderException, NullPointerException {
-        OrganizationName org =
-                (OrganizationName) getEntityDescriptor(entityID).getOrganization().getOrganizationNames().get(0);
-        return org.getName().getLocalString();
-    }
-
-    /**
      * This method returns the organizational display name of the entityID passed into it from the SAML metadata This
      * will fail if the organizational name is not the first name in the list of organizational names can use
      * https://idp.cardiff.ac.uk/shibboleth for testing.
@@ -137,68 +156,18 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
      * @throws MetadataProviderException
      */
     private String getOrganisationDisplayName(String entityID) throws MetadataProviderException, NullPointerException {
+        log.debug("EntityId {}",entityID);
         OrganizationDisplayName orgName =
-                (OrganizationDisplayName) getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
+                (OrganizationDisplayName) metadataProvider.getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
+        log.debug("EntityId {} has {}",entityID, orgName);
         return orgName.getName().getLocalString();
     }
 
-    /**
-     * Gets the valid metadata for a given entity.
-     * 
-     * @param entityID the ID of the entity
-     * 
-     * @return the entity's metadata or null if there is no metadata or no valid metadata
-     * 
-     * @throws MetadataProviderException thrown if the provider can not fetch the metadata, must not be thrown if there
-     *             is simply no EntityDescriptor with the given ID
-     */
-    public EntityDescriptor getEntityDescriptor(String entityID) throws MetadataProviderException {
-        EntityDescriptor descriptor = null;
-        try {
-            for (MetadataProvider provider : providers) {
-                log.trace("Checking child metadata provider for entity descriptor with entity ID: {}", entityID);
-                descriptor = provider.getEntityDescriptor(entityID);
-                if (descriptor != null) {
-                    break;
-                }
-            }
-        } catch (MetadataProviderException e) {
-            throw e;
-        }
-        return descriptor;
-    }
 
-    private void loadSAMLMetadata(List<String> SAMLMetadataURIs) throws MetadataProviderException,
-            ConfigurationException {
-        DefaultBootstrap.bootstrap();
-        parser = new BasicParserPool();
-        parser.setNamespaceAware(true);
 
-        for (String metadataURI : SAMLMetadataURIs) {
-            FilesystemMetadataProvider provider = new FilesystemMetadataProvider(new File(metadataURI));
-            provider.setParserPool(parser);
-            provider.initialize();
-            providers.add(provider);
-            log.debug("Loaded SAML metatada {}", metadataURI);
-        }
-    }
-
-    /**
-     * @param providers the providers to set
-     */
-    public void setProviders(List<MetadataProvider> providers) {
-        this.providers = providers;
-    }
-
-    /**
-     * @return the providers
-     */
-    public List<MetadataProvider> getProviders() {
-        return providers;
-    }
 
     public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) {
-        // TODO Auto-generated method stub
+        // nothing to do here.
 
     }
 

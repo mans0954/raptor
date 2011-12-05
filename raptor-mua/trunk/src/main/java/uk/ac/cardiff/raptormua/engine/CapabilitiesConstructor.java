@@ -69,6 +69,11 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
 
     /** Set containing the names of fields that should not be included in the list of possible field values */
     private Set<String> excludeFieldNames;
+    
+    /**
+     * If set to true, cache timeout is ignored, and new capabilities are constructed from scratch.
+     */
+    private boolean invalidateCache;
 
     /** Springs application context */
     private ApplicationContext applicationContext;
@@ -125,6 +130,10 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
                 ((endTime - startTime) / 1000));
 
         return capabilities;
+    }
+    
+    public void invalidateCache() {
+        invalidateCache =true;        
     }
 
     public void addStatisticInformation(Capabilities capabilities, StatisticHandler statisticsHandler) {
@@ -221,6 +230,12 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
         if (cacheTimeoutMs == 0 || !cacheEnabled) {
             return;
         }
+        if (invalidateCache){
+            log.info("Capabilities cache was forced cleared");
+            cachedCapabilities = null;
+            invalidateCache=false;
+            return;
+        }
         long currentTimeMillis = System.currentTimeMillis();
         boolean shouldReset = (currentTimeMillis - cacheResetTimeMs) > cacheTimeoutMs;
         if (shouldReset) {
@@ -279,5 +294,6 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
         this.applicationContext = applicationContext;
 
     }
+
 
 }

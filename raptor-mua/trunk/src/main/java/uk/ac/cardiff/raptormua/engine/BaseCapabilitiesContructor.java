@@ -25,4 +25,8 @@ public abstract class BaseCapabilitiesContructor {
 
     public abstract Capabilities constructCapabilities(StatisticHandler statisticsHandler,
             EventStorageEngine storageEngine, ServiceMetadata metadata);
+
+
+    /** If things have changed, the cache should be invalidated immediately. */
+    public abstract void invalidateCache();
 }
