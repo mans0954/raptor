@@ -19,20 +19,14 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics.processor;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.opensaml.DefaultBootstrap;
-import org.opensaml.saml2.metadata.EntityDescriptor;
 import org.opensaml.saml2.metadata.OrganizationDisplayName;
-import org.opensaml.saml2.metadata.OrganizationName;
 import org.opensaml.saml2.metadata.provider.ChainingMetadataProvider;
 import org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider;
-import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
-import org.opensaml.util.resource.Resource;
 import org.opensaml.xml.ConfigurationException;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.slf4j.Logger;
@@ -50,7 +44,7 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
 
     /** Parser manager used to parse XML. */
     protected static BasicParserPool parser;
-    
+
     /** ChainingMetadataProvider to allow 1..* types of metadata providers. */
     protected ChainingMetadataProvider metadataProvider;
 
@@ -65,14 +59,10 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
      * 
      */
     public SamlMetadataNameFormatter() {
-        
+
     }
-    
-    public ChainingMetadataProvider getProvider(){
-        return metadataProvider;
-    }
-    
-    public SamlMetadataNameFormatter(List<MetadataProvider> providers){
+
+    public SamlMetadataNameFormatter(List<MetadataProvider> providers) {
         metadataProvider = new ChainingMetadataProvider();
         try {
             loadSAMLMetadata(providers);
@@ -83,7 +73,6 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
         }
     }
 
-    
     /**
      * Takes a <code>List</code> of SAML
      * <code>MetadataProvider<code>s and adds them to the <code>metadataProvider</code>.
@@ -100,33 +89,19 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
         metadataProvider = new ChainingMetadataProvider();
         for (MetadataProvider providerGeneric : SAMLMetadataProviders) {
             FileBackedHTTPMetadataProvider provider = (FileBackedHTTPMetadataProvider) providerGeneric;
-//            provider.setMinRefreshDelay(1000);
-//            provider.setMaxRefreshDelay(2000);            
+            // provider.setMinRefreshDelay(1000);
+            // provider.setMaxRefreshDelay(2000);
             log.info("Loading SAML metadata [{}]", provider.getMetadataURI());
             provider.setParserPool(parser);
             provider.initialize();
             metadataProvider.addMetadataProvider(provider);
             log.debug("Loaded SAML metatada {}", provider.getMetadataURI());
         }
-        List<MetadataProvider> providers = metadataProvider.getProviders();
-        log.debug("This class is {}",this);
-        for (MetadataProvider provider : providers){
-            log.debug("Provider is {}",((OrganizationDisplayName)provider.getEntityDescriptor("https://www.internurse.com/shibboleth").getOrganization().getDisplayNames().get(0)).getName().getLocalString());
-        }
+
     }
 
     public Observation[] process(Observation[] observations) throws PostprocessorException {
-        log.debug("This class is {}",this);
         log.debug("{} post processor called, entries into postprocessor: {}", this.getClass(), observations.length);
-        List<MetadataProvider> providers = metadataProvider.getProviders();
-        log.debug("Providers {}", providers.size());
-        for (MetadataProvider provider : providers){
-            try {
-                log.debug("Provider is {}",((OrganizationDisplayName)provider.getEntityDescriptor("https://www.internurse.com/shibboleth").getOrganization().getDisplayNames().get(0)).getName().getLocalString());
-            } catch (MetadataProviderException e) {
-               log.error("{}",e);
-            }
-        }
         for (Observation obs : observations) {
             if (obs instanceof Group) {
                 Group obsG = (Group) obs;
@@ -156,15 +131,11 @@ public class SamlMetadataNameFormatter extends AbstractStatisticPostProcessor {
      * @throws MetadataProviderException
      */
     private String getOrganisationDisplayName(String entityID) throws MetadataProviderException, NullPointerException {
-        log.debug("EntityId {}",entityID);
         OrganizationDisplayName orgName =
-                (OrganizationDisplayName) metadataProvider.getEntityDescriptor(entityID).getOrganization().getDisplayNames().get(0);
-        log.debug("EntityId {} has {}",entityID, orgName);
+                (OrganizationDisplayName) metadataProvider.getEntityDescriptor(entityID).getOrganization()
+                        .getDisplayNames().get(0);
         return orgName.getName().getLocalString();
     }
-
-
-
 
     public void registerAndSetMethodParameters(List<MethodParameter> methodParameters) {
         // nothing to do here.

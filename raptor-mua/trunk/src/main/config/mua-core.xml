@@ -17,7 +17,8 @@
 
 
     <!-- WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
-    <jaxws:endpoint id="muaEndpoint" implementor="#muaEndpointInterface" address="/MultiUnitAggregator">
+    <jaxws:endpoint id="muaEndpoint" 
+            implementor="#muaEndpointInterface" address="/MultiUnitAggregator">
         <jaxws:serviceFactory>
             <ref bean='jaxws-and-aegis-service-factory' />
         </jaxws:serviceFactory>

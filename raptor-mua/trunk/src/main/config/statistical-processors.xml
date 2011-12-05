@@ -117,7 +117,7 @@
 				<bean
 					class="org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider">
 					<constructor-arg index="0"
-						value="http://metadata.ukfederation.org.uk/ukfederation-metadata.xml" />
+						value="http://iam.cf.ac.uk/cufederation/metadata.cufederation.xml" />
 					<constructor-arg index="1" value="5000" />
 					<constructor-arg index="2" value="/tmp/metadata-uk-fed.xml" />
 				</bean>
