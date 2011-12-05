@@ -52,6 +52,9 @@
   <logger name="org.hibernate" level="INFO">
     <appender-ref ref="stdout"/>
   </logger>
+  <logger name="org.opensaml.saml2.metadata.provider" level ="INFO">
+    <appender-ref ref="stdout"/>
+  </logger>
 
   <logger name="org.apache.cxf" level="INFO">
     <appender-ref ref="stdout"/>

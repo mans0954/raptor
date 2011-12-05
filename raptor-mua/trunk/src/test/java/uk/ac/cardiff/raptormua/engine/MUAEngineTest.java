@@ -101,7 +101,7 @@ public class MUAEngineTest extends BaseMuaTest {
         event.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         event.setPrincipalName("scmps2");
         event.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        event.setReleasedAttributes(new String[] {"eduPersonScopedAffiliation", "eduPersonEntitlement"});
+        event.setAttributes(new String[] {"eduPersonScopedAffiliation", "eduPersonEntitlement"});
         event.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         event.setRequestId("");
         event.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
