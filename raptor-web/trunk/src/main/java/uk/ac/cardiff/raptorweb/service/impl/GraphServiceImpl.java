@@ -85,7 +85,14 @@ public class GraphServiceImpl implements GraphService {
         websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().add(processorToAdd);
     }
 
+    /**
+     * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if they 
+     * do not already exist.
+     */
     public void populateStatisticalUnits(WebSession websession) {
+        if (websession.getGraphmodel().getStatisticalUnitsForView()!=null){
+            return;
+        }
         ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList<StatisticalUnitInformationView>();
         List<StatisticalUnitInformation> units = getStatisticalUnits();
         for (StatisticalUnitInformation unit : units) {
