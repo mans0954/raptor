@@ -28,7 +28,7 @@ public class ShibbolethEntryTest {
         entry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         entry.setPrincipalName("scmps2");
         entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        entry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        entry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         entry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         entry.setRequestId("");
         entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -43,7 +43,7 @@ public class ShibbolethEntryTest {
         equalEntry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         equalEntry.setPrincipalName("scmps2");
         equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        equalEntry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        equalEntry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         equalEntry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         equalEntry.setRequestId("");
         equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -69,7 +69,7 @@ public class ShibbolethEntryTest {
         entry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         entry.setPrincipalName("scmps2");
         entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        entry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        entry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         entry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         entry.setRequestId("");
         entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -84,7 +84,7 @@ public class ShibbolethEntryTest {
         equalEntry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         equalEntry.setPrincipalName("scmps2");
         equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        equalEntry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        equalEntry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         equalEntry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         equalEntry.setRequestId("");
         equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -110,7 +110,7 @@ public class ShibbolethEntryTest {
         entry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         entry.setPrincipalName("scmps2");
         entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        entry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        entry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         entry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         entry.setRequestId("");
         entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -125,7 +125,7 @@ public class ShibbolethEntryTest {
         equalEntry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         equalEntry.setPrincipalName("scmps2");
         equalEntry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        equalEntry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation" }); // removed eduPersonEntitlement
+        equalEntry.setAttributes(new String[] { "eduPersonScopedAffiliation" }); // removed eduPersonEntitlement
         equalEntry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         equalEntry.setRequestId("");
         equalEntry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
@@ -149,12 +149,12 @@ public class ShibbolethEntryTest {
         entry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         entry.setPrincipalName("scmps2");
         entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        entry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        entry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         entry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         entry.setRequestId("");
         entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
         entry.setResourceHost("https://idp.cardiff.ac.uk/shibboleth");
-        entry.setAssertionId(new String[] { "1" });
+        entry.setAssertions(new String[] { "1" });
         entry.setEventId(100);
         entry.setNameIdentifier("name1");
         PrincipalInformation principle = new PrincipalInformation();
@@ -176,12 +176,12 @@ public class ShibbolethEntryTest {
         copy.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso-new");
         copy.setPrincipalName("new");
         copy.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest-new");
-        copy.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation" }); // removed eduPersonEntitlement
+        copy.setAttributes(new String[] { "eduPersonScopedAffiliation" }); // removed eduPersonEntitlement
         copy.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth-new");
         copy.setRequestId("new");
         copy.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-SOAP-new");
         copy.setResourceHost("https://idp.cardiff.ac.uk/shibboleth-new");
-        copy.setAssertionId(new String[] { "1", "4" });
+        copy.setAssertions(new String[] { "1", "4" });
         copy.setEventId(300);
         copy.setNameIdentifier("new");
         PrincipalInformation principleCopy = new PrincipalInformation(principle);
@@ -212,12 +212,12 @@ public class ShibbolethEntryTest {
         entry.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         entry.setPrincipalName("scmps2");
         entry.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        entry.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
+        entry.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" });
         entry.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         entry.setRequestId("");
         entry.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
         entry.setResourceHost("https://idp.cardiff.ac.uk/shibboleth");
-        entry.setAssertionId(new String[] { "1" });
+        entry.setAssertions(new String[] { "1" });
         entry.setEventId(100);
         entry.setNameIdentifier("name1");
         PrincipalInformation principle = new PrincipalInformation();
@@ -235,12 +235,12 @@ public class ShibbolethEntryTest {
         copy.setMessageProfileId("urn:mace:shibboleth:2.0:profiles:saml2:sso");
         copy.setPrincipalName("scmps2");
         copy.setRequestBinding("urn:mace:shibboleth:1.0:profiles:AuthnRequest");
-        copy.setReleasedAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" }); // removed eduPersonEntitlement
+        copy.setAttributes(new String[] { "eduPersonScopedAffiliation", "eduPersonEntitlement" }); // removed eduPersonEntitlement
         copy.setServiceHost("https://abc.cardiff.ac.uk/sp/shibboleth");
         copy.setRequestId("");
         copy.setResponseBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
         copy.setResourceHost("https://idp.cardiff.ac.uk/shibboleth");
-        entry.setAssertionId(new String[] { "1" });
+        entry.setAssertions(new String[] { "1" });
         entry.setEventId(100);
         entry.setNameIdentifier("name1");
         PrincipalInformation principleCopy = new PrincipalInformation(principle);

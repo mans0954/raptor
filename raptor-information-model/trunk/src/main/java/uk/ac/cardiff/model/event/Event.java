@@ -59,7 +59,7 @@ public class Event {
     /** The hostname of the resource you are using. */
     private String resourceHost;
 
-    /** The resource id. This is the resource you are using. */
+    /** The resource id. This is the identifier of resource you are using. */
     private String resourceId;
 
     /**
@@ -137,7 +137,6 @@ public class Event {
     /**
      * Only XML DATE or XML DATETIME objects can be sent through XML WS hence, the joda.DateTime property is ignored, instead a proxy getDate method is used to
      * convert from DateTime to Date
-     * <p>
      * 
      * @return a Date representation of the eventTime DateTime format
      */

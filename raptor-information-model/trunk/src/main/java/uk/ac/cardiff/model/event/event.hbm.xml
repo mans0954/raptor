@@ -88,9 +88,9 @@
 		<property name="responseBinding" column="responseBinding"
 			type="string" />
 		<property name="requestBinding" column="requestBinding" type="string" />
-		<property name="releasedAttributes" column="releasedAttributes"
+		<property name="attributes" column="releasedattributes"
 			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" length="400"/>
-		<property name="assertionId" column="assertionId"
+		<property name="assertions" column="assertionid"
 			type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
 		<property name="nameIdentifier" column="nameIdentifier" type="string" />
 		<property name="responseId" column="responseId" type="string" />
