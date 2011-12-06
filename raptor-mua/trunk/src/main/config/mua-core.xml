@@ -273,8 +273,9 @@
 
     <import resource="database.xml" />
     <import resource="metadata.xml" />
-    <import resource="statistical-units.xml" />
-    <import resource="event-release.xml" />
+    <import resource="statistical-units-custom.xml" />
+    <import resource="event-release-system.xml" />
+    <import resource="event-release-custom.xml" />
     <import resource="users.xml" />
     <import resource="attribute-association.xml" />
     <import resource="batch-event-parse.xml" />
