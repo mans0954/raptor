@@ -105,8 +105,8 @@ public class ChartProcessor {
     private String getRelativePath(File dir) {
         try {
             String relative = dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), "");
-            log.debug("Absolute Path {}, base Path {}, Relative Path is {}",new Object[]{dir.getAbsoluteFile(),baseDirectory.getFile().getAbsolutePath(),relative});
             relative = relative.replaceAll("\\\\","/");
+            log.debug("Absolute Path {}, base Path {}, Relative Path is {}",new Object[]{dir.getAbsoluteFile(),baseDirectory.getFile().getAbsolutePath(),relative});            
             return relative;
         } catch (IOException e) {
             log.error("Could not get relative path for file {}, {}", dir, e.getMessage());
