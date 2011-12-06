@@ -89,7 +89,7 @@ public class ChartProcessor {
             if (!baseGraphDirectory.exists())
                 baseGraphDirectory.mkdir();
 
-            // then check for the existence of the users directory within the bae
+            // then check for the existence of the users directory within the base
             root = saveDirectory.getFile().getCanonicalPath() + "/" + user;
             File dir = new File(root);
             log.debug("Save directory for charts exists: " + dir.exists());
@@ -102,14 +102,16 @@ public class ChartProcessor {
         return root;
     }
 
-    private File getRelativePath(File dir) {
-        File relative = null;
+    private String getRelativePath(File dir) {
         try {
-            relative = new File(dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), ""));
+            String relative = dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), "");
+            log.debug("Absolute Path {}, base Path {}, Relative Path is {}",new Object[]{dir.getAbsoluteFile(),baseDirectory.getFile().getAbsolutePath(),relative});
+            relative = relative.replaceAll("\\\\","/");
+            return relative;
         } catch (IOException e) {
             log.error("Could not get relative path for file {}, {}", dir, e.getMessage());
+            return "";
         }
-        return relative;
     }
 
     private BufferedImage extractImage(JFreeChart chart, int width, int height) {

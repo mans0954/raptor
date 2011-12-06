@@ -34,10 +34,10 @@ public class RaptorJFreeChartModel implements Serializable {
 
     private static final long serialVersionUID = -3533889063143775041L;
 
-    static Logger log = LoggerFactory.getLogger(RaptorJFreeChartModel.class);
+    private final Logger log = LoggerFactory.getLogger(RaptorJFreeChartModel.class);
 
     private File chartLocation;
-    private File relativeChartLocation;
+    private String relativeChartLocation;
     private JFreeChart chart;
 
     public void setChartLocation(File chartLocation) {
@@ -48,21 +48,16 @@ public class RaptorJFreeChartModel implements Serializable {
 	return chartLocation;
     }
 
-    public void setRelativeChartLocation(File relativeChartLocation) {
+    public void setRelativeChartLocation(String relativeChartLocation) {
 	this.relativeChartLocation = relativeChartLocation;
     }
 
-    public File getRelativeChartLocation() {
+    public String getRelativeChartLocation() {
 	return relativeChartLocation;
     }
 
     public String getRelativeChartLocationPath(){
-	try {
-	    return relativeChartLocation.getCanonicalPath();
-	} catch (IOException e) {
-	   log.error("Could not get relative chart location for {}",relativeChartLocation);
-	}
-	return "";
+	return relativeChartLocation;
     }
 
     public void setChart(JFreeChart chart) {
