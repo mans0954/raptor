@@ -90,7 +90,7 @@
     </bean>
 
 
-    <bean id="databaseConntector" class="uk.ac.cardiff.raptor.event.expansion.connector.RDBMSDataConnector">         
+    <bean id="databaseConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.RDBMSDataConnector">         
          <property name="cacheResults"><value>true</value></property>
          <property name="cacheTimeoutMs"><value>86400000</value></property>
          <property name="dataSource">
