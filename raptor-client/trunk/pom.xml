@@ -327,8 +327,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.0</version>
                 <configuration>
-                    <username>philsmart</username>
-                    <password>nv75hh</password>
+                    
                     <tagBase>
                         http://iam.cf.ac.uk/repos/RAPTOR/raptor-client/tags
                     </tagBase>
