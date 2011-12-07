@@ -42,7 +42,7 @@ public class MUAEngineTest extends BaseMuaTest {
      * Override the database connection with connection to a test database. Not currently as no easy way to set the
      * connection pool. Just use local database and assume test.
      */
-    @BeforeClass
+   // @BeforeClass
     public void setup() {
         Assert.assertNotNull(engine);
 
@@ -67,7 +67,7 @@ public class MUAEngineTest extends BaseMuaTest {
     /**
      * Will create entry in event handler - make sure dummy event handler used?
      */
-    @Test
+    //@Test
     public void addSingleEventTest() {
         EventPushMessage message = new EventPushMessage();
         message.setTimeOfPush(new Date(System.currentTimeMillis()));
