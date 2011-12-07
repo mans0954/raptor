@@ -70,7 +70,7 @@
 						<div id="content" class="clearfix spring">
 
 							<h3>Please login with your user name and password</h3>
-							<form name='f' action='/raptor/j_spring_security_check'
+							<form name='f' action='<%=request.getContextPath()%>/j_spring_security_check'
 								method="post">
 								<table>
 									<tr>
