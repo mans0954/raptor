@@ -40,11 +40,15 @@ import ch.qos.logback.core.util.StatusPrinter;
 public class RunServer {
 
     /**
-     * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3.
-     * Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
-     * to initialise the servlet.
+     * Programmatically do the following:
+     * <ol>
+     * <li> Set the Apache CXF logger to use SLF4J </li>
+     * <li> Configure the logback logger</li>
+     * <li>Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
+     * to initialise the servlet</li>
+     * </ol>
      * 
-     * @param args
+     * @param args the standard program arguments.
      * @throws IOException
      * @throws FileNotFoundException
      * @throws Exception
