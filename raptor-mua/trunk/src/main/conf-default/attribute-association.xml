@@ -37,7 +37,7 @@
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
         <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
-        <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
         <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
@@ -60,7 +60,7 @@
         <property name="subjectPrincipalField"><value>principalName</value></property>
         <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
         <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
-        <property name="searchFilterTemplate"><value>cn=[principal]</value></property>
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
         <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>
