@@ -22,10 +22,10 @@
 
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>RaptorWeb Login</title>
-<link rel="stylesheet" href="/RaptorWeb/templates/raptor/css/common.css"
-	type="text/css" media="screen" />
+
 </head>
 <body onload='document.f.j_username.focus();'>
 	<div id="content">
@@ -34,9 +34,9 @@
 			<div class="banner">
 
 				<div id="logoContainer">
-					<center>
+					<center>					
 						<a href="http://iam.cf.ac.uk/trac/RAPTOR"><img
-							src="/raptor-web/templates/raptor/images/simple-logo.png"
+							src="<%=request.getContextPath()%>/templates/raptor/images/simple-logo.png"
 							alt="Raptor" border="0" />
 						</a>
 					</center>
@@ -70,7 +70,7 @@
 						<div id="content" class="clearfix spring">
 
 							<h3>Please login with your user name and password</h3>
-							<form name='f' action='/raptor-web/j_spring_security_check'
+							<form name='f' action='/raptor/j_spring_security_check'
 								method="post">
 								<table>
 									<tr>
