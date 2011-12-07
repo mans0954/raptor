@@ -20,7 +20,8 @@
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<!--  Can add custom MUAs to send onto further here, but not likely -->
+	<!-- IF needed, define your own custom formats here. -->
+
 
 
 </beans>

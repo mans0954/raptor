@@ -81,7 +81,7 @@
 
 
 
-        <!-- data connectors. Currently only LDAP. Static Singleton Connector  -->
+        <!-- data connectors.  -->
     <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
          <property name="poolMaxIdle"><value>10</value></property>
          <property name="poolInitIdleCapacity"><value>10</value></property>
@@ -93,6 +93,20 @@
          <property name="cacheResults"><value>true</value></property>
          <property name="cacheTimeoutMs"><value>86400000</value></property>
     </bean>
+    
+    <!--  Example RDBMS Data connectors for postgres. But mysql is also possible. 
+        <bean id="databaseConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.RDBMSDataConnector">         
+         <property name="cacheResults"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>86400000</value></property>
+         <property name="dataSource">
+            <bean id="dataSourceConnectionProperties" class="org.apache.commons.dbcp.BasicDataSource">
+                <property name="driverClassName" value="org.postgresql.Driver"/>
+                <property name="url"  value="jdbc:postgresql://localhost/identities"/>
+                <property name="username"  value="postgres"/>
+                <property name="password"  value=""/>
+            </bean>
+         </property>
+    </bean>-->
 
 
 </beans>

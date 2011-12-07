@@ -269,13 +269,16 @@
             <value>ShibbolethIdpAuthenticationEvent</value> <value>EzproxyAuthenticationEvent</value> </list> </property> -->
     </bean>
 
+    <bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
+        <property name="sessionFactory" ref="muaSessionFactory" />
+    </bean>
+
     <!-- Load all other bean definitions -->
 
     <import resource="database.xml" />
     <import resource="metadata.xml" />
     <import resource="statistical-units-custom.xml" />
-    <import resource="event-release-system.xml" />
-    <import resource="event-release-custom.xml" />
+    <import resource="event-release.xml" />
     <import resource="users.xml" />
     <import resource="attribute-association.xml" />
     <import resource="batch-event-parse.xml" />
