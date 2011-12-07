@@ -121,7 +121,7 @@ public final class ReflectionHelper {
     }
 
     /**
-     * Uses reflection to get all the classes that are in the <code>EVENT_PACKAGE_NAME</code package.
+     * Uses reflection to get all the classes that are in the <code>EVENT_PACKAGE_NAME</code> package.
      * 
      * @return a list of simple names of found classes;
      */
