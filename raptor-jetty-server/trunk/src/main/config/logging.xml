@@ -2,7 +2,7 @@
 
 <configuration>
 
-  <property name="LOG_HOME" value="/opt/raptor/web/logs" />
+  <property name="LOG_HOME" value="logs" />
 
    
 
