@@ -120,13 +120,13 @@
                     </property>
                    
                 </bean>
-               
-
-
-               
+                          
             </list>
         </property>
     </bean>
+    
+    <!-- Create the entry handler -->
+    <bean name="memoryEventHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"></bean>
     
 
      <import resource="event-parse-formats-system.xml"/>
