@@ -166,12 +166,16 @@ public class GraphModel implements Serializable {
     }
 
     public List<String> getPossiblePostProcessorValues() {
+        if (suggestionValues==null || suggestionValues.getPossiblePostProcessors()==null){
+            return Collections.emptyList();
+        }        
         List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
         List<String> possibles = new ArrayList<String>();
         for (ProcessorInformation information : processorsInformation) {
             possibles.add(information.getFriendlyName());
         }
         return possibles;
+        
     }
 
     public ArrayList<String> autocompleteFieldValues(Object suggest) {
