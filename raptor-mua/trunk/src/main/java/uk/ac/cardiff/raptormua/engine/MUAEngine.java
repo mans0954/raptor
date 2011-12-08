@@ -310,7 +310,7 @@ public final class MUAEngine {
     }
 
     /**
-     * If <code>pushed</code contains events to add then sent them to the <code>storageEngine</code> for processing,
+     * If <code>pushed</code> contains events to add then sent them to the <code>storageEngine</code> for processing,
      * otherwise do nothing.
      * 
      * @param pushed the {@link uk.ac.cardiff.model.wsmodel.EventPushMessage} received from the client.
