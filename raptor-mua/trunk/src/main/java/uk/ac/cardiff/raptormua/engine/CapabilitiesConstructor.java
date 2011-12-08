@@ -213,8 +213,10 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
                 (DateTime) storageEngine.getEventHandler().queryUnique("SELECT max(eventTime) from Event", null);
         DateTime earliest =
                 (DateTime) storageEngine.getEventHandler().queryUnique("SELECT min(eventTime) from Event", null);
-        capabilities.setLatestEventTime(new Date(latest.getMillis()));
-        capabilities.setEarliestEventTime(new Date(earliest.getMillis()));
+        if (latest!=null && earliest !=null){
+            capabilities.setLatestEventTime(new Date(latest.getMillis()));
+            capabilities.setEarliestEventTime(new Date(earliest.getMillis()));
+        }
     }
 
     private void addResourceInformation(Capabilities capabilities, EventStorageEngine storageEngine) {
