@@ -77,7 +77,7 @@
                             <value>log</value>
                         </list>
                     </property>
-                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/shib2/" />
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/shib2/" />
                     <property name="eventType">
                         <value>SHIBBOLETH2</value>
                     </property>
@@ -89,7 +89,7 @@
                             <value>log</value>
                         </list>
                     </property>
-                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/shib13/" />
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/shib13/" />
                     <property name="eventType">
                         <value>SHIBBOLETH13</value>
                     </property>
@@ -101,7 +101,7 @@
                             <value>log</value>
                         </list>
                     </property>
-                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/ezproxy/" />
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/ezproxy/" />
                     <property name="eventType">
                         <value>EZPROXY</value>
                     </property>
