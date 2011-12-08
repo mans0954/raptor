@@ -19,6 +19,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -80,10 +81,15 @@ public class StatisticalUnitInformation implements Serializable {
     }
 
     /**
-     * @return the postprocessors
+     * @return the postprocessors if not null, otherwise returns an empty list.
      */
     public List<ProcessorInformation> getPostprocessors() {
-        return postprocessors;
+        if (postprocessors!=null){
+            return postprocessors;
+        }
+        else{
+            return Collections.emptyList();
+        }
     }
 
 }
