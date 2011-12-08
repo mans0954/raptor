@@ -35,16 +35,14 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
     private StatisticProcessorRegistry processorRegistry;
 
     /**
-     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic}s that have been registered with this
-     * handler
+     * List of {@link uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic}s that have been registered with this handler
      */
     protected List<BaseStatistic> statisticalUnits;
 
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) {
         BaseStatistic toUpdate = null;
         for (BaseStatistic statistic : statisticalUnits) {
-            if (statistic.getStatisticParameters().getUnitName()
-                    .equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
+            if (statistic.getStatisticParameters().getUnitName().equals(statisticalUnitInformation.getStatisticParameters().getUnitName()))
                 toUpdate = statistic;
         }
         log.debug("Found statistic [{}] to update", toUpdate.getStatisticParameters().getUnitName());
@@ -56,8 +54,7 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
     public BaseStatistic getStatistic(String statisticName) {
         for (BaseStatistic statistic : statisticalUnits) {
             if (statistic.getStatisticParameters().getUnitName().equals(statisticName)) {
-                log.debug("Found statistic [{}] from statistic registry", statistic.getStatisticParameters()
-                        .getUnitName());
+                log.debug("Found statistic [{}] from statistic registry", statistic.getStatisticParameters().getUnitName());
                 return statistic;
             }
         }
@@ -67,28 +64,34 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
     /**
      * Updates the statistical parameters of the passed statistic.
      * 
-     * @param statistic - the statistic to update
-     * @param statisticalUnitInformation - the statistical unit information to used update the <code>statistic</code>
+     * @param statistic
+     *            - the statistic to update
+     * @param statisticalUnitInformation
+     *            - the statistical unit information to used update the <code>statistic</code>
      */
     private void performUpdate(BaseStatistic statistic, StatisticalUnitInformation statisticalUnitInformation) {
+        if (statisticalUnitInformation == null) {
+            // nothing to update.
+            return;
+        }
         statistic.setStatisticParameters(statisticalUnitInformation.getStatisticParameters());
-        // now deal with the post processors
 
-        // clear them first
-        statistic.setPostprocessor(null);
-        List<ProcessorInformation> information = statisticalUnitInformation.getPostprocessors();
-        for (ProcessorInformation info : information) {
-            log.debug("Setting processor [{}]", info.getProcessorClass());
-            if (info.getMethodParameters() != null) {
-                for (MethodParameter parameter : info.getMethodParameters()) {
-                    log.debug("Parameter [{},{}]", parameter.getParameterName(), parameter.getValue());
+        // now deal with the post processors. clear them first
+        if (statisticalUnitInformation.getPostprocessors() != null) {
+            statistic.setPostprocessor(null);
+            List<ProcessorInformation> information = statisticalUnitInformation.getPostprocessors();
+            for (ProcessorInformation info : information) {
+                log.debug("Setting processor [{}]", info.getProcessorClass());
+                if (info.getMethodParameters() != null) {
+                    for (MethodParameter parameter : info.getMethodParameters()) {
+                        log.debug("Parameter [{},{}]", parameter.getParameterName(), parameter.getValue());
+                    }
                 }
             }
-        }
-        List<StatisticPostProcessor> postProcessors =
-                initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
+            List<StatisticPostProcessor> postProcessors = initialisePostProcessors(statisticalUnitInformation.getPostprocessors());
 
-        statistic.setPostprocessor(postProcessors);
+            statistic.setPostprocessor(postProcessors);
+        }
     }
 
     /**
@@ -125,7 +128,8 @@ public abstract class AbstractStatisticRegistry implements StatisticRegistry {
     }
 
     /**
-     * @param processorRegistry the processorRegistry to set
+     * @param processorRegistry
+     *            the processorRegistry to set
      */
     public void setProcessorRegistry(StatisticProcessorRegistry processorRegistry) {
         this.processorRegistry = processorRegistry;
