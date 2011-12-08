@@ -23,8 +23,7 @@
 					</property>
 					<property name="isAttached" value="true"></property>
 					<property name="publicKey">
-						<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks
-						</value>
+						<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor.jks</value>
 					</property>
 					<property name="publicKeyPassword">
 						<value>phil11</value>
@@ -39,15 +38,13 @@
 			<bean
 				class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
 				<property name="trustStoreLocation">
-					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks
-					</value>
+					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value>
 				</property>
 				<property name="trustStorePassword">
 					<value>phil11</value>
 				</property>
 				<property name="keyStoreLocation">
-					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks
-					</value>
+					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value>
 				</property>
 				<property name="keyStorePassword">
 					<value>phil11</value>
