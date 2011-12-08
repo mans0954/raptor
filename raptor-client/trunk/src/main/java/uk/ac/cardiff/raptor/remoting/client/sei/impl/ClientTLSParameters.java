@@ -35,6 +35,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Raptor client specific class to hold TLS parameters for easy configuration. Will then produce an implementation
@@ -44,6 +46,9 @@ import org.apache.cxf.configuration.jsse.TLSClientParameters;
  * 
  */
 public class ClientTLSParameters {
+    
+    /** class logger */
+    private final Logger log = LoggerFactory.getLogger(ClientTLSParameters.class);
 
     /** The public certificates for trusted servers. */
     private String trustStoreLocation;
@@ -77,6 +82,7 @@ public class ClientTLSParameters {
         // clients private key / public key
         final KeyStore keyStoreKeyManager = KeyStore.getInstance("JKS");
         final File keyStoreFile = new File(keyStoreLocation);
+        log.debug("Tls Client Parameters uing keystore [{}], exists {}",keyStoreFile, keyStoreFile.exists());
         keyStoreKeyManager.load(new FileInputStream(keyStoreFile), keyStorePassword.toCharArray());
         final KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         keyFactory.init(keyStoreKeyManager, keyStorePassword.toCharArray());
