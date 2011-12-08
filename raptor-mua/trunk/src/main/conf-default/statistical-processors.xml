@@ -119,7 +119,7 @@
 					<constructor-arg index="0"
 						value="http://metadata.ukfederation.org.uk/ukfederation-metadata.xml" />
 					<constructor-arg index="1" value="5000" />
-					<constructor-arg index="2" value="/conf/samlmetadata-ukfederation.xml" />
+					<constructor-arg index="2" value="conf/samlmetadata-ukfederation.xml" />
 				</bean>
 
 			</list>
