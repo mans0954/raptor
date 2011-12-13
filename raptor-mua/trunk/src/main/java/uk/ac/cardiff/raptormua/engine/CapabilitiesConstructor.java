@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -69,14 +71,24 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
 
     /** Set containing the names of fields that should not be included in the list of possible field values */
     private Set<String> excludeFieldNames;
-    
+
     /**
      * If set to true, cache timeout is ignored, and new capabilities are constructed from scratch.
      */
     private boolean invalidateCache;
 
+    /** The single thread pool responsible for queing reconstruction of the <code>cached</code> capabilities. */
+    private final ExecutorService capabilitiesConstructionService;
+
     /** Springs application context */
     private ApplicationContext applicationContext;
+
+    /**
+     * Default constructor. Creates a new single thread executor service.
+     */
+    public CapabilitiesConstructor() {
+        capabilitiesConstructionService = Executors.newSingleThreadExecutor();
+    }
 
     /**
      * Constructos the capabilities of this MUA instance, by computing and storing the following:
@@ -131,9 +143,9 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
 
         return capabilities;
     }
-    
+
     public void invalidateCache() {
-        invalidateCache =true;        
+        invalidateCache = true;
     }
 
     public void addStatisticInformation(Capabilities capabilities, StatisticHandler statisticsHandler) {
@@ -213,7 +225,7 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
                 (DateTime) storageEngine.getEventHandler().queryUnique("SELECT max(eventTime) from Event", null);
         DateTime earliest =
                 (DateTime) storageEngine.getEventHandler().queryUnique("SELECT min(eventTime) from Event", null);
-        if (latest!=null && earliest !=null){
+        if (latest != null && earliest != null) {
             capabilities.setLatestEventTime(new Date(latest.getMillis()));
             capabilities.setEarliestEventTime(new Date(earliest.getMillis()));
         }
@@ -232,10 +244,10 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
         if (cacheTimeoutMs == 0 || !cacheEnabled) {
             return;
         }
-        if (invalidateCache){
+        if (invalidateCache) {
             log.info("Capabilities cache was forced cleared");
             cachedCapabilities = null;
-            invalidateCache=false;
+            invalidateCache = false;
             return;
         }
         long currentTimeMillis = System.currentTimeMillis();
@@ -296,6 +308,5 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
         this.applicationContext = applicationContext;
 
     }
-
 
 }

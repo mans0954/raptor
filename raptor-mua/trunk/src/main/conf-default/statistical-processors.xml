@@ -43,8 +43,8 @@
 				</bean>
 				<bean
 					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
-					<property name="processorId" value="XValuePercentage"/>
-					<property name="processorFriendlyName" value="X-Value as Percentages" />
+					<property name="processorId" value="YValuePercentage"/>
+					<property name="processorFriendlyName" value="YValue as Percentage" />
 					<property name="processorClass">
 						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.PercentagePostProcessor
 						</value>
@@ -52,8 +52,8 @@
 				</bean>
 				<bean
 					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
-					<property name="processorId" value="YValueSortAlphabetically"/>
-					<property name="processorFriendlyName" value="Sort Y-Axis Alphabetically" />
+					<property name="processorId" value="XValueSortAlphabetically"/>
+					<property name="processorFriendlyName" value="Sort X-Axis Alphabetically" />
 					<property name="processorClass">
 						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor
 						</value>
@@ -70,8 +70,8 @@
 				</bean>
 				<bean
 					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
-					<property name="processorId" value="XValueSort"/>
-					<property name="processorFriendlyName" value="Sort X-axis by value" />
+					<property name="processorId" value="YValueSort"/>
+					<property name="processorFriendlyName" value="Sort Y-axis by value" />
 					<property name="processorClass">
 						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor
 						</value>
