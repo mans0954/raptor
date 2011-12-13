@@ -58,7 +58,7 @@ import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 /**
  * The Class GraphAndChartPDFReportGenerator.
  */
-public class GraphAndChartPDFReportGenerator extends ReportConstructor {
+public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
 
     /** The report bean. */
     private GenericReportBean reportBean;
@@ -86,9 +86,10 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
 
             // append username, to create username specific directories
             File dir = new File(saveDirectory.getFile().getCanonicalPath() + "/" + session.getUser().getName());
-            log.debug("Save Directory exists: " + dir.exists());
-            if (!dir.exists())
+            log.debug("Save {} Directory exists: {}", dir, dir.exists());
+            if (!dir.exists()) {
                 dir.mkdir();
+            }
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             java.util.Date date = new java.util.Date();
@@ -99,17 +100,21 @@ public class GraphAndChartPDFReportGenerator extends ReportConstructor {
                 fileName = session.getGraphmodel().getDownloadFilename() + ".pdf";
             }
             dir = new File(dir.getAbsoluteFile() + "/" + fileName);
+            log.debug("Complete file directory to PDF is {}", dir);
 
             File reportTemplateXMLFile = new File(baseDirectory.getFile().getCanonicalPath() + "/report-templates/" + reportXMLFile);
-            log.debug("Creating PDF in file {}", reportTemplateXMLFile);
+            log.debug("Report template XML file is at {}", reportTemplateXMLFile);
 
             JasperPrint jp = constructReport(reportTemplateXMLFile, session);
+            log.debug("Exporting Jasper PDF resource to {}", dir.getCanonicalPath());
             JasperExportManager.exportReportToPdfFile(jp, dir.getCanonicalPath());
 
-            String relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
+            String relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), "");
             Date now = new Date(System.currentTimeMillis());
+            log.debug("Report can be downloaded from {}", relativePath);
+
             session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
-            log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit());
+            log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
 
         } catch (JRException e) {
             log.error("Error Creating JasperReport", e);

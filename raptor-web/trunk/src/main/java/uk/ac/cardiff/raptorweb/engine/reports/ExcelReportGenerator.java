@@ -23,21 +23,13 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import uk.ac.cardiff.raptorweb.engine.RaptorWebEngine;
-import uk.ac.cardiff.raptorweb.model.GraphModel;
-import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
-import uk.ac.cardiff.raptorweb.model.ReportModel;
-import uk.ac.cardiff.raptorweb.model.TableSeries;
-import uk.ac.cardiff.raptorweb.model.WebSession;
-import uk.ac.cardiff.raptorweb.model.records.Row;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.write.Label;
-import jxl.write.NumberFormats;
 import jxl.write.Number;
+import jxl.write.NumberFormats;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
@@ -46,13 +38,16 @@ import jxl.write.WriteException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
+
+import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
+import uk.ac.cardiff.raptorweb.model.TableSeries;
+import uk.ac.cardiff.raptorweb.model.WebSession;
 
 /**
  * @author philsmart
  * 
  */
-public class ExcelReportGenerator extends ReportConstructor {
+public class ExcelReportGenerator extends BaseReportConstructor {
     static Logger log = LoggerFactory.getLogger(ExcelReportGenerator.class);
 
     @Override
@@ -72,11 +67,11 @@ public class ExcelReportGenerator extends ReportConstructor {
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             java.util.Date date = new java.util.Date();
-            
+
             String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
                     + dateFormat.format(date) + ".xls";
             if (!session.getGraphmodel().getDownloadFilename().equals("")) {
-                fileName = session.getGraphmodel().getDownloadFilename()+".xls";
+                fileName = session.getGraphmodel().getDownloadFilename() + ".xls";
             }
             dir = new File(dir.getAbsoluteFile() + "/" + fileName);
 
@@ -122,7 +117,7 @@ public class ExcelReportGenerator extends ReportConstructor {
 
             }
 
-            relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getParentFile().getAbsolutePath(), "");
+            relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), "");
             Date now = new Date(System.currentTimeMillis());
             session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
             log.debug("Excel Report Created At: " + relativePath);
