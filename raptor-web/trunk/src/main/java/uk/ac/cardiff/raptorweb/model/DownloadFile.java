@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- *
- */
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.File;
@@ -23,44 +20,117 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * The Class DownloadFile.
+ * 
  * @author philsmart
- *
  */
-public class DownloadFile implements Serializable{
+public class DownloadFile implements Serializable {
 
-	private File file;
-	private String friendlyName;
-	private String downloadPath;
-	private Date createdDate;
-	private String typeDisplayName;
+    /**
+     * Generated Serial UID.
+     */
+    private static final long serialVersionUID = 5552980503919792959L;
 
-	public void setFile(File file) {
-		this.file = file;
-		friendlyName = file.getName();
-	}
-	public File getFile() {
-		return file;
-	}
-	public String getFriendlyName() {
-		return friendlyName;
-	}
-	public void setDownloadPath(String downloadPath) {
-		this.downloadPath = downloadPath;
-	}
-	public String getDownloadPath() {
-		return downloadPath;
-	}
-	public void setCreatedDate(Date createdDate) {
-	    this.createdDate = createdDate;
-	}
-	public Date getCreatedDate() {
-	    return createdDate;
-	}
-	public void setTypeDisplayName(String typeDisplayName) {
-	    this.typeDisplayName = typeDisplayName;
-	}
-	public String getTypeDisplayName() {
-	    return typeDisplayName;
-	}
+    /** The file. */
+    private File file;
+
+    /** The friendly name. */
+    private String friendlyName;
+
+    /** The download path. To be appended to the context path of the servlet. */
+    private String downloadPath;
+
+    /** The created date. */
+    private Date createdDate;
+
+    /** The type display name. */
+    private String typeDisplayName;
+
+    /**
+     * Sets the file.
+     * 
+     * @param file
+     *            the new file
+     */
+    public void setFile(File file) {
+        this.file = file;
+        friendlyName = file.getName();
+    }
+
+    /**
+     * Gets the file.
+     * 
+     * @return the file
+     */
+    public File getFile() {
+        return file;
+    }
+
+    /**
+     * Gets the friendly name.
+     * 
+     * @return the friendly name
+     */
+    public String getFriendlyName() {
+        return friendlyName;
+    }
+
+    /**
+     * Sets the download path.
+     * 
+     * @param downloadPath
+     *            the new download path
+     */
+    public void setDownloadPath(String downloadPath) {
+        this.downloadPath = downloadPath;
+    }
+
+    /**
+     * Gets the download path.
+     * 
+     * @return the download path
+     */
+    public String getDownloadPath() {
+
+        return downloadPath;
+    }
+
+    /**
+     * Sets the created date.
+     * 
+     * @param createdDate
+     *            the new created date
+     */
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    /**
+     * Gets the created date.
+     * 
+     * @return the created date
+     */
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    /**
+     * Sets the type display name.
+     * 
+     * @param typeDisplayName
+     *            the new type display name
+     */
+    public void setTypeDisplayName(String typeDisplayName) {
+        this.typeDisplayName = typeDisplayName;
+    }
+
+    /**
+     * Gets the type display name.
+     * 
+     * @return the type display name
+     */
+    public String getTypeDisplayName() {
+        return typeDisplayName;
+    }
 
 }

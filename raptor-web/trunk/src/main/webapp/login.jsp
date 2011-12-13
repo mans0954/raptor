@@ -93,7 +93,7 @@
 							<c:if test="${not empty param.login_error and param.login_error eq 1}"> <div class="error"><p style="color:red">Invalid Username or Password</p></div></c:if>
 						</div></td>
 					<td width="10%"></td>
-
+                
 				</tr>
 			</table>
 			<br />
