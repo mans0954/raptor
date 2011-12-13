@@ -19,7 +19,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -81,14 +81,14 @@ public class StatisticalUnitInformation implements Serializable {
     }
 
     /**
-     * @return the postprocessors if not null, otherwise returns an empty list.
+     * @return the postprocessors if not null, otherwise creates a new list of postprocessors and return that list.
      */
     public List<ProcessorInformation> getPostprocessors() {
-        if (postprocessors!=null){
+        if (postprocessors != null) {
             return postprocessors;
-        }
-        else{
-            return Collections.emptyList();
+        } else {
+            postprocessors = new ArrayList<ProcessorInformation>();
+            return postprocessors;
         }
     }
 
