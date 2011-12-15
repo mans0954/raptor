@@ -40,21 +40,22 @@ public class SetupModel implements Serializable {
 
     /** The currently selected MUA */
     private MUAEntry selectedEndpoint;
-    
-    /** The capabilities of the currently selected MUA*/
+
+    /** The capabilities of the currently selected MUA */
     private Capabilities selectEndpointCapabilities;
-    
-    /** A <code>String</code> that holds a message from the results of processing */
+
+    /** A <code>String</code> that holds a message from the result of processing */
     private String processingResult;
-    
+
     /** Class for storing batch log file upload information */
     private FileUpload fileUpload;
-    
-    public SetupModel(){
+
+    public SetupModel() {
         fileUpload = new FileUpload();
     }
 
     public void setSelectEndpointCapabilities(Capabilities selectEndpointCapabilities) {
+        log.debug("Setting event types {}", selectEndpointCapabilities.getEventsPerType());
         this.selectEndpointCapabilities = selectEndpointCapabilities;
     }
 
