@@ -16,17 +16,15 @@
 
 package uk.ac.cardiff.raptormua.engine;
 
-import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.raptor.store.EventStorageEngine;
-import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 
 public abstract class BaseCapabilitiesContructor {
 
-    public abstract Capabilities constructCapabilities(StatisticHandler statisticsHandler,
-            EventStorageEngine storageEngine, ServiceMetadata metadata);
-
+    public abstract Capabilities getCapabilities();
 
     /** If things have changed, the cache should be invalidated immediately. */
     public abstract void invalidateCache();
+
+    /** called to initialise this capabiliies constructor. If needed. */
+    public abstract void initialiseCapabilities();
 }

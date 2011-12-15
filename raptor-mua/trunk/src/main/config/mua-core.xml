@@ -139,8 +139,14 @@
     </bean>
 
     <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
-        <property name="cacheEnabled">
-            <value>true</value>
+         <property name="statisticsHandler">
+            <ref bean="statisticalUnits" />
+        </property>
+        <property name="storageEngine">
+            <ref bean="storageEngine"></ref>
+        </property>
+         <property name="metadata">
+            <ref bean="MUAMetadata"></ref>
         </property>
         <property name="cacheTimeoutMs">
             <value>1800000</value>
