@@ -69,4 +69,13 @@ public class EventTypeInformation implements Serializable {
     public String getEventTypeName() {
         return eventTypeName;
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return "EventTypeInformation [eventTypeName=" + eventTypeName + ", noOfEvents=" + noOfEvents + "]";
+    }
 }
