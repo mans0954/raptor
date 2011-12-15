@@ -25,6 +25,8 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.ServiceMetadata;
@@ -54,7 +56,7 @@ import uk.ac.cardiff.raptormua.upload.BatchFile;
  * 
  * @author philsmart
  */
-public final class MUAEngine {
+public final class MUAEngine implements InitializingBean {
 
     /** Class logger. */
     private final Logger log = LoggerFactory.getLogger(MUAEngine.class);
@@ -100,7 +102,18 @@ public final class MUAEngine {
     public MUAEngine() {
         log.info("Setup Multi-Unit Aggregator Engine...");
         maxReleaseEventSize = 100;
+
+    }
+
+    /**
+     * After properties have been set, check for required dependencies and construct an initial capabilities.
+     */
+    public void afterPropertiesSet() {
+        Assert.notNull(capabilitiesConstructor,
+                "No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
+        capabilitiesConstructor.initialiseCapabilities();
         log.info("Mulit-Unit Aggregator Engine is running...");
+
     }
 
     /**
@@ -176,10 +189,11 @@ public final class MUAEngine {
      * @return the capabilities of this MUA
      */
     public final Capabilities getCapabilities() {
-        if (capabilitiesConstructor != null)
-            return capabilitiesConstructor.constructCapabilities(statisticsHandler, storageEngine, muaMetadata);
-        else
+        if (capabilitiesConstructor != null) {
+            return capabilitiesConstructor.getCapabilities();
+        } else {
             log.error("No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
+        }
         return null;
     }
 
@@ -269,8 +283,8 @@ public final class MUAEngine {
     }
 
     /**
-     * Update the statistical unit described in <code>statisticalUnitInformation</code>. Invalidate the capabilities cache, as
-     * statistical unit has changed.
+     * Update the statistical unit described in <code>statisticalUnitInformation</code>. Invalidate the capabilities
+     * cache, as statistical unit has changed.
      * 
      * @param statisticalUnitInformation the statistical unit information
      */
