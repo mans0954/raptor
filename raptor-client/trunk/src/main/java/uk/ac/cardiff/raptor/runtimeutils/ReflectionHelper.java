@@ -130,6 +130,7 @@ public final class ReflectionHelper {
         String forPckgName = EVENT_PACKAGE_NAME;
         String jarFile = getJARFilePath(forPckgName);
         jarFile = jarFile.replace("file:", "");
+        jarFile = jarFile.replaceAll("%20", "\\ ");
         log.debug("jar {}", jarFile);
         List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
 
@@ -162,6 +163,7 @@ public final class ReflectionHelper {
         String forPckgName = EVENT_PACKAGE_NAME;
         String jarFile = getJARFilePath(forPckgName);
         jarFile = jarFile.replace("file:", "");
+        jarFile = jarFile.replaceAll("%20", "\\ ");
         log.debug("jar {}", jarFile);
         List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
 
@@ -216,6 +218,7 @@ public final class ReflectionHelper {
         String forPckgName = EVENT_PACKAGE_NAME;
         String jarFile = getJARFilePath(forPckgName);
         jarFile = jarFile.replace("file:", "");
+        jarFile = jarFile.replaceAll("%20", "\\ ");
         log.debug("jar {}", jarFile);
         List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
         ArrayList allclasses = new ArrayList();
@@ -261,6 +264,7 @@ public final class ReflectionHelper {
         String forPckgName = EVENT_PACKAGE_NAME;
         String jarFile = getJARFilePath(forPckgName);
         jarFile = jarFile.replace("file:", "");
+        jarFile = jarFile.replaceAll("%20", "\\ ");
         List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
         ArrayList allclasses = new ArrayList();
         for (String classname : classes) {
