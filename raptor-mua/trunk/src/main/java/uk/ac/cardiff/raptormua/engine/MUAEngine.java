@@ -299,11 +299,8 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param resourceMetadata the resource metadata
      */
-    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata)
-            throws TransactionInProgressException {
-        int transactionId = (int) (Math.random() * 1000000);
-        resourceStorageEngine.performAsynchronousResourceStoragePipeline(transactionId, resourceMetadata);
-
+    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
+        resourceStorageEngine.performAsynchronousResourceStoragePipeline(resourceMetadata);
     }
 
     /**

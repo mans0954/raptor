@@ -253,11 +253,7 @@ public class MUAProcessImpl implements MUAProcess {
 
     public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
         log.info("Saving resource metadata (classification) for {} resources", resourceMetadata.size());
-        try {
-            engine.saveAndApplyResourceClassification(resourceMetadata);
-        } catch (TransactionInProgressException e) {
-            log.error("Error trying to save resource metdata to this MUA, {}", e);
-        }
+        engine.saveAndApplyResourceClassification(resourceMetadata);
 
     }
 
