@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk> Licensed 
+	under the Apache License, Version 2.0 (the "License"); you may not use this 
+	file except in compliance with the License. You may obtain a copy of the 
+	License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by 
+	applicable law or agreed to in writing, software distributed under the License 
+	is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+	KIND, either express or implied. See the License for the specific language 
+	governing permissions and limitations under the License. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+
+	<!-- Processor registry, all processors are auto wired -->
+	<bean id="processorRegistry"
+		class="uk.ac.cardiff.raptormua.engine.statistics.DefaultStatisticProcessorRegistry">
+		<property name="processorFactory">
+			<ref bean="processorFactory" />
+		</property>
+		<property name="postprocessors">
+			<list>
+				<bean
+					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
+					<property name="processorId" value="CutRowsPostProcessor"/>
+					<property name="processorFriendlyName" value="Remove Rows From Result" />
+					<property name="processorClass">
+						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.CutRowsPostProcessor
+						</value>
+					</property>
+					<property name="methodParameters">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="valueType" value="java.lang.Integer" />
+								<property name="parameterType" value="VALUE" />
+								<property name="parameterName" value="No. Of Rows To Keep"></property>
+							</bean>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
+					<property name="processorId" value="YValuePercentage"/>
+					<property name="processorFriendlyName" value="Y-Value as Percentage" />
+					<property name="processorClass">
+						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.PercentagePostProcessor
+						</value>
+					</property>
+				</bean>
+				<bean
+					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
+					<property name="processorId" value="XValueSortAlphabetically"/>
+					<property name="processorFriendlyName" value="Sort X-Axis Alphabetically" />
+					<property name="processorClass">
+						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor
+						</value>
+					</property>
+					<property name="methodParameters">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="valueType" value="java.lang.Boolean" />
+								<property name="parameterType" value="VALUE" />
+								<property name="parameterName" value="Ascending"></property>
+							</bean>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
+					<property name="processorId" value="YValueSort"/>
+					<property name="processorFriendlyName" value="Sort Y-axis by value" />
+					<property name="processorClass">
+						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor
+						</value>
+					</property>
+					<property name="methodParameters">
+						<list>
+							<bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+								<property name="valueType" value="java.lang.Boolean" />
+								<property name="parameterType" value="VALUE" />
+								<property name="parameterName" value="Ascending"></property>
+							</bean>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
+					<property name="processorId" value="SamlMetadataNameFormatter"/>
+					<property name="processorFriendlyName" value="Format entityIds with SAML Org Name" />
+					<property name="scope" value="SINGLETON" />
+					<property name="singletonBeanReference">
+						<ref bean="samlMetadataFormatterSingletonInstance" />
+					</property>
+					<property name="processorClass">
+						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter
+						</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="processorFactory"
+		class="uk.ac.cardiff.raptormua.engine.statistics.StatisticProcessorFactory" />
+
+
+
+	<!-- instances of singleton processors need to be define below -->
+
+	<bean id="samlMetadataFormatterSingletonInstance"
+		class="uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter">
+		<constructor-arg index="0">
+			<list>
+				<bean
+					class="org.opensaml.saml2.metadata.provider.FileBackedHTTPMetadataProvider">
+					<constructor-arg index="0"
+						value="http://iam.cf.ac.uk/cufederation/metadata.cufederation.xml" />
+					<constructor-arg index="1" value="5000" />
+					<constructor-arg index="2" value="/tmp/metadata-uk-fed.xml" />
+				</bean>
+
+			</list>
+		</constructor-arg>
+	</bean>
+
+
+</beans>
