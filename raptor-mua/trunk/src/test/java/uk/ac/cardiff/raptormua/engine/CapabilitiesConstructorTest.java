@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 
 import org.springframework.util.Assert;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
@@ -48,12 +47,12 @@ public class CapabilitiesConstructorTest extends BaseMuaTest {
         Assert.notNull(metadata);
     }
 
-    @Test
-    public void queueCapabilitiesTest() throws InterruptedException {
-        for (int i = 0; i < 10; i++) {
-            constructor.getCapabilities();
-        }
-        // must sleep as thread test.
-        Thread.sleep(20000);
-    }
+    // @Test
+    // public void queueCapabilitiesTest() throws InterruptedException {
+    // for (int i = 0; i < 10; i++) {
+    // constructor.getCapabilities();
+    // }
+    // // must sleep as thread test.
+    // Thread.sleep(20000);
+    // }
 }
