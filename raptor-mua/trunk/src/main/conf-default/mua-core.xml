@@ -259,7 +259,7 @@
         </property>
     </bean>
 
-    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.ResourceStorageEngine">
+    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.DefaultResourceStorageEngine">
         <property name="dataConnection">
             <ref bean="dataConnectionImpl" />
         </property>
