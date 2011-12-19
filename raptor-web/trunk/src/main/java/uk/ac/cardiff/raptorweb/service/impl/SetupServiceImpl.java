@@ -84,8 +84,8 @@ public class SetupServiceImpl implements SetupService {
 
     }
 
-    public void sendResourceClassification() {
-        webEngine.sendResourceClassification();
+    public void sendResourceClassification(WebSession websession) {
+        webEngine.sendResourceClassification(websession.getSetupmodel().getSelectEndpointCapabilities().getResourceMetadata());
     }
 
 }

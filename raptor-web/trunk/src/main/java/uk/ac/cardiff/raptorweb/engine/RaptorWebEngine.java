@@ -317,10 +317,9 @@ public final class RaptorWebEngine {
     }
 
     /**
-     * Sends back to the attached MUA the current resource classification.
+     * Sends back to the attached MUA the resource classification <code>resourceMetadata</code>.
      */
-    public void sendResourceClassification() {
-        List<ResourceMetadata> resourceMetadata = currentlyAttachedCapabilities.getResourceMetadata();
+    public void sendResourceClassification(List<ResourceMetadata> resourceMetadata) {
         serviceEndpointClient.sendResourceMetadata(resourceMetadata, attachedMUA);
 
     }
