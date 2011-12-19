@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>uk.ac.cardiff.raptor</groupId>
+    <artifactId>raptor-parse</artifactId>
+    <version>1.0.1</version>
+    <name>Raptor Event Parsing Library</name>
+
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+
+    <!-- Adding extra repositories for any other libs, which is hosted on Iam -->
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>raptor-extras-repo</id>
+            <name>Iam Local Maven Repo</name>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-extra</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>raptor-snapshot-repo</id>
+            <name>Iam Local Maven Repo Snapshots</name>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <id>raptor-release-repo</id>
+            <name>Iam Local Maven Repo Releases</name>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <!-- done -->
+
+
+    <scm>
+        <developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-parse/tags/raptor-parse-1.0.1</developerConnection>
+        <url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-parse/tags/raptor-parse-1.0.1</url>
+    </scm>
+
+
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>raptor-release</id>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>raptor-snapshot</id>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+    <dependencies>
+
+        <!-- Raptor Dependencies -->
+        <dependency>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>raptor-information-model</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.cardiff.raptor</groupId>
+            <artifactId>raptor-client</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- commons and logging -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>0.9.27</version>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <configuration>
+                        <projectNameTemplate>[artifactId]-[version]</projectNameTemplate>
+                        <wtpmanifest>true</wtpmanifest>
+                        <wtpapplicationxml>true</wtpapplicationxml>
+                        <wtpversion>2.0</wtpversion>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.code.maven-license-plugin</groupId>
+                    <artifactId>maven-license-plugin</artifactId>
+                    <version>1.4.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.0</version>
+                <configuration>                
+                    <tagBase>
+                        http://iam.cf.ac.uk/repos/RAPTOR/raptor-parse/tags
+                    </tagBase>
+                    <providerImplementations>
+                        <svn>javasvn</svn>
+                    </providerImplementations>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+                        <artifactId>maven-scm-provider-svnjava</artifactId>
+                        <version>1.10</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <includes>
+                        <include>src/**</include>
+                        <include>**/test/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>target/**</exclude>
+                        <exclude>.clover/**</exclude>
+                    </excludes>
+                    <header>src/main/resources/license-apache</header>
+                    <properties>
+                        <year>2010</year>
+                        <email>smartp@cf.ac.uk</email>
+                        <name>Cardiff University, Wales</name>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
