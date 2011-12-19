@@ -5,10 +5,11 @@
     IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
     governing permissions and limitations under the License. -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:aop="http://www.springframework.org/schema/aop"
     xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 
     <import resource="classpath:META-INF/cxf/cxf.xml" />
@@ -17,8 +18,7 @@
 
 
     <!-- WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
-    <jaxws:endpoint id="muaEndpoint" 
-            implementor="#muaEndpointInterface" address="/MultiUnitAggregator">
+    <jaxws:endpoint id="muaEndpoint" implementor="#muaEndpointInterface" address="/MultiUnitAggregator">
         <jaxws:serviceFactory>
             <ref bean='jaxws-and-aegis-service-factory' />
         </jaxws:serviceFactory>
@@ -139,13 +139,13 @@
     </bean>
 
     <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
-         <property name="statisticsHandler">
+        <property name="statisticsHandler">
             <ref bean="statisticalUnits" />
         </property>
         <property name="storageEngine">
             <ref bean="storageEngine"></ref>
         </property>
-         <property name="metadata">
+        <property name="metadata">
             <ref bean="MUAMetadata"></ref>
         </property>
         <property name="cacheTimeoutMs">
@@ -259,7 +259,7 @@
         </property>
     </bean>
 
-    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.ResourceStorageEngine">
+    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.DefaultResourceStorageEngine">
         <property name="dataConnection">
             <ref bean="dataConnectionImpl" />
         </property>
@@ -278,6 +278,19 @@
     <bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
         <property name="sessionFactory" ref="muaSessionFactory" />
     </bean>
+
+
+    <!-- AOP cross cuts -->
+
+    <bean name="performanceAdvice" class="uk.ac.cardiff.raptormua.engine.runtimestatistics.PerformanceInterceptor" />
+
+     <aop:config>
+        <aop:aspect id="performanceAspect" ref="performanceAdvice">
+            <aop:pointcut id="resourceStorageLayer" expression="execution(* uk.ac.cardiff.raptor.store.DefaultResourceStorageEngine.performAsynchronousResourceStoragePipeline(*))" />
+            <aop:around pointcut-ref="resourceStorageLayer" method="traceSave" />
+        </aop:aspect>
+    </aop:config> 
+
 
     <!-- Load all other bean definitions -->
 
