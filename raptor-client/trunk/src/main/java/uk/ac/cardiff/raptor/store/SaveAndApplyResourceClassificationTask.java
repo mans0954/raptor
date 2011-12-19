@@ -42,16 +42,21 @@ public class SaveAndApplyResourceClassificationTask implements Callable<Boolean>
     private RaptorDataConnection dataConnection;
 
     /** The callback interface that is called once the <code>call</code> method has completed */
-    private SaveAndApplyResourceClassificationCallbackInterface storeCallback;
+    private SaveAndApplyResourceClassificationCallbackInterface<StorageResult> storeCallback;
 
     /** The list of resource metadata used to attribute resource classifications to stored events */
-    List<ResourceMetadata> resourceMetadata;
+    private List<ResourceMetadata> resourceMetadata;
 
-    public SaveAndApplyResourceClassificationTask(RaptorDataConnection dataConnection,
-            List<ResourceMetadata> resourceMetadata, SaveAndApplyResourceClassificationCallbackInterface callback) {
+    /** Numerical id of this transaction (for tracking). */
+    private int transactionId;
+
+    public SaveAndApplyResourceClassificationTask(int transactionId, RaptorDataConnection dataConnection,
+            List<ResourceMetadata> resourceMetadata,
+            SaveAndApplyResourceClassificationCallbackInterface<StorageResult> callback) {
         this.storeCallback = callback;
         this.dataConnection = dataConnection;
         this.resourceMetadata = resourceMetadata;
+        this.transactionId = transactionId;
 
     }
 
@@ -64,10 +69,16 @@ public class SaveAndApplyResourceClassificationTask implements Callable<Boolean>
 
         } catch (DataAccessException e) {
             log.error("Failed to store events asynchronously", e);
-            storeCallback.callback(new Boolean("false"));
+            StorageResult result = new StorageResult();
+            result.setSuccess(true);
+            result.setTransactionId(transactionId);
+            storeCallback.callback(result);
             return false;
         }
-        storeCallback.callback(new Boolean("true"));
+        StorageResult result = new StorageResult();
+        result.setSuccess(false);
+        result.setTransactionId(transactionId);
+        storeCallback.callback(result);
         return true;
     }
 

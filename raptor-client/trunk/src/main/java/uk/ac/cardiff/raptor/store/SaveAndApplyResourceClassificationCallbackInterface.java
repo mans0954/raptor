@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.store;
 
-public interface SaveAndApplyResourceClassificationCallbackInterface {
-	
-	public void callback(Object result);
+public interface SaveAndApplyResourceClassificationCallbackInterface<T> {
+
+    public void callback(T result);
 
 }

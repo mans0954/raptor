@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptor.store;
 
 public interface StoreEntriesTaskCallbackInterface {
-	
-	public void storageResultCallback(Object result);
+
+    public void storageResultCallback(Object result);
 
 }
