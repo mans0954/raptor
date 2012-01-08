@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
 import org.testng.annotations.BeforeMethod;
 
 import uk.ac.cardiff.model.ServiceMetadata;
-import uk.ac.cardiff.raptor.store.EventStorageEngine;
+import uk.ac.cardiff.raptor.store.DefaultEventStorageEngine;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 
 public class CapabilitiesConstructorTest extends BaseMuaTest {
@@ -34,7 +34,7 @@ public class CapabilitiesConstructorTest extends BaseMuaTest {
     private StatisticHandler statisticsHandler;
 
     @Resource(name = "storageEngine")
-    private EventStorageEngine storageEngine;
+    private DefaultEventStorageEngine storageEngine;
 
     @Resource(name = "MUAMetadata")
     private ServiceMetadata metadata;

@@ -16,23 +16,32 @@
 
 package uk.ac.cardiff.raptormua.engine.runtimestatistics;
 
-import org.aspectj.lang.ProceedingJoinPoint;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.raptor.store.SaveAndApplyResourceClassificationTask;
 
-public class PerformanceInterceptor {
+public class StorageStatisticsInterceptor {
 
     /** class logger */
     private final Logger log = LoggerFactory.getLogger(SaveAndApplyResourceClassificationTask.class);
 
-    public Object traceSave(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
-        log.debug("Asynchronous storage engine called");
-        Object result = joinPoint.proceed();
-        long end = System.currentTimeMillis();
-        log.debug("Method {} took {} ms to executed", joinPoint.getSignature().getName(), (end - start));
-        return result;
+    /** realtime statistics storage . */
+    private RuntimeEventStorageStatistics eventStorageStatistics;
+
+    public void eventStoreStatistics(int transactionId, List<Event> events) throws Throwable {
+        log.info("Storage statistics intercepted, storage [{}] has [{}] events", transactionId, events.size());
+        eventStorageStatistics.recordEventStorage(events);
     }
+
+    /**
+     * @param eventStorageStatistics the eventStorageStatistics to set
+     */
+    public void setEventStorageStatistics(RuntimeEventStorageStatistics eventStorageStatistics) {
+        this.eventStorageStatistics = eventStorageStatistics;
+    }
+
 }

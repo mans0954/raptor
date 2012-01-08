@@ -40,7 +40,11 @@
     </encoder>
   </appender>
 
-  <logger name="org.springframework" level="INFO">
+<!--   <logger name="org.springframework" level="INFO">
+    <appender-ref ref="stdout"/>
+  </logger> -->
+  
+  <logger name="org.springframework.jmx" level="DEBUG">
     <appender-ref ref="stdout"/>
   </logger>
   <logger name="uk.ac.cardiff" level="debug">

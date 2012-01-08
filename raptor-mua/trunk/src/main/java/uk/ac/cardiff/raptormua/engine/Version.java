@@ -18,19 +18,19 @@ package uk.ac.cardiff.raptormua.engine;
 
 public class Version {
 
-    /** Name of the IdP. */
+    /** Name of the mua. */
     private static final String NAME;
 
-    /** IdP version. */
+    /** mua version. */
     private static final String VERSION;
 
-    /** IdP major version number. */
+    /** mua major version number. */
     private static final int MAJOR_VERSION;
 
-    /** IdP minor version number. */
+    /** mua minor version number. */
     private static final int MINOR_VERSION;
 
-    /** IdP micro version number. */
+    /** mua micro version number. */
     private static final int MICRO_VERSION;
 
     /** Constructor. */
@@ -38,45 +38,45 @@ public class Version {
     }
 
     /**
-     * Gets the name of the IdP.
+     * Gets the name of the mua.
      * 
-     * @return name of the IdP
+     * @return name of the mua
      */
     public static String getName() {
         return NAME;
     }
 
     /**
-     * Gets the version of the IdP.
+     * Gets the version of the mua.
      * 
-     * @return version of the IdP
+     * @return version of the mua
      */
     public static String getVersion() {
         return VERSION;
     }
 
     /**
-     * Gets the major version number of the IdP.
+     * Gets the major version number of the mua.
      * 
-     * @return major version number of the IdP
+     * @return major version number of the mua
      */
     public static int getMajorVersion() {
         return MAJOR_VERSION;
     }
 
     /**
-     * Gets the minor version number of the IdP.
+     * Gets the minor version number of the mua.
      * 
-     * @return minor version number of the IdP
+     * @return minor version number of the mua
      */
     public static int getMinorVersion() {
         return MINOR_VERSION;
     }
 
     /**
-     * Gets the micro version number of the IdP.
+     * Gets the micro version number of the mua.
      * 
-     * @return micro version number of the IdP
+     * @return micro version number of the mua
      */
     public static int getMicroVersion() {
         return MICRO_VERSION;

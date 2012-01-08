@@ -312,7 +312,7 @@ public final class MUAEngine implements InitializingBean {
     public final boolean performAdministrativeFunction(final AdministrativeFunction function) {
         switch (function.getAdministrativeFunction()) {
             case REMOVEALL:
-                storageEngine.removeAllEntries();
+                // storageEngine.removeAllEntries();
                 break;
             default:
                 break;

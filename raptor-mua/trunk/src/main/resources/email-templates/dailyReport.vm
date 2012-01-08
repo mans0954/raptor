@@ -1,0 +1,30 @@
+<html>
+<body>
+<h2>Raptor MUA Daily Report [${today}]</h2>
+<div>
+
+<h3>MUA Information and Status</h3>
+<p> 
+<ul>
+<li>MUA Version - ${muaVersion}</li>
+<li>MUA Uptime - ${muaUptime}</li>
+<li>Events processed since started  - ${eventsSinceStarted}</li>
+<ul>
+</p>
+</div>
+
+<div>
+<h3>Event Storage Statistics</h3>
+<p>
+The MUA has persisted the following events during the time periods specified:
+</p>
+<ol>
+<li>Today - ${todayEventStorageStats} </li>
+<li>Yesterday - ${yesterdayEventStorageStats} </li>
+<li> This Week - ${lastWeekEventStorageStats} </li>
+<li> This Year - ${thisYearEventStorageStats} </li>
+</ol>
+</div>
+</body>
+
+</html>
