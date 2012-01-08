@@ -250,7 +250,7 @@
     <!-- DONE -->
 
     <!-- Create the storage engine and entry handler -->
-    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.EventStorageEngine">
+    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.DefaultEventStorageEngine">
         <property name="eventHandler">
             <ref bean="persistantEventHandler" />
         </property>
@@ -280,17 +280,188 @@
     </bean>
 
 
-    <!-- AOP cross cuts -->
+
+    <!-- emailer -->
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="emailTrigger" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="emailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="emailJob" />
+        <!-- run every morning at 11 PM -->
+      <!--   <property name="cronExpression" value="0 0 23 * * ?" /> -->
+        <property name="cronExpression" value="0 0/1 * 1/1 * ? *" />
+    </bean>
+
+    <bean id="emailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="emailReports" />
+        <property name="targetMethod" value="sendReport" />
+        <property name="arguments">
+            <list>
+                <value type="java.lang.String">dailyReport</value>
+                <value type="java.lang.String">smartp@cf.ac.uk</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="defaultEmailer" class="uk.ac.cardiff.raptormua.mail.DefaultEmailer">
+        <property name="velocityEngine">
+            <ref bean="velocityEngine" />
+        </property>
+        <property name="mailSender">
+            <ref bean="mailSender" />
+        </property>
+    </bean>
+
+    <!-- Will determine and inject the any EmailerProperties from the application context -->
+    <bean id="emailHandler" class="uk.ac.cardiff.raptormua.mail.EmailHandler">
+        <property name="emailer">
+            <ref bean="defaultEmailer" />
+        </property>
+    </bean>
+
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="ResourceLoaderPath" value="file:/" />
+        <property name="velocityProperties">
+            <props>
+                <prop key="resource.loader">file</prop>
+                <prop key="file.resource.loader.class">
+                    org.apache.velocity.runtime.resource.loader.FileResourceLoader
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="emailReports" class="uk.ac.cardiff.raptormua.mail.EmailReportHandler">
+        <property name="emailReports">
+            <list>
+                <bean class="uk.ac.cardiff.raptormua.mail.DailyEmailReport">
+                    <property name="emailReportIdentifier" value="dailyReport" />
+                    <property name="emailerPropertiesIdentifier" value="raptorDailyEmail" />
+                    <property name="persistentStorageStatistics">
+                        <ref bean="persistentEventStorageStatistics" />
+                    </property>
+                    <property name="runtimeStorageStatistics">
+                        <ref bean="eventStorageStatistics" />
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="emailHandler">
+            <ref bean="emailHandler" />
+        </property>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="courier.cf.ac.uk" />
+        <!-- <property name="username" value="user" /> -->
+        <!-- <property name="password" value="pass" /> -->
+    </bean>
+
+
+    <bean id="raptorDailyEmailContext" class="uk.ac.cardiff.raptormua.mail.EmailerProperties">
+        <property name="emailerPropertiesIdentifier" value="raptorDailyEmail" />
+        <property name="title" value="Raptor MUA Daily Report" />
+        <property name="fromEmailAddress" value="raptor@cf.ac.uk" />
+        <property name="templateLocation" value="classpath:email-templates/dailyReport.vm" />
+    </bean>
+
+
+    <!-- AOP cross cuts and runtime statistics -->
+
+    <bean name="eventStorageStatistics" class="uk.ac.cardiff.raptormua.engine.runtimestatistics.RuntimeEventStorageStatistics">
+    </bean>
+
+    <bean name="persistentEventStorageStatistics" class="uk.ac.cardiff.raptormua.engine.runtimestatistics.PersistentEventStorageStatistics">
+        <property name="eventHandler">
+            <ref bean="persistantEventHandler" />
+        </property>
+        <property name="periods">
+            <list>
+                <bean class="uk.ac.cardiff.raptormua.engine.runtimestatistics.TodayStatisticsPeriod" />
+                <bean class="uk.ac.cardiff.raptormua.engine.runtimestatistics.ThisYearStatisticsPeriod" />
+                <bean class="uk.ac.cardiff.raptormua.engine.runtimestatistics.YesterdayStatisticsPeriod" />
+                <bean class="uk.ac.cardiff.raptormua.engine.runtimestatistics.ThisWeekStatisticsPeriod" />
+            </list>
+        </property>
+    </bean>
+
 
     <bean name="performanceAdvice" class="uk.ac.cardiff.raptormua.engine.runtimestatistics.PerformanceInterceptor" />
 
-     <aop:config>
-        <aop:aspect id="performanceAspect" ref="performanceAdvice">
-            <aop:pointcut id="resourceStorageLayer" expression="execution(* uk.ac.cardiff.raptor.store.DefaultResourceStorageEngine.performAsynchronousResourceStoragePipeline(*))" />
-            <aop:around pointcut-ref="resourceStorageLayer" method="traceSave" />
-        </aop:aspect>
-    </aop:config> 
+    <bean name="storageStatisticsAdvice" class="uk.ac.cardiff.raptormua.engine.runtimestatistics.StorageStatisticsInterceptor">
+        <property name="eventStorageStatistics">
+            <ref bean="eventStorageStatistics" />
+        </property>
+    </bean>
 
+    <aop:config>
+        <aop:aspect id="performanceAspect" ref="performanceAdvice">
+            <aop:pointcut id="performanceLayer" expression="bean(persistantEventHandler)" />
+            <aop:around pointcut-ref="performanceLayer" method="traceSave" />
+        </aop:aspect>
+
+        <aop:aspect id="eventStorageAspect" ref="storageStatisticsAdvice">
+            <aop:pointcut id="eventStorageLayer" expression="bean(storageEngine) and args(transactionId, events)" />
+            <aop:before pointcut-ref="eventStorageLayer" method="eventStoreStatistics" />
+        </aop:aspect>
+    </aop:config>
+
+
+    <!-- JMX configuration -->
+
+
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter">
+        <property name="beans">
+            <map>
+                <entry key="runtimeEventStorageRuntime" value-ref="runtimeEventStorageJmxBean" />
+                <entry key="persistentEventStorageRuntime" value-ref="persistentEventStorageJmxBean" />
+                <entry key="muaDescriptor" value-ref="muaDescriptorJmxBean" />
+                <entry key="emailer" value-ref="emailerJmxBean" />
+            </map>
+        </property>
+        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING" />
+        <!-- allows metadata driven attribute or method exposure -->
+        <property name="assembler" ref="assembler" />
+        <!-- allows metadata driven mbean naming -->
+        <property name="namingStrategy" ref="namingStrategy"></property>
+    </bean>
+
+    <bean id="attributeSource" class="org.springframework.jmx.export.annotation.AnnotationJmxAttributeSource">
+    </bean>
+
+    <bean id="namingStrategy" class="org.springframework.jmx.export.naming.MetadataNamingStrategy">
+        <property name="attributeSource" ref="attributeSource" />
+    </bean>
+
+    <bean id="assembler" class="org.springframework.jmx.export.assembler.MetadataMBeanInfoAssembler">
+        <property name="attributeSource" ref="attributeSource" />
+    </bean>
+
+    <bean id="runtimeEventStorageJmxBean" class="uk.ac.cardiff.raptormua.jmx.EventStorageStatisticsJmx">
+        <property name="eventStorageStatistics">
+            <ref bean="eventStorageStatistics" />
+        </property>
+    </bean>
+
+    <bean id="emailerJmxBean" class="uk.ac.cardiff.raptormua.jmx.EmailerJmx">
+        <property name="emailReportHandler">
+            <ref bean="emailReports" />
+        </property>
+    </bean>
+
+    <bean id="persistentEventStorageJmxBean" class="uk.ac.cardiff.raptormua.jmx.PersistentEventStorageStatisticsJmx">
+        <property name="eventStorageStatistics">
+            <ref bean="persistentEventStorageStatistics" />
+        </property>
+    </bean>
+
+    <bean id="muaDescriptorJmxBean" class="uk.ac.cardiff.raptormua.jmx.MuaDescriptorJmx" />
 
     <!-- Load all other bean definitions -->
 

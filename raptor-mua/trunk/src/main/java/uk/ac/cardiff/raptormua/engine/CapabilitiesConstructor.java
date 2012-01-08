@@ -93,7 +93,7 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
                     queueCapabilitiesConstruction();
                 }
             }
-        }, 60000, 60000);
+        }, cacheTimeoutMs, cacheTimeoutMs);
     }
 
     /**
