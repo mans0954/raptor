@@ -23,7 +23,108 @@
 
     <!--  THIS IS EMPTY, BUT YOU COULD ADD YOUR OWN EVENT FORMATS HERE   -->
     
-
+    <bean id="ezProxyFileFormatMathew" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+    <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>requesterIp</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+               
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>2</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="@cardiff.ac.uk" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>3</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>4</value>
+                        </list>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>dd/MMM/yyyy:HH:mm:ssZ</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\[" value=""/>
+                         <entry key="\]" value=""/>
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceHost</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexRetain">
+                       <value>https://[^:]*|http://[^:]*</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>URL</value>
+                    </property>
+                    <property name="regexRetain">
+                       <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*</value>
+                    </property>
+                    <property name="regexRetainCaseInsensitive">
+                        <value>true</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="url=" value=""/>
+                         <entry key="%2520" value=""/>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter">
+            <value> </value>
+        </property>
+    </bean>
 
 
 </beans>
