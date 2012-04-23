@@ -105,7 +105,7 @@ public class DataAccessRegister {
     }
 
     /**
-     * Removes events from each parsing modules iff they have been released to all registered endpoints
+     * Removes events from each parsing module iff they have been released to all registered endpoints
      */
     public void garbageCollect(List<Endpoint> endpoints) {
         DateTime earliestReleaseTime = null;

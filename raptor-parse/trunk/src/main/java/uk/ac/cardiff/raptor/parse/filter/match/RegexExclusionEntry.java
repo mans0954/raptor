@@ -25,16 +25,16 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptor.parse.filter.AbstractInclusionEntry;
+import uk.ac.cardiff.raptor.parse.filter.AbstractExclusionEntry;
 
 /**
  * The Class RegexInclusionEntry.
  * 
  */
-public class RegexInclusionEntry extends AbstractInclusionEntry {
+public class RegexExclusionEntry extends AbstractExclusionEntry {
 
     /** The class logger */
-    private final Logger log = LoggerFactory.getLogger(RegexInclusionEntry.class);
+    private final Logger log = LoggerFactory.getLogger(RegexExclusionEntry.class);
 
     /**
      * Constructs a regex from the <code>match</code> string, and checks if this regex is contained in the input
@@ -44,7 +44,7 @@ public class RegexInclusionEntry extends AbstractInclusionEntry {
      * @return true, if successful
      */
     public boolean filter(String value) {
-        log.trace("Using regex pattern {} against value {}", this.getMatch(), value);
+        log.trace("Using regex pattern NOT {} against value {}", this.getMatch(), value);
         Pattern p = Pattern.compile(this.getMatch());
         Matcher m = p.matcher(value);
         return m.find();
