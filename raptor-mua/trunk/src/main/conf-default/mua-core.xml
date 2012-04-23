@@ -250,7 +250,7 @@
     <!-- DONE -->
 
     <!-- Create the storage engine and entry handler -->
-    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.EventStorageEngine">
+    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.DefaultEventStorageEngine">
         <property name="eventHandler">
             <ref bean="persistantEventHandler" />
         </property>

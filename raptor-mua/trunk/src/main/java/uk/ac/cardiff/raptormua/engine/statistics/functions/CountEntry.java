@@ -119,7 +119,7 @@ public class CountEntry extends BaseStatistic {
             /*
              * SQL between is >= start && <= end. We want, >= start && < end, so must exclude equals end
              */
-            String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
+            String tableName = statisticParameters.getEventType();
             String query = "";
             if (sqlWhere.equals(""))
                 query =

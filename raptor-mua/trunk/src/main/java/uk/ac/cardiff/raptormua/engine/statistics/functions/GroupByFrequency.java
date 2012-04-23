@@ -70,7 +70,7 @@ public class GroupByFrequency extends BaseStatistic {
         DateTime start = startingTime();
         DateTime end = endingTime();
         log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
-        String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
+        String tableName = statisticParameters.getEventType();
         log.debug("Select {}, tableName {}", groupByField, tableName);
 
         String resourceCategoryFilter = statisticParameters.getResourceCategory().getSql();

@@ -128,7 +128,7 @@ public class CountEntryPerInterval extends BaseStatistic {
         }
 
         long testCount = 0;
-        String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
+        String tableName = statisticParameters.getEventType();
         for (Bucket bucket : buckets) {
             /*
              * SQL between is >= start && <= end. We want, >= start && < end, so must exclude equals end

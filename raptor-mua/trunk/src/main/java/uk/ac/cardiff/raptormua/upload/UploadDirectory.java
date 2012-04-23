@@ -16,6 +16,7 @@
 /**
  * 
  */
+
 package uk.ac.cardiff.raptormua.upload;
 
 import java.io.File;
@@ -26,48 +27,47 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.wsmodel.LogFileUpload.ParsingEventType;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class UploadDirectory {
-    
+
     /** Class Logger */
     private static final Logger log = LoggerFactory.getLogger(UploadDirectory.class);
-    
-    /** The directory where the upload files exist*/
-    private File uploadDirectory;  
-    
+
+    /** The directory where the upload files exist */
+    private File uploadDirectory;
+
     /** The file extensions for allowed files */
     private String[] allowedFileExtensions;
-    
-    /** The event type this file should be parsed as*/
+
+    /** The event type this file should be parsed as */
     private ParsingEventType eventType;
-    
-    public List<BatchFile> getNewFiles() throws UploadFileException{            
-        if (uploadDirectory.isDirectory()){
+
+    public List<BatchFile> getNewFiles() throws UploadFileException {
+        if (uploadDirectory.isDirectory()) {
             ArrayList<BatchFile> filesToUpload = new ArrayList<BatchFile>();
-            
+
             File[] files = uploadDirectory.listFiles();
-            for (File file : files){
-                for (String extension : allowedFileExtensions){
-                    if (file.getName().endsWith(extension)){
-                        log.info("Parsing file {}",file);
+            for (File file : files) {
+                for (String extension : allowedFileExtensions) {
+                    if (file.getName().endsWith(extension)) {
+                        log.info("Parsing file {}", file);
                         BatchFile bFile = new BatchFile();
                         bFile.setLogFile(file);
                         bFile.setEventType(eventType);
-                        filesToUpload.add(bFile);                        
+                        filesToUpload.add(bFile);
                     }
                 }
             }
-            
+
             return filesToUpload;
-            
-        }
-        else{
-            throw new UploadFileException("Upload Directory "+uploadDirectory+" does not exist or is not a directory");
+
+        } else {
+            throw new UploadFileException("Upload Directory " + uploadDirectory
+                    + " does not exist or is not a directory");
         }
     }
 

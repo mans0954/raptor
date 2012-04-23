@@ -47,8 +47,10 @@
                             is a way of dealing with inheritence in CXF and aegis -->
                         <value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>
@@ -278,8 +280,8 @@
     <bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
         <property name="sessionFactory" ref="muaSessionFactory" />
     </bean>
-
-
+    
+    
 
     <!-- emailer -->
 
@@ -294,8 +296,8 @@
     <bean id="emailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="emailJob" />
         <!-- run every morning at 11 PM -->
-      <!--   <property name="cronExpression" value="0 0 23 * * ?" /> -->
-        <property name="cronExpression" value="0 0/1 * 1/1 * ? *" />
+        <property name="cronExpression" value="0 0 23 * * ?" /> 
+      <!--   <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> -->
     </bean>
 
     <bean id="emailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -401,10 +403,10 @@
     </bean>
 
     <aop:config>
-        <aop:aspect id="performanceAspect" ref="performanceAdvice">
+<!--         <aop:aspect id="performanceAspect" ref="performanceAdvice">
             <aop:pointcut id="performanceLayer" expression="bean(persistantEventHandler)" />
             <aop:around pointcut-ref="performanceLayer" method="traceSave" />
-        </aop:aspect>
+        </aop:aspect> -->
 
         <aop:aspect id="eventStorageAspect" ref="storageStatisticsAdvice">
             <aop:pointcut id="eventStorageLayer" expression="bean(storageEngine) and args(transactionId, events)" />

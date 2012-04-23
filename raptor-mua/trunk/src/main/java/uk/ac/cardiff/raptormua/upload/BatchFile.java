@@ -16,23 +16,23 @@
 /**
  * 
  */
+
 package uk.ac.cardiff.raptormua.upload;
 
 import java.io.File;
 
 import uk.ac.cardiff.model.wsmodel.LogFileUpload.ParsingEventType;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class BatchFile {
-    
+
     /** The logfile to upload */
     private File logFile;
-    
-    /** The event type this file should be parsed as*/
+
+    /** The event type this file should be parsed as */
     private ParsingEventType eventType;
 
     /**
@@ -62,7 +62,5 @@ public class BatchFile {
     public ParsingEventType getEventType() {
         return eventType;
     }
-
-
 
 }

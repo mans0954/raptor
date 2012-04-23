@@ -60,7 +60,7 @@ public class GroupByCountDistinct extends BaseStatistic {
         DateTime end = endingTime();
         log.debug("groupByFrequency between [start:{}] [end:{}]", start, end);
 
-        String tableName = statisticParameters.getEventType().getHibernateSimpleClassName();
+        String tableName = statisticParameters.getEventType();
 
         log.debug("Select {}, tableName {}", groupByField, tableName);
 
