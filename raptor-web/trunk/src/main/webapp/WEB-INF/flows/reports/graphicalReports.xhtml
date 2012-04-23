@@ -130,11 +130,8 @@
 												<h:outputText value="Event Type" style="font-weight: bold;" />
 
 												<rich:inplaceSelect
-													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventTypeString}">
-													<f:selectItem itemLabel="Shibboleth"
-														itemValue="SHIBBOLETH_AUTHENTICATION" />
-													<f:selectItem itemLabel="Ezproxy"
-														itemValue="EZPROXY_AUTHENTICATION" />
+													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventType}">
+											         <f:selectItems value="#{flowScope.websession.graphmodel.eventTypeList}"/>
 												</rich:inplaceSelect>
 
 												<h:outputText value="Resource Category"

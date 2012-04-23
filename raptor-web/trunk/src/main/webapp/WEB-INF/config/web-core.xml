@@ -42,7 +42,7 @@
 
 	<bean id="startService" class="uk.ac.cardiff.raptorweb.service.impl.StartServiceImpl">
 		<property name="webEngine"><ref bean="webEngine"/></property>
-        <property name="dashboardStatistics" ref="dashboardStatisticsList"/>
+        <property name="dashboardStatisticSets" ref="dashboardStatisticsList"/>
 	</bean>
 
 	<bean id="graphService" class="uk.ac.cardiff.raptorweb.service.impl.GraphServiceImpl">
@@ -85,7 +85,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			<!--   <ref local="SystemStatsQuickTrigger"/>-->
+			   <ref local="SystemStatsQuickTrigger"/>
 			</list>
 		</property>
 	</bean>

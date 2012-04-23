@@ -18,46 +18,47 @@
  */
 package uk.ac.cardiff.raptorweb.model;
 
-import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange;
 
+public class CachedStartStatistics {
 
-import uk.ac.cardiff.model.wsmodel.Capabilities;
+    /** Class logger */
+    private final Logger log = LoggerFactory.getLogger(CachedStartStatistics.class);
 
-/**
- * Almost exactly the same class as <code>StartModel</code>, but extended for 
- * semantic operational differences 
- * 
- * @author philsmart
- *
- */
-public class CachedStartStatistics{
+    /** The cached statistic */
+    private List<StartStatistics> cached = new ArrayList<StartStatistics>();
 
-        /** Class logger */
-	private final Logger log = LoggerFactory.getLogger(CachedStartStatistics.class);
+    public StartStatistics getStartstatistics(TimeRange timeRange, String eventType) {
+        // TODO add time as well.
+        for (StartStatistics statistic : cached) {
+            log.debug("Looking for statistics [{}] with [{}] for range [{}][{}]", new Object[] { eventType, statistic.getComputedForClassType(), timeRange, statistic.getTimeRange() });
+            if (statistic.getComputedForClassType().equals(eventType) && timeRange == statistic.getTimeRange()) {
+                log.debug("Returning start statistic [{},{}]", statistic.getComputedForClassType(), statistic.getTopFiveResouces());
+                return statistic;
+            }
+        }
+        return null;
+    }
 
-	/** The cached statistic */
-	private StartStatistics cached;
-	
-	
-	public CachedStartStatistics(){
-	    cached = new StartStatistics();
-	}
+    /**
+     * @param cached
+     *            the cached to set
+     */
+    public void setCached(List<StartStatistics> cached) {
+        this.cached = cached;
+    }
 
-	public void setCached(StartStatistics cached) {
-	    this.cached = cached;
-	}
-
-	public StartStatistics getCached() {
-	    return cached;
-	}
-
-
+    /**
+     * @return the cached
+     */
+    public List<StartStatistics> getCached() {
+        return cached;
+    }
 
 }

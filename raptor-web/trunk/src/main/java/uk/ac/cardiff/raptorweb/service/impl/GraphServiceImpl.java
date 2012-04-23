@@ -86,11 +86,10 @@ public class GraphServiceImpl implements GraphService {
     }
 
     /**
-     * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if they 
-     * do not already exist.
+     * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if they do not already exist.
      */
     public void populateStatisticalUnits(WebSession websession) {
-        if (websession.getGraphmodel().getStatisticalUnitsForView()!=null){
+        if (websession.getGraphmodel().getStatisticalUnitsForView() != null) {
             return;
         }
         ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList<StatisticalUnitInformationView>();
@@ -105,8 +104,16 @@ public class GraphServiceImpl implements GraphService {
 
     }
 
+    /**
+     * Populates the suggestion values that assist users in selecting certain statistical parameters.
+     * 
+     * @param websession
+     *            the webssesion to set suggestion values on.
+     */
     public void populateSuggestionValues(WebSession websession) {
-        websession.getGraphmodel().setSuggestionValues(webEngine.getSuggestionValues());
+        websession.getGraphmodel().setSuggestionValues(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
+        websession.getGraphmodel().setEventTypes(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getEventsPerType());
+
     }
 
     /**

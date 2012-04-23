@@ -19,16 +19,18 @@
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.joda.time.DateTime;
+import javax.faces.model.SelectItem;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
+import uk.ac.cardiff.model.wsmodel.EventTypeInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
+import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange;
 
 /**
  * @author philsmart
@@ -49,24 +51,16 @@ public class StartModel implements Serializable {
 
     private TimeRange statsRangeSelector;
 
-    public enum TimeRange {
-        TODAY, LASTWEEK, LASTMONTH, LASTYEAR
-    }
-
-    public enum EventType {
-        /** A Shibboleth Authentication Event Type */
-        SHIBBOLETH_AUTHENTICATION,
-        /** An Ezproxy Authentication Event Type */
-        EZPROXY_AUTHENTICATION;
-    }
-
-    private EventType eventType;
+    /**
+     * The event type (classname) used to select the correct dashboard statistics to display.
+     */
+    private String eventType;
 
     private ResourceCategory resourceCategory;
 
     public StartModel() {
         statsRangeSelector = TimeRange.TODAY;
-        eventType = EventType.SHIBBOLETH_AUTHENTICATION;
+        // eventType = EventType.SHIBBOLETH_AUTHENTICATION;
         resourceCategory = resourceCategory.ALL;
     }
 
@@ -90,6 +84,31 @@ public class StartModel implements Serializable {
         }
     }
 
+    /**
+     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the UI.
+     */
+    public List<SelectItem> getEventTypeList() {
+        List<SelectItem> eventTypes = new ArrayList<SelectItem>();
+
+        List<EventTypeInformation> eventTypesFromAttached = getAttachedMUACapabilities().getEventsPerType();
+        for (EventTypeInformation eventType : eventTypesFromAttached) {
+            if (eventType.getNoOfEvents() > 0) {
+                String eventTypeString = eventType.getEventTypeName();
+                SelectItem item = new SelectItem();
+                String[] classNameSplit = eventTypeString.split("\\.");
+                if (classNameSplit.length > 0) {
+                    item.setLabel(classNameSplit[classNameSplit.length - 1]);
+                } else {
+                    item.setLabel(eventTypeString);
+                }
+                item.setValue(eventTypeString);
+                log.debug("Setting event value to: " + item.getValue());
+                eventTypes.add(item);
+            }
+        }
+        return eventTypes;
+    }
+
     public TimeRange getStatsRangeSelector() {
         return statsRangeSelector;
     }
@@ -103,31 +122,12 @@ public class StartModel implements Serializable {
         return statsRangeSelector.toString();
     }
 
-    public String getEventTypeString() {
-        return eventType.toString();
-    }
-
-    public void setEventTypeString(String eventTypeString) {
-        for (EventType type : EventType.values()) {
-            if (type.toString().equals(eventTypeString))
-                eventType = type;
-        }
-    }
-
     public void setStartStatistics(StartStatistics startStatistics) {
         this.startStatistics = startStatistics;
     }
 
     public StartStatistics getStartStatistics() {
         return startStatistics;
-    }
-
-    public void setEventType(EventType eventType) {
-        this.eventType = eventType;
-    }
-
-    public EventType getEventType() {
-        return eventType;
     }
 
     /**
@@ -155,6 +155,22 @@ public class StartModel implements Serializable {
 
     public String getResourceCategoryString() {
         return resourceCategory.toString();
+    }
+
+    /**
+     * @param eventType
+     *            the eventType to set
+     */
+    public void setEventType(String eventType) {
+        log.debug("Setting event type dashboard: " + eventType);
+        this.eventType = eventType;
+    }
+
+    /**
+     * @return the eventType
+     */
+    public String getEventType() {
+        return eventType;
     }
 
 }
