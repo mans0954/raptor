@@ -36,6 +36,8 @@
                         <list>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         </list>
                     </property>
                     <property name="serviceEndpoint">
