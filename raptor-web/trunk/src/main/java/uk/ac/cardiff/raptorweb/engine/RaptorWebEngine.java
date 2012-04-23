@@ -32,7 +32,6 @@ import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
-import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
 import uk.ac.cardiff.raptorweb.model.MUAEntry;
@@ -109,13 +108,6 @@ public final class RaptorWebEngine {
         log.info("Attaching {} and retrieving abilities", entry);
         this.attachedMUA = entry;
         currentlyAttachedCapabilities = serviceEndpointClient.discoverMUACapabilities(attachedMUA);
-    }
-
-    public SuggestionValues getSuggestionValues() {
-        if (currentlyAttachedCapabilities != null) {
-            return currentlyAttachedCapabilities.getSuggestionValues();
-        }
-        return new SuggestionValues();
     }
 
     /**

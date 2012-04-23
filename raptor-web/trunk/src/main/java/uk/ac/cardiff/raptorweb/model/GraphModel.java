@@ -20,14 +20,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.faces.model.SelectItem;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.report.Series;
+import uk.ac.cardiff.model.wsmodel.EventTypeInformation;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
-import uk.ac.cardiff.model.wsmodel.StatisticParameters.EventType;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.ChartType;
 import uk.ac.cardiff.raptorweb.model.ChartOptions.GraphPresentation;
@@ -75,6 +77,7 @@ public class GraphModel implements Serializable {
     /** The filename to use for report downloads. */
     private String downloadFilename;
 
+    /** The suggestion values used by the UI to assist user input. */
     private SuggestionValues suggestionValues;
 
     /** Record for holding information about a new processor to add */
@@ -85,6 +88,9 @@ public class GraphModel implements Serializable {
 
     /** The selected post processor, as a reference for removal */
     private ProcessorInformation selectedPostProcessor;
+
+    /** List of {@link EventTypeInformation} to assist users in selecting event type information. */
+    private List<EventTypeInformation> eventTypes;
 
     /**
      * Set some sensible defaults for this graphs models chart options
@@ -105,6 +111,30 @@ public class GraphModel implements Serializable {
         // create a blank selected statistical unit for display
         selectedStatisticalUnit = new StatisticalUnitInformationView();
 
+    }
+
+    /**
+     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the UI.
+     */
+    public List<SelectItem> getEventTypeList() {
+        List<SelectItem> eventTypes = new ArrayList<SelectItem>();
+
+        List<EventTypeInformation> eventTypesFromAttached = getEventTypes();
+        for (EventTypeInformation eventType : eventTypesFromAttached) {
+            if (eventType.getNoOfEvents() > 0) {
+                String eventTypeString = eventType.getEventTypeName();
+                SelectItem item = new SelectItem();
+                String[] classNameSplit = eventTypeString.split("\\.");
+                if (classNameSplit.length > 0) {
+                    item.setLabel(classNameSplit[classNameSplit.length - 1]);
+                } else {
+                    item.setLabel(eventTypeString);
+                }
+                item.setValue(eventTypeString);
+                eventTypes.add(item);
+            }
+        }
+        return eventTypes;
     }
 
     public void initialiseNewProcessorAdd() {
@@ -160,22 +190,23 @@ public class GraphModel implements Serializable {
      * @return
      */
     public List<String> getPossibleFieldNameValues() {
-        EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
-        String[] classFilter = eventType.getClassHierarchy();
-        return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
+        // EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
+        // String[] classFilter = eventType.getClassHierarchy();
+        // return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
+        return Collections.emptyList();
     }
 
     public List<String> getPossiblePostProcessorValues() {
-        if (suggestionValues==null || suggestionValues.getPossiblePostProcessors()==null){
+        if (suggestionValues == null || suggestionValues.getPossiblePostProcessors() == null) {
             return Collections.emptyList();
-        }        
+        }
         List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
         List<String> possibles = new ArrayList<String>();
         for (ProcessorInformation information : processorsInformation) {
             possibles.add(information.getFriendlyName());
         }
         return possibles;
-        
+
     }
 
     public ArrayList<String> autocompleteFieldValues(Object suggest) {
@@ -355,6 +386,21 @@ public class GraphModel implements Serializable {
      */
     public ProcessorInformation getProcessorToAdd() {
         return processorToAdd;
+    }
+
+    /**
+     * @param eventTypes
+     *            the eventTypes to set
+     */
+    public void setEventTypes(List<EventTypeInformation> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
+
+    /**
+     * @return the eventTypes
+     */
+    public List<EventTypeInformation> getEventTypes() {
+        return eventTypes;
     }
 
 }
