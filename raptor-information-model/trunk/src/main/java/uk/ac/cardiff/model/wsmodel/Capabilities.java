@@ -270,7 +270,8 @@ public class Capabilities implements Serializable {
     }
 
     /**
-     * @param muaVersion the muaVersion to set
+     * @param muaVersion
+     *            the muaVersion to set
      */
     public void setMuaVersion(String muaVersion) {
         this.muaVersion = muaVersion;

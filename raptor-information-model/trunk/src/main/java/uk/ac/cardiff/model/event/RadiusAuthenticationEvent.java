@@ -15,6 +15,10 @@
  */
 package uk.ac.cardiff.model.event;
 
+import uk.ac.cardiff.utility.EqualsUtil;
+import uk.ac.cardiff.utility.HashCodeUtil;
+import uk.ac.cardiff.utility.StringUtils;
+
 public class RadiusAuthenticationEvent extends AuthenticationEvent {
     /*
      * grep for Auth Login OK AND grep for without @ in the line
@@ -33,6 +37,92 @@ public class RadiusAuthenticationEvent extends AuthenticationEvent {
     protected RadiusAuthenticationEvent(RadiusAuthenticationEvent event) {
         super(event);
         this.clientIdentifier = event.clientIdentifier;
+    }
+
+    /**
+     * Instantiates a new shibboleth idp authentication event.
+     */
+    public RadiusAuthenticationEvent() {
+        super();
+    }
+
+    /**
+     * New instance.
+     * 
+     * @return the {@link RadiusAuthenticationEvent} authentication event
+     */
+    public static RadiusAuthenticationEvent newInstance() {
+        return new RadiusAuthenticationEvent();
+    }
+
+    /**
+     * Copy method. Alternative to clone. Returns a copied version of this event.
+     * 
+     * @return the shibboleth idp authentication event
+     */
+    public RadiusAuthenticationEvent copy() {
+        return new RadiusAuthenticationEvent(this);
+    }
+
+    /**
+     * create a unique hash, with as uniform a distribution as possible.
+     * 
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        int hash = HashCodeUtil.SEED;
+
+        hash = HashCodeUtil.hash(hash, getEventTimeMillis());
+        hash = HashCodeUtil.hash(hash, getAuthenticationType());
+        hash = HashCodeUtil.hash(hash, getEventId());
+        hash = HashCodeUtil.hash(hash, getServiceHost());
+        hash = HashCodeUtil.hash(hash, getResourceHost());
+        hash = HashCodeUtil.hash(hash, getPrincipalName());
+        hash = HashCodeUtil.hash(hash, getEventType());
+        hash = HashCodeUtil.hash(hash, getServiceId());
+        hash = HashCodeUtil.hash(hash, getResourceId());
+        hash = HashCodeUtil.hash(hash, getClientIdentifier());
+        return hash;
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return StringUtils.buildToString(this);
+    }
+
+    /**
+     * For hibernate, so the hashcode can be persisted.
+     * 
+     * @return the hash code
+     */
+    public int getHashCode() {
+        return hashCode();
+    }
+
+    /**
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if ((obj == null) || (obj.getClass() != this.getClass()))
+            return false;
+        RadiusAuthenticationEvent that = (RadiusAuthenticationEvent) obj;
+        boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
+                && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
+                && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName())
+                && EqualsUtil.areEqual(this.getServiceId(), that.getServiceId()) && EqualsUtil.areEqual(this.getEventType(), that.getEventType())
+                && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId()) && EqualsUtil.areEqual(this.getClientIdentifier(), that.getClientIdentifier());
+
+        return areEqual;
     }
 
     /**

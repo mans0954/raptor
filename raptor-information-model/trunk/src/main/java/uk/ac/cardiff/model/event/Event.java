@@ -23,7 +23,6 @@ import java.util.Date;
 import org.joda.time.DateTime;
 
 import uk.ac.cardiff.model.event.auxiliary.EventMetadata;
-import uk.ac.cardiff.utility.StringUtils;
 
 /**
  * For any class that extends this class, equality must be computed for the same fields as the hash. Otherwise a discrepancy will occur when checking
@@ -47,7 +46,7 @@ public class Event {
      */
     private int eventId;
 
-    /** The service id. This is the service that serves the event. */
+    /** The service id. This is the service that serves the event. e.g. the authentication event. */
     private String serviceId;
 
     /** The event type. */
@@ -319,15 +318,6 @@ public class Event {
      */
     public String getServiceId() {
         return serviceId;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-        return StringUtils.buildToString(this);
     }
 
     /**
