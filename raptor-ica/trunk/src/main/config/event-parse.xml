@@ -55,7 +55,7 @@
                 <!--  EZPROXY -->
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-mathew.log
@@ -121,6 +121,77 @@
 					</property>
 
 				</bean> 
+                
+                    <!--  Shibboleth 2 SP -->
+                 <bean id="shibbolethSpLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="false"/>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/shibsp-example.log
+                        </value>
+                    </property>
+                    <property name="format">
+                        <ref bean="shibSPLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilterEngineShibSp" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                             <property name="includeLineFilters">
+                               <list>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
+                                       <property name="includeIfContains"><value>new session created</value></property>
+                                   </bean>
+                                </list>
+                              </property>                              
+                        </bean>
+                    </property>
+                </bean> 
+                
+                <!-- OpenRadius -->
+                <bean id="freeRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/radius.log
+                        </value>
+                    </property>
+                    <property name="format">
+                        <ref bean="freeRadiusIdpLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilteropenRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                             <property name="includeLineFilters">
+                               <list>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsRegexLineFilter">
+                                       <property name="includeIfContainsRegex"><value>Auth: Login OK.*via TLS tunnel</value></property>
+                                   </bean>                                   
+                                </list>
+                              </property>                                                         
+                        </bean>
+                    </property>
+                    <property name="exclusionList">
+                            <bean class="uk.ac.cardiff.raptor.parse.filter.ExclusionList">
+                                <property name="exclusionEntries">
+                                    <list>
+                                         <bean class ="uk.ac.cardiff.raptor.parse.filter.match.RegexExclusionEntry">
+                                            <property name ="fieldName" value="principalName"/>
+                                            <property name="match" value="@"/>
+                                        </bean>
+                                    </list>
+                                </property>
+                            </bean>
+                    </property>
+                </bean> 
+                
 			</list>
 		</property>
 	</bean>
