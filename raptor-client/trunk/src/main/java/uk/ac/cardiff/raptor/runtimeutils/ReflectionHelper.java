@@ -153,6 +153,39 @@ public final class ReflectionHelper {
     }
 
     /**
+     * Uses reflection to get all the classes that are in the <code>EVENT_PACKAGE_NAME</code> package and return them as
+     * a list of Classes.
+     * 
+     * @return
+     */
+    public static List<Class<?>> getAllEventClassTypes() {
+        List<Class<?>> allClasses = new ArrayList<Class<?>>();
+        String forPckgName = EVENT_PACKAGE_NAME;
+        String jarFile = getJARFilePath(forPckgName);
+        jarFile = jarFile.replace("file:", "");
+        jarFile = jarFile.replaceAll("%20", "\\ ");
+        log.debug("jar {}", jarFile);
+        List<String> classes = getClassNamesInJarOrFolder(jarFile, forPckgName);
+
+        for (String classname : classes) {
+            try {
+                Object o = Class.forName(classname.replace(".class", "")).newInstance();
+                if (o != null)
+                    if (o instanceof uk.ac.cardiff.model.event.Event) {
+                        allClasses.add(o.getClass());
+                    }
+            } catch (ClassNotFoundException cnfex) {
+                log.error("error getting subclasses of Entry, {}", cnfex);
+            } catch (InstantiationException iex) {
+                // log.error("{}", iex);
+            } catch (IllegalAccessException iaex) {
+                // The class is not public
+            }
+        }
+        return allClasses;
+    }
+
+    /**
      * This is terrible code. Finds all fieldnames of all classes that are subclasses of the
      * {@link uk.ac.cardiff.model.event.Event} class.
      * 
@@ -500,7 +533,7 @@ public final class ReflectionHelper {
             Object result = getter.invoke(object, new Object[] {});
             return result;
         } catch (Throwable e) {
-            log.error("Field name '" + fieldname + "' does not match internal model attribute");
+            log.error("Field name '" + fieldname + "' does not match internal model attribute [{}]", e.getMessage());
 
         }
         return null;

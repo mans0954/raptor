@@ -77,6 +77,9 @@ public class LogFileIncrementalMemoryEventHandler implements IncrementalEventHan
      * @return true if this event was added to the entry handler, false otherwise
      */
     public boolean addEvent(Event event) {
+        if (eventNotValid(event)) {
+            return false;
+        }
         addEventIdIfNull(event);
         boolean isAfter = isAfter(event);
         boolean isEqual = isEqual(event);
@@ -98,6 +101,18 @@ public class LogFileIncrementalMemoryEventHandler implements IncrementalEventHan
         }
         return false;
 
+    }
+
+    /**
+     * Determines if the event has the present and correct attributes to be added.
+     * 
+     * @param event
+     */
+    private boolean eventNotValid(Event event) {
+        if (event.getEventTime() == null) {
+            return false;
+        }
+        return true;
     }
 
     /**
