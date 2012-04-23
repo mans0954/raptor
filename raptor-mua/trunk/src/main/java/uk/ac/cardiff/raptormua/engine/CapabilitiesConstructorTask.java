@@ -160,16 +160,17 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
     private void addEventTotals() {
         log.debug("Adding event totals to capabilities");
         capabilities.setNumberOfAuthenticationsStored(storageEngine.getEventHandler().getNumberOfEvents());
-        List<String> eventTypes = ReflectionHelper.getAllEventClasses();
+        List<Class<?>> allEventTypes = ReflectionHelper.getAllEventClassTypes();
         List<EventTypeInformation> eventsPerType = new ArrayList<EventTypeInformation>();
-        for (String eventType : eventTypes) {
-            String query = "SELECT count(*) from " + eventType;
+        for (Class<?> foundClass : allEventTypes) {
+            String className = foundClass.getCanonicalName();
+            String query = "SELECT count(*) from " + className;
             try {
                 long count = (Long) storageEngine.getEventHandler().queryUnique(query, null);
-                log.debug("EventType {} has {} events", eventType, count);
-                eventsPerType.add(new EventTypeInformation(eventType, count));
+                log.debug("EventType [{}] has {} events", className, count);
+                eventsPerType.add(new EventTypeInformation(className, count));
             } catch (Exception e) {
-                log.warn("EventType [{}] has no count (table probably does not exist yet, no problem)", eventType);
+                log.warn("EventType [{}] has no count (table probably does not exist yet, no problem)", className);
             }
         }
         capabilities.setEventsPerType(eventsPerType);

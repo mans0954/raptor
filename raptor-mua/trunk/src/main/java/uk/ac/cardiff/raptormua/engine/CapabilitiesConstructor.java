@@ -22,8 +22,9 @@ package uk.ac.cardiff.raptormua.engine;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
     private Set<String> excludeFieldNames;
 
     /** The single thread pool responsible for queing reconstruction of the <code>cached</code> capabilities. */
-    private final ExecutorService capabilitiesConstructionService;
+    private final ThreadPoolExecutor capabilitiesConstructionService;
 
     /** The statiscs handler used to extract statistical units to perform. */
     private StatisticHandler statisticsHandler;
@@ -75,13 +76,15 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
     /**
      * Default constructor. Does the following:
      * <ol>
-     * <li>Creates a new single thread executor service.</li>
+     * <li>Creates a new single thread executor service directly as a {@link ThreadPoolExecutor} so the active thread
+     * count can be monitored.</li>
      * <li>Sets the default timeout to 1800000ms.</li>
      * <li>Starts a timer task which checks the cache every minute.</li>
      * </ol>
      */
     public CapabilitiesConstructor() {
-        capabilitiesConstructionService = Executors.newSingleThreadExecutor();
+        final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(1);
+        capabilitiesConstructionService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, queue);
         cacheTimeoutMs = 1800000;
         cacheTimer = new Timer();
         cacheTimer.schedule(new TimerTask() {
@@ -103,7 +106,6 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
      */
     public void returnResult(Capabilities newCapabilities) {
         log.info("Capabilities have been reconstructed {}", newCapabilities);
-
         cachedCapabilities = newCapabilities;
         cacheResetTimeMs = System.currentTimeMillis();
 
@@ -117,14 +119,20 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
     }
 
     private void queueCapabilitiesConstruction() {
-        log.info("Capabilities constructor called, adding request to thread queue");
-        if (statisticsHandler != null && storageEngine != null && metadata != null) {
-            CapabilitiesConstructorTask constructor =
-                    new CapabilitiesConstructorTask(this, statisticsHandler, storageEngine, metadata);
-            constructor.setExcludeFieldNames(excludeFieldNames);
-            capabilitiesConstructionService.submit(constructor);
+        log.info("Capabilities constructor called, adding request to thread queue, with {} currently active",
+                capabilitiesConstructionService.getActiveCount());
+
+        if (capabilitiesConstructionService.getActiveCount() == 0) {
+            if (statisticsHandler != null && storageEngine != null && metadata != null) {
+                CapabilitiesConstructorTask constructor =
+                        new CapabilitiesConstructorTask(this, statisticsHandler, storageEngine, metadata);
+                constructor.setExcludeFieldNames(excludeFieldNames);
+                capabilitiesConstructionService.submit(constructor);
+            } else {
+                log.error("No capabilites constructed, one-of (statisticsHandler, storageEngine or metadata) not set");
+            }
         } else {
-            log.error("No capabilites constructed, one-of statisticsHandler, storageEngine or metadata not set");
+            log.debug("Capabilities already being constructed, new request ignored");
         }
     }
 
