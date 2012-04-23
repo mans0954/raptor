@@ -46,8 +46,11 @@ public class Header {
     /** The index in the currently tokenized line this header matches to. */
     private int fieldNo;
 
-    /** Used to combined two fields together. */
+    /** Used to combined two or more fields together. If this value is set as -1, all remaining fields will be read. */
     private int[] additionalFieldNos;
+
+    /** When combining fields together, should the delimeter be preserved after concatenation. */
+    private boolean preserveDelimeterOnFieldConcatenation;
 
     /** The type of field, based on the Type enum. */
     private Type fieldType;
@@ -271,6 +274,20 @@ public class Header {
      */
     public boolean isRegexRetainCaseInsensitive() {
         return regexRetainCaseInsensitive;
+    }
+
+    /**
+     * @param preserveDelimeterOnFieldConcatenation the preserveDelimeterOnFieldConcatenation to set
+     */
+    public void setPreserveDelimeterOnFieldConcatenation(boolean preserveDelimeterOnFieldConcatenation) {
+        this.preserveDelimeterOnFieldConcatenation = preserveDelimeterOnFieldConcatenation;
+    }
+
+    /**
+     * @return the preserveDelimeterOnFieldConcatenation
+     */
+    public boolean isPreserveDelimeterOnFieldConcatenation() {
+        return preserveDelimeterOnFieldConcatenation;
     }
 
 }

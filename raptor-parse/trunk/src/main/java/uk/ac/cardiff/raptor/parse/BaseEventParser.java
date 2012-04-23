@@ -110,11 +110,11 @@ public abstract class BaseEventParser {
             Class<?> classDefinition = Class.forName(className);
             object = classDefinition.newInstance();
         } catch (InstantiationException e) {
-            log.warn(e.getMessage());
+            log.warn("Major issue, could not instantied the event class,", e);
         } catch (IllegalAccessException e) {
-            log.warn(e.getMessage());
+            log.warn("Major issue, could not instantied the event class,", e);
         } catch (ClassNotFoundException e) {
-            log.warn(e.getMessage());
+            log.warn("Major issue, could not instantied the event class,", e);
         }
         return object;
     }

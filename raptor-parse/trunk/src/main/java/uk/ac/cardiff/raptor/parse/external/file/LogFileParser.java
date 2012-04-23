@@ -59,7 +59,6 @@ import uk.ac.cardiff.raptor.parse.runtimeutils.ReflectionHelper;
  * A log file parser, used to parse files on the local filesystem according to a given format and transformed into the
  * given event type.
  * 
- * @author phil
  * 
  */
 public class LogFileParser extends BaseEventParser {
@@ -80,7 +79,7 @@ public class LogFileParser extends BaseEventParser {
      */
     private boolean printParsingPosition;
 
-    /** The filter engine that evaluates lineFilters to test whether a line from the raw log file should be parsed */
+    /** The filter engine that evaluates lineFilters to test whether a line from the raw log file should be parsed. */
     private LineFilterEngine lineFilterEngine;
 
     /**
@@ -162,13 +161,13 @@ public class LogFileParser extends BaseEventParser {
                 if (parseLine == true) {
                     StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
                     tokenizer.setIgnoreEmptyTokens(false);
-                    ArrayList<String> allvalues = new ArrayList<String>();
+                    List<String> allvalues = new ArrayList<String>();
                     while (tokenizer.hasNext()) {
                         Object next = tokenizer.next();
                         if (next instanceof String)
                             allvalues.add((String) next);
                         else {
-                            log.error("input column was not a string");
+                            log.error("input column was not a string, this should not happen");
                         }
                     }
                     Event authE = (Event) this.createObject(eventType);
@@ -187,6 +186,7 @@ public class LogFileParser extends BaseEventParser {
 
                     if (shouldBeIncluded && !preventAdd) {
                         eventHandler.addEvent(authE);
+                        // System.exit(1);
                     }
 
                 }
@@ -227,6 +227,7 @@ public class LogFileParser extends BaseEventParser {
     private void populateField(List<String> allvalues, Event authE) throws HeaderException {
         for (Header header : format.getHeaders()) {
             try {
+                // catch invalid field header formats.
                 if (!(header.getFieldNo() >= allvalues.size())) {
                     String value = getFieldValue(allvalues, header);
                     value = retain(value, header);
@@ -268,18 +269,46 @@ public class LogFileParser extends BaseEventParser {
 
     private String getFieldValue(List<String> allvalues, Header header) {
         StringBuilder output = new StringBuilder();
-        output.append(allvalues.get(header.getFieldNo()));
+        if (header.getAdditionalFieldNos() == null) {
+            append(output, allvalues.get(header.getFieldNo()), false);
+        } else if (header.getAdditionalFieldNos() != null) {
+            append(output, allvalues.get(header.getFieldNo()), header.isPreserveDelimeterOnFieldConcatenation());
+        }
+
         if (header.getAdditionalFieldNos() != null) {
-            for (int fieldNo : header.getAdditionalFieldNos()) {
-                output.append(allvalues.get(fieldNo));
+            if (header.getAdditionalFieldNos().length == 1 && header.getAdditionalFieldNos()[0] == -1) {
+                // grab all remaining fields from FieldNo.
+                for (int i = header.getFieldNo() + 1; i < allvalues.size(); i++) {
+                    if (i == allvalues.size() - 1) {
+                        append(output, allvalues.get(i), false);
+                    } else {
+                        append(output, allvalues.get(i), header.isPreserveDelimeterOnFieldConcatenation());
+                    }
+                }
+            } else {
+                for (int i = 0; i < header.getAdditionalFieldNos().length; i++) {
+                    int fieldNo = header.getAdditionalFieldNos()[i];
+                    if (i == header.getAdditionalFieldNos().length - 1) {
+                        append(output, allvalues.get(fieldNo), false);
+                    } else {
+                        append(output, allvalues.get(fieldNo), header.isPreserveDelimeterOnFieldConcatenation());
+                    }
+                }
             }
         }
         return output.toString();
     }
 
+    private void append(StringBuilder output, String value, boolean preserveDelimeterOnFieldConcatenation) {
+        output.append(value);
+        if (preserveDelimeterOnFieldConcatenation) {
+            output.append(format.getDelimeter());
+        }
+    }
+
     /**
      * Decodes a URL (which must use the http(s) protocol) based on the ISO-8859-1 ISO-Latin character set. Keeps
-     * decoding until the literal 'http(s)://' is obtained, as some URL's are double encoded.
+     * decoding (max 5 times) until the literal 'http(s)://' is obtained, as some URL's are double encoded.
      * 
      * @param value the URL to be decoded. Must be a URL using the http protocol.
      * @return the <code>value</code> URL decoded
@@ -328,7 +357,8 @@ public class LogFileParser extends BaseEventParser {
 
     /**
      * Returns only the substring from <code>value</code> that matches the given <code>regexRetain<code>
-     * variable in the <code>header</code> input. If no expressions match, then a value of 'error' is returned.
+     * variable in the <code>header</code> input. If no expressions match, then a value of 'error' is returned. If more
+     * than one match is found, the first is chosen.
      * 
      * @param value the string from which a regex matching group is returned
      * @param header the <code>Header</code> that contains the regex pattern to match
@@ -350,6 +380,7 @@ public class LogFileParser extends BaseEventParser {
         while (match.find()) {
             allFound.add(match.group());
         }
+
         if (allFound.size() > 0) {
             return allFound.get(0);
         }
