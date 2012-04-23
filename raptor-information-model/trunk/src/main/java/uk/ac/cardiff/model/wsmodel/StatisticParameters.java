@@ -137,36 +137,8 @@ public class StatisticParameters implements Serializable {
     /** The type of statistic */
     private StatisticType type;
 
-    // TODO should be constructed in XML
-    /** The type of event from the information model this statistic should be performed over */
-    public enum EventType {
-        /** A Shibboleth Authentication Event Type */
-        SHIBBOLETH_AUTHENTICATION("ShibbolethIdpAuthenticationEvent", new String[] { "uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent", "uk.ac.cardiff.model.event.AuthenticationEvent",
-                "uk.ac.cardiff.model.event.Event" }),
-        /** An Ezproxy Authentication Event Type */
-        EZPROXY_AUTHENTICATION("EzproxyAuthenticationEvent", new String[] { "uk.ac.cardiff.model.event.EzproxyAuthenticationEvent", "uk.ac.cardiff.model.event.AuthenticationEvent",
-                "uk.ac.cardiff.model.event.Event" });
-
-        private String hibernateSimpleClassName;
-
-        private String[] classHierarchy;
-
-        private EventType(String hibernateSimpleClassName, String[] classHierarchy) {
-            this.hibernateSimpleClassName = hibernateSimpleClassName;
-            this.classHierarchy = classHierarchy;
-        }
-
-        public String getHibernateSimpleClassName() {
-            return hibernateSimpleClassName;
-        }
-
-        public String[] getClassHierarchy() {
-            return classHierarchy;
-        }
-    }
-
-    /** The type of event this statistic is computed for */
-    private EventType eventType;
+    /** The type of event (canonical class name) this statistic is computed for */
+    private String eventType;
 
     /** Configures the parameters used to view a graphical representation */
     private Presentation presentation;
@@ -452,23 +424,15 @@ public class StatisticParameters implements Serializable {
         return series;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
-    }
-
-    public void setEventTypeString(String eventType) {
-        for (EventType type : EventType.values()) {
-            if (type.toString().equals(eventType)) {
-                this.eventType = type;
-            }
-        }
     }
 
     public String getEventTypeString() {
         return eventType.toString();
     }
 
-    public EventType getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
