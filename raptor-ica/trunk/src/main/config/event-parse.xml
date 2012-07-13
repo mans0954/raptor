@@ -58,11 +58,10 @@
                     <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-mathew.log
-                        </value>
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20110107.log</value>
                     </property>
                     <property name="format">
-                        <ref bean="ezProxyFileFormatMathew" />
+                        <ref bean="ezProxyFileFormat" />
                     </property>
                     <property name="eventType">
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
@@ -72,8 +71,11 @@
 		                     <property name="includeLineFilters">
 		                       <list>
 			                       <bean class="uk.ac.cardiff.raptor.parse.filter.RegexContainsLineFilter">
-			                           <property name="includeIfContains"><value>GET[\p{Z}\s][^\p{Z}\s]*connect\?session</value></property>
+			                           <property name="includeIfContains"><value>GET[\p{Z}\s][^\p{Z}\s]*login\?url</value></property>
 			                       </bean>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.RegexContainsLineFilter">
+                                       <property name="includeIfContains"><value>GET[\p{Z}\s][^\p{Z}\s]*connect\?session</value></property>
+                                   </bean>
 			                    </list>
 			                  </property>
 			                   <property name="excludeLineFilters">
@@ -85,6 +87,18 @@
 	                          </property>
                         </bean>
                     </property>
+                     <property name="exclusionList">
+                           <bean class="uk.ac.cardiff.raptor.parse.filter.ExclusionList">
+                               <property name="exclusionEntries">
+                                   <list>
+                                       <bean class="uk.ac.cardiff.raptor.parse.filter.match.ExactMatchExclusionEntry">
+                                           <property name="fieldName" value="principalName"/>
+                                           <property name="match" value="-"/>
+                                       </bean>
+                                   </list>
+                               </property>
+                           </bean>
+                   </property>
                    
                 </bean>
                
@@ -96,7 +110,7 @@
                     <property name="enabled" value="false"/>
 					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="logfile">
-						<value>file:///Users/philsmart/Documents/DataSets/Logs/idp-audit-2010-10-20.idp1.log
+						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib-idp-small.log
 						</value>
 					</property>
 					<property name="format">
@@ -119,12 +133,24 @@
 								</property>
 							</bean>
 					</property>
+                      <property name="exclusionList">
+                           <bean class="uk.ac.cardiff.raptor.parse.filter.ExclusionList">
+                               <property name="exclusionEntries">
+                                   <list>
+                                       <bean class="uk.ac.cardiff.raptor.parse.filter.match.RegexExclusionEntry">
+                                           <property name="fieldName" value="resourceId"/>
+                                           <property name="match" value="queens.ezp1.qub.ac.uk"/>
+                                       </bean>
+                                   </list>
+                               </property>
+                           </bean>
+                   </property>
 
 				</bean> 
                 
-                    <!--  Shibboleth 2 SP -->
+                    <!--  Shibboleth 2.4 and earlier SP -->
                  <bean id="shibbolethSpLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="false"/>
+                    <property name="enabled" value="true"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/shibsp-example.log
@@ -153,7 +179,7 @@
                 
                 <!-- OpenRadius -->
                 <bean id="freeRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/radius.log

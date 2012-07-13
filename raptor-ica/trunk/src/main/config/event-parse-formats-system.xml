@@ -201,7 +201,7 @@
             <value> </value>
         </property>
     </bean>
-    
+    <!-- 2.4 and earlier -->
     <bean id="shibSPLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
         <property name="headers">
             <list>
