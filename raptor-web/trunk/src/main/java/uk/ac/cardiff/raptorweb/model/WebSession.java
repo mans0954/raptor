@@ -19,15 +19,19 @@ import java.io.Serializable;
 
 import org.springframework.security.core.Authentication;
 
-
 /**
- * The Web Session class holds all view specific state information e.g. about the user, the startmodel, the graphmodel etc.
- * Hence any call to these must come through the flowscope.webuser context.
+ * The Web Session class holds all view specific state information e.g. about the user, the startmodel, the graphmodel etc. Hence any call to these must come
+ * through the flowscope.webuser context.
+ * 
  * @author philsmart
- *
+ * 
  */
 public class WebSession implements Serializable {
 
+    /**
+     * Default serial UID
+     */
+    private static final long serialVersionUID = 7131752054932206591L;
 
     private Authentication user;
     private StartModel startmodel;
@@ -35,54 +39,52 @@ public class WebSession implements Serializable {
     private ReportModel reportmodel;
     private SetupModel setupmodel;
 
-    /* initilise the models used by the diferent view states*/
-    public WebSession(){
-	startmodel = new StartModel();
-	graphmodel = new GraphModel();
-	reportmodel = new ReportModel();
-	setupmodel = new SetupModel();
+    /** initilise the models used by the different view states. */
+    public WebSession() {
+        startmodel = new StartModel();
+        graphmodel = new GraphModel();
+        reportmodel = new ReportModel();
+        setupmodel = new SetupModel();
     }
 
-
     public void setUser(Authentication user) {
-	this.user = user;
+        this.user = user;
     }
 
     public Authentication getUser() {
-	return user;
+        return user;
     }
 
     public void setStartmodel(StartModel startmodel) {
-	this.startmodel = startmodel;
+        this.startmodel = startmodel;
     }
 
     public StartModel getStartmodel() {
-	return startmodel;
+        return startmodel;
     }
 
     public void setGraphmodel(GraphModel graphmodel) {
-	this.graphmodel = graphmodel;
+        this.graphmodel = graphmodel;
     }
 
     public GraphModel getGraphmodel() {
-	return graphmodel;
+        return graphmodel;
     }
 
     public void setReportmodel(ReportModel reportmodel) {
-	this.reportmodel = reportmodel;
+        this.reportmodel = reportmodel;
     }
 
     public ReportModel getReportmodel() {
-	return reportmodel;
+        return reportmodel;
     }
 
     public void setSetupmodel(SetupModel setupmodel) {
-	this.setupmodel = setupmodel;
+        this.setupmodel = setupmodel;
     }
 
     public SetupModel getSetupmodel() {
-	return setupmodel;
+        return setupmodel;
     }
-
 
 }

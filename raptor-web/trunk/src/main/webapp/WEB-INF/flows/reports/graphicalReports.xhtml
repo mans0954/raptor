@@ -131,7 +131,7 @@
 
 												<rich:inplaceSelect
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventType}">
-											         <f:selectItems value="#{flowScope.websession.graphmodel.eventTypeList}"/>
+											         <f:selectItems value="#{eventTypeService.eventTypeList}"/>
 												</rich:inplaceSelect>
 
 												<h:outputText value="Resource Category"
