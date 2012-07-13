@@ -185,7 +185,8 @@ public class LogFileParser extends BaseEventParser {
                             new Object[] {shouldBeIncluded, preventAdd, authE.toString()});
 
                     if (shouldBeIncluded && !preventAdd) {
-                        eventHandler.addEvent(authE);
+                        boolean added = eventHandler.addEvent(authE);
+                        log.trace("Added event to event handler {}", added);
                         // System.exit(1);
                     }
 
