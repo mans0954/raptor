@@ -35,9 +35,11 @@ import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.DynamicTableModel;
 import uk.ac.cardiff.raptorweb.engine.reports.beans.GenericReportBean;
+import uk.ac.cardiff.raptorweb.model.EventTypeDisplayMapper;
 import uk.ac.cardiff.raptorweb.model.ManyRow;
 import uk.ac.cardiff.raptorweb.model.RaptorTableChartModel;
 import uk.ac.cardiff.raptorweb.model.TableSeries;
@@ -67,7 +69,12 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     private String reportXMLFile;
 
     /** The log. */
-    static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
+    final static Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
+
+    /**
+     * Used to turn event types to friendly names for display in the PDF.
+     */
+    private EventTypeDisplayMapper eventTypeMapper;
 
     /*
      * (non-Javadoc)
@@ -222,6 +229,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("image", image);
+        parameters.put("query", constructQueryString(session));
         parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
         log.debug("Map: " + parameters);
 
@@ -229,6 +237,18 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
         JRDataSource ds = new JRTableModelDataSource(model);
         JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds, parameters);
         return jp;
+    }
+
+    private String constructQueryString(WebSession webSession) {
+        StringBuilder builder = new StringBuilder();
+        StatisticParameters params = webSession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters();
+        builder.append("Start: ");
+        builder.append(params.getStartTime());
+        builder.append(" End: ");
+        builder.append(params.getEndTime());
+        builder.append(" Type: ");
+        builder.append(eventTypeMapper.mapEventType(params.getEventType()));
+        return builder.toString();
     }
 
     /**
@@ -293,6 +313,21 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
      */
     public String getReportXMLFile() {
         return reportXMLFile;
+    }
+
+    /**
+     * @param eventTypeMapper
+     *            the eventTypeMapper to set
+     */
+    public void setEventTypeMapper(EventTypeDisplayMapper eventTypeMapper) {
+        this.eventTypeMapper = eventTypeMapper;
+    }
+
+    /**
+     * @return the eventTypeMapper
+     */
+    public EventTypeDisplayMapper getEventTypeMapper() {
+        return eventTypeMapper;
     }
 
 }

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.faces.model.SelectItem;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,30 +111,6 @@ public class GraphModel implements Serializable {
 
     }
 
-    /**
-     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the UI.
-     */
-    public List<SelectItem> getEventTypeList() {
-        List<SelectItem> eventTypes = new ArrayList<SelectItem>();
-
-        List<EventTypeInformation> eventTypesFromAttached = getEventTypes();
-        for (EventTypeInformation eventType : eventTypesFromAttached) {
-            if (eventType.getNoOfEvents() > 0) {
-                String eventTypeString = eventType.getEventTypeName();
-                SelectItem item = new SelectItem();
-                String[] classNameSplit = eventTypeString.split("\\.");
-                if (classNameSplit.length > 0) {
-                    item.setLabel(classNameSplit[classNameSplit.length - 1]);
-                } else {
-                    item.setLabel(eventTypeString);
-                }
-                item.setValue(eventTypeString);
-                eventTypes.add(item);
-            }
-        }
-        return eventTypes;
-    }
-
     public void initialiseNewProcessorAdd() {
         processorToAdd = new ProcessorInformation();
 
@@ -181,6 +155,7 @@ public class GraphModel implements Serializable {
     public void setSelectedStatisticalUnit(StatisticalUnitInformationView selectedStatisticalUnit) {
         this.selectedStatisticalUnit.setSelected(false);
         this.selectedStatisticalUnit = selectedStatisticalUnit;
+        log.debug("Setting statistical unit to: " + selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType());
         this.selectedStatisticalUnit.setSelected(true);
     }
 

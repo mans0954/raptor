@@ -58,7 +58,7 @@
 								<rich:inplaceSelect id="eventTypeSelector"
 									value="#{flowScope.websession.startmodel.eventType}"
 									style="font-size:100%">
-									<f:selectItems value="#{flowScope.websession.startmodel.eventTypeList}" />
+									<f:selectItems value="#{eventTypeService.eventTypeList}" />
 									<a4j:support ajaxSingle="true" event="onviewactivated"
 										action="refreshStartStats"
 										reRender="statsSelectionForm, startTables, startGraph,shortStats" />

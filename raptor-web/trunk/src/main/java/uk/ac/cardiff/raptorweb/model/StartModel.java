@@ -19,16 +19,11 @@
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.wsmodel.Capabilities;
-import uk.ac.cardiff.model.wsmodel.EventTypeInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
 import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange;
 
@@ -56,11 +51,20 @@ public class StartModel implements Serializable {
      */
     private String eventType;
 
+    /** The type of resource. */
     private ResourceCategory resourceCategory;
 
+    /**
+     * Defines a number of default values for the start model so the UI is seeded with initial values. These are:
+     * <ol>
+     * <li>statsRangeSelector = TimeRange.TODAY</li>
+     * <li>eventType = "uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"</li>
+     * <li>resourceCategory = resourceCategory.ALL</li>
+     * </ol>
+     */
     public StartModel() {
         statsRangeSelector = TimeRange.TODAY;
-        // eventType = EventType.SHIBBOLETH_AUTHENTICATION;
+        eventType = "uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent";
         resourceCategory = resourceCategory.ALL;
     }
 
@@ -82,31 +86,6 @@ public class StartModel implements Serializable {
             if (time.toString().equals(timeRange))
                 statsRangeSelector = time;
         }
-    }
-
-    /**
-     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the UI.
-     */
-    public List<SelectItem> getEventTypeList() {
-        List<SelectItem> eventTypes = new ArrayList<SelectItem>();
-
-        List<EventTypeInformation> eventTypesFromAttached = getAttachedMUACapabilities().getEventsPerType();
-        for (EventTypeInformation eventType : eventTypesFromAttached) {
-            if (eventType.getNoOfEvents() > 0) {
-                String eventTypeString = eventType.getEventTypeName();
-                SelectItem item = new SelectItem();
-                String[] classNameSplit = eventTypeString.split("\\.");
-                if (classNameSplit.length > 0) {
-                    item.setLabel(classNameSplit[classNameSplit.length - 1]);
-                } else {
-                    item.setLabel(eventTypeString);
-                }
-                item.setValue(eventTypeString);
-                log.debug("Setting event value to: " + item.getValue());
-                eventTypes.add(item);
-            }
-        }
-        return eventTypes;
     }
 
     public TimeRange getStatsRangeSelector() {
