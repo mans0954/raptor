@@ -44,7 +44,7 @@
 				<bean
 					class="uk.ac.cardiff.raptormua.engine.statistics.processor.ProcessorTemplate">
 					<property name="processorId" value="YValuePercentage"/>
-					<property name="processorFriendlyName" value="YValue as Percentage" />
+					<property name="processorFriendlyName" value="Y-Value as Percentage" />
 					<property name="processorClass">
 						<value type="java.lang.Class">uk.ac.cardiff.raptormua.engine.statistics.processor.PercentagePostProcessor
 						</value>

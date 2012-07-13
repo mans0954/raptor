@@ -41,7 +41,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
-                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
 					<property name="unitName"><value>Number of authentications over defined interval</value></property>
 					<property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -76,7 +76,7 @@
 	<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
-                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
 					<property name="unitName"><value>Number of authentications over defined segments</value></property>
 					<property name="startTime"><value>20101020T140000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss-->
 					<property name="endTime"><value>20111020T170000</value></property> <!--  presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z-->
@@ -112,7 +112,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
-                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
 					<property name="unitName"><value>Number of authentications grouped by particular field</value></property>
 					<property name="startTime"><value>20110115T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110120T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -174,7 +174,7 @@
 		<property name="StatisticParameters">
 			<bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
 					<property name="statisticType"><value>User</value></property>
-                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                     <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
 					<property name="unitName"><value>Comparison of authentications for particular Service Providers</value></property>
 					<property name="startTime"><value>20110116T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
 					<property name="endTime"><value>20110117T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -251,7 +251,7 @@
         <property name="StatisticParameters">
             <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
                     <property name="statisticType"><value>User</value></property>
-                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
                     <property name="unitName"><value>Number of authentications per school</value></property>
                     <property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
                     <property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
@@ -317,7 +317,7 @@
         <property name="StatisticParameters">
             <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
                     <property name="statisticType"><value>User</value></property>
-                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthentication</value></property>
+                    <property name="eventType"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
                     <property name="unitName"><value>Number of authentications per affiliation type</value></property>
                     <property name="startTime"><value>20100520T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
                     <property name="endTime"><value>20110522T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
