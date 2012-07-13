@@ -77,7 +77,7 @@ public class LogFileIncrementalMemoryEventHandler implements IncrementalEventHan
      * @return true if this event was added to the entry handler, false otherwise
      */
     public boolean addEvent(Event event) {
-        if (eventNotValid(event)) {
+        if (eventValid(event) == false) {
             return false;
         }
         addEventIdIfNull(event);
@@ -104,11 +104,12 @@ public class LogFileIncrementalMemoryEventHandler implements IncrementalEventHan
     }
 
     /**
-     * Determines if the event has the present and correct attributes to be added.
+     * Determines if the event has the correct attributes to be added to this event handler. Currently, an event only
+     * requires the time of the event <code>eventTime</code> to be valid.
      * 
      * @param event
      */
-    private boolean eventNotValid(Event event) {
+    private boolean eventValid(Event event) {
         if (event.getEventTime() == null) {
             return false;
         }
