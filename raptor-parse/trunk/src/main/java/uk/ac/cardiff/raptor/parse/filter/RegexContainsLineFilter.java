@@ -45,7 +45,7 @@ public class RegexContainsLineFilter implements LineFilter {
         Matcher m = p.matcher(line);
         boolean found = m.find();
         if (found) {
-            log.debug("Regex matched to {}", m.group());
+            log.trace("Regex matched to {}", m.group());
         }
         return found;
     }
