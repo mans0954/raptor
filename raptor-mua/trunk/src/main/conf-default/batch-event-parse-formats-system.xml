@@ -114,6 +114,107 @@
             <value> </value>
         </property>
     </bean>
+    
+     <!-- 2.4 and earlier -->
+    <bean id="shibSPLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>1</value>
+                        </list>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>yyyy-MM-ddHH:mm:ss</value>
+                    </property>
+                </bean>  
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>sessionId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>9</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>   
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>11</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>  
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>protocol</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>12</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>   
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>clientIp</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>14</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                         <entry key="\(" value=""/>
+                         <entry key="\)" value=""/>
+                        </map>
+                    </property>
+                </bean>               
+            </list>
+        </property>
+        <property name="delimeter">
+            <value> </value>
+        </property>
+    </bean>
 
 	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
 		<property name="headers">

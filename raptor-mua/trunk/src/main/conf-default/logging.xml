@@ -42,11 +42,17 @@
 		<appender-ref ref="FILE" />
 	</logger>
 	<logger name="org.opensaml.saml2.metadata.provider" level="INFO">
-		<appender-ref ref="stdout" />
+		<appender-ref ref="FILE" />
 	</logger>
 	<logger name="org.apache.cxf" level="INFO">
 		<appender-ref ref="FILE" />
 	</logger>
+    <logger name="org.hibernate" level="ERROR">
+        <appender-ref ref="FILE" />
+    </logger>
+    <logger name="com.mchange.v2.c3p0" level="ERROR">
+        <appender-ref ref="FILE" />
+    </logger>
 
 
 </configuration>

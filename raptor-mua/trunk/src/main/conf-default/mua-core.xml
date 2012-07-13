@@ -47,8 +47,10 @@
                             is a way of dealing with inheritence in CXF and aegis -->
                         <value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>

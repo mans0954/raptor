@@ -63,6 +63,13 @@
   <logger name="org.apache.cxf" level="INFO">
     <appender-ref ref="stdout"/>
   </logger>
+  
+      <logger name="org.hibernate" level="ERROR">
+        <appender-ref ref="stdout" />
+    </logger>
+    <logger name="com.mchange.v2.c3p0" level="ERROR">
+        <appender-ref ref="stdout" />
+    </logger>
 
 
 </configuration>
