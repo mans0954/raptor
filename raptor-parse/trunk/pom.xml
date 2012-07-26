@@ -86,13 +86,13 @@
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-information-model</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-client</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.1.0</version>
             <scope>provided</scope>
         </dependency>
 
