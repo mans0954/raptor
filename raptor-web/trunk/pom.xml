@@ -3,7 +3,7 @@
     <groupId>uk.ac.cardiff.raptor</groupId>
     <artifactId>raptor-web</artifactId>
     <name>RaptorWeb (Raptor Web Interface)</name>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <url>http://iam.cf.ac.uk</url>
 
@@ -21,16 +21,16 @@
         <url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-web</url>
     </scm>
     
-        <distributionManagement>
+     <distributionManagement>
         <repository>
             <uniqueVersion>false</uniqueVersion>
             <id>raptor-release</id>
-            <url>scp://phil@colonelk:/home/phil/</url>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-release</url>
         </repository>
         <snapshotRepository>
             <uniqueVersion>false</uniqueVersion>
             <id>raptor-snapshot</id>
-            <url>scp://phil@colonelk:/home/phil/</url>
+            <url>http://iam.cf.ac.uk/nexus-webapp-1.6.0/content/repositories/raptor-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
     
@@ -674,13 +674,7 @@
 
 
     <build>
-      <extensions>
-    <extension>
-      <groupId>org.apache.maven.wagon</groupId>
-       <artifactId>wagon-ssh-external</artifactId>
-       <version>1.0-alpha-5</version>
-    </extension>
-  </extensions>
+   
 
         <pluginManagement>
             <plugins>
