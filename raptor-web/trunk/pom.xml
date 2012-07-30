@@ -3,7 +3,7 @@
     <groupId>uk.ac.cardiff.raptor</groupId>
     <artifactId>raptor-web</artifactId>
     <name>RaptorWeb (Raptor Web Interface)</name>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <url>http://iam.cf.ac.uk</url>
 
