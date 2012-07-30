@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk> Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS 
+    IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
+    governing permissions and limitations under the License. -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- All these dashboard statistics are computed for the time ranges: TODAY, LASTWEEK, LASTMONTH and LASTYEAR -->
+
+    <util:list id="dashboardStatisticsList">
+
+        <bean id="shibbolethDashboardStatisticsSet" class="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet">
+            <property name="computedOverTimeRanges">
+                <list>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">TODAY</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTWEEK</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTMONTH</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTYEAR</value>
+                </list>
+            </property>
+            <property name="resourceCategorys">
+                <list>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">INTERNAL</value>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">EXTERNAL</value>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">ALL</value>
+                </list>
+            </property>
+            <property name="dashboardStatistics">
+                <list>
+                    <bean id="shibNoAuthenticationsOverInterval" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultGraphDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>HEADLINE_GRAPH</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfAuthenticationsPerIntervalNumber</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        </property>
+
+                    </bean>
+                    <bean id="shibNoAuthentications" class="uk.ac.cardiff.raptorweb.model.dashboard.UniqueChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>NO_AUTHS</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfAuthenticationsPer</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="shibNoUniqueUsers" class="uk.ac.cardiff.raptorweb.model.dashboard.NoRowsChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>NO_UNIQUE_AUTHS</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfUnqiueUsersPer</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="shibTop5Resources" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>TOP_FIVE</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>top5Resources</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="shibTop5NoUniqueAuthenticationsPerServiceProvider" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>TOP_FIVE_UNIQUE</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfUniqueAuthenticationsPerSP</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                </list>
+            </property>
+        </bean>
+        <bean id="ezproxyDashboardStatisticsSet" class="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet">
+            <property name="computedOverTimeRanges">
+                <list>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">TODAY</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTWEEK</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTMONTH</value>
+                    <value type="uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange">LASTYEAR</value>
+                </list>
+            </property>
+            <property name="resourceCategorys">
+                <list>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">INTERNAL</value>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">EXTERNAL</value>
+                    <value type="uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory">ALL</value>
+                </list>
+            </property>
+            <property name="dashboardStatistics">
+                <list>
+                    <bean id="ezproxyNoAuthentications" class="uk.ac.cardiff.raptorweb.model.dashboard.UniqueChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>NO_AUTHS</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfAuthenticationsPer</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="ezproxyNoUniqueUsers" class="uk.ac.cardiff.raptorweb.model.dashboard.NoRowsChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>NO_UNIQUE_AUTHS</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfUnqiueUsersPer</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="ezproxyTop5Resources" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>TOP_FIVE</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>top5Resources</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="ezproxyNoAuthenticationsOverInterval" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultGraphDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>HEADLINE_GRAPH</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfAuthenticationsPerIntervalNumber</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                    <bean id="ezproxyTop5NoUniqueAuthenticationsPerServiceProvider" class="uk.ac.cardiff.raptorweb.model.dashboard.DefaultChartDashboardStatistic">
+                        <property name="chartProcessor">
+                            <ref bean="chartProcessor" />
+                        </property>
+                        <property name="dashboardStatisticType">
+                            <value>TOP_FIVE_UNIQUE</value>
+                        </property>
+                        <property name="statisticalUnitName">
+                            <value>numberOfUniqueAuthenticationsPerSP</value>
+                        </property>
+                        <property name="enabled">
+                            <value>true</value>
+                        </property>
+                        <property name="eventType">
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </property>
+                    </bean>
+                </list>
+            </property>
+        </bean>
+    </util:list>
+
+
+
+</beans>
