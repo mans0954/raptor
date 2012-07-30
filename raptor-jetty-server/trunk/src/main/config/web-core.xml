@@ -67,6 +67,45 @@
             <property name="saveDirectory"><value>/graphs/</value></property>
             <property name="baseDirectory"><value>/</value></property> <!-- the above is the absolute path, this is the same but as a relative path-->
     </bean>
+    
+     <!-- Set up a background task that removes old graphs used for display only (not saved reports e.g. PDFs) -->
+    <bean id="garbageCollectionService" class="uk.ac.cardiff.raptorweb.service.impl.GarbageCollectionServiceImpl">
+        <property name="graphDirectoryCleaner" ref="graphCleaner"/>
+    </bean>
+    
+    <bean id="graphCleaner" class="uk.ac.cardiff.raptorweb.engine.garbage.GraphDirectoryCleaner">
+        <property name="graphsDirectoryToClean" value="/graphs/"/>
+        <property name="daysBehindToRemoveFrom" value="7"/>
+    </bean>
+    
+    <bean id="garbageCollectionScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+               <ref local="cleanOldGraphsQuickTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="cleanOldGraphsQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="cleanOldGraphsJobDetail" />
+        </property>
+        <property name="startDelay" value="10000"/>
+        <property name="repeatInterval" value="18000000"/>
+    </bean>
+
+    <bean id="cleanOldGraphsJobDetail"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="garbageCollectionService" />
+        </property>
+        <property name="targetMethod">
+            <value>cleanOldGraphsDirectory</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
 
 
 	<!-- Set up the start page background stats generator -->
