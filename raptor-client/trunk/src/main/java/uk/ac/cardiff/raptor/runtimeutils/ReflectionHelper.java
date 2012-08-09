@@ -78,8 +78,8 @@ public final class ReflectionHelper {
      */
     public static void nullAttribute(Object object, String attributeID) {
         try {
-            // log.debug("Setting {} to null on object {}",attributeID,object);
-            Class id = object.getClass();
+            log.trace("Setting {} to null on object {}", attributeID, object);
+            Class<?> id = object.getClass();
             String fieldAsMethod = prepareMethodNameSet(attributeID);
             Method[] methods = id.getMethods();
             Method setter = null;

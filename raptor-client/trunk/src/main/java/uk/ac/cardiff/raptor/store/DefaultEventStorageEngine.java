@@ -101,17 +101,20 @@ public class DefaultEventStorageEngine implements EventStorageEngine, StoreEntri
     }
 
     /** {@inheritDoc} */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime) {
-        List<Event> query =
-                (List<Event>) eventHandler.query("from Event where eventTime >= ?", new Object[] {earliestReleaseTime});
+    public List<Event> getEventsOnOrAfter(Class<? extends Event> eventType, DateTime earliestReleaseTime) {
+        @SuppressWarnings("unchecked") List<Event> query =
+                (List<Event>) eventHandler.query("from " + eventType.getCanonicalName() + " where eventTime >= ?",
+                        new Object[] {earliestReleaseTime});
         return query;
     }
 
     /** {@inheritDoc} */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults) {
-        List<Event> query =
-                (List<Event>) eventHandler.query("from Event where eventTime >= ? order by eventTime asc",
-                        new Object[] {earliestReleaseTime}, maxNoResults);
+    public List<Event> getEventsOnOrAfter(Class<? extends Event> eventType, DateTime earliestReleaseTime,
+            int maxNoResults) {
+        @SuppressWarnings("unchecked") List<Event> query =
+                (List<Event>) eventHandler.query("from " + eventType.getCanonicalName()
+                        + " where eventTime >= ? order by eventTime asc", new Object[] {earliestReleaseTime},
+                        maxNoResults);
         return query;
     }
 

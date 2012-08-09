@@ -113,6 +113,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
     }
 
     public List query(String query, Object[] parameters, int maxNoResults) {
+        log.debug("Running query [{}]", query);
         return dataConnection.runQuery(query, parameters, maxNoResults);
     }
 
