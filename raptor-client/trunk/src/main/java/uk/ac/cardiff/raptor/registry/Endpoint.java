@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
 import uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy;
 import uk.ac.cardiff.raptor.remoting.policy.PushPolicy;
 
@@ -56,6 +57,11 @@ public class Endpoint {
 
     /** Which event types can be sent to this endpoint. */
     private Class<?>[] supportedEvents;
+
+    /**
+     * The resource category this endpoint supports, e.g. internal, external or all.
+     */
+    private ResourceCategory supportedResourceCategory;
 
     /**
      * Default constructor. Instantiate <code>releaseInformation</code>
@@ -162,6 +168,20 @@ public class Endpoint {
      */
     public Class<?>[] getSupportedEvents() {
         return supportedEvents;
+    }
+
+    /**
+     * @param supportedResourceCategory the supportedResourceCategory to set
+     */
+    public void setSupportedResourceCategory(ResourceCategory supportedResourceCategory) {
+        this.supportedResourceCategory = supportedResourceCategory;
+    }
+
+    /**
+     * @return the supportedResourceCategory
+     */
+    public ResourceCategory getSupportedResourceCategory() {
+        return supportedResourceCategory;
     }
 
 }

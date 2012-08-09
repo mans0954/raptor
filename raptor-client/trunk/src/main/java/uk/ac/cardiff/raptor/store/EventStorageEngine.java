@@ -51,7 +51,7 @@ public interface EventStorageEngine {
      * @param earliestReleaseTime
      * @return
      */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime);
+    public List<Event> getEventsOnOrAfter(Class<? extends Event> eventType, DateTime earliestReleaseTime);
 
     /**
      * Returns events on or after the input time <code>earliestReleaseTime</code>, but with a maximum of
@@ -61,7 +61,8 @@ public interface EventStorageEngine {
      * @param maxNoResults
      * @return
      */
-    public List<Event> getEventsOnOrAfter(DateTime earliestReleaseTime, int maxNoResults);
+    public List<Event> getEventsOnOrAfter(Class<? extends Event> eventType, DateTime earliestReleaseTime,
+            int maxNoResults);
 
     /**
      * Returns the possible values that each of the input field names can take

@@ -30,6 +30,7 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.event.auxiliary.EventMetadata;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
 import uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.registry.EndpointRegistry;
@@ -64,6 +65,7 @@ public class EventReleaseEngine {
         for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
             List<Event> applicableEvents = chronologicalFilter(endpoint, events);
             applicableEvents = eventTypeFilter(endpoint, applicableEvents);
+            applicableEvents = eventResourceCategoryFilter(endpoint, applicableEvents);
             boolean shouldRelease = shouldRelease(endpoint, applicableEvents);
             log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
             if (shouldRelease) {
@@ -99,7 +101,9 @@ public class EventReleaseEngine {
     }
 
     /**
-     * Method that returns those events that are supported by the <code>endpoint</code parameter.
+     * Method that returns those events that are supported by the <code>endpoint</code>. For example, if the endpoint on
+     * supports Shibboleth Events, only Shibboleth events are returned by this method. If no supported event types are
+     * configured on the endpoint, ALL events are removed.
      * 
      * @param endpoint
      * @param applicableEvents
@@ -127,6 +131,41 @@ public class EventReleaseEngine {
 
         }
         log.info("There are {} events to send to the endpoint [{}] after event type filtering",
+                applicableEvents.size(), endpoint.getServiceEndpoint());
+        return applicableEvents;
+    }
+
+    /**
+     * Method that returns those events that are of a resource category supported by the <code>endpoint</code>. For
+     * example, if the endpoint only supports EXTERNAL Events, only EXTERNAL events are returned by this method. If the
+     * endpoint has not specified a resource category type, no events are filtered, so the input is equal to the output.
+     * 
+     * @param endpoint
+     * @param events
+     * @return
+     */
+    private List<Event> eventResourceCategoryFilter(Endpoint endpoint, List<Event> events) {
+        if (endpoint.getSupportedResourceCategory() == null) {
+            log.info(
+                    "There are {} events to send to the endpoint [{}] after resource category type filtering. No filtering performed, has the endpoint been set"
+                            + " with a supported resource category type?", events.size(), endpoint.getServiceEndpoint());
+            return new ArrayList<Event>();
+        }
+        ArrayList<Event> applicableEvents = new ArrayList<Event>();
+        for (Event event : events) {
+            boolean supported = false;
+            ResourceCategory resourceCategory = endpoint.getSupportedResourceCategory();
+            for (int category : resourceCategory.getResourceIdCategory()) {
+                if (event.getResourceIdCategory() == category) {
+                    supported = true;
+                }
+            }
+            if (supported) {
+                applicableEvents.add(event);
+            }
+
+        }
+        log.info("There are {} events to send to the endpoint [{}] after resource category type filtering",
                 applicableEvents.size(), endpoint.getServiceEndpoint());
         return applicableEvents;
     }
