@@ -31,7 +31,7 @@
 			<ref bean="eventReleaseEngine"></ref>
 		</property>
 		<property name="enableEventRelease">
-			<value>false</value>
+			<value>true</value>
 		</property>
 	</bean>
 
@@ -46,13 +46,13 @@
 			<bean
 				class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
 				<property name="trustStoreLocation">
-					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/mua-public.jks</value>
+					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-local-fed-mua.jks</value>
 				</property>
 				<property name="trustStorePassword">
 					<value>phil11</value>
 				</property>
 				<property name="keyStoreLocation">
-					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-ica.jks</value>
+					<value>/Users/philsmart/Documents/Java/RaptorWorkspace/keys/raptor-local-fed-mua.jks</value>
 				</property>
 				<property name="keyStorePassword">
 					<value>phil11</value>
@@ -78,8 +78,9 @@
 							</value>
 						</list>
 					</property>
+                    <property name="supportedResourceCategory" value="EXTERNAL"/>
 					<property name="serviceEndpoint">
-						<value>https://localhost:8443/MUA/MultiUnitAggregator</value>
+						<value>https://raptor-aggr.ja.net:8111/MUA/MultiUnitAggregator</value>
 					</property>
 					<property name="pushPolicies">
 						<list>
@@ -99,7 +100,7 @@
 	<bean id="entryNoElapsedTimePushPolicy"
 		class="uk.ac.cardiff.raptor.remoting.policy.EntryNoElapsedTimePushPolicy">
 		<property name="pushOnOrAfterNoEntries">
-			<value>10</value>
+			<value>1000</value>
 		</property>
 		<property name="pushInterval">
 			<value>100000</value>
@@ -117,7 +118,7 @@
 			<list>
                 <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
                     <property name="attributeId">
-                        <value>assertionId</value>
+                        <value>assertions</value>
                     </property>
                     <property name="eventType">
                         <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent

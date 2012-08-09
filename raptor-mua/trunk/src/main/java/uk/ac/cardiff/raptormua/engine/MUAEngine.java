@@ -43,6 +43,8 @@ import uk.ac.cardiff.raptor.parse.DataAccessRegister;
 import uk.ac.cardiff.raptor.parse.EventParserNotFoundException;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.registry.Endpoint;
+import uk.ac.cardiff.raptor.registry.EventTypeRegistry;
+import uk.ac.cardiff.raptor.registry.RegisteredEventType;
 import uk.ac.cardiff.raptor.remoting.client.EventReleaseClient;
 import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
@@ -84,7 +86,15 @@ public final class MUAEngine implements InitializingBean {
     private DataAccessRegister dataAccessRegister;
 
     /**
-     * The Maximum number of events that can be released (e.g. to another MUA) at any one time.
+     * Holds information about all registered event types this MUA can process.
+     */
+    private EventTypeRegistry eventTypeRegistry;
+
+    /**
+     * The Maximum number of events that can be released (e.g. to another MUA) at any one time. This is also the max
+     * paging size on the database. As in, the maximum amount of events (per event type) that will be loaded into memory
+     * from the database at any single event release call. This should be set sensibly as all events are loaded into
+     * memory.
      */
     private int maxReleaseEventSize;
 
@@ -121,7 +131,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param statisticsHandler the statistichandler to set
      */
-    public final void setStatisticsHandler(final StatisticHandler statisticsHandler) {
+    public void setStatisticsHandler(final StatisticHandler statisticsHandler) {
         this.statisticsHandler = statisticsHandler;
     }
 
@@ -130,7 +140,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the statistics handler
      */
-    public final StatisticHandler getStatisticsHandler() {
+    public StatisticHandler getStatisticsHandler() {
         return statisticsHandler;
     }
 
@@ -140,7 +150,7 @@ public final class MUAEngine implements InitializingBean {
      * @param statisticName the statistic name
      * @return the aggregator graph model
      */
-    public final AggregatorGraphModel performStatistic(final String statisticName) {
+    public AggregatorGraphModel performStatistic(final String statisticName) {
         statisticsHandler.setEventHandler(storageEngine.getEventHandler());
         return statisticsHandler.performStatistic(statisticName);
 
@@ -153,7 +163,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return true, if successful
      */
-    public final boolean release() {
+    public boolean release() {
         if (eventReleaseClient.isEnabled()) {
             List<Endpoint> endpoints = eventReleaseClient.getEndpoints();
             DateTime earliestReleaseTime = null;
@@ -169,7 +179,15 @@ public final class MUAEngine implements InitializingBean {
                 }
             }
 
-            List<Event> eventsToSend = storageEngine.getEventsOnOrAfter(earliestReleaseTime, maxReleaseEventSize);
+            List<RegisteredEventType> eventTypes = eventTypeRegistry.getAllConcreteEventTypes();
+            List<Event> eventsToSend = new ArrayList<Event>();
+            for (RegisteredEventType registeredEventType : eventTypes) {
+                List<Event> events =
+                        storageEngine.getEventsOnOrAfter(registeredEventType.getEventType(), earliestReleaseTime,
+                                maxReleaseEventSize);
+                eventsToSend.addAll(events);
+
+            }
 
             boolean success = false;
             try {
@@ -188,7 +206,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the capabilities of this MUA
      */
-    public final Capabilities getCapabilities() {
+    public Capabilities getCapabilities() {
         if (capabilitiesConstructor != null) {
             return capabilitiesConstructor.getCapabilities();
         } else {
@@ -204,7 +222,7 @@ public final class MUAEngine implements InitializingBean {
      * @return the list
      * @throws TransactionInProgressException the transaction in progress exception
      */
-    public final List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles)
+    public List<LogFileUploadResult> batchParse(final List<LogFileUpload> uploadFiles)
             throws TransactionInProgressException {
         log.info("Going to parse {} batch uploaded files", uploadFiles.size());
         ArrayList<Event> allEvents = new ArrayList<Event>();
@@ -254,7 +272,7 @@ public final class MUAEngine implements InitializingBean {
      * @param uploadFiles the upload files
      * @throws TransactionInProgressException the transaction in progress exception
      */
-    public final void batchParseFiles(final List<BatchFile> uploadFiles) throws TransactionInProgressException {
+    public void batchParseFiles(final List<BatchFile> uploadFiles) throws TransactionInProgressException {
         log.info("Going to parse {} batch uploaded files", uploadFiles.size());
 
         for (BatchFile batchFile : uploadFiles) {
@@ -288,7 +306,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param statisticalUnitInformation the statistical unit information
      */
-    public final void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
+    public void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
         capabilitiesConstructor.invalidateCache();
 
@@ -299,7 +317,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param resourceMetadata the resource metadata
      */
-    public void saveAndApplyResourceClassification(List<ResourceMetadata> resourceMetadata) {
+    public void saveAndApplyResourceClassification(final List<ResourceMetadata> resourceMetadata) {
         resourceStorageEngine.performAsynchronousResourceStoragePipeline(resourceMetadata);
     }
 
@@ -309,7 +327,7 @@ public final class MUAEngine implements InitializingBean {
      * @param function information about the administrative function to perform.
      * @return true, iff the administrative function performed successfully, false otherwise
      */
-    public final boolean performAdministrativeFunction(final AdministrativeFunction function) {
+    public boolean performAdministrativeFunction(final AdministrativeFunction function) {
         switch (function.getAdministrativeFunction()) {
             case REMOVEALL:
                 // storageEngine.removeAllEntries();
@@ -327,7 +345,7 @@ public final class MUAEngine implements InitializingBean {
      * @param pushed the {@link uk.ac.cardiff.model.wsmodel.EventPushMessage} received from the client.
      * @throws TransactionInProgressException the transaction in progress exception
      */
-    public final void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
+    public void addAuthentications(final EventPushMessage pushed) throws TransactionInProgressException {
         if (pushed.getEvents().size() > 0) {
             int transactionId = (int) (Math.random() * 1000000);
             if (!forceSynchronousEventStorage) {
@@ -344,7 +362,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param muaMetadata the new mua metadata
      */
-    public final void setMuaMetadata(final ServiceMetadata muaMetadata) {
+    public void setMuaMetadata(final ServiceMetadata muaMetadata) {
         this.muaMetadata = muaMetadata;
     }
 
@@ -353,7 +371,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the mua metadata
      */
-    public final ServiceMetadata getMuaMetadata() {
+    public ServiceMetadata getMuaMetadata() {
         return muaMetadata;
     }
 
@@ -362,7 +380,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param eventReleaseClient the new event release client
      */
-    public final void setEventReleaseClient(final EventReleaseClient eventReleaseClient) {
+    public void setEventReleaseClient(final EventReleaseClient eventReleaseClient) {
         this.eventReleaseClient = eventReleaseClient;
     }
 
@@ -371,7 +389,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the event release client
      */
-    public final EventReleaseClient getEventReleaseClient() {
+    public EventReleaseClient getEventReleaseClient() {
         return eventReleaseClient;
     }
 
@@ -380,7 +398,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param storageEngine the storageEngine to set
      */
-    public final void setStorageEngine(final EventStorageEngine storageEngine) {
+    public void setStorageEngine(final EventStorageEngine storageEngine) {
         this.storageEngine = storageEngine;
     }
 
@@ -389,7 +407,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the storageEngine
      */
-    public final EventStorageEngine getStorageEngine() {
+    public EventStorageEngine getStorageEngine() {
         return storageEngine;
     }
 
@@ -398,7 +416,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param dataAccessRegister the dataAccessRegister to set
      */
-    public final void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
+    public void setDataAccessRegister(final DataAccessRegister dataAccessRegister) {
         this.dataAccessRegister = dataAccessRegister;
     }
 
@@ -407,7 +425,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @return the dataAccessRegister
      */
-    public final DataAccessRegister getDataAccessRegister() {
+    public DataAccessRegister getDataAccessRegister() {
         return dataAccessRegister;
     }
 
@@ -416,13 +434,12 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param maxReleaseEventSize the maxReleaseEventSize to set
      */
-    public void setMaxReleaseEventSize(int maxReleaseEventSize) {
-        if (maxReleaseEventSize > 3000) {
-            log.warn("Max Release Event size can not be set higher than 3000, defaulting to 3000");
-            this.maxReleaseEventSize = 3000;
-        } else {
-            this.maxReleaseEventSize = maxReleaseEventSize;
+    public void setMaxReleaseEventSize(final int maxReleaseEventSize) {
+        if (maxReleaseEventSize > 10000) {
+            log.warn("Max Release Event size should not be set higher than 10000");
         }
+        this.maxReleaseEventSize = maxReleaseEventSize;
+
     }
 
     /**
@@ -439,7 +456,7 @@ public final class MUAEngine implements InitializingBean {
      * 
      * @param capabilitiesConstructor the capabilitiesConstructor to set
      */
-    public void setCapabilitiesConstructor(BaseCapabilitiesContructor capabilitiesConstructor) {
+    public void setCapabilitiesConstructor(final BaseCapabilitiesContructor capabilitiesConstructor) {
         this.capabilitiesConstructor = capabilitiesConstructor;
     }
 
@@ -455,7 +472,7 @@ public final class MUAEngine implements InitializingBean {
     /**
      * @param resourceStorageEngine the resourceStorageEngine to set
      */
-    public void setResourceStorageEngine(ResourceStorageEngine resourceStorageEngine) {
+    public void setResourceStorageEngine(final ResourceStorageEngine resourceStorageEngine) {
         this.resourceStorageEngine = resourceStorageEngine;
     }
 
@@ -469,7 +486,7 @@ public final class MUAEngine implements InitializingBean {
     /**
      * @param forceSynchronousEventStorage the forceSynchronousEventStorage to set
      */
-    public void setForceSynchronousEventStorage(boolean forceSynchronousEventStorage) {
+    public void setForceSynchronousEventStorage(final boolean forceSynchronousEventStorage) {
         this.forceSynchronousEventStorage = forceSynchronousEventStorage;
     }
 
@@ -478,6 +495,13 @@ public final class MUAEngine implements InitializingBean {
      */
     public boolean isForceSynchronousEventStorage() {
         return forceSynchronousEventStorage;
+    }
+
+    /**
+     * @param eventTypeRegistry the eventTypeRegistry to set
+     */
+    public void setEventTypeRegistry(final EventTypeRegistry eventTypeRegistry) {
+        this.eventTypeRegistry = eventTypeRegistry;
     }
 
 }
