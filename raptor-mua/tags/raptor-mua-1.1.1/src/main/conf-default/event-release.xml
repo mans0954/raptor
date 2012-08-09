@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+		Licensed under the Apache License, Version 2.0 (the "License"); you
+		may not use this file except in compliance with the License. You may
+		obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--  the event release client, for sending events to the UK federation's MUA -->
+
+	<bean id="eventReleaseClient"
+		class="uk.ac.cardiff.raptor.remoting.client.DefaultEventReleaseClient">
+		<property name="endpointRegistry">
+			<ref bean="endpointRegistry" />
+		</property>
+		<property name="eventReleaseEngine">
+			<ref bean="eventReleaseEngine"></ref>
+		</property>
+		<property name="enableEventRelease">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<!--
+		Configure how the client talks to the MUA, setting appropriate trust
+		and keystore locations
+	-->
+
+	<bean id="serviceEndpointInterface"
+		class="uk.ac.cardiff.raptor.remoting.client.sei.impl.CxfServiceEndpointClient">
+		<property name="tlsParameters">
+			<bean
+				class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
+				<property name="trustStoreLocation">
+					<value>/opt/raptor/mua/keys/authorised-keys.jks</value>
+				</property>
+				<property name="trustStorePassword">
+					<value>changeit</value>
+				</property>
+				<property name="keyStoreLocation">
+					<value>/opt/raptor/mua/keys/raptor-mua.jks</value>
+				</property>
+				<property name="keyStorePassword">
+					<value>changeit</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+
+	<bean id="endpointRegistry" class="uk.ac.cardiff.raptor.registry.EndpointRegistry">
+		<property name="persistReleaseInformation">
+			<value>true</value>
+		</property>
+		<property name="dataConnection">
+			<ref bean="dataConnectionImpl" />
+		</property>
+		<property name="endpoints">
+			<list>
+                <!-- UK federation's MUA -->
+				<bean id="cardiffRaptorMUA" class="uk.ac.cardiff.raptor.registry.Endpoint">
+					<property name="supportedEvents">
+						<list>
+							<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+							</value>
+						</list>
+					</property>
+                    <property name="supportedResourceCategory" value="EXTERNAL"/>
+					<property name="serviceEndpoint">
+						<value>https://raptor-aggr.ja.net:8111/MUA/MultiUnitAggregator</value> 
+					</property>
+					<property name="pushPolicies">
+						<list>
+							<ref bean="entryNoElapsedTimePushPolicy"></ref>
+						</list>
+					</property>
+					<property name="attributeFilterPolicy">
+						<ref bean="removeHashPrincipleFilterPolicy"></ref>
+					</property>
+				</bean>
+                <!-- End of UK federation endpoint setup -->
+			</list>
+		</property>
+	</bean>
+
+	<!--  policy for release of events. Every 5000 events or every 12 hours. Max event push size is < 10,000 records -->
+
+	<bean id="entryNoElapsedTimePushPolicy"
+		class="uk.ac.cardiff.raptor.remoting.policy.EntryNoElapsedTimePushPolicy">
+		<property name="pushOnOrAfterNoEntries">
+			<value>5000</value>
+		</property>
+		<property name="pushInterval">
+			<value>43200000</value>
+		</property>
+	</bean>
+
+	<!-- Attribute filter policies -->
+
+	<bean id="removeHashPrincipleFilterPolicy"
+		class="uk.ac.cardiff.raptor.attribute.filtering.AttributeFilterPolicy">
+		<property name="policyName">
+			<value>removePrincipleInformationAndHashPrincipal</value>
+		</property>
+		<property name="attributeRules">
+			<list>
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>assertions</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>requestId</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+                <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+                    <property name="attributeId">
+                        <value>responseId</value>
+                    </property>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="denyValueRule">
+                        <bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+                            <property name="enabled">
+                                <value>true</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+				<bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
+					<property name="attributeId">
+						<value>principalInformation</value>
+					</property>
+					<property name="eventType">
+						<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+						</value>
+					</property>
+					<property name="denyValueRule">
+						<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+							<property name="enabled">
+								<value>true</value>
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<bean class="uk.ac.cardiff.raptor.attribute.filtering.HashAttributeRule">
+					<property name="attributeId">
+						<value>principalName</value>
+					</property>
+					<property name="eventType">
+						<value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent
+						</value>
+					</property>
+					<property name="denyValueRule">
+						<bean class="uk.ac.cardiff.raptor.attribute.filtering.match.MatchRule">
+							<property name="enabled">
+								<value>true</value>
+							</property>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
+
+</beans>
