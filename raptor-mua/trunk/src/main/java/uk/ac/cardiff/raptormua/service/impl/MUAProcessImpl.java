@@ -91,7 +91,7 @@ public class MUAProcessImpl implements MUAProcess {
             try {
                 engine.release();
             } catch (Exception e) {
-                log.error("Error trying to release events {}", e.getMessage());
+                log.error("Error trying to release events, reason = [{}]", e.getMessage());
             } finally {
                 lockR.unlock();
             }
@@ -146,15 +146,16 @@ public class MUAProcessImpl implements MUAProcess {
     }
 
     /**
-     * Because this is perform async, the lock is not useful (it will be released immediately), its the immediate
-     * exceptions that are.
+     * Because this is performed async, the lock is not useful (it will be released immediately).
+     * 
+     * @param pushed the events to add to this MUA.
      */
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
             try {
-                log.info("MUA has received {} entries from {}", pushed.getEvents().size(), pushed.getClientMetadata()
-                        .getServiceName());
+                log.info("MUA has received {} entries from {} [{}]", new Object[] {pushed.getEvents().size(),
+                        pushed.getClientMetadata().getEntityId(), pushed.getClientMetadata().getServiceName()});
                 engine.addAuthentications(pushed);
                 success = true;
             } catch (TransactionInProgressException e) {

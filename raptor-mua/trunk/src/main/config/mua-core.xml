@@ -31,6 +31,38 @@
             <ref bean="MUAProcess"></ref>
         </property>
     </bean>
+    
+    <!-- Types of events supported in this system, removing need for reflection (as this becomes to difficult to manage) -->
+    <bean id="registeredConcreteEventTypes" class="uk.ac.cardiff.raptor.registry.EventTypeRegistry">
+        <property name="registeredEventTypes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class" >uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value></property>
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>                    
+                    <property name="concrete" value="true"/>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value></property>                    
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value></property>                    
+                    <property name="concrete" value="false"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>                    
+                    <property name="concrete" value="false"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
     <bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding" scope="prototype" />
     <bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean" scope="prototype">
@@ -115,29 +147,32 @@
     <!-- this bean config kicks of the singleton engine instance which is then used by all services of the MUA -->
     <bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
         <property name="eventReleaseClient">
-            <ref bean="eventReleaseClient"></ref>
+            <ref bean="eventReleaseClient"/>
+        </property>
+        <property name="eventTypeRegistry">
+            <ref bean="registeredConcreteEventTypes"/>
         </property>
         <property name="statisticsHandler">
             <ref bean="statisticalUnits" />
         </property>
         <property name="storageEngine">
-            <ref bean="storageEngine"></ref>
+            <ref bean="storageEngine"/>
         </property>
         <property name="resourceStorageEngine">
-            <ref bean="resourceStorageEngine"></ref>
+            <ref bean="resourceStorageEngine"/>
         </property>
         <property name="muaMetadata">
-            <ref bean="MUAMetadata"></ref>
+            <ref bean="MUAMetadata"/>
         </property>
         <property name="capabilitiesConstructor">
             <ref bean="capabilitiesConstructor" />
         </property>
         <property name="dataAccessRegister">
-            <ref bean="dataAccessRegister"></ref>
+            <ref bean="dataAccessRegister"/>
         </property>
         <property name="maxReleaseEventSize">
-            <value>2000</value>
-        </property> <!-- Max Size is 3000 -->
+            <value>5000</value>
+        </property> <!-- Max Size is 10000 -->
     </bean>
 
     <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
