@@ -23,6 +23,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
 import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange;
 
 public class StartStatistics implements Serializable {
@@ -32,6 +33,11 @@ public class StartStatistics implements Serializable {
 
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(StartStatistics.class);
+
+    /**
+     * The resource category this start statistics has been computed for.
+     */
+    private ResourceCategory resourceCategory;
 
     private double numberOfAuthenticationsPer;
     private double numberOfUniqueAuthenticationsPer;
@@ -163,6 +169,20 @@ public class StartStatistics implements Serializable {
      */
     public TimeRange getTimeRange() {
         return timeRange;
+    }
+
+    /**
+     * @return Returns the resourceCategory.
+     */
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
+    }
+
+    /**
+     * @param resourceCategory The resourceCategory to set.
+     */
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
     }
 
 }

@@ -79,16 +79,19 @@ public class StartServiceImpl implements StartService {
         List<StatisticalUnitInformation> statisticalUnits = getStatisticalUnits();
 
         for (DashboardStatisticsSet set : dashboardStatisticSets) {
-            StartStatistics statisticalSet = new StartStatistics();
 
             for (TimeRange period : set.getComputedOverTimeRanges()) {
+
                 for (ResourceCategory category : set.getResourceCategorys()) {
+                    StartStatistics statisticalSet = new StartStatistics();
                     for (AbstractDashboardStatistic dashboardStatistic : set.getDashboardStatistics()) {
+
                         if (dashboardStatistic.isEnabled()) {
                             try {
 
                                 statisticalSet.setComputedForClassType(dashboardStatistic.getEventType());
                                 statisticalSet.setTimeRange(period);
+                                statisticalSet.setResourceCategory(category);
                                 DateTime start = timeRanges.getStartTime(period);
                                 DateTime end = timeRanges.getEndTime(period);
 
@@ -122,12 +125,14 @@ public class StartServiceImpl implements StartService {
                             }
                         }
                     }
+                    statisticalSet.setAccurateOf(new DateTime(System.currentTimeMillis()));
+                    log.debug("Caching the start statistic {}, for time range {}", statisticalSet.getComputedForClassType(), statisticalSet.getTimeRange());
+                    computedStatistics.add(statisticalSet);
                 }
+
             }
-            statisticalSet.setAccurateOf(new DateTime(System.currentTimeMillis()));
-            computedStatistics.add(statisticalSet);
+            cachedStartStatistics.setCached(computedStatistics);
         }
-        cachedStartStatistics.setCached(computedStatistics);
 
         log.info("Generating background statistics for the start page...done");
     }
@@ -137,9 +142,11 @@ public class StartServiceImpl implements StartService {
      */
     @Override
     public void generateStatistics(WebSession websession) {
-        log.debug("Getting start statistics for {} from {}", websession.getStartmodel().getStatsRangeSelector(), websession.getStartmodel().getEventType());
+        log.debug("Getting start statistics for {} from {}, resource type {}", new Object[] { websession.getStartmodel().getStatsRangeSelector(), websession.getStartmodel().getEventType(),
+                websession.getStartmodel().getResourceCategory() });
 
-        StartStatistics statistic = cachedStartStatistics.getStartstatistics(websession.getStartmodel().getStatsRangeSelector(), websession.getStartmodel().getEventType());
+        StartStatistics statistic = cachedStartStatistics.getStartstatistics(websession.getStartmodel().getStatsRangeSelector(), websession.getStartmodel().getEventType(), websession.getStartmodel()
+                .getResourceCategory());
 
         websession.getStartmodel().setStartStatistics(statistic);
 
