@@ -24,6 +24,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.ResourceCategory;
 import uk.ac.cardiff.raptorweb.model.dashboard.DashboardStatisticsSet.TimeRange;
 
 public class CachedStartStatistics {
@@ -34,11 +35,12 @@ public class CachedStartStatistics {
     /** The cached statistic */
     private List<StartStatistics> cached = new ArrayList<StartStatistics>();
 
-    public StartStatistics getStartstatistics(TimeRange timeRange, String eventType) {
-        // TODO add time as well.
+    public StartStatistics getStartstatistics(final TimeRange timeRange, final String eventType, final ResourceCategory category) {
+
         for (StartStatistics statistic : cached) {
-            log.debug("Looking for statistics [{}] with [{}] for range [{}][{}]", new Object[] { eventType, statistic.getComputedForClassType(), timeRange, statistic.getTimeRange() });
-            if (statistic.getComputedForClassType().equals(eventType) && timeRange == statistic.getTimeRange()) {
+            log.debug("Looking for statistics [{}] with [{}] for range [{}={}] and Resource Type [{}={}]",
+                    new Object[] { eventType, statistic.getComputedForClassType(), timeRange, statistic.getTimeRange(), category, statistic.getResourceCategory() });
+            if (statistic.getComputedForClassType().equals(eventType) && timeRange == statistic.getTimeRange() && category == statistic.getResourceCategory()) {
                 log.debug("Returning start statistic [{},{}]", statistic.getComputedForClassType(), statistic.getTopFiveResouces());
                 return statistic;
             }
@@ -51,6 +53,10 @@ public class CachedStartStatistics {
      *            the cached to set
      */
     public void setCached(List<StartStatistics> cached) {
+        for (StartStatistics statistic : cached) {
+            log.debug("Storing the cached start statistic for {}, time range {} and resource category {}",
+                    new Object[] { statistic.getComputedForClassType(), statistic.getTimeRange(), statistic.getResourceCategory() });
+        }
         this.cached = cached;
     }
 

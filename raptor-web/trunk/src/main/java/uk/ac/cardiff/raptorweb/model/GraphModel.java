@@ -165,10 +165,11 @@ public class GraphModel implements Serializable {
      * @return
      */
     public List<String> getPossibleFieldNameValues() {
-        // EventType eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
+        // TODO this should not be a partially hard coded list.
+        String eventType = selectedStatisticalUnit.getStatisticalUnitInformation().getStatisticParameters().getEventType();
         // String[] classFilter = eventType.getClassHierarchy();
-        // return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(classFilter);
-        return Collections.emptyList();
+        return (ArrayList<String>) suggestionValues.getPossibleFieldNameValuesList(new String[] { eventType, "uk.ac.cardiff.model.event.AuthenticationEvent", "uk.ac.cardiff.model.event.Event" });
+
     }
 
     public List<String> getPossiblePostProcessorValues() {
