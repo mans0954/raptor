@@ -270,9 +270,10 @@
                     <artifactId>maven-license-plugin</artifactId>
                     <version>1.4.0</version>
                 </plugin>
-          
+                </plugins>
+          </pluginManagement>
        
-       
+        <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -511,7 +512,7 @@
 
             <!-- PLUGIN to COPY correct directories into the target directory for packaging...DONE -->
               </plugins>
-         </pluginManagement>
+         
 
     </build>
 </project>
