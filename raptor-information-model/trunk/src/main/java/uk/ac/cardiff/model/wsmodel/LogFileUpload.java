@@ -55,7 +55,12 @@ public class LogFileUpload implements Serializable {
         SHIBBOLETH2("Shibboleth 2"),
 
         /** The EZPROXY. */
-        EZPROXY("Ezproxy");
+        EZPROXY("Ezproxy"),
+
+        /**
+         * Shibboleth 2.4<
+         */
+        SHIBBOLETHSP24("Shibboleth SP LT2.4");
 
         /** The friendly name. */
         public String friendlyName;
