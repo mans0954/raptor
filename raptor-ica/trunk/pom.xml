@@ -92,13 +92,13 @@
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-client</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.2</version>
         </dependency>
 
         <dependency>
             <groupId>uk.ac.cardiff.raptor</groupId>
             <artifactId>raptor-parse</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </dependency>
 
 
@@ -270,9 +270,9 @@
                     <artifactId>maven-license-plugin</artifactId>
                     <version>1.4.0</version>
                 </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
+          
+       
+       
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -407,7 +407,6 @@
             <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
-                <version>1.4.0</version>
                 <configuration>
                     <includes>
                         <include>src/**</include>
@@ -508,11 +507,11 @@
                     </execution>
                 </executions>
             </plugin>
-
+        
 
             <!-- PLUGIN to COPY correct directories into the target directory for packaging...DONE -->
-
-        </plugins>
+              </plugins>
+         </pluginManagement>
 
     </build>
 </project>

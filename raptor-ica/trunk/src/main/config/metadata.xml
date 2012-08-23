@@ -24,7 +24,7 @@
     <bean id="ICAMetadata" class="uk.ac.cardiff.model.ServiceMetadata">
         <property name="organisationName"><value>Cardiff University</value></property>
         <property name="contactEmail"><value>smartp@cf.ac.uk</value></property>
-        <property name="serviceName"><value>Cardiff University Idp Service</value></property>
+        <property name="serviceName"><value>Cardiff University Idp Service (LOCAL TEST)</value></property>
         <property name="entityId"><value>https://HOSTNAME/raptor-ica</value></property>
     </bean>
 
