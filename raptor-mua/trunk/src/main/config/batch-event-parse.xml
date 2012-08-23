@@ -110,7 +110,7 @@
                         <ref bean="memoryEventHandler"></ref>
                     </property>
                     <property name="eventTypeFriendlyName">
-                        <value>Shibboleth 2.4 or earlier SP</value>
+                        <value>Shibboleth SP LT2.4</value>
                     </property>
                     <property name="format">
                         <ref bean="shibSPLogFileFormat" />

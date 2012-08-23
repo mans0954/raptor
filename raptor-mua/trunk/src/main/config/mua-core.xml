@@ -128,6 +128,18 @@
                         <value>SHIBBOLETH13</value>
                     </property>
                 </bean>
+                 <bean id="shibSp24BelowUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/shibsp_upto24/" />
+                    <property name="eventType">
+                        <value>SHIBBOLETHSP24</value>
+                    </property>
+                </bean>
                 <bean id="ezproxyUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
                     <property name="allowedFileExtensions">
                         <list>

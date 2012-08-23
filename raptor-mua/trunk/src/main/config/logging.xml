@@ -47,7 +47,7 @@
   <logger name="org.springframework.jmx" level="DEBUG">
     <appender-ref ref="stdout"/>
   </logger>
-  <logger name="uk.ac.cardiff" level="debug">
+  <logger name="uk.ac.cardiff" level="trace">
     <appender-ref ref="stdout"/>
   </logger>
   <logger name="org.mortbay" level="ERROR">
