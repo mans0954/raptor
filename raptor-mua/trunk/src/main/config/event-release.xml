@@ -31,7 +31,7 @@
 			<ref bean="eventReleaseEngine"></ref>
 		</property>
 		<property name="enableEventRelease">
-			<value>true</value>
+			<value>false</value>
 		</property>
 	</bean>
 
