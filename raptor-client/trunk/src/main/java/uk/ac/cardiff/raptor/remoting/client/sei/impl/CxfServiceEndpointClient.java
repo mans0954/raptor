@@ -17,6 +17,7 @@
 package uk.ac.cardiff.raptor.remoting.client.sei.impl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.cxf.aegis.DatabindingException;
@@ -31,10 +32,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.model.event.AuthenticationEvent;
-import uk.ac.cardiff.model.event.EzproxyAuthenticationEvent;
-import uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent;
-import uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent;
+import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.raptor.registry.Endpoint;
 import uk.ac.cardiff.raptor.remoting.client.sei.ServiceEndpointClient;
@@ -48,6 +46,13 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
     /** Raptor specific TLS parameters class, that can return cxf specific TLSParameters */
     private ClientTLSParameters tlsParameters;
 
+    /**
+     * The class of allowed types. That is, only these classes are registered with the AegisDataBinding and hence only
+     * these specific types are sent through SOAP - if specific type is omitted, but superclass is contained, then
+     * instance is serialized as superclass type.
+     */
+    private List<Class<? extends Event>> allowedClassTypes;
+
     @Override
     public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint) {
         try {
@@ -55,16 +60,16 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
             factory.setServiceClass(MultiUnitAggregator.class);
             AegisDatabinding databinding = new AegisDatabinding();
 
-            org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
+            org.apache.cxf.aegis.AegisContext context =
+                    new org.apache.cxf.aegis.AegisContext();
             context.setWriteXsiTypes(true);
 
             Set<Class<?>> rootClasses = new HashSet<Class<?>>();
 
             Set<String> overrides = new HashSet<String>();
-            overrides.add(ShibbolethIdpAuthenticationEvent.class.getName());
-            overrides.add(AuthenticationEvent.class.getName());
-            overrides.add(EzproxyAuthenticationEvent.class.getName());
-            overrides.add(OpenathenslaAuthenticationEvent.class.getName());
+            for (Class<? extends Event> type : allowedClassTypes) {
+                overrides.add(type.getName());
+            }
             databinding.setOverrideTypes(overrides);
 
             for (String typeName : overrides) {
@@ -72,7 +77,8 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
                 try {
                     c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
                 } catch (ClassNotFoundException e) {
-                    throw new DatabindingException("Could not find override type class: " + typeName, e);
+                    throw new DatabindingException("Could not find override type class: "
+                            + typeName, e);
                 }
                 rootClasses.add(c);
             }
@@ -90,7 +96,8 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
             httpConduit.setClient(httpClientPolicy);
 
             if (getTlsParameters() != null)
-                httpConduit.setTlsClientParameters(getTlsParameters().getTlsClientParameters());
+                httpConduit.setTlsClientParameters(getTlsParameters()
+                        .getTlsClientParameters());
 
             log.debug("Accessing the endpoint version " + client.getVersion());
             client.addAuthentications(pushed);
@@ -98,10 +105,12 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 
             return true;
         } catch (SoapFault e) {
-            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
+            log.error("Could not send events to endpoint [{}]",
+                    endpoint.getServiceEndpoint(), e);
             return false;
         } catch (Exception e) {
-            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
+            log.error("Could not send events to endpoint [{}]",
+                    endpoint.getServiceEndpoint(), e);
             return false;
         }
 
@@ -119,6 +128,20 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
      */
     public ClientTLSParameters getTlsParameters() {
         return tlsParameters;
+    }
+
+    /**
+     * @return Returns the allowedClassTypes.
+     */
+    public List<Class<? extends Event>> getAllowedClassTypes() {
+        return allowedClassTypes;
+    }
+
+    /**
+     * @param allowedClassTypes The allowedClassTypes to set.
+     */
+    public void setAllowedClassTypes(List<Class<? extends Event>> allowedClassTypes) {
+        this.allowedClassTypes = allowedClassTypes;
     }
 
 }
