@@ -59,7 +59,8 @@ public class EventReleaseEngine {
      * 
      * @param authenticationModules
      */
-    public boolean release(EndpointRegistry endpointRegistry, List<Event> events, ServiceMetadata serviceMetadata) {
+    public boolean release(EndpointRegistry endpointRegistry, List<Event> events,
+            ServiceMetadata serviceMetadata) {
         boolean releasedtoAll = true;
         int releaseCount = 0;
         for (Endpoint endpoint : endpointRegistry.getEndpoints()) {
@@ -67,15 +68,20 @@ public class EventReleaseEngine {
             applicableEvents = eventTypeFilter(endpoint, applicableEvents);
             applicableEvents = eventResourceCategoryFilter(endpoint, applicableEvents);
             boolean shouldRelease = shouldRelease(endpoint, applicableEvents);
-            log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(), shouldRelease);
+            log.debug("Endpoint {}, should release {}", endpoint.getServiceEndpoint(),
+                    shouldRelease);
             if (shouldRelease) {
-                List<Event> filteredEntries = filterAttributes(serviceMetadata, endpoint, applicableEvents);
+                List<Event> filteredEntries =
+                        filterAttributes(serviceMetadata, endpoint, applicableEvents);
                 appendMetadata(filteredEntries, serviceMetadata);
-                EventPushMessage pushMessage = constructEventPush(serviceMetadata, filteredEntries);
-                log.debug("Pushing {} entries to the Endpoint [{}]", filteredEntries.size(),
-                        endpoint.getServiceEndpoint());
-                boolean releaseSuccess = getServiceEndpointInterface().sendEvents(pushMessage, endpoint);
-                log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(), releaseSuccess);
+                EventPushMessage pushMessage =
+                        constructEventPush(serviceMetadata, filteredEntries);
+                log.debug("Pushing {} entries to the Endpoint [{}]",
+                        filteredEntries.size(), endpoint.getServiceEndpoint());
+                boolean releaseSuccess =
+                        getServiceEndpointInterface().sendEvents(pushMessage, endpoint);
+                log.debug("Release to [{}] succeeded {}", endpoint.getServiceEndpoint(),
+                        releaseSuccess);
                 if (releaseSuccess == false)
                     releasedtoAll = false;
                 else if (releaseSuccess == true) {
@@ -85,16 +91,18 @@ public class EventReleaseEngine {
                      * <code>filteredEntries</code>
                      */
                     endpoint.releasePerformed(applicableEvents);
-                    log.debug("Endpoint [{}] has been sent events up to and including {}",
-                            endpoint.getServiceEndpoint(), endpoint.getReleaseInformation().getLastReleasedEventTime());
+                    log.debug(
+                            "Endpoint [{}] has been sent events up to and including {}",
+                            endpoint.getServiceEndpoint(), endpoint
+                                    .getReleaseInformation().getLastReleasedEventTime());
                 }
             } else {
                 releasedtoAll = false;
             }
 
         }
-        log.info("Released to {} listening Endpoints, out of a total of {}", releaseCount, endpointRegistry
-                .getEndpoints().size());
+        log.info("Released to {} listening Endpoints, out of a total of {}",
+                releaseCount, endpointRegistry.getEndpoints().size());
 
         return releasedtoAll;
 
@@ -113,7 +121,8 @@ public class EventReleaseEngine {
         if (endpoint.getSupportedEvents() == null) {
             log.info(
                     "There are 0 events to send to the endpoint [{}] after event type filtering. Has the endpoint been set"
-                            + " with the correct supported event types?", endpoint.getServiceEndpoint());
+                            + " with the correct supported event types?",
+                    endpoint.getServiceEndpoint());
             return new ArrayList<Event>();
         }
 
@@ -130,7 +139,8 @@ public class EventReleaseEngine {
             }
 
         }
-        log.info("There are {} events to send to the endpoint [{}] after event type filtering",
+        log.info(
+                "There are {} events to send to the endpoint [{}] after event type filtering",
                 applicableEvents.size(), endpoint.getServiceEndpoint());
         return applicableEvents;
     }
@@ -144,12 +154,14 @@ public class EventReleaseEngine {
      * @param events
      * @return
      */
-    private List<Event> eventResourceCategoryFilter(Endpoint endpoint, List<Event> events) {
+    private List<Event>
+            eventResourceCategoryFilter(Endpoint endpoint, List<Event> events) {
         if (endpoint.getSupportedResourceCategory() == null) {
             log.info(
                     "There are {} events to send to the endpoint [{}] after resource category type filtering. No filtering performed, has the endpoint been set"
-                            + " with a supported resource category type?", events.size(), endpoint.getServiceEndpoint());
-            return new ArrayList<Event>();
+                            + " with a supported resource category type?", events.size(),
+                    endpoint.getServiceEndpoint());
+            return events;
         }
         ArrayList<Event> applicableEvents = new ArrayList<Event>();
         for (Event event : events) {
@@ -165,7 +177,8 @@ public class EventReleaseEngine {
             }
 
         }
-        log.info("There are {} events to send to the endpoint [{}] after resource category type filtering",
+        log.info(
+                "There are {} events to send to the endpoint [{}] after resource category type filtering",
                 applicableEvents.size(), endpoint.getServiceEndpoint());
         return applicableEvents;
     }
@@ -188,7 +201,8 @@ public class EventReleaseEngine {
      * @param events the list of events that are filtered chronologically
      * @return the list of filtered events
      */
-    private List<Event> chronologicalFilter(final Endpoint endpoint, final List<Event> events) {
+    private List<Event> chronologicalFilter(final Endpoint endpoint,
+            final List<Event> events) {
         ArrayList<Event> applicableEvents = new ArrayList<Event>();
 
         for (Event event : events) {
@@ -196,8 +210,9 @@ public class EventReleaseEngine {
                 applicableEvents.add(event);
             }
         }
-        log.info("There are {} events to send to the endpoint [{}] after {}", new Object[] {applicableEvents.size(),
-                endpoint.getServiceEndpoint(), endpoint.getReleaseInformation().getLastReleasedEventTime()});
+        log.info("There are {} events to send to the endpoint [{}] after {}",
+                new Object[] {applicableEvents.size(), endpoint.getServiceEndpoint(),
+                        endpoint.getReleaseInformation().getLastReleasedEventTime()});
         return applicableEvents;
     }
 
@@ -226,10 +241,12 @@ public class EventReleaseEngine {
      * @param allEvents the list of <code>Event</code>s to filter
      * @return a filtered set of events based on any defined attribute filter policies.
      */
-    private List<Event> filterAttributes(ServiceMetadata metadata, Endpoint endpoint, List<Event> allEvents) {
+    private List<Event> filterAttributes(ServiceMetadata metadata, Endpoint endpoint,
+            List<Event> allEvents) {
         if (endpoint.getAttributeFilterPolicy() == null)
             return allEvents;
-        return attributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(), metadata, allEvents);
+        return attributeFilterEngine.filter(endpoint.getAttributeFilterPolicy(),
+                metadata, allEvents);
     }
 
     /**
@@ -240,7 +257,8 @@ public class EventReleaseEngine {
      * @param events
      * @return
      */
-    private EventPushMessage constructEventPush(ServiceMetadata clientMetadata, List<Event> events) {
+    private EventPushMessage constructEventPush(ServiceMetadata clientMetadata,
+            List<Event> events) {
         EventPushMessage pushMessage = new EventPushMessage();
         pushMessage.setClientMetadata(clientMetadata);
         pushMessage.setEvents(events);
@@ -256,7 +274,8 @@ public class EventReleaseEngine {
         return attributeFilterEngine;
     }
 
-    public void setServiceEndpointInterface(ServiceEndpointClient serviceEndpointInterface) {
+    public void
+            setServiceEndpointInterface(ServiceEndpointClient serviceEndpointInterface) {
         this.serviceEndpointInterface = serviceEndpointInterface;
     }
 

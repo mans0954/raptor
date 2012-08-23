@@ -36,7 +36,8 @@ import uk.ac.cardiff.model.event.Event;
 public class EntryNoElapsedTimePushPolicy implements PushPolicy {
 
     /** Class logger. */
-    private final Logger log = LoggerFactory.getLogger(EntryNoElapsedTimePushPolicy.class);
+    private final Logger log = LoggerFactory
+            .getLogger(EntryNoElapsedTimePushPolicy.class);
 
     /** The time, in milliseconds, that this policy was last evaluated. */
     private long lastReleasedTime;
@@ -63,14 +64,17 @@ public class EntryNoElapsedTimePushPolicy implements PushPolicy {
      *         since the last release exceeds <code>pushInterval</code> and the number of <code>events</code> is greater
      *         than 0, false otherwise.
      */
+    @Override
     public boolean evaluatePolicy(List<Event> events) {
+        log.trace("Push Policy has {} event(s) input", events.size());
         long currentTime = System.currentTimeMillis();
         if (pushOnOrAfterNoEntries <= events.size()) {
             lastReleasedTime = currentTime;
             return true;
         } else {
             long difference = currentTime - lastReleasedTime;
-            log.trace("ElapsedTime difference {}, pushInterval {}", difference, pushInterval);
+            log.trace("ElapsedTime difference {}, pushInterval {}", difference,
+                    pushInterval);
             if (difference >= getPushInterval() && events.size() > 0) {
                 log.trace("Elapsed time passed and {} events to send", events.size());
                 lastReleasedTime = currentTime;
