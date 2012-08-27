@@ -32,10 +32,12 @@ import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
  * 
  * @author philsmart
  */
-public class ResourceCategoryAttributeAssociationDefinition extends BaseAttributeAssociationDefinition {
+public class ResourceCategoryAttributeAssociationDefinition extends
+        BaseAttributeAssociationDefinition {
 
     /** Class logger. */
-    private final Logger log = LoggerFactory.getLogger(ResourceCategoryAttributeAssociationDefinition.class);
+    private final Logger log = LoggerFactory
+            .getLogger(ResourceCategoryAttributeAssociationDefinition.class);
 
     /** The data connector used to acquire the attributes. */
     private RaptorDataConnection dataConnection;
@@ -43,6 +45,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
     /**
      * @see uk.ac.cardiff.raptor.event.expansion.BaseAttributeAssociationDefinition#initialise()
      */
+    @Override
     public void initialise() {
     }
 
@@ -53,7 +56,8 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
         Object result = null;
         if (event.getResourceId() != null) {
             result =
-                    dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?",
+                    dataConnection.runQueryUnique(
+                            "from ResourceMetadata where resourceId=?",
                             new Object[] {event.getResourceId()});
         }
         if (result != null && result instanceof ResourceMetadata) {
@@ -65,18 +69,24 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
             }
             return true;
         } else {
-            ResourceMetadata resourceNew = new ResourceMetadata();
-            resourceNew.setExternal(true);
-            resourceNew.setInternal(false);
-            resourceNew.setResourceId(event.getResourceId());
-            event.setResourceIdCategory(2);
-            try {
-                dataConnection.save(resourceNew);
-            } catch (DataAccessException e) {
-                log.error("Could not save new resource metadata {}", e.getMessage());
+            // only set new resource information if has resource id.
+            if (event.getResourceId() != null) {
+                ResourceMetadata resourceNew = new ResourceMetadata();
+                resourceNew.setExternal(true);
+                resourceNew.setInternal(false);
+                resourceNew.setResourceId(event.getResourceId());
+                // set event to default resource category, then save this resourceId.
+                event.setResourceIdCategory(2);
+                try {
+                    dataConnection.save(resourceNew);
+                } catch (DataAccessException e) {
+                    log.error("Could not save new resource metadata {}", e.getMessage());
+                    return false;
+                }
+                return true;
+            } else {
                 return false;
             }
-            return true;
         }
 
     }
@@ -86,6 +96,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
      * 
      * @param classToAdd the classToAdd to set
      */
+    @Override
     public void setClassToAdd(Class<?> classToAdd) {
         this.classToAdd = classToAdd;
     }
@@ -95,6 +106,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
      * 
      * @return the classToAdd
      */
+    @Override
     public Class<?> getClassToAdd() {
         return classToAdd;
     }
@@ -104,6 +116,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
      * 
      * @param associateWithClass the associateWithClass to set
      */
+    @Override
     public void setAssociateWithClass(String associateWithClass) {
         this.associateWithClass = associateWithClass;
     }
@@ -113,6 +126,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
      * 
      * @return the associateWithClass
      */
+    @Override
     public String getAssociateWithClass() {
         return associateWithClass;
     }
