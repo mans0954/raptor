@@ -19,7 +19,6 @@
 	<classpathentry kind="src" output="target/bin" path="src/main/bin"/>
 	<classpathentry kind="src" output="target/ddl" path="src/main/ddl"/>
 	<classpathentry kind="src" output="target/conf-default" path="src/main/conf-default"/>
-	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
 		<attributes>
