@@ -133,7 +133,7 @@
                     <property name="enabled" value="true"/>
 					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="eventTypeFriendlyName">
-                       <value>Shibboleth 2 IdP</value>
+                       <value>Shibboleth 2</value>
                     </property>
 					<property name="format">
 						<ref bean="shibIDPAuditFileFormat" />
