@@ -64,7 +64,7 @@ public class StatisticHandler {
     private AggregatorGraphModel performStatiticalPipeline(BaseStatistic statistic) {
         statistic.setEntryHandler(getEventHandler());
         Boolean success = invoke(statistic);
-        log.info("Statistic [{}] succedded {}", statistic.getStatisticParameters().getUnitName(), success);
+        log.info("Statistic [{}] succeeded [{}]", statistic.getStatisticParameters().getUnitName(), success);
         if (success) {
             // now send through post processor
             statistic.postProcess();
@@ -115,7 +115,7 @@ public class StatisticHandler {
             }
             return success;
         } catch (StatisticalUnitException e) {
-            log.error("Failed to invoke statistics [{}]", statistic.getStatisticParameters().getUnitName(), e);
+            log.error("Failed to invoke statistic [{}]", statistic.getStatisticParameters().getUnitName(), e);
 
         }
         return false;

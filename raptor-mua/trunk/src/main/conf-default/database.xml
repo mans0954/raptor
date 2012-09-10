@@ -71,7 +71,7 @@
             <value>org.hsqldb.jdbcDriver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:hsqldb:file:data/mua-three;hsqldb.default_table_type=cached</value>
+            <value>jdbc:hsqldb:file:data/mua;hsqldb.default_table_type=cached</value>
         </property>
         <property name="user">
             <value>sa</value>
