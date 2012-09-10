@@ -182,7 +182,7 @@ public class MUAProcessImpl implements MUAProcess {
             throws SoapFault {
         if (lockR.tryLock()) {
             try {
-                log.info("Webservice call to update and perform statistic {}", statisticalUnitInformation
+                log.info("Webservice call to update and perform statistic [{}]", statisticalUnitInformation
                         .getStatisticParameters().getUnitName());
                 engine.updateStatisticalUnit(statisticalUnitInformation);
                 return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
