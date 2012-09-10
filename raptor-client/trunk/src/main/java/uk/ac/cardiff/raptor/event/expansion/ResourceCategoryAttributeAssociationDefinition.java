@@ -69,7 +69,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends
             }
             return true;
         } else {
-            // only set new resource information if has resource id.
+            // only set new resource information if has resource id. However, must set default resources category anyway
             if (event.getResourceId() != null) {
                 ResourceMetadata resourceNew = new ResourceMetadata();
                 resourceNew.setExternal(true);
@@ -85,6 +85,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends
                 }
                 return true;
             } else {
+                event.setResourceIdCategory(2);
                 return false;
             }
         }
