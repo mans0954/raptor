@@ -126,6 +126,10 @@
 	</view-state>
 
 
+    <view-state id="justReport" view="juspReport.xhtml">
+    
+    </view-state>
+
 
 	<view-state id="setupRaptorWeb" view="setupRaptorWeb.xhtml">
    

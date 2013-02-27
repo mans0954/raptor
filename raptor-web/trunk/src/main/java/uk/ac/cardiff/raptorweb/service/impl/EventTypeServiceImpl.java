@@ -44,23 +44,26 @@ public class EventTypeServiceImpl implements EventTypeService {
      * but a friendly name from the <code>eventTypeToDisplayMapper</code>. Importantly, if the event type is not in the <code>eventTypeToDisplayMapper</code>
      * list, it is not returned. Consequently, the set of event types to display are only those specified in the <code>eventTypeToDisplayMapper</code>.
      */
+    @Override
     public List<SelectItem> getEventTypeList() {
         List<SelectItem> eventTypes = new ArrayList<SelectItem>();
 
         List<EventTypeInformation> eventTypesFromAttached = webEngine.getAttachedCapabilities().getEventsPerType();
-        for (EventTypeInformation eventType : eventTypesFromAttached) {
-            String eventTypeString = eventType.getEventTypeName();
-            SelectItem item = new SelectItem();
+        if (eventTypesFromAttached != null) {
+            for (EventTypeInformation eventType : eventTypesFromAttached) {
+                String eventTypeString = eventType.getEventTypeName();
+                SelectItem item = new SelectItem();
 
-            String labelValue = eventTypeToDisplayMapper.mapEventType(eventTypeString);
+                String labelValue = eventTypeToDisplayMapper.mapEventType(eventTypeString);
 
-            if (labelValue != null) {
-                item.setLabel(labelValue);
-                item.setValue(eventTypeString);
-                log.debug("Setting event value to: " + item.getValue());
-                eventTypes.add(item);
+                if (labelValue != null) {
+                    item.setLabel(labelValue);
+                    item.setValue(eventTypeString);
+                    log.debug("Setting event value to: " + item.getValue());
+                    eventTypes.add(item);
+                }
+
             }
-
         }
         return eventTypes;
     }

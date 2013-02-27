@@ -41,6 +41,10 @@
 
 	</bean>
     
+    <bean id="juspService" class="uk.ac.cardiff.raptorweb.service.impl.JuspServiceImpl">
+
+    </bean>
+    
     <bean id="eventTypeService" class="uk.ac.cardiff.raptorweb.service.impl.EventTypeServiceImpl">
         <property name="webEngine"><ref bean="webEngine"/></property>
         <property name="eventTypeToDisplayMapper" ref="eventTypesToDisplayMapper"/>
@@ -131,7 +135,7 @@
 	<bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-			  <ref local="SystemStatsQuickTrigger"/>
+			 <!-- <ref local="SystemStatsQuickTrigger"/>-->
 			</list>
 		</property>
 	</bean>
@@ -164,6 +168,7 @@
                 <entry value="ShibbolethIdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"/>
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent"/>
                 <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent"/>
+                <entry value="Jusp Monthly" key="uk.ac.cardiff.model.event.JuspAggregatedEvent"/>
             </map>
         </property>
     

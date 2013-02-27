@@ -24,6 +24,7 @@
         <transition on="setupTrans" to="setupRaptorWeb" />
         <transition on="aboutTrans" to="about" />
         <transition on="homeTrans" to="startReport" />
+         <transition on="juspTrans" to="justReport" />
     </global-transitions>
 
 </flow>
