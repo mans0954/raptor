@@ -65,14 +65,17 @@ public class GraphServiceImpl implements GraphService {
         return webEngine.getAttached();
     }
 
+    @Override
     public MUAEntry getCurrentlyAttached() {
         return webEngine.getCurrentlyAttached();
     }
 
+    @Override
     public void removePostProcessorFromSelectedStatistic(WebSession websession) {
         websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().remove(websession.getGraphmodel().getSelectedPostProcessor());
     }
 
+    @Override
     public void addProcessorToSelectedStatistic(WebSession websession) {
         ProcessorInformation processorToAdd = websession.getGraphmodel().getProcessorToAdd();
         log.debug("Adding processor [{} with parameters {}]", processorToAdd.getFriendlyName(), (processorToAdd.getMethodParameters() != null));
@@ -88,6 +91,7 @@ public class GraphServiceImpl implements GraphService {
     /**
      * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if they do not already exist.
      */
+    @Override
     public void populateStatisticalUnits(WebSession websession) {
         if (websession.getGraphmodel().getStatisticalUnitsForView() != null) {
             return;
@@ -99,6 +103,7 @@ public class GraphServiceImpl implements GraphService {
             unitForView.setSelected(false);
             unitForView.setStatisticalUnitInformation(unit);
             statisticalUnitsForView.add(unitForView);
+            log.debug("Has params {}", unitForView.getStatisticalUnitInformation().getStatisticParameters().getSeries());
         }
         websession.getGraphmodel().setStatisticalUnitsForView(statisticalUnitsForView);
 
@@ -119,6 +124,7 @@ public class GraphServiceImpl implements GraphService {
     /**
      * Only retrieves USER level units from those retrieved by the MUA. Encapsulates them in a view object
      */
+    @Override
     public List<StatisticalUnitInformation> getStatisticalUnits() {
         List<StatisticalUnitInformation> units = webEngine.getStatisticalUnits();
         List<StatisticalUnitInformation> unitsForUser = new ArrayList<StatisticalUnitInformation>();
@@ -131,16 +137,19 @@ public class GraphServiceImpl implements GraphService {
         return unitsForUser;
     }
 
+    @Override
     public void generateExcelReport(WebSession websession) {
         if (websession.getGraphmodel().getCurrentTableGraph() != null)
             webEngine.generateReport(websession, "excel");
     }
 
+    @Override
     public void generateCSVReport(WebSession websession) {
         if (websession.getGraphmodel().getCurrentTableGraph() != null)
             webEngine.generateReport(websession, "csv");
     }
 
+    @Override
     public void generatePDFReport(WebSession websession) {
         if (websession.getGraphmodel().getCurrentTableGraph() != null)
             webEngine.generateReport(websession, "pdf");
@@ -151,10 +160,12 @@ public class GraphServiceImpl implements GraphService {
      * 
      * @param model
      */
+    @Override
     public void loadSavedReports(WebSession websession) {
         webEngine.loadSavedReports(websession);
     }
 
+    @Override
     public void invokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
         log.info("Graph Service Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
@@ -163,6 +174,7 @@ public class GraphServiceImpl implements GraphService {
 
     }
 
+    @Override
     public void updateAndInvokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
         log.info("Graph Service Updating and Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
@@ -197,6 +209,7 @@ public class GraphServiceImpl implements GraphService {
 
     }
 
+    @Override
     public void removeReport(WebSession websession) {
         webEngine.removeReport(websession.getReportmodel());
     }
