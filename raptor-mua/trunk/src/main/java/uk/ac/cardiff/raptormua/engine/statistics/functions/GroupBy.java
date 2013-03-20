@@ -49,6 +49,7 @@ public class GroupBy extends BaseStatistic {
      * @return true if the statistic succeeds successfully
      * @throws StatisticalUnitException
      */
+    @Override
     public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere)
             throws StatisticalUnitException {
 
@@ -95,7 +96,7 @@ public class GroupBy extends BaseStatistic {
 
         ArrayList<Group> groups = new ArrayList();
         for (Object result : results) {
-            Object resultAsArray = (Object) result;
+            Object resultAsArray = result;
             Group group = new Group();
             group.setValue(0);
             if (resultAsArray != null) {
@@ -123,6 +124,9 @@ public class GroupBy extends BaseStatistic {
     @Override
     public void setStatisticParameters(StatisticParameters statisticParameters) {
         List<MethodParameter> methodParams = statisticParameters.getMethodParams();
+
+        // if ==0 then add defaults to allow runtime creation and interrogation of stats.
+
         if (methodParams.size() == 1) {
             methodParams.get(0).setParameterName("Group By Field");
             methodParams.get(0).setParameterType(ParameterType.FIELD);

@@ -72,6 +72,18 @@
                     </property>
                     <property name="concrete" value="false" />
                 </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="false" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
             </list>
         </property>
     </bean>
@@ -94,6 +106,8 @@
                         <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                         <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
+                        <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                     </list>
                 </entry>

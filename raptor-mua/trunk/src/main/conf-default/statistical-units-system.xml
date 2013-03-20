@@ -10,6 +10,10 @@
 
 
     <!-- System level statistics that must be present for RaptorWeb to work -->
+    
+   
+    
+    <!-- Other Event Statistics -->
 
     <bean id="numberOfAuthenticationsPer" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry">
         <property name="StatisticParameters">

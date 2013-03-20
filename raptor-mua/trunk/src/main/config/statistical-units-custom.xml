@@ -36,6 +36,52 @@
 		-->
 		
 
+     <!-- Just statistic -->
+    
+    <bean id="juspMonthlyStatistic" class="uk.ac.cardiff.raptormua.engine.statistics.functions.JuspStatisticalFunction">
+        <property name="StatisticParameters">
+            <bean class="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+                    <property name="statisticType"><value>User</value></property>
+                    <property name="eventType"><value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value></property>
+                    <property name="unitName"><value>Jusp Monthly Report</value></property>
+                    <property name="startTime"><value>20121201T140000</value></property>   <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss -->
+                    <property name="endTime"><value>20121230T170000</value></property>  <!-- presently only ddMMyyy or yyyyMMdd'T'HHmmss e.g. 20101020T225100Z -->
+                    <property name="methodParams">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="value"><value>car</value></property>
+                            </bean>                           
+                        </list>
+                    </property>
+
+                    <property name="series">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="JR1 Downloads"/>
+                            </bean>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="JR1a Downloads"/>
+                                <property name="dummySeries" value="true"/>
+                            </bean>
+                            <bean class="uk.ac.cardiff.model.report.Series">
+                                <property name="seriesLabel" value="Total Number of downloads"/>
+                                <property name="dummySeries" value="true"/>
+                            </bean>
+                        </list>
+                    </property>
+                                      
+
+                    <property name="presentation">
+                        <bean class="uk.ac.cardiff.model.report.Presentation">
+                            <property name="graphTitle" value="Jusp Monthly Report For Cardiff University"/>
+                            <property name="xAxisLabel" value="Platform Name"/>
+                             <property name="yAxisLabel" value="Number of downloads"/>
+                        </bean>
+                    </property>
+            </bean>
+        </property>
+    </bean>
+        
 
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
 		<property name="StatisticParameters">

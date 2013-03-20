@@ -34,9 +34,11 @@ import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.parse.BaseEventParser;
 import uk.ac.cardiff.raptor.parse.DataAccessRegister;
@@ -50,6 +52,7 @@ import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
 import uk.ac.cardiff.raptor.store.ResourceStorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
+import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
 
@@ -118,6 +121,7 @@ public final class MUAEngine implements InitializingBean {
     /**
      * After properties have been set, check for required dependencies and construct an initial capabilities.
      */
+    @Override
     public void afterPropertiesSet() {
         Assert.notNull(capabilitiesConstructor,
                 "No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
@@ -339,6 +343,21 @@ public final class MUAEngine implements InitializingBean {
     }
 
     /**
+     * Uses the {@link StatisticHandler} to dynamically create a new statistic type and then pass the constructed
+     * {@link StatisticalUnitInformation} back.
+     * 
+     * @param statisticType
+     * @return
+     */
+    public StatisticalUnitInformation getStatisticalUnitInformation(StatisticFunctionType statisticType) {
+        BaseStatistic statistic = statisticsHandler.instantiateStatistic(statisticType);
+        StatisticalUnitInformation information = new StatisticalUnitInformation();
+        information.setStatisticParameters(statistic.getStatisticParameters());
+        information.setPostprocessors(statistic.getAttachProcessors());
+        return information;
+    }
+
+    /**
      * If <code>pushed</code> contains events to add then sent them to the <code>storageEngine</code> for processing,
      * otherwise do nothing.
      * 
@@ -355,6 +374,16 @@ public final class MUAEngine implements InitializingBean {
             }
 
         }
+    }
+
+    /**
+     * @param statisticalUnitInformation
+     */
+    public AggregatorGraphModel
+            invokeStatisticDynamically(DynamicStatisticalUnitInformation statisticalUnitInformation) {
+        statisticsHandler.setEventHandler(storageEngine.getEventHandler());
+        return statisticsHandler.performStatisticDynamically(statisticalUnitInformation);
+
     }
 
     /**
