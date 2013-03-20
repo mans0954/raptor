@@ -34,9 +34,11 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
@@ -70,6 +72,7 @@ public class MUAProcessImpl implements MUAProcess {
      */
     final Lock lockR = new ReentrantLock();
 
+    @Override
     public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
         if (lockR.tryLock()) {
             try {
@@ -86,6 +89,7 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
+    @Override
     public void release() {
         if (lockR.tryLock()) {
             try {
@@ -100,11 +104,13 @@ public class MUAProcessImpl implements MUAProcess {
         }
     }
 
+    @Override
     public Capabilities getCapabilities() {
         log.info("WebSservice call for get capabilities");
         return engine.getCapabilities();
     }
 
+    @Override
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
@@ -126,6 +132,38 @@ public class MUAProcessImpl implements MUAProcess {
         }
     }
 
+    /**
+     * This is a non-blocking method that returns the {@link StatisticalUnitInformation} for the given
+     * {@link StatisticFunctionType}. This will happen in the engine by direct instantiation of the type, and passing
+     * the constructed {@link StatisticalUnitInformation} information back.
+     * 
+     * @param statisticType
+     * @return
+     */
+    @Override
+    public StatisticalUnitInformation getStatisticalUnitInformation(StatisticFunctionType statisticType) {
+        log.info(
+                "Getting statistical unit information for statistic type [{}] - through dynamic construction and lookup",
+                statisticType.getStatisticClass());
+
+        return engine.getStatisticalUnitInformation(statisticType);
+    }
+
+    /**
+     * This is a non-blocking method that will construct and invoke a statistical function dynamically.
+     * 
+     * {@inheritDoc}
+     */
+    @Override
+    public AggregatorGraphModel invokeStatisticalUnitDynamically(
+            DynamicStatisticalUnitInformation statisticalUnitInformation) {
+        log.info("Dynamically invoking the statistical function [{}]", statisticalUnitInformation.getFunction()
+                .getStatisticClass());
+        return engine.invokeStatisticDynamically(statisticalUnitInformation);
+
+    }
+
+    @Override
     public boolean performAdministrativeFunction(AdministrativeFunction function) throws SoapFault {
         if (lockR.tryLock()) {
             try {
@@ -150,6 +188,7 @@ public class MUAProcessImpl implements MUAProcess {
      * 
      * @param pushed the events to add to this MUA.
      */
+    @Override
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;
         if (lockR.tryLock()) {
@@ -178,6 +217,7 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
+    @Override
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation)
             throws SoapFault {
         if (lockR.tryLock()) {
@@ -197,6 +237,7 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
+    @Override
     public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
         List<LogFileUploadResult> result = new ArrayList<LogFileUploadResult>();
         boolean success = false;
@@ -228,6 +269,7 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
+    @Override
     public void uploadFromDirectory() {
         List<BatchFile> files = fileUploadEngine.scanDirectories();
         if (files != null && files.size() > 0) {
@@ -247,11 +289,13 @@ public class MUAProcessImpl implements MUAProcess {
         }
     }
 
+    @Override
     public void resourceClassification() {
         log.info("Resource classification background thread called");
         // backgroundServices.resourceClassification();
     }
 
+    @Override
     public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata) {
         log.info("Saving resource metadata (classification) for {} resources", resourceMetadata.size());
         engine.saveAndApplyResourceClassification(resourceMetadata);

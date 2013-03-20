@@ -32,6 +32,7 @@ import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.EventTypeInformation;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
@@ -77,6 +78,7 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
         metadata = metadataToUse;
     }
 
+    @Override
     public Boolean call() throws Exception {
         doConstructCapabilities();
         callback.returnResult(capabilities);
@@ -88,6 +90,7 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
         capabilities = new Capabilities();
         capabilities.setMetadata(metadata);
         addStatisticInformation();
+        addStatisticTypeInformation();
         addSuggestions();
         addEventTotals();
         addEventDateInformation();
@@ -117,6 +120,12 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
             stats.add(information);
         }
         capabilities.setStatisticalServices(stats);
+    }
+
+    public void addStatisticTypeInformation() {
+        log.debug("Adding statistical type information to capabilities");
+        List<StatisticFunctionType> st = statisticsHandler.getStatisticTypeRegistry().getStatisticTypes();
+        capabilities.setStatisticFunctionTypes(st);
     }
 
     private void addSuggestions() {
@@ -190,8 +199,7 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
 
     private void addResourceInformation() {
         log.debug("Adding resource metadata to capabilities");
-        List<ResourceMetadata> resourceMetadata =
-                (List<ResourceMetadata>) storageEngine.getEventHandler().query("from ResourceMetadata", null);
+        List<ResourceMetadata> resourceMetadata = storageEngine.getEventHandler().query("from ResourceMetadata", null);
         log.debug("Setting {} resource metadata(s)", resourceMetadata.size());
         Collections.sort(resourceMetadata, new ResourceMetadataComparator());
         capabilities.setResourceMetadata(resourceMetadata);

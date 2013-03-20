@@ -16,12 +16,14 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics.functions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.MethodParameterNotOfRequiredTypeException;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
@@ -35,6 +37,7 @@ public class CountEntry extends BaseStatistic {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(CountEntry.class);
 
+    @Override
     public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere)
             throws StatisticalUnitException {
 
@@ -50,7 +53,9 @@ public class CountEntry extends BaseStatistic {
 
         int numberOfIntervals = Integer.parseInt(numberOfIntervalsString);
         log.debug("Performing countEntry Statistical Operation");
-        log.debug("Params for method:  {}, {} ", this.getClass().getSimpleName(), statisticParameters.getUnitName());
+        log.debug("Params for method:  {}, {}, for type {}, with where ={}", new Object[] {
+                this.getClass().getSimpleName(), statisticParameters.getUnitName(), statisticParameters.getEventType(),
+                sqlWhere});
 
         /* divide the temporal extent into evenly sized buckets */
         DateTime start = startingTime();
@@ -58,7 +63,7 @@ public class CountEntry extends BaseStatistic {
         log.debug("countEntry between [start:{}] [end:{}]", start, end);
         long difference = end.getMillis() - start.getMillis();
         log.debug("There is " + difference + "ms difference between start and end entries");
-        long timeIntervalsInMs = (long) (difference / numberOfIntervals);
+        long timeIntervalsInMs = difference / numberOfIntervals;
         long reminder = difference % numberOfIntervals;
         log.debug("There are " + numberOfIntervals + " buckets, with reminder " + reminder + "ms");
 
@@ -154,6 +159,14 @@ public class CountEntry extends BaseStatistic {
 
     @Override
     public void setStatisticParameters(StatisticParameters statisticParameters) {
+        /*
+         * allow for runtime construction of statisticParameters by creating a default set if none exist. This could be
+         * forced in some way.
+         */
+        if (statisticParameters == null) {
+            statisticParameters = createDefaultParameters();
+        }
+
         List<MethodParameter> methodParams = statisticParameters.getMethodParams();
         if (methodParams.size() == 1) {
             methodParams.get(0).setParameterName("Number of Intervals");
@@ -166,4 +179,21 @@ public class CountEntry extends BaseStatistic {
 
     }
 
+    private StatisticParameters createDefaultParameters() {
+        StatisticParameters parameters = new StatisticParameters();
+        parameters.setStatisticType("User");
+
+        MethodParameter param = new MethodParameter();
+        param.setValue("10");
+        List<MethodParameter> params = new ArrayList<MethodParameter>();
+        params.add(param);
+        parameters.setMethodParams(params);
+        Series defaultSeries = new Series();
+        defaultSeries.setSeriesLabel("Series 1");
+        List<Series> allSeries = new ArrayList<Series>();
+        allSeries.add(defaultSeries);
+        parameters.setSeries(allSeries);
+        return parameters;
+
+    }
 }

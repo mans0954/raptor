@@ -42,10 +42,10 @@ public class RunServer {
     /**
      * Programmatically do the following:
      * <ol>
-     * <li> Set the Apache CXF logger to use SLF4J </li>
-     * <li> Configure the logback logger</li>
-     * <li>Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
-     * to initialise the servlet</li>
+     * <li>Set the Apache CXF logger to use SLF4J</li>
+     * <li>Configure the logback logger</li>
+     * <li>Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration
+     * directory to initialise the servlet</li>
      * </ol>
      * 
      * @param args the standard program arguments.
@@ -88,7 +88,7 @@ public class RunServer {
         connector.setPort(portNumber);
 
         // enable mutual authentication
-        // sslConnector.setNeedClientAuth(true);
+        sslConnector.setNeedClientAuth(true);
         System.out.println("Using Connector " + sslConnector);
         server.setConnectors(new Connector[] {sslConnector});
 

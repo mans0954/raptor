@@ -17,7 +17,7 @@
     create table AuthenticationEvent (
         persistantId int8 not null,
         eventtime timestamp,
-        serviceHost varchar(255),
+        serviceHost varchar(400),
         resourceHost varchar(255),
         serviceId varchar(255),
         resourceId varchar(255),
@@ -37,7 +37,7 @@
     create table EzproxyAuthenticationEvent (
         persistantId int8 not null,
         eventtime timestamp,
-        serviceHost varchar(255),
+        serviceHost varchar(400),
         resourceHost varchar(255),
         serviceId varchar(255),
         resourceId varchar(255),
@@ -57,10 +57,31 @@
         primary key (persistantId)
     );
 
+    create table RadiusAuthenticationEvent (
+        persistantId int8 not null,
+        eventtime timestamp,
+        serviceHost varchar(400),
+        resourceHost varchar(255),
+        serviceId varchar(255),
+        resourceId varchar(255),
+        eventId int4 not null,
+        eventType varchar(255),
+        resourceIdCategory int4,
+        entityId varchar(255),
+        serviceName varchar(255),
+        organisationName varchar(255),
+        authenticationType varchar(255),
+        principalName varchar(255),
+        school varchar(255),
+        affiliation varchar(255),
+        clientIdentifier varchar(255),
+        primary key (persistantId)
+    );
+
     create table ShibbolethIdpAuthenticationEvent (
         persistantId int8 not null,
         eventtime timestamp,
-        serviceHost varchar(255),
+        serviceHost varchar(400),
         resourceHost varchar(255),
         serviceId varchar(255),
         resourceId varchar(255),
@@ -78,18 +99,41 @@
         messageProfileId varchar(255),
         responseBinding varchar(255),
         requestBinding varchar(255),
-        releasedAttributes varchar(255),
-        assertionId varchar(255),
+        releasedattributes varchar(400),
+        assertionid varchar(255),
         nameIdentifier varchar(255),
         responseId varchar(255),
         current_hashCode int4,
         primary key (persistantId)
     );
 
+    create table ShibbolethSpAuthenticationEvent (
+        persistantId int8 not null,
+        eventtime timestamp,
+        serviceHost varchar(400),
+        resourceHost varchar(255),
+        serviceId varchar(255),
+        resourceId varchar(255),
+        eventId int4 not null,
+        eventType varchar(255),
+        resourceIdCategory int4,
+        entityId varchar(255),
+        serviceName varchar(255),
+        organisationName varchar(255),
+        authenticationType varchar(255),
+        principalName varchar(255),
+        school varchar(255),
+        affiliation varchar(255),
+        protocol varchar(255),
+        clientIp varchar(255),
+        sessionId varchar(255),
+        primary key (persistantId)
+    );
+
     create table event (
         persistantId int8 not null,
         eventtime timestamp,
-        serviceHost varchar(255),
+        serviceHost varchar(400),
         resourceHost varchar(255),
         serviceId varchar(255),
         resourceId varchar(255),
@@ -102,16 +146,16 @@
         primary key (persistantId)
     );
 
+    create table latestEqualEntries (
+        latestEqualEntries_id int8 not null,
+        hashcode int4
+    );
+
     create table release_information (
         persistantId int8 not null,
         serviceEndpoint varchar(255) not null,
         lastReleasedEventTime timestamp,
         primary key (persistantId)
-    );
-
-    create table latestequalentries (
-        latestEqualEntries_id int8 not null,
-        hashcode int4
     );
 
     create table resource_metadata (
@@ -122,86 +166,126 @@
         primary key (persistantId)
     );
 
-    create index AuthenticationEventdt_index on AuthenticationEvent (eventtime);
+    create index AuthenticationEventeventid_i on AuthenticationEvent (eventId);
 
-    create index AuthenticationEventrequesthost_indx on AuthenticationEvent (serviceHost);
+    create index AuthenticationEventorgname_i on AuthenticationEvent (organisationName);
 
-    create index AuthenticationEventeventid_indx on AuthenticationEvent (eventId);
+    create index AuthenticationEventserviceid_i on AuthenticationEvent (serviceId);
 
-    create index AuthenticationEventserviceid_indx on AuthenticationEvent (serviceId);
+    create index AuthenticationEventservicename_i on AuthenticationEvent (serviceName);
 
-    create index AuthenticationEventorganisationName_indx on AuthenticationEvent (organisationName);
+    create index AuthenticationEventrequesthost_i on AuthenticationEvent (serviceHost);
 
-    create index AuthenticationEventserviceName_indx on AuthenticationEvent (serviceName);
+    create index AuthenticationEvententityid_i on AuthenticationEvent (entityId);
 
-    create index AuthenticationEvententityId_index on AuthenticationEvent (entityId);
+    create index AuthenticationEventdt_i on AuthenticationEvent (eventtime);
 
-    create index affiliation_indx on AuthenticationEvent (affiliation);
+    create index affiliation_i on AuthenticationEvent (affiliation);
 
-    create index principalname_indx on AuthenticationEvent (principalName);
+    create index principalname_i on AuthenticationEvent (principalName);
 
-    create index school_index on AuthenticationEvent (school);
+    create index school_i on AuthenticationEvent (school);
 
-    create index EzproxyAuthenticationEventAuthenticationEventdt_index on EzproxyAuthenticationEvent (eventtime);
+    create index EzproxyAuthenticationEventAuthenticationEventeventid_i on EzproxyAuthenticationEvent (eventId);
 
-    create index EzproxyAuthenticationEventAuthenticationEventrequesthost_indx on EzproxyAuthenticationEvent (serviceHost);
+    create index EzproxyAuthenticationEventAuthenticationEventorgname_i on EzproxyAuthenticationEvent (organisationName);
 
-    create index EzproxyAuthenticationEventAuthenticationEventeventid_indx on EzproxyAuthenticationEvent (eventId);
+    create index EzproxyAuthenticationEventAuthenticationEventserviceid_i on EzproxyAuthenticationEvent (serviceId);
 
-    create index EzproxyAuthenticationEventAuthenticationEventserviceid_indx on EzproxyAuthenticationEvent (serviceId);
+    create index EzproxyAuthenticationEventAuthenticationEventservicename_i on EzproxyAuthenticationEvent (serviceName);
 
-    create index EzproxyAuthenticationEventAuthenticationEventorganisationName_indx on EzproxyAuthenticationEvent (organisationName);
+    create index EzproxyAuthenticationEventAuthenticationEventrequesthost_i on EzproxyAuthenticationEvent (serviceHost);
 
-    create index EzproxyAuthenticationEventAuthenticationEventserviceName_indx on EzproxyAuthenticationEvent (serviceName);
+    create index EzproxyAuthenticationEventAuthenticationEvententityid_i on EzproxyAuthenticationEvent (entityId);
 
-    create index EzproxyAuthenticationEventAuthenticationEvententityId_index on EzproxyAuthenticationEvent (entityId);
+    create index EzproxyAuthenticationEventAuthenticationEventdt_i on EzproxyAuthenticationEvent (eventtime);
 
-    create index EzproxyAuthenticationEventaffiliation_indx on EzproxyAuthenticationEvent (affiliation);
+    create index EzproxyAuthenticationEventaffiliation_i on EzproxyAuthenticationEvent (affiliation);
 
-    create index EzproxyAuthenticationEventprincipalname_indx on EzproxyAuthenticationEvent (principalName);
+    create index EzproxyAuthenticationEventprincipalname_i on EzproxyAuthenticationEvent (principalName);
 
-    create index EzproxyAuthenticationEventschool_index on EzproxyAuthenticationEvent (school);
+    create index EzproxyAuthenticationEventschool_i on EzproxyAuthenticationEvent (school);
 
-    create index hashcode_indx on EzproxyAuthenticationEvent (current_hashCode);
+    create index hashcode_i on EzproxyAuthenticationEvent (current_hashCode);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventdt_index on ShibbolethIdpAuthenticationEvent (eventtime);
+    create index RadiusAuthenticationEventAuthenticationEventeventid_i on RadiusAuthenticationEvent (eventId);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventrequesthost_indx on ShibbolethIdpAuthenticationEvent (serviceHost);
+    create index RadiusAuthenticationEventAuthenticationEventorgname_i on RadiusAuthenticationEvent (organisationName);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventeventid_indx on ShibbolethIdpAuthenticationEvent (eventId);
+    create index RadiusAuthenticationEventAuthenticationEventserviceid_i on RadiusAuthenticationEvent (serviceId);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventserviceid_indx on ShibbolethIdpAuthenticationEvent (serviceId);
+    create index RadiusAuthenticationEventAuthenticationEventservicename_i on RadiusAuthenticationEvent (serviceName);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventorganisationName_indx on ShibbolethIdpAuthenticationEvent (organisationName);
+    create index RadiusAuthenticationEventAuthenticationEventrequesthost_i on RadiusAuthenticationEvent (serviceHost);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEventserviceName_indx on ShibbolethIdpAuthenticationEvent (serviceName);
+    create index RadiusAuthenticationEventAuthenticationEvententityid_i on RadiusAuthenticationEvent (entityId);
 
-    create index ShibbolethIdpAuthenticationEventAuthenticationEvententityId_index on ShibbolethIdpAuthenticationEvent (entityId);
+    create index RadiusAuthenticationEventAuthenticationEventdt_i on RadiusAuthenticationEvent (eventtime);
 
-    create index ShibbolethIdpAuthenticationEventaffiliation_indx on ShibbolethIdpAuthenticationEvent (affiliation);
+    create index RadiusAuthenticationEventaffiliation_i on RadiusAuthenticationEvent (affiliation);
 
-    create index ShibbolethIdpAuthenticationEventprincipalname_indx on ShibbolethIdpAuthenticationEvent (principalName);
+    create index RadiusAuthenticationEventprincipalname_i on RadiusAuthenticationEvent (principalName);
 
-    create index ShibbolethIdpAuthenticationEventschool_index on ShibbolethIdpAuthenticationEvent (school);
+    create index RadiusAuthenticationEventschool_i on RadiusAuthenticationEvent (school);
 
-    create index hashcode_indx on ShibbolethIdpAuthenticationEvent (current_hashCode);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventeventid_i on ShibbolethIdpAuthenticationEvent (eventId);
 
-    create index dt_index on event (eventtime);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventorgname_i on ShibbolethIdpAuthenticationEvent (organisationName);
 
-    create index requesthost_indx on event (serviceHost);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventserviceid_i on ShibbolethIdpAuthenticationEvent (serviceId);
 
-    create index eventid_indx on event (eventId);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventservicename_i on ShibbolethIdpAuthenticationEvent (serviceName);
 
-    create index serviceid_indx on event (serviceId);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventrequesthost_i on ShibbolethIdpAuthenticationEvent (serviceHost);
 
-    create index organisationName_indx on event (organisationName);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEvententityid_i on ShibbolethIdpAuthenticationEvent (entityId);
 
-    create index serviceName_indx on event (serviceName);
+    create index ShibbolethIdpAuthenticationEventAuthenticationEventdt_i on ShibbolethIdpAuthenticationEvent (eventtime);
 
-    create index entityId_index on event (entityId);
+    create index ShibbolethIdpAuthenticationEventaffiliation_i on ShibbolethIdpAuthenticationEvent (affiliation);
 
-    alter table latestequalentries 
-        add constraint FK94BC350EAAC8B6DE 
+    create index ShibbolethIdpAuthenticationEventprincipalname_i on ShibbolethIdpAuthenticationEvent (principalName);
+
+    create index ShibbolethIdpAuthenticationEventschool_i on ShibbolethIdpAuthenticationEvent (school);
+
+    create index hashcode_i_shib on ShibbolethIdpAuthenticationEvent (current_hashCode);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventeventid_i on ShibbolethSpAuthenticationEvent (eventId);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventorgname_i on ShibbolethSpAuthenticationEvent (organisationName);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventserviceid_i on ShibbolethSpAuthenticationEvent (serviceId);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventservicename_i on ShibbolethSpAuthenticationEvent (serviceName);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventrequesthost_i on ShibbolethSpAuthenticationEvent (serviceHost);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEvententityid_i on ShibbolethSpAuthenticationEvent (entityId);
+
+    create index ShibbolethSpAuthenticationEventAuthenticationEventdt_i on ShibbolethSpAuthenticationEvent (eventtime);
+
+    create index ShibbolethSpAuthenticationEventaffiliation_i on ShibbolethSpAuthenticationEvent (affiliation);
+
+    create index ShibbolethSpAuthenticationEventprincipalname_i on ShibbolethSpAuthenticationEvent (principalName);
+
+    create index ShibbolethSpAuthenticationEventschool_i on ShibbolethSpAuthenticationEvent (school);
+
+    create index eventid_i on event (eventId);
+
+    create index orgname_i on event (organisationName);
+
+    create index serviceid_i on event (serviceId);
+
+    create index servicename_i on event (serviceName);
+
+    create index requesthost_i on event (serviceHost);
+
+    create index entityid_i on event (entityId);
+
+    create index dt_i on event (eventtime);
+
+    alter table latestEqualEntries 
+        add constraint FK283FC3E3AAC8B6DE 
         foreign key (latestEqualEntries_id) 
         references release_information;
 
