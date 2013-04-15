@@ -22,49 +22,72 @@ import java.io.Serializable;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class Presentation implements Serializable{
+public class Presentation implements Serializable {
 
-    /** Generated Serial UID*/
+    /** Generated Serial UID */
     private static final long serialVersionUID = -4241388640686604177L;
 
     /** the title of the graph */
     private String graphTitle;
 
-    /** the label displayed on the xAxis*/
+    /** the label displayed on the xAxis */
     private String xAxisLabel;
 
     /** the label displayed on the yAxis */
     private String yAxisLabel;
 
-    /** the user can specify a date format per graph if the graph is a time series*/
+    /** the user can specify a date format per graph if the graph is a time series */
     private String dateFormat;
 
+    public Presentation() {
+        super();
+    }
+
+    /**
+     * Copy Constructor.
+     * 
+     * @param presentation
+     */
+    public Presentation(Presentation presentation) {
+        super();
+        graphTitle = presentation.graphTitle;
+        xAxisLabel = presentation.xAxisLabel;
+        yAxisLabel = presentation.yAxisLabel;
+        dateFormat = presentation.dateFormat;
+    }
 
     public void setGraphTitle(String graphTitle) {
-	this.graphTitle = graphTitle;
+        this.graphTitle = graphTitle;
     }
+
     public String getGraphTitle() {
-	return graphTitle;
+        return graphTitle;
     }
+
     public void setxAxisLabel(String xAxisLabel) {
-	this.xAxisLabel = xAxisLabel;
+        this.xAxisLabel = xAxisLabel;
     }
+
     public String getxAxisLabel() {
-	return xAxisLabel;
+        return xAxisLabel;
     }
+
     public void setyAxisLabel(String yAxisLabel) {
-	this.yAxisLabel = yAxisLabel;
+        this.yAxisLabel = yAxisLabel;
     }
+
     public String getyAxisLabel() {
-	return yAxisLabel;
+        return yAxisLabel;
     }
+
     public void setDateFormat(String dateFormat) {
-	this.dateFormat = dateFormat;
+        this.dateFormat = dateFormat;
     }
+
     public String getDateFormat() {
-	return dateFormat;
+        return dateFormat;
     }
 
 }

@@ -21,12 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * [  <comparison predicate>    ::=   <row value expression> <comp op> <row value expression>]
- *
+ * [ <comparison predicate> ::= <row value expression> <comp op> <row value expression>]
+ * 
  * @author philsmart
- *
+ * 
  */
-public class ComparisonPredicate implements Serializable{
+public class ComparisonPredicate implements Serializable {
     /**
      * Generated SerialUID
      */
@@ -35,42 +35,74 @@ public class ComparisonPredicate implements Serializable{
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(ComparisonPredicate.class);
 
-    public enum CompOp {EQUAL,NOT_EQUAL}
+    public enum CompOp {
+        EQUAL, NOT_EQUAL
+    }
 
     private CompOp compOp;
     private String fieldName;
     private String value;
 
+    /**
+     * Constructor.
+     * 
+     * @param comparisonPredicate
+     */
+    public ComparisonPredicate() {
+        super();
+    }
 
+    /**
+     * Copy Constructor.
+     * 
+     * @param comparisonPredicate
+     */
+    public ComparisonPredicate(ComparisonPredicate comparisonPredicate) {
+        super();
+        if (comparisonPredicate != null) {
+            fieldName = comparisonPredicate.fieldName;
+            value = comparisonPredicate.value;
+            if (comparisonPredicate.compOp != null) {
+                compOp = CompOp.valueOf(comparisonPredicate.compOp.name());
+            }
+        }
+
+    }
 
     public void setCompOp(CompOp compOp) {
-	this.compOp = compOp;
+        this.compOp = compOp;
     }
+
     public CompOp getCompOp() {
-	return compOp;
+        return compOp;
     }
-    public void setFieldName(String fieldName) {        
-	this.fieldName = fieldName;
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
+
     public String getFieldName() {
-	return fieldName;
+        return fieldName;
     }
+
     public void setValue(String value) {
-	this.value = value;
+        this.value = value;
     }
+
     public String getValue() {
-	return value;
+        return value;
     }
 
     public CompOp[] getPossibleComparisonOperatorValues() {
-	return CompOp.values();
+        return CompOp.values();
     }
 
     /**
      * Does not set anything, only used to maintain compatibility with XML bindings
+     * 
      * @param compValues
      */
-    public void setPossibleComparisonOperatorValues(CompOp[] compValues){
+    public void setPossibleComparisonOperatorValues(CompOp[] compValues) {
 
     }
 

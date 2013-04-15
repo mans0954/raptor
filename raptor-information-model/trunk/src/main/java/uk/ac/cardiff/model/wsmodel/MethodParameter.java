@@ -59,6 +59,27 @@ public class MethodParameter implements Serializable {
      */
     private String valueType;
 
+    public MethodParameter() {
+        super();
+    }
+
+    /**
+     * Copy Constructor.
+     * 
+     * @param param
+     */
+    public MethodParameter(MethodParameter param) {
+        super();
+        if (param != null) {
+            if (param.parameterType != null) {
+                parameterType = ParameterType.valueOf(param.parameterType.name());
+            }
+            parameterName = param.parameterName;
+            value = param.value;
+            valueType = param.valueType;
+        }
+    }
+
     /**
      * Sets the value.
      * 

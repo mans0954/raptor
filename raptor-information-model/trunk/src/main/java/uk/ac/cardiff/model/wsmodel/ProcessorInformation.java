@@ -16,6 +16,7 @@
 package uk.ac.cardiff.model.wsmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,31 @@ public class ProcessorInformation implements Serializable {
     private String friendlyName;
 
     private List<MethodParameter> methodParameters;
+
+    public ProcessorInformation() {
+        super();
+    }
+
+    /**
+     * Copy Constructor.
+     * 
+     * @param info
+     */
+    public ProcessorInformation(ProcessorInformation info) {
+        super();
+        if (info != null) {
+            processorClass = info.processorClass;
+            friendlyName = info.friendlyName;
+            if (info.getMethodParameters() != null) {
+                methodParameters = new ArrayList<MethodParameter>();
+                for (MethodParameter param : info.methodParameters) {
+                    MethodParameter newParam = new MethodParameter(param);
+                    methodParameters.add(newParam);
+                }
+            }
+        }
+
+    }
 
     /**
      * @param methodParameters

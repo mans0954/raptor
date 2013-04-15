@@ -156,6 +156,46 @@ public class StatisticParameters implements Serializable {
         resourceCategory = ResourceCategory.ALL;
     }
 
+    /**
+     * Copy Constructor.
+     * 
+     * @param statisticParameters
+     */
+    public StatisticParameters(StatisticParameters statisticParameters) {
+        super();
+        if (statisticParameters != null) {
+            eventType = statisticParameters.eventType;
+            if (statisticParameters.type != null) {
+                type = StatisticType.valueOf(statisticParameters.type.name());
+            }
+            if (statisticParameters.resourceCategory != null) {
+                resourceCategory = ResourceCategory.valueOf(statisticParameters.resourceCategory.name());
+            }
+            if (statisticParameters.presentation != null) {
+                presentation = new Presentation(statisticParameters.presentation);
+            }
+
+            startTime = new DateTime(statisticParameters.startTime);
+            unitName = statisticParameters.unitName;
+            endTime = new DateTime(statisticParameters.endTime);
+            if (statisticParameters.methodParameters != null) {
+                methodParameters = new ArrayList<MethodParameter>();
+                for (MethodParameter param : statisticParameters.methodParameters) {
+                    MethodParameter newParam = new MethodParameter(param);
+                    methodParameters.add(newParam);
+                }
+            }
+            if (statisticParameters.series != null) {
+                series = new ArrayList<Series>();
+                for (Series serie : statisticParameters.series) {
+                    Series newSerie = new Series(serie);
+                    series.add(newSerie);
+                }
+            }
+        }
+
+    }
+
     public void setUnitName(String unitName) {
         this.unitName = unitName;
     }
@@ -169,6 +209,7 @@ public class StatisticParameters implements Serializable {
     }
 
     public List<MethodParameter> getMethodParams() {
+
         return methodParameters;
     }
 
