@@ -31,58 +31,109 @@
             <ref bean="MUAProcess"></ref>
         </property>
     </bean>
-    
+
     <!-- Types of events supported in this system, removing need for reflection (as this becomes to difficult to manage) -->
     <bean id="registeredConcreteEventTypes" class="uk.ac.cardiff.raptor.registry.EventTypeRegistry">
         <property name="registeredEventTypes">
             <list>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
-                    <property name="concrete" value="true"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class" >uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value></property>
-                    <property name="concrete" value="true"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="concrete" value="true" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>                    
-                    <property name="concrete" value="true"/>
-                </bean>
-                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value></property>                    
-                    <property name="concrete" value="true"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value></property>                    
-                    <property name="concrete" value="false"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>                    
-                    <property name="concrete" value="false"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="false" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value></property>                    
-                    <property name="concrete" value="false"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value>
+                    </property>
+                    <property name="concrete" value="false" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value></property>                    
-                    <property name="concrete" value="true"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="false" />
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
-                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.WugenEvent</value></property>                    
-                    <property name="concrete" value="true"/>
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.WugenEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
                 </bean>
             </list>
         </property>
     </bean>
-    
+
     <bean id="statisticTypeRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.XmlConfiguredStatisticTypeRegistry">
         <property name="statisticTypes">
-            <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
-                <property name="friendlyName" value="CountryEntry"/>
-                <property name="description" value="Counts the entries"/>
-                <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry"/>
-            </bean>        
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="CountryEntry" />
+                    <property name="description" value="Counts the entries" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group By Field" />
+                    <property name="description" value="Groups results by the particular field over the given time interval" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group Jusp Aggregate Resources" />
+                    <property name="description" value="Groups Jusp Resources together based on Jr1, Jr1a downloads" />
+                    <property name="statisticClass"
+                        value="uk.ac.cardiff.raptormua.engine.statistics.functions.JuspStatisticalFunction" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
         </property>
     </bean>
 
@@ -153,7 +204,7 @@
                         <value>SHIBBOLETH13</value>
                     </property>
                 </bean>
-                 <bean id="shibSp24BelowUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                <bean id="shibSp24BelowUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
                     <property name="allowedFileExtensions">
                         <list>
                             <value>txt</value>
@@ -184,28 +235,28 @@
     <!-- this bean config kicks of the singleton engine instance which is then used by all services of the MUA -->
     <bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
         <property name="eventReleaseClient">
-            <ref bean="eventReleaseClient"/>
+            <ref bean="eventReleaseClient" />
         </property>
         <property name="eventTypeRegistry">
-            <ref bean="registeredConcreteEventTypes"/>
+            <ref bean="registeredConcreteEventTypes" />
         </property>
         <property name="statisticsHandler">
             <ref bean="statisticalUnits" />
         </property>
         <property name="storageEngine">
-            <ref bean="storageEngine"/>
+            <ref bean="storageEngine" />
         </property>
         <property name="resourceStorageEngine">
-            <ref bean="resourceStorageEngine"/>
+            <ref bean="resourceStorageEngine" />
         </property>
         <property name="muaMetadata">
-            <ref bean="MUAMetadata"/>
+            <ref bean="MUAMetadata" />
         </property>
         <property name="capabilitiesConstructor">
             <ref bean="capabilitiesConstructor" />
         </property>
         <property name="dataAccessRegister">
-            <ref bean="dataAccessRegister"/>
+            <ref bean="dataAccessRegister" />
         </property>
         <property name="maxReleaseEventSize">
             <value>5000</value>
@@ -246,7 +297,7 @@
             <ref bean="statisticRegistry" />
         </property>
         <property name="statisticTypeRegistry">
-            <ref bean="statisticTypeRegistry"/>
+            <ref bean="statisticTypeRegistry" />
         </property>
 
     </bean>
@@ -355,8 +406,8 @@
     <bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
         <property name="sessionFactory" ref="muaSessionFactory" />
     </bean>
-    
-    
+
+
 
     <!-- emailer -->
 
@@ -371,8 +422,8 @@
     <bean id="emailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="emailJob" />
         <!-- run every morning at 11 PM -->
-        <property name="cronExpression" value="0 0 23 * * ?" /> 
-      <!--   <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> -->
+        <property name="cronExpression" value="0 0 23 * * ?" />
+        <!-- <property name="cronExpression" value="0 0/1 * 1/1 * ? *" /> -->
     </bean>
 
     <bean id="emailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -478,10 +529,8 @@
     </bean>
 
     <aop:config>
-<!--         <aop:aspect id="performanceAspect" ref="performanceAdvice">
-            <aop:pointcut id="performanceLayer" expression="bean(persistantEventHandler)" />
-            <aop:around pointcut-ref="performanceLayer" method="traceSave" />
-        </aop:aspect> -->
+        <!-- <aop:aspect id="performanceAspect" ref="performanceAdvice"> <aop:pointcut id="performanceLayer" expression="bean(persistantEventHandler)" 
+            /> <aop:around pointcut-ref="performanceLayer" method="traceSave" /> </aop:aspect> -->
 
         <aop:aspect id="eventStorageAspect" ref="storageStatisticsAdvice">
             <aop:pointcut id="eventStorageLayer" expression="bean(storageEngine) and args(transactionId, events)" />

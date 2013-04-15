@@ -23,6 +23,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
 import uk.ac.cardiff.model.wsmodel.MethodParameterNotOfRequiredTypeException;
@@ -37,7 +38,7 @@ public class JuspStatisticalFunction extends BaseStatistic {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(JuspStatisticalFunction.class);
 
-    private final String[] REPORT_TOTALS = new String[] {"jr1Downloads", "jr1aDownloads", "totalDownloads"};
+    private final String[] REPORT_TOTALS = new String[] {"jr1Downloads", "jr1aDownloads"};
 
     @Override
     public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere)
@@ -108,15 +109,46 @@ public class JuspStatisticalFunction extends BaseStatistic {
 
     @Override
     public void setStatisticParameters(StatisticParameters statisticParameters) {
+        /*
+         * allow for runtime construction of statisticParameters by creating a default set if none exist. This could be
+         * forced in some way.
+         */
+        if (statisticParameters == null) {
+            statisticParameters = createDefaultParameters();
+        }
+
         List<MethodParameter> methodParams = statisticParameters.getMethodParams();
         if (methodParams.size() == 1) {
             methodParams.get(0).setParameterName("Institution");
-            methodParams.get(0).setParameterType(ParameterType.FIELD);
+            methodParams.get(0).setParameterType(ParameterType.VALUE);
         } else {
             log.error("Unable to set parameter type for statistic {}, incorrect number of parameters", this.getClass()
                     .getSimpleName());
         }
         this.statisticParameters = statisticParameters;
+
+    }
+
+    private StatisticParameters createDefaultParameters() {
+        StatisticParameters parameters = new StatisticParameters();
+        parameters.setStatisticType("User");
+
+        MethodParameter param = new MethodParameter();
+        param.setValue("car");
+        List<MethodParameter> params = new ArrayList<MethodParameter>();
+        params.add(param);
+        parameters.setMethodParams(params);
+        Series defaultSeries = new Series();
+        defaultSeries.setSeriesLabel("JR1 Downloads");
+        defaultSeries.setDummySeries(false);
+        Series defaultSeriesJr1a = new Series();
+        defaultSeriesJr1a.setSeriesLabel("JR1a Downloads");
+        defaultSeriesJr1a.setDummySeries(true);
+        List<Series> allSeries = new ArrayList<Series>();
+        allSeries.add(defaultSeries);
+        allSeries.add(defaultSeriesJr1a);
+        parameters.setSeries(allSeries);
+        return parameters;
 
     }
 
