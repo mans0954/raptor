@@ -23,6 +23,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import uk.ac.cardiff.model.report.Series;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.MethodParameter.ParameterType;
 import uk.ac.cardiff.model.wsmodel.MethodParameterNotOfRequiredTypeException;
@@ -49,6 +50,7 @@ public class GroupByFrequency extends BaseStatistic {
      * @return
      * @throws StatisticalUnitException
      */
+    @Override
     public Boolean performStatistic(List<MethodParameter> methodParams, String sqlWhere)
             throws StatisticalUnitException {
 
@@ -135,6 +137,15 @@ public class GroupByFrequency extends BaseStatistic {
 
     @Override
     public void setStatisticParameters(StatisticParameters statisticParameters) {
+
+        /*
+         * allow for runtime construction of statisticParameters by creating a default set if none exist. This could be
+         * forced in some way.
+         */
+        if (statisticParameters == null) {
+            statisticParameters = createDefaultParameters();
+        }
+
         List<MethodParameter> methodParams = statisticParameters.getMethodParams();
         if (methodParams.size() == 1) {
             methodParams.get(0).setParameterName("Group By Field");
@@ -144,6 +155,24 @@ public class GroupByFrequency extends BaseStatistic {
                     .getSimpleName());
         }
         this.statisticParameters = statisticParameters;
+
+    }
+
+    private StatisticParameters createDefaultParameters() {
+        StatisticParameters parameters = new StatisticParameters();
+        parameters.setStatisticType("User");
+
+        MethodParameter param = new MethodParameter();
+        param.setValue("resourceId");
+        List<MethodParameter> params = new ArrayList<MethodParameter>();
+        params.add(param);
+        parameters.setMethodParams(params);
+        Series defaultSeries = new Series();
+        defaultSeries.setSeriesLabel("Series 1");
+        List<Series> allSeries = new ArrayList<Series>();
+        allSeries.add(defaultSeries);
+        parameters.setSeries(allSeries);
+        return parameters;
 
     }
 
