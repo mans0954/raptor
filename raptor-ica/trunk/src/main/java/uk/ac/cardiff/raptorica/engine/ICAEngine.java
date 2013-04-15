@@ -90,10 +90,14 @@ public class ICAEngine {
      * @return true, if successful
      */
     public boolean release() {
+        log.info("Event release on ICA called for {} parsers", getDataAccessRegister().getEnabledParsingModules()
+                .size());
         List<Event> eventsToSend = new ArrayList<Event>();
+
         for (BaseEventParser parser : getDataAccessRegister().getEnabledParsingModules()) {
             eventsToSend.addAll(parser.getAuthentications());
         }
+
         log.trace("ICA Parser(s) have {} events to send", eventsToSend.size());
         boolean success = false;
         try {
