@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.cxf.aegis.DatabindingException;
 import org.apache.cxf.aegis.databinding.AegisDatabinding;
 import org.apache.cxf.aegis.type.TypeUtil;
@@ -53,6 +55,11 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
      */
     private List<Class<? extends Event>> allowedClassTypes;
 
+    @PostConstruct
+    public void initialise() {
+        log.warn("The allowed class types is null. This *may* prevent this instance from releasing events. Possibly set this in the event-release config file.");
+    }
+
     @Override
     public boolean sendEvents(EventPushMessage pushed, Endpoint endpoint) {
         try {
@@ -60,8 +67,7 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
             factory.setServiceClass(MultiUnitAggregator.class);
             AegisDatabinding databinding = new AegisDatabinding();
 
-            org.apache.cxf.aegis.AegisContext context =
-                    new org.apache.cxf.aegis.AegisContext();
+            org.apache.cxf.aegis.AegisContext context = new org.apache.cxf.aegis.AegisContext();
             context.setWriteXsiTypes(true);
 
             Set<Class<?>> rootClasses = new HashSet<Class<?>>();
@@ -77,8 +83,7 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
                 try {
                     c = ClassLoaderUtils.loadClass(typeName, TypeUtil.class);
                 } catch (ClassNotFoundException e) {
-                    throw new DatabindingException("Could not find override type class: "
-                            + typeName, e);
+                    throw new DatabindingException("Could not find override type class: " + typeName, e);
                 }
                 rootClasses.add(c);
             }
@@ -96,8 +101,7 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
             httpConduit.setClient(httpClientPolicy);
 
             if (getTlsParameters() != null)
-                httpConduit.setTlsClientParameters(getTlsParameters()
-                        .getTlsClientParameters());
+                httpConduit.setTlsClientParameters(getTlsParameters().getTlsClientParameters());
 
             log.debug("Accessing the endpoint version " + client.getVersion());
             client.addAuthentications(pushed);
@@ -105,12 +109,10 @@ public class CxfServiceEndpointClient implements ServiceEndpointClient {
 
             return true;
         } catch (SoapFault e) {
-            log.error("Could not send events to endpoint [{}]",
-                    endpoint.getServiceEndpoint(), e);
+            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
             return false;
         } catch (Exception e) {
-            log.error("Could not send events to endpoint [{}]",
-                    endpoint.getServiceEndpoint(), e);
+            log.error("Could not send events to endpoint [{}]", endpoint.getServiceEndpoint(), e);
             return false;
         }
 

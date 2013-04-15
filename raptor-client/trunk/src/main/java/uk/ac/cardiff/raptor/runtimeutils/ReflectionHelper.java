@@ -533,7 +533,7 @@ public final class ReflectionHelper {
             Object result = getter.invoke(object, new Object[] {});
             return result;
         } catch (Throwable e) {
-            log.error("Field name '" + fieldname + "' does not match internal model attribute [{}]", e.getMessage());
+            log.error("Field name '" + fieldname + "' does not match internal model attribute [{}]", e.getMessage(), e);
 
         }
         return null;
