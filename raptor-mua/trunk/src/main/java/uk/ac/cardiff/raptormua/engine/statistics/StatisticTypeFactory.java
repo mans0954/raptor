@@ -16,10 +16,14 @@
 
 package uk.ac.cardiff.raptormua.engine.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
 
@@ -42,6 +46,7 @@ public class StatisticTypeFactory {
      * Creating a generic {@link BaseStatistic} from the class string encapsulated in statisticType.
      * 
      * @param statisticType an issues and null is returned.
+     * @param registry a {@link StatisticProcessorRegistry} used to initialise post processors.
      * @return
      */
     public static BaseStatistic createNewBaseStatistic(StatisticFunctionType statisticType) {
@@ -75,7 +80,8 @@ public class StatisticTypeFactory {
      * @param statisticalUnitInformation
      * @return
      */
-    public static BaseStatistic createNewBaseStatistic(DynamicStatisticalUnitInformation statisticalUnitInformation) {
+    public static BaseStatistic createNewBaseStatistic(DynamicStatisticalUnitInformation statisticalUnitInformation,
+            StatisticProcessorRegistry registry) {
         try {
             Class<?> statisticClass = Class.forName(statisticalUnitInformation.getFunction().getStatisticClass());
             Object statisticInstance = statisticClass.newInstance();
@@ -83,8 +89,14 @@ public class StatisticTypeFactory {
                 BaseStatistic statistic = (BaseStatistic) statisticInstance;
                 statistic.setStatisticParameters(statisticalUnitInformation.getStatisticUnitInformation()
                         .getStatisticParameters());
-                // statistic
-                // .setPostprocessor(statisticalUnitInformation.getStatisticUnitInformation().getPostprocessors());
+
+                statistic.setPostprocessor(null);
+
+                List<StatisticPostProcessor> postProcessors =
+                        initialisePostProcessors(statisticalUnitInformation.getStatisticUnitInformation()
+                                .getPostprocessors(), registry);
+                statistic.setPostprocessor(postProcessors);
+
                 statistic.getStatisticParameters().setUnitName(
                         "DYNAMIC-" + statisticInstance.getClass().getSimpleName());
                 return statistic;
@@ -105,6 +117,27 @@ public class StatisticTypeFactory {
                     statisticalUnitInformation.getFunction().getStatisticClass(), e);
         }
         return null;
+    }
+
+    private static List<StatisticPostProcessor> initialisePostProcessors(
+            List<ProcessorInformation> processorInformation, StatisticProcessorRegistry registry) {
+        if (processorInformation == null) {
+            return null;
+        }
+        ArrayList<StatisticPostProcessor> initlialisedPostProcessors = new ArrayList<StatisticPostProcessor>();
+        for (ProcessorInformation information : processorInformation) {
+            try {
+                StatisticPostProcessor processor = registry.getProcessor(information);
+                log.debug("Initialise post processor with friendlyname [{}]", processor.getFriendlyName());
+                initlialisedPostProcessors.add(processor);
+            } catch (StatisticPostProcessorFactoryException e) {
+                log.error("Could not set processor {} on statistic", information.getProcessorClass(), e);
+            } catch (ProcessorRegistryException e) {
+                log.error("Could not set processor {} on statistic", information.getProcessorClass(), e);
+            }
+        }
+
+        return initlialisedPostProcessors;
     }
 
 }

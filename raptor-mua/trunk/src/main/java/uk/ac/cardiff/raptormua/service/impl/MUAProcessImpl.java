@@ -159,6 +159,8 @@ public class MUAProcessImpl implements MUAProcess {
             DynamicStatisticalUnitInformation statisticalUnitInformation) {
         log.info("Dynamically invoking the statistical function [{}]", statisticalUnitInformation.getFunction()
                 .getStatisticClass());
+        log.trace("Dynamic statistic has {} post processors", statisticalUnitInformation.getStatisticUnitInformation()
+                .getPostprocessors().size());
         return engine.invokeStatisticDynamically(statisticalUnitInformation);
 
     }
