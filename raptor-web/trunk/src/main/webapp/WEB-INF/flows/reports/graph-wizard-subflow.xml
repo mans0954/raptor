@@ -91,7 +91,7 @@
 
     <view-state id="graphOptionsSelector" view="wizard/graph-options-selector.xhtml">
         <transition on="next" to="graphLayoutSelector" />
-        <transition on="back" to="graphSeriesSelector" />
+        <transition on="back" to="graphProcessorSelector" />
         <transition on="cancel" to="cancelWizard" />
     </view-state>
 

@@ -38,12 +38,12 @@
 						<h3 align="center">Please Select The Graph Function To Run
 							For Each Event</h3>
 						<br />
-                        <a4j:form id="statisticFunctionSelectForm">
-						<rich:dataGrid id="functionDataTable"
-							value="#{graphWizardModel.graphSets}" var="graph" columns="1"
-							width="100%" style="border:3px" styleClass="simpleTable">
+						<a4j:form id="statisticFunctionSelectForm">
+							<rich:dataGrid id="functionDataTable"
+								value="#{graphWizardModel.graphSets}" var="graph" columns="1"
+								width="100%" style="border:3px" styleClass="simpleTable">
 
-							
+
 								<b>Event:</b>
 								<h:outputText value=" #{graph.eventType}" />
 								<h:panelGrid columns="2">
@@ -79,20 +79,20 @@
 											suggestionValues="#{graphWizardModel.possibleFieldNameValues}" />
 									</rich:column>
 								</rich:dataTable>
-						
-						</rich:dataGrid>
+
+							</rich:dataGrid>
 
 
-						<rich:spacer height="10px" />
-						
+							<rich:spacer height="10px" />
+
 							<h:panelGrid columns="5">
 								<h:commandButton value="next" action="next" />
 								<rich:spacer width="5px" />
-								<h:commandButton value="back" action="back" immediate="true"/>
+								<h:commandButton value="back" action="back" immediate="true" />
 								<rich:spacer width="5px" />
-								<h:commandButton value="cancel" action="cancel" immediate="true"/>
+								<h:commandButton value="cancel" action="cancel" immediate="true" />
 							</h:panelGrid>
-						  </a4j:form>
+						</a4j:form>
 					</div>
 				</center>
 

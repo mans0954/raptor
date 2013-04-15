@@ -36,8 +36,7 @@
 				<h4 align="left">Step 4. Graph Series Selector</h4>
 				<center>
 					<div class="stepbystep">
-						<h3 align="center">Please Select Any Post Processors Per
-							Series</h3>
+						<h3 align="center">Please Select Optional Post Processors</h3>
 						<br />
 						<a4j:form>
 
@@ -48,7 +47,7 @@
 								<h:outputText value=" #{graph.eventType}" />
 
 								<rich:dataTable id="postProcessorTable"
-									value="#{graph.statisticalUnitInformation.postprocessors}"
+									value="#{graph.statisticalUnitInformation.statisticalUnitInformation.postprocessors}"
 									var="processor" width="100%" style="width:100%;">
 
 									<rich:column style="width:100%">
@@ -70,7 +69,7 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_20.png" />
 											<f:setPropertyActionListener value="#{processor}"
-												target="#{flowScope.websession.graphmodel.selectedPostProcessor}" />
+												target="#{graphWizardModel.selectedPostProcessor}" />
 										</a4j:commandLink>
 
 									</rich:column>
@@ -87,7 +86,7 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{processor}"
-												target="#{flowScope.websession.graphmodel.selectedPostProcessor}" />
+												target="#{graphWizardModel.selectedPostProcessor}" />
 										</a4j:commandLink>
 
 									</rich:column>

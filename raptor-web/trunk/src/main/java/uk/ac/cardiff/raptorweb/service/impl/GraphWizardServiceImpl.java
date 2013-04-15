@@ -178,6 +178,8 @@ public class GraphWizardServiceImpl implements GraphWizardService {
             dynamic.setFunction(set.getSelectedStatisticFunctionType());
 
             dynamic.setStatisticUnitInformation(set.getStatisticalUnitInformation().getStatisticalUnitInformation());
+            log.debug("Has compiled with {} post processors", dynamic.getStatisticUnitInformation().getPostprocessors()
+                    .size());
             dynamic.getStatisticUnitInformation().getStatisticParameters().setEndTime(model.getCurrentEndTimeActual());
             dynamic.getStatisticUnitInformation().getStatisticParameters()
                     .setStartTime(model.getCurrentStartTimeActual());
