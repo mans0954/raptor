@@ -43,7 +43,12 @@ public class Header {
     /** The name of the field this header matches to in the internal <code>Event</code> model. */
     private String fieldName;
 
-    /** The index in the currently tokenized line this header matches to. */
+    /**
+     * The name of the source fieldname to extract the value from, this is used by some parsing types.
+     */
+    private String sourceFieldName;
+
+    /** The index in the currently tokenized line this header matches to. This is used by some parsing types. */
     private int fieldNo;
 
     /** Used to combined two or more fields together. If this value is set as -1, all remaining fields will be read. */
@@ -288,6 +293,20 @@ public class Header {
      */
     public boolean isPreserveDelimeterOnFieldConcatenation() {
         return preserveDelimeterOnFieldConcatenation;
+    }
+
+    /**
+     * @return Returns the sourceFieldName.
+     */
+    public String getSourceFieldName() {
+        return sourceFieldName;
+    }
+
+    /**
+     * @param sourceFieldName The sourceFieldName to set.
+     */
+    public void setSourceFieldName(String sourceFieldName) {
+        this.sourceFieldName = sourceFieldName;
     }
 
 }

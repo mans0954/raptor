@@ -23,29 +23,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.text.StrTokenizer;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.event.Event;
-import uk.ac.cardiff.raptor.parse.BaseEventParser;
+import uk.ac.cardiff.raptor.parse.BaseEventFileParser;
 import uk.ac.cardiff.raptor.parse.ParserException;
 import uk.ac.cardiff.raptor.parse.external.file.format.Header;
 import uk.ac.cardiff.raptor.parse.external.file.format.HeaderException;
@@ -61,7 +55,7 @@ import uk.ac.cardiff.raptor.parse.runtimeutils.ReflectionHelper;
  * 
  * 
  */
-public class LogFileParser extends BaseEventParser {
+public class LogFileParser extends BaseEventFileParser {
 
     /** The class logger */
     private final Logger log = LoggerFactory.getLogger(LogFileParser.class);
@@ -124,6 +118,7 @@ public class LogFileParser extends BaseEventParser {
 
     }
 
+    @Override
     public void parse(File logfile) throws ParserException {
         try {
             log.info("parsing log file: {}", logfile.getCanonicalPath());
@@ -308,35 +303,6 @@ public class LogFileParser extends BaseEventParser {
     }
 
     /**
-     * Decodes a URL (which must use the http(s) protocol) based on the ISO-8859-1 ISO-Latin character set. Keeps
-     * decoding (max 5 times) until the literal 'http(s)://' is obtained, as some URL's are double encoded.
-     * 
-     * @param value the URL to be decoded. Must be a URL using the http protocol.
-     * @return the <code>value</code> URL decoded
-     */
-    private String decode(String value) {
-        try {
-            int maxTries = 0;
-            String decodedURL = value;
-            while (true) {
-                decodedURL = URLDecoder.decode(decodedURL, "ISO-8859-1");
-                if (decodedURL.contains("http://") || decodedURL.contains("https://")) {
-                    return decodedURL;
-                }
-                if (maxTries == 5) {
-                    log.warn("Maximum tries have been hit to decode the URL [{}]", value);
-                    break;
-                }
-                maxTries++;
-            }
-
-        } catch (UnsupportedEncodingException e) {
-            return value;
-        }
-        return value;
-    }
-
-    /**
      * Replace substrings from <code>value</code> with the given strings in <code>header</code> that match the regular
      * expression(s) in the regexReplaceAll from the <code>header</code>
      * 
@@ -413,7 +379,7 @@ public class LogFileParser extends BaseEventParser {
     }
 
     /**
-     * Determines if the event should stored, as determined by a <fieldname, value> match on the input
+     * Determines if the event should be stored, as determined by a <fieldname, value> match on the input
      * <code>authE</code> event with those in the <code>exclusionList</code>.
      * 
      * @param authE
@@ -482,83 +448,6 @@ public class LogFileParser extends BaseEventParser {
     }
 
     /**
-     * Converts the <code>value</code> into a list delimited by the <code> delimeter</code> input, and adds the list of
-     * string values to the <code>fieldName</code> of the <code>object</code> using Reflection.
-     * 
-     * @param value the value to add to the <code>object</code>
-     * @param fieldName the name of the field that the value is added to
-     * @param delimeter the delimeter used to split the <code>value</code> into a list
-     * @param object the object with which to set the <code>value</code> on
-     */
-    private void addStringList(String value, String fieldName, Object object, String delimeter) {
-        try {
-            String[] splitValue = value.split(delimeter);
-            String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
-            setValueOnObject(fieldAsMethod, splitValue, object);
-        } catch (Exception e) {
-            log.error("Illegal StringList Value: {} for field: {}", new Object[] {value, fieldName, e});
-        }
-    }
-
-    /**
-     * Converts the <code>value</code> into a date using the given <code>format</code> and <code>timezone</code>
-     * parameters, and adds the date to the <code>fieldName</code> of the <code>object</code> using Reflection.
-     * 
-     * @param value the value to add to the <code>object</code>
-     * @param format the date format used to parse the <code>value</code> into a string
-     * @param timezone sets the timezone on the newly created date
-     * @param fieldName the name of the field that the value is added to
-     * @param object the object with which to set the <code>value</code> on
-     */
-    private void addDate(String value, String format, String timezone, String fieldName, Object object) {
-        try {
-            DateTimeFormatter dtf = DateTimeFormat.forPattern(format);
-            dtf = dtf.withZone(DateTimeZone.forTimeZone(TimeZone.getTimeZone(timezone)));
-            DateTime dt = dtf.parseDateTime(value.substring(0, value.length()));
-            String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
-            setValueOnObject(fieldAsMethod, dt, object);
-        } catch (Exception e) {
-            log.error("Illegal Date Value: {} for field: {}", new Object[] {value, fieldName, e});
-        }
-
-    }
-
-    /**
-     * Adds the string <code>value</code> to the <code>fieldName</code> of the <code>object</code> using Reflection.
-     * 
-     * @param value the value to add to the <code>object</code>
-     * @param fieldName the name of the field that the value is added to
-     * @param object the object with which to set the <code>value</code> on
-     */
-    private void addString(String value, String fieldName, Object object) {
-        try {
-            String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
-            setValueOnObject(fieldAsMethod, value, object);
-        } catch (Exception e) {
-            log.error("Illegal String Value: {} for field: {}", new Object[] {value, fieldName, e});
-        }
-
-    }
-
-    /**
-     * Converts the <code>value</code> into an Integer, and adds the Integer to the <code>fieldName</code> of the
-     * <code>object</code> using Reflection.
-     * 
-     * @param value the value to add to the <code>object</code>
-     * @param fieldName the name of the field that the value is added to
-     * @param object the object with which to set the <code>value</code> on
-     */
-    private void addInteger(String value, String fieldName, Object object) {
-        try {
-            String fieldAsMethod = ReflectionHelper.prepareMethodNameSet(fieldName);
-            setValueOnObject(fieldAsMethod, value, object);
-        } catch (Exception e) {
-            log.error("Illegal Integer Value: {} for field: {}", new Object[] {value, fieldName, e});
-        }
-
-    }
-
-    /**
      * Returns the value of the <code>fieldname</code> parameter from the <code>object</code> Object
      * 
      * @param fieldname the name of the field from which to retrieve the value
@@ -576,24 +465,6 @@ public class LogFileParser extends BaseEventParser {
             log.error("Field name '{}' does not match internal model attribute", fieldname, e);
         }
         return null;
-    }
-
-    /**
-     * Sets the <code>param</code> object on the field <code>fieldname</code> of the object <code>object</code>
-     * 
-     * @param fieldname the name of the field from which to set the value <code>param</code>
-     * @param param the object to set on the <code>fieldname</code> of the <code>object</code>
-     * @param object the object with which to set the object <code>param</code>
-     */
-    private void setValueOnObject(String fieldname, Object param, Object object) {
-        try {
-            Class<? extends Object> id = object.getClass();
-            Method setter = id.getMethod(fieldname, new Class[] {param.getClass()});
-            setter.invoke(object, new Object[] {param});
-        } catch (Throwable e) {
-            log.error("Field name '{}' does not match internal model attribute", fieldname, e);
-
-        }
     }
 
     public void setLogfile(String logfile) {
