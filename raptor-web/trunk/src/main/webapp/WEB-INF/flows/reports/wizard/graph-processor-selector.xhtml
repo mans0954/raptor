@@ -70,6 +70,7 @@
 												value="/image/icon/onebit_20.png" />
 											<f:setPropertyActionListener value="#{processor}"
 												target="#{graphWizardModel.selectedPostProcessor}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>
@@ -87,6 +88,7 @@
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{processor}"
 												target="#{graphWizardModel.selectedPostProcessor}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>
@@ -98,6 +100,7 @@
 											reRender="addPostProcessorForm">
 											<h:graphicImage id="addPostProcessorImage"
 												style="width:20px;" value="/image/icon/onebit_31.png" />
+												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</f:facet>
