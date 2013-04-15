@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.Series;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptorweb.model.ChartOptions;
@@ -123,6 +125,12 @@ public class GraphWizardModel implements Serializable {
     /** The suggestion values used by the UI to assist user input. */
     private SuggestionValues suggestionValues;
 
+    /** The selected post processor, as a reference for removal */
+    private ProcessorInformation selectedPostProcessor;
+
+    /** Record for holding information about a new processor to add */
+    private ProcessorInformation processorToAdd;
+
     /** The filename to use for report downloads. */
     private String downloadFilename;
 
@@ -140,6 +148,41 @@ public class GraphWizardModel implements Serializable {
         super();
         qualitativeTimeRange = QualitativeTimeRange.LAST_WEEK;
         initChartOptions();
+    }
+
+    public void initialiseNewProcessorAdd() {
+        processorToAdd = new ProcessorInformation();
+
+    }
+
+    /**
+     * Makes a copy of any method parameters from the suggestion values, into the processorToAdd
+     */
+    public void setupProcessorToAdd() {
+        if (processorToAdd != null) {
+            log.trace("Finding method parameters for {}", processorToAdd.getFriendlyName());
+            List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
+            for (ProcessorInformation information : processorsInformation) {
+                if (information.getFriendlyName().equals(processorToAdd.getFriendlyName())) {
+                    processorToAdd.setProcessorClass(information.getProcessorClass());
+                    if (information.getMethodParameters() != null) {
+                        List<MethodParameter> parameters = new ArrayList<MethodParameter>();
+                        for (MethodParameter parameter : information.getMethodParameters()) {
+                            MethodParameter parameterNew = new MethodParameter();
+                            log.debug("Setup parameter {}", parameter.getParameterName());
+                            parameterNew.setParameterName(parameter.getParameterName());
+                            parameterNew.setParameterType(parameter.getParameterType());
+                            parameterNew.setValueType(parameter.getValueType());
+                            parameters.add(parameterNew);
+                        }
+                        processorToAdd.setMethodParameters(parameters);
+                    } else {
+                        processorToAdd.setMethodParameters(null);
+                    }
+                }
+            }
+
+        }
     }
 
     /**
@@ -515,6 +558,34 @@ public class GraphWizardModel implements Serializable {
      */
     public void setDateSavedFormatted(String dateSavedFormatted) {
         this.dateSavedFormatted = dateSavedFormatted;
+    }
+
+    /**
+     * @return Returns the selectedPostProcessor.
+     */
+    public ProcessorInformation getSelectedPostProcessor() {
+        return selectedPostProcessor;
+    }
+
+    /**
+     * @param selectedPostProcessor The selectedPostProcessor to set.
+     */
+    public void setSelectedPostProcessor(ProcessorInformation selectedPostProcessor) {
+        this.selectedPostProcessor = selectedPostProcessor;
+    }
+
+    /**
+     * @return Returns the processorToAdd.
+     */
+    public ProcessorInformation getProcessorToAdd() {
+        return processorToAdd;
+    }
+
+    /**
+     * @param processorToAdd The processorToAdd to set.
+     */
+    public void setProcessorToAdd(ProcessorInformation processorToAdd) {
+        this.processorToAdd = processorToAdd;
     }
 
 }

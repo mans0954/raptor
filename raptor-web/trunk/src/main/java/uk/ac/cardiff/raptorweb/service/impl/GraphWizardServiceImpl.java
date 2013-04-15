@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
+import uk.ac.cardiff.model.wsmodel.MethodParameter;
+import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
@@ -51,6 +53,29 @@ public class GraphWizardServiceImpl implements GraphWizardService {
             log.error("Can not set time range, this should not really happen.");
         }
 
+    }
+
+    @Override
+    public void addProcessorToSelectedStatistic(GraphWizardModel model) {
+        ProcessorInformation processorToAdd = model.getProcessorToAdd();
+        log.debug("Adding processor [{} with parameters {}]", processorToAdd.getFriendlyName(),
+                (processorToAdd.getMethodParameters() != null));
+
+        if (processorToAdd.getMethodParameters() != null) {
+            for (MethodParameter methodParameter : processorToAdd.getMethodParameters()) {
+                log.debug("Parameter [{},{},{}]",
+                        new Object[] {methodParameter.getParameterName(), methodParameter.getValue(),
+                                methodParameter.getValue().getClass()});
+            }
+        }
+        model.getSelectedGraphSet().getStatisticalUnitInformation().getStatisticalUnitInformation().getPostprocessors()
+                .add(processorToAdd);
+    }
+
+    @Override
+    public void removePostProcessorFromSelectedStatistic(GraphWizardModel model) {
+        model.getSelectedGraphSet().getStatisticalUnitInformation().getStatisticalUnitInformation().getPostprocessors()
+                .remove(model.getSelectedPostProcessor());
     }
 
     @Override

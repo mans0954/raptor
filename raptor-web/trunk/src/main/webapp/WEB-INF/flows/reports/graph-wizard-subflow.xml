@@ -36,7 +36,7 @@
     </view-state>
 
     <view-state id="graphTypeSelector" view="wizard/graph-type-selector.xhtml">
-       
+
         <transition on="lookupStatistic">
             <evaluate expression="graphWizardService.lookupStatisticalUnitInformation(graphWizardModel)" />
         </transition>
@@ -59,8 +59,32 @@
             <evaluate expression="graphWizardService.removeSelectedFilterFromSelectedStatistic(graphWizardModel)" />
         </transition>
 
-        <transition on="next" to="graphOptionsSelector" />
+        <transition on="next" to="graphProcessorSelector" />
         <transition on="back" to="graphTypeSelector" />
+        <transition on="cancel" to="cancelWizard" />
+    </view-state>
+
+
+    <view-state id="graphProcessorSelector" view="wizard/graph-processor-selector.xhtml">
+
+        <transition on="removePostProcessorFromSelectedStatistic">
+            <evaluate expression="graphWizardService.removePostProcessorFromSelectedStatistic(graphWizardModel)"></evaluate>
+        </transition>
+        
+        <transition on="addProcessorToSelectedStatistic">
+            <evaluate expression="graphWizardService.addProcessorToSelectedStatistic(graphWizardModel)"></evaluate>
+        </transition>
+        
+        <transition on="initialiseNewProcessorAdd">
+            <evaluate expression="graphWizardModel.initialiseNewProcessorAdd()" />
+        </transition>
+
+        <transition on="setupProcessorToAdd">
+            <evaluate expression="graphWizardModel.setupProcessorToAdd()" />
+        </transition>
+
+        <transition on="next" to="graphOptionsSelector" />
+        <transition on="back" to="graphSeriesSelector" />
         <transition on="cancel" to="cancelWizard" />
     </view-state>
 
@@ -92,7 +116,7 @@
         <transition on="generatePDFReport">
             <evaluate expression="graphWizardService.generatePDFReport(graphWizardModel)" />
         </transition>
-        
+
         <transition on="save">
             <evaluate expression="savedWizardReportsService.save(graphWizardModel,flowScope.websession.user.name)" />
         </transition>

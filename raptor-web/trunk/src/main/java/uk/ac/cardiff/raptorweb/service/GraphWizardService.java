@@ -7,6 +7,7 @@ import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel;
  *
  */
 public interface GraphWizardService {
+    // TODO this is too similar to graphService to be a seperate service.
 
     /**
      * Computes the current time range from the given qualitative time range in the input {@link GraphWizardModel}.
@@ -36,12 +37,12 @@ public interface GraphWizardService {
     /**
      * @param model
      */
-    void removeSelectedFilterFromSelectedStatistic(GraphWizardModel model);
+    public void removeSelectedFilterFromSelectedStatistic(GraphWizardModel model);
 
     /**
      * @param model
      */
-    void removeSeriesFromSelectedStatistic(GraphWizardModel model);
+    public void removeSeriesFromSelectedStatistic(GraphWizardModel model);
 
     public void generateExcelReport(GraphWizardModel model);
 
@@ -50,5 +51,15 @@ public interface GraphWizardService {
     public void generatePDFReport(GraphWizardModel model);
 
     public void loadSavedReports(GraphWizardModel model);
+
+    /**
+     * @param model
+     */
+    public void addProcessorToSelectedStatistic(GraphWizardModel model);
+
+    /**
+     * @param model
+     */
+    public void removePostProcessorFromSelectedStatistic(GraphWizardModel model);
 
 }
