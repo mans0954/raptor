@@ -26,9 +26,11 @@ import uk.ac.cardiff.model.AdministrativeFunction;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 
 /**
@@ -121,5 +123,23 @@ public interface MultiUnitAggregator {
      * @param resourceMetadata
      */
     public void saveResourceMetadata(List<ResourceMetadata> resourceMetadata);
+
+    /**
+     * Allows the dynamic (runtime) instantiation, configuration and invocation of a statistical function.
+     * 
+     * @param dynamicStatisticalInformation
+     * @return
+     */
+    public AggregatorGraphModel invokeStatisticalUnitDynamically(
+            DynamicStatisticalUnitInformation dynamicStatisticalInformation);
+
+    /**
+     * Returns the statistical information for the <code>statisticType</code> input. Does this by dynamically
+     * constructing the BaseStatistic and sending its parameters back.
+     * 
+     * @param statisticType
+     * @return
+     */
+    public StatisticalUnitInformation getStatisticalUnitInformation(StatisticFunctionType statisticType);
 
 }

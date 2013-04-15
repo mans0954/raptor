@@ -50,6 +50,7 @@ public final class AttributeAssociationEngine {
      * Gets associated attributes for the given ...
      */
     public void associateAttributes(final List<Event> events) throws AttributeAssociationException {
+
         for (BaseAttributeAssociationDefinition attributeAssociationDefinition : attributeAssociationDefinitions) {
             log.info("Attribute Association Definition [{}], is enabled [{}]",
                     attributeAssociationDefinition.getDefiniationName(), attributeAssociationDefinition.isEnabled());
