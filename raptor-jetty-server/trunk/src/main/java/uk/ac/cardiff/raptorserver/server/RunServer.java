@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorserver.server;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +25,6 @@ import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
-
 import org.mortbay.jetty.handler.DefaultHandler;
 import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.webapp.WebAppContext;
@@ -38,14 +37,15 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
 public class RunServer {
-    
+
     /** Class Logger */
     private static final Logger log = LoggerFactory.getLogger(RunServer.class);
 
     /**
-     * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3. Start a Jetty Server instance including
-     * trust and key stores, and set the web.xml in the configuration directory to initialise the servlet.
-     *
+     * Programmatically do the following: 1. Set the Apache CXF logger to use SLF4J 2. Configure the logback logger 3.
+     * Start a Jetty Server instance including trust and key stores, and set the web.xml in the configuration directory
+     * to initialise the servlet.
+     * 
      * @param args
      * @throws IOException
      * @throws FileNotFoundException
@@ -54,16 +54,16 @@ public class RunServer {
     public static void main(String args[]) throws FileNotFoundException, IOException {
         System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
 
-        String configurationFiles = System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/");
+        String configurationFiles =
+                System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/");
 
-        configureLogger(configurationFiles+"conf/logging.xml");
+        configureLogger(configurationFiles + "conf/logging.xml");
 
         Properties props = new Properties();
         props.load(new FileInputStream(configurationFiles + "conf/server.properties"));
 
         int portNumber = Integer.parseInt(props.getProperty("jetty.port", "8112"));
         String webappContextPath = props.getProperty("jetty.webapp.contextPath", "/raptor-web");
-
 
         System.out.println("[INFO] Jetty Config: Using Port " + portNumber);
         System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
@@ -74,28 +74,27 @@ public class RunServer {
         connector.setPort(portNumber);
         connector.setMaxIdleTime(30000);
 
-
-        server.setConnectors(new Connector[] { connector });
+        server.setConnectors(new Connector[] {connector});
 
         WebAppContext webappcontext = new WebAppContext();
         webappcontext.setContextPath(webappContextPath);
         webappcontext.setWar(configurationFiles);
-        webappcontext.setWar(configurationFiles+"/webapp/raptor-web/");
-        System.out.println("[INFO] Configured RaptorWeb To: " + configurationFiles+"/webapp/raptor-web/");
+        webappcontext.setWar(configurationFiles + "/webapp/raptor-web/");
+        System.out.println("[INFO] Configured RaptorWeb To: " + configurationFiles + "/webapp/raptor-web/");
 
         HandlerCollection handlers = new HandlerCollection();
-        handlers.setHandlers(new Handler[] { webappcontext, new DefaultHandler() });
+        handlers.setHandlers(new Handler[] {webappcontext, new DefaultHandler()});
 
         server.setHandler(handlers);
 
         try {
-              log.info("Starting Jetty Server");
-                server.start();
-                server.join();
-                log.info("Jetty has stopped");
+            log.info("Starting Jetty Server");
+            server.start();
+            server.join();
+            log.info("Jetty has stopped");
         } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(100);
+            e.printStackTrace();
+            System.exit(100);
         }
 
     }
