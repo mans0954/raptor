@@ -16,10 +16,10 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 
 import org.jfree.chart.JFreeChart;
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class RaptorJFreeChartModel implements Serializable {
 
@@ -37,36 +37,37 @@ public class RaptorJFreeChartModel implements Serializable {
     private final Logger log = LoggerFactory.getLogger(RaptorJFreeChartModel.class);
 
     private File chartLocation;
+
     private String relativeChartLocation;
+
     private JFreeChart chart;
 
     public void setChartLocation(File chartLocation) {
-	this.chartLocation = chartLocation;
+        this.chartLocation = chartLocation;
     }
 
     public File getChartLocation() {
-	return chartLocation;
+        return chartLocation;
     }
 
     public void setRelativeChartLocation(String relativeChartLocation) {
-	this.relativeChartLocation = relativeChartLocation;
+        this.relativeChartLocation = relativeChartLocation;
     }
 
     public String getRelativeChartLocation() {
-	return relativeChartLocation;
+        return relativeChartLocation;
     }
 
-    public String getRelativeChartLocationPath(){
-	return relativeChartLocation;
+    public String getRelativeChartLocationPath() {
+        return relativeChartLocation;
     }
 
     public void setChart(JFreeChart chart) {
-	this.chart = chart;
+        this.chart = chart;
     }
 
     public JFreeChart getChart() {
-	return chart;
+        return chart;
     }
-
 
 }

@@ -141,7 +141,7 @@
     <!-- Richfaces config -->
     <context-param>
         <param-name>org.richfaces.SKIN</param-name>
-        <param-value>darkX</param-value>
+        <param-value>glassX</param-value>
     </context-param>
 
     <!-- Making the RichFaces skin spread to standard HTML controls -->

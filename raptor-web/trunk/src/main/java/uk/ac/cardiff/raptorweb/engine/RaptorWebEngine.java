@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.engine;
 
 import java.util.ArrayList;
@@ -29,8 +30,10 @@ import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
+import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.reports.ReportHandler;
 import uk.ac.cardiff.raptorweb.model.GraphModel;
@@ -111,9 +114,10 @@ public final class RaptorWebEngine {
     }
 
     /**
-     * Returns the list of USER level statistical units from the attached MUA as stored in the currentlyAttachedCapabilities. If no
-     * currentlyAttachedCapabilities exists, hence no MUA has been successfully queried, it chooses either the current MUA <code>attachedMUA</code> or the MUA
-     * that was loaded with <code>isAttached value="true"</code> from the XML configuration.
+     * Returns the list of USER level statistical units from the attached MUA as stored in the
+     * currentlyAttachedCapabilities. If no currentlyAttachedCapabilities exists, hence no MUA has been successfully
+     * queried, it chooses either the current MUA <code>attachedMUA</code> or the MUA that was loaded with
+     * <code>isAttached value="true"</code> from the XML configuration.
      * 
      * @return List of statistical units, as <code>StatisticalUnitInformation</code>
      */
@@ -148,8 +152,7 @@ public final class RaptorWebEngine {
     /**
      * Gets the capabilites from the selectedEndpoint. This is a live lookup.
      * 
-     * @param selectedEndpoint
-     *            the endpoint to get the capabilities of.
+     * @param selectedEndpoint the endpoint to get the capabilities of.
      * @return the {@link Capabilities} of the selected endpoint.
      */
     public Capabilities getCapabilities(MUAEntry selectedEndpoint) {
@@ -157,7 +160,8 @@ public final class RaptorWebEngine {
     }
 
     /**
-     * Gets the capabilites from the currently selected endpoint (held in <code>attachedMUA</code>). This is a live lookup.
+     * Gets the capabilites from the currently selected endpoint (held in <code>attachedMUA</code>). This is a live
+     * lookup.
      * 
      * @return the {@link Capabilities} of the selected endpoint.
      */
@@ -165,6 +169,11 @@ public final class RaptorWebEngine {
         return serviceEndpointClient.discoverMUACapabilities(attachedMUA);
     }
 
+    /**
+     * Gets the attached from those already stored - this is a cached lookup.
+     * 
+     * @return
+     */
     public MUAEntry getCurrentlyAttached() {
         for (MUAEntry entry : registry.getMUAEntries()) {
             if (entry.getIsAttached()) {
@@ -175,13 +184,16 @@ public final class RaptorWebEngine {
     }
 
     public AggregatorGraphModel invokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
-        AggregatorGraphModel gmodel = serviceEndpointClient.invokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit.getStatisticParameters().getUnitName());
+        AggregatorGraphModel gmodel =
+                serviceEndpointClient.invokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit
+                        .getStatisticParameters().getUnitName());
         return gmodel;
 
     }
 
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation selectedStatisticalUnit) {
-        AggregatorGraphModel gmodel = serviceEndpointClient.updateAndinvokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit);
+        AggregatorGraphModel gmodel =
+                serviceEndpointClient.updateAndinvokeStatisticalUnit(getCurrentlyAttached(), selectedStatisticalUnit);
         return gmodel;
 
     }
@@ -211,9 +223,12 @@ public final class RaptorWebEngine {
      * @param model
      */
     public void updateMUAStatistic(GraphModel model) {
-        log.debug("Updating statistic {} ", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
-        log.debug("Has startDate {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getStartTimeAsDate());
-        serviceEndpointClient.updateStatisticalUnit(attachedMUA, model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
+        log.debug("Updating statistic {} ", model.getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                .getStatisticParameters().getUnitName());
+        log.debug("Has startDate {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                .getStatisticParameters().getStartTimeAsDate());
+        serviceEndpointClient.updateStatisticalUnit(attachedMUA, model.getSelectedStatisticalUnit()
+                .getStatisticalUnitInformation());
     }
 
     /**
@@ -314,6 +329,26 @@ public final class RaptorWebEngine {
     public void sendResourceClassification(List<ResourceMetadata> resourceMetadata) {
         serviceEndpointClient.sendResourceMetadata(resourceMetadata, attachedMUA);
 
+    }
+
+    /**
+     * 
+     * Live lookup to the MUA to find the {@link StatisticalUnitInformation} for the input {@link StatisticFunctionType}
+     * .
+     * 
+     * @param selectedStatisticFunctionType
+     */
+    public StatisticalUnitInformation lookupStatisticalUnitInformation(
+            StatisticFunctionType selectedStatisticFunctionType) {
+        return serviceEndpointClient.lookupStatisticalUnitInformation(attachedMUA, selectedStatisticFunctionType);
+    }
+
+    /**
+     * @param statisticalUnitInformations
+     */
+    public AggregatorGraphModel invokeStatisticalUnitDynamic(
+            DynamicStatisticalUnitInformation statisticalUnitInformation) {
+        return serviceEndpointClient.invokeStatisticalUnitDynamic(attachedMUA, statisticalUnitInformation);
     }
 
 }

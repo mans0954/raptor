@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
@@ -25,42 +26,47 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
 import uk.ac.cardiff.raptorweb.model.records.Row;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class TableSeries implements Serializable{
+public class TableSeries implements Serializable {
+
+    /**
+     * Serial UID.
+     */
+    private static final long serialVersionUID = 6708316462135569267L;
 
     static Logger log = LoggerFactory.getLogger(TableSeries.class);
 
     private List<Row> rows;
+
     private String seriesLabel;
 
-    public TableSeries(){
-	rows = new ArrayList<Row>();
+    public TableSeries() {
+        rows = new ArrayList<Row>();
     }
 
     public void setRows(List<Row> rows) {
-	this.rows = rows;
+        this.rows = rows;
     }
 
     public List<Row> getRows() {
-	return rows;
+        return rows;
     }
 
     public void addRow(Row row) {
-	getRows().add(row);
+        getRows().add(row);
     }
 
     public void setSeriesLabel(String seriesLabel) {
-	this.seriesLabel = seriesLabel;
+        this.seriesLabel = seriesLabel;
     }
 
     public String getSeriesLabel() {
-	return seriesLabel;
+        return seriesLabel;
     }
 
 }

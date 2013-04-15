@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapping>
+    <description>Maps a graph wizard model for persisting to a file</description>
+
+    <class name="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel">
+        <map-to xml="graph-wizard-model" />
+        <field name="graphTitle" type="string">
+            <bind-xml name="graph-title" node="element" />
+        </field>
+        <field name="qualitativeTimeRangeAsString" type="string">
+            <bind-xml name="qualitative-time-range" node="element" />
+        </field>
+        <field name="displayLayout" type="string">
+            <bind-xml name="display-layout" node="element" />
+        </field>
+        <field name="chartOptions">
+            <bind-xml name="chart-options" node="element" />
+        </field>
+        <field name="dateSavedFormatted" type="string">
+            <bind-xml name="date-saved" node="element" />
+        </field>
+        <field name="graphSets" collection="arraylist" type="uk.ac.cardiff.raptorweb.model.wizard.GraphSet">
+            <bind-xml name="graph-sets" />
+        </field>
+    </class>
+
+    <class name="uk.ac.cardiff.raptorweb.model.wizard.GraphSet">
+        <map-to xml="graph-set" />
+        <field name="eventType" type="string">
+            <bind-xml name="event-type" node="element" />
+        </field>
+        <field name="statisticalUnitInformation" type="uk.ac.cardiff.raptorweb.model.StatisticalUnitInformationView" >
+            <bind-xml name="statistical-unit-information" node="element" />
+        </field>
+    </class>
+    
+    
+    <class name="uk.ac.cardiff.raptorweb.model.StatisticalUnitInformationView">
+        <map-to xml="statistical-unit-information-view" />
+        <field name="statisticalUnitInformation" type="uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation">
+            <bind-xml name="statistical-unit-information" node="element" />
+        </field>
+    
+    </class>
+    <!-- TODO check post processors will work here -->
+    <class name="uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation">
+        <map-to xml="statistical-unit-information" />
+        <field name="statisticParameters" type="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+            <bind-xml name="statistic-parameters" node="element" />
+        </field>
+        <field name="postprocessors" collection="arraylist" type="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+            <bind-xml name="postprocessors" node="element" />
+        </field>
+    </class>
+    
+    <class name="uk.ac.cardiff.model.wsmodel.StatisticParameters">
+        <map-to xml="statistic-parameters" />
+        <field name="unitName" type="string">
+            <bind-xml name="unit-name" node="element" />
+        </field>
+        <field name="startTimeAsJavaDate" type="date">
+            <bind-xml name="start-time-as-java-date" node="element" />
+        </field>
+        <field name="endTimeAsJavaDate" type="date">
+            <bind-xml name="end-time-as-java-date" node="element" />
+        </field>
+        <field name="presentation" >
+            <bind-xml name="presentation" node="element" />
+        </field>
+        <field name="resourceCategory" type="uk.ac.cardiff.model.wsmodel.StatisticParameters$ResourceCategory">
+            <bind-xml name="resource-category" node="element" />
+        </field> 
+        <field name="type" type="uk.ac.cardiff.model.wsmodel.StatisticParameters$StatisticType">
+            <bind-xml name="type" node="element" />
+        </field>
+        <field name="eventType" type="string">
+            <bind-xml name="event-type" node="element" />
+        </field>
+        <field name="series" collection="arraylist" type="uk.ac.cardiff.model.report.Series">
+            <bind-xml name="series" node="element" />
+        </field>
+        <field name="methodParams" collection="arraylist" type="uk.ac.cardiff.model.wsmodel.MethodParameter">
+            <bind-xml name="method-parameters" node="element" />
+        </field>
+    </class>
+
+</mapping>
