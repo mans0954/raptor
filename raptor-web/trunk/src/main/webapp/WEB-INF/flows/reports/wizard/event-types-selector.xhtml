@@ -1,0 +1,94 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+
+	<ui:define name="content">
+
+
+		<rich:layout>
+			<rich:layoutPanel position="top">
+				<h4 align="left">Step 2. Select Event Type(s)</h4>
+				<center>
+					<div class="stepbystep">
+						<h3 align="center">Please Select One Or More Event Types</h3>
+						<br />
+						<h:form id="event-type-select-form">
+							<h:panelGrid columns="2">
+								<h:selectOneMenu id="dateRangeSelector"
+									value="#{graphWizardModel.tmpSelectedEventType}">
+									<f:selectItems value="#{eventTypeService.eventTypeList}" />
+								</h:selectOneMenu>
+								<a4j:commandButton value="add" reRender="event-type-select-form"
+									action="addEventType" />
+							</h:panelGrid>
+							<br />
+
+							<rich:dataTable id="eventTypesForm"
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+								cellpadding="0" cellspacing="0" border="0" var="var"
+								value="#{graphWizardModel.graphSets}">
+
+								<rich:column>
+									<f:facet name="header">Event Type</f:facet>
+									<h:outputText value="#{var.eventType}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">Remove</f:facet>
+									<a4j:commandLink action="removeEventType"
+										reRender="eventTypesForm">
+										<h:graphicImage
+											style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+											value="/image/icon/onebit_33.png" />
+										<f:setPropertyActionListener value="#{var}"
+											target="#{graphWizardModel.tmpGraphSetToRemove}" />
+									</a4j:commandLink>
+								</rich:column>
+							</rich:dataTable>
+
+							<rich:spacer height="10px" />
+
+							<h:panelGrid columns="5">
+								<h:commandButton value="next" action="next" />
+								<rich:spacer width="5px" />
+								<h:commandButton value="back" action="back" />
+								<rich:spacer width="5px" />
+								<h:commandButton value="cancel" action="cancel" />
+							</h:panelGrid>
+						</h:form>
+					</div>
+				</center>
+
+			</rich:layoutPanel>
+
+
+		</rich:layout>
+
+
+	</ui:define>
+</ui:composition>

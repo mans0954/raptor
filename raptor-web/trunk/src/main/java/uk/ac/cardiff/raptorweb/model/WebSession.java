@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
@@ -20,8 +21,8 @@ import java.io.Serializable;
 import org.springframework.security.core.Authentication;
 
 /**
- * The Web Session class holds all view specific state information e.g. about the user, the startmodel, the graphmodel etc. Hence any call to these must come
- * through the flowscope.webuser context.
+ * The Web Session class holds all view specific state information e.g. about the user, the startmodel, the graphmodel
+ * etc. Hence any call to these must come through the flowscope.webuser context.
  * 
  * @author philsmart
  * 
@@ -34,9 +35,13 @@ public class WebSession implements Serializable {
     private static final long serialVersionUID = 7131752054932206591L;
 
     private Authentication user;
+
     private StartModel startmodel;
+
     private GraphModel graphmodel;
+
     private ReportModel reportmodel;
+
     private SetupModel setupmodel;
 
     /** initilise the models used by the different view states. */
@@ -49,6 +54,7 @@ public class WebSession implements Serializable {
 
     public void setUser(Authentication user) {
         this.user = user;
+
     }
 
     public Authentication getUser() {

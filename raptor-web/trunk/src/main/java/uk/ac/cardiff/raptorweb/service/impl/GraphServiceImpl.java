@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.service.impl;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import uk.ac.cardiff.model.report.AggregatorGraphModel;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.model.wsmodel.MethodParameter;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
+import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptorweb.engine.ChartProcessor;
@@ -72,31 +74,38 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void removePostProcessorFromSelectedStatistic(WebSession websession) {
-        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().remove(websession.getGraphmodel().getSelectedPostProcessor());
+        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors()
+                .remove(websession.getGraphmodel().getSelectedPostProcessor());
     }
 
     @Override
     public void addProcessorToSelectedStatistic(WebSession websession) {
         ProcessorInformation processorToAdd = websession.getGraphmodel().getProcessorToAdd();
-        log.debug("Adding processor [{} with parameters {}]", processorToAdd.getFriendlyName(), (processorToAdd.getMethodParameters() != null));
+        log.debug("Adding processor [{} with parameters {}]", processorToAdd.getFriendlyName(),
+                (processorToAdd.getMethodParameters() != null));
 
         if (processorToAdd.getMethodParameters() != null) {
             for (MethodParameter methodParameter : processorToAdd.getMethodParameters()) {
-                log.debug("Parameter [{},{},{}]", new Object[] { methodParameter.getParameterName(), methodParameter.getValue(), methodParameter.getValue().getClass() });
+                log.debug("Parameter [{},{},{}]",
+                        new Object[] {methodParameter.getParameterName(), methodParameter.getValue(),
+                                methodParameter.getValue().getClass()});
             }
         }
-        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors().add(processorToAdd);
+        websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getPostprocessors()
+                .add(processorToAdd);
     }
 
     /**
-     * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if they do not already exist.
+     * Populates the {@link GraphModel} inside the <code>websesion</code> with the currently set statistical units if
+     * they do not already exist.
      */
     @Override
     public void populateStatisticalUnits(WebSession websession) {
         if (websession.getGraphmodel().getStatisticalUnitsForView() != null) {
             return;
         }
-        ArrayList<StatisticalUnitInformationView> statisticalUnitsForView = new ArrayList<StatisticalUnitInformationView>();
+        ArrayList<StatisticalUnitInformationView> statisticalUnitsForView =
+                new ArrayList<StatisticalUnitInformationView>();
         List<StatisticalUnitInformation> units = getStatisticalUnits();
         for (StatisticalUnitInformation unit : units) {
             StatisticalUnitInformationView unitForView = new StatisticalUnitInformationView();
@@ -112,12 +121,13 @@ public class GraphServiceImpl implements GraphService {
     /**
      * Populates the suggestion values that assist users in selecting certain statistical parameters.
      * 
-     * @param websession
-     *            the webssesion to set suggestion values on.
+     * @param websession the webssesion to set suggestion values on.
      */
     public void populateSuggestionValues(WebSession websession) {
-        websession.getGraphmodel().setSuggestionValues(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
-        websession.getGraphmodel().setEventTypes(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getEventsPerType());
+        websession.getGraphmodel().setSuggestionValues(
+                webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
+        websession.getGraphmodel().setEventTypes(
+                webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getEventsPerType());
 
     }
 
@@ -135,6 +145,15 @@ public class GraphServiceImpl implements GraphService {
             }
         }
         return unitsForUser;
+    }
+
+    /**
+     * Retrieves the {@link StatisticFunctionType} from the web engine from whatever is currently attached.
+     * 
+     * @return
+     */
+    public List<StatisticFunctionType> getStatisticFunctionTypeUnits() {
+        return webEngine.getAttachedCapabilities().getStatisticFunctionTypes();
     }
 
     @Override
@@ -168,8 +187,10 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public void invokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
-        log.info("Graph Service Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
-        AggregatorGraphModel gmodel = webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
+        log.info("Graph Service Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                .getStatisticParameters().getUnitName());
+        AggregatorGraphModel gmodel =
+                webEngine.invokeStatisticalUnit(model.getSelectedStatisticalUnit().getStatisticalUnitInformation());
         setGraphModel(model, gmodel);
 
     }
@@ -177,8 +198,11 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public void updateAndInvokeStatisticalUnit(WebSession websession) {
         GraphModel model = websession.getGraphmodel();
-        log.info("Graph Service Updating and Invoking {}", model.getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
-        AggregatorGraphModel gmodel = webEngine.updateAndInvokeStatisticalUnit(websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation());
+        log.info("Graph Service Updating and Invoking {}", model.getSelectedStatisticalUnit()
+                .getStatisticalUnitInformation().getStatisticParameters().getUnitName());
+        AggregatorGraphModel gmodel =
+                webEngine.updateAndInvokeStatisticalUnit(websession.getGraphmodel().getSelectedStatisticalUnit()
+                        .getStatisticalUnitInformation());
         setGraphModel(model, gmodel);
 
     }
@@ -188,13 +212,15 @@ public class GraphServiceImpl implements GraphService {
         if (gmodel != null) {
             model.setCurrentTableGraph(chartProcessor.constructRaptorTableChartModel(gmodel));
             model.setCurrentJFreeGraph(chartProcessor.constructJFreeGraph(gmodel, model.getChartOptions()));
-            model.setProcessingResult("Updated [" + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
+            model.setProcessingResult("Updated ["
+                    + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
 
         } else {
             log.warn("Chart model came back from the MUA as null, nothing to display");
             model.setCurrentTableGraph(null);
             model.setCurrentGraph(null);
-            model.setProcessingResult("The statistic failed to produce a graphable result [" + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
+            model.setProcessingResult("The statistic failed to produce a graphable result ["
+                    + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
         }
     }
 
@@ -230,18 +256,23 @@ public class GraphServiceImpl implements GraphService {
     /*
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptorweb.service.GraphService#removeSeriesFromSelectedStatistic(uk.ac.cardiff.raptorweb.model.WebSession)
+     * @see
+     * uk.ac.cardiff.raptorweb.service.GraphService#removeSeriesFromSelectedStatistic(uk.ac.cardiff.raptorweb.model.
+     * WebSession)
      */
     @Override
     public void removeSeriesFromSelectedStatistic(WebSession websession) {
-        websession.getGraphmodel().getSelectedStatisticalUnit().removeSeries(websession.getGraphmodel().getSelectedSeries());
+        websession.getGraphmodel().getSelectedStatisticalUnit()
+                .removeSeries(websession.getGraphmodel().getSelectedSeries());
 
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptorweb.service.GraphService#addSeriesToSelectedStatistic(uk.ac.cardiff.raptorweb.model.WebSession)
+     * @see
+     * uk.ac.cardiff.raptorweb.service.GraphService#addSeriesToSelectedStatistic(uk.ac.cardiff.raptorweb.model.WebSession
+     * )
      */
     @Override
     public void addSeriesToSelectedStatistic(WebSession websession) {
@@ -251,13 +282,15 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void addFilterToSelectedSeries(WebSession websession) {
-        websession.getGraphmodel().getSelectedStatisticalUnit().addFilterToSeries(websession.getGraphmodel().getSelectedSeries());
+        websession.getGraphmodel().getSelectedStatisticalUnit()
+                .addFilterToSeries(websession.getGraphmodel().getSelectedSeries());
 
     }
 
     @Override
     public void removeSelectedFilterFromSelectedStatistic(WebSession websession) {
-        websession.getGraphmodel().getSelectedStatisticalUnit().removeFilterFromSeries(websession.getGraphmodel().getSelectedSeries());
+        websession.getGraphmodel().getSelectedStatisticalUnit()
+                .removeFilterFromSeries(websession.getGraphmodel().getSelectedSeries());
 
     }
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.service.impl;
 
 import java.util.ArrayList;
@@ -40,12 +41,15 @@ public class EventTypeServiceImpl implements EventTypeService {
     private EventTypeDisplayMapper eventTypeToDisplayMapper;
 
     /**
-     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the UI.The label is not the event type class name
-     * but a friendly name from the <code>eventTypeToDisplayMapper</code>. Importantly, if the event type is not in the <code>eventTypeToDisplayMapper</code>
-     * list, it is not returned. Consequently, the set of event types to display are only those specified in the <code>eventTypeToDisplayMapper</code>.
+     * Gets a list of event types from the attached MUA's capabilities, and places them inside SelectItems for the
+     * UI.The label is not the event type class name but a friendly name from the <code>eventTypeToDisplayMapper</code>.
+     * Importantly, if the event type is not in the <code>eventTypeToDisplayMapper</code> list, it is not returned.
+     * Consequently, the set of event types to display are only those specified in the
+     * <code>eventTypeToDisplayMapper</code>.
      */
     @Override
     public List<SelectItem> getEventTypeList() {
+        log.debug("Getting event type list as a list of select items");
         List<SelectItem> eventTypes = new ArrayList<SelectItem>();
 
         List<EventTypeInformation> eventTypesFromAttached = webEngine.getAttachedCapabilities().getEventsPerType();
@@ -69,16 +73,14 @@ public class EventTypeServiceImpl implements EventTypeService {
     }
 
     /**
-     * @param webEngine
-     *            the webEngine to set
+     * @param webEngine the webEngine to set
      */
     public void setWebEngine(RaptorWebEngine webEngine) {
         this.webEngine = webEngine;
     }
 
     /**
-     * @param eventTypeToDisplayMapper
-     *            the eventTypeToDisplayMapper to set
+     * @param eventTypeToDisplayMapper the eventTypeToDisplayMapper to set
      */
     public void setEventTypeToDisplayMapper(EventTypeDisplayMapper eventTypeToDisplayMapper) {
         this.eventTypeToDisplayMapper = eventTypeToDisplayMapper;

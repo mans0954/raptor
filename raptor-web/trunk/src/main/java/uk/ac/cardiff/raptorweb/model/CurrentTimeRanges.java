@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import org.joda.time.DateTime;
@@ -27,13 +28,38 @@ public class CurrentTimeRanges {
     private final Logger log = LoggerFactory.getLogger(CurrentTimeRanges.class);
 
     public DateTime currentTime;
+
     public DateTime startToday;
+
     public DateTime startWeek;
+
     public DateTime startMonth;
+
     public DateTime startYear;
 
+    public DateTime startLastMonth;
+
+    public DateTime endLastMonth;
+
+    @Deprecated
     public CurrentTimeRanges() {
         computeTimeRanges();
+    }
+
+    /**
+     * if forceDayBoundaries is true, then computes start times from the beginning of days and end times from the end of
+     * days.
+     * 
+     * Constructor.
+     * 
+     * @param forceDayStart
+     */
+    public CurrentTimeRanges(boolean forceDayBoundaries) {
+        if (forceDayBoundaries) {
+            computeTimeRangesForceDayBoundaries();
+        } else {
+            computeTimeRanges();
+        }
     }
 
     public DateTime getStartTime(TimeRange period) throws NoSuchTimeRangeException {
@@ -45,6 +71,8 @@ public class CurrentTimeRanges {
             return startMonth;
         } else if (period == TimeRange.LASTYEAR) {
             return startYear;
+        } else if (period == TimeRange.PREVIOUSMONTH) {
+            return startLastMonth;
         } else {
             throw new NoSuchTimeRangeException("Requested a time period that does not exists [" + period + "]");
         }
@@ -67,9 +95,61 @@ public class CurrentTimeRanges {
             return currentTime;
         } else if (period == TimeRange.LASTYEAR) {
             return currentTime;
+        } else if (period == TimeRange.PREVIOUSMONTH) {
+            return endLastMonth;
         } else {
             throw new NoSuchTimeRangeException("Requested a time period that does not exists [" + period + "]");
         }
+    }
+
+    private void computeTimeRangesForceDayBoundaries() {
+        long currentTimeInMS = System.currentTimeMillis();
+        DateTime currentDateTime = new DateTime(currentTimeInMS);
+        currentDateTime = currentDateTime.plusDays(1);
+        currentDateTime = currentDateTime.minusHours(currentDateTime.getHourOfDay());
+        currentDateTime = currentDateTime.minusMinutes(currentDateTime.getMinuteOfHour());
+        currentDateTime = currentDateTime.minusSeconds(currentDateTime.getSecondOfMinute());
+
+        DateTime today = new DateTime(currentTimeInMS);
+        today = today.minusHours(today.getHourOfDay());
+        today = today.minusMinutes(today.getMinuteOfHour());
+        today = today.minusSeconds(today.getSecondOfMinute());
+
+        DateTime oneMonthPrevious = currentDateTime.minusMonths(1);
+        oneMonthPrevious = oneMonthPrevious.minusHours(oneMonthPrevious.getHourOfDay());
+        oneMonthPrevious = oneMonthPrevious.minusMinutes(oneMonthPrevious.getMinuteOfHour());
+        oneMonthPrevious = oneMonthPrevious.minusSeconds(oneMonthPrevious.getSecondOfMinute());
+
+        DateTime oneYearPrevious = currentDateTime.minusYears(1);
+        oneYearPrevious = oneYearPrevious.minusHours(oneYearPrevious.getHourOfDay());
+        oneYearPrevious = oneYearPrevious.minusMinutes(oneYearPrevious.getMinuteOfHour());
+        oneYearPrevious = oneYearPrevious.minusSeconds(oneYearPrevious.getSecondOfMinute());
+
+        DateTime oneWeekPrevious = currentDateTime.minusWeeks(1);
+        oneWeekPrevious = oneWeekPrevious.minusHours(oneWeekPrevious.getHourOfDay());
+        oneWeekPrevious = oneWeekPrevious.minusMinutes(oneWeekPrevious.getMinuteOfHour());
+        oneWeekPrevious = oneWeekPrevious.minusSeconds(oneWeekPrevious.getSecondOfMinute());
+
+        DateTime lastMonthStart = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue();
+        DateTime lastMonthEnd = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue();
+        lastMonthStart = lastMonthStart.minusMillis(lastMonthStart.getMillisOfDay());
+        lastMonthEnd =
+                lastMonthEnd.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+
+        startMonth = oneMonthPrevious;
+        startToday = today;
+        startWeek = oneWeekPrevious;
+        startYear = oneYearPrevious;
+        currentTime = currentDateTime;
+        endLastMonth = lastMonthEnd;
+        startLastMonth = lastMonthStart;
+
+        log.debug("Ignore time, TODAY [start:{}] [end:{}]", today, currentDateTime);
+        log.debug("Ignore time, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
+        log.debug("Ignore time, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
+        log.debug("Ignore time, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
+        log.debug("Ignore time, PREVIOUSYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
+
     }
 
     private void computeTimeRanges() {
@@ -83,16 +163,33 @@ public class CurrentTimeRanges {
         DateTime oneYearPrevious = currentDateTime.minusYears(1);
         DateTime oneWeekPrevious = currentDateTime.minusWeeks(1);
 
+        DateTime lastMonthStart = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue();
+        DateTime lastMonthEnd = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue();
+        lastMonthStart = lastMonthStart.minusMillis(lastMonthStart.getMillisOfDay());
+
         startMonth = oneMonthPrevious;
         startToday = today;
         startWeek = oneWeekPrevious;
         startYear = oneYearPrevious;
         currentTime = currentDateTime;
+        endLastMonth = lastMonthEnd;
+        startLastMonth = lastMonthStart;
 
-        log.debug("Start Page, TODAY [start:{}] [end:{}]", today, currentDateTime);
-        log.debug("Start Page, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
-        log.debug("Start Page, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
-        log.debug("Start Page, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
+        log.debug("TODAY [start:{}] [end:{}]", today, currentDateTime);
+        log.debug("LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
+        log.debug("LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
+        log.debug("LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
+        log.debug("PREVIOUSYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
+
+    }
+
+    public static void main(String args[]) {
+        DateTime lastMonthStart = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue();
+        DateTime lastMonthEnd = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue();
+        lastMonthStart = lastMonthStart.minusMillis(lastMonthStart.getMillisOfDay());
+        lastMonthEnd =
+                lastMonthEnd.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
+        System.out.println("Start " + lastMonthStart + "  End " + lastMonthEnd);
 
     }
 

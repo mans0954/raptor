@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.model.dashboard;
 
 import java.util.List;
@@ -32,14 +33,13 @@ public class DashboardStatisticsSet {
     private List<StatisticParameters.ResourceCategory> resourceCategorys;
 
     public enum TimeRange {
-        TODAY, LASTWEEK, LASTMONTH, LASTYEAR
+        TODAY, LASTWEEK, LASTMONTH, LASTYEAR, SCONULYEAR, PREVIOUSMONTH
     }
 
     private List<AbstractDashboardStatistic> dashboardStatistics;
 
     /**
-     * @param computedOverTimeRanges
-     *            the computedOverTimeRanges to set
+     * @param computedOverTimeRanges the computedOverTimeRanges to set
      */
     public void setComputedOverTimeRanges(List<TimeRange> computedOverTimeRanges) {
         this.computedOverTimeRanges = computedOverTimeRanges;
@@ -53,8 +53,7 @@ public class DashboardStatisticsSet {
     }
 
     /**
-     * @param resourceCategorys
-     *            the resourceCategorys to set
+     * @param resourceCategorys the resourceCategorys to set
      */
     public void setResourceCategorys(List<StatisticParameters.ResourceCategory> resourceCategorys) {
         this.resourceCategorys = resourceCategorys;

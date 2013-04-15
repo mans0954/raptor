@@ -16,11 +16,11 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -30,12 +30,12 @@ import uk.ac.cardiff.raptorweb.model.records.Row;
 
 /**
  * @author philsmart
- *
+ * 
  */
 public class RaptorTableChartModel implements Serializable {
     static Logger log = LoggerFactory.getLogger(RaptorTableChartModel.class);
 
-    /* generated serialID */
+    /** generated serialID */
     private static final long serialVersionUID = 1765790673328864045L;
 
     private List<TableSeries> tableSeries;
@@ -43,80 +43,78 @@ public class RaptorTableChartModel implements Serializable {
     private List<ManyRow> rowsForView;
 
     private List<String> series;
+
     private List<Object[]> rowList;
 
     public RaptorTableChartModel() {
-	setTableSeries(new ArrayList());
+        setTableSeries(new ArrayList());
     }
 
     /**
      * @param tseries
      */
     public void addTableSeries(TableSeries tseries) {
-	getTableSeries().add(tseries);
+        getTableSeries().add(tseries);
     }
 
     public void setTableSeries(List<TableSeries> tableSeries) {
-	this.tableSeries = tableSeries;
+        this.tableSeries = tableSeries;
     }
 
     public List<TableSeries> getTableSeries() {
-	return tableSeries;
+        return tableSeries;
     }
 
     /**
      * This could be cached, as opposed to created on the fly e.g. created after the construction of he tableSeries
-     *
+     * 
      * @return
      */
     public void constructTableForView() {
-	if (rowsForView == null)
-	    rowsForView = new ArrayList<ManyRow>();
-	if (series == null)
-	    series = new ArrayList<String>();
+        if (rowsForView == null)
+            rowsForView = new ArrayList<ManyRow>();
+        if (series == null)
+            series = new ArrayList<String>();
 
+        series.add("Group");
+        for (TableSeries tseries : tableSeries) {
+            series.add(tseries.getSeriesLabel());
 
-	series.add("Group");
-	for (TableSeries tseries : tableSeries) {
-	    series.add(tseries.getSeriesLabel());
+        }
 
-	}
+        if (tableSeries.size() > 0) {
+            for (Row row : tableSeries.get(0).getRows()) {
+                ManyRow manyRow = new ManyRow();
+                manyRow.setGroupLabel(row.getGroup());
+                getRowsForView().add(manyRow);
 
+            }
 
-	if (tableSeries.size() > 0) {
-	    for (Row row : tableSeries.get(0).getRows()) {
-		ManyRow manyRow = new ManyRow();
-		manyRow.setGroupLabel(row.getGroup());
-		getRowsForView().add(manyRow);
+            for (TableSeries series : tableSeries) {
+                for (Row row : series.getRows()) {
+                    for (ManyRow mrow : getRowsForView()) {
+                        if (mrow.getGroupLabel().equals(row.getGroup())) {
+                            mrow.addValue(row.getValue());
+                        }
+                    }
+                }
+            }
+            setRowList(new ArrayList<Object[]>());
 
-	    }
-
-	    for (TableSeries series : tableSeries) {
-		for (Row row : series.getRows()) {
-		    for (ManyRow mrow : getRowsForView()) {
-			if (mrow.getGroupLabel().equals(row.getGroup())) {
-			    mrow.addValue(row.getValue());
-			}
-		    }
-		}
-	    }
-	    setRowList(new ArrayList<Object[]>());
-
-	    for (ManyRow mrow : rowsForView) {
-		Object[] completeRow = new Object[series.size()];
-		for (int i = 0; i < series.size(); i++) {
-		    if (i==0){
-			completeRow[0] = mrow.getGroupLabel();
-		    }
-		    else if (mrow.getValues().size() >= i) {
-			completeRow[i] = mrow.getValues().get(i-1);
-		    } else {
-			completeRow[i] = "";
-		    }
-		}
-		rowList.add(completeRow);
-	    }
-	}
+            for (ManyRow mrow : rowsForView) {
+                Object[] completeRow = new Object[series.size()];
+                for (int i = 0; i < series.size(); i++) {
+                    if (i == 0) {
+                        completeRow[0] = mrow.getGroupLabel();
+                    } else if (mrow.getValues().size() >= i) {
+                        completeRow[i] = mrow.getValues().get(i - 1);
+                    } else {
+                        completeRow[i] = "";
+                    }
+                }
+                rowList.add(completeRow);
+            }
+        }
 
     }
 
@@ -125,36 +123,36 @@ public class RaptorTableChartModel implements Serializable {
      * @return
      */
     private int maxNoRows() {
-	int maxRows = 0;
-	for (TableSeries tseries : tableSeries) {
-	    if (tseries.getRows().size() > maxRows)
-		maxRows = tseries.getRows().size();
-	}
-	return maxRows;
+        int maxRows = 0;
+        for (TableSeries tseries : tableSeries) {
+            if (tseries.getRows().size() > maxRows)
+                maxRows = tseries.getRows().size();
+        }
+        return maxRows;
     }
 
     public void setRowsForView(List<ManyRow> rowsForView) {
-	this.rowsForView = rowsForView;
+        this.rowsForView = rowsForView;
     }
 
     public List<ManyRow> getRowsForView() {
-	return rowsForView;
+        return rowsForView;
     }
 
     public void setSeries(List<String> series) {
-	this.series = series;
+        this.series = series;
     }
 
     public List<String> getSeries() {
-	return series;
+        return series;
     }
 
     public void setRowList(List<Object[]> rowList) {
-	this.rowList = rowList;
+        this.rowList = rowList;
     }
 
     public List<Object[]> getRowList() {
-	return rowList;
+        return rowList;
     }
 
 }
