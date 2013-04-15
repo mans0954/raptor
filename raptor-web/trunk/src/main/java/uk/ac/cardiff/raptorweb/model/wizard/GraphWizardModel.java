@@ -155,6 +155,19 @@ public class GraphWizardModel implements Serializable {
 
     }
 
+    public List<String> getPossiblePostProcessorValues() {
+        if (suggestionValues == null || suggestionValues.getPossiblePostProcessors() == null) {
+            return Collections.emptyList();
+        }
+        List<ProcessorInformation> processorsInformation = suggestionValues.getPossiblePostProcessors();
+        List<String> possibles = new ArrayList<String>();
+        for (ProcessorInformation information : processorsInformation) {
+            possibles.add(information.getFriendlyName());
+        }
+        return possibles;
+
+    }
+
     /**
      * Makes a copy of any method parameters from the suggestion values, into the processorToAdd
      */
