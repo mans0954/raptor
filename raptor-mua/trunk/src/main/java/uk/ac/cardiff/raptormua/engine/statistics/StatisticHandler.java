@@ -73,7 +73,9 @@ public class StatisticHandler {
      */
     public AggregatorGraphModel
             performStatisticDynamically(DynamicStatisticalUnitInformation statisticalUnitInformation) {
-        BaseStatistic statistic = StatisticTypeFactory.createNewBaseStatistic(statisticalUnitInformation);
+        BaseStatistic statistic =
+                StatisticTypeFactory.createNewBaseStatistic(statisticalUnitInformation,
+                        statisticRegistry.getStatisticProcessorRegistry());
         return performStatiticalPipeline(statistic);
     }
 
