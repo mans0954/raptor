@@ -94,6 +94,24 @@
     <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.RadiusAuthenticationEvent">
         <property name="clientIdentifier" column="clientIdentifier" type="string" />
     </union-subclass>
+    
+    <union-subclass extends="uk.ac.cardiff.model.event.Event" name="uk.ac.cardiff.model.event.AggregatedEvent">
+        <property name="periodStart" column="periodStart" type="org.joda.time.contrib.hibernate.PersistentDateTime" />
+        <property name="periodEnd" column="periodEnd" type="org.joda.time.contrib.hibernate.PersistentDateTime" />
+    </union-subclass>
+    
+     <union-subclass extends="uk.ac.cardiff.model.event.Event" name="uk.ac.cardiff.model.event.WugenEvent">
+        <property name="target" column="target" type="string" />
+        <property name="quality" column="quality" type="int" />
+        <property name="wayflessUrl" column="wayflessUrl" type="string" />
+    </union-subclass>
+    
+    <union-subclass extends="uk.ac.cardiff.model.event.AggregatedEvent" name="uk.ac.cardiff.model.event.JuspAggregatedEvent">
+        <property name="jr1Downloads" column="jr1Downloads" type="int" />
+        <property name="jr1aDownloads" column="jr1aDownloads" type="int" />
+        <property name="plId" column="plId" type="string" />
+        <property name="totalDownloads" column="totalDownloads" type="int" />
+    </union-subclass>
 
 
 

@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class only represents information, the dattypes are strings, and the strings maybe formatted As a result, this class is only for human consumption (or
+ * This class only represents information, the datatypes are strings, and the strings maybe formatted As a result, this class is only for human consumption (or
  * presentation to the user)
  * 
  * @author philsmart
@@ -48,6 +48,38 @@ public class StatisticalUnitInformation implements Serializable {
 
     /** List of the configured post-processors */
     private List<ProcessorInformation> postprocessors;
+
+    public StatisticalUnitInformation() {
+        super();
+    }
+
+    /**
+     * Copy constructor.
+     * 
+     * @param statisticParameters
+     */
+    public StatisticalUnitInformation(StatisticalUnitInformation oldInformation) {
+        super();
+        if (oldInformation != null) {
+            if (oldInformation.statisticParameters != null) {
+                statisticParameters = new StatisticParameters(oldInformation.statisticParameters);
+            }
+            if (oldInformation.getPostprocessors() != null) {
+                postprocessors = new ArrayList<ProcessorInformation>();
+                for (ProcessorInformation info : oldInformation.getPostprocessors()) {
+                    ProcessorInformation newInfo = new ProcessorInformation(info);
+                    postprocessors.add(newInfo);
+                }
+            }
+            if (oldInformation.getPreprocessors() != null) {
+                preprocessors = new ArrayList<ProcessorInformation>();
+                for (ProcessorInformation info : oldInformation.getPreprocessors()) {
+                    ProcessorInformation newInfo = new ProcessorInformation(info);
+                    preprocessors.add(newInfo);
+                }
+            }
+        }
+    }
 
     public void setStatisticParameters(StatisticParameters statisticParameters) {
         this.statisticParameters = statisticParameters;

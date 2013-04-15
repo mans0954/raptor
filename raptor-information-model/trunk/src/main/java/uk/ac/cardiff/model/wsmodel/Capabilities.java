@@ -41,6 +41,11 @@ public class Capabilities implements Serializable {
     /** The list of statistical services the attached MUA has configured. */
     private List<StatisticalUnitInformation> statisticalServices;
 
+    /**
+     * List of statistic types the MUA supports that can be used to create and execute at runtime.
+     */
+    private List<StatisticFunctionType> statisticFunctionTypes;
+
     /** Any error message that occurs during processing the attached MUAs capabilities. */
     private String errorMessage;
 
@@ -282,6 +287,20 @@ public class Capabilities implements Serializable {
      */
     public String getMuaVersion() {
         return muaVersion;
+    }
+
+    /**
+     * @return Returns the statisticFunctionTypes.
+     */
+    public List<StatisticFunctionType> getStatisticFunctionTypes() {
+        return statisticFunctionTypes;
+    }
+
+    /**
+     * @param statisticFunctionTypes The statisticFunctionTypes to set.
+     */
+    public void setStatisticFunctionTypes(List<StatisticFunctionType> statisticFunctionTypes) {
+        this.statisticFunctionTypes = statisticFunctionTypes;
     }
 
 }

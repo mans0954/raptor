@@ -84,11 +84,13 @@ public class SuggestionValues implements Serializable {
      * @return the possible field name values list
      */
     public List<String> getPossibleFieldNameValuesList(String[] classFilters) {
+        log.trace("Getting possible field {}", classFilters);
         ArrayList<String> fields = new ArrayList<String>();
         if (possibleFieldNameValues == null)
             return fields;
         for (Suggestion entry : possibleFieldNameValues) {
             for (String filter : classFilters) {
+
                 if (filter.equals(entry.getBase())) {
                     fields.add(entry.getValue());
                 }
@@ -136,7 +138,8 @@ public class SuggestionValues implements Serializable {
     }
 
     /**
-     * @param possiblePostProcessors the possiblePostProcessors to set
+     * @param possiblePostProcessors
+     *            the possiblePostProcessors to set
      */
     public void setPossiblePostProcessors(List<ProcessorInformation> possiblePostProcessors) {
         this.possiblePostProcessors = possiblePostProcessors;
