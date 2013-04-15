@@ -30,6 +30,9 @@
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.WugenEvent</value>
             </list>        
        </property>
     </bean>
@@ -47,6 +50,8 @@
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                             <value type="java.lang.Class">uk.ac.cardiff.model.event.WugenEvent</value>
                         </list>
                     </property>
                     <property name="serviceEndpoint">
@@ -75,7 +80,7 @@
 
     <bean id="entryNoElapsedTimePushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.EntryNoElapsedTimePushPolicy">
         <property name="pushOnOrAfterNoEntries">
-            <value>10</value>
+            <value>2</value>
         </property>
         <property name="pushInterval">
             <value>30000</value>

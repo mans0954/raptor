@@ -28,6 +28,69 @@
 		etc IMPORTANT, the headers must be a match for the internal model at
 		the moment
 	-->
+    
+     <bean id="juspMonthlyPeriodFormat" class="uk.ac.cardiff.raptor.parse.external.remote.format.JsonFormat">
+        <property name="addEventTimePerEvent" value="true"/>
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="sourceFieldName">
+                        <value>Platform Name</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>plId</value>
+                    </property>
+                    <property name="sourceFieldName">
+                        <value>PlID</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>jr1Downloads</value>
+                    </property>
+                    <property name="sourceFieldName">
+                        <value>JR1 downloads</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>INTEGER</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>jr1aDownloads</value>
+                    </property>
+                    <property name="sourceFieldName">
+                        <value>JR1a downloads</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>INTEGER</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>totalDownloads</value>
+                    </property>
+                    <property name="sourceFieldName">
+                        <value>Total Downloads</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>INTEGER</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
 	<!-- accepted types are DATE, STRING, INTEGER -->
 
