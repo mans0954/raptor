@@ -45,28 +45,25 @@
 
 							<rich:column styleClass="lowerBorderTable">
 								<h:panelGrid columns="3">
-									<h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
+									<a4j:commandLink action="runReportWizard"
+										onclick="#{rich:component('workingPanel')}.show();">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
+									</a4j:commandLink>
+
 									<h:outputText
 										value="#{report.graphTitle} - #{report.dateSavedFormatted}" />
 
-								</h:panelGrid>
-							</rich:column>
-							<rich:column styleClass="lowerBorderTable">
-								<h:panelGrid columns="2">
 									<a4j:commandLink action="editReportWizard">
 										<f:setPropertyActionListener value="#{report}"
 											target="#{savedReports.selectedReport}" />
 										<h:graphicImage value="/image/icon/onebit_20.png" width="20px" />
 									</a4j:commandLink>
-									<a4j:commandLink action="runReportWizard"
-										onclick="#{rich:component('workingPanel')}.show();">
-										<f:setPropertyActionListener value="#{report}"
-											target="#{savedReports.selectedReport}" />
-										<h:graphicImage value="/image/icon/play.png" width="20px" />
-									</a4j:commandLink>
 
 								</h:panelGrid>
 							</rich:column>
+
 							<rich:column styleClass="lowerBorderTable">
 								<h:panelGrid columns="1">
 
