@@ -73,6 +73,14 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
         return root;
     }
 
+    public void removeReport(GraphWizardReports reports) {
+        log.info("Removing saved report [{}]");
+        // remove from the list of saved reports immediately
+        reports.getSavedWizardModels().remove(reports.getSelectedReport());
+        // remove from the filesystem.
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public void save(GraphWizardModel model, String user) {

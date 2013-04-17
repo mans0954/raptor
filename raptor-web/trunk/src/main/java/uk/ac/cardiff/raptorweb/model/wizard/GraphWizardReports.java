@@ -43,6 +43,11 @@ public class GraphWizardReports implements Serializable {
     private List<GraphWizardModel> savedWizardModels;
 
     /**
+     * Tmp variable for the currently selected report.
+     */
+    private GraphWizardModel selectedReport;
+
+    /**
      * @return Returns the savedWizardModels.
      */
     public List<GraphWizardModel> getSavedWizardModels() {
@@ -59,6 +64,25 @@ public class GraphWizardReports implements Serializable {
         this.savedWizardModels = savedWizardModels;
     }
 
+    public GraphWizardModel initEditReport() {
+        log.info("Returning the graph wizard model to edit");
+        selectedReport.setRunImmediatly(false);
+        return selectedReport;
+    }
+
+    public GraphWizardModel initRunReport() {
+        log.info("Returning the graph wizard model to edit");
+        selectedReport.setRunImmediatly(true);
+        return selectedReport;
+    }
+
+    public GraphWizardModel initNewReport() {
+        log.info("Returning a new graph wizard model");
+        GraphWizardModel model = new GraphWizardModel();
+        model.setRunImmediatly(false);
+        return model;
+    }
+
     /**
      * @param modelIn
      */
@@ -73,5 +97,19 @@ public class GraphWizardReports implements Serializable {
         savedWizardModels.add(modelIn);
         log.trace("Added loaded graph wizard model, now loaded {}, to {}", savedWizardModels.size(), this);
 
+    }
+
+    /**
+     * @return Returns the selectedReport.
+     */
+    public GraphWizardModel getSelectedReport() {
+        return selectedReport;
+    }
+
+    /**
+     * @param selectedReport The selectedReport to set.
+     */
+    public void setSelectedReport(GraphWizardModel selectedReport) {
+        this.selectedReport = selectedReport;
     }
 }

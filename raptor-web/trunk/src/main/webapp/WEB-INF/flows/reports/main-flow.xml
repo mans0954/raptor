@@ -37,13 +37,25 @@
     <view-state id="reportWizard" view="reportWizard.xhtml">
         <var name="savedReports" class="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardReports" />
         <on-entry>
-             <evaluate expression="savedWizardReportsService.load(savedReports,flowScope.websession.user.name)" />
+            <evaluate expression="savedWizardReportsService.load(savedReports,flowScope.websession.user.name)" />
         </on-entry>
-        <transition on="startReportWizard" to="graphWizardSubflow" />
+        <transition on="startReportWizard" to="graphWizardSubflow">
+            <evaluate expression="savedReports.initNewReport()" result="flowScope.graphWizardModel"/>
+        </transition>
+        <transition on="editReportWizard" to="graphWizardSubflow">
+            <evaluate expression="savedReports.initEditReport()" result="flowScope.graphWizardModel"/>
+        </transition>
+        <transition on="runReportWizard" to="graphWizardSubflow">
+            <evaluate expression="savedReports.initRunReport()" result="flowScope.graphWizardModel"/>
+        </transition>
+        <transition on="removeReportWizard" to="graphWizardSubflow">
+            <evaluate expression="savedWizardReportsService.removeReport(savedReports)"/>
+        </transition>
     </view-state>
 
-        <subflow-state id="graphWizardSubflow" subflow="report-wizard-subflow">
-        <transition on="cancelWizard" to="reportWizard"/>
+    <subflow-state id="graphWizardSubflow" subflow="report-wizard-subflow">
+        <input name="graphWizardModel" value="flowScope.graphWizardModel"/>
+        <transition on="cancelWizard" to="reportWizard" />
     </subflow-state>
 
     <view-state id="about" view="about.xhtml">

@@ -144,9 +144,15 @@ public class GraphWizardModel implements Serializable {
      */
     private String dateSavedFormatted;
 
+    /**
+     * If set to true, all selection stages should be skipped and the graph(s) should be run straight away.
+     */
+    private boolean runImmediatly = false;
+
     public GraphWizardModel() {
         super();
         qualitativeTimeRange = QualitativeTimeRange.LAST_WEEK;
+        displayLayout = "ONTOP";
         initChartOptions();
     }
 
@@ -438,10 +444,20 @@ public class GraphWizardModel implements Serializable {
     }
 
     /**
+     * Adds the List of {@link StatisticFunctionType}s, also checks if any graphSet requires this property set - so as
+     * to cater for loaded reports.
+     * 
      * @param statisticFunctionTypes The statisticFunctionTypes to set.
      */
     public void setStatisticFunctionTypes(List<StatisticFunctionType> statisticFunctionTypes) {
         this.statisticFunctionTypes = statisticFunctionTypes;
+        if (graphSets != null) {
+            for (GraphSet graphSet : graphSets) {
+                if (graphSet.getStatisticFunctionTypes() == null) {
+                    graphSet.setStatisticFunctionTypes(statisticFunctionTypes);
+                }
+            }
+        }
     }
 
     /**
@@ -599,6 +615,20 @@ public class GraphWizardModel implements Serializable {
      */
     public void setProcessorToAdd(ProcessorInformation processorToAdd) {
         this.processorToAdd = processorToAdd;
+    }
+
+    /**
+     * @return Returns the runImmediatly.
+     */
+    public boolean isRunImmediatly() {
+        return runImmediatly;
+    }
+
+    /**
+     * @param runImmediatly The runImmediatly to set.
+     */
+    public void setRunImmediatly(boolean runImmediatly) {
+        this.runImmediatly = runImmediatly;
     }
 
 }
