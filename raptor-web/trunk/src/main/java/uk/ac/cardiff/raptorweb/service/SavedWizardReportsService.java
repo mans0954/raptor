@@ -18,6 +18,7 @@ package uk.ac.cardiff.raptorweb.service;
 
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel;
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardReports;
+import uk.ac.cardiff.raptorweb.model.wizard.SavedGraphWizardModel;
 
 public interface SavedWizardReportsService {
 
@@ -26,7 +27,7 @@ public interface SavedWizardReportsService {
      * 
      * @param model
      */
-    public void save(GraphWizardModel model, String user);
+    public void save(SavedGraphWizardModel model, String user);
 
     /**
      * Loads the set of reports into the {@link GraphWizardReports} from xml files in the users report directory.
@@ -35,5 +36,10 @@ public interface SavedWizardReportsService {
      * @return
      */
     public void load(GraphWizardReports reports, String user);
+
+    /**
+     * @param reports
+     */
+    public void removeReport(GraphWizardReports reports);
 
 }

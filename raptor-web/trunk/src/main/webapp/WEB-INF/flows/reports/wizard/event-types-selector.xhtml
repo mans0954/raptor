@@ -40,7 +40,7 @@
 						<h:form id="event-type-select-form">
 							<h:panelGrid columns="2">
 								<h:selectOneMenu id="dateRangeSelector"
-									value="#{graphWizardModel.tmpSelectedEventType}">
+									value="#{savedGraphWizardModel.graphWizardModel.tmpSelectedEventType}">
 									<f:selectItems value="#{eventTypeService.eventTypeList}" />
 								</h:selectOneMenu>
 								<a4j:commandButton value="add" reRender="event-type-select-form"
@@ -52,7 +52,7 @@
 								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
 								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
 								cellpadding="0" cellspacing="0" border="0" var="var"
-								value="#{graphWizardModel.graphSets}">
+								value="#{savedGraphWizardModel.graphWizardModel.graphSets}">
 
 								<rich:column>
 									<f:facet name="header">Event Type</f:facet>
@@ -66,7 +66,7 @@
 											style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 											value="/image/icon/onebit_33.png" />
 										<f:setPropertyActionListener value="#{var}"
-											target="#{graphWizardModel.tmpGraphSetToRemove}" />
+											target="#{savedGraphWizardModel.graphWizardModel.tmpGraphSetToRemove}" />
 									</a4j:commandLink>
 								</rich:column>
 							</rich:dataTable>

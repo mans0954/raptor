@@ -45,8 +45,8 @@
                             <h:commandButton value="save" action="save" />
                         </h:panelGrid>
 
-						<rich:dataGrid value="#{graphWizardModel.graphSets}" var="graph"
-							columns="#{graphWizardModel.resultColumns}" width="100%"
+						<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
+							columns="#{savedGraphWizardModel.graphWizardModel.resultColumns}" width="100%"
 							style="border:0px">
 
 
@@ -84,7 +84,7 @@
 											<h:graphicImage style="cursor: pointer"
 												value="/image/arrow.png" />
 											<h:outputText value="Filename:" />
-											<h:inputText value="#{graphWizardModel.downloadFilename}" />
+											<h:inputText value="#{savedGraphWizardModel.graphWizardModel.downloadFilename}" />
 										</h:panelGrid>
 
 										<h:panelGrid id="reportTypePanel" columns="3">

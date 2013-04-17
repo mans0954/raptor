@@ -44,32 +44,32 @@
 							<h:panelGrid columns="2">
 								<h:outputText value="Graph Title:" style="font-weight: bold;" />
 								<h:inputText style="width:100%;"
-									value="#{graphWizardModel.graphTitle}" />
+									value="#{savedGraphWizardModel.graphWizardModel.graphTitle}" />
 								<h:outputText value="Chart Type:" />
 								<rich:comboBox selectFirstOnUpdate="false"
 									defaultLabel="Enter some value"
-									value="#{graphWizardModel.chartOptions.graphType}">
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.graphType}">
 									<f:selectItems
-										value="#{graphWizardModel.chartOptions.graphTypeList}" />
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.graphTypeList}" />
 								</rich:comboBox>
 
 								<h:outputText value="Orientation:" />
 								<rich:comboBox
-									value="#{graphWizardModel.chartOptions.orientation}">
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.orientation}">
 									<f:selectItems
-										value="#{graphWizardModel.chartOptions.orientationTypeList}" />
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.orientationTypeList}" />
 								</rich:comboBox>
 
 								<h:outputText value="Height in pixels:" />
 								<h:inputText
-									value="#{graphWizardModel.chartOptions.imageHeight}" />
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.imageHeight}" />
 
 								<h:outputText value="Label Position:" />
 								<rich:comboBox selectFirstOnUpdate="false"
 									defaultLabel="Enter some value"
-									value="#{graphWizardModel.chartOptions.xLabelPosition}">
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.xLabelPosition}">
 									<f:selectItems
-										value="#{graphWizardModel.chartOptions.labelPositionsTypeList}" />
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.labelPositionsTypeList}" />
 								</rich:comboBox>
 
 							</h:panelGrid>

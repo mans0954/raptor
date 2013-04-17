@@ -124,7 +124,7 @@ public class GraphWizardServiceImpl implements GraphWizardService {
      */
     @Override
     public void populateSuggestionValues(GraphWizardModel model) {
-        log.debug("Graph Wizard Model has been constructed as {}", model);
+
         model.setSuggestionValues(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
 
     }

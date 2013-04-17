@@ -43,16 +43,16 @@
 							<div>
 								<h:panelGrid columns="2">
 									<h:selectOneMenu id="dateRangeSelector"
-										value="#{graphWizardModel.qualitativeTimeRangeAsString}">
+										value="#{savedGraphWizardModel.graphWizardModel.qualitativeTimeRangeAsString}">
 										<a4j:support event="onchange" action="computeCurrentTimeRange"
 											reRender="dateSelectorForm" />
 										<f:selectItems
-											value="#{graphWizardModel.qualitativeTimeRangeSelectItems}" />
+											value="#{savedGraphWizardModel.graphWizardModel.qualitativeTimeRangeSelectItems}" />
 									</h:selectOneMenu>
 									
 									<ul>
-										<li>Start Date: <i>#{graphWizardModel.currentStartTimeActualFormatted}</i></li>
-										<li>End Date: <i>#{graphWizardModel.currentEndTimeActualFormatted}</i></li>
+										<li>Start Date: <i>#{savedGraphWizardModel.graphWizardModel.currentStartTimeActualFormatted}</i></li>
+										<li>End Date: <i>#{savedGraphWizardModel.graphWizardModel.currentEndTimeActualFormatted}</i></li>
 									</ul>
 								</h:panelGrid>
 							</div>

@@ -40,7 +40,7 @@
 						<br />
 						<a4j:form>
 
-							<rich:dataGrid value="#{graphWizardModel.graphSets}" var="graph"
+							<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
 								columns="1" width="100%" style="border:3px"
 								styleClass="simpleTable">
                                 <b>Event:</b><h:outputText value=" #{graph.eventType}"/>
@@ -57,7 +57,7 @@
 											reRender="seriesTableWizard">
 											<h:graphicImage style="width:20px"
 												value="/image/icon/onebit_31.png" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</f:facet>
@@ -88,8 +88,8 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_39.png" />
 											<f:setPropertyActionListener value="#{series}"
-												target="#{graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 										<a4j:commandLink immediate="true"
 											oncomplete="#{rich:component('seriesModalPanel')}.show()"
@@ -101,8 +101,8 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_31.png" />
 											<f:setPropertyActionListener value="#{series}"
-												target="#{graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>
@@ -117,8 +117,8 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{series}"
-												target="#{graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>

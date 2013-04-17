@@ -42,9 +42,9 @@
 			<center>
 				<rich:panel>
 					<rich:comboBox
-						value="#{graphWizardModel.processorToAdd.friendlyName}"
+						value="#{savedGraphWizardModel.graphWizardModel.processorToAdd.friendlyName}"
 						width="300px"
-						suggestionValues="#{graphWizardModel.possiblePostProcessorValues}">
+						suggestionValues="#{savedGraphWizardModel.graphWizardModel.possiblePostProcessorValues}">
 						<a4j:support event="onselect" action="setupProcessorToAdd"
 							reRender="addPostProcessorForm" />
 					</rich:comboBox>
@@ -52,7 +52,7 @@
 				<rich:spacer height="10px" />
 
 				<rich:dataTable id="newProcessorTable"
-					value="#{graphWizardModel.processorToAdd.methodParameters}"
+					value="#{savedGraphWizardModel.graphWizardModel.processorToAdd.methodParameters}"
 					var="method">
 
 					<rich:column>

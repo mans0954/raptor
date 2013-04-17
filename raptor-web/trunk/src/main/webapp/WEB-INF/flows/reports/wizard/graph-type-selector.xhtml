@@ -40,7 +40,7 @@
 						<br />
 						<a4j:form id="statisticFunctionSelectForm">
 							<rich:dataGrid id="functionDataTable"
-								value="#{graphWizardModel.graphSets}" var="graph" columns="1"
+								value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph" columns="1"
 								width="100%" style="border:3px" styleClass="simpleTable">
 
 
@@ -54,7 +54,7 @@
 										<a4j:support event="onchange" action="lookupStatistic"
 											reRender="functionDataTable">
 											<f:setPropertyActionListener value="#{graph}"
-												target="#{graphWizardModel.selectedGraphSet}" />
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:support>
 									</h:selectOneMenu>
 
@@ -76,7 +76,7 @@
 										<rich:comboBox width="200px"
 											rendered="#{parameter.parameterType=='FIELD'}"
 											value="#{parameter.value}"
-											suggestionValues="#{graphWizardModel.possibleFieldNameValues}" />
+											suggestionValues="#{savedGraphWizardModel.graphWizardModel.possibleFieldNameValues}" />
 									</rich:column>
 								</rich:dataTable>
 

@@ -3,24 +3,24 @@
 
     <!-- <var name="graphWizardModel" class="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel" /> -->
     
-    <input name="graphWizardModel"/>
+    <input name="savedGraphWizardModel"/>
     
     <on-start>
-        <evaluate expression="graphWizardModel.setStatisticFunctionTypes(graphService.getStatisticFunctionTypeUnits())" />
-        <evaluate expression="graphWizardService.populateSuggestionValues(graphWizardModel)" />
+        <evaluate expression="savedGraphWizardModel.graphWizardModel.setStatisticFunctionTypes(graphService.getStatisticFunctionTypeUnits())" />
+        <evaluate expression="graphWizardService.populateSuggestionValues(savedGraphWizardModel.graphWizardModel)" />
     </on-start>
     
     <decision-state id="editRunDecision">
-        <if test="graphWizardModel.runImmediatly==true" then="compileAndInvokeStatisticalUnit" else="dateSelector" />
+        <if test="savedGraphWizardModel.graphWizardModel.runImmediatly==true" then="compileAndInvokeStatisticalUnit" else="dateSelector" />
     </decision-state>
     
 
     <view-state id="dateSelector" view="wizard/date-selector.xhtml">
         <on-entry>
-            <evaluate expression="graphWizardService.computeCurrentTimeRange(flowScope.graphWizardModel)" />
+            <evaluate expression="graphWizardService.computeCurrentTimeRange(savedGraphWizardModel.graphWizardModel)" />
         </on-entry>
         <transition on="computeCurrentTimeRange">
-            <evaluate expression="graphWizardService.computeCurrentTimeRange(flowScope.graphWizardModel)" />
+            <evaluate expression="graphWizardService.computeCurrentTimeRange(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="next" to="eventTypeSelector" />
@@ -30,11 +30,11 @@
 
     <view-state id="eventTypeSelector" view="wizard/event-types-selector.xhtml">
         <transition on="addEventType">
-            <evaluate expression="graphWizardModel.saveEventType()" />
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.saveEventType()" />
         </transition>
 
         <transition on="removeEventType">
-            <evaluate expression="graphWizardModel.removeEventType()" />
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.removeEventType()" />
         </transition>
 
         <transition on="next" to="graphTypeSelector" />
@@ -45,7 +45,7 @@
     <view-state id="graphTypeSelector" view="wizard/graph-type-selector.xhtml">
 
         <transition on="lookupStatistic">
-            <evaluate expression="graphWizardService.lookupStatisticalUnitInformation(graphWizardModel)" />
+            <evaluate expression="graphWizardService.lookupStatisticalUnitInformation(savedGraphWizardModel.graphWizardModel)" />
         </transition>
         <transition on="next" to="graphSeriesSelector" />
         <transition on="back" to="eventTypeSelector" />
@@ -54,16 +54,16 @@
 
     <view-state id="graphSeriesSelector" view="wizard/graph-series-selector.xhtml">
         <transition on="addSeriesToSelectedStatistic">
-            <evaluate expression="graphWizardService.addSeriesToSelectedStatistic(graphWizardModel)"></evaluate>
+            <evaluate expression="graphWizardService.addSeriesToSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
         <transition on="addFilterToSelectedSeries">
-            <evaluate expression="graphWizardService.addFilterToSelectedSeries(graphWizardModel)"></evaluate>
+            <evaluate expression="graphWizardService.addFilterToSelectedSeries(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
         <transition on="removeSeriesFromSelectedStatistic">
-            <evaluate expression="graphWizardService.removeSeriesFromSelectedStatistic(graphWizardModel)" />
+            <evaluate expression="graphWizardService.removeSeriesFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
         </transition>
         <transition on="removeSelectedFilterFromSelectedStatistic">
-            <evaluate expression="graphWizardService.removeSelectedFilterFromSelectedStatistic(graphWizardModel)" />
+            <evaluate expression="graphWizardService.removeSelectedFilterFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="next" to="graphProcessorSelector" />
@@ -75,19 +75,19 @@
     <view-state id="graphProcessorSelector" view="wizard/graph-processor-selector.xhtml">
 
         <transition on="removePostProcessorFromSelectedStatistic">
-            <evaluate expression="graphWizardService.removePostProcessorFromSelectedStatistic(graphWizardModel)"></evaluate>
+            <evaluate expression="graphWizardService.removePostProcessorFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
 
         <transition on="addProcessorToSelectedStatistic">
-            <evaluate expression="graphWizardService.addProcessorToSelectedStatistic(graphWizardModel)"></evaluate>
+            <evaluate expression="graphWizardService.addProcessorToSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
 
         <transition on="initialiseNewProcessorAdd">
-            <evaluate expression="graphWizardModel.initialiseNewProcessorAdd()" />
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.initialiseNewProcessorAdd()" />
         </transition>
 
         <transition on="setupProcessorToAdd">
-            <evaluate expression="graphWizardModel.setupProcessorToAdd()" />
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.setupProcessorToAdd()" />
         </transition>
 
         <transition on="next" to="graphOptionsSelector" />
@@ -114,31 +114,31 @@
     </view-state>
 
     <action-state id="compileAndInvokeStatisticalUnit">
-        <evaluate expression="graphWizardService.compileStatisticalUnitInformation(graphWizardModel)" />
+        <evaluate expression="graphWizardService.compileStatisticalUnitInformation(savedGraphWizardModel.graphWizardModel)" />
         <transition to="graphResultsSelector">
-            <evaluate expression="graphWizardService.invokeStatisticalUnitInformationDynamic(graphWizardModel)" />
+            <evaluate expression="graphWizardService.invokeStatisticalUnitInformationDynamic(savedGraphWizardModel.graphWizardModel)" />
         </transition>
     </action-state>
 
     <decision-state id="layoutNeededBack">
-        <if test="graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="graphOptionsSelector" />
+        <if test="savedGraphWizardModel.graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="graphOptionsSelector" />
     </decision-state>
 
     <view-state id="graphResultsSelector" view="wizard/graph-wizard-results.xhtml">
         <transition on="generateExcelReport">
-            <evaluate expression="graphWizardService.generateExcelReport(graphWizardModel)" />
+            <evaluate expression="graphWizardService.generateExcelReport(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="generateCSVReport">
-            <evaluate expression="graphWizardService.generateCSVReport(graphWizardModel)" />
+            <evaluate expression="graphWizardService.generateCSVReport(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="generatePDFReport">
-            <evaluate expression="graphWizardService.generatePDFReport(graphWizardModel)" />
+            <evaluate expression="graphWizardService.generatePDFReport(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="save">
-            <evaluate expression="savedWizardReportsService.save(graphWizardModel,flowScope.websession.user.name)" />
+            <evaluate expression="savedWizardReportsService.save(savedGraphWizardModel,flowScope.websession.user.name)" />
         </transition>
 
 
