@@ -20,6 +20,7 @@ import org.springframework.oxm.XmlMappingException;
 
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel;
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardReports;
+import uk.ac.cardiff.raptorweb.model.wizard.SavedGraphWizardModel;
 import uk.ac.cardiff.raptorweb.service.SavedWizardReportsService;
 
 /**
@@ -73,28 +74,43 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
         return root;
     }
 
+    @Override
     public void removeReport(GraphWizardReports reports) {
         log.info("Removing saved report [{}]");
         // remove from the list of saved reports immediately
         reports.getSavedWizardModels().remove(reports.getSelectedReport());
         // remove from the filesystem.
+        try {
+            reports.getSelectedReport().getFilename().delete();
+        } catch (Exception e) {
+            log.error("Could not delete report", e);
+        }
 
     }
 
     /** {@inheritDoc} */
     @Override
-    public void save(GraphWizardModel model, String user) {
+    public void save(SavedGraphWizardModel model, String user) {
         log.info("Saving graph wizard model");
         FileOutputStream os = null;
         try {
-            model.setDateSavedFormatted(savedDate());
-            String directory = getRootDirectory(user);
-            String filename =
-                    directory + "/report-" + model.getGraphTitle() + "-"
-                            + model.getDateSavedFormatted().replace(":", "-") + ".xml";
+
+            String filename = null;
+            if (model.isEdittingReport()) {
+                filename = model.getFilename().getCanonicalPath();
+                model.getGraphWizardModel().setDateModifiedFormatted(savedDate());
+            } else {
+                String directory = getRootDirectory(user);
+                model.getGraphWizardModel().setDateSavedFormatted(savedDate());
+                model.getGraphWizardModel().setDateModifiedFormatted(savedDate());
+                filename =
+                        directory + "/report-" + model.getGraphWizardModel().getGraphTitle() + "-"
+                                + model.getGraphWizardModel().getDateSavedFormatted().replace(":", "-") + ".xml";
+            }
+
             os = new FileOutputStream(filename);
             log.debug("Saving report to [{}]", filename);
-            this.marshaller.marshal(model, new StreamResult(os));
+            this.marshaller.marshal(model.getGraphWizardModel(), new StreamResult(os));
         } catch (FileNotFoundException e) {
             log.error("Could not save graph wizard report", e);
         } catch (XmlMappingException e) {
@@ -134,7 +150,10 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
                     FileInputStream input = new FileInputStream(file);
                     GraphWizardModel modelIn =
                             (GraphWizardModel) unmarshaller.unmarshal(new StreamSource(input, "UTF8"));
-                    reports.addSavedWizardModel(modelIn);
+                    SavedGraphWizardModel savedModel = new SavedGraphWizardModel();
+                    savedModel.setGraphWizardModel(modelIn);
+                    savedModel.setFilename(file);
+                    reports.addSavedWizardModel(savedModel);
                     log.debug("Loaded report [{}]", file.getCanonicalPath());
                 }
             } catch (Exception e) {

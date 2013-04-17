@@ -2,6 +2,8 @@
 
 <mapping>
     <description>Maps a graph wizard model for persisting to a file</description>
+    
+    
 
     <class name="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel">
         <map-to xml="graph-wizard-model" />
@@ -19,6 +21,9 @@
         </field>
         <field name="dateSavedFormatted" type="string">
             <bind-xml name="date-saved" node="element" />
+        </field>
+        <field name="dateModifiedFormatted" type="string">
+            <bind-xml name="date-modified" node="element" />
         </field>
         <field name="graphSets" collection="arraylist" type="uk.ac.cardiff.raptorweb.model.wizard.GraphSet">
             <bind-xml name="graph-sets" />

@@ -145,6 +145,11 @@ public class GraphWizardModel implements Serializable {
     private String dateSavedFormatted;
 
     /**
+     * Date this was last modified.
+     */
+    private String dateModifiedFormatted;
+
+    /**
      * If set to true, all selection stages should be skipped and the graph(s) should be run straight away.
      */
     private boolean runImmediatly = false;
@@ -450,6 +455,9 @@ public class GraphWizardModel implements Serializable {
      * @param statisticFunctionTypes The statisticFunctionTypes to set.
      */
     public void setStatisticFunctionTypes(List<StatisticFunctionType> statisticFunctionTypes) {
+        if (statisticFunctionTypes != null) {
+            log.trace("Setting the statistic function types with size of {}", statisticFunctionTypes.size());
+        }
         this.statisticFunctionTypes = statisticFunctionTypes;
         if (graphSets != null) {
             for (GraphSet graphSet : graphSets) {
@@ -629,6 +637,20 @@ public class GraphWizardModel implements Serializable {
      */
     public void setRunImmediatly(boolean runImmediatly) {
         this.runImmediatly = runImmediatly;
+    }
+
+    /**
+     * @return Returns the dateModifiedFormatted.
+     */
+    public String getDateModifiedFormatted() {
+        return dateModifiedFormatted;
+    }
+
+    /**
+     * @param dateModifiedFormatted The dateModifiedFormatted to set.
+     */
+    public void setDateModifiedFormatted(String dateModifiedFormatted) {
+        this.dateModifiedFormatted = dateModifiedFormatted;
     }
 
 }

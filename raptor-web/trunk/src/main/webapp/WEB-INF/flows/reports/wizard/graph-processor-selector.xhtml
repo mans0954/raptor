@@ -40,7 +40,7 @@
 						<br />
 						<a4j:form>
 
-							<rich:dataGrid value="#{graphWizardModel.graphSets}" var="graph"
+							<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
 								columns="1" width="100%" style="border:3px"
 								styleClass="simpleTable">
 								<b>Event:</b>
@@ -69,8 +69,8 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_20.png" />
 											<f:setPropertyActionListener value="#{processor}"
-												target="#{graphWizardModel.selectedPostProcessor}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												target="#{savedGraphWizardModel.graphWizardModel.selectedPostProcessor}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>
@@ -87,8 +87,8 @@
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{processor}"
-												target="#{graphWizardModel.selectedPostProcessor}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												target="#{savedGraphWizardModel.graphWizardModel.selectedPostProcessor}" />
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</rich:column>
@@ -100,7 +100,7 @@
 											reRender="addPostProcessorForm">
 											<h:graphicImage id="addPostProcessorImage"
 												style="width:20px;" value="/image/icon/onebit_31.png" />
-												<f:setPropertyActionListener value="#{graph}" target="#{graphWizardModel.selectedGraphSet}"/>
+												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
 										</a4j:commandLink>
 
 									</f:facet>

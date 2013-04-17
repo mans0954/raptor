@@ -40,17 +40,17 @@ public class GraphWizardReports implements Serializable {
     /**
      * list of saved or loaded {@link GraphWizardModel}s.
      */
-    private List<GraphWizardModel> savedWizardModels;
+    private List<SavedGraphWizardModel> savedWizardModels;
 
     /**
      * Tmp variable for the currently selected report.
      */
-    private GraphWizardModel selectedReport;
+    private SavedGraphWizardModel selectedReport;
 
     /**
      * @return Returns the savedWizardModels.
      */
-    public List<GraphWizardModel> getSavedWizardModels() {
+    public List<SavedGraphWizardModel> getSavedWizardModels() {
         if (savedWizardModels != null) {
             log.trace("Getting {} saved wizard models from {}", savedWizardModels.size(), this);
         }
@@ -60,39 +60,43 @@ public class GraphWizardReports implements Serializable {
     /**
      * @param savedWizardModels The savedWizardModels to set.
      */
-    public void setSavedWizardModels(List<GraphWizardModel> savedWizardModels) {
+    public void setSavedWizardModels(List<SavedGraphWizardModel> savedWizardModels) {
         this.savedWizardModels = savedWizardModels;
     }
 
-    public GraphWizardModel initEditReport() {
+    public SavedGraphWizardModel initEditReport() {
         log.info("Returning the graph wizard model to edit");
-        selectedReport.setRunImmediatly(false);
+        selectedReport.getGraphWizardModel().setRunImmediatly(false);
+        selectedReport.setEdittingReport(true);
         return selectedReport;
     }
 
-    public GraphWizardModel initRunReport() {
+    public SavedGraphWizardModel initRunReport() {
         log.info("Returning the graph wizard model to edit");
-        selectedReport.setRunImmediatly(true);
+        selectedReport.getGraphWizardModel().setRunImmediatly(true);
         return selectedReport;
     }
 
-    public GraphWizardModel initNewReport() {
+    public SavedGraphWizardModel initNewReport() {
         log.info("Returning a new graph wizard model");
-        GraphWizardModel model = new GraphWizardModel();
-        model.setRunImmediatly(false);
+        SavedGraphWizardModel model = new SavedGraphWizardModel();
+        model.setGraphWizardModel(new GraphWizardModel());
+        model.getGraphWizardModel().setRunImmediatly(false);
+        log.trace("Returning the new saved graph wizard model [{}] and graph wizard model [{}]", model,
+                model.getGraphWizardModel());
         return model;
     }
 
     /**
      * @param modelIn
      */
-    public void addSavedWizardModel(GraphWizardModel modelIn) {
+    public void addSavedWizardModel(SavedGraphWizardModel modelIn) {
         if (modelIn == null) {
             log.error("Will not add a null graph wizard model");
             return;
         }
         if (savedWizardModels == null) {
-            savedWizardModels = new ArrayList<GraphWizardModel>();
+            savedWizardModels = new ArrayList<SavedGraphWizardModel>();
         }
         savedWizardModels.add(modelIn);
         log.trace("Added loaded graph wizard model, now loaded {}, to {}", savedWizardModels.size(), this);
@@ -102,14 +106,14 @@ public class GraphWizardReports implements Serializable {
     /**
      * @return Returns the selectedReport.
      */
-    public GraphWizardModel getSelectedReport() {
+    public SavedGraphWizardModel getSelectedReport() {
         return selectedReport;
     }
 
     /**
      * @param selectedReport The selectedReport to set.
      */
-    public void setSelectedReport(GraphWizardModel selectedReport) {
+    public void setSelectedReport(SavedGraphWizardModel selectedReport) {
         this.selectedReport = selectedReport;
     }
 }
