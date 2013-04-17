@@ -1,12 +1,19 @@
-<flow parent="reports" start-state="dateSelector" xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<flow parent="reports" start-state="editRunDecision" xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-    <var name="graphWizardModel" class="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel" />
-
+    <!-- <var name="graphWizardModel" class="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel" /> -->
+    
+    <input name="graphWizardModel"/>
+    
     <on-start>
         <evaluate expression="graphWizardModel.setStatisticFunctionTypes(graphService.getStatisticFunctionTypeUnits())" />
         <evaluate expression="graphWizardService.populateSuggestionValues(graphWizardModel)" />
     </on-start>
+    
+    <decision-state id="editRunDecision">
+        <if test="graphWizardModel.runImmediatly==true" then="compileAndInvokeStatisticalUnit" else="dateSelector" />
+    </decision-state>
+    
 
     <view-state id="dateSelector" view="wizard/date-selector.xhtml">
         <on-entry>
@@ -70,11 +77,11 @@
         <transition on="removePostProcessorFromSelectedStatistic">
             <evaluate expression="graphWizardService.removePostProcessorFromSelectedStatistic(graphWizardModel)"></evaluate>
         </transition>
-        
+
         <transition on="addProcessorToSelectedStatistic">
             <evaluate expression="graphWizardService.addProcessorToSelectedStatistic(graphWizardModel)"></evaluate>
         </transition>
-        
+
         <transition on="initialiseNewProcessorAdd">
             <evaluate expression="graphWizardModel.initialiseNewProcessorAdd()" />
         </transition>
@@ -90,19 +97,32 @@
 
 
     <view-state id="graphOptionsSelector" view="wizard/graph-options-selector.xhtml">
-        <transition on="next" to="graphLayoutSelector" />
+        <transition on="next" to="layoutNeeded" />
         <transition on="back" to="graphProcessorSelector" />
         <transition on="cancel" to="cancelWizard" />
     </view-state>
 
+
+    <decision-state id="layoutNeeded">
+        <if test="graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="compileAndInvokeStatisticalUnit" />
+    </decision-state>
+
     <view-state id="graphLayoutSelector" view="wizard/page-layout-selector.xhtml">
-        <transition on="next" to="graphResultsSelector">
-            <evaluate expression="graphWizardService.compileStatisticalUnitInformation(graphWizardModel)" />
-            <evaluate expression="graphWizardService.invokeStatisticalUnitInformationDynamic(graphWizardModel)" />
-        </transition>
+        <transition on="next" to="compileAndInvokeStatisticalUnit" />
         <transition on="back" to="graphOptionsSelector" />
         <transition on="cancel" to="cancelWizard" />
     </view-state>
+
+    <action-state id="compileAndInvokeStatisticalUnit">
+        <evaluate expression="graphWizardService.compileStatisticalUnitInformation(graphWizardModel)" />
+        <transition to="graphResultsSelector">
+            <evaluate expression="graphWizardService.invokeStatisticalUnitInformationDynamic(graphWizardModel)" />
+        </transition>
+    </action-state>
+
+    <decision-state id="layoutNeededBack">
+        <if test="graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="graphOptionsSelector" />
+    </decision-state>
 
     <view-state id="graphResultsSelector" view="wizard/graph-wizard-results.xhtml">
         <transition on="generateExcelReport">
@@ -122,7 +142,7 @@
         </transition>
 
 
-        <transition on="back" to="graphLayoutSelector" />
+        <transition on="back" to="layoutNeededBack" />
         <transition on="done" to="cancelWizard" />
     </view-state>
 

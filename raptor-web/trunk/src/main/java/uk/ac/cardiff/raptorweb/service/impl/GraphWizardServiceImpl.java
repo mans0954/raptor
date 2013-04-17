@@ -124,6 +124,7 @@ public class GraphWizardServiceImpl implements GraphWizardService {
      */
     @Override
     public void populateSuggestionValues(GraphWizardModel model) {
+        log.debug("Graph Wizard Model has been constructed as {}", model);
         model.setSuggestionValues(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
 
     }
@@ -170,6 +171,9 @@ public class GraphWizardServiceImpl implements GraphWizardService {
     @Override
     public void compileStatisticalUnitInformation(GraphWizardModel model) {
         log.info("Compiling the graph wizard model information into a set of DynamicStatisticalUnitInformation models");
+
+        // compute time ranges again so it is accurate when running.
+        computeCurrentTimeRange(model);
 
         List<DynamicStatisticalUnitInformation> statisticalUnitInformations =
                 new ArrayList<DynamicStatisticalUnitInformation>();

@@ -28,11 +28,12 @@
 
 
 	<ui:define name="content">
+		<a4j:include viewId="../working-panel.xhtml" />
 
 
 		<rich:layout>
 			<rich:layoutPanel position="top">
-				<h4 align="left">Step 4. Graph Options Selector</h4>
+				<h4 align="left">Step 6. Graph Options Selector</h4>
 				<center>
 
 					<div class="stepbystep">
@@ -40,17 +41,17 @@
 							<h3 align="center">Please Select The Graph Options</h3>
 							<br />
 
-							 <h:panelGrid columns="2">
+							<h:panelGrid columns="2">
 								<h:outputText value="Graph Title:" style="font-weight: bold;" />
 								<h:inputText style="width:100%;"
 									value="#{graphWizardModel.graphTitle}" />
 								<h:outputText value="Chart Type:" />
-								 <rich:comboBox selectFirstOnUpdate="false"
+								<rich:comboBox selectFirstOnUpdate="false"
 									defaultLabel="Enter some value"
 									value="#{graphWizardModel.chartOptions.graphType}">
 									<f:selectItems
 										value="#{graphWizardModel.chartOptions.graphTypeList}" />
-								</rich:comboBox> 
+								</rich:comboBox>
 
 								<h:outputText value="Orientation:" />
 								<rich:comboBox
@@ -77,7 +78,8 @@
 
 
 							<h:panelGrid columns="5">
-								<h:commandButton value="next" action="next" />
+								<h:commandButton value="next" action="next"
+									onclick="#{rich:component('workingPanel')}.show();" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />

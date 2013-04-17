@@ -26,12 +26,13 @@
 	template="/templates/raptor/full.xhtml">
 
 	<ui:define name="content">
+		<a4j:include viewId="working-panel.xhtml" />
 
 		<rich:layout>
 
 			<rich:layoutPanel position="bottom">
 
-				<rich:panel bodyClass="inpanelBody" >
+				<rich:panel bodyClass="inpanelBody">
 					<f:facet name="header">
                     Saved Reports
                 </f:facet>
@@ -47,12 +48,34 @@
 									<h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
 									<h:outputText
 										value="#{report.graphTitle} - #{report.dateSavedFormatted}" />
-									<h:panelGrid columns="3">
-										<a4j:commandLink action="editSavedReport">
-											<h:graphicImage value="/image/icon/onebit_20.png"
-												width="20px" />
-										</a4j:commandLink>
-									</h:panelGrid>
+
+								</h:panelGrid>
+							</rich:column>
+							<rich:column styleClass="lowerBorderTable">
+								<h:panelGrid columns="2">
+									<a4j:commandLink action="editReportWizard">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/onebit_20.png" width="20px" />
+									</a4j:commandLink>
+									<a4j:commandLink action="runReportWizard"
+										onclick="#{rich:component('workingPanel')}.show();">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/play.png" width="20px" />
+									</a4j:commandLink>
+
+								</h:panelGrid>
+							</rich:column>
+							<rich:column styleClass="lowerBorderTable">
+								<h:panelGrid columns="1">
+
+									<a4j:commandLink action="removeReportWizard"
+										reRender="reportWizard-savedReports">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/trash.png" width="20px" />
+									</a4j:commandLink>
 								</h:panelGrid>
 							</rich:column>
 
@@ -76,23 +99,23 @@
 
 			</rich:layoutPanel>
 
-			<rich:layoutPanel position="top" >
-				
-					<form>
-						<h:panelGrid columns="2">
-							
-								<h3>
-									Click on the icon to create a new report
-									<a4j:commandLink action="startReportWizard">
-										<h:graphicImage value="/image/icon/pie_chart.png" width="50px" />
-									</a4j:commandLink>
+			<rich:layoutPanel position="top">
 
-								</h3>
-							
-						</h:panelGrid>
-					</form>
+				<form>
+					<h:panelGrid columns="2">
 
-				
+						<h3>
+							Click on the icon to create a new report
+							<a4j:commandLink action="startReportWizard">
+								<h:graphicImage value="/image/icon/pie_chart.png" width="50px" />
+							</a4j:commandLink>
+
+						</h3>
+
+					</h:panelGrid>
+				</form>
+
+
 
 
 			</rich:layoutPanel>
