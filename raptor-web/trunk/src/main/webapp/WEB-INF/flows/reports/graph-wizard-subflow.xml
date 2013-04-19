@@ -104,7 +104,7 @@
 
 
     <decision-state id="layoutNeeded">
-        <if test="graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="compileAndInvokeStatisticalUnit" />
+        <if test="savedGraphWizardModel.graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="compileAndInvokeStatisticalUnit" />
     </decision-state>
 
     <view-state id="graphLayoutSelector" view="wizard/page-layout-selector.xhtml">

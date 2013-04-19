@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -18,6 +19,7 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.oxm.XmlMappingException;
 
+import uk.ac.cardiff.raptorweb.engine.util.MessageGenerator;
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel;
 import uk.ac.cardiff.raptorweb.model.wizard.GraphWizardReports;
 import uk.ac.cardiff.raptorweb.model.wizard.SavedGraphWizardModel;
@@ -48,7 +50,7 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
      */
     private Resource saveDirectory;
 
-    private final String DATE_SAVED_FORMAT = "EEE dd yyyy (HH:mm)";
+    private final String DATE_SAVED_FORMAT = "EEE, dd MMM yyyy (HH:mm z)";
 
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(SavedWizardReportsServiceImpl.class);
@@ -111,6 +113,12 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
             os = new FileOutputStream(filename);
             log.debug("Saving report to [{}]", filename);
             this.marshaller.marshal(model.getGraphWizardModel(), new StreamResult(os));
+            if (model.isEdittingReport()) {
+                MessageGenerator.addInfo("ReSaved [" + new Date() + "]");
+            } else {
+                MessageGenerator.addInfo("Saved [" + new Date() + "]");
+            }
+
         } catch (FileNotFoundException e) {
             log.error("Could not save graph wizard report", e);
         } catch (XmlMappingException e) {

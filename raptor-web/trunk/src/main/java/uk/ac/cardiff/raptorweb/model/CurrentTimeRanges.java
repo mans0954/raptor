@@ -41,6 +41,10 @@ public class CurrentTimeRanges {
 
     public DateTime endLastMonth;
 
+    public DateTime startSconulYear;
+
+    public DateTime endSconulYear;
+
     @Deprecated
     public CurrentTimeRanges() {
         computeTimeRanges();
@@ -73,6 +77,8 @@ public class CurrentTimeRanges {
             return startYear;
         } else if (period == TimeRange.PREVIOUSMONTH) {
             return startLastMonth;
+        } else if (period == TimeRange.SCONULYEAR) {
+            return startSconulYear;
         } else {
             throw new NoSuchTimeRangeException("Requested a time period that does not exists [" + period + "]");
         }
@@ -97,6 +103,8 @@ public class CurrentTimeRanges {
             return currentTime;
         } else if (period == TimeRange.PREVIOUSMONTH) {
             return endLastMonth;
+        } else if (period == TimeRange.SCONULYEAR) {
+            return endSconulYear;
         } else {
             throw new NoSuchTimeRangeException("Requested a time period that does not exists [" + period + "]");
         }
@@ -136,6 +144,22 @@ public class CurrentTimeRanges {
         lastMonthEnd =
                 lastMonthEnd.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
 
+        DateTime previousAugust = new DateTime();
+        if (previousAugust.getMonthOfYear() < 8) {
+            previousAugust = previousAugust.withYear(previousAugust.getYear() - 1);
+        }
+        previousAugust = previousAugust.withMonthOfYear(8);
+        previousAugust = previousAugust.dayOfMonth().withMinimumValue().minusMillis(previousAugust.getMillisOfDay());
+
+        DateTime endJuly = new DateTime();
+        if (endJuly.getMonthOfYear() > 7) {
+            endJuly = endJuly.withYear(endJuly.getYear() + 1);
+        }
+        endJuly = endJuly.withMonthOfYear(7);
+        endJuly =
+                endJuly.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59)
+                        .withMillisOfSecond(999);
+
         startMonth = oneMonthPrevious;
         startToday = today;
         startWeek = oneWeekPrevious;
@@ -144,11 +168,15 @@ public class CurrentTimeRanges {
         endLastMonth = lastMonthEnd;
         startLastMonth = lastMonthStart;
 
+        startSconulYear = previousAugust; // aug 1st,
+        endSconulYear = endJuly; // july 31st
+
         log.debug("Ignore time, TODAY [start:{}] [end:{}]", today, currentDateTime);
         log.debug("Ignore time, LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
         log.debug("Ignore time, LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
         log.debug("Ignore time, LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
         log.debug("Ignore time, PREVIOUSYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
+        log.debug("Ignore time, SCONULYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
 
     }
 
@@ -167,6 +195,20 @@ public class CurrentTimeRanges {
         DateTime lastMonthEnd = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue();
         lastMonthStart = lastMonthStart.minusMillis(lastMonthStart.getMillisOfDay());
 
+        DateTime previousAugust = new DateTime();
+        if (previousAugust.getMonthOfYear() < 8) {
+            previousAugust = previousAugust.withYear(previousAugust.getYear() - 1);
+        }
+        previousAugust = previousAugust.withMonthOfYear(8);
+        previousAugust = previousAugust.dayOfMonth().withMinimumValue();
+
+        DateTime endJuly = new DateTime();
+        if (endJuly.getMonthOfYear() > 7) {
+            endJuly = endJuly.withYear(endJuly.getYear() + 1);
+        }
+        endJuly = endJuly.withMonthOfYear(7);
+        endJuly = endJuly.dayOfMonth().withMaximumValue();
+
         startMonth = oneMonthPrevious;
         startToday = today;
         startWeek = oneWeekPrevious;
@@ -174,22 +216,35 @@ public class CurrentTimeRanges {
         currentTime = currentDateTime;
         endLastMonth = lastMonthEnd;
         startLastMonth = lastMonthStart;
+        startSconulYear = previousAugust;
+        endSconulYear = endJuly;
 
         log.debug("TODAY [start:{}] [end:{}]", today, currentDateTime);
         log.debug("LASTWEEK [start:{}] [end:{}]", oneWeekPrevious, currentDateTime);
         log.debug("LASTMONTH [start:{}] [end:{}]", oneMonthPrevious, currentDateTime);
         log.debug("LASTYEAR [start:{}] [end:{}]", oneYearPrevious, currentDateTime);
         log.debug("PREVIOUSYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
+        log.debug("SCONULYEAR [start:{}] [end:{}]", startLastMonth, endLastMonth);
 
     }
 
     public static void main(String args[]) {
-        DateTime lastMonthStart = new DateTime().minusMonths(1).dayOfMonth().withMinimumValue();
-        DateTime lastMonthEnd = new DateTime().minusMonths(1).dayOfMonth().withMaximumValue();
-        lastMonthStart = lastMonthStart.minusMillis(lastMonthStart.getMillisOfDay());
-        lastMonthEnd =
-                lastMonthEnd.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
-        System.out.println("Start " + lastMonthStart + "  End " + lastMonthEnd);
+        DateTime previousAugust = new DateTime();
+        if (previousAugust.getMonthOfYear() < 8) {
+            previousAugust = previousAugust.withYear(previousAugust.getYear() - 1);
+        }
+        previousAugust = previousAugust.withMonthOfYear(8);
+        previousAugust = previousAugust.dayOfMonth().withMinimumValue().minusMillis(previousAugust.getMillisOfDay());
+
+        DateTime endJuly = new DateTime();
+        if (endJuly.getMonthOfYear() > 7) {
+            endJuly = endJuly.withYear(endJuly.getYear() + 1);
+        }
+        endJuly = endJuly.withMonthOfYear(7);
+        endJuly =
+                endJuly.dayOfMonth().withMaximumValue().withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59)
+                        .withMillisOfSecond(999);
+        System.out.println("Start " + previousAugust + "  End " + endJuly);
 
     }
 
