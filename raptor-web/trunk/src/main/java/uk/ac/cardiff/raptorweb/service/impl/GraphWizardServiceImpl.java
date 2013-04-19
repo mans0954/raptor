@@ -155,6 +155,7 @@ public class GraphWizardServiceImpl implements GraphWizardService {
      * @param model
      */
     public void lookupStatisticalUnitInformation(GraphWizardModel model) {
+        log.trace("Looking up statistical unit information");
         StatisticalUnitInformation information =
                 webEngine.lookupStatisticalUnitInformation(model.getSelectedGraphSet()
                         .getSelectedStatisticFunctionType());

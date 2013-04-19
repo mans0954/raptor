@@ -32,17 +32,19 @@
 
 		<rich:layout>
 			<rich:layoutPanel position="top">
-				<h4 align="left">Step 3. Graph Type Selector</h4>
+				<h4 align="left">Step 3. Graph Type Selector <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Graph Function To Run
 							For Each Event</h3>
 						<br />
-						<a4j:form id="statisticFunctionSelectForm">
-							<rich:dataGrid id="functionDataTable"
-								value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph" columns="1"
-								width="100%" style="border:3px" styleClass="simpleTable">
 
+						<rich:dataGrid id="functionDataTable"
+							value="#{savedGraphWizardModel.graphWizardModel.graphSets}"
+							var="graph" columns="1" width="100%" style="border:3px"
+							styleClass="simpleTable">
+
+							<a4j:form id="statisticFunctionSelectForm">
 
 								<b>Event:</b>
 								<h:outputText value=" #{graph.eventType}" />
@@ -72,19 +74,24 @@
 									<rich:column style="border-style: hidden;">
 										<h:inputText rendered="#{parameter.parameterType=='VALUE'}"
 											value="#{parameter.value}">
+											<a4j:support event="onchange" />
 										</h:inputText>
 										<rich:comboBox width="200px"
 											rendered="#{parameter.parameterType=='FIELD'}"
 											value="#{parameter.value}"
-											suggestionValues="#{savedGraphWizardModel.graphWizardModel.possibleFieldNameValues}" />
+											suggestionValues="#{savedGraphWizardModel.graphWizardModel.possibleFieldNameValues}">
+											<a4j:support event="onchange" />
+										</rich:comboBox>
 									</rich:column>
 								</rich:dataTable>
 
-							</rich:dataGrid>
+							</a4j:form>
+
+						</rich:dataGrid>
 
 
-							<rich:spacer height="10px" />
-
+						<rich:spacer height="10px" />
+						<h:form>
 							<h:panelGrid columns="5">
 								<h:commandButton value="next" action="next" />
 								<rich:spacer width="5px" />
@@ -92,7 +99,8 @@
 								<rich:spacer width="5px" />
 								<h:commandButton value="cancel" action="cancel" immediate="true" />
 							</h:panelGrid>
-						</a4j:form>
+						</h:form>
+
 					</div>
 				</center>
 

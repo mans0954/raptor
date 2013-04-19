@@ -32,22 +32,29 @@
 
 		<rich:layout>
 			<rich:layoutPanel position="top">
-				<h4 align="left">Step 8. Results</h4>
+			
+				<h4 align="left">Step 8. Results <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
 				<center>
 
 
 					<h:form id="wizardResultsForm">
-					   <h:panelGrid columns="5">
-                            <h:commandButton value="back" action="back" />
-                            <rich:spacer width="5px" />
-                            <h:commandButton value="done" action="done" />
-                            <rich:spacer width="5px" />
-                            <h:commandButton value="save" action="save" />
-                        </h:panelGrid>
+						<h:panelGrid columns="6">
+							<h:commandButton value="back" action="back" />
+							<rich:spacer width="5px" />
+							<h:commandButton value="done" action="done" />
+							<rich:spacer width="5px" />
+							<h:commandButton value="save" action="save" />
+							
+						</h:panelGrid>
+                        <h:messages showSummary="#{true}" layout="table" rendered="${not empty flowRequestContext.messageContext.allMessages}"
+                            infoClass="info" errorClass="error"/>
 
-						<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
-							columns="#{savedGraphWizardModel.graphWizardModel.resultColumns}" width="100%"
-							style="border:0px">
+
+						<rich:dataGrid
+							value="#{savedGraphWizardModel.graphWizardModel.graphSets}"
+							var="graph"
+							columns="#{savedGraphWizardModel.graphWizardModel.resultColumns}"
+							width="100%" style="border:0px">
 
 
 							<rich:tabPanel height="450" selectedTab="graph"
@@ -84,7 +91,8 @@
 											<h:graphicImage style="cursor: pointer"
 												value="/image/arrow.png" />
 											<h:outputText value="Filename:" />
-											<h:inputText value="#{savedGraphWizardModel.graphWizardModel.downloadFilename}" />
+											<h:inputText
+												value="#{savedGraphWizardModel.graphWizardModel.downloadFilename}" />
 										</h:panelGrid>
 
 										<h:panelGrid id="reportTypePanel" columns="3">
@@ -175,17 +183,10 @@
 								</rich:tab>
 
 							</rich:tabPanel>
-
-
 						</rich:dataGrid>
-
-
-
 						<br />
-						
+
 					</h:form>
-
-
 				</center>
 			</rich:layoutPanel>
 

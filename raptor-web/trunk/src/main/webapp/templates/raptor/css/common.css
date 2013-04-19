@@ -271,9 +271,40 @@ footer {
 .lowerBorderTable {
 	border-style: solid;
 	border-bottom: 10px solid rgb(192, 192, 192);
-	border-top:solid 0px #C0C0C0;
-	border-left:solid 0px #C0C0C0;
-	border-right:solid 0px #C0C0C0;
+	border-top: solid 0px #C0C0C0;
+	border-left: solid 0px #C0C0C0;
+	border-right: solid 0px #C0C0C0;
+}
+
+.info,.success,.warning,.error,.validation {
+	margin: 10px 0px;
+	height: 10px;
+	padding: 2px 3px 8px 30px;
+	background-repeat: no-repeat;
+	background-position: 3px center;
+	font-weight: bold;
+}
+
+.error {
+	color: #D8000C;
+	background-color: #FFBABA;
+	background-image: url('../images/icon/onebit_36-small.png');
+}
+
+.info {
+	color: #00529B;
+}
+
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+	background-image: url('../images/icon/onebit_34-small.png');
+}
+
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+	background-image: url('../images/icon/onebit_36-small.png');
 }
 
 .stepbystep {
