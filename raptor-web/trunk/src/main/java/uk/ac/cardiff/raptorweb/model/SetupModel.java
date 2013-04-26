@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.model;
 
 import java.io.Serializable;
@@ -55,7 +56,6 @@ public class SetupModel implements Serializable {
     }
 
     public void setSelectEndpointCapabilities(Capabilities selectEndpointCapabilities) {
-        log.debug("Setting event types {}", selectEndpointCapabilities.getEventsPerType());
         this.selectEndpointCapabilities = selectEndpointCapabilities;
     }
 

@@ -52,21 +52,23 @@ public class EventTypeServiceImpl implements EventTypeService {
         log.debug("Getting event type list as a list of select items");
         List<SelectItem> eventTypes = new ArrayList<SelectItem>();
 
-        List<EventTypeInformation> eventTypesFromAttached = webEngine.getAttachedCapabilities().getEventsPerType();
-        if (eventTypesFromAttached != null) {
-            for (EventTypeInformation eventType : eventTypesFromAttached) {
-                String eventTypeString = eventType.getEventTypeName();
-                SelectItem item = new SelectItem();
+        if (webEngine.getAttachedCapabilities() != null) {
+            List<EventTypeInformation> eventTypesFromAttached = webEngine.getAttachedCapabilities().getEventsPerType();
+            if (eventTypesFromAttached != null) {
+                for (EventTypeInformation eventType : eventTypesFromAttached) {
+                    String eventTypeString = eventType.getEventTypeName();
+                    SelectItem item = new SelectItem();
 
-                String labelValue = eventTypeToDisplayMapper.mapEventType(eventTypeString);
+                    String labelValue = eventTypeToDisplayMapper.mapEventType(eventTypeString);
 
-                if (labelValue != null) {
-                    item.setLabel(labelValue);
-                    item.setValue(eventTypeString);
-                    log.debug("Setting event value to: " + item.getValue());
-                    eventTypes.add(item);
+                    if (labelValue != null) {
+                        item.setLabel(labelValue);
+                        item.setValue(eventTypeString);
+                        log.debug("Setting event value to: " + item.getValue());
+                        eventTypes.add(item);
+                    }
+
                 }
-
             }
         }
         return eventTypes;

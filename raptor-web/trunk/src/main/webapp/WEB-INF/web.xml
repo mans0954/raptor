@@ -44,6 +44,13 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
+    
+    <!--  so that Jetty picks up the correct faces config -->
+    <listener>
+        <listener-class>
+            com.sun.faces.config.ConfigureListener
+        </listener-class>
+    </listener>
 
 
     <!-- Use xhtml view templates saved as *.xhtml, for use with Facelets -->
