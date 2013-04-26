@@ -22,14 +22,14 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Handler;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.handler.DefaultHandler;
-import org.mortbay.jetty.handler.HandlerCollection;
-import org.mortbay.jetty.security.SslSocketConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -75,20 +75,24 @@ public class RunServer {
         System.out.println("[INFO] Servlet and Spring Config: Configuration files at " + configurationFiles);
 
         Server server = new Server();
-        SslSocketConnector sslConnector = new SslSocketConnector();
+
+        SslContextFactory contextFactory = new SslContextFactory();
+
+        contextFactory.setKeyStorePath(keyStoreLocaion);
+        contextFactory.setKeyStorePassword(keyStorePassword);
+
+        contextFactory.setTrustStore(trustStoreLocaion);
+        contextFactory.setTrustStorePassword(trustStorePassword);
+        contextFactory.setNeedClientAuth(true);
+
+        SslSocketConnector sslConnector = new SslSocketConnector(contextFactory);
         sslConnector.setPort(portNumber);
         sslConnector.setMaxIdleTime(30000);
-        sslConnector.setKeystore(keyStoreLocaion);
-        sslConnector.setPassword(keyStorePassword);
-        sslConnector.setKeyPassword(keyStorePassword);
-        sslConnector.setTruststore(trustStoreLocaion);
-        sslConnector.setTrustPassword(trustStorePassword);
 
-        SocketConnector connector = new SocketConnector();
-        connector.setPort(portNumber);
+        // SocketConnector connector = new SocketConnector();
+        // connector.setPort(portNumber);
 
         // enable mutual authentication
-        sslConnector.setNeedClientAuth(true);
         System.out.println("Using Connector " + sslConnector);
         server.setConnectors(new Connector[] {sslConnector});
 
@@ -97,7 +101,7 @@ public class RunServer {
         webappcontext.setContextPath(webappContextPath);
         webappcontext.setWar(configurationFiles);
 
-        HandlerCollection handlers = new HandlerCollection();
+        ContextHandlerCollection handlers = new ContextHandlerCollection();
         handlers.setHandlers(new Handler[] {webappcontext, new DefaultHandler()});
 
         server.setHandler(handlers);
