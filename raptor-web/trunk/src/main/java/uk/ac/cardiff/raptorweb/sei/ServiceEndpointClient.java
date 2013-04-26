@@ -106,7 +106,7 @@ public class ServiceEndpointClient {
             MultiUnitAggregator client = getEndpointConnection(endpoint);
             log.debug("Accessing the MUA version " + client.getVersion());
             capabilities = client.getCapabilities();
-            log.debug("Retrieved capabilities from the MUA [{}]", endpoint);
+            log.debug("Retrieved capabilities [{}] from the MUA [{}]", (capabilities != null), endpoint);
         } catch (SoapFault e) {
             log.error("SOAP Fault, Problem trying to retrieving capabilities from MUA [{}]", new Object[] {endpoint}, e);
             capabilities = new Capabilities();

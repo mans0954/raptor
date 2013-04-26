@@ -131,7 +131,7 @@
         <webflow.version>2.0.5.RELEASE</webflow.version>
         <spring.security.version>3.0.5.RELEASE</spring.security.version>
         <richfaces.version>3.3.3.Final</richfaces.version>
-        <jetty.version>6.1.25</jetty.version>
+        <jetty.version>8.1.10.v20130312</jetty.version>
     </properties>
 
     <dependencies>
