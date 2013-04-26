@@ -50,7 +50,7 @@
   <logger name="uk.ac.cardiff" level="trace">
     <appender-ref ref="stdout"/>
   </logger>
-  <logger name="org.mortbay" level="ERROR">
+  <logger name="org.eclipse.jetty" level="INFO">
     <appender-ref ref="stdout"/>
   </logger>
   <logger name="org.hibernate" level="INFO">
