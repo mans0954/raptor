@@ -51,7 +51,7 @@
     <appender-ref ref="FILE"/>
   </logger>
 
-  <logger name="org.mortbay" level="INFO">
+  <logger name="org.eclipse.jetty" level="INFO">
     <appender-ref ref="stdout"/>
     <appender-ref ref="FILE"/>
   </logger>
