@@ -437,6 +437,9 @@
                     </property> <!-- Atom (ISO 8601) -->
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="headerToLowerCase">
+                        <value>true</value>
+                    </property>
                     <property name="fieldName">
                         <value>requestBinding</value>
                     </property>
@@ -654,8 +657,7 @@
                         <value>URL</value>
                     </property>
                     <property name="regexRetain">
-                        <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*
-                        </value>
+                        <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*</value>
                     </property>
                     <property name="regexRetainCaseInsensitive">
                         <value>true</value>
@@ -669,10 +671,7 @@
                 </bean>
             </list>
         </property>
-        <property name="delimeter">
-            <value>
-            </value>
-        </property>
+        <property name="delimeter" value=" "/>
 
 
 

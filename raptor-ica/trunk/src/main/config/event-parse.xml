@@ -28,7 +28,7 @@
                 <!-- JUSP Json parser-->
 
                 <bean id="juspParser" class="uk.ac.cardiff.raptor.parse.external.remote.JsonLogParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="webServiceLocation" value="http://www.jusp.mimas.ac.uk/api/"/>
                     <property name="eventType">
@@ -104,7 +104,7 @@
                     <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20110107.log</value>
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/ezproxy-20130310.log</value>
                     </property>
                     <property name="format">
                         <ref bean="ezProxyFileFormat" />
@@ -153,7 +153,7 @@
 				<!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="false"/>
+                    <property name="enabled" value="true"/>
 					<property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib-idp-small.log

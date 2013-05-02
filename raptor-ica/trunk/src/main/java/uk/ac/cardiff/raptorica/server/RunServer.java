@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.Context;
-import org.mortbay.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -67,7 +67,9 @@ public class RunServer {
         System.out.println("[INFO] Spring Config: Configuration files at " + configurationFiles);
 
         final Server server = new Server(portNumber);
-        final Context context = new Context(server, "/ICA", Context.SESSIONS);
+        final ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        ctx.setContextPath("/");
+        server.setHandler(ctx);
 
         final DispatcherServlet dispatcherServlet = new DispatcherServlet();
         // dispatcherServlet.setContextConfigLocation("classpath:beans.xml");
@@ -76,7 +78,7 @@ public class RunServer {
         dispatcherServlet.setContextConfigLocation(springBeans.toURI().toString());
 
         final ServletHolder servletHolder = new ServletHolder(dispatcherServlet);
-        context.addServlet(servletHolder, "/*");
+        ctx.addServlet(servletHolder, "/*");
 
         try {
             server.start();
