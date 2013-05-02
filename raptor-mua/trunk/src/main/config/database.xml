@@ -27,7 +27,7 @@
         <!-- OR mapping files. -->
         <property name="mappingResources">
             <list>
-                <value>uk/ac/cardiff/model/event/event.hbm.xml</value>
+                <value>uk/ac/cardiff/model/event/event-name-limit.hbm.xml</value>
                 <value>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</value>
                 <value>uk/ac/cardiff/raptor/registry/releaseInformation.hbm.xml</value>
             </list>

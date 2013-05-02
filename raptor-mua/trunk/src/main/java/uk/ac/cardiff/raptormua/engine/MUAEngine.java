@@ -311,6 +311,9 @@ public final class MUAEngine implements InitializingBean {
      * @param statisticalUnitInformation the statistical unit information
      */
     public void updateStatisticalUnit(final StatisticalUnitInformation statisticalUnitInformation) {
+        log.trace("Updating the statistic with start time [{}] and end time [{}]", statisticalUnitInformation
+                .getStatisticParameters().getStartTimeAsJavaDate(), statisticalUnitInformation.getStatisticParameters()
+                .getEndTimeAsJavaDate());
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
         capabilitiesConstructor.invalidateCache();
 

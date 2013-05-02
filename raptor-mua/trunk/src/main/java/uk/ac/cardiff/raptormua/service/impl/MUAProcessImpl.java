@@ -21,6 +21,7 @@ package uk.ac.cardiff.raptormua.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -39,6 +40,7 @@ import uk.ac.cardiff.model.wsmodel.EventPushMessage;
 import uk.ac.cardiff.model.wsmodel.LogFileUpload;
 import uk.ac.cardiff.model.wsmodel.LogFileUploadResult;
 import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
+import uk.ac.cardiff.model.wsmodel.StatisticParameters.StatisticType;
 import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
 import uk.ac.cardiff.raptormua.engine.MUAEngine;
@@ -68,22 +70,37 @@ public class MUAProcessImpl implements MUAProcess {
     private FileUploadEngine fileUploadEngine;
 
     /**
-     * ReentrantLock to prevent more than one operation at the same time
+     * General ReentrantLock to prevent more than one operation at the same time.
      */
     final Lock lockR = new ReentrantLock();
 
+    /**
+     * Lock the should be checked by all operations that require write access.
+     */
+    final Lock writeLock = new ReentrantLock();
+
+    /**
+     * A lock that should be checked when a SYSTEM level statistical unit is updated, as these should not happen
+     * concurrently.
+     */
+    final Lock lockUpdateStatisticalUnitsSystem = new ReentrantLock();
+
+    /**
+     * A lock that should be checked when a USER level statistical unit is updated, as these should not happen
+     * concurrently.
+     */
+    final Lock lockUpdateStatisticalUnitsUser = new ReentrantLock();
+
     @Override
     public AggregatorGraphModel performStatistic(String statisticName) throws SoapFault {
-        if (lockR.tryLock()) {
-            try {
-                log.info("WebSservice call for perform statistic [{}] ", statisticName);
-                return engine.performStatistic(statisticName);
-            } catch (Exception e) {
-                log.error("{}", e);
-            } finally {
-                lockR.unlock();
-            }
+        // TODO this could be performing a stat that is being updated. Maybe think about locks here?
+        try {
+            log.info("WebSservice call for perform statistic [{}] ", statisticName);
+            return engine.performStatistic(statisticName);
+        } catch (Exception e) {
+            log.error("{}", e);
         }
+
         log.warn("Lock was hit for method [performStatistic]");
         throw new SoapFault("lock was hit on method performStatistic", new QName("Server"));
 
@@ -91,13 +108,13 @@ public class MUAProcessImpl implements MUAProcess {
 
     @Override
     public void release() {
-        if (lockR.tryLock()) {
+        if (writeLock.tryLock()) {
             try {
                 engine.release();
             } catch (Exception e) {
-                log.error("Error trying to release events, reason = [{}]", e.getMessage());
+                log.error("Error trying to release events, write lock in operation, reason = [{}]", e.getMessage());
             } finally {
-                lockR.unlock();
+                writeLock.unlock();
             }
         } else {
             log.warn("Lock was hit for method [release]");
@@ -113,7 +130,8 @@ public class MUAProcessImpl implements MUAProcess {
     @Override
     public void updateStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation) throws SoapFault {
         boolean success = false;
-        if (lockR.tryLock()) {
+        Lock lockToUse = determineCorrectLock(statisticalUnitInformation);
+        if (lockToUse.tryLock()) {
             try {
                 log.info("Updating statistical unit {}", statisticalUnitInformation.getStatisticParameters()
                         .getUnitName());
@@ -123,7 +141,7 @@ public class MUAProcessImpl implements MUAProcess {
                 log.error("{}", e);
                 success = false;
             } finally {
-                lockR.unlock();
+                lockToUse.unlock();
             }
         }
         if (!success) {
@@ -193,7 +211,7 @@ public class MUAProcessImpl implements MUAProcess {
     @Override
     public void addAuthentications(EventPushMessage pushed) throws SoapFault {
         boolean success = false;
-        if (lockR.tryLock()) {
+        if (writeLock.tryLock()) {
             try {
                 log.info("MUA has received {} entries from {} [{}]", new Object[] {pushed.getEvents().size(),
                         pushed.getClientMetadata().getEntityId(), pushed.getClientMetadata().getServiceName()});
@@ -207,7 +225,7 @@ public class MUAProcessImpl implements MUAProcess {
                 log.error("Error trying to add authentications to this MUA", e);
                 success = false;
             } finally {
-                lockR.unlock();
+                writeLock.unlock();
 
             }
         } else
@@ -219,23 +237,48 @@ public class MUAProcessImpl implements MUAProcess {
 
     }
 
+    private Lock determineCorrectLock(StatisticalUnitInformation statInformation) {
+        StatisticType type = statInformation.getStatisticParameters().getType();
+        if (type == StatisticType.SYSTEM) {
+            return lockUpdateStatisticalUnitsSystem;
+        }
+        if (type == StatisticType.USER) {
+            return lockUpdateStatisticalUnitsUser;
+        } else {
+            // else, return the lock for the system stats as these are more important to protect.
+            return lockUpdateStatisticalUnitsSystem;
+        }
+    }
+
     @Override
     public AggregatorGraphModel updateAndInvokeStatisticalUnit(StatisticalUnitInformation statisticalUnitInformation)
             throws SoapFault {
-        if (lockR.tryLock()) {
-            try {
-                log.info("Webservice call to update and perform statistic [{}]", statisticalUnitInformation
-                        .getStatisticParameters().getUnitName());
-                engine.updateStatisticalUnit(statisticalUnitInformation);
-                return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
-            } catch (Exception e) {
-                log.error("{}", e);
-            } finally {
-                lockR.unlock();
+
+        Lock lockToUse = determineCorrectLock(statisticalUnitInformation);
+        try {
+            if (lockToUse.tryLock(10, TimeUnit.SECONDS)) {
+                try {
+                    log.info("Webservice call to update and perform statistic [{}]", statisticalUnitInformation
+                            .getStatisticParameters().getUnitName());
+                    engine.updateStatisticalUnit(statisticalUnitInformation);
+                    return engine.performStatistic(statisticalUnitInformation.getStatisticParameters().getUnitName());
+                } catch (Exception e) {
+                    log.error("{}", e);
+                } finally {
+                    lockToUse.unlock();
+                }
+            } else {
+
+                log.warn("Lock was hit for method [updateAndInvokeStatisticalUnit] - statistics being updated");
+                throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit - statistics being updated",
+                        new QName("Server"));
             }
+        } catch (InterruptedException e) {
+            log.error("Error trying to obtain a lock with wait time", e);
         }
-        log.warn("Lock was hit for method [updateAndInvokeStatisticalUnit]");
-        throw new SoapFault("lock was hit on method updateAndInvokeStatisticalUnit", new QName("Server"));
+
+        log.warn("method [updateAndInvokeStatisticalUnit] did not perform any logc!");
+        throw new SoapFault("method [updateAndInvokeStatisticalUnit] did not perform any logc!", new QName("Server"));
 
     }
 
@@ -243,7 +286,7 @@ public class MUAProcessImpl implements MUAProcess {
     public List<LogFileUploadResult> batchUpload(List<LogFileUpload> uploadFiles) throws SoapFault {
         List<LogFileUploadResult> result = new ArrayList<LogFileUploadResult>();
         boolean success = false;
-        if (lockR.tryLock()) {
+        if (writeLock.tryLock()) {
             try {
                 log.info("Webservice call to parse {} batch log file(s)", uploadFiles.size());
 
@@ -258,7 +301,7 @@ public class MUAProcessImpl implements MUAProcess {
                 success = false;
 
             } finally {
-                lockR.unlock();
+                writeLock.unlock();
             }
         } else {
             log.warn("Lock was hit for method [batchUpload]");
@@ -275,7 +318,7 @@ public class MUAProcessImpl implements MUAProcess {
     public void uploadFromDirectory() {
         List<BatchFile> files = fileUploadEngine.scanDirectories();
         if (files != null && files.size() > 0) {
-            if (lockR.tryLock()) {
+            if (writeLock.tryLock()) {
                 try {
                     log.info("Uploading {} files from directory", files.size());
                     engine.batchParseFiles(files);
@@ -283,7 +326,7 @@ public class MUAProcessImpl implements MUAProcess {
                     log.error("Could not parse and store batch uploads, will retry on next run");
 
                 } finally {
-                    lockR.unlock();
+                    writeLock.unlock();
                 }
             } else {
                 log.warn("Lock was hit for method [batchUpload]");

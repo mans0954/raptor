@@ -265,31 +265,7 @@
                     </property>
 			</bean>
 		</property>
-		  <property name="attachProcessors">
-            <list>
-                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
-                    <property name="processorClass">
-                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter</value>
-                    </property>
-                </bean>
-                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
-                    <property name="processorClass">
-                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor</value>
-                    </property>
-                    <property name="methodParameters">
-                        <list>
-                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
-                                <property name="parameterType" value="VALUE" />
-                                <property name="parameterName" value="Ascending"></property>   
-                                <property name="value">
-                                    <value type="java.lang.Boolean">true</value>
-                                </property>
-                            </bean>
-                        </list>
-                    </property>
-                </bean>               
-            </list>
-        </property>
+		 
 	</bean>
 
 	<bean id="authsPerSchool" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
