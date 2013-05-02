@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.engine.reports;
 
 import java.awt.Color;
@@ -79,12 +80,14 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     /*
      * (non-Javadoc)
      * 
-     * @see uk.ac.cardiff.raptorweb.engine.reports.ReportConstructor#generateReport(uk.ac.cardiff.raptorweb.model.WebSession)
+     * @see
+     * uk.ac.cardiff.raptorweb.engine.reports.ReportConstructor#generateReport(uk.ac.cardiff.raptorweb.model.WebSession)
      */
     @Override
     public void generateReport(WebSession session) {
         // TODO there are common setup and store aspects to all reports that should be pushed higher
-        log.info("Generating PDF report for both graph and chart, for {}", session.getGraphmodel().getSelectedStatisticalUnit());
+        log.info("Generating PDF report for both graph and chart, for {}", session.getGraphmodel()
+                .getSelectedStatisticalUnit());
 
         try {
             File baseGraphDirectory = saveDirectory.getFile();
@@ -101,15 +104,18 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             java.util.Date date = new java.util.Date();
 
-            String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
-                    + dateFormat.format(date) + ".pdf";
+            String fileName =
+                    session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                            .getStatisticParameters().getUnitName().replaceAll(" ", "")
+                            + "-" + dateFormat.format(date) + ".pdf";
             if (!session.getGraphmodel().getDownloadFilename().equals("")) {
                 fileName = session.getGraphmodel().getDownloadFilename() + ".pdf";
             }
             dir = new File(dir.getAbsoluteFile() + "/" + fileName);
             log.debug("Complete file directory to PDF is {}", dir);
 
-            File reportTemplateXMLFile = new File(baseDirectory.getFile().getCanonicalPath() + "/report-templates/" + reportXMLFile);
+            File reportTemplateXMLFile =
+                    new File(baseDirectory.getFile().getCanonicalPath() + "/report-templates/" + reportXMLFile);
             log.debug("Report template XML file is at {}", reportTemplateXMLFile);
 
             JasperPrint jp = constructReport(reportTemplateXMLFile, session);
@@ -120,8 +126,10 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
             Date now = new Date(System.currentTimeMillis());
             log.debug("Report can be downloaded from {}", relativePath);
 
-            session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
-            log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName());
+            session.getReportmodel().addReportForDownload(dir, relativePath, now,
+                    this.getHandledReportType().displayName);
+            log.info("Successfully created PDF...{}", session.getGraphmodel().getSelectedStatisticalUnit()
+                    .getStatisticalUnitInformation().getStatisticParameters().getUnitName());
 
         } catch (JRException e) {
             log.error("Error Creating JasperReport", e);
@@ -136,19 +144,15 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     /**
      * Construct report.
      * 
-     * @param reportTemplateXMLFile
-     *            the report template xml file
-     * @param session
-     *            the session
+     * @param reportTemplateXMLFile the report template xml file
+     * @param session the session
      * @return the jasper print
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     * @throws JRException
-     *             the jR exception
-     * @throws ColumnBuilderException
-     *             the column builder exception
+     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws JRException the jR exception
+     * @throws ColumnBuilderException the column builder exception
      */
-    private JasperPrint constructReport(File reportTemplateXMLFile, WebSession session) throws IOException, JRException, ColumnBuilderException {
+    private JasperPrint constructReport(File reportTemplateXMLFile, WebSession session) throws IOException,
+            JRException, ColumnBuilderException {
         log.info("Constructing Report Using DynamicJasper");
 
         // construct the table
@@ -167,7 +171,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
             Iterator<?> it = mrow.getValues().iterator();
             headerCount = 1;
             while (it.hasNext()) {
-                String value = it.next().toString();
+                String value = formatValueAsString(it.next());
                 data[rowCount][headerCount++] = value;
             }
             rowCount++;
@@ -205,12 +209,16 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
             if (i == 0) {
                 // group category
                 String key = headings[i];
-                AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhiteBold).build();
+                AbstractColumn column =
+                        ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key)
+                                .setWidth(new Integer(100)).setStyle(columDetailWhiteBold).build();
                 column.setHeaderStyle(titleStyle);
                 drb.addColumn(column);
             } else {
                 String key = headings[i];
-                AbstractColumn column = ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key).setWidth(new Integer(100)).setStyle(columDetailWhite).build();
+                AbstractColumn column =
+                        ColumnBuilder.getNew().setColumnProperty(key, String.class.getName()).setTitle(key)
+                                .setWidth(new Integer(100)).setStyle(columDetailWhite).build();
                 column.setHeaderStyle(titleStyle);
                 drb.addColumn(column);
             }
@@ -225,12 +233,15 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
         drb.setDetailHeight(new Integer(15));
 
         // add any additional parameters that are mapped to the template
-        BufferedImage image = ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session.getGraphmodel().getChartOptions());
+        BufferedImage image =
+                ChartProcessor.extractBufferedImage(session.getGraphmodel().getCurrentJFreeGraph().getChart(), session
+                        .getGraphmodel().getChartOptions());
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("image", image);
         parameters.put("query", constructQueryString(session));
-        parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getPresentation().getGraphTitle());
+        parameters.put("subtitle", session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                .getStatisticParameters().getPresentation().getGraphTitle());
         log.debug("Map: " + parameters);
 
         DynamicReport dr = drb.build();
@@ -241,7 +252,9 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
 
     private String constructQueryString(WebSession webSession) {
         StringBuilder builder = new StringBuilder();
-        StatisticParameters params = webSession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters();
+        StatisticParameters params =
+                webSession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                        .getStatisticParameters();
         builder.append("Start: ");
         builder.append(params.getStartTime());
         builder.append(" End: ");
@@ -254,8 +267,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     /**
      * Max no rows.
      * 
-     * @param currentTableGraph
-     *            the current table graph
+     * @param currentTableGraph the current table graph
      * @return the int
      */
     private int maxNoRows(RaptorTableChartModel currentTableGraph) {
@@ -280,8 +292,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     /**
      * Sets the report bean.
      * 
-     * @param reportBean
-     *            the new report bean
+     * @param reportBean the new report bean
      */
     public void setReportBean(GenericReportBean reportBean) {
         this.reportBean = reportBean;
@@ -299,8 +310,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     /**
      * Sets the report xml file.
      * 
-     * @param reportXMLFile
-     *            the new report xml file
+     * @param reportXMLFile the new report xml file
      */
     public void setReportXMLFile(String reportXMLFile) {
         this.reportXMLFile = reportXMLFile;
@@ -316,8 +326,7 @@ public class GraphAndChartPDFReportGenerator extends BaseReportConstructor {
     }
 
     /**
-     * @param eventTypeMapper
-     *            the eventTypeMapper to set
+     * @param eventTypeMapper the eventTypeMapper to set
      */
     public void setEventTypeMapper(EventTypeDisplayMapper eventTypeMapper) {
         this.eventTypeMapper = eventTypeMapper;

@@ -27,6 +27,9 @@
     </bean>
 
 
+    <!-- View Validators -->
+    <bean id="savedGraphWizardModelValidator" class="uk.ac.cardiff.raptorweb.validators.SavedGraphWizardModelValidator"/>
+
 
     <bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
         <property name="webEngine">
@@ -187,7 +190,7 @@
     <bean id="statsSchedular" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <!-- <ref local="SystemStatsQuickTrigger"/> -->
+               <!-- <ref local="SystemStatsQuickTrigger"/> -->
             </list>
         </property>
     </bean>

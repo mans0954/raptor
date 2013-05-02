@@ -32,7 +32,7 @@
     </decision-state>
     
 
-    <view-state id="dateSelector" view="wizard/date-selector.xhtml">
+    <view-state id="dateSelector" view="wizard/date-selector.xhtml" model="savedGraphWizardModel">
         <on-entry>
             <evaluate expression="graphWizardService.computeCurrentTimeRange(savedGraphWizardModel.graphWizardModel)" />
         </on-entry>
@@ -45,47 +45,47 @@
         <transition on="cancel" to="cancelWizard" />
     </view-state>
 
-    <view-state id="eventTypeSelector" view="wizard/event-types-selector.xhtml">
-        <transition on="addEventType">
+    <view-state id="eventTypeSelector" view="wizard/event-types-selector.xhtml" model="savedGraphWizardModel">
+        <transition on="addEventType" validate="false">
             <evaluate expression="savedGraphWizardModel.graphWizardModel.saveEventType()" />
         </transition>
 
-        <transition on="removeEventType">
+        <transition on="removeEventType" validate="false">
             <evaluate expression="savedGraphWizardModel.graphWizardModel.removeEventType()" />
         </transition>
 
-        <transition on="next" to="graphTypeSelector" />
-        <transition on="back" to="dateSelector" />
-        <transition on="cancel" to="cancelWizard" />
+        <transition on="next" to="graphTypeSelector"/>
+        <transition on="back" to="dateSelector"  validate="false"/>
+        <transition on="cancel" to="cancelWizard" validate="false"/>
     </view-state>
 
-    <view-state id="graphTypeSelector" view="wizard/graph-type-selector.xhtml">
+    <view-state id="graphTypeSelector" view="wizard/graph-type-selector.xhtml" model="savedGraphWizardModel">
 
-        <transition on="lookupStatistic">
+        <transition on="lookupStatistic" validate="false">
             <evaluate expression="graphWizardService.lookupStatisticalUnitInformation(savedGraphWizardModel.graphWizardModel)" />
         </transition>
         <transition on="next" to="graphSeriesSelector" />
-        <transition on="back" to="eventTypeSelector" />
-        <transition on="cancel" to="cancelWizard" />
+        <transition on="back" to="eventTypeSelector" validate="false"/>
+        <transition on="cancel" to="cancelWizard" validate="false"/>
     </view-state>
 
-    <view-state id="graphSeriesSelector" view="wizard/graph-series-selector.xhtml">
-        <transition on="addSeriesToSelectedStatistic">
+    <view-state id="graphSeriesSelector" view="wizard/graph-series-selector.xhtml" model="savedGraphWizardModel">
+        <transition on="addSeriesToSelectedStatistic" validate="false">
             <evaluate expression="graphWizardService.addSeriesToSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
-        <transition on="addFilterToSelectedSeries">
+        <transition on="addFilterToSelectedSeries" validate="false">
             <evaluate expression="graphWizardService.addFilterToSelectedSeries(savedGraphWizardModel.graphWizardModel)"></evaluate>
         </transition>
-        <transition on="removeSeriesFromSelectedStatistic">
+        <transition on="removeSeriesFromSelectedStatistic" validate="false">
             <evaluate expression="graphWizardService.removeSeriesFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
         </transition>
-        <transition on="removeSelectedFilterFromSelectedStatistic">
+        <transition on="removeSelectedFilterFromSelectedStatistic" validate="false">
             <evaluate expression="graphWizardService.removeSelectedFilterFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
         </transition>
 
         <transition on="next" to="graphProcessorSelector" />
-        <transition on="back" to="graphTypeSelector" />
-        <transition on="cancel" to="cancelWizard" />
+        <transition on="back" to="graphTypeSelector" validate="false" />
+        <transition on="cancel" to="cancelWizard" validate="false"/>
     </view-state>
 
 

@@ -197,6 +197,10 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void updateAndInvokeStatisticalUnit(WebSession websession) {
+        if (validate(websession) == false) {
+            log.error("Could not validate graph options, nothing to return");
+            return;
+        }
         GraphModel model = websession.getGraphmodel();
         log.info("Graph Service Updating and Invoking {}", model.getSelectedStatisticalUnit()
                 .getStatisticalUnitInformation().getStatisticParameters().getUnitName());
@@ -205,6 +209,16 @@ public class GraphServiceImpl implements GraphService {
                         .getStatisticalUnitInformation());
         setGraphModel(model, gmodel);
 
+    }
+
+    private boolean validate(WebSession websession) {
+        if (websession.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                .getStatisticParameters().getSeries().size() == 0) {
+            log.error("No series defined, graph can not be produced");
+            websession.getGraphmodel().setProcessingResult("No series defined, graph can not be produced");
+            return false;
+        }
+        return true;
     }
 
     private void setGraphModel(GraphModel model, AggregatorGraphModel gmodel) {
@@ -219,6 +233,7 @@ public class GraphServiceImpl implements GraphService {
             log.warn("Chart model came back from the MUA as null, nothing to display");
             model.setCurrentTableGraph(null);
             model.setCurrentGraph(null);
+            model.setCurrentJFreeGraph(null);
             model.setProcessingResult("The statistic failed to produce a graphable result ["
                     + uk.ac.cardiff.raptor.runtimeutils.DateUtils.getCurrentTimeFormatted() + "]");
         }

@@ -31,8 +31,12 @@
 		<a4j:include viewId="wizard-series-panel.xhtml" />
 
 		<rich:layout>
-			<rich:layoutPanel position="top">
-				<h4 align="left">Step 4. Graph Series Selector <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
+			<rich:layoutPanel position="center" width="70%">
+				<h4 align="left">
+					Step 4. Graph Series Selector
+					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+						style="color:red" value=" [EDIT]" />
+				</h4>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Number Of Series and
@@ -40,10 +44,12 @@
 						<br />
 						<a4j:form>
 
-							<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
-								columns="1" width="100%" style="border:3px"
+							<rich:dataGrid
+								value="#{savedGraphWizardModel.graphWizardModel.graphSets}"
+								var="graph" columns="1" width="100%" style="border:3px"
 								styleClass="simpleTable">
-                                <b>Event:</b><h:outputText value=" #{graph.eventType}"/>
+								<b>Event:</b>
+								<h:outputText value=" #{graph.eventType}" />
 								<rich:dataTable id="seriesTableWizard"
 									value="#{graph.statisticalUnitInformation.statisticalUnitInformation.statisticParameters.series}"
 									bandingInterval="2" banding="row" var="series" width="100%"
@@ -57,7 +63,8 @@
 											reRender="seriesTableWizard">
 											<h:graphicImage style="width:20px"
 												value="/image/icon/onebit_31.png" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</f:facet>
@@ -89,7 +96,8 @@
 												value="/image/icon/onebit_39.png" />
 											<f:setPropertyActionListener value="#{series}"
 												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 										<a4j:commandLink immediate="true"
 											oncomplete="#{rich:component('seriesModalPanel')}.show()"
@@ -102,7 +110,8 @@
 												value="/image/icon/onebit_31.png" />
 											<f:setPropertyActionListener value="#{series}"
 												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</rich:column>
@@ -112,19 +121,25 @@
 										</f:facet>
 										<a4j:commandLink immediate="true"
 											action="removeSeriesFromSelectedStatistic"
-											id="removeSeriesLink" reRender="seriesModalPanel,seriesTableWizard">
+											id="removeSeriesLink"
+											reRender="seriesModalPanel,seriesTableWizard">
 											<h:graphicImage
 												style="width:20px; border:0; margin-left: auto;margin-right: auto;"
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{series}"
 												target="#{savedGraphWizardModel.graphWizardModel.selectedSeries}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</rich:column>
 
 								</rich:dataTable>
 							</rich:dataGrid>
+
+							<h:panelGrid columns="1" border="0">
+								<h:messages style="color:darkred" id="error_message" />
+							</h:panelGrid>
 
 							<h:panelGrid columns="5">
 								<h:commandButton value="next" action="next" />
@@ -136,6 +151,32 @@
 						</a4j:form>
 					</div>
 				</center>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+                    <p>
+					For each event type you added to this report, you can now modify
+					the set of series that you wish to graph. If all you want is a
+					single series with no filtering, you can simply click next.
+					</p>
+                    <p>
+					However, if you wish to drill down into the data, then you can do
+					so by adding multiple series, and/or by adding filters to each
+					series. To add a new series, simply click the green add button at
+					the bottom left of the relevant event type pane. To add filters to
+					a particular series, click the add filter icon. For each filter,
+					choose the field that you want to filter on, the filter operation,
+					and the value to filter on. For example, to filter the series for a
+					particular department, you would choose
+					"principalInformation.school" "EQUALS" "[name of dept]". Or to
+					filter for a particular resource - "resourceid" "EQUALS"
+					"[identifier of resource]".
+					</p>
+				</div>
 
 			</rich:layoutPanel>
 

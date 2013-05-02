@@ -16,6 +16,7 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.engine.reports;
 
 import java.io.BufferedWriter;
@@ -42,6 +43,7 @@ public class CSVReportGenerator extends BaseReportConstructor {
     /** Class logger */
     private final Logger log = LoggerFactory.getLogger(CSVReportGenerator.class);
 
+    @Override
     public void generateReport(WebSession session) {
         log.info("Generating CSV Report {}", session.getGraphmodel().getSelectedStatisticalUnit());
         String relativePath = null;
@@ -60,8 +62,10 @@ public class CSVReportGenerator extends BaseReportConstructor {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             java.util.Date date = new java.util.Date();
 
-            String fileName = session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation().getStatisticParameters().getUnitName().replaceAll(" ", "") + "-"
-                    + dateFormat.format(date) + ".csv";
+            String fileName =
+                    session.getGraphmodel().getSelectedStatisticalUnit().getStatisticalUnitInformation()
+                            .getStatisticParameters().getUnitName().replaceAll(" ", "")
+                            + "-" + dateFormat.format(date) + ".csv";
             if (!session.getGraphmodel().getDownloadFilename().equals("")) {
                 fileName = session.getGraphmodel().getDownloadFilename() + ".csv";
             }
@@ -70,7 +74,7 @@ public class CSVReportGenerator extends BaseReportConstructor {
             StringBuilder document = new StringBuilder();
 
             int rowCount = 0;
-            for (int lineCount = 0; lineCount < maxNoRows(session.getGraphmodel().getCurrentTableGraph()); lineCount++) {
+            for (int lineCount = 0; lineCount <= maxNoRows(session.getGraphmodel().getCurrentTableGraph()); lineCount++) {
                 if (lineCount == 0) {
                     // do headers
                     for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
@@ -79,8 +83,10 @@ public class CSVReportGenerator extends BaseReportConstructor {
                     document.append("\n");
                 } else {
                     for (TableSeries tseries : session.getGraphmodel().getCurrentTableGraph().getTableSeries()) {
-                        if (tseries.getRows().size() > rowCount)
-                            document.append(tseries.getRows().get(rowCount).getGroup() + "," + tseries.getRows().get(rowCount).getValue() + ",");
+                        if (tseries.getRows().size() > rowCount) {
+                            document.append(tseries.getRows().get(rowCount).getGroup() + ","
+                                    + formatValueAsString(tseries.getRows().get(rowCount).getValue()) + ",");
+                        }
                     }
                     document.append("\n");
                     rowCount++;
@@ -93,7 +99,8 @@ public class CSVReportGenerator extends BaseReportConstructor {
 
             relativePath = dir.getAbsolutePath().replace(baseDirectory.getFile().getAbsolutePath(), "");
             Date now = new Date(System.currentTimeMillis());
-            session.getReportmodel().addReportForDownload(dir, relativePath, now, this.getHandledReportType().displayName);
+            session.getReportmodel().addReportForDownload(dir, relativePath, now,
+                    this.getHandledReportType().displayName);
             log.debug("CSV Report Created At: " + relativePath);
 
         } catch (IOException e) {

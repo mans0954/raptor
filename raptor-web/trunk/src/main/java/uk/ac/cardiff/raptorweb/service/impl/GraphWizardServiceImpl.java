@@ -211,7 +211,7 @@ public class GraphWizardServiceImpl implements GraphWizardService {
     }
 
     public void invokeStatisticalUnitInformationDynamic(GraphWizardModel model) {
-
+        log.debug("Invoking graph wizard model which is null =  {}", (model == null));
         for (GraphSet set : model.getGraphSets()) {
             if (set.getDynamicStatisticalUnitInformation() == null) {
                 log.warn("This graph set had no compiled DynamicStatisticalUnitInformation set, ignoring...");

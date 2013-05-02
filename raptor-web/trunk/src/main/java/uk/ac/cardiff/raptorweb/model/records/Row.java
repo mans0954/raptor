@@ -16,34 +16,44 @@
 /**
  *
  */
+
 package uk.ac.cardiff.raptorweb.model.records;
 
 import java.io.Serializable;
 
 /**
  * @author philsmart
- *
+ * 
  */
-public class Row<T> implements Serializable{
+public class Row<T> implements Serializable {
 
-	private String group;
-	private T value;
+    /**
+     * generated serial UID.
+     */
+    private static final long serialVersionUID = 2112198267005805940L;
 
-	public void setValue(T value) {
-		this.value = value;
-	}
-	public T getValue() {
-		return value;
-	}
-	public String getStringValue(){
-	    return value.toString();
-	}
-	public void setGroup(String group) {
-	    this.group = group;
-	}
-	public String getGroup() {
-	    return group;
-	}
+    private String group;
 
+    private T value;
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public String getStringValue() {
+        return value.toString();
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getGroup() {
+        return group;
+    }
 
 }

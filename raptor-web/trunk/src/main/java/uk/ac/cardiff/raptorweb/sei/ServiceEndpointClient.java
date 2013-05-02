@@ -291,6 +291,8 @@ public class ServiceEndpointClient {
         try {
             MultiUnitAggregator client = getEndpointConnection(endpoint);
             log.debug("Accessing the MUA version " + client.getVersion());
+            log.trace("Sending end date [{}] and start date [{}]", statisticalUnit.getStatisticParameters()
+                    .getEndTimeAsDate(), statisticalUnit.getStatisticParameters().getStartTimeAsDate());
             AggregatorGraphModel gmodel = client.updateAndInvokeStatisticalUnit(statisticalUnit);
             log.debug("Retrieved Graph Model from the MUA [" + endpoint.getServiceEndpoint() + "]");
             return gmodel;
