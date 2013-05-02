@@ -82,10 +82,16 @@ public class Header {
     private String listDelimeter;
 
     /**
+     * If true, will lowercase String.toLowerCase() the value of the header.
+     */
+    private boolean headerToLowerCase;
+
+    /**
      * Instantiates a new header.
      */
     public Header() {
         regexRetainCaseInsensitive = false;
+        setHeaderToLowerCase(false);
     }
 
     /**
@@ -307,6 +313,20 @@ public class Header {
      */
     public void setSourceFieldName(String sourceFieldName) {
         this.sourceFieldName = sourceFieldName;
+    }
+
+    /**
+     * @return Returns the headerToLowerCase.
+     */
+    public boolean isHeaderToLowerCase() {
+        return headerToLowerCase;
+    }
+
+    /**
+     * @param headerToLowerCase The headerToLowerCase to set.
+     */
+    public void setHeaderToLowerCase(boolean headerToLowerCase) {
+        this.headerToLowerCase = headerToLowerCase;
     }
 
 }
