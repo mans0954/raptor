@@ -147,6 +147,10 @@
                     <artifactId>spring-tx</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
