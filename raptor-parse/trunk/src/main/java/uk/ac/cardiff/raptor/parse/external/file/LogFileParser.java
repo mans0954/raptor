@@ -266,9 +266,10 @@ public class LogFileParser extends BaseEventFileParser {
     private String getFieldValue(List<String> allvalues, Header header) {
         StringBuilder output = new StringBuilder();
         if (header.getAdditionalFieldNos() == null) {
-            append(output, allvalues.get(header.getFieldNo()), false);
+            append(output, allvalues.get(header.getFieldNo()), false, header.isHeaderToLowerCase());
         } else if (header.getAdditionalFieldNos() != null) {
-            append(output, allvalues.get(header.getFieldNo()), header.isPreserveDelimeterOnFieldConcatenation());
+            append(output, allvalues.get(header.getFieldNo()), header.isPreserveDelimeterOnFieldConcatenation(),
+                    header.isHeaderToLowerCase());
         }
 
         if (header.getAdditionalFieldNos() != null) {
@@ -276,18 +277,20 @@ public class LogFileParser extends BaseEventFileParser {
                 // grab all remaining fields from FieldNo.
                 for (int i = header.getFieldNo() + 1; i < allvalues.size(); i++) {
                     if (i == allvalues.size() - 1) {
-                        append(output, allvalues.get(i), false);
+                        append(output, allvalues.get(i), false, header.isHeaderToLowerCase());
                     } else {
-                        append(output, allvalues.get(i), header.isPreserveDelimeterOnFieldConcatenation());
+                        append(output, allvalues.get(i), header.isPreserveDelimeterOnFieldConcatenation(),
+                                header.isHeaderToLowerCase());
                     }
                 }
             } else {
                 for (int i = 0; i < header.getAdditionalFieldNos().length; i++) {
                     int fieldNo = header.getAdditionalFieldNos()[i];
                     if (i == header.getAdditionalFieldNos().length - 1) {
-                        append(output, allvalues.get(fieldNo), false);
+                        append(output, allvalues.get(fieldNo), false, header.isHeaderToLowerCase());
                     } else {
-                        append(output, allvalues.get(fieldNo), header.isPreserveDelimeterOnFieldConcatenation());
+                        append(output, allvalues.get(fieldNo), header.isPreserveDelimeterOnFieldConcatenation(),
+                                header.isHeaderToLowerCase());
                     }
                 }
             }
@@ -295,7 +298,12 @@ public class LogFileParser extends BaseEventFileParser {
         return output.toString();
     }
 
-    private void append(StringBuilder output, String value, boolean preserveDelimeterOnFieldConcatenation) {
+    private void append(StringBuilder output, String value, boolean preserveDelimeterOnFieldConcatenation,
+            boolean toLowerCase) {
+        if (toLowerCase) {
+            log.trace("Lowercasing value [{} = {}]", value, value.toLowerCase());
+            value = value.toLowerCase();
+        }
         output.append(value);
         if (preserveDelimeterOnFieldConcatenation) {
             output.append(format.getDelimeter());
