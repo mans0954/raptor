@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
@@ -53,6 +54,8 @@ public class RunServer {
      */
     public static void main(String args[]) throws FileNotFoundException, IOException {
         System.setProperty("org.apache.cxf.Logger", "org.apache.cxf.common.logging.Slf4jLogger");
+
+        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 
         String configurationFiles =
                 System.getProperty("configurationFiles", System.getProperty("user.dir") + "/target/");
