@@ -264,8 +264,6 @@ public class StatisticParameters implements Serializable {
     }
 
     /**
-     * for output on the web page (just a date that can be rendered by trinidad)
-     * 
      * @return
      */
     public Date getEndTimeAsJavaDate() {
@@ -285,11 +283,13 @@ public class StatisticParameters implements Serializable {
     public void setEndTimeAsJavaDate(Date date) {
         this.endTimeJava = date;
         this.endTime = new DateTime(date);
+        log.trace("Setting End Time as [{}] with actual value of [{}]", date, endTime);
     }
 
     public void setStartTimeAsJavaDate(Date date) {
         this.startTimeJava = date;
         this.startTime = new DateTime(date);
+        log.trace("Setting Start Time as [{}] with actual value of [{}]", date, startTime);
     }
 
     public String getStartTimeAsFormattedString() {
