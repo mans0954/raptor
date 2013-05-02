@@ -25,7 +25,7 @@ property using the getDate and setDate methods -->
 		<property name="startTimeAsDate" ignore="true"/>
 		<property name="endTimeAsFormattedString" ignore="true"/>
 		<property name="startTimeAsFormattedString" ignore="true"/>
-		<property name="startTimeAsJavaDate" ignore="true"/>
+		<!-- <property name="startTimeAsJavaDate" ignore="true"/> -->
 		<property name="endTimeHour" ignore="true"/>
 		<property name="endTimeMinute" ignore="true"/>
 		<property name="endTimeSecond" ignore="true"/>

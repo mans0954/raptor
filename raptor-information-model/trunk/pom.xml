@@ -66,6 +66,7 @@
 				<includes>
 					<include>uk/ac/cardiff/model/event/Event.aegis.xml</include>
 					<include>uk/ac/cardiff/model/event/event.hbm.xml</include>
+                    <include>uk/ac/cardiff/model/event/event-name-limit.hbm.xml</include>
                     <include>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</include>
 					<include>uk/ac/cardiff/model/wsmodel/StatisticParameters.aegis.xml</include>
 					<include>uk/ac/cardiff/model/wsmodel/StatisticalUnitInformation.aegis.xml</include>
