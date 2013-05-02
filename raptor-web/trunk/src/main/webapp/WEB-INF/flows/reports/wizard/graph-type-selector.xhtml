@@ -31,8 +31,12 @@
 
 
 		<rich:layout>
-			<rich:layoutPanel position="top">
-				<h4 align="left">Step 3. Graph Type Selector <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
+			<rich:layoutPanel position="center" width="70%">
+				<h4 align="left">
+					Step 3. Graph Type Selector
+					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+						style="color:red" value=" [EDIT]" />
+				</h4>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Graph Function To Run
@@ -88,6 +92,9 @@
 							</a4j:form>
 
 						</rich:dataGrid>
+						<h:panelGrid columns="1" border="0">
+							<h:messages style="color:darkred" id="error_message" />
+						</h:panelGrid>
 
 
 						<rich:spacer height="10px" />
@@ -103,6 +110,19 @@
 
 					</div>
 				</center>
+
+			</rich:layoutPanel>
+
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+
+					For each event type that you added in the previous step, you can
+					choose which function you wish to run. What functions are available
+					will depend on the event type.
+				</div>
 
 			</rich:layoutPanel>
 

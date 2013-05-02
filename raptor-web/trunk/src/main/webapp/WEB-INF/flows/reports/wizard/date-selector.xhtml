@@ -31,8 +31,12 @@
 
 
 		<rich:layout>
-			<rich:layoutPanel position="top">
-				<h4 align="left">Step 1. Date Selection <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4> 
+			<rich:layoutPanel position="center" width="70%">
+				<h4 align="left">
+					Step 1. Date Selection
+					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+						style="color:red" value=" [EDIT]" />
+				</h4>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Reporting Period.</h3>
@@ -49,7 +53,7 @@
 										<f:selectItems
 											value="#{savedGraphWizardModel.graphWizardModel.qualitativeTimeRangeSelectItems}" />
 									</h:selectOneMenu>
-									
+
 									<ul>
 										<li>Start Date: <i>#{savedGraphWizardModel.graphWizardModel.currentStartTimeActualFormatted}</i></li>
 										<li>End Date: <i>#{savedGraphWizardModel.graphWizardModel.currentEndTimeActualFormatted}</i></li>
@@ -69,6 +73,24 @@
 
 					</div>
 				</center>
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+
+					Please select from one of the various time options:
+					<ul>
+						<li>Last month - the previous complete calendar month.</li>
+						<li>Today minus one week - The last week, including today.</li>
+						<li>Today minus one month - The last month, including today.</li>
+						<li>Today minus one year - The last year, including today.</li>
+						<li>Previous SCONUL year - the previous complete SCONUL year
+							(i.e. Aug 1st to July 31st)</li>
+					</ul>
+				</div>
+
 			</rich:layoutPanel>
 
 

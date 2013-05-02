@@ -32,8 +32,12 @@
 
 
 		<rich:layout>
-			<rich:layoutPanel position="top">
-				<h4 align="left">Step 6. Graph Options Selector <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
+			<rich:layoutPanel position="center" width="70%">
+				<h4 align="left">
+					Step 6. Graph Options Selector
+					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+						style="color:red" value=" [EDIT]" />
+				</h4>
 				<center>
 
 					<div class="stepbystep">
@@ -88,6 +92,28 @@
 						</h:form>
 					</div>
 				</center>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+
+					The type of graph and its options can be customised. You can
+					change:
+					<ul>
+						<li>The Graph's title (note this is used on the graph itself
+							and as the name the report will be saved as, should you choose to
+							save the report for reuse.</li>
+						<li>Chart Type - Bar chart, Line chart, etc.</li>
+						<li>Orientation - whether you want each data grouping to be
+							presented as columns or rows.</li>
+						<li>Height in pixels - how tall each graph should be.</li>
+						<li>Label Position - the orientation of the data labels for
+							each column.</li>
+					</ul>
+				</div>
 
 			</rich:layoutPanel>
 

@@ -16,13 +16,14 @@
 /**
  *
  */
-package uk.ac.cardiff.raptorweb.engine.reports;
 
+package uk.ac.cardiff.raptorweb.engine.reports;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import uk.ac.cardiff.raptorweb.model.WebSession;
+
 
 /**
  * @author philsmart
@@ -35,6 +36,7 @@ public abstract class BaseReportConstructor {
 
     /** the location of the directory within the application that reports are saved to */
     protected Resource saveDirectory;
+
     protected Resource baseDirectory;
 
     /** the enum list of the report types this handler can deal with e.g. excel or csv */
@@ -42,6 +44,7 @@ public abstract class BaseReportConstructor {
         excel("xls", "excel"), csv("csv", "CSV"), pdf("pdf", "PDF");
 
         public String fileExtension;
+
         public String displayName;
 
         HandledReportTypes(String fileExtension, String displayName) {
@@ -64,6 +67,27 @@ public abstract class BaseReportConstructor {
     protected abstract HandledReportTypes getRegisterHandledReportType();
 
     public abstract void generateReport(WebSession session);
+
+    /**
+     * Takes the given value as formats as a string using a 'sensible' formatting strategy e.g. if double with no
+     * decimal value then remove the decimal place on output.
+     * 
+     * 
+     * @param value
+     * @return
+     */
+    protected String formatValueAsString(Object value) {
+        log.trace("Formatting value [{}] as type [{}]", value, value.getClass());
+        if (value instanceof Double) {
+            double d = (Double) value;
+            if (d % 1 == 0) {
+                int dAsInt = (int) d;
+                return Integer.toString(dAsInt);
+            }
+        }
+        return value.toString();
+
+    }
 
     public void setSaveDirectory(Resource saveDirectory) {
         this.saveDirectory = saveDirectory;

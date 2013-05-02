@@ -408,10 +408,9 @@
 
 									<rich:spacer width="10px" />
 
-									<a4j:commandButton value="refresh" action="rerenderGraph">
-										<a4j:support ajaxSingle="true" event="oncomplete"
-											reRender="graphImage" />
-									</a4j:commandButton>
+									<h:commandButton value="refresh" onclick="#{rich:component('workingPanel')}.show();"
+									action="rerenderGraph" reRender="graphImage"/>
+					
 
 								</h:panelGrid>
 							</rich:simpleTogglePanel>
@@ -546,18 +545,9 @@
 									<rich:datascroller id="datascroller" />
 								</f:facet>
 							</rich:dataTable>
-
-
 						</rich:tab>
-
 					</rich:tabPanel>
-
-
 				</a4j:form>
-
-
-
-
 			</rich:layoutPanel>
 
 

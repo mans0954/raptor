@@ -29,19 +29,24 @@
 
 	<ui:define name="content">
 		<a4j:include viewId="wizard-add-processor-panel.xhtml" />
-        <a4j:include viewId="wizard-edit-processor.panel.xhtml" />
+		<a4j:include viewId="wizard-edit-processor.panel.xhtml" />
 
 		<rich:layout>
-			<rich:layoutPanel position="top">
-				<h4 align="left">Step 5. Graph Post Processor Selector <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
+			<rich:layoutPanel position="center" width="70%">
+				<h4 align="left">
+					Step 5. Graph Post Processor Selector
+					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+						style="color:red" value=" [EDIT]" />
+				</h4>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select Optional Post Processors</h3>
 						<br />
 						<a4j:form>
 
-							<rich:dataGrid value="#{savedGraphWizardModel.graphWizardModel.graphSets}" var="graph"
-								columns="1" width="100%" style="border:3px"
+							<rich:dataGrid
+								value="#{savedGraphWizardModel.graphWizardModel.graphSets}"
+								var="graph" columns="1" width="100%" style="border:3px"
 								styleClass="simpleTable">
 								<b>Event:</b>
 								<h:outputText value=" #{graph.eventType}" />
@@ -70,7 +75,8 @@
 												value="/image/icon/onebit_20.png" />
 											<f:setPropertyActionListener value="#{processor}"
 												target="#{savedGraphWizardModel.graphWizardModel.selectedPostProcessor}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</rich:column>
@@ -88,7 +94,8 @@
 												value="/image/icon/onebit_33.png" />
 											<f:setPropertyActionListener value="#{processor}"
 												target="#{savedGraphWizardModel.graphWizardModel.selectedPostProcessor}" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</rich:column>
@@ -100,7 +107,8 @@
 											reRender="addPostProcessorForm">
 											<h:graphicImage id="addPostProcessorImage"
 												style="width:20px;" value="/image/icon/onebit_31.png" />
-												<f:setPropertyActionListener value="#{graph}" target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}"/>
+											<f:setPropertyActionListener value="#{graph}"
+												target="#{savedGraphWizardModel.graphWizardModel.selectedGraphSet}" />
 										</a4j:commandLink>
 
 									</f:facet>
@@ -120,6 +128,19 @@
 						</a4j:form>
 					</div>
 				</center>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+
+					For each event type you added to this report, you can now perform
+					some optional post-processing of the results that you wish to
+					graph. This includes such things as sorting the results, etc. If
+					you just want the data presented as-is, simply click next.
+				</div>
 
 			</rich:layoutPanel>
 
