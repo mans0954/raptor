@@ -16,6 +16,7 @@
                 <ref bean="shibPrincipalAttributeAssociationDefinition"/>
                 <ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>
                 <ref bean="shibResourceCategoryAttributeAssociationDefinition"/>
+                <ref bean="openAthensLaResourceCategoryAttributeAssociationDefinition"/>
              </list>
         </property>
     </bean>
@@ -40,6 +41,29 @@
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
         <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManAffiliation</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>CardiffIDManDept</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="openAthensLaResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>OpenAthensLaAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value></property>
         <property name="lookupAttributes">
             <list>
                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">

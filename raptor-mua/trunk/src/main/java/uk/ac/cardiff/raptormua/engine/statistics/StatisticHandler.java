@@ -180,7 +180,7 @@ public class StatisticHandler {
      * @return
      */
     public BaseStatistic instantiateStatistic(StatisticFunctionType statisticType) {
-        BaseStatistic statistic = StatisticTypeFactory.createNewBaseStatistic(statisticType);
+        BaseStatistic statistic = StatisticTypeFactory.createNewBaseStatistic(statisticType, eventHandler);
         return statistic;
     }
 

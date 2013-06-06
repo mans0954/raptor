@@ -24,6 +24,7 @@
 				<!-- <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>-->
 			    <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop>
                 <!--  <prop key="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</prop>-->
+                <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.OracleDialect</prop> -->
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
@@ -59,6 +60,26 @@
             </props>
         </property>
     </bean>
+    
+    <bean id="muac3p0DataSourceOracle" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:oracle:thin:@host:1521:schema</value>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.acquire_increment">5</prop>
+                <prop key="c3p0.idle_test_period">100</prop>
+                <prop key="c3p0.max_size">10</prop>
+                <prop key="c3p0.max_statements">0</prop>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="user">username</prop>
+                <prop key="password">password</prop>
+            </props>
+        </property>
+    </bean>
 
 
 
@@ -71,7 +92,7 @@
             <value>org.hsqldb.jdbcDriver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:hsqldb:file:data/mua;hsqldb.default_table_type=cached</value>
+            <value>jdbc:hsqldb:file:data/raptor-mua-db;hsqldb.default_table_type=cached</value>
         </property>
         <property name="user">
             <value>sa</value>
