@@ -52,7 +52,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
      * stored, for example failure of the underlying persistent store. Also, as its a set, it prevents the addition of
      * duplicate values
      */
-    private Set<Event> persistQueue;
+    private final Set<Event> persistQueue;
 
     /**
      * If true, COUNT queries to the database are separated per table as described in <code>countTableNames</code>.
@@ -75,6 +75,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
     /**
      * Initialises the entry handler.
      */
+    @Override
     public void initialise() {
         log.info("Persistant entry handler [{}] initialising", this);
         log.info("Persistent data store has {} entries for [{}]", this.getNumberOfEvents(), this);
@@ -91,6 +92,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
         return dataConnection.runQueryUnique(query, null);
     }
 
+    @Override
     public List query(String query, Object[] parameters) {
         if (parameters != null) {
             log.trace("SQL query to entry handler [{}], with parameters [{}]", query, Arrays.asList(parameters));
@@ -100,10 +102,17 @@ public class PersistantEventHandler implements QueryableEventHandler {
         return dataConnection.runQuery(query, parameters);
     }
 
+    @Override
     public Object queryUnique(String query, Object[] parameters) {
         return dataConnection.runQueryUnique(query, parameters);
     }
 
+    @Override
+    public Object queryForceUnique(String query, Object[] parameters) {
+        return dataConnection.runQueryForceUnique(query, parameters);
+    }
+
+    @Override
     public void update(String query, Object[] parameters) throws StorageException {
         try {
             dataConnection.runUpdate(query, parameters);
@@ -112,11 +121,13 @@ public class PersistantEventHandler implements QueryableEventHandler {
         }
     }
 
+    @Override
     public List query(String query, Object[] parameters, int maxNoResults) {
         log.debug("Running query [{}]", query);
         return dataConnection.runQuery(query, parameters, maxNoResults);
     }
 
+    @Override
     public void save(Event event) throws StorageException {
         try {
             dataConnection.save(event);
@@ -125,6 +136,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
         }
     }
 
+    @Override
     public void saveAll(Collection object) throws StorageException {
         try {
             dataConnection.saveAll(object);
@@ -144,6 +156,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
      * @param entries the list of events that are to be stored
      * @throws
      */
+    @Override
     public void addEvents(final List<Event> entries) throws StorageException {
         log.info("Persistent Entry Handler has {} entries, with {} new entries inputted, and {} exist in the queue",
                 new Object[] {this.getNumberOfEvents(), entries.size(), persistQueue.size()});
@@ -173,6 +186,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
                 duplicates);
     }
 
+    @Override
     public boolean addEvent(final Event event) {
 
         String query =
@@ -190,11 +204,13 @@ public class PersistantEventHandler implements QueryableEventHandler {
 
     }
 
+    @Override
     public List<Event> getEvents() {
         List<Event> runQuery = dataConnection.runQuery("from Event", null);
         return runQuery;
     }
 
+    @Override
     public void removeAllEvents() {
         // no-op method
     }
@@ -214,6 +230,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
      * queries to certain database. Otherwise a fully automatic and higher level 'select count(*) from Event' is used
      * where table joins are required to sum all subclasses of Event.
      */
+    @Override
     public long getNumberOfEvents() {
         if (optimiseCountQueries == true) {
             log.trace("Using optimised COUNT query, but dependent on the user defined countClassNames XML property");
@@ -235,6 +252,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
         }
     }
 
+    @Override
     public DateTime getLatestEventTime() {
         return (DateTime) dataConnection.runQueryUnique("select max(eventTime) from Event", null);
     }
@@ -270,6 +288,7 @@ public class PersistantEventHandler implements QueryableEventHandler {
     /**
      * This is a no-op method for this event handler
      */
+    @Override
     public void removeEventsBefore(DateTime earliestReleaseTime, Set<Integer> latestEqualEntries) {
         // no op method.
     }
