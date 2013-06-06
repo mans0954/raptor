@@ -12,6 +12,8 @@
         <constructor-arg index="0"><ref bean="serviceEndpointClient"/></constructor-arg>
 	</bean>
 
+    <!-- View Validators -->
+    <bean id="savedGraphWizardModelValidator" class="uk.ac.cardiff.raptorweb.validators.SavedGraphWizardModelValidator"/>
 
 
 	<bean id="setupService" class="uk.ac.cardiff.raptorweb.service.impl.SetupServiceImpl">
@@ -21,6 +23,32 @@
 	<bean id="preferenceService" class="uk.ac.cardiff.raptorweb.service.impl.PreferenceServiceImpl">
 
 	</bean>
+    
+    <bean id="savedWizardReportsService" class="uk.ac.cardiff.raptorweb.service.impl.SavedWizardReportsServiceImpl">
+        <property name="marshaller" ref="castorMarshaller" />
+        <property name="unmarshaller" ref="castorMarshaller" />
+        <property name="baseDirectory">
+            <value>/</value>
+        </property>
+        <property name="saveDirectory">
+            <value>/reports/</value>
+        </property>
+    </bean>
+    
+    <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller">
+        <property name="mappingLocation" value="classpath:graph-wizard-mapping.xml" />
+        <property name="whitespacePreserve" value="true"/>
+    </bean>
+    
+    <bean id="
+        graphWizardService " class="uk.ac.cardiff.raptorweb.service.impl.GraphWizardServiceImpl">
+        <property name="webEngine">
+            <ref bean="webEngine" />
+        </property>
+        <property name="chartProcessor">
+            <ref bean="chartProcessor" />
+        </property>
+    </bean>
     
     <bean id="eventTypeService" class="uk.ac.cardiff.raptorweb.service.impl.EventTypeServiceImpl">
         <property name="webEngine"><ref bean="webEngine"/></property>
@@ -142,6 +170,7 @@
     <bean id="eventTypesToDisplayMapper" class="uk.ac.cardiff.raptorweb.model.EventTypeDisplayMapper">
         <property name="eventTypeFriendlyNameMap">
             <map>
+                <entry value="OpenAthens LA" key="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent" />
                 <entry value="ShibbolethIdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"/>
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent"/>
                 <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent"/>
