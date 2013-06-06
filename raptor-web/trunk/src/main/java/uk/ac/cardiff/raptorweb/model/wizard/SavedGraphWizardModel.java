@@ -45,6 +45,12 @@ public class SavedGraphWizardModel implements Serializable {
     private boolean edittingReport = false;
 
     /**
+     * If the report has been generated, set this to true. If so, this can be used as an indiciation that all fields
+     * have been set and any modifictions can be made in part to the model.
+     */
+    private boolean finishedReport = false;
+
+    /**
      * @return Returns the graphWizardModel.
      */
     public GraphWizardModel getGraphWizardModel() {
@@ -84,6 +90,20 @@ public class SavedGraphWizardModel implements Serializable {
      */
     public void setEdittingReport(boolean edittingReport) {
         this.edittingReport = edittingReport;
+    }
+
+    /**
+     * @return Returns the finishedReport.
+     */
+    public boolean isFinishedReport() {
+        return finishedReport;
+    }
+
+    /**
+     * @param finishedReport The finishedReport to set.
+     */
+    public void setFinishedReport(boolean finishedReport) {
+        this.finishedReport = finishedReport;
     }
 
 }

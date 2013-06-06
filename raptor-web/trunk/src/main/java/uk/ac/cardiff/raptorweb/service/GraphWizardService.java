@@ -77,4 +77,9 @@ public interface GraphWizardService {
      */
     public void removePostProcessorFromSelectedStatistic(GraphWizardModel model);
 
+    /**
+     * @param model
+     */
+    public void setDefaultGraphFunctions(GraphWizardModel model);
+
 }

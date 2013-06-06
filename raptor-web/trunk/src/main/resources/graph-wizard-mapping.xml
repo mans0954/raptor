@@ -39,6 +39,9 @@
         <field name="dateSavedFormatted" type="string">
             <bind-xml name="date-saved" node="element" />
         </field>
+        <field name="createdBy" type="string">
+            <bind-xml name="created-by" node="element" />
+        </field>
         <field name="dateModifiedFormatted" type="string">
             <bind-xml name="date-modified" node="element" />
         </field>

@@ -28,15 +28,20 @@
 
 
 	<ui:define name="content">
-
+		<a4j:include viewId="../working-panel.xhtml" />
 
 		<rich:layout>
 			<rich:layoutPanel position="center" width="70%">
-				<h4 align="left">
-					Step 3. Graph Type Selector
-					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
-						style="color:red" value=" [EDIT]" />
-				</h4>
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection" action="date-selector"/>
+						->
+						<h:commandLink value="Select Event Type(s)" action="event-type-selector"/>
+						-> Step 3. Graph Type Selector
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Graph Function To Run
@@ -99,12 +104,16 @@
 
 						<rich:spacer height="10px" />
 						<h:form>
-							<h:panelGrid columns="5">
+							<h:panelGrid columns="6">
 								<h:commandButton value="next" action="next" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" immediate="true" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="cancel" action="cancel" immediate="true" />
+								<h:commandButton value="finish" action="finish"
+									onclick="#{rich:component('workingPanel')}.show();"
+									rendered="#{savedGraphWizardModel.finishedReport}" />
+
 							</h:panelGrid>
 						</h:form>
 

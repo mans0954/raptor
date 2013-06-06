@@ -164,6 +164,11 @@ public class GraphWizardModel implements Serializable {
     private String dateModifiedFormatted;
 
     /**
+     * Who created this report.
+     */
+    private String createdBy;
+
+    /**
      * If set to true, all selection stages should be skipped and the graph(s) should be run straight away.
      */
     private boolean runImmediatly = false;
@@ -665,6 +670,23 @@ public class GraphWizardModel implements Serializable {
      */
     public void setDateModifiedFormatted(String dateModifiedFormatted) {
         this.dateModifiedFormatted = dateModifiedFormatted;
+    }
+
+    /**
+     * @return Returns the createdBy. Returns "unknown" if createdBy is null.
+     */
+    public String getCreatedBy() {
+        if (createdBy == null) {
+            return "unknown";
+        }
+        return createdBy;
+    }
+
+    /**
+     * @param createdBy The createdBy to set.
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
 }

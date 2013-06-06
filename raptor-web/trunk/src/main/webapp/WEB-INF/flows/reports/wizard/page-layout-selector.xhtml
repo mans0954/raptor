@@ -28,14 +28,39 @@
 
 
 	<ui:define name="content">
-        <a4j:include viewId="../working-panel.xhtml" />
+		<a4j:include viewId="../working-panel.xhtml" />
 
 		<rich:layout>
 			<rich:layoutPanel position="top">
-				<h4 align="left">Step 7. Page Layout <h:outputText rendered="#{savedGraphWizardModel.edittingReport}" style="color:red" value=" [EDIT]"/></h4>
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						->
+						<h:commandLink value="Select Event Type(s)"
+							action="event-type-selector" />
+						->
+						<h:commandLink value="Graph Type Selector"
+							action="graph-type-selector" />
+						->
+						<h:commandLink value="Graph Series Selector"
+							action="graph-series-selector" />
+						->
+						<h:commandLink value="Graph Options Selector"
+							action="graph-options-selector" />
+						->
+						<h:commandLink value="Graph Post Processor Selector"
+							action="graph-post-processors" />
+
+						-> Step 7. Page Layout
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 					<div class="stepbystep">
-						<h3 align="center">Please Select How You Want The Graphs Laid Out (On Screen)</h3>
+						<h3 align="center">Please Select How You Want The Graphs Laid
+							Out (On Screen)</h3>
 						<br />
 
 						<h:form id="layoutSelectorForm">
@@ -43,17 +68,19 @@
 							<div>
 								<h:panelGrid columns="2">
 									<h:selectOneMenu id="dateRangeSelector"
-										value="#{savedGraphWizardModel.graphWizardModel.displayLayout}">							
-											<f:selectItem itemLabel="One On Top Of The Other" itemValue="ONTOP" />
-											<f:selectItem itemLabel="Side By Side" itemValue="SIDEBYSIDE" />
-									</h:selectOneMenu>		
-									
+										value="#{savedGraphWizardModel.graphWizardModel.displayLayout}">
+										<f:selectItem itemLabel="One On Top Of The Other"
+											itemValue="ONTOP" />
+										<f:selectItem itemLabel="Side By Side" itemValue="SIDEBYSIDE" />
+									</h:selectOneMenu>
+
 								</h:panelGrid>
 							</div>
 
 							<br />
 							<h:panelGrid columns="5">
-								<h:commandButton value="next" action="next" onclick="#{rich:component('workingPanel')}.show();"/>
+								<h:commandButton value="next" action="next"
+									onclick="#{rich:component('workingPanel')}.show();" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />

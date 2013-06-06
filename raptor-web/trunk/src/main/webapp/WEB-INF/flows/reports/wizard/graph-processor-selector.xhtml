@@ -30,14 +30,31 @@
 	<ui:define name="content">
 		<a4j:include viewId="wizard-add-processor-panel.xhtml" />
 		<a4j:include viewId="wizard-edit-processor.panel.xhtml" />
+		<a4j:include viewId="../working-panel.xhtml" />
 
 		<rich:layout>
 			<rich:layoutPanel position="center" width="70%">
-				<h4 align="left">
-					Step 5. Graph Post Processor Selector
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						->
+						<h:commandLink value="Select Event Type(s)"
+							action="event-type-selector" />
+						->
+						<h:commandLink value="Graph Type Selector"
+							action="graph-type-selector" />
+						->
+						<h:commandLink value="Graph Series Selector"
+							action="graph-series-selector"/>
+                        -> <h:commandLink
+								value="Graph Options Selector"
+								action="graph-options-selector" />
+					-> Step 6. Graph Post Processor Selector
 					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
-						style="color:red" value=" [EDIT]" />
-				</h4>
+								style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select Optional Post Processors</h3>
@@ -119,7 +136,8 @@
 							</rich:dataGrid>
 
 							<h:panelGrid columns="5">
-								<h:commandButton value="next" action="next" />
+								<h:commandButton value="next" action="next"
+									onclick="#{rich:component('workingPanel')}.show();" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />

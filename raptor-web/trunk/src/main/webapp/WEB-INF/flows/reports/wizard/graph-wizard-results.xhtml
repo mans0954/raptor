@@ -33,11 +33,27 @@
 		<rich:layout>
 			<rich:layoutPanel position="top">
 
-				<h4 align="left">
-					Step 8. Results
+				<h:form><h4 align="left"><h:commandLink value="Date Selection"
+                            action="date-selector" />
+                        ->
+                        <h:commandLink value="Select Event Type(s)"
+                            action="event-type-selector" />
+                        ->
+                        <h:commandLink value="Graph Type Selector"
+                            action="graph-type-selector" />
+                        ->
+                        <h:commandLink value="Graph Series Selector"
+                            action="graph-series-selector"/>
+                        -> <h:commandLink
+                                value="Graph Options Selector"
+                                action="graph-options-selector" />
+                    ->  <h:commandLink
+                                value="Graph Post Processor Selector" action="graph-post-processors"/>
+					-> Step 8. Results
 					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
 						style="color:red" value=" [EDIT]" />
 				</h4>
+				</h:form>
 				<center>
 
 

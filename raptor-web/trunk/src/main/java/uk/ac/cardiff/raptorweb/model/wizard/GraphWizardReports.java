@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.cardiff.raptorweb.model.wizard;
 
 import java.io.Serializable;
@@ -46,6 +47,15 @@ public class GraphWizardReports implements Serializable {
     private SavedGraphWizardModel selectedReport;
 
     /**
+     * A String representation of a URL that points to a valid raptor report template.
+     */
+    private String reportToDownloadUrl;
+
+    public GraphWizardReports() {
+        reportToDownloadUrl = "http://";
+    }
+
+    /**
      * @return Returns the savedWizardModels.
      */
     public List<SavedGraphWizardModel> getSavedWizardModels() {
@@ -71,6 +81,7 @@ public class GraphWizardReports implements Serializable {
 
     public SavedGraphWizardModel initRunReport() {
         log.info("Returning the graph wizard model to edit");
+        selectedReport.setEdittingReport(true);
         selectedReport.getGraphWizardModel().setRunImmediatly(true);
         return selectedReport;
     }
@@ -113,5 +124,19 @@ public class GraphWizardReports implements Serializable {
      */
     public void setSelectedReport(SavedGraphWizardModel selectedReport) {
         this.selectedReport = selectedReport;
+    }
+
+    /**
+     * @return Returns the reportToDownloadUrl.
+     */
+    public String getReportToDownloadUrl() {
+        return reportToDownloadUrl;
+    }
+
+    /**
+     * @param reportToDownloadUrl The reportToDownloadUrl to set.
+     */
+    public void setReportToDownloadUrl(String reportToDownloadUrl) {
+        this.reportToDownloadUrl = reportToDownloadUrl;
     }
 }

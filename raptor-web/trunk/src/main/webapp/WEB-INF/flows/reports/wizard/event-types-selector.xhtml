@@ -28,14 +28,19 @@
 
 
 	<ui:define name="content">
-
+		<a4j:include viewId="../working-panel.xhtml" />
 
 		<rich:layout>
-			<rich:layoutPanel position="center" width="70%">>
-				<h4 align="left">Step 2. Select Event Type(s)
-					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
-						style="color:red" value=" [EDIT]" />
-				</h4>
+			<rich:layoutPanel position="center" width="70%">
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						-> Step 2. Select Event Type(s)
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select One Or More Event Types</h3>
@@ -75,7 +80,7 @@
 								</rich:column>
 							</rich:dataTable>
 							<h:panelGrid columns="1" border="0">
-								<h:messages style="color:darkred" id="error_message"/>
+								<h:messages style="color:darkred" id="error_message" />
 							</h:panelGrid>
 
 							<rich:spacer height="10px" />
@@ -92,18 +97,18 @@
 				</center>
 
 			</rich:layoutPanel>
-			
+
 			<rich:layoutPanel position="right">
 
-                <div class="stepbystepInstructions">
-                    <h3 align="center">Instructions</h3>
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
 
-                    The wizard can be used to display one or more of the event types
-                    that Raptor supports. For each type that you want to report on,
-                    choose it from the drop down and click the "add" button.
-                </div>
+					The wizard can be used to display one or more of the event types
+					that Raptor supports. For each type that you want to report on,
+					choose it from the drop down and click the "add" button.
+				</div>
 
-            </rich:layoutPanel>
+			</rich:layoutPanel>
 
 
 		</rich:layout>
