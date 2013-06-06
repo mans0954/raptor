@@ -53,8 +53,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
     }
 
     @Override
-    public void saveAll(@SuppressWarnings("rawtypes") Collection collection)
-            throws DataAccessException {
+    public void saveAll(@SuppressWarnings("rawtypes") Collection collection) throws DataAccessException {
         hibernateTemplate.saveOrUpdateAll(collection);
     }
 
@@ -71,8 +70,7 @@ public class DefaultDataConnection implements RaptorDataConnection {
 
     @Override
     @SuppressWarnings("rawtypes")
-    public List runQuery(String query, Object[] parameters, int maxResultSize)
-            throws DataAccessException {
+    public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException {
         hibernateTemplate.setMaxResults(maxResultSize);
         List result = hibernateTemplate.find(query, parameters);
         hibernateTemplate.setMaxResults(0);
@@ -89,14 +87,11 @@ public class DefaultDataConnection implements RaptorDataConnection {
      * @throws DataAccessException
      */
     @SuppressWarnings("rawtypes")
-    public List
-            runQueryPaged(final String query, final int pageSize, final int pageNumber)
-                    throws DataAccessException {
+    public List runQueryPaged(final String query, final int pageSize, final int pageNumber) throws DataAccessException {
         HibernateTemplate template = getHibernateTemplate();
         return template.executeFind(new HibernateCallback() {
             @Override
-            public Object doInHibernate(Session session) throws HibernateException,
-                    SQLException {
+            public Object doInHibernate(Session session) throws HibernateException, SQLException {
                 Query queryToRun = session.createQuery(query);
                 queryToRun.setMaxResults(pageSize);
                 queryToRun.setFirstResult(pageSize * pageNumber);
@@ -105,18 +100,34 @@ public class DefaultDataConnection implements RaptorDataConnection {
         });
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object runQueryUnique(String query, Object[] parameters)
-            throws DataAccessException {
+    public Object runQueryForceUnique(final String query, final Object[] parameters) {
         if (parameters != null) {
-            log.trace("Query to database, {}, with params [{}]", query,
-                    Arrays.asList(parameters));
+            log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
         } else {
             log.trace("Query to database, {}]", query);
         }
-        Object object =
-                DataAccessUtils.uniqueResult(getHibernateTemplate().find(query,
-                        parameters));
+        HibernateTemplate template = getHibernateTemplate();
+        return template.execute(new HibernateCallback() {
+            @Override
+            public Object doInHibernate(Session session) throws HibernateException, SQLException {
+                Query queryToRun = session.createQuery(query);
+                queryToRun.setMaxResults(1);
+                return queryToRun.uniqueResult();
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object runQueryUnique(String query, Object[] parameters) throws DataAccessException {
+        if (parameters != null) {
+            log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
+        } else {
+            log.trace("Query to database, {}]", query);
+        }
+        Object object = DataAccessUtils.uniqueResult(getHibernateTemplate().find(query, parameters));
         return object;
     }
 

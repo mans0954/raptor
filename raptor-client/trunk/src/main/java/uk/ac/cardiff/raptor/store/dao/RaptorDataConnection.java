@@ -100,4 +100,15 @@ public interface RaptorDataConnection {
      */
     public void runUpdate(String query, Object[] parameters) throws DataAccessException;
 
+    /**
+     * Runs the query <code>query</code> with the parameters <code>parameters</code> and returns a single unique result.
+     * Only the first result is taken even if the query would return more than one result. Concrete implementations of
+     * the interface may require the query in a specific, specified, language e.g. HQL or JPQL.
+     * 
+     * @param query the query to run.
+     * @param parameters the parameters to substitute into the query string <code>query</code>
+     * @return
+     */
+    public Object runQueryForceUnique(String query, Object[] parameters);
+
 }
