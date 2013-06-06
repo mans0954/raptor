@@ -91,6 +91,12 @@
                     </property>
                     <property name="concrete" value="true" />
                 </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
             </list>
         </property>
     </bean>
@@ -107,6 +113,7 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -119,6 +126,7 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -159,6 +167,7 @@
                         <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.WugenEvent</value>
+                        <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>
@@ -226,6 +235,18 @@
                     <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/ezproxy/" />
                     <property name="eventType">
                         <value>EZPROXY</value>
+                    </property>
+                </bean>
+                <bean id="openAthensLa" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/openathensla/" />
+                    <property name="eventType">
+                        <value>OPENATHENSLA</value>
                     </property>
                 </bean>
             </list>

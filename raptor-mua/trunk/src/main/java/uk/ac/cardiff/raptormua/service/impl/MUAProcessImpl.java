@@ -256,7 +256,7 @@ public class MUAProcessImpl implements MUAProcess {
 
         Lock lockToUse = determineCorrectLock(statisticalUnitInformation);
         try {
-            if (lockToUse.tryLock(10, TimeUnit.SECONDS)) {
+            if (lockToUse.tryLock(30, TimeUnit.SECONDS)) {
                 try {
                     log.info("Webservice call to update and perform statistic [{}]", statisticalUnitInformation
                             .getStatisticParameters().getUnitName());

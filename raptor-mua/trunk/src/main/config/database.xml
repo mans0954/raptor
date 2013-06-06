@@ -16,8 +16,8 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>
-                <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> -->
+                 <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>
+                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> -->
                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</prop> -->
                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.OracleDialect</prop> -->
                 <prop key="hibernate.show_sql">true</prop>
@@ -27,7 +27,7 @@
         <!-- OR mapping files. -->
         <property name="mappingResources">
             <list>
-                <value>uk/ac/cardiff/model/event/event-name-limit.hbm.xml</value>
+                <value>uk/ac/cardiff/model/event/event.hbm.xml</value>
                 <value>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</value>
                 <value>uk/ac/cardiff/raptor/registry/releaseInformation.hbm.xml</value>
             </list>
@@ -49,7 +49,7 @@
                 <prop key="c3p0.max_size">100</prop>
                 <prop key="c3p0.max_statements">0</prop>
                 <prop key="c3p0.min_size">10</prop>
-                <prop key="user">philsmart</prop>
+                <prop key="user">postgres</prop>
                 <prop key="password"></prop>
             </props>
         </property>
@@ -85,7 +85,7 @@
             <value>org.hsqldb.jdbcDriver</value>
         </property>
         <property name="jdbcUrl">
-            <value>jdbc:hsqldb:file:data/mua;hsqldb.default_table_type=cached</value>
+            <value>jdbc:hsqldb:file:data/mua-two;hsqldb.default_table_type=cached</value>
         </property>
         <property name="user">
             <value>sa</value>

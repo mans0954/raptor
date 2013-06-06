@@ -126,6 +126,7 @@ public final class MUAEngine implements InitializingBean {
         Assert.notNull(capabilitiesConstructor,
                 "No Capabilities constructor found, this is a FATAL error, please add one to the engine in mua-core.xml");
         capabilitiesConstructor.initialiseCapabilities();
+        statisticsHandler.setEventHandler(storageEngine.getEventHandler());
         log.info("Mulit-Unit Aggregator Engine is running...");
 
     }
@@ -155,7 +156,7 @@ public final class MUAEngine implements InitializingBean {
      * @return the aggregator graph model
      */
     public AggregatorGraphModel performStatistic(final String statisticName) {
-        statisticsHandler.setEventHandler(storageEngine.getEventHandler());
+
         return statisticsHandler.performStatistic(statisticName);
 
     }
@@ -384,7 +385,6 @@ public final class MUAEngine implements InitializingBean {
      */
     public AggregatorGraphModel
             invokeStatisticDynamically(DynamicStatisticalUnitInformation statisticalUnitInformation) {
-        statisticsHandler.setEventHandler(storageEngine.getEventHandler());
         return statisticsHandler.performStatisticDynamically(statisticalUnitInformation);
 
     }

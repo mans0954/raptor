@@ -129,12 +129,34 @@ public class JuspStatisticalFunction extends BaseStatistic {
 
     }
 
+    /**
+     * finds the most commonly occurring JUSP institution Id - which is stored as service Id.
+     */
+    private String addJuspInstitutionIdSuggestion() {
+
+        try {
+            String query = "Select serviceId from JuspAggregatedEvent group by serviceId order by count(*) desc ";
+            Object result = getEventHandler().queryForceUnique(query, null);
+            log.debug("Institution Id has result: {}, {}", result, result.getClass());
+            if (result instanceof String) {
+                String resultString = (String) result;
+                log.debug("Found most common JUSP institution Id as [{}]", resultString);
+                return resultString;
+            }
+        } catch (Throwable e) {
+            log.warn("Could not automatically set most common Jusp Institution - not a critical error - {}", e);
+        }
+        log.warn("Did not find most common JUSP institution Id");
+        return "unknown";
+
+    }
+
     private StatisticParameters createDefaultParameters() {
         StatisticParameters parameters = new StatisticParameters();
         parameters.setStatisticType("User");
 
         MethodParameter param = new MethodParameter();
-        param.setValue("car");
+        param.setValue(addJuspInstitutionIdSuggestion());
         List<MethodParameter> params = new ArrayList<MethodParameter>();
         params.add(param);
         parameters.setMethodParams(params);

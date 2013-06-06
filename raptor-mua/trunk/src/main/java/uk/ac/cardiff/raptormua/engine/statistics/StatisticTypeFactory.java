@@ -26,6 +26,7 @@ import uk.ac.cardiff.model.wsmodel.DynamicStatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.ProcessorInformation;
 import uk.ac.cardiff.model.wsmodel.StatisticFunctionType;
 import uk.ac.cardiff.model.wsmodel.StatisticParameters;
+import uk.ac.cardiff.raptor.store.QueryableEventHandler;
 
 /**
  * Constructs {@link BaseStatistic}s from its class type and the set of statistic parameters passed in. Allows runtime
@@ -46,15 +47,19 @@ public class StatisticTypeFactory {
      * Creating a generic {@link BaseStatistic} from the class string encapsulated in statisticType.
      * 
      * @param statisticType an issues and null is returned.
+     * @param eventHandler the {@link QueryableEventHandler} added to the statistic so it can be used during default
+     *            parameter construction. Could be null.
      * @param registry a {@link StatisticProcessorRegistry} used to initialise post processors.
      * @return
      */
-    public static BaseStatistic createNewBaseStatistic(StatisticFunctionType statisticType) {
+    public static BaseStatistic createNewBaseStatistic(StatisticFunctionType statisticType,
+            QueryableEventHandler eventHandler) {
         try {
             Class<?> statisticClass = Class.forName(statisticType.getStatisticClass());
             Object statisticInstance = statisticClass.newInstance();
             if (statisticInstance instanceof BaseStatistic) {
                 BaseStatistic statistic = (BaseStatistic) statisticInstance;
+                statistic.setEntryHandler(eventHandler);
                 statistic.setStatisticParameters(null);
                 return statistic;
             } else {
@@ -77,7 +82,10 @@ public class StatisticTypeFactory {
     }
 
     /**
-     * @param statisticalUnitInformation
+     * 
+     * @param statisticalUnitInformation to add statistical parameters to the statistic.
+     * @param registry to attach post processors to the statistic
+     * 
      * @return
      */
     public static BaseStatistic createNewBaseStatistic(DynamicStatisticalUnitInformation statisticalUnitInformation,
@@ -87,9 +95,9 @@ public class StatisticTypeFactory {
             Object statisticInstance = statisticClass.newInstance();
             if (statisticInstance instanceof BaseStatistic) {
                 BaseStatistic statistic = (BaseStatistic) statisticInstance;
+
                 statistic.setStatisticParameters(statisticalUnitInformation.getStatisticUnitInformation()
                         .getStatisticParameters());
-
                 statistic.setPostprocessor(null);
 
                 List<StatisticPostProcessor> postProcessors =

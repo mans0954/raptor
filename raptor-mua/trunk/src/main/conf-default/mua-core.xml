@@ -84,6 +84,56 @@
                     </property>
                     <property name="concrete" value="true" />
                 </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="statisticTypeRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.XmlConfiguredStatisticTypeRegistry">
+        <property name="statisticTypes">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="CountryEntry" />
+                    <property name="description" value="Counts the entries" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group By Field" />
+                    <property name="description" value="Groups results by the particular field over the given time interval" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group Jusp Aggregate Resources" />
+                    <property name="description" value="Groups Jusp Resources together based on Jr1, Jr1a downloads" />
+                    <property name="statisticClass"
+                    value="uk.ac.cardiff.raptormua.engine.statistics.functions.JuspStatisticalFunction" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                        </list>
+                    </property>
+                </bean>
             </list>
         </property>
     </bean>
@@ -109,6 +159,7 @@
                          <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>
@@ -176,6 +227,18 @@
                     <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/ezproxy/" />
                     <property name="eventType">
                         <value>EZPROXY</value>
+                    </property>
+                </bean>
+                <bean id="openAthensLa" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/openathensla/" />
+                    <property name="eventType">
+                        <value>OPENATHENSLA</value>
                     </property>
                 </bean>
             </list>
@@ -246,7 +309,10 @@
         <property name="statisticRegistry">
             <ref bean="statisticRegistry" />
         </property>
-
+        <property name="statisticTypeRegistry">
+            <ref bean="statisticTypeRegistry" />
+        </property>
+    
     </bean>
 
     <!-- Handles all statistical units defined -->

@@ -98,6 +98,7 @@ public abstract class BaseStatistic {
     }
 
     public void setEntryHandler(QueryableEventHandler entryHandler) {
+        log.trace("Setting event handler for this statistic [{}]", entryHandler);
         this.eventHandler = entryHandler;
     }
 

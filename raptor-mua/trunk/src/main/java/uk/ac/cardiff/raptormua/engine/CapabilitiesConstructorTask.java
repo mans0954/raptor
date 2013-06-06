@@ -80,7 +80,11 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-        doConstructCapabilities();
+        try {
+            doConstructCapabilities();
+        } catch (Throwable e) {
+            log.error("Could not construct capabilities", e);
+        }
         callback.returnResult(capabilities);
         return null;
     }
@@ -131,6 +135,7 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
     private void addSuggestions() {
         log.debug("Adding suggestion information to capabilities");
         SuggestionValues suggestionValues = new SuggestionValues();
+
         suggestionValues.setPossibleFieldNameValues(ReflectionHelper.getFieldsFromEntrySubClasses());
         capabilities.setSuggestionValues(suggestionValues);
 

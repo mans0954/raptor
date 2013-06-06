@@ -51,7 +51,39 @@
                     </property>
 				</bean>
 
-
+                <bean id="openAthensLa" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="eventTypeFriendlyName">
+                       <value>OpenAthens LA</value>
+                    </property>
+                    <property name="logFileDateFormat" value="yyyy-MM-dd"/>
+                    <property name="format">
+                        <ref bean="openathenslaFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </property>                   
+                    
+                    <property name="LineFilterEngine">
+                        <bean class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                            <property name="includeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
+                                        <property name="includeIfContains"><value>AUDIT sso</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                            <property name="excludeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ExcludeLineFilter">
+                                        <property name="excludeIfContains"><value>proxy.runtime.test.openathens.net</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
 
                <bean id="ezproxyLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
                      <property name="enabled" value="true"/>
