@@ -69,6 +69,11 @@ public class LogFileParser extends BaseEventFileParser {
     private String logfile;
 
     /**
+     * A custom date format that is appended to logfiles.
+     */
+    private String logFileDateFormat = "yyyyMMdd";
+
+    /**
      * Whether to print out the current position of parsing in the <code>logFile</code>
      */
     private boolean printParsingPosition;
@@ -103,7 +108,7 @@ public class LogFileParser extends BaseEventFileParser {
         String usedLogFile = null;
         try {
             DateTime todaysDate = new DateTime();
-            usedLogFile = logfile.replace("DATE", todaysDate.toString("yyyyMMdd"));
+            usedLogFile = logfile.replace("DATE", todaysDate.toString(logFileDateFormat));
             log.info("parsing log file: {}", usedLogFile);
             URL logfileURL = new URL(usedLogFile);
             URLConnection logfileconnection = logfileURL.openConnection();
@@ -517,6 +522,20 @@ public class LogFileParser extends BaseEventFileParser {
      */
     public LineFilterEngine getLineFilterEngine() {
         return lineFilterEngine;
+    }
+
+    /**
+     * @return Returns the logFileDateFormat.
+     */
+    public String getLogFileDateFormat() {
+        return logFileDateFormat;
+    }
+
+    /**
+     * @param logFileDateFormat The logFileDateFormat to set.
+     */
+    public void setLogFileDateFormat(String logFileDateFormat) {
+        this.logFileDateFormat = logFileDateFormat;
     }
 
 }
