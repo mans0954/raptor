@@ -95,6 +95,10 @@
         <property name="clientIdentifier" column="clientIdentifier" type="string" />
     </union-subclass>
     
+    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent">
+        <property name="requesterIp" column="requesterIp" type="string" />
+    </union-subclass>
+    
     <union-subclass extends="uk.ac.cardiff.model.event.Event" name="uk.ac.cardiff.model.event.AggregatedEvent">
         <property name="periodStart" column="periodStart" type="org.joda.time.contrib.hibernate.PersistentDateTime" />
         <property name="periodEnd" column="periodEnd" type="org.joda.time.contrib.hibernate.PersistentDateTime" />

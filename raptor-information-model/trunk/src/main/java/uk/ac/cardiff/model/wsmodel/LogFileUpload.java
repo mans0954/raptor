@@ -57,6 +57,9 @@ public class LogFileUpload implements Serializable {
         /** The EZPROXY. */
         EZPROXY("Ezproxy"),
 
+        /** Open Athens LA. */
+        OPENATHENSLA("OpenAthens LA"),
+
         /**
          * Shibboleth 2.4<
          */

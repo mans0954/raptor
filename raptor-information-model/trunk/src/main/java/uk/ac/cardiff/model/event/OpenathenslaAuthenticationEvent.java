@@ -18,6 +18,8 @@
  */
 package uk.ac.cardiff.model.event;
 
+import uk.ac.cardiff.utility.EqualsUtil;
+import uk.ac.cardiff.utility.HashCodeUtil;
 import uk.ac.cardiff.utility.StringUtils;
 
 /**
@@ -25,10 +27,10 @@ import uk.ac.cardiff.utility.StringUtils;
  * 
  * @author philsmart
  */
-public class OpenathenslaAuthenticationEvent extends Event {
+public class OpenathenslaAuthenticationEvent extends AuthenticationEvent {
 
     /** The requester ip. */
-    private String requesterIP;
+    private String requesterIp;
 
     /**
      * Instantiates a new openathensla authentication event.
@@ -45,7 +47,7 @@ public class OpenathenslaAuthenticationEvent extends Event {
      */
     public OpenathenslaAuthenticationEvent(OpenathenslaAuthenticationEvent event) {
         super(event);
-        this.requesterIP = event.getRequesterIP();
+        this.requesterIp = event.getRequesterIp();
     }
 
     /**
@@ -53,6 +55,7 @@ public class OpenathenslaAuthenticationEvent extends Event {
      * 
      * @return the openathensla authentication event
      */
+    @Override
     public OpenathenslaAuthenticationEvent copy() {
         return new OpenathenslaAuthenticationEvent(this);
     }
@@ -63,8 +66,8 @@ public class OpenathenslaAuthenticationEvent extends Event {
      * @param requesterIP
      *            the new requester ip
      */
-    public void setRequesterIP(String requesterIP) {
-        this.requesterIP = requesterIP;
+    public void setRequesterIp(String requesterIP) {
+        this.requesterIp = requesterIP;
     }
 
     /**
@@ -72,8 +75,8 @@ public class OpenathenslaAuthenticationEvent extends Event {
      * 
      * @return the requester ip
      */
-    public String getRequesterIP() {
-        return requesterIP;
+    public String getRequesterIp() {
+        return requesterIp;
     }
 
     /*
@@ -81,8 +84,67 @@ public class OpenathenslaAuthenticationEvent extends Event {
      * 
      * @see uk.ac.cardiff.model.event.Event#toString()
      */
+    @Override
     public String toString() {
         return StringUtils.buildToString(this);
     }
 
+    /**
+     * For hibernate, so the hashcode can be persisted.
+     * 
+     * @return the hash code
+     */
+    public int getHashCode() {
+        return hashCode();
+    }
+
+    /**
+     * For hibernate, does nothing as the hascode is computed on the fly from the <code>hashCode</code> method.
+     * 
+     * @param hashCode
+     *            the new hash code
+     */
+    public void setHashCode(int hashCode) {
+
+    }
+
+    /**
+     * create a unique hash, with as uniform a distribution as possible.
+     * 
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+        int hash = HashCodeUtil.SEED;
+
+        hash = HashCodeUtil.hash(hash, getEventTimeMillis());
+        hash = HashCodeUtil.hash(hash, getAuthenticationType());
+        hash = HashCodeUtil.hash(hash, getEventId());
+        hash = HashCodeUtil.hash(hash, getServiceHost());
+        hash = HashCodeUtil.hash(hash, getRequesterIp());
+        hash = HashCodeUtil.hash(hash, getResourceHost());
+        hash = HashCodeUtil.hash(hash, getPrincipalName());
+        hash = HashCodeUtil.hash(hash, getEventType());
+        hash = HashCodeUtil.hash(hash, getServiceId());
+        hash = HashCodeUtil.hash(hash, getResourceId());
+
+        return hash;
+
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if ((obj == null) || (obj.getClass() != this.getClass()))
+            return false;
+        OpenathenslaAuthenticationEvent that = (OpenathenslaAuthenticationEvent) obj;
+        boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
+                && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
+                && EqualsUtil.areEqual(this.getRequesterIp(), that.getRequesterIp()) && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost())
+                && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName()) && EqualsUtil.areEqual(this.getServiceId(), that.getServiceId())
+                && EqualsUtil.areEqual(this.getEventType(), that.getEventType()) && EqualsUtil.areEqual(this.getResourceId(), that.getResourceId());
+
+        return areEqual;
+    }
 }
