@@ -16,11 +16,16 @@
 
 package uk.ac.cardiff.raptorweb.service.impl;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.xml.transform.stream.StreamResult;
@@ -105,6 +110,41 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
 
     }
 
+    @Override
+    public void loadReportFromUrl(GraphWizardReports reports, String user) {
+        log.info("Loading a report from URL [{}]", reports.getReportToDownloadUrl());
+        String filenameFromUrl =
+                reports.getReportToDownloadUrl().substring(reports.getReportToDownloadUrl().lastIndexOf('/'),
+                        reports.getReportToDownloadUrl().length());
+        try {
+            filenameFromUrl = URLDecoder.decode(filenameFromUrl, "UTF-8");
+        } catch (UnsupportedEncodingException e1) {
+            log.error("Filename from URL could not be URL decoded, hence the resultant filename may contain URL encoded characters");
+        }
+        String filename = getRootDirectory(user) + "/" + filenameFromUrl;
+        log.debug("Saving report with filename [{}]", filename);
+        try {
+            URL reportUrl = new URL(reports.getReportToDownloadUrl());
+            log.debug("Report URL location constructed [{}]", reportUrl);
+            BufferedInputStream in = new BufferedInputStream(reportUrl.openStream());
+            FileOutputStream out = new FileOutputStream(filename);
+            byte data[] = new byte[1024];
+            int count;
+            while ((count = in.read(data, 0, 1024)) != -1) {
+                out.write(data, 0, count);
+            }
+            out.close();
+
+        } catch (MalformedURLException e) {
+            log.error("Report can not be loaded from URL [{}], URL is not valid", reports.getReportToDownloadUrl());
+        } catch (IOException e) {
+            log.error("Report can not be saved to the file system [filename={}]", filename, e);
+        } catch (Exception e) {
+            log.error("Could not save remote report, general exception thrown", e);
+        }
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public void save(SavedGraphWizardModel model, String user) {
@@ -120,9 +160,12 @@ public class SavedWizardReportsServiceImpl implements SavedWizardReportsService 
                 String directory = getRootDirectory(user);
                 model.getGraphWizardModel().setDateSavedFormatted(savedDate());
                 model.getGraphWizardModel().setDateModifiedFormatted(savedDate());
+                model.getGraphWizardModel().setCreatedBy(user);
+
                 filename =
                         directory + "/report-" + model.getGraphWizardModel().getGraphTitle() + "-"
                                 + model.getGraphWizardModel().getDateSavedFormatted().replace(":", "-") + ".xml";
+                model.setFilename(new File(filename));
             }
 
             os = new FileOutputStream(filename);

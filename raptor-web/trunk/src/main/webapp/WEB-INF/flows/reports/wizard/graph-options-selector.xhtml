@@ -33,11 +33,22 @@
 
 		<rich:layout>
 			<rich:layoutPanel position="center" width="70%">
-				<h4 align="left">
-					Step 6. Graph Options Selector
-					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
-						style="color:red" value=" [EDIT]" />
-				</h4>
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						->
+						<h:commandLink value="Select Event Type(s)"
+							action="event-type-selector" />
+						->
+						<h:commandLink value="Graph Type Selector"
+							action="graph-type-selector" />
+						-> <h:commandLink value="Graph Series Selector" action="graph-series-selector"/>
+						-> Step 5. Graph Options Selector
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 
 					<div class="stepbystep">
@@ -78,16 +89,21 @@
 
 							</h:panelGrid>
 
+							<h:panelGrid columns="1" border="0">
+								<h:messages style="color:darkred" id="error_message" />
+							</h:panelGrid>
 
 
-
-							<h:panelGrid columns="5">
-								<h:commandButton value="next" action="next"
+							<h:panelGrid columns="6">
+								<h:commandButton value="Select Post Processors" action="next"
 									onclick="#{rich:component('workingPanel')}.show();" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="cancel" action="cancel" />
+								<h:commandButton value="finish" action="finish"
+									onclick="#{rich:component('workingPanel')}.show();" />
+
 							</h:panelGrid>
 						</h:form>
 					</div>

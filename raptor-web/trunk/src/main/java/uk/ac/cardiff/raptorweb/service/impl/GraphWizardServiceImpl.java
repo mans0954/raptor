@@ -70,6 +70,22 @@ public class GraphWizardServiceImpl implements GraphWizardService {
 
     }
 
+    /**
+     * Sets each graph sets statistical function by selecting the first item from the returned list of possible types.
+     * 
+     * @param model
+     */
+    @Override
+    public void setDefaultGraphFunctions(GraphWizardModel model) {
+        for (GraphSet set : model.getGraphSets()) {
+            if (model.getStatisticFunctionTypes() != null && model.getStatisticFunctionTypes().size() > 0) {
+                model.setSelectedGraphSet(set);
+                set.setSelectedStatisticFunctionType(model.getStatisticFunctionTypes().get(0));
+                lookupStatisticalUnitInformation(model);
+            }
+        }
+    }
+
     @Override
     public void addProcessorToSelectedStatistic(GraphWizardModel model) {
         ProcessorInformation processorToAdd = model.getProcessorToAdd();
@@ -139,7 +155,6 @@ public class GraphWizardServiceImpl implements GraphWizardService {
      */
     @Override
     public void populateSuggestionValues(GraphWizardModel model) {
-
         model.setSuggestionValues(webEngine.getCapabilitiesOfCurrentlyAttachedEndpoint().getSuggestionValues());
 
     }

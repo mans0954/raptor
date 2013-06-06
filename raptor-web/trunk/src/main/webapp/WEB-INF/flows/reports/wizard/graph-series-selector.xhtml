@@ -29,14 +29,23 @@
 
 	<ui:define name="content">
 		<a4j:include viewId="wizard-series-panel.xhtml" />
-
+		<a4j:include viewId="../working-panel.xhtml" />
 		<rich:layout>
 			<rich:layoutPanel position="center" width="70%">
-				<h4 align="left">
-					Step 4. Graph Series Selector
-					<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
-						style="color:red" value=" [EDIT]" />
-				</h4>
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						->
+						<h:commandLink value="Select Event Type(s)"
+							action="event-type-selector" />
+						->
+						<h:commandLink value="Graph Type Selector" action="graph-type-selector"/>
+						-> Step 4. Graph Series Selector
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
 				<center>
 					<div class="stepbystep">
 						<h3 align="center">Please Select The Number Of Series and
@@ -141,12 +150,15 @@
 								<h:messages style="color:darkred" id="error_message" />
 							</h:panelGrid>
 
-							<h:panelGrid columns="5">
+							<h:panelGrid columns="6">
 								<h:commandButton value="next" action="next" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="cancel" action="cancel" />
+								<h:commandButton value="finish" action="finish"
+									onclick="#{rich:component('workingPanel')}.show();"
+									rendered="#{savedGraphWizardModel.finishedReport}" />
 							</h:panelGrid>
 						</a4j:form>
 					</div>
@@ -158,24 +170,20 @@
 
 				<div class="stepbystepInstructions">
 					<h3 align="center">Instructions</h3>
-                    <p>
-					For each event type you added to this report, you can now modify
-					the set of series that you wish to graph. If all you want is a
-					single series with no filtering, you can simply click next.
-					</p>
-                    <p>
-					However, if you wish to drill down into the data, then you can do
-					so by adding multiple series, and/or by adding filters to each
-					series. To add a new series, simply click the green add button at
-					the bottom left of the relevant event type pane. To add filters to
-					a particular series, click the add filter icon. For each filter,
-					choose the field that you want to filter on, the filter operation,
-					and the value to filter on. For example, to filter the series for a
-					particular department, you would choose
-					"principalInformation.school" "EQUALS" "[name of dept]". Or to
-					filter for a particular resource - "resourceid" "EQUALS"
-					"[identifier of resource]".
-					</p>
+					<p>For each event type you added to this report, you can now
+						modify the set of series that you wish to graph. If all you want
+						is a single series with no filtering, you can simply click next.</p>
+					<p>However, if you wish to drill down into the data, then you
+						can do so by adding multiple series, and/or by adding filters to
+						each series. To add a new series, simply click the green add
+						button at the bottom left of the relevant event type pane. To add
+						filters to a particular series, click the add filter icon. For
+						each filter, choose the field that you want to filter on, the
+						filter operation, and the value to filter on. For example, to
+						filter the series for a particular department, you would choose
+						"principalInformation.school" "EQUALS" "[name of dept]". Or to
+						filter for a particular resource - "resourceid" "EQUALS"
+						"[identifier of resource]".</p>
 				</div>
 
 			</rich:layoutPanel>

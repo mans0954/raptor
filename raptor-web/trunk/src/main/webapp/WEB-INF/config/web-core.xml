@@ -220,6 +220,7 @@
         <property name="eventTypeFriendlyNameMap">
             <map>
                 <entry value="ShibbolethIdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent" />
+                <entry value="OpenAthens LA" key="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent" />
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent" />
                 <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent" />
                 <entry value="Jusp Monthly" key="uk.ac.cardiff.model.event.JuspAggregatedEvent" />

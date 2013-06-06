@@ -51,6 +51,9 @@
         <transition on="removeReportWizard">
             <evaluate expression="savedWizardReportsService.removeReport(savedReports)"/>
         </transition>
+        <transition on="loadReportFromUrl" to="reportWizard">
+            <evaluate expression="savedWizardReportsService.loadReportFromUrl(savedReports,flowScope.websession.user.name)"/>
+        </transition>
     </view-state>
 
     <subflow-state id="graphWizardSubflow" subflow="report-wizard-subflow">

@@ -28,7 +28,7 @@
 
 
 	<ui:define name="content">
-
+        <a4j:include viewId="../working-panel.xhtml" />
 
 		<rich:layout>
 			<rich:layoutPanel position="center" width="70%">
@@ -62,12 +62,14 @@
 							</div>
 
 							<br />
-							<h:panelGrid columns="5">
+							<h:panelGrid columns="6">
 								<h:commandButton value="next" action="next" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="back" action="back" />
 								<rich:spacer width="5px" />
 								<h:commandButton value="cancel" action="cancel" />
+								<h:commandButton value="finish" action="finish"
+                                    onclick="#{rich:component('workingPanel')}.show();" rendered="#{savedGraphWizardModel.finishedReport}"/>
 							</h:panelGrid>
 						</h:form>
 

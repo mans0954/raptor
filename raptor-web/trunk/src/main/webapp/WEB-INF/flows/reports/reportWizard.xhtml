@@ -31,12 +31,12 @@
 		<rich:layout>
 
 			<rich:layoutPanel position="bottom">
-
-				<rich:panel bodyClass="inpanelBody">
-					<f:facet name="header">
+				<h:form id="reportWizard-form">
+					<rich:panel bodyClass="inpanelBody">
+						<f:facet name="header">
                     Saved Reports
                 </f:facet>
-					<h:form>
+
 						<rich:dataTable id="reportWizard-savedReports"
 							styleClass="lowerBorderTable"
 							value="#{savedReports.savedWizardModels}" var="report"
@@ -44,40 +44,47 @@
 
 
 							<rich:column styleClass="lowerBorderTable">
-								<h:panelGrid columns="3">
-								    <a4j:commandLink action="runReportWizard"
-                                        onclick="#{rich:component('workingPanel')}.show();">
-                                        <f:setPropertyActionListener value="#{report}"
-                                            target="#{savedReports.selectedReport}" />
-                                        <h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
-                                        </a4j:commandLink>
-								    <a4j:commandLink action="editReportWizard">
-                                        <f:setPropertyActionListener value="#{report}"
-                                            target="#{savedReports.selectedReport}" />
-                                        <h:graphicImage value="/image/icon/onebit_20.png" width="20px" />
-                                    </a4j:commandLink>
-									
-									
+								<h:panelGrid columns="5">
+									<a4j:commandLink id="runReportQuickImage" action="runReportWizard"
+										onclick="#{rich:component('workingPanel')}.show();">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
+									</a4j:commandLink>
+									<rich:toolTip value="Run Report" for="runReportQuickImage"/>
+									<a4j:commandLink id="editReportImage" action="editReportWizard">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/onebit_20.png" width="20px" />
+									</a4j:commandLink>
+                                    <rich:toolTip value="Edit Report" for="editReportImage"/>
+
 
 									<h:outputText
 										value="Title: #{report.graphWizardModel.graphTitle}" />
 
-									
+
 
 								</h:panelGrid>
 							</rich:column>
+							
+							<rich:column styleClass="lowerBorderTable">
+                                <h:outputText
+                                    value=" created by: #{report.graphWizardModel.createdBy}" />
+
+                            </rich:column>
 
 							<rich:column styleClass="lowerBorderTable">
 								<h:outputText
 									value=" created: #{report.graphWizardModel.dateSavedFormatted}" />
 
 							</rich:column>
-							
-							<rich:column styleClass="lowerBorderTable">
-                                <h:outputText
-                                    value="modified: #{report.graphWizardModel.dateModifiedFormatted}" />
 
-                            </rich:column>
+							<rich:column styleClass="lowerBorderTable">
+								<h:outputText
+									value="modified: #{report.graphWizardModel.dateModifiedFormatted}" />
+
+							</rich:column>
 
 							<rich:column styleClass="lowerBorderTable">
 								<h:panelGrid columns="1">
@@ -92,11 +99,21 @@
 							</rich:column>
 
 						</rich:dataTable>
-					</h:form>
+					</rich:panel>
 
-				</rich:panel>
+					<h:panelGrid columns="3">
+
+						<h4>
+							Load a report from URL:
+							<h:inputText value="#{savedReports.reportToDownloadUrl}"
+								size="50" />
+							<a4j:commandButton value="download"  action="loadReportFromUrl"
+								reRender="reportWizard-savedReports" />
+						</h4>
 
 
+					</h:panelGrid>
+				</h:form>
 
 			</rich:layoutPanel>
 
@@ -125,6 +142,7 @@
 						</h3>
 
 					</h:panelGrid>
+
 				</form>
 
 

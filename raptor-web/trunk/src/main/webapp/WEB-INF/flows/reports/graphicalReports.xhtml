@@ -219,7 +219,7 @@
                                                     <f:facet name="header">
                                                         <h:outputText value="Edit" />
                                                     </f:facet>
-                                                    <a4j:commandLink immediate="true" oncomplete="#{rich:component('editPostProcessorPanel')}.show();"                                                      
+                                                    <a4j:commandLink oncomplete="#{rich:component('editPostProcessorPanel')}.show();"                                                      
                                                         id="editPostProcessorLink" reRender="editProcessorTable">
                                                         <h:graphicImage
                                                             style="width:20px; border:0; margin-left: auto;margin-right: auto;"
@@ -234,7 +234,7 @@
 													<f:facet name="header">
 														<h:outputText value="Remove" />
 													</f:facet>
-													<a4j:commandLink immediate="true"
+													<a4j:commandLink 
 														action="removePostProcessorFromSelectedStatistic"
 														id="removePostProcessorLink"
 														reRender="optionsPanelForm,postProcessorTable">
@@ -248,7 +248,7 @@
 												</rich:column>
 
 												<f:facet name="footer">
-													<a4j:commandLink immediate="true" id="postProcessorLink"
+													<a4j:commandLink  id="postProcessorLink"
 														oncomplete="#{rich:component('addPostProcessorPanel')}.show();"
 														action="initialiseNewProcessorAdd"
 														reRender="addPostProcessorForm">
@@ -269,7 +269,7 @@
 
 
 												<f:facet name="footer">
-													<a4j:commandLink immediate="true"
+													<a4j:commandLink 
 														action="addSeriesToSelectedStatistic" id="addSeriesLink"
 														reRender="seriesModalPanel,seriesTable">
 														<h:graphicImage style="width:20px"
@@ -296,7 +296,7 @@
 													<f:facet name="header">
 														<h:outputText value="Filter" />
 													</f:facet>
-													<a4j:commandLink immediate="true"
+													<a4j:commandLink 
 														oncomplete="#{rich:component('seriesModalPanel')}.show()"
 														id="conditionModalPanelLinkEdit"
 														rendered="#{not empty series.comparisonPredicate}"
@@ -307,7 +307,7 @@
 														<f:setPropertyActionListener value="#{series}"
 															target="#{flowScope.websession.graphmodel.selectedSeries}" />
 													</a4j:commandLink>
-													<a4j:commandLink immediate="true"
+													<a4j:commandLink 
 														oncomplete="#{rich:component('seriesModalPanel')}.show()"
 														id="conditionModalPanelLinkAdd"
 														rendered="#{empty series.comparisonPredicate}"
@@ -325,7 +325,7 @@
 													<f:facet name="header">
 														<h:outputText value="Remove" />
 													</f:facet>
-													<a4j:commandLink immediate="true"
+													<a4j:commandLink 
 														action="removeSeriesFromSelectedStatistic"
 														id="removeSeriesLink" reRender="optionsPanelForm">
 														<h:graphicImage

@@ -34,6 +34,17 @@ public class SavedGraphWizardModelValidator {
         log.info("validating the date selector");
     }
 
+    public void validateGraphOptionsSelector(SavedGraphWizardModel model, ValidationContext context) {
+        log.info("validating the graph options selector");
+        MessageContext messages = context.getMessageContext();
+        if (model.getGraphWizardModel().getGraphTitle() == null
+                || model.getGraphWizardModel().getGraphTitle().equals("")) {
+            log.warn("Graph title required");
+            messages.addMessage(new MessageBuilder().error()
+                    .defaultText("Graph Title is required. This is used as part of the filename when saved").build());
+        }
+    }
+
     public void validateGraphSeriesSelector(SavedGraphWizardModel model, ValidationContext context) {
         log.info("validating the series selector");
         MessageContext messages = context.getMessageContext();

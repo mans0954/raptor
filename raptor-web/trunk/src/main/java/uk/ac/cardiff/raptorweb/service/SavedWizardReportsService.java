@@ -42,4 +42,12 @@ public interface SavedWizardReportsService {
      */
     public void removeReport(GraphWizardReports reports);
 
+    /**
+     * Loads a report from the URL specified in the {@link GraphWizardReports#reportToDownloadUrl} and saves it to the
+     * current users home reports directory.
+     * 
+     * @param reports
+     */
+    public void loadReportFromUrl(GraphWizardReports reports, String user);
+
 }
