@@ -14,36 +14,7 @@
         <property name="parsingModules">
             <list>
             
-                 <!-- JUSP Json parser-->
-
-                <bean id="juspParser" class="uk.ac.cardiff.raptor.parse.external.remote.JsonLogParser">
-                    <property name="enabled" value="true"/>
-                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
-                    <property name="webServiceLocation" value="http://www.jusp.mimas.ac.uk/api/"/>
-                    <property name="eventType">
-                        <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
-                    </property>
-                    <property name="jsonFormat">
-                        <ref bean="juspMonthlyPeriodFormat"/>
-                    </property>
-                    <property name="queryParams">
-                        <map>
-                            <entry>
-                                <key><value>action</value></key>
-                                <value>getInstStats</value>
-                            </entry>
-                            <entry>
-                                <key><value>id</value></key>
-                                <value>car</value>
-                            </entry>
-                            <entry>
-                                <key><value>mnth</value></key>
-                                <value>2012-06</value>
-                            </entry>
-                        </map>
-                    </property>
-                </bean>
-                
+               
             
                 <!-- Shibboleth 2 -->
 
@@ -200,9 +171,51 @@
                            </bean>
                    </property>
                 </bean>
+                
+                <!-- Open Athens LA -->
+                <bean id="openAthensLa" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="logfile">
+                        <value>/var/log/openathens/login-apache-DATE
+                        </value>
+                    </property>
+                    <property name="logFileDateFormat" value="yyyy-MM-dd"/>
+                    <property name="format">
+                        <ref bean="openathenslaFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+                    
+                    <property name="LineFilterEngine">
+                        <bean class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                            <property name="includeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
+                                        <property name="includeIfContains"><value>AUDIT sso</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                            <property name="excludeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ExcludeLineFilter">
+                                        <property name="excludeIfContains"><value>proxy.runtime.test.openathens.net</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+
+                
+                
             </list>
         </property>
     </bean>
+    
+    
 
     <!-- Create the entry handler -->
     <bean name="memoryEventHandler" class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"></bean>

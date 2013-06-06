@@ -17,7 +17,7 @@
     <!-- accepted types are DATE, STRING, INTEGER -->
 
     <bean id="juspMonthlyPeriodFormat" class="uk.ac.cardiff.raptor.parse.external.remote.format.JsonFormat">
-        <property name="addEventTimePerEvent" value="true"/>
+        <property name="addEventTimePerEvent" value="true" />
         <property name="headers">
             <list>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
@@ -78,7 +78,7 @@
             </list>
         </property>
     </bean>
-    
+
     <bean id="wugenLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
         <property name="headers">
             <list>
@@ -88,7 +88,7 @@
                     </property>
                     <property name="fieldNo">
                         <value>0</value>
-                    </property>                   
+                    </property>
                     <property name="timeZone">
                         <value>UTC</value>
                     </property>
@@ -97,47 +97,47 @@
                     </property>
                     <property name="dateTimeFormat">
                         <value>yyyy-MM-dd'T'HH:mm:ss</value>
-                    </property>                    
-                </bean>   
+                    </property>
+                </bean>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
                     <property name="fieldName">
                         <value>wayflessUrl</value>
                     </property>
                     <property name="fieldNo">
                         <value>1</value>
-                    </property>                
+                    </property>
                     <property name="fieldType">
                         <value>STRING</value>
                     </property>
-                                     
-                </bean>   
+
+                </bean>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
                     <property name="fieldName">
                         <value>target</value>
                     </property>
                     <property name="fieldNo">
                         <value>4</value>
-                    </property>                
+                    </property>
                     <property name="fieldType">
                         <value>STRING</value>
                     </property>
-                                     
-                </bean>   
+
+                </bean>
                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
                     <property name="fieldName">
                         <value>quality</value>
                     </property>
                     <property name="fieldNo">
                         <value>5</value>
-                    </property>                
+                    </property>
                     <property name="fieldType">
                         <value>INTEGER</value>
                     </property>
-                                     
-                </bean>         
+
+                </bean>
             </list>
         </property>
-         <property name="delimeter">
+        <property name="delimeter">
             <value>,</value>
         </property>
     </bean>
@@ -416,6 +416,83 @@
         </property>
     </bean>
 
+    <bean id="openathenslaFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                      <property name="additionalFieldNos">
+                        <list>
+                            <value>1</value>
+                            <value>2</value>
+                        </list>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="\[" value="" />
+                            <entry key="\]" value="" />
+                        </map>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>dd/MMM/yyyyHH:mm:ss.SSSZ</value>
+                    </property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>requesterIp</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>9</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>10</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="&quot;" value="" />                           
+                        </map>
+                    </property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>11</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+         <property name="delimeter">
+            <value> </value>
+        </property>
+    </bean>
+
     <bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
         <property name="headers">
             <list>
@@ -657,7 +734,8 @@
                         <value>URL</value>
                     </property>
                     <property name="regexRetain">
-                        <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*</value>
+                        <value>url=http%3a%2f%2f[^%]*|url=https://[^/]*|url=https%3a%2f%2f[^%]*|url=http://[^/]*|url=%2520http%3a%2f%2f[^%]*|url=%2520https%3a%2f%2f[^%]*|url=%20http%3a%2f%2f[^%]*|url=%20https%3a%2f%2f[^%]*|url=http%253A%252F%252F[^%]*
+                        </value>
                     </property>
                     <property name="regexRetainCaseInsensitive">
                         <value>true</value>
@@ -671,7 +749,7 @@
                 </bean>
             </list>
         </property>
-        <property name="delimeter" value=" "/>
+        <property name="delimeter" value=" " />
 
 
 
