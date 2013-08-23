@@ -19,7 +19,7 @@
                 <!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="false" />
+                    <property name="enabled" value="true" />
                     <property name="eventHandler">
                         <ref bean="memoryEventHandler"></ref>
                     </property>
@@ -174,7 +174,7 @@
                 
                 <!-- Open Athens LA -->
                 <bean id="openAthensLa" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
                     <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
                     <property name="logfile">
                         <value>/var/log/openathens/login-apache-DATE
