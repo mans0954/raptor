@@ -91,8 +91,13 @@
         <property name="sessionId" column="sessionId" type="string" />
     </union-subclass>
 
-    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.RadiusAuthenticationEvent">
+    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent">
         <property name="clientIdentifier" column="clientIdentifier" type="string" />
+    </union-subclass>
+    
+    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent">
+        <property name="clientIdentifier" column="clientIdentifier" type="string" />
+        
     </union-subclass>
     
     <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent">
