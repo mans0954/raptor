@@ -19,7 +19,7 @@ import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
 import uk.ac.cardiff.utility.StringUtils;
 
-public class RadiusAuthenticationEvent extends AuthenticationEvent {
+public class EduoroamRadiusAuthenticationEvent extends AuthenticationEvent {
     /*
      * grep for Auth Login OK AND grep for without @ in the line
      * 
@@ -32,9 +32,9 @@ public class RadiusAuthenticationEvent extends AuthenticationEvent {
      * Copy constructor.
      * 
      * @param event
-     *            the {@link RadiusAuthenticationEvent} to copy.
+     *            the {@link EduoroamRadiusAuthenticationEvent} to copy.
      */
-    protected RadiusAuthenticationEvent(RadiusAuthenticationEvent event) {
+    protected EduoroamRadiusAuthenticationEvent(EduoroamRadiusAuthenticationEvent event) {
         super(event);
         this.clientIdentifier = event.clientIdentifier;
     }
@@ -42,17 +42,17 @@ public class RadiusAuthenticationEvent extends AuthenticationEvent {
     /**
      * Instantiates a new shibboleth idp authentication event.
      */
-    public RadiusAuthenticationEvent() {
+    public EduoroamRadiusAuthenticationEvent() {
         super();
     }
 
     /**
      * New instance.
      * 
-     * @return the {@link RadiusAuthenticationEvent} authentication event
+     * @return the {@link EduoroamRadiusAuthenticationEvent} authentication event
      */
-    public static RadiusAuthenticationEvent newInstance() {
-        return new RadiusAuthenticationEvent();
+    public static EduoroamRadiusAuthenticationEvent newInstance() {
+        return new EduoroamRadiusAuthenticationEvent();
     }
 
     /**
@@ -60,8 +60,8 @@ public class RadiusAuthenticationEvent extends AuthenticationEvent {
      * 
      * @return the shibboleth idp authentication event
      */
-    public RadiusAuthenticationEvent copy() {
-        return new RadiusAuthenticationEvent(this);
+    public EduoroamRadiusAuthenticationEvent copy() {
+        return new EduoroamRadiusAuthenticationEvent(this);
     }
 
     /**
@@ -115,7 +115,7 @@ public class RadiusAuthenticationEvent extends AuthenticationEvent {
             return true;
         if ((obj == null) || (obj.getClass() != this.getClass()))
             return false;
-        RadiusAuthenticationEvent that = (RadiusAuthenticationEvent) obj;
+        EduoroamRadiusAuthenticationEvent that = (EduoroamRadiusAuthenticationEvent) obj;
         boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
                 && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
                 && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName())
