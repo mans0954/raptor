@@ -58,7 +58,17 @@
 					<artifactId>jcl-over-slf4j</artifactId>
 					<groupId>org.slf4j</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>velocity</artifactId>
+					<groupId>org.apache.velocity</groupId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
 		</dependency>
 
 		<!-- Raptor Specific -->
