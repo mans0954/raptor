@@ -89,11 +89,34 @@
         <property name="sessionId" column="sessionId" type="string" />
     </union-subclass>
 
-    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" table="RadiusAuthE" name="uk.ac.cardiff.model.event.RadiusAuthenticationEvent">
-        <property name="clientIdentifier" column="clientIdentifier" type="string" />
+       <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" table="eduRadAuthE" name="uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent">
+        <property name="clientIdentifier" column="clientIdentifier" type="string" />        
+        <property name="eapType" column="eapType" type="string" />
+        <property name="serviceClass" column="serviceClass" type="string" />
+        <property name="serverSoftware" column="serverSoftware" type="string" />
+        <property name="result" column="result" type="string" />
+        <property name="resultInfo" column="resultInfo" type="string" />
+        <property name="userIdCui" column="userIdCui" type="string" />
+         <property name="realm" column="realm" type="string" />
+         <property name="serviceClientIdentifier" column="serviceClientIdentifier" type="string" />
+         <property name="rpOperatorName" column="rpOperatorName" type="string" /> 
+         <property name="serverSoftwareVersion" column="serverSoftwareVersion" type="string" />
     </union-subclass>
     
-    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" name="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent">
+    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" table="moonRadAuthE" name="uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent">
+        <property name="clientIdentifier" column="clientIdentifier" type="string" />        
+        <property name="eapType" column="eapType" type="string" />
+        <property name="serviceClass" column="serviceClass" type="string" />
+        <property name="serverSoftware" column="serverSoftware" type="string" />
+        <property name="result" column="result" type="string" />
+        <property name="resultInfo" column="resultInfo" type="string" />
+        <property name="userIdCui" column="userIdCui" type="string" />
+         <property name="realm" column="realm" type="string" />
+         <property name="serviceClientIdentifier" column="serviceClientIdentifier" type="string" />        
+         <property name="rpOperatorName" column="rpOperatorName" type="string" /> 
+         <property name="serverSoftwareVersion" column="serverSoftwareVersion" type="string" />
+    </union-subclass>
+    <union-subclass extends="uk.ac.cardiff.model.event.AuthenticationEvent" table="openAthensAuthE" name="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent">
         <property name="requesterIp" column="requesterIp" type="string" />
     </union-subclass>
     

@@ -19,7 +19,7 @@ import uk.ac.cardiff.utility.EqualsUtil;
 import uk.ac.cardiff.utility.HashCodeUtil;
 import uk.ac.cardiff.utility.StringUtils;
 
-public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
+public class EduroamRadiusAuthenticationEvent extends AuthenticationEvent {
 
 
     private String clientIdentifier;
@@ -48,9 +48,9 @@ public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
      * Copy constructor.
      * 
      * @param event
-     *            the {@link MoonshotRadiusAuthenticationEvent} to copy.
+     *            the {@link EduroamRadiusAuthenticationEvent} to copy.
      */
-    protected MoonshotRadiusAuthenticationEvent(MoonshotRadiusAuthenticationEvent event) {
+    protected EduroamRadiusAuthenticationEvent(EduroamRadiusAuthenticationEvent event) {
         super(event);
         this.clientIdentifier = event.clientIdentifier;
     }
@@ -58,17 +58,17 @@ public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
     /**
      * Instantiates a new shibboleth idp authentication event.
      */
-    public MoonshotRadiusAuthenticationEvent() {
+    public EduroamRadiusAuthenticationEvent() {
         super();
     }
 
     /**
      * New instance.
      * 
-     * @return the {@link MoonshotRadiusAuthenticationEvent} authentication event
+     * @return the {@link EduroamRadiusAuthenticationEvent} authentication event
      */
-    public static MoonshotRadiusAuthenticationEvent newInstance() {
-        return new MoonshotRadiusAuthenticationEvent();
+    public static EduroamRadiusAuthenticationEvent newInstance() {
+        return new EduroamRadiusAuthenticationEvent();
     }
 
     /**
@@ -77,8 +77,8 @@ public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
      * @return the shibboleth idp authentication event
      */
     @Override
-    public MoonshotRadiusAuthenticationEvent copy() {
-        return new MoonshotRadiusAuthenticationEvent(this);
+    public EduroamRadiusAuthenticationEvent copy() {
+        return new EduroamRadiusAuthenticationEvent(this);
     }
 
     /**
@@ -142,7 +142,6 @@ public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
     public void setHashCode(int hashCode) {
 
     }
-
     /**
      * 
      * @see java.lang.Object#equals(java.lang.Object)
@@ -153,7 +152,7 @@ public class MoonshotRadiusAuthenticationEvent extends AuthenticationEvent {
             return true;
         if ((obj == null) || (obj.getClass() != this.getClass()))
             return false;
-        MoonshotRadiusAuthenticationEvent that = (MoonshotRadiusAuthenticationEvent) obj;
+        EduroamRadiusAuthenticationEvent that = (EduroamRadiusAuthenticationEvent) obj;
         boolean areEqual = EqualsUtil.areEqual(this.getEventTimeMillis(), that.getEventTimeMillis()) && EqualsUtil.areEqual(this.getEventId(), that.getEventId())
                 && EqualsUtil.areEqual(this.getAuthenticationType(), that.getAuthenticationType()) && EqualsUtil.areEqual(this.getServiceHost(), that.getServiceHost())
                 && EqualsUtil.areEqual(this.getResourceHost(), that.getResourceHost()) && EqualsUtil.areEqual(this.getPrincipalName(), that.getPrincipalName())

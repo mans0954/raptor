@@ -63,7 +63,18 @@ public class LogFileUpload implements Serializable {
         /**
          * Shibboleth 2.4<
          */
-        SHIBBOLETHSP24("Shibboleth SP LT2.4");
+        SHIBBOLETHSP24("Shibboleth SP LT2.4"),
+        
+        /**
+         * radius-eduroam
+         */
+        EDUROAMRADIUS("Radius Eduroam"),
+        
+        /**
+         * radius-moonshot
+         */
+        MOONSHOTRADIUS("Radius Moonshot");
+        
 
         /** The friendly name. */
         public String friendlyName;
