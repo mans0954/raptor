@@ -224,6 +224,8 @@
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent" />
                 <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent" />
                 <entry value="Jusp Monthly" key="uk.ac.cardiff.model.event.JuspAggregatedEvent" />
+                <entry value="Moonshot Radius" key="uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent" />
+                 <entry value="Eduroam Radius" key="uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent" />
             </map>
         </property>
 
