@@ -153,7 +153,7 @@
 				<!-- Shibboleth 2 -->
 
                 <bean id="shibbolethAuditLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
 					<property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
 					<property name="logfile">
 						<value>file:///Users/philsmart/Documents/DataSets/Logs/shib-idp-small.log
@@ -225,7 +225,7 @@
                 
                 <!-- Open Athens LA -->
                 <bean id="openAthensLa" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
-                    <property name="enabled" value="true"/>
+                    <property name="enabled" value="false"/>
                     <property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
                     <property name="logfile">
                         <value>file:///Users/philsmart/Documents/DataSets/Logs/oala-log-sample.txt
@@ -260,45 +260,66 @@
                     </property>
                 </bean>
                 
-                <!-- OpenRadius -->
-                <bean id="freeRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+               
+                
+                <!-- Moonshot Radius -->
+                <bean id="moonshotRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
                     <property name="enabled" value="false"/>
                     <property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
                     <property name="logfile">
-                        <value>file:///Users/philsmart/Documents/DataSets/Logs/radius.log
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/raptor-moonshot.log
                         </value>
                     </property>
                     <property name="format">
-                        <ref bean="freeRadiusIdpLogFileFormat" />
+                        <ref bean="moonshotRadiusIdpLogFileFormat" />
                     </property>
                     <property name="eventType">
-                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
                     </property>
                     <property name="printParsingPosition"><value>true</value></property>
 
                     <property name="LineFilterEngine">
-                        <bean id="lineFilteropenRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                        <bean id="lineFilterMoonshotRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
                              <property name="includeLineFilters">
                                <list>
                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsRegexLineFilter">
-                                       <property name="includeIfContainsRegex"><value>Auth: Login OK.*via TLS tunnel</value></property>
+                                       <property name="includeIfContainsRegex"><value>OK</value></property>
                                    </bean>                                   
                                 </list>
                               </property>                                                         
                         </bean>
                     </property>
-                    <property name="exclusionList">
-                            <bean class="uk.ac.cardiff.raptor.parse.filter.ExclusionList">
-                                <property name="exclusionEntries">
-                                    <list>
-                                         <bean class ="uk.ac.cardiff.raptor.parse.filter.match.RegexExclusionEntry">
-                                            <property name ="fieldName" value="principalName"/>
-                                            <property name="match" value="@"/>
-                                        </bean>
-                                    </list>
-                                </property>
-                            </bean>
+                   
+                </bean> 
+                
+                 <!-- Eduroam Radius -->
+                <bean id="eduroamRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
+                    <property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/raptor-eduroam.log
+                        </value>
                     </property>
+                    <property name="format">
+                        <ref bean="moonshotRadiusIdpLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilterEduroamRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                             <property name="includeLineFilters">
+                               <list>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsRegexLineFilter">
+                                       <property name="includeIfContainsRegex"><value>OK</value></property>
+                                   </bean>                                   
+                                </list>
+                              </property>                                                         
+                        </bean>
+                    </property>
+                   
                 </bean> 
                 
 			</list>
