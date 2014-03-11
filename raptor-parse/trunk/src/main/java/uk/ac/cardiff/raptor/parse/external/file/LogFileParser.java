@@ -159,17 +159,21 @@ public class LogFileParser extends BaseEventFileParser {
                 }
                 log.trace("Parse [{}] - {}", parseLine, inputLine);
                 if (parseLine == true) {
+                	log.trace("Parsing line using [{}] delimeter",format.getDelimeter());
                     StrTokenizer tokenizer = new StrTokenizer(inputLine, format.getDelimeter());
                     tokenizer.setIgnoreEmptyTokens(false);
                     List<String> allvalues = new ArrayList<String>();
+                    
                     while (tokenizer.hasNext()) {
                         Object next = tokenizer.next();
+                        //log.trace("Token [{}]",next);
                         if (next instanceof String)
                             allvalues.add((String) next);
                         else {
                             log.error("input column was not a string, this should not happen");
                         }
                     }
+                    log.trace("Line tokenized into {} tokens",allvalues.size());
                     Event authE = (Event) this.createObject(eventType);
                     try {
                         populateField(allvalues, authE);
