@@ -208,6 +208,67 @@
                         </bean>
                     </property>
                 </bean>
+                
+                <!-- Moonshot Radius -->
+                <bean id="moonshotRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="false"/>
+                    <property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/raptor-moonshot.log
+                        </value>
+                    </property>
+                    <property name="format">
+                        <ref bean="moonshotRadiusIdpLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+                    
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilterMoonshotRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                            <property name="includeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsRegexLineFilter">
+                                        <property name="includeIfContainsRegex"><value>OK</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                    
+                </bean>
+                
+                <!-- Eduroam Radius -->
+                <bean id="eduroamRadiusLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="false"/>
+                    <property name="eventHandler"><bean class="uk.ac.cardiff.raptor.store.impl.LogFileIncrementalMemoryEventHandler"/></property>
+                    <property name="logfile">
+                        <value>file:///Users/philsmart/Documents/DataSets/Logs/raptor-eduroam.log
+                        </value>
+                    </property>
+                    <property name="format">
+                        <ref bean="moonshotRadiusIdpLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
+                    
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilterEduroamRadiusLFP" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                            <property name="includeLineFilters">
+                                <list>
+                                    <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsRegexLineFilter">
+                                        <property name="includeIfContainsRegex"><value>OK</value></property>
+                                    </bean>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                    
+                </bean> 
+
 
                 
                 

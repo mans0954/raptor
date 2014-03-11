@@ -28,7 +28,8 @@
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
@@ -49,11 +50,12 @@
                         <list>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
-                            <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                              <value type="java.lang.Class">uk.ac.cardiff.model.event.WugenEvent</value>
                              <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                             <value type="java.lang.Class">uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
                         </list>
                     </property>
                     <property name="serviceEndpoint">
@@ -76,7 +78,7 @@
 
     <bean id="entryNoPushPolicy" class="uk.ac.cardiff.raptor.remoting.policy.EntryNoPushPolicy">
         <property name="pushOnOrAfterNoEntries">
-            <value>10</value>
+            <value>1</value>
         </property>
     </bean>
 
