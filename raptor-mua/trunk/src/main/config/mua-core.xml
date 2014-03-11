@@ -57,7 +57,13 @@
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
                     <property name="eventType">
-                        <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
                     </property>
                     <property name="concrete" value="true" />
                 </bean>
@@ -114,6 +120,8 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -127,6 +135,8 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -163,7 +173,8 @@
                         <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
-                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.WugenEvent</value>
@@ -247,6 +258,30 @@
                     <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/openathensla/" />
                     <property name="eventType">
                         <value>OPENATHENSLA</value>
+                    </property>
+                </bean>
+                <bean id="moonshotRadius" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/radius-moonshot-idp/" />
+                    <property name="eventType">
+                        <value>MOONSHOTRADIUS</value>
+                    </property>
+                </bean>
+                <bean id="eduroamRadius" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/Users/philsmart/Documents/DataSets/Logs/batch/radius-eduroam-idp/" />
+                    <property name="eventType">
+                        <value>EDUROAMRADIUS</value>
                     </property>
                 </bean>
             </list>
@@ -348,7 +383,7 @@
     <!-- release trigger setup -->
     <bean id="muaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
-            <ref local="muaReleaseJobDetail" />
+            <ref bean="muaReleaseJobDetail" />
         </property>
         <property name="startDelay" value="10000" />
         <property name="repeatInterval" value="10000" />
@@ -369,7 +404,7 @@
     <!-- large file upload trigger -->
     <bean id="muaFileUploadQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
-            <ref local="muaFileUplaodJobDetail" />
+            <ref bean="muaFileUplaodJobDetail" />
         </property>
         <property name="startDelay" value="10000" />
         <property name="repeatInterval" value="60000" />
@@ -391,8 +426,8 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <ref local="muaReleaseQuickTrigger" />
-                <ref local="muaFileUploadQuickTrigger" />
+                <ref bean="muaReleaseQuickTrigger" />
+                <ref bean="muaFileUploadQuickTrigger" />
             </list>
         </property>
     </bean>

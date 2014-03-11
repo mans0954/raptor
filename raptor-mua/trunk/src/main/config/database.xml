@@ -12,7 +12,7 @@
     <!-- HIBERNATE DAO -->
     <bean id="muaSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource">
-            <ref local="muac3p0DataSource" />
+            <ref bean="muac3p0DataSource" />
         </property>
         <property name="hibernateProperties">
             <props>
@@ -27,7 +27,7 @@
         <!-- OR mapping files. -->
         <property name="mappingResources">
             <list>
-                <value>uk/ac/cardiff/model/event/event.hbm.xml</value>
+                <value>uk/ac/cardiff/model/event/event-name-limit.hbm.xml</value>
                 <value>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</value>
                 <value>uk/ac/cardiff/raptor/registry/releaseInformation.hbm.xml</value>
             </list>
@@ -49,7 +49,7 @@
                 <prop key="c3p0.max_size">100</prop>
                 <prop key="c3p0.max_statements">0</prop>
                 <prop key="c3p0.min_size">10</prop>
-                <prop key="user">postgres</prop>
+                <prop key="user">philsmart</prop>
                 <prop key="password"></prop>
             </props>
         </property>

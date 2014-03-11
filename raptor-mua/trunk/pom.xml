@@ -70,6 +70,7 @@
                     <artifactId>hibernate</artifactId>
                     <groupId>org.hibernate</groupId>
                 </exclusion>
+                
             </exclusions>
         </dependency>
 
@@ -179,32 +180,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <!-- Open SAML -->
-
-
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>2.4.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>log4j-over-slf4j</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>slf4j-api</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jcl-over-slf4j</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jul-to-slf4j</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+       
 
 
 
@@ -385,7 +361,7 @@
             <id>shibboleth.internet2.edu</id>
             <name>Internet2</name>
             <layout>default</layout>
-            <url>http://shibboleth.internet2.edu/downloads/maven2</url>
+            <url>http://build.shibboleth.net/nexus/content/repositories/releases/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

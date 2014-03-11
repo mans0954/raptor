@@ -104,7 +104,7 @@
    <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
          <property name="poolMaxIdle"><value>10</value></property>
          <property name="poolInitIdleCapacity"><value>10</value></property>
-         <property name="ldapUrl"><value>zidman12.cf.ac.uk</value></property>
+         <property name="ldapUrl"><value>zidman3.cf.ac.uk</value></property>
          <property name="ldapBaseDn"><value>o=people</value></property>
          <property name="startTls"><value>false</value></property>
          <property name="principal"><value>cn=srvreg1,o=users</value></property>

@@ -92,9 +92,9 @@ public class RunServer {
         // SocketConnector connector = new SocketConnector();
         // connector.setPort(portNumber);
 
-        // enable mutual authentication
         System.out.println("Using Connector " + sslConnector);
         server.setConnectors(new Connector[] {sslConnector});
+
 
         WebAppContext webappcontext = new WebAppContext();
         webappcontext.setDescriptor(configurationFiles + "/web.xml");

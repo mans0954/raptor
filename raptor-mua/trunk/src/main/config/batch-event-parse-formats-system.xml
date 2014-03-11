@@ -105,6 +105,330 @@
             <value> </value>
         </property>
     </bean>
+    
+    <bean id="moonshotRadiusIdpLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>                                     
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>yyyy-MM-dd HH:mm:ss</value>
+                    </property>                   
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>realm</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>1</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                   
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>rpOperatorName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>2</value>
+                    </property>                    
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>3</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>   
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="@cf.ac.uk" value="" />
+                        </map>
+                    </property>                
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>userIdCui</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>4</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>5</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eapType</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>7</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceClass</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>8</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serverSoftware</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>9</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serverSoftwareVersion</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>10</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>result</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>11</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resultInfo</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>12</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter" value="#"/>
+    </bean>
+    
+    <bean id="eduroamRadiusIdpLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>                                     
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>yyyy-MM-dd HH:mm:ss</value>
+                    </property>                   
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>realm</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>1</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                   
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>rpOperatorName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>2</value>
+                    </property>                    
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>3</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>   
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="@cf.ac.uk" value="" />
+                        </map>
+                    </property>                
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>userIdCui</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>4</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>5</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>6</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eapType</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>7</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serviceClass</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>8</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serverSoftware</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>9</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>serverSoftwareVersion</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>10</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>result</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>11</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resultInfo</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>12</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>                                  
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter" value="#"/>
+    </bean>
 
      <bean id="shib13IDPAccessFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
         <property name="headers">
