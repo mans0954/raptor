@@ -298,7 +298,7 @@ public final class MUAEngine implements InitializingBean {
                 log.error("Error Parsing the batch uploaded log file {}, with reason",
                         batchFile.getLogFile().getName(), e.getMessage());
             } catch (EventParserNotFoundException e) {
-                log.error("Event parser could not be found for {}, with reason {}", batchFile.getLogFile().getName(),
+                log.error("Event parser could not be found for {}, with reason {}, check one exists in the event-parse xml file.", batchFile.getLogFile().getName(),
                         e.getMessage());
             }
         }

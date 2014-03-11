@@ -19,7 +19,7 @@
 
 <configuration>
 
-  <property name="LOG_HOME" value="/tmp/" />
+  <property name="LOG_HOME" value="/var/log/drre" />
 
   <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -55,6 +55,7 @@
   </logger>
   <logger name="org.hibernate" level="INFO">
     <appender-ref ref="stdout"/>
+    <appender-ref ref="FILE"/>
   </logger>
   <logger name="org.opensaml.saml2.metadata.provider" level ="INFO">
     <appender-ref ref="stdout"/>

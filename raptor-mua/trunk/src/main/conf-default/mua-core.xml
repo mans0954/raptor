@@ -56,7 +56,7 @@
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
                     <property name="eventType">
-                        <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                     </property>
                     <property name="concrete" value="true" />
                 </bean>
@@ -158,7 +158,7 @@
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                          <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
-                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                          <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                     </list>
                 </entry>
@@ -340,7 +340,7 @@
     <!-- release trigger setup -->
     <bean id="muaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
-            <ref local="muaReleaseJobDetail" />
+            <ref bean="muaReleaseJobDetail" />
         </property>
         <property name="startDelay" value="60000" />
         <property name="repeatInterval" value="60000" />
@@ -361,7 +361,7 @@
     <!-- large file upload trigger -->
     <bean id="muaFileUploadQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
         <property name="jobDetail">
-            <ref local="muaFileUplaodJobDetail" />
+            <ref bean="muaFileUplaodJobDetail" />
         </property>
         <property name="startDelay" value="10000" />
         <property name="repeatInterval" value="60000" />
@@ -383,8 +383,8 @@
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
-                <ref local="muaReleaseQuickTrigger" />
-                <ref local="muaFileUploadQuickTrigger" />
+                <ref bean="muaReleaseQuickTrigger" />
+                <ref bean="muaFileUploadQuickTrigger" />
             </list>
         </property>
     </bean>
