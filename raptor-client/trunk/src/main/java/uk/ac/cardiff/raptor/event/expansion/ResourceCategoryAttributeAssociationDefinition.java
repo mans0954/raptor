@@ -22,6 +22,7 @@ package uk.ac.cardiff.raptor.event.expansion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import uk.ac.cardiff.model.event.Event;
 import uk.ac.cardiff.model.resource.ResourceMetadata;
@@ -32,122 +33,128 @@ import uk.ac.cardiff.raptor.store.dao.RaptorDataConnection;
  * 
  * @author philsmart
  */
-public class ResourceCategoryAttributeAssociationDefinition extends
-        BaseAttributeAssociationDefinition {
+public class ResourceCategoryAttributeAssociationDefinition extends BaseAttributeAssociationDefinition {
 
-    /** Class logger. */
-    private final Logger log = LoggerFactory
-            .getLogger(ResourceCategoryAttributeAssociationDefinition.class);
+	/** Class logger. */
+	private final Logger log = LoggerFactory.getLogger(ResourceCategoryAttributeAssociationDefinition.class);
 
-    /** The data connector used to acquire the attributes. */
-    private RaptorDataConnection dataConnection;
+	/** The data connector used to acquire the attributes. */
+	private RaptorDataConnection dataConnection;
 
-    /**
-     * @see uk.ac.cardiff.raptor.event.expansion.BaseAttributeAssociationDefinition#initialise()
-     */
-    @Override
-    public void initialise() {
-    }
+	/**
+	 * @see uk.ac.cardiff.raptor.event.expansion.BaseAttributeAssociationDefinition#initialise()
+	 */
+	@Override
+	public void initialise() {
+	}
 
-    @Override
-    public boolean associate(final Event event) {
+	@Override
+	public boolean associate(final Event event) {
 
-        ResourceMetadata resourceMetadata = null;
-        Object result = null;
-        if (event.getResourceId() != null) {
-            result =
-                    dataConnection.runQueryUnique(
-                            "from ResourceMetadata where resourceId=?",
-                            new Object[] {event.getResourceId()});
-        }
-        if (result != null && result instanceof ResourceMetadata) {
-            resourceMetadata = (ResourceMetadata) result;
-            if (resourceMetadata.isExternal()) {
-                event.setResourceIdCategory(2);
-            } else if (resourceMetadata.isInternal()) {
-                event.setResourceIdCategory(1);
-            }
-            return true;
-        } else {
-            // only set new resource information if has resource id. However, must set default resources category anyway
-            if (event.getResourceId() != null) {
-                ResourceMetadata resourceNew = new ResourceMetadata();
-                resourceNew.setExternal(true);
-                resourceNew.setInternal(false);
-                resourceNew.setResourceId(event.getResourceId());
-                // set event to default resource category, then save this resourceId.
-                event.setResourceIdCategory(2);
-                try {
-                    dataConnection.save(resourceNew);
-                } catch (DataAccessException e) {
-                    log.error("Could not save new resource metadata {}", e.getMessage());
-                    return false;
-                }
-                return true;
-            } else {
-                event.setResourceIdCategory(2);
-                return false;
-            }
-        }
+		ResourceMetadata resourceMetadata = null;
+		Object result = null;
+		if (event.getResourceId() != null) {
+			try {
+				result = dataConnection.runQueryUnique("from ResourceMetadata where resourceId=?",
+						new Object[] { event.getResourceId() });
+			} catch (IncorrectResultSizeDataAccessException e) {
+				log.error("Query for {} returned the wrong number of results: ", event.getResourceId(), e.getMessage());
+			}
+		}
 
-    }
+		if (result != null && result instanceof ResourceMetadata) {
+			resourceMetadata = (ResourceMetadata) result;
+			if (resourceMetadata.isExternal()) {
+				event.setResourceIdCategory(2);
+			} else if (resourceMetadata.isInternal()) {
+				event.setResourceIdCategory(1);
+			}
+			return true;
+		} else {
+			// only set new resource information if has resource id. However,
+			// must set default resources category anyway
+			if (event.getResourceId() != null) {
+				ResourceMetadata resourceNew = new ResourceMetadata();
+				resourceNew.setExternal(true);
+				resourceNew.setInternal(false);
+				resourceNew.setResourceId(event.getResourceId());
+				// set event to default resource category, then save this
+				// resourceId.
+				event.setResourceIdCategory(2);
+				try {
+					dataConnection.save(resourceNew);
+				} catch (DataAccessException e) {
+					log.error("Could not save new resource metadata {}", e.getMessage());
+					return false;
+				}
+				return true;
+			} else {
+				event.setResourceIdCategory(2);
+				return false;
+			}
+		}
 
-    /**
-     * Sets the class to add.
-     * 
-     * @param classToAdd the classToAdd to set
-     */
-    @Override
-    public void setClassToAdd(Class<?> classToAdd) {
-        this.classToAdd = classToAdd;
-    }
+	}
 
-    /**
-     * Gets the class to add.
-     * 
-     * @return the classToAdd
-     */
-    @Override
-    public Class<?> getClassToAdd() {
-        return classToAdd;
-    }
+	/**
+	 * Sets the class to add.
+	 * 
+	 * @param classToAdd
+	 *            the classToAdd to set
+	 */
+	@Override
+	public void setClassToAdd(Class<?> classToAdd) {
+		this.classToAdd = classToAdd;
+	}
 
-    /**
-     * Sets the associate with class.
-     * 
-     * @param associateWithClass the associateWithClass to set
-     */
-    @Override
-    public void setAssociateWithClass(String associateWithClass) {
-        this.associateWithClass = associateWithClass;
-    }
+	/**
+	 * Gets the class to add.
+	 * 
+	 * @return the classToAdd
+	 */
+	@Override
+	public Class<?> getClassToAdd() {
+		return classToAdd;
+	}
 
-    /**
-     * Gets the associate with class.
-     * 
-     * @return the associateWithClass
-     */
-    @Override
-    public String getAssociateWithClass() {
-        return associateWithClass;
-    }
+	/**
+	 * Sets the associate with class.
+	 * 
+	 * @param associateWithClass
+	 *            the associateWithClass to set
+	 */
+	@Override
+	public void setAssociateWithClass(String associateWithClass) {
+		this.associateWithClass = associateWithClass;
+	}
 
-    /**
-     * Sets the data connection.
-     * 
-     * @param dataConnection the dataConnection to set
-     */
-    public void setDataConnection(RaptorDataConnection dataConnection) {
-        this.dataConnection = dataConnection;
-    }
+	/**
+	 * Gets the associate with class.
+	 * 
+	 * @return the associateWithClass
+	 */
+	@Override
+	public String getAssociateWithClass() {
+		return associateWithClass;
+	}
 
-    /**
-     * Gets the data connection.
-     * 
-     * @return the dataConnection
-     */
-    public RaptorDataConnection getDataConnection() {
-        return dataConnection;
-    }
+	/**
+	 * Sets the data connection.
+	 * 
+	 * @param dataConnection
+	 *            the dataConnection to set
+	 */
+	public void setDataConnection(RaptorDataConnection dataConnection) {
+		this.dataConnection = dataConnection;
+	}
+
+	/**
+	 * Gets the data connection.
+	 * 
+	 * @return the dataConnection
+	 */
+	public RaptorDataConnection getDataConnection() {
+		return dataConnection;
+	}
 
 }
