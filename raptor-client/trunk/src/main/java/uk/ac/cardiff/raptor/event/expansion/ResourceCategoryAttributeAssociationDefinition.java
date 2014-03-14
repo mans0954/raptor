@@ -50,7 +50,7 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
 
 	@Override
 	public boolean associate(final Event event) {
-
+		boolean stopAssociate = false;
 		ResourceMetadata resourceMetadata = null;
 		Object result = null;
 		if (event.getResourceId() != null) {
@@ -59,39 +59,45 @@ public class ResourceCategoryAttributeAssociationDefinition extends BaseAttribut
 						new Object[] { event.getResourceId() });
 			} catch (IncorrectResultSizeDataAccessException e) {
 				log.error("Query for {} returned the wrong number of results: ", event.getResourceId(), e.getMessage());
+				stopAssociate = true;
 			}
 		}
 
-		if (result != null && result instanceof ResourceMetadata) {
-			resourceMetadata = (ResourceMetadata) result;
-			if (resourceMetadata.isExternal()) {
-				event.setResourceIdCategory(2);
-			} else if (resourceMetadata.isInternal()) {
-				event.setResourceIdCategory(1);
-			}
-			return true;
-		} else {
-			// only set new resource information if has resource id. However,
-			// must set default resources category anyway
-			if (event.getResourceId() != null) {
-				ResourceMetadata resourceNew = new ResourceMetadata();
-				resourceNew.setExternal(true);
-				resourceNew.setInternal(false);
-				resourceNew.setResourceId(event.getResourceId());
-				// set event to default resource category, then save this
-				// resourceId.
-				event.setResourceIdCategory(2);
-				try {
-					dataConnection.save(resourceNew);
-				} catch (DataAccessException e) {
-					log.error("Could not save new resource metadata {}", e.getMessage());
-					return false;
+		if (!stopAssociate) {
+			if (result != null && result instanceof ResourceMetadata) {
+				resourceMetadata = (ResourceMetadata) result;
+				if (resourceMetadata.isExternal()) {
+					event.setResourceIdCategory(2);
+				} else if (resourceMetadata.isInternal()) {
+					event.setResourceIdCategory(1);
 				}
 				return true;
 			} else {
-				event.setResourceIdCategory(2);
-				return false;
+				// only set new resource information if has resource id.
+				// However,
+				// must set default resources category anyway
+				if (event.getResourceId() != null) {
+					ResourceMetadata resourceNew = new ResourceMetadata();
+					resourceNew.setExternal(true);
+					resourceNew.setInternal(false);
+					resourceNew.setResourceId(event.getResourceId());
+					// set event to default resource category, then save this
+					// resourceId.
+					event.setResourceIdCategory(2);
+					try {
+						dataConnection.save(resourceNew);
+					} catch (DataAccessException e) {
+						log.error("Could not save new resource metadata {}", e.getMessage());
+						return false;
+					}
+					return true;
+				} else {
+					event.setResourceIdCategory(2);
+					return false;
+				}
 			}
+		}else{
+			return false;
 		}
 
 	}
