@@ -36,186 +36,205 @@ import uk.ac.cardiff.raptorweb.model.StatisticalUnitInformationView;
  */
 public class GraphSet implements Serializable {
 
-    /** Class logger */
-    private final Logger log = LoggerFactory.getLogger(GraphSet.class);
+	/** Class logger */
+	private final Logger log = LoggerFactory.getLogger(GraphSet.class);
 
-    /**
-     * Default generated serial UID.
-     */
-    private static final long serialVersionUID = 1772750085993032745L;
+	/**
+	 * Default generated serial UID.
+	 */
+	private static final long serialVersionUID = 1772750085993032745L;
 
-    /**
-     * Stores the tabular graph form.
-     */
-    private RaptorTableChartModel tableModel;
+	/**
+	 * Stores the tabular graph form.
+	 */
+	private RaptorTableChartModel tableModel;
 
-    /**
-     * Holds the visual graph form.
-     */
-    private RaptorJFreeChartModel graphModel;
+	/**
+	 * Holds the visual graph form.
+	 */
+	private RaptorJFreeChartModel graphModel;
 
-    /**
-     * A list of {@link StatisticFunctionType}s that are used to select (dynamically) the type of graph function the
-     * required to construct a graph. This is a copy of the global one held by the {@link GraphWizardModel}, so that it
-     * is possible to select the correct one from a String input.
-     * **/
-    private List<StatisticFunctionType> statisticFunctionTypes;
+	/**
+	 * A list of {@link StatisticFunctionType}s that are used to select
+	 * (dynamically) the type of graph function the required to construct a
+	 * graph. This is a copy of the global one held by the
+	 * {@link GraphWizardModel}, so that it is possible to select the correct
+	 * one from a String input.
+	 * **/
+	private List<StatisticFunctionType> statisticFunctionTypes;
 
-    /**
-     * The technical description of the statistic to perform.
-     */
-    private StatisticalUnitInformationView statisticalUnitInformation;
+	/**
+	 * The technical description of the statistic to perform.
+	 */
+	private StatisticalUnitInformationView statisticalUnitInformation;
 
-    /**
-     * Which of the statisticFunctionTypes has been choosen.
-     */
-    private StatisticFunctionType selectedStatisticFunctionType;
+	/**
+	 * Which of the statisticFunctionTypes has been choosen.
+	 */
+	private StatisticFunctionType selectedStatisticFunctionType;
 
-    /**
-     * Tmp storage of event type information.
-     */
-    private String eventType;
+	/**
+	 * Tmp storage of event type information.
+	 */
+	private String eventType;
 
-    /**
-     * The compiled/encapsulated (information copied into) version of a {@link StatisticalUnitInformation} and
-     * {@link StatisticFunctionType}.
-     */
-    private DynamicStatisticalUnitInformation dynamicStatisticalUnitInformation;
+	/**
+	 * The compiled/encapsulated (information copied into) version of a
+	 * {@link StatisticalUnitInformation} and {@link StatisticFunctionType}.
+	 */
+	private DynamicStatisticalUnitInformation dynamicStatisticalUnitInformation;
 
-    public SelectItem[] getStatisticFunctionTypesSelectItems() {
-        List<SelectItem> itemsList = new ArrayList<SelectItem>();
-        itemsList.add(new SelectItem("", "Please Select Function Type")); // useful as this provides a first null
-                                                                          // element
-                                                                          // which is not allowed if
-        // required=true.
-        for (StatisticFunctionType type : statisticFunctionTypes) {
-            if (type.getAppliesToEventTypes() != null && type.getAppliesToEventTypes().contains(eventType)) {
-                itemsList.add(new SelectItem(type.getStatisticClass(), type.getFriendlyName() + " - "
-                        + type.getDescription()));
-            }
-        }
-        return itemsList.toArray(new SelectItem[0]);
-    }
+	public SelectItem[] getStatisticFunctionTypesSelectItems() {
+		List<SelectItem> itemsList = new ArrayList<SelectItem>();
+		itemsList.add(new SelectItem("", "Please Select Function Type"));
+		
+		for (StatisticFunctionType type : statisticFunctionTypes) {
+			if (type.getAppliesToEventTypes() != null
+					&& type.getAppliesToEventTypes().contains(eventType)) {
+				itemsList.add(new SelectItem(type.getStatisticClass(), type
+						.getFriendlyName() + " - " + type.getDescription()));
+			}
+		}
+		return itemsList.toArray(new SelectItem[0]);
+	}
 
-    /**
-     * @return Returns the selectedStatisticFunctionType.
-     */
-    public StatisticFunctionType getSelectedStatisticFunctionType() {
-        return selectedStatisticFunctionType;
-    }
+	/**
+	 * @return Returns the selectedStatisticFunctionType.
+	 */
+	public StatisticFunctionType getSelectedStatisticFunctionType() {
+		return selectedStatisticFunctionType;
+	}
 
-    /**
-     * @param selectedStatisticFunctionType The selectedStatisticFunctionType to set.
-     */
-    public void setSelectedStatisticFunctionType(StatisticFunctionType selectedStatisticFunctionType) {
-        this.selectedStatisticFunctionType = selectedStatisticFunctionType;
-    }
+	/**
+	 * @param selectedStatisticFunctionType
+	 *            The selectedStatisticFunctionType to set.
+	 */
+	public void setSelectedStatisticFunctionType(
+			StatisticFunctionType selectedStatisticFunctionType) {
+		this.selectedStatisticFunctionType = selectedStatisticFunctionType;
+	}
 
-    /**
-     * @return Returns the statistic class name of the selectedStatisticFunctionType.
-     */
-    public String getSelectedStatisticFunctionTypeString() {
-        if (selectedStatisticFunctionType != null) {
-            return selectedStatisticFunctionType.getStatisticClass();
-        }
-        return null;
-    }
+	/**
+	 * @return Returns the statistic class name of the
+	 *         selectedStatisticFunctionType.
+	 */
+	public String getSelectedStatisticFunctionTypeString() {
+		if (selectedStatisticFunctionType != null) {
+			log.trace("Getting selected statistical function as {}",
+					selectedStatisticFunctionType.getStatisticClass());
+		}
+		if (selectedStatisticFunctionType != null) {
+			return selectedStatisticFunctionType.getStatisticClass();
+		}
+		return null;
+	}
 
-    /**
-     * @param selectedStatisticFunctionType The selectedStatisticFunctionType to set.
-     */
-    public void setSelectedStatisticFunctionTypeString(String selectedStatisticFunctionType) {
-        log.trace("Setting selected statistic function type = [{}]", selectedStatisticFunctionType);
-        for (StatisticFunctionType type : statisticFunctionTypes) {
-            if (type.getStatisticClass().equals(selectedStatisticFunctionType)) {
-                this.selectedStatisticFunctionType = type;
-            }
-        }
-    }
+	/**
+	 * @param selectedStatisticFunctionType
+	 *            The selectedStatisticFunctionType to set.
+	 */
+	public void setSelectedStatisticFunctionTypeString(
+			String selectedStatisticFunctionType) {
+		log.trace("Setting selected statistic function type = [{}]",
+				selectedStatisticFunctionType);
+		for (StatisticFunctionType type : statisticFunctionTypes) {
+			if (type.getStatisticClass().equals(selectedStatisticFunctionType)) {
+				this.selectedStatisticFunctionType = type;
+			}
+		}
+	}
 
-    /**
-     * @return Returns the graphModel.
-     */
-    public RaptorJFreeChartModel getGraphModel() {
-        return graphModel;
-    }
+	/**
+	 * @return Returns the graphModel.
+	 */
+	public RaptorJFreeChartModel getGraphModel() {
+		return graphModel;
+	}
 
-    /**
-     * @param graphModel The graphModel to set.
-     */
-    public void setGraphModel(RaptorJFreeChartModel graphModel) {
-        this.graphModel = graphModel;
-    }
+	/**
+	 * @param graphModel
+	 *            The graphModel to set.
+	 */
+	public void setGraphModel(RaptorJFreeChartModel graphModel) {
+		this.graphModel = graphModel;
+	}
 
-    /**
-     * @return Returns the tableModel.
-     */
-    public RaptorTableChartModel getTableModel() {
-        return tableModel;
-    }
+	/**
+	 * @return Returns the tableModel.
+	 */
+	public RaptorTableChartModel getTableModel() {
+		return tableModel;
+	}
 
-    /**
-     * @param tableModel The tableModel to set.
-     */
-    public void setTableModel(RaptorTableChartModel tableModel) {
-        this.tableModel = tableModel;
-    }
+	/**
+	 * @param tableModel
+	 *            The tableModel to set.
+	 */
+	public void setTableModel(RaptorTableChartModel tableModel) {
+		this.tableModel = tableModel;
+	}
 
-    /**
-     * @return Returns the statisticalUnitInformation.
-     */
-    public StatisticalUnitInformationView getStatisticalUnitInformation() {
-        return statisticalUnitInformation;
-    }
+	/**
+	 * @return Returns the statisticalUnitInformation.
+	 */
+	public StatisticalUnitInformationView getStatisticalUnitInformation() {
+		return statisticalUnitInformation;
+	}
 
-    /**
-     * @param statisticalUnitInformation The statisticalUnitInformation to set.
-     */
-    public void setStatisticalUnitInformation(StatisticalUnitInformationView statisticalUnitInformation) {
-        this.statisticalUnitInformation = statisticalUnitInformation;
-    }
+	/**
+	 * @param statisticalUnitInformation
+	 *            The statisticalUnitInformation to set.
+	 */
+	public void setStatisticalUnitInformation(
+			StatisticalUnitInformationView statisticalUnitInformation) {
+		this.statisticalUnitInformation = statisticalUnitInformation;
+	}
 
-    /**
-     * @return Returns the eventType.
-     */
-    public String getEventType() {
-        return eventType;
-    }
+	/**
+	 * @return Returns the eventType.
+	 */
+	public String getEventType() {
+		return eventType;
+	}
 
-    /**
-     * @param eventType The eventType to set.
-     */
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
+	/**
+	 * @param eventType
+	 *            The eventType to set.
+	 */
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
 
-    /**
-     * @return Returns the statisticFunctionTypes.
-     */
-    public List<StatisticFunctionType> getStatisticFunctionTypes() {
-        return statisticFunctionTypes;
-    }
+	/**
+	 * @return Returns the statisticFunctionTypes.
+	 */
+	public List<StatisticFunctionType> getStatisticFunctionTypes() {
+		return statisticFunctionTypes;
+	}
 
-    /**
-     * @param statisticFunctionTypes The statisticFunctionTypes to set.
-     */
-    public void setStatisticFunctionTypes(List<StatisticFunctionType> statisticFunctionTypes) {
-        this.statisticFunctionTypes = statisticFunctionTypes;
-    }
+	/**
+	 * @param statisticFunctionTypes
+	 *            The statisticFunctionTypes to set.
+	 */
+	public void setStatisticFunctionTypes(
+			List<StatisticFunctionType> statisticFunctionTypes) {
+		this.statisticFunctionTypes = statisticFunctionTypes;
+	}
 
-    /**
-     * @return Returns the dynamicStatisticalUnitInformation.
-     */
-    public DynamicStatisticalUnitInformation getDynamicStatisticalUnitInformation() {
-        return dynamicStatisticalUnitInformation;
-    }
+	/**
+	 * @return Returns the dynamicStatisticalUnitInformation.
+	 */
+	public DynamicStatisticalUnitInformation getDynamicStatisticalUnitInformation() {
+		return dynamicStatisticalUnitInformation;
+	}
 
-    /**
-     * @param dynamicStatisticalUnitInformation The dynamicStatisticalUnitInformation to set.
-     */
-    public void
-            setDynamicStatisticalUnitInformation(DynamicStatisticalUnitInformation dynamicStatisticalUnitInformation) {
-        this.dynamicStatisticalUnitInformation = dynamicStatisticalUnitInformation;
-    }
+	/**
+	 * @param dynamicStatisticalUnitInformation
+	 *            The dynamicStatisticalUnitInformation to set.
+	 */
+	public void setDynamicStatisticalUnitInformation(
+			DynamicStatisticalUnitInformation dynamicStatisticalUnitInformation) {
+		this.dynamicStatisticalUnitInformation = dynamicStatisticalUnitInformation;
+	}
 
 }

@@ -5,12 +5,6 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-        <dependent-module archiveName="raptor-client-1.1.6-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-client/raptor-client">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="raptor-information-model-1.1.4-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/raptor-information-model/raptor-information-model">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="raptor-web"/>
         <property name="java-output-path" value="/raptor-web/target/classes"/>
     </wb-module>
