@@ -2,14 +2,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-client</artifactId>
-	<version>1.1.7-SNAPSHOT</version>
+	<version>1.1.7</version>
 	<name>Raptor Client for Remoting</name>
 	<description>Raptor Library for sending and Receiving Model Events</description>
 
 	<!-- set up of SCM and DM -->
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-client/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-client</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-client/tags/raptor-client-1.1.7</developerConnection>
+		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-client/tags/raptor-client-1.1.7</url>
 	</scm>
 	<distributionManagement>
 		<repository>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>uk.ac.cardiff.raptor</groupId>
 			<artifactId>raptor-information-model</artifactId>
-			<version>1.1.5-SNAPSHOT</version>
+			<version>1.1.4</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>hibernate</artifactId>
