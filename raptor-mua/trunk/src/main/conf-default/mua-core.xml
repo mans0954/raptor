@@ -62,6 +62,12 @@
                 </bean>
                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
                     <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
                         <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
                     </property>
                     <property name="concrete" value="false" />
@@ -107,6 +113,8 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -120,6 +128,8 @@
                             <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
                         </list>
                     </property>
                 </bean>
@@ -156,10 +166,12 @@
                         <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
-                         <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
-                        <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
                         <value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
-                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
+                        <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                        <value>uk.ac.cardiff.model.event.WugenEvent</value>
+                        <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>
@@ -241,6 +253,31 @@
                         <value>OPENATHENSLA</value>
                     </property>
                 </bean>
+                <bean id="moonshotRadius" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/radius-moonshot-idp/" />
+                    <property name="eventType">
+                        <value>MOONSHOTRADIUS</value>
+                    </property>
+                </bean>
+                <bean id="eduroamRadius" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/radius-eduroam-idp/" />
+                    <property name="eventType">
+                        <value>EDUROAMRADIUS</value>
+                    </property>
+                </bean>
+
             </list>
         </property>
     </bean>
