@@ -22,6 +22,9 @@ package uk.ac.cardiff.raptormua.upload;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author philsmart
  * 
  */
-public class FileUploadEngine {
+public class FileUploadEngine{
 
     /** Class Logger */
     private static final Logger log = LoggerFactory.getLogger(UploadDirectory.class);
@@ -39,6 +42,8 @@ public class FileUploadEngine {
 
     /** Whether file uploads are enabled */
     private boolean enabled;
+    
+    
 
     /**
      * 
@@ -89,5 +94,7 @@ public class FileUploadEngine {
     public boolean isEnabled() {
         return enabled;
     }
+
+
 
 }
