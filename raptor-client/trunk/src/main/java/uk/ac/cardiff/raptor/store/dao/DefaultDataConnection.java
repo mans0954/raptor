@@ -28,6 +28,7 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
@@ -38,117 +39,120 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
  */
 public class DefaultDataConnection implements RaptorDataConnection {
 
-    /** hibernate template to persist classes */
-    private HibernateTemplate hibernateTemplate;
+	/** hibernate template to persist classes */
+	private HibernateTemplate hibernateTemplate;
 
-    @SuppressWarnings("unused")
-    private SessionFactory sessionFactory;
+	@SuppressWarnings("unused")
+	private SessionFactory sessionFactory;
 
-    /** class logger */
-    private static Logger log = LoggerFactory.getLogger(DefaultDataConnection.class);
+	/** class logger */
+	private static Logger log = LoggerFactory.getLogger(DefaultDataConnection.class);
 
-    @Override
-    public void save(Object object) throws DataAccessException {
-        hibernateTemplate.saveOrUpdate(object);
-    }
+	@Override
+	public void save(Object object) throws DataAccessException {
+		hibernateTemplate.saveOrUpdate(object);
+	}
 
-    @Override
-    public void saveAll(@SuppressWarnings("rawtypes") Collection collection) throws DataAccessException {
-        hibernateTemplate.saveOrUpdateAll(collection);
-    }
+	@Override
+	public void saveAll(@SuppressWarnings("rawtypes") Collection collection) throws DataAccessException {
+		hibernateTemplate.saveOrUpdateAll(collection);
+	}
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public List runQuery(String query, Object[] parameters) throws DataAccessException {
-        return hibernateTemplate.find(query, parameters);
-    }
+	@Override
+	@SuppressWarnings("rawtypes")
+	public List runQuery(String query, Object[] parameters) throws DataAccessException {
+		return hibernateTemplate.find(query, parameters);
+	}
 
-    @Override
-    public void runUpdate(String query, Object[] parameters) throws DataAccessException {
-        hibernateTemplate.bulkUpdate(query, parameters);
-    }
+	@Override
+	public void runUpdate(String query, Object[] parameters) throws DataAccessException {
+		hibernateTemplate.bulkUpdate(query, parameters);
+	}
 
-    @Override
-    @SuppressWarnings("rawtypes")
-    public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException {
-        hibernateTemplate.setMaxResults(maxResultSize);
-        List result = hibernateTemplate.find(query, parameters);
-        hibernateTemplate.setMaxResults(0);
-        return result;
-    }
+	@Override
+	@SuppressWarnings("rawtypes")
+	public List runQuery(String query, Object[] parameters, int maxResultSize) throws DataAccessException {
+		hibernateTemplate.setMaxResults(maxResultSize);
+		List result = hibernateTemplate.find(query, parameters);
+		hibernateTemplate.setMaxResults(0);
+		return result;
+	}
 
-    /**
-     * Not used method. Specific to this implementation for testing.
-     * 
-     * @param query
-     * @param pageSize
-     * @param pageNumber
-     * @return
-     * @throws DataAccessException
-     */
-    @SuppressWarnings("rawtypes")
-    public List runQueryPaged(final String query, final int pageSize, final int pageNumber) throws DataAccessException {
-        HibernateTemplate template = getHibernateTemplate();
-        return template.executeFind(new HibernateCallback() {
-            @Override
-            public Object doInHibernate(Session session) throws HibernateException, SQLException {
-                Query queryToRun = session.createQuery(query);
-                queryToRun.setMaxResults(pageSize);
-                queryToRun.setFirstResult(pageSize * pageNumber);
-                return queryToRun.list();
-            }
-        });
-    }
+	/**
+	 * Not used method. Specific to this implementation for testing.
+	 * 
+	 * @param query
+	 * @param pageSize
+	 * @param pageNumber
+	 * @return
+	 * @throws DataAccessException
+	 */
+	@SuppressWarnings("rawtypes")
+	public List runQueryPaged(final String query, final int pageSize, final int pageNumber) throws DataAccessException {
+		HibernateTemplate template = getHibernateTemplate();
+		return template.executeFind(new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query queryToRun = session.createQuery(query);
+				queryToRun.setMaxResults(pageSize);
+				queryToRun.setFirstResult(pageSize * pageNumber);
+				return queryToRun.list();
+			}
+		});
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Object runQueryForceUnique(final String query, final Object[] parameters) {
-        if (parameters != null) {
-            log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
-        } else {
-            log.trace("Query to database, {}]", query);
-        }
-        HibernateTemplate template = getHibernateTemplate();
-        return template.execute(new HibernateCallback() {
-            @Override
-            public Object doInHibernate(Session session) throws HibernateException, SQLException {
-                Query queryToRun = session.createQuery(query);
-                queryToRun.setMaxResults(1);
-                return queryToRun.uniqueResult();
-            }
-        });
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object runQueryForceUnique(final String query, final Object[] parameters) {
+		if (parameters != null) {
+			log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
+		} else {
+			log.trace("Query to database, {}]", query);
+		}
+		HibernateTemplate template = getHibernateTemplate();
+		return template.execute(new HibernateCallback() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+				Query queryToRun = session.createQuery(query);
+				queryToRun.setMaxResults(1);
+				return queryToRun.uniqueResult();
+			}
+		});
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public Object runQueryUnique(String query, Object[] parameters) throws DataAccessException {
-        if (parameters != null) {
-            log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
-        } else {
-            log.trace("Query to database, {}]", query);
-        }
-        Object object = DataAccessUtils.uniqueResult(getHibernateTemplate().find(query, parameters));
-        return object;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object runQueryUnique(String query, Object[] parameters) throws DataAccessException {
+		if (parameters != null) {
+			log.trace("Query to database, {}, with params [{}]", query, Arrays.asList(parameters));
+		} else {
+			log.trace("Query to database, {}]", query);
+		}
 
-    public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-        this.hibernateTemplate = hibernateTemplate;
-    }
+		Object object = DataAccessUtils.uniqueResult(getHibernateTemplate().find(query, parameters));
 
-    public HibernateTemplate getHibernateTemplate() {
-        return hibernateTemplate;
-    }
+		log.trace("Object unique [{}]", object);
+		return object;
+	}
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-        this.hibernateTemplate = new HibernateTemplate(sessionFactory);
-    }
+	public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
+		this.hibernateTemplate = hibernateTemplate;
+	}
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void deleteAllEntries(Collection entries) throws DataAccessException {
-        hibernateTemplate.deleteAll(entries);
+	public HibernateTemplate getHibernateTemplate() {
+		return hibernateTemplate;
+	}
 
-    }
+	public void setSessionFactory(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+		this.hibernateTemplate = new HibernateTemplate(sessionFactory);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void deleteAllEntries(Collection entries) throws DataAccessException {
+		hibernateTemplate.deleteAll(entries);
+
+	}
 
 }
