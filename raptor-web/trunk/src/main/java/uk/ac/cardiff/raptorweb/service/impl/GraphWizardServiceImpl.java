@@ -78,8 +78,9 @@ public class GraphWizardServiceImpl implements GraphWizardService {
     @Override
     public void setDefaultGraphFunctions(GraphWizardModel model) {
         for (GraphSet set : model.getGraphSets()) {
-            if (model.getStatisticFunctionTypes() != null && model.getStatisticFunctionTypes().size() > 0) {
-                model.setSelectedGraphSet(set);
+            if (set.getStatisticalUnitInformation()==null && model.getStatisticFunctionTypes() != null && model.getStatisticFunctionTypes().size() > 0) {
+            	log.debug("Setting default graph functions");
+                model.setSelectedGraphSet(set);          
                 set.setSelectedStatisticFunctionType(model.getStatisticFunctionTypes().get(0));
                 lookupStatisticalUnitInformation(model);
             }

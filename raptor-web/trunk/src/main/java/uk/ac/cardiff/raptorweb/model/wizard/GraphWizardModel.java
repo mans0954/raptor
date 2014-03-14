@@ -53,7 +53,7 @@ public class GraphWizardModel implements Serializable {
     public enum QualitativeTimeRange {
         PREVIOUS_MONTH("Last Month", TimeRange.PREVIOUSMONTH), LAST_WEEK("Today Minus One Week", TimeRange.LASTWEEK),
         LAST_MONTH("Today Minus One Month", TimeRange.LASTMONTH),
-        LAST_YEAR("Today Minus One Year", TimeRange.LASTYEAR), SCONUL_YEAR("This Sconul Year", TimeRange.SCONULYEAR);
+        LAST_YEAR("Today Minus One Year", TimeRange.LASTYEAR), SCONUL_YEAR("This Sconul Year", TimeRange.SCONULYEAR), TODAY("Today", TimeRange.TODAY);
 
         private final String friendlyName;
 
