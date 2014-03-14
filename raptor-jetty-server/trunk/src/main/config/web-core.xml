@@ -24,6 +24,10 @@
 
 	</bean>
     
+    <bean id="juspService" class="uk.ac.cardiff.raptorweb.service.impl.JuspServiceImpl">
+        
+    </bean>
+    
     <bean id="savedWizardReportsService" class="uk.ac.cardiff.raptorweb.service.impl.SavedWizardReportsServiceImpl">
         <property name="marshaller" ref="castorMarshaller" />
         <property name="unmarshaller" ref="castorMarshaller" />
@@ -174,6 +178,8 @@
                 <entry value="ShibbolethIdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"/>
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent"/>
                 <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent"/>
+                <entry value="Moonshot Radius" key="uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent" />
+                <entry value="Eduroam Radius" key="uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent" />
             </map>
         </property>
     
