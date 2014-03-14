@@ -16,7 +16,7 @@
                 <!--<ref bean="shibPrincipalAttributeAssociationDefinition"/>-->
                 <!--<ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>-->
                 <!--< ref bean="openAthensLaResourceCategoryAttributeAssociationDefinition"/>-->
-                <ref bean="shibResourceCategoryAttributeAssociationDefinition"/> <!--Do NOT disable this-->
+                <ref bean="resourceCategoryAttributeAssociationDefinition"/> <!--Do NOT disable this-->
              </list>
         </property>
     </bean>
@@ -45,12 +45,11 @@
     </bean>
 
     <!-- Association policies to mark resources as internal or external. Do NOT disable this-->
-    <bean id="shibResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
-        <property name="definiationName"><value>Shib Resource Category Definition</value></property>
+    <bean id="resourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
+        <property name="definiationName"><value>Resource Category Definition</value></property>
         <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
         <property name="enabled"><value>true</value></property>
         <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>
-        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
     </bean>
 
 
