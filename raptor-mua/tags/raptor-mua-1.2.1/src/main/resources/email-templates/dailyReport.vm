@@ -1,0 +1,45 @@
+#*
+ * Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *#
+<html>
+<body>
+<h2>Raptor MUA Daily Report [${today}]</h2>
+<div>
+
+<h3>MUA Information and Status</h3>
+<p> 
+<ul>
+<li>MUA Version - ${muaVersion}</li>
+<li>MUA Uptime - ${muaUptime}</li>
+<li>Events processed since started  - ${eventsSinceStarted}</li>
+<ul>
+</p>
+</div>
+
+<div>
+<h3>Event Storage Statistics</h3>
+<p>
+The MUA has persisted the following events during the time periods specified:
+</p>
+<ol>
+<li>Today - ${todayEventStorageStats} </li>
+<li>Yesterday - ${yesterdayEventStorageStats} </li>
+<li> This Week - ${lastWeekEventStorageStats} </li>
+<li> This Year - ${thisYearEventStorageStats} </li>
+</ol>
+</div>
+</body>
+
+</html>
