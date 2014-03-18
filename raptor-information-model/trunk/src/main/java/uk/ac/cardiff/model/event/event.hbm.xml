@@ -70,7 +70,7 @@
         <property name="responseBinding" column="responseBinding" type="string" />
         <property name="requestBinding" column="requestBinding" type="string" />
         <property name="attributes" column="releasedattributes" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType"
-            length="400" />
+            length="600" />
         <property name="assertions" column="assertionid" type="uk.ac.cardiff.model.hibernate.types.CommaDelimStringToListUserType" />
         <property name="nameIdentifier" column="nameIdentifier" type="string" />
         <property name="responseId" column="responseId" type="string" />
