@@ -1,0 +1,37 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+
+<!--  this is important, we ignore the eventTime, instead passing the eventTime in a simpler Java Date
+property using the getDate and setDate methods -->
+<mappings xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<mapping>
+		<property name="endTimeAsDate" ignore="true"/>
+		<property name="startTimeAsDate" ignore="true"/>
+		<property name="endTimeAsFormattedString" ignore="true"/>
+		<property name="startTimeAsFormattedString" ignore="true"/>
+		<!-- <property name="startTimeAsJavaDate" ignore="true"/> -->
+		<property name="endTimeHour" ignore="true"/>
+		<property name="endTimeMinute" ignore="true"/>
+		<property name="endTimeSecond" ignore="true"/>
+		<property name="startTimeHour" ignore="true"/>
+		<property name="startTimeMinute" ignore="true"/>
+		<property name="startTimeSecond" ignore="true"/>
+        <property name="eventTypeString" ignore="true"/>
+	</mapping>
+</mappings>
