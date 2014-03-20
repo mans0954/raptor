@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>uk.ac.cardiff.raptor</groupId>
 	<artifactId>raptor-information-model</artifactId>
-	<version>1.1.4-SNAPSHOT</version>
+	<version>1.1.4</version>
 
 	<dependencies>
 		<dependency>
@@ -38,8 +38,8 @@
 	</dependencies>
 
 	<scm>
-		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/trunk</developerConnection>
-		<url>http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model</url>
+		<developerConnection>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/tags/raptor-information-model-1.1.4</developerConnection>
+		<url>scm:svn:http://iam.cf.ac.uk/repos/RAPTOR/raptor-information-model/tags/raptor-information-model-1.1.4</url>
 	</scm>
 	<distributionManagement>
 		<repository>
