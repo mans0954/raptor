@@ -1,6 +1,6 @@
 Name:          raptor-server
 Version:       1.0.0
-Release:       12
+Release:       13
 Summary:       MUA and Web components of the Raptor Software Suite
 Group:         Productivity/Other
 License:       Apache 2.0
@@ -11,8 +11,8 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-build
 
 BuildRequires: unzip
 Requires:      java >= 1.6.0
-Requires:      raptor-mua = 1.1.4
-Requires:      raptor-web = 1.1.0
+Requires:      raptor-mua = 1.2.0
+Requires:      raptor-web = 1.2.0
 Conflicts:     raptor-all
 
 
@@ -90,6 +90,9 @@ fi
 /opt/raptor/server/version.txt
 
 %changelog
+* Mon Jul 8 2013  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-13
+- Bumped raptor-mua, and raptor-web to v1.2.0
+
 * Wed Sep 12 2012  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-12
 - Bumped raptor-mua to v1.1.4.
 
