@@ -1,6 +1,6 @@
 Name:          raptor-all
 Version:       1.0.0
-Release:       3
+Release:       4
 Summary:       All components of Raptor Software Suite
 Group:         Productivity/Other
 License:       Apache 2.0
@@ -12,7 +12,7 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-build
 BuildRequires: unzip
 Requires:      java >= 1.6.0
 Requires:      raptor-ica = 0.2.0
-Requires:      raptor-mua = 0.2.0
+Requires:      raptor-mua = 0.2.1
 Requires:      raptor-web = 0.2.0
 
 
@@ -94,6 +94,9 @@ fi
 
 
 %changelog
+* Wed Sep 28 2011  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-4
+- Bumped raptor-mua to v0.2.1
+
 * Sat Sep 17 2011  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-3
 - Bumped raptor-ica, raptor-mua, and raptor-web to v0.2.0
 
