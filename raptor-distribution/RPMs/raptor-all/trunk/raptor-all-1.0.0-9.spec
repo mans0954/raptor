@@ -1,6 +1,6 @@
 Name:          raptor-all
 Version:       1.0.0
-Release:       8
+Release:       9
 Summary:       All components of Raptor Software Suite
 Group:         Productivity/Other
 License:       Apache 2.0
@@ -94,6 +94,9 @@ fi
 
 
 %changelog
+* Sun Aug 19 2012  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-9
+- Rerelease of v1.1 (containing v1.1.0, v1.1.1, v1.1.0)
+
 * Fri Aug 10 2012  Rhys Smith <smith@cardiff.ac.uk>  1.0.0-8
 - Bumped raptor-mua to v1.1.0
 
