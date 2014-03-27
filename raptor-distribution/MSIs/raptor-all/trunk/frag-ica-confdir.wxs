@@ -4,22 +4,6 @@
     <Fragment>
 
         <!--
-            #########################################
-            # Rename all files that we will overwrite
-            #########################################
-        -->
-
-        <CustomAction Id='SetCmdPathIca' Property='CmdPathIca' Value='[SystemFolder]cmd.exe' />
-        <!--<CustomAction Id='RunCmdMoveX' Property='CmdPathIca' ExeCommand='/c ren &quot;[RAPTORICADIR]conf\X.xml&quot; X.xml.vx.x.x.autosaved' />-->
-
-        <InstallExecuteSequence>
-            <Custom Action='SetCmdPathIca' After='SetUNINSTALLING' />
-            <!--<Custom Action='RunCmdMoveX' After='SetCmdPathIca'>UPGRADING</Custom>-->
-        </InstallExecuteSequence>
-
-
-
-        <!--
             ############
             # The Files!
             ############

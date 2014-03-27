@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="RAPTORWEBDIR">
@@ -9,14 +9,41 @@
                 <Component Id="cmpA5ADE38F8EC17CE0E5099259F9138274" Guid="*">
                     <File Id="fil75C0B769FD097762BA9BE39DF1A5594D" KeyPath="yes" Source="source\web\lib\core-3.1.1.jar" />
                 </Component>
+                <Component Id="cmp55EF091DA5AF21E554D6DA19D2454186" Guid="*">
+                    <File Id="fil4FC4B6005311B71357D71F6BDEC02F0F" KeyPath="yes" Source="source\web\lib\javax.servlet.jsp.jstl-1.2.1.jar" />
+                </Component>
+                <Component Id="cmp962BDEFB12B00646487CEB7AA182EFC6" Guid="*">
+                    <File Id="fil9EE8D5C6E29FA27A8AE7BC87613ACAB5" KeyPath="yes" Source="source\web\lib\javax.servlet.jsp.jstl-api-1.2.1.jar" />
+                </Component>
                 <Component Id="cmpFF40B4A151926281F66F7B4230F8F0FD" Guid="*">
                     <File Id="filC8E815676ACE8D3E43D5E3147DD6E5EE" KeyPath="yes" Source="source\web\lib\jcl-over-slf4j-1.6.1.jar" />
                 </Component>
-                <Component Id="cmpAD2B0A264B6B3ED00F135BB4C9A40615" Guid="*">
-                    <File Id="fil2797990509F50113394863306E3D36ED" KeyPath="yes" Source="source\web\lib\jetty-6.1.25.jar" />
+                <Component Id="cmp90F88238F90328D5B7F07F9D99DEBA5F" Guid="*">
+                    <File Id="fil64BCA183C9E8D3A8C77C547682EF9F9F" KeyPath="yes" Source="source\web\lib\jetty-continuation-8.1.0.RC5.jar" />
                 </Component>
-                <Component Id="cmp0F861D4428C03122772FC65A934276E4" Guid="*">
-                    <File Id="filD8D01D3E09C6C73EC65C76F54F37A6AA" KeyPath="yes" Source="source\web\lib\jetty-util-6.1.25.jar" />
+                <Component Id="cmpE026C3B999634AF851951808265EFE31" Guid="*">
+                    <File Id="filD17F3AB76724A1E648AC8C8BD87C08CC" KeyPath="yes" Source="source\web\lib\jetty-http-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmp4068C86E2D24E41859BD21E7F9EB462E" Guid="*">
+                    <File Id="fil21AEABBC5DAD605A1BBA989BFA93FE0B" KeyPath="yes" Source="source\web\lib\jetty-io-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmp8CFDBF9945D46E048AE5EFB429D8DCD8" Guid="*">
+                    <File Id="fil368B445BD5C3922F33B2643B0026D616" KeyPath="yes" Source="source\web\lib\jetty-security-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmpD6EE74A56689D7952A3BB2ABB030441E" Guid="*">
+                    <File Id="fil1E82D53F4FD2011686C113D72C4F0680" KeyPath="yes" Source="source\web\lib\jetty-server-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmp14AFA634C8E28CFFF3C9CA54D029DE1B" Guid="*">
+                    <File Id="fil9F0AACAEE8D97376EF784004ADC5B6CC" KeyPath="yes" Source="source\web\lib\jetty-servlet-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmp4EA78A60AFAA6C974535AFF2DB757395" Guid="*">
+                    <File Id="fil8B14626FAA2A37FAB30A50696862611F" KeyPath="yes" Source="source\web\lib\jetty-util-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmpA839C49F4E21C863E58AE3E4BAC62AA6" Guid="*">
+                    <File Id="fil631E0A490D5B6932CCEDA3B03C9887D1" KeyPath="yes" Source="source\web\lib\jetty-webapp-8.1.0.RC5.jar" />
+                </Component>
+                <Component Id="cmp983BF5E715F7053672FDA4F4F01D5335" Guid="*">
+                    <File Id="filA9E5028EBD6B2BF666CDFE99755FCC82" KeyPath="yes" Source="source\web\lib\jetty-xml-8.1.0.RC5.jar" />
                 </Component>
                 <Component Id="cmp72C9FECCB62733EF0151D5671D45A657" Guid="*">
                     <File Id="fil1F214300CC8D666C4E41910F760ABBBF" KeyPath="yes" Source="source\web\lib\jsp-2.1-glassfish-9.1.02.B04.p0.jar" />
@@ -30,6 +57,9 @@
                 <Component Id="cmpC096EDBA925BA9E5316CD60745DA59D4" Guid="*">
                     <File Id="filEB7549D5C164802C5492A8057BDAE0E3" KeyPath="yes" Source="source\web\lib\jstl-1.2.jar" />
                 </Component>
+                <Component Id="cmpE710B1E7D9140A3566F5ABD458714504" Guid="*">
+                    <File Id="fil68C55837B7DBA264486590733A2B7476" KeyPath="yes" Source="source\web\lib\jstl-api-1.2.jar" />
+                </Component>
                 <Component Id="cmpA57D7868123363525662AECED02EB5B2" Guid="*">
                     <File Id="fil59B08310A0063B64E933E44C5B9D1703" KeyPath="yes" Source="source\web\lib\jul-to-slf4j-1.6.1.jar" />
                 </Component>
@@ -42,11 +72,17 @@
                 <Component Id="cmpB739BE4B0FF8D04E8806925490633F08" Guid="*">
                     <File Id="fil1C5BB60EC21886D8525493FC07ACA8A0" KeyPath="yes" Source="source\web\lib\logback-core-0.9.27.jar" />
                 </Component>
-                <Component Id="cmp5844DC4CE31B7543EEEC593C7A7EA130" Guid="*">
-                    <File Id="fil554E4110713F67AB79C81273DEF8A6BA" KeyPath="yes" Source="source\web\lib\servlet-api-2.5-20081211.jar" />
+                <Component Id="cmpF0756ED1A9573F10CED44FDBFAC6F53D" Guid="*">
+                    <File Id="filB9DBDCBAC98471DDA843864C10DBE9E6" KeyPath="yes" Source="source\web\lib\servlet-api-2.5.jar" />
+                </Component>
+                <Component Id="cmp5F51D39B9A53DA7C39D7657A8C09DA62" Guid="*">
+                    <File Id="fil4B109CFF222C1594699218345260CA8A" KeyPath="yes" Source="source\web\lib\servlet-api-3.0.20100224.jar" />
                 </Component>
                 <Component Id="cmp96622340BE617755A6445CD8C0DA0973" Guid="*">
                     <File Id="filAE1F97DCEE60BC8079B5B1D94870682C" KeyPath="yes" Source="source\web\lib\slf4j-api-1.6.1.jar" />
+                </Component>
+                <Component Id="cmp4FFEFADF5E44A76FB0AD883256DDD33D" Guid="*">
+                    <File Id="fil0BAAB524E22327EC2225EF1BABCACC16" KeyPath="yes" Source="source\web\lib\wrapper-windows-x86-32.dll" />
                 </Component>
                 <Component Id="cmpC9DB8DCA1C6C8107599A0BFBE16FFDE4" Guid="*">
                     <File Id="fil0015F84B3D4A904B3A29161C004317AD" KeyPath="yes" Source="source\web\lib\wrapper.jar" />
@@ -58,19 +94,31 @@
         <ComponentGroup Id="cgrRaptorWebLib">
             <ComponentRef Id="cmp765AEF9199DA5E0A892C4D960C89450E" />
             <ComponentRef Id="cmpA5ADE38F8EC17CE0E5099259F9138274" />
+            <ComponentRef Id="cmp55EF091DA5AF21E554D6DA19D2454186" />
+            <ComponentRef Id="cmp962BDEFB12B00646487CEB7AA182EFC6" />
             <ComponentRef Id="cmpFF40B4A151926281F66F7B4230F8F0FD" />
-            <ComponentRef Id="cmpAD2B0A264B6B3ED00F135BB4C9A40615" />
-            <ComponentRef Id="cmp0F861D4428C03122772FC65A934276E4" />
+            <ComponentRef Id="cmp90F88238F90328D5B7F07F9D99DEBA5F" />
+            <ComponentRef Id="cmpE026C3B999634AF851951808265EFE31" />
+            <ComponentRef Id="cmp4068C86E2D24E41859BD21E7F9EB462E" />
+            <ComponentRef Id="cmp8CFDBF9945D46E048AE5EFB429D8DCD8" />
+            <ComponentRef Id="cmpD6EE74A56689D7952A3BB2ABB030441E" />
+            <ComponentRef Id="cmp14AFA634C8E28CFFF3C9CA54D029DE1B" />
+            <ComponentRef Id="cmp4EA78A60AFAA6C974535AFF2DB757395" />
+            <ComponentRef Id="cmpA839C49F4E21C863E58AE3E4BAC62AA6" />
+            <ComponentRef Id="cmp983BF5E715F7053672FDA4F4F01D5335" />
             <ComponentRef Id="cmp72C9FECCB62733EF0151D5671D45A657" />
             <ComponentRef Id="cmp5D3730686A2D098E7E79BA5360FD07D1" />
             <ComponentRef Id="cmpD1AE3FEECC12473AF26A078E8A0AF26E" />
             <ComponentRef Id="cmpC096EDBA925BA9E5316CD60745DA59D4" />
+            <ComponentRef Id="cmpE710B1E7D9140A3566F5ABD458714504" />
             <ComponentRef Id="cmpA57D7868123363525662AECED02EB5B2" />
             <ComponentRef Id="cmpE70148592CE43A7D2002D2ECBC964791" />
             <ComponentRef Id="cmpF36D6C7A8117F5602C5C7B74DBE01109" />
             <ComponentRef Id="cmpB739BE4B0FF8D04E8806925490633F08" />
-            <ComponentRef Id="cmp5844DC4CE31B7543EEEC593C7A7EA130" />
+            <ComponentRef Id="cmpF0756ED1A9573F10CED44FDBFAC6F53D" />
+            <ComponentRef Id="cmp5F51D39B9A53DA7C39D7657A8C09DA62" />
             <ComponentRef Id="cmp96622340BE617755A6445CD8C0DA0973" />
+            <ComponentRef Id="cmp4FFEFADF5E44A76FB0AD883256DDD33D" />
             <ComponentRef Id="cmpC9DB8DCA1C6C8107599A0BFBE16FFDE4" />
         </ComponentGroup>
     </Fragment>

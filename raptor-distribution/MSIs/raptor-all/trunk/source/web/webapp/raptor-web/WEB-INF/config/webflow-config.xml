@@ -37,6 +37,8 @@
             id="globalflow" />
         <webflow:flow-location path="/WEB-INF/flows/reports/main-flow.xml"
             id="reports" />
+            <webflow:flow-location path="/WEB-INF/flows/reports/graph-wizard-subflow.xml"
+            id="report-wizard-subflow" />
     </webflow:flow-registry>
 
     <!-- Configures the Spring Web Flow JSF integration view-factory-creator="mvcViewFactoryCreator"-->
