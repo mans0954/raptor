@@ -30,7 +30,7 @@
 	<ui:define name="content">
 
 		<rich:tabPanel id="setupTabPanel" height="450"
-			selectedTab="aggregatorSetup" switchType="client">
+			selectedTab="aggregatorSetup" switchType="server">
 
 			<rich:tab name="aggregatorSetup" label="Aggregator Setup">
 
@@ -134,7 +134,7 @@
 
 					<h:form id="resourceClassificationForm">
 						<rich:scrollableDataTable
-							value="#{setupService.attachedCapabilities.resourceMetadata}"
+							value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.resourceMetadata}"
 							bandingInterval="2" height="400px" banding="row" var="resource"
 							width="570px">
 
@@ -278,27 +278,27 @@
 							<h:panelGrid columns="2"><h:outputText style="font-weight:bold;"
                                     value="MUA Version: " />
                                 <h:outputText
-                                    value="#{setupService.attachedCapabilities.muaVersion}" />
+                                    value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.muaVersion}" />
 								<h:outputText style="font-weight:bold;"
 									value="Organisation Name: " />
 								<h:outputText
-									value="#{setupService.attachedCapabilities.metadata.organisationName}" />
+									value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.metadata.organisationName}" />
 								<h:outputText style="font-weight:bold;" value="Contact:  " />
 								<h:outputText
-									value="#{setupService.attachedCapabilities.metadata.contactEmail}" />
+									value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.metadata.contactEmail}" />
 								<h:outputText style="font-weight:bold;" value="Endpoint URL: " />
 								<h:outputText
 									value=" #{setupService.currentlyAttached.serviceEndpoint}" />
 								<h:outputText style="font-weight:bold;"
 									value="Total Stored Events: " />
 								<h:outputText
-									value="#{setupService.attachedCapabilities.numberOfAuthenticationsStored}" />
+									value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.numberOfAuthenticationsStored}" />
 								<h:outputText style="font-weight:bold;" value="Earilest Event: " />
 								<h:outputText
-									value="#{setupService.attachedCapabilities.earliestEventTime}" />
+									value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.earliestEventTime}" />
 								<h:outputText style="font-weight:bold;" value="Latest Event: " />
 								<h:outputText
-									value="#{setupService.attachedCapabilities.latestEventTime}" />
+									value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.latestEventTime}" />
 
 							</h:panelGrid>
 						</center>
@@ -307,7 +307,7 @@
 					<rich:layoutPanel position="right">
 						<center>
 							<rich:dataTable
-								value="#{setupService.attachedCapabilities.eventsPerType}"
+								value="#{flowScope.websession.setupmodel.selectEndpointCapabilities.eventsPerType}"
 								bandingInterval="2" banding="row" var="eventInfo">
 								<rich:column>
 									<f:facet name="header">
