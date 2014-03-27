@@ -48,7 +48,7 @@
             <ref local="icaReleaseJobDetail" />
         </property>
         <property name="startDelay" value="10000" />
-        <property name="repeatInterval" value="10000" />
+        <property name="repeatInterval" value="2628000000" />
     </bean>
 
     <bean id="icaReleaseJobDetail"

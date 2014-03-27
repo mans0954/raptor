@@ -7,7 +7,7 @@
                     <File Id='filRaptorMuaBinMuaBat' KeyPath='yes' Source='source\mua\bin\mua.bat' />
                 </Component>
                 <Component Id='cmpRaptorMuaBinWrapperExe' Guid='*'>
-                    <File Id='filRaptorMuaBinWrapperExe' KeyPath='yes' Source='source\mua\bin\wrapper-windows-x86-32.exe' />
+                    <File Id='filRaptorMuaBinWrapperExe' KeyPath='yes' Source='source\mua\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorMuaBinWrapperConf' Guid='*'>
                     <File Id='filRaptorMuaBinWrapperConf' KeyPath='yes' Source='source\mua\bin\wrapper.conf' />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="RAPTORMUADIR">
@@ -141,9 +141,6 @@
                 <Component Id="cmpBEFD269AF12ED7DD84EAC336ACB27778" Guid="*">
                     <File Id="fil97E75013A35753DDCF7575D34D792880" KeyPath="yes" Source="source\mua\lib\geronimo-jms_1.1_spec-1.1.1.jar" />
                 </Component>
-                <Component Id="cmp70C87815C04295733C93C7615D5DA571" Guid="*">
-                    <File Id="filBA549B45EA873F4E4A5BB651A402EBBD" KeyPath="yes" Source="source\mua\lib\geronimo-servlet_2.5_spec-1.2.jar" />
-                </Component>
                 <Component Id="cmpAF46DA28785796444149A657D4591DBD" Guid="*">
                     <File Id="fil1228B89BAE7C14160AEBD211D72F0C56" KeyPath="yes" Source="source\mua\lib\geronimo-stax-api_1.0_spec-1.0.1.jar" />
                 </Component>
@@ -158,6 +155,21 @@
                 </Component>
                 <Component Id="cmpEF9BA2E3ECBACD98C040285E7486BB3D" Guid="*">
                     <File Id="fil18AFAD469B1A222D82F9C486DF2EF5C1" KeyPath="yes" Source="source\mua\lib\icu4j-2.6.1.jar" />
+                </Component>
+                <Component Id="cmpF80B4B97B6A43BD279E62C4125207DA5" Guid="*">
+                    <File Id="fil5EBC455419C7714E60D87D8A9C0645CE" KeyPath="yes" Source="source\mua\lib\jackson-core-asl-1.9.11.jar" />
+                </Component>
+                <Component Id="cmp6D35E6EB70B3206B389CCD90D46458E1" Guid="*">
+                    <File Id="fil61306B688A2245A065265C5E9D561631" KeyPath="yes" Source="source\mua\lib\jackson-jaxrs-1.9.2.jar" />
+                </Component>
+                <Component Id="cmp69C58561C58D185C5F2119E733302F05" Guid="*">
+                    <File Id="filC32C7C01F75C42BE11F43F6AC5C978A9" KeyPath="yes" Source="source\mua\lib\jackson-mapper-asl-1.9.11.jar" />
+                </Component>
+                <Component Id="cmpFD5F275453764D8BDC37E12D11AB6725" Guid="*">
+                    <File Id="fil7853D4E9C1735021D210200CB2D7DE47" KeyPath="yes" Source="source\mua\lib\jackson-xc-1.9.2.jar" />
+                </Component>
+                <Component Id="cmp1B4F9ADFDCE5E93CB23EA35C2FC69075" Guid="*">
+                    <File Id="fil5044CBCA0B6A918D341CFEFF78AB93A4" KeyPath="yes" Source="source\mua\lib\javax.servlet-3.0.0.v201112011016.jar" />
                 </Component>
                 <Component Id="cmpDF7CBBD796E7159184CA3F30512B1169" Guid="*">
                     <File Id="filDCA651EDF1159FCC48BFC68F32923380" KeyPath="yes" Source="source\mua\lib\jaxb-api-2.1.jar" />
@@ -180,14 +192,44 @@
                 <Component Id="cmp497ECA3BE3D014D76EEC761BCBCE6B25" Guid="*">
                     <File Id="fil03E332F8F4EF722B89954C85DAC73596" KeyPath="yes" Source="source\mua\lib\jcommander-1.12.jar" />
                 </Component>
+                <Component Id="cmpEBC7A033B5FE08DAC29622E5781D35D9" Guid="*">
+                    <File Id="filEFFC7D9FB68055E9B3ECE1289F0791BF" KeyPath="yes" Source="source\mua\lib\jersey-client-1.16.jar" />
+                </Component>
+                <Component Id="cmp04AE880C57F23A0FEFA8ED3D5995F936" Guid="*">
+                    <File Id="fil272FDF740BABAD49A857CC2559B17E28" KeyPath="yes" Source="source\mua\lib\jersey-core-1.16.jar" />
+                </Component>
+                <Component Id="cmp9767B39281E0A2E1943DD5C9B22EA354" Guid="*">
+                    <File Id="fil1C95DE05755028472421420B53C08644" KeyPath="yes" Source="source\mua\lib\jersey-json-1.16.jar" />
+                </Component>
                 <Component Id="cmpD3C28E2E476FA744F460E51023C1C262" Guid="*">
                     <File Id="fil6FB63D6C09C6C2D9EB23DBC745023C6F" KeyPath="yes" Source="source\mua\lib\jettison-1.2.jar" />
                 </Component>
-                <Component Id="cmp0AB40F33F28867CDA5175E6DF5C12F82" Guid="*">
-                    <File Id="fil7DD9E42EA97FF996A1FF62E8F31838B2" KeyPath="yes" Source="source\mua\lib\jetty-6.1.23.jar" />
+                <Component Id="cmp9D3AF65D47BED25929AD9928C0E67A7F" Guid="*">
+                    <File Id="fil616897FA6A11854E372BB3453A43F6EC" KeyPath="yes" Source="source\mua\lib\jetty-continuation-8.1.10.v20130312.jar" />
                 </Component>
-                <Component Id="cmp1AD15558ADC41B69A40344507B11DA43" Guid="*">
-                    <File Id="filFECC260AD36CEB07B0B6114C11BABD96" KeyPath="yes" Source="source\mua\lib\jetty-util-6.1.23.jar" />
+                <Component Id="cmp67A92893698AD2A17FC5835D99D8F8A2" Guid="*">
+                    <File Id="filC1B41055686C4218B70BF53341078939" KeyPath="yes" Source="source\mua\lib\jetty-http-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmpF3F86C4B1202093302022895D6283EB7" Guid="*">
+                    <File Id="fil213281BC893D032238186262F4545DAD" KeyPath="yes" Source="source\mua\lib\jetty-io-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmp4952EEC7F0F5D4572E13A14BD82CBE7C" Guid="*">
+                    <File Id="fil74CEBBA8CA1F9CA9E1874EEE2C1C2B50" KeyPath="yes" Source="source\mua\lib\jetty-security-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmpA3E01DF1B044F3734C8FC5F042D2A7AA" Guid="*">
+                    <File Id="filAA13D9486A1438746BC960548CC7AE3F" KeyPath="yes" Source="source\mua\lib\jetty-server-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmp91F641283C9B211F7FC7FEC5E32EE6A5" Guid="*">
+                    <File Id="fil73BE38C672F37528E190839EE38D1BCC" KeyPath="yes" Source="source\mua\lib\jetty-servlet-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmpED08AF4B20E323A3C2CA15EFE8459883" Guid="*">
+                    <File Id="fil9756170F1F8A9D127FE5E9EE58B0EF4D" KeyPath="yes" Source="source\mua\lib\jetty-util-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmpE2ABA1DAEB617569402B7A9390BD58E5" Guid="*">
+                    <File Id="fil093FAD3879740CA3A2BD7B6B54C0ED8E" KeyPath="yes" Source="source\mua\lib\jetty-webapp-8.1.10.v20130312.jar" />
+                </Component>
+                <Component Id="cmp01DC5E932A5953F59C35C44AFACEEA3D" Guid="*">
+                    <File Id="fil2CCBB0AF20EC52C6918EE9BC0EBF75B6" KeyPath="yes" Source="source\mua\lib\jetty-xml-8.1.10.v20130312.jar" />
                 </Component>
                 <Component Id="cmpE993A5C3BC400319E303531980057682" Guid="*">
                     <File Id="fil98054D68166DB267E6E3688426B240F8" KeyPath="yes" Source="source\mua\lib\joda-time-1.6.jar" />
@@ -261,6 +303,9 @@
                 <Component Id="cmp4D6297515431AA4440B2836FE71687B4" Guid="*">
                     <File Id="filFCEF96AD69472CDF415581F90443FC3A" KeyPath="yes" Source="source\mua\lib\not-yet-commons-ssl-0.3.9.jar" />
                 </Component>
+                <Component Id="cmp11F4992E8ACC3E64C7A7E45224981A59" Guid="*">
+                    <File Id="filAF6AFF709DF2D670429A8CF0FBE2F862" KeyPath="yes" Source="source\mua\lib\ojdbc-6.jar" />
+                </Component>
                 <Component Id="cmpC197781FF92B3190939ED64F293F8F68" Guid="*">
                     <File Id="filE3FA29877316ED2331EF3E2384567857" KeyPath="yes" Source="source\mua\lib\opensaml-2.4.0.jar" />
                 </Component>
@@ -282,14 +327,14 @@
                 <Component Id="cmp59B8D543587394FDCEC6854AAD0F8CEB" Guid="*">
                     <File Id="fil5FA543379BC30DB8612C7A2FDB310293" KeyPath="yes" Source="source\mua\lib\quartz-1.8.4.jar" />
                 </Component>
-                <Component Id="cmp32B56E23D29286F0A889AFA26C232840" Guid="*">
-                    <File Id="fil4DC139D5802EFC3B71FC89CFE64248F9" KeyPath="yes" Source="source\mua\lib\raptor-client-1.1.4.jar" />
+                <Component Id="cmpCF899422FA3616931E0DB0F875505C09" Guid="*">
+                    <File Id="fil2A5CFD57E450AA0563E4A39CE8C21F57" KeyPath="yes" Source="source\mua\lib\raptor-client-1.1.5.jar" />
                 </Component>
-                <Component Id="cmp76F921F06C32C0679B275FAC09406A25" Guid="*">
-                    <File Id="filD643A4896FD3A70063C338FA00DEA962" KeyPath="yes" Source="source\mua\lib\raptor-information-model-1.1.2.jar" />
+                <Component Id="cmpD2EB635F3B0F307D4C2CCA8EEBF2F90C" Guid="*">
+                    <File Id="fil797B947BBAAC4A8B1EC2119AF4E74FE4" KeyPath="yes" Source="source\mua\lib\raptor-information-model-1.1.3.jar" />
                 </Component>
-                <Component Id="cmp1991F0DA4FA94A5F27006BC1ED4B8906" Guid="*">
-                    <File Id="filC3DCD7B72650567A28D205C587B097A0" KeyPath="yes" Source="source\mua\lib\raptor-parse-1.1.1.jar" />
+                <Component Id="cmp2AA06CABA4B238B82A7C70FD473BF5FF" Guid="*">
+                    <File Id="fil44B06ABB678F1BFC2D566658DADB9C6E" KeyPath="yes" Source="source\mua\lib\raptor-parse-1.1.2.jar" />
                 </Component>
                 <Component Id="cmp4723F5AA79924F806CCE5754252DC0BC" Guid="*">
                     <File Id="filB240A17EEEF9B95C8DC23C9E77947A0D" KeyPath="yes" Source="source\mua\lib\resolver-2.10.0.jar" />
@@ -305,9 +350,6 @@
                 </Component>
                 <Component Id="cmpCBE960AE90DB3F2EB216DB9FB614ABCC" Guid="*">
                     <File Id="fil6EF440E8D4674D61EA132027032FAECE" KeyPath="yes" Source="source\mua\lib\serializer-2.7.1.jar" />
-                </Component>
-                <Component Id="cmp37E49F7332A0005C1B5EECB9678D92B4" Guid="*">
-                    <File Id="fil3CBFCFFC4A611C34807D83FF39ED8BBD" KeyPath="yes" Source="source\mua\lib\servlet-api-2.5-20081211.jar" />
                 </Component>
                 <Component Id="cmp1C703D80FE709CF51A880D224E83C77A" Guid="*">
                     <File Id="filF87A32A557598C2FB814C58E822D4257" KeyPath="yes" Source="source\mua\lib\slf4j-api-1.6.1.jar" />
@@ -354,9 +396,6 @@
                 <Component Id="cmpA0C3F1518A85D3E181A7157252A7A0F2" Guid="*">
                     <File Id="fil71109291F2553A0E194A36FA9C01D953" KeyPath="yes" Source="source\mua\lib\spring-webmvc-3.0.3.RELEASE.jar" />
                 </Component>
-                <Component Id="cmp8712285AB53A09DB7DC9DAAB3626992A" Guid="*">
-                    <File Id="fil1A7187A95A6DC3F15CDAD9578EA9485D" KeyPath="yes" Source="source\mua\lib\start-6.1.23.jar" />
-                </Component>
                 <Component Id="cmpE202EBF912D05068FA10A431D6D1C6E8" Guid="*">
                     <File Id="fil69BFA5ECF1CEE130AA1AC1682BB1A45F" KeyPath="yes" Source="source\mua\lib\testng-6.3.1.jar" />
                 </Component>
@@ -368,6 +407,9 @@
                 </Component>
                 <Component Id="cmpDE409A606E5B5AEABB5D4B6BFF05CE29" Guid="*">
                     <File Id="filF0A9F197C86679152E00AFA964414058" KeyPath="yes" Source="source\mua\lib\wagon-provider-api-1.0-beta-2.jar" />
+                </Component>
+                <Component Id="cmp6B8058881EFA1F0A59C5CC2ADF9F7AD8" Guid="*">
+                    <File Id="fil89CC5E854AE3249D222E0DA993FCE36A" KeyPath="yes" Source="source\mua\lib\wrapper-windows-x86-32.dll" />
                 </Component>
                 <Component Id="cmp9EC581054B75BEE3ECF6FB3CF23A2CA2" Guid="*">
                     <File Id="fil166D4B6325475FE422E907A962C69DD7" KeyPath="yes" Source="source\mua\lib\wrapper.jar" />
@@ -468,12 +510,16 @@
             <ComponentRef Id="cmp8ABCC398259BE5912B533B514FF4AF5B" />
             <ComponentRef Id="cmp51D690975BFEC0413DF22D33133FA5CC" />
             <ComponentRef Id="cmpBEFD269AF12ED7DD84EAC336ACB27778" />
-            <ComponentRef Id="cmp70C87815C04295733C93C7615D5DA571" />
             <ComponentRef Id="cmpAF46DA28785796444149A657D4591DBD" />
             <ComponentRef Id="cmp43CB24BFF0759AAC3B267F3A75172EE6" />
             <ComponentRef Id="cmpABE3BE3A79E0F191131D8EE89C7C87EF" />
             <ComponentRef Id="cmpE80E7DAA69DB332B8C580D1C2FDF3EAB" />
             <ComponentRef Id="cmpEF9BA2E3ECBACD98C040285E7486BB3D" />
+            <ComponentRef Id="cmpF80B4B97B6A43BD279E62C4125207DA5" />
+            <ComponentRef Id="cmp6D35E6EB70B3206B389CCD90D46458E1" />
+            <ComponentRef Id="cmp69C58561C58D185C5F2119E733302F05" />
+            <ComponentRef Id="cmpFD5F275453764D8BDC37E12D11AB6725" />
+            <ComponentRef Id="cmp1B4F9ADFDCE5E93CB23EA35C2FC69075" />
             <ComponentRef Id="cmpDF7CBBD796E7159184CA3F30512B1169" />
             <ComponentRef Id="cmp538B72A04D6D03EEF1F0147FF99A47FE" />
             <ComponentRef Id="cmp916AFB7003A19D44EC01372D422824DE" />
@@ -481,9 +527,19 @@
             <ComponentRef Id="cmpB45FA5AF7BBD7AEB2BFA0AE782E382C5" />
             <ComponentRef Id="cmpBAFB9100FDE3BD738389370958ACF632" />
             <ComponentRef Id="cmp497ECA3BE3D014D76EEC761BCBCE6B25" />
+            <ComponentRef Id="cmpEBC7A033B5FE08DAC29622E5781D35D9" />
+            <ComponentRef Id="cmp04AE880C57F23A0FEFA8ED3D5995F936" />
+            <ComponentRef Id="cmp9767B39281E0A2E1943DD5C9B22EA354" />
             <ComponentRef Id="cmpD3C28E2E476FA744F460E51023C1C262" />
-            <ComponentRef Id="cmp0AB40F33F28867CDA5175E6DF5C12F82" />
-            <ComponentRef Id="cmp1AD15558ADC41B69A40344507B11DA43" />
+            <ComponentRef Id="cmp9D3AF65D47BED25929AD9928C0E67A7F" />
+            <ComponentRef Id="cmp67A92893698AD2A17FC5835D99D8F8A2" />
+            <ComponentRef Id="cmpF3F86C4B1202093302022895D6283EB7" />
+            <ComponentRef Id="cmp4952EEC7F0F5D4572E13A14BD82CBE7C" />
+            <ComponentRef Id="cmpA3E01DF1B044F3734C8FC5F042D2A7AA" />
+            <ComponentRef Id="cmp91F641283C9B211F7FC7FEC5E32EE6A5" />
+            <ComponentRef Id="cmpED08AF4B20E323A3C2CA15EFE8459883" />
+            <ComponentRef Id="cmpE2ABA1DAEB617569402B7A9390BD58E5" />
+            <ComponentRef Id="cmp01DC5E932A5953F59C35C44AFACEEA3D" />
             <ComponentRef Id="cmpE993A5C3BC400319E303531980057682" />
             <ComponentRef Id="cmpEF6C9FB7EEABB322B60D5A7D64DF54A5" />
             <ComponentRef Id="cmp4E80589EBB57C20C7E193EF2959CD395" />
@@ -508,6 +564,7 @@
             <ComponentRef Id="cmpC86BC2E0A4F012E13752F881F3A3BD98" />
             <ComponentRef Id="cmp9901CC35C6EEDF16FF93615E9E215147" />
             <ComponentRef Id="cmp4D6297515431AA4440B2836FE71687B4" />
+            <ComponentRef Id="cmp11F4992E8ACC3E64C7A7E45224981A59" />
             <ComponentRef Id="cmpC197781FF92B3190939ED64F293F8F68" />
             <ComponentRef Id="cmp74F803C4068A2C04430DD0AD192AFE95" />
             <ComponentRef Id="cmp6F90844544FC062827C0923456C7AE2A" />
@@ -515,15 +572,14 @@
             <ComponentRef Id="cmp8170D34F18B7A88EADD64BF173A03EB9" />
             <ComponentRef Id="cmpF4BA7EF5F3A07258B418B77775994BBA" />
             <ComponentRef Id="cmp59B8D543587394FDCEC6854AAD0F8CEB" />
-            <ComponentRef Id="cmp32B56E23D29286F0A889AFA26C232840" />
-            <ComponentRef Id="cmp76F921F06C32C0679B275FAC09406A25" />
-            <ComponentRef Id="cmp1991F0DA4FA94A5F27006BC1ED4B8906" />
+            <ComponentRef Id="cmpCF899422FA3616931E0DB0F875505C09" />
+            <ComponentRef Id="cmpD2EB635F3B0F307D4C2CCA8EEBF2F90C" />
+            <ComponentRef Id="cmp2AA06CABA4B238B82A7C70FD473BF5FF" />
             <ComponentRef Id="cmp4723F5AA79924F806CCE5754252DC0BC" />
             <ComponentRef Id="cmp7D713A85E53D04F783CBB38D3966058F" />
             <ComponentRef Id="cmpA677227609C92143401D3E0521A8DEB8" />
             <ComponentRef Id="cmpB9AB071A2F9D5F549DD771F54CE44970" />
             <ComponentRef Id="cmpCBE960AE90DB3F2EB216DB9FB614ABCC" />
-            <ComponentRef Id="cmp37E49F7332A0005C1B5EECB9678D92B4" />
             <ComponentRef Id="cmp1C703D80FE709CF51A880D224E83C77A" />
             <ComponentRef Id="cmp8EE6EDBC610EB588E7C04B05C67FB499" />
             <ComponentRef Id="cmpD4B29B845667F4BB433C8AF5D6D23911" />
@@ -539,11 +595,11 @@
             <ComponentRef Id="cmp998E5A477465BF11F58A4EE448A32D50" />
             <ComponentRef Id="cmp1A1EC3FC34A459F0F9ABA8A4E4315FCF" />
             <ComponentRef Id="cmpA0C3F1518A85D3E181A7157252A7A0F2" />
-            <ComponentRef Id="cmp8712285AB53A09DB7DC9DAAB3626992A" />
             <ComponentRef Id="cmpE202EBF912D05068FA10A431D6D1C6E8" />
             <ComponentRef Id="cmp897BB933B51AD34D9DB3F81888C2DD1C" />
             <ComponentRef Id="cmpCE18CB3838A535BE1AFB8170175A4D97" />
             <ComponentRef Id="cmpDE409A606E5B5AEABB5D4B6BFF05CE29" />
+            <ComponentRef Id="cmp6B8058881EFA1F0A59C5CC2ADF9F7AD8" />
             <ComponentRef Id="cmp9EC581054B75BEE3ECF6FB3CF23A2CA2" />
             <ComponentRef Id="cmpD396DFCDCCCD7E03FBCFE5FD8D26297F" />
             <ComponentRef Id="cmpA45BD75B46A09C0691C5D43AD75F21E8" />
