@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='6e79d001-7fe4-4ce8-88bd-a2b5861c541b'
-      Name='Raptor Server'
+    <Product Id='0786f408-6d5e-48a6-a51a-ab1c3d963b8a'
+      Name='Raptor Server Combined Package'
       UpgradeCode='b5e977e4-8691-42d0-a21f-6243f02cb8a8'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='0.2.1.0'>
+      Version='1.5.0'>
 
         <Package Id='*'
-          Description='Raptor Server'
-          Comments='Raptor Server v0.2.1.0 (MUA v0.2.1 / Web v0.2.0)'
+          Description='Raptor Server Combined Package'
+          Comments='Raptor Server Combined Package v1-r5 (MUA v1.0.0 / Web v1.0.0)'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -128,14 +128,15 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor Server v0.2.1.0'
-          Description='The complete package.'
+          Title='Raptor Server Combined Package v1-r5'
+          Description='Raptor Server Combined Package, containing the Raptor MUA and Raptor Web components.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v0.2.1' Description='Raptor MUA' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.0.0' Description='Raptor MUA v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
+                <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
                 <ComponentGroupRef Id='cgrRaptorMuaConf' />
                 <ComponentGroupRef Id='cgrRaptorMuaKeys' />
@@ -144,7 +145,7 @@
                 <ComponentRef Id='cmpRaptorMuaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v0.2.0' Description='Raptor Web' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.0.0' Description='Raptor Web v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />

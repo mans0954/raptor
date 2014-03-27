@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
      xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
     <Fragment>
-        <DirectoryRef Id="RAPTORMUADIR">            
+        <DirectoryRef Id='RAPTORMUADIR'>            
             <Directory Id='dirRaptorMuaConf' Name='conf'>
 
 
@@ -19,6 +19,12 @@
                     </Component>
                     <Component Id='cmpRaptorMuaConfBatchEventParseDist' Guid='*'>
                         <File Id='filRaptorMuaConfBatchEventParseDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorMuaConfBatchEventParseFormatsCustomDist' Guid='*'>
+                        <File Id='filRaptorMuaConfBatchEventParseFormatsCustomDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-custom.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorMuaConfBatchEventParseFormatsSystemDist' Guid='*'>
+                        <File Id='filRaptorMuaConfBatchEventParseFormatsSystemDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-system.xml'/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfDatabaseDist' Guid='*'>
                         <File Id='filRaptorMuaConfDatabaseDist' KeyPath='yes' Source='source\mua\conf\database.xml'/>
@@ -38,16 +44,19 @@
                     <Component Id='cmpRaptorMuaConfServerPropertiesDist' Guid='*'>
                         <File Id='filRaptorMuaConfServerPropertiesDist' KeyPath='yes' Source='source\mua\conf\server.properties'/>
                     </Component>
+                    <Component Id='cmpRaptorMuaConfStatisticalUnitsCustomDist' Guid='*'>
+                        <File Id='filRaptorMuaConfStatisticalUnitsCustomDist' KeyPath='yes' Source='source\mua\conf\statistical-units-custom.xml'/>
+                    </Component>
                     <Component Id='cmpRaptorMuaConfStatisticalUnitsSystemDist' Guid='*'>
                         <File Id='filRaptorMuaConfStatisticalUnitsSystemDist' KeyPath='yes' Source='source\mua\conf\statistical-units-system.xml'/>
                     </Component>
-                    <Component Id='cmpRaptorMuaConfStatisticalUnitsDist' Guid='*'>
-                        <File Id='filRaptorMuaConfStatisticalUnitsDist' KeyPath='yes' Source='source\mua\conf\statistical-units.xml'/>
+                    <Component Id='cmpRaptorMuaConfStatisticalProcessorsDist' Guid='*'>
+                        <File Id='filRaptorMuaConfStatisticalProcessorsDist' KeyPath='yes' Source='source\mua\conf\statistical-processors.xml'/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfUsersDist' Guid='*'>
                         <File Id='filRaptorMuaConfUsersDist' KeyPath='yes' Source='source\mua\conf\users.xml'/>
                     </Component>
-                    <Component Id='cmpRaptorMuaConfWebDist' Guid='*' NeverOverwrite='yes'>
+                    <Component Id='cmpRaptorMuaConfWebDist' Guid='*'>
                         <File Id='filRaptorMuaConfWebDist' KeyPath='yes' Source='source\mua\conf\web.xml'/>
                     </Component>
                 </Directory>
@@ -70,6 +79,14 @@
 
                 <Component Id='cmpRaptorMuaConfBatchEventParse' Guid='*' NeverOverwrite='yes'>
                     <File Id='filRaptorMuaConfBatchEventParse' KeyPath='yes' Source='source\mua\conf\batch-event-parse.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorMuaConfBatchEventParseFormatsCustom' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorMuaConfBatchEventParseFormatsCustom' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-custom.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorMuaConfBatchEventParseFormatsSystem' Guid='*'>
+                    <File Id='filRaptorMuaConfBatchEventParseFormatsSystem' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-system.xml'/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfDatabase' Guid='*' NeverOverwrite='yes'>
@@ -131,7 +148,7 @@
 
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfMuaCore' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorMuaConfMuaCore' Guid='*'>
                     <File Id='filRaptorMuaConfMuaCore' KeyPath='yes' Source='source\mua\conf\mua-core.xml'/>
 
                     <!-- Change the batchimport directories to Windows style -->
@@ -157,23 +174,27 @@
                     <File Id='filRaptorMuaConfServerProperties' KeyPath='yes' Source='source\mua\conf\server.properties'/>
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfStatisticalUnitsSystem' Guid='*' NeverOverwrite='yes'>
-                    <File Id='filRaptorMuaConfStatisticalUnitsSystem' KeyPath='yes' Source='source\mua\conf\statistical-units-system.xml'/>
-                </Component>
-
-                <Component Id='cmpRaptorMuaConfStatisticalUnits' Guid='*' NeverOverwrite='yes'>
-                    <File Id='filRaptorMuaConfStatisticalUnits' KeyPath='yes' Source='source\mua\conf\statistical-units.xml'/>
+                <Component Id='cmpRaptorMuaConfStatisticalUnitsCustom' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorMuaConfStatisticalUnitsCustom' KeyPath='yes' Source='source\mua\conf\statistical-units-custom.xml'/>
 
                     <!-- Change SAML metadata locations with info collected from the UI -->
                     <!-- TODO -->
 
                 </Component>
 
+                <Component Id='cmpRaptorMuaConfStatisticalUnitsSystem' Guid='*'>
+                    <File Id='filRaptorMuaConfStatisticalUnitsSystem' KeyPath='yes' Source='source\mua\conf\statistical-units-system.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorMuaConfStatisticalProcessors' Guid='*'>
+                    <File Id='filRaptorMuaConfStatisticalProcessors' KeyPath='yes' Source='source\mua\conf\statistical-processors.xml'/>
+                </Component>
+
                 <Component Id='cmpRaptorMuaConfUsers' Guid='*' NeverOverwrite='yes'>
                     <File Id='filRaptorMuaConfUsers' KeyPath='yes' Source='source\mua\conf\users.xml'/>
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfWeb' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorMuaConfWeb' Guid='*'>
                     <File Id='filRaptorMuaConfWeb' KeyPath='yes' Source='source\mua\conf\web.xml'/>
                 </Component>
 
@@ -181,31 +202,37 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorMuaConf">
-            <ComponentRef Id="cmpRaptorMuaConfAttributeAssociationDist" />
-            <ComponentRef Id="cmpRaptorMuaConfBatchEventParseDist" />
-            <ComponentRef Id="cmpRaptorMuaConfDatabaseDist" />
-            <ComponentRef Id="cmpRaptorMuaConfEventReleaseDist" />
-            <ComponentRef Id="cmpRaptorMuaConfLoggingDist" />
-            <ComponentRef Id="cmpRaptorMuaConfMetadataDist" />
-            <ComponentRef Id="cmpRaptorMuaConfMuaCoreDist" />
-            <ComponentRef Id="cmpRaptorMuaConfServerPropertiesDist" />
-            <ComponentRef Id="cmpRaptorMuaConfStatisticalUnitsSystemDist" />
-            <ComponentRef Id="cmpRaptorMuaConfStatisticalUnitsDist" />
-            <ComponentRef Id="cmpRaptorMuaConfUsersDist" />
-            <ComponentRef Id="cmpRaptorMuaConfWebDist" />
-            <ComponentRef Id="cmpRaptorMuaConfAttributeAssociation" />
-            <ComponentRef Id="cmpRaptorMuaConfBatchEventParse" />
-            <ComponentRef Id="cmpRaptorMuaConfDatabase" />
-            <ComponentRef Id="cmpRaptorMuaConfEventRelease" />
-            <ComponentRef Id="cmpRaptorMuaConfLogging" />
-            <ComponentRef Id="cmpRaptorMuaConfMetadata" />
-            <ComponentRef Id="cmpRaptorMuaConfMuaCore" />
-            <ComponentRef Id="cmpRaptorMuaConfServerProperties" />
-            <ComponentRef Id="cmpRaptorMuaConfStatisticalUnitsSystem" />
-            <ComponentRef Id="cmpRaptorMuaConfStatisticalUnits" />
-            <ComponentRef Id="cmpRaptorMuaConfUsers" />
-            <ComponentRef Id="cmpRaptorMuaConfWeb" />
+        <ComponentGroup Id='cgrRaptorMuaConf'>
+            <ComponentRef Id='cmpRaptorMuaConfAttributeAssociationDist' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParseDist' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParseFormatsCustomDist' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParseFormatsSystemDist' />
+            <ComponentRef Id='cmpRaptorMuaConfDatabaseDist' />
+            <ComponentRef Id='cmpRaptorMuaConfEventReleaseDist' />
+            <ComponentRef Id='cmpRaptorMuaConfLoggingDist' />
+            <ComponentRef Id='cmpRaptorMuaConfMetadataDist' />
+            <ComponentRef Id='cmpRaptorMuaConfMuaCoreDist' />
+            <ComponentRef Id='cmpRaptorMuaConfServerPropertiesDist' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalUnitsCustomDist' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalUnitsSystemDist' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalProcessorsDist' />
+            <ComponentRef Id='cmpRaptorMuaConfUsersDist' />
+            <ComponentRef Id='cmpRaptorMuaConfWebDist' />
+            <ComponentRef Id='cmpRaptorMuaConfAttributeAssociation' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParse' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParseFormatsCustom' />
+            <ComponentRef Id='cmpRaptorMuaConfBatchEventParseFormatsSystem' />
+            <ComponentRef Id='cmpRaptorMuaConfDatabase' />
+            <ComponentRef Id='cmpRaptorMuaConfEventRelease' />
+            <ComponentRef Id='cmpRaptorMuaConfLogging' />
+            <ComponentRef Id='cmpRaptorMuaConfMetadata' />
+            <ComponentRef Id='cmpRaptorMuaConfMuaCore' />
+            <ComponentRef Id='cmpRaptorMuaConfServerProperties' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalUnitsCustom' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalUnitsSystem' />
+            <ComponentRef Id='cmpRaptorMuaConfStatisticalProcessors' />
+            <ComponentRef Id='cmpRaptorMuaConfUsers' />
+            <ComponentRef Id='cmpRaptorMuaConfWeb' />
         </ComponentGroup>
     </Fragment>
 </Wix>
