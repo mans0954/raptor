@@ -30,6 +30,9 @@
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                 <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                 <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
             </list>        
        </property>
     </bean>
@@ -46,6 +49,8 @@
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                             <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                            <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
                         </list>
                     </property>
                     <property name="serviceEndpoint">

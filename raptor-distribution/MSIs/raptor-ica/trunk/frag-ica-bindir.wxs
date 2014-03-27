@@ -7,7 +7,7 @@
                     <File Id='filRaptorIcaBinIcaBat' KeyPath='yes' Source='source\ica\bin\ica.bat' />
                 </Component>
                 <Component Id='cmpRaptorIcaBinWrapperExe' Guid='*'>
-                    <File Id='filRaptorIcaBinWrapperExe' KeyPath='yes' Source='source\ica\bin\wrapper-windows-x86-32.exe' />
+                    <File Id='filRaptorIcaBinWrapperExe' KeyPath='yes' Source='source\ica\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorIcaBinWrapperConf' Guid='*'>
                     <File Id='filRaptorIcaBinWrapperConf' KeyPath='yes' Source='source\ica\bin\wrapper.conf' />
