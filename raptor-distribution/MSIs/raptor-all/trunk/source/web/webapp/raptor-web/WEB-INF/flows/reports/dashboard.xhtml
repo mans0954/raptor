@@ -56,12 +56,9 @@
                                 <rich:spacer width="2px" />
 
 								<rich:inplaceSelect id="eventTypeSelector"
-									value="#{flowScope.websession.startmodel.eventTypeString}"
+									value="#{flowScope.websession.startmodel.eventType}"
 									style="font-size:100%">
-									<f:selectItem itemLabel="Shibboleth"
-										itemValue="SHIBBOLETH_AUTHENTICATION" />
-									<f:selectItem itemLabel="Ezproxy"
-										itemValue="EZPROXY_AUTHENTICATION" />
+									<f:selectItems value="#{eventTypeService.eventTypeList}" />
 									<a4j:support ajaxSingle="true" event="onviewactivated"
 										action="refreshStartStats"
 										reRender="statsSelectionForm, startTables, startGraph,shortStats" />

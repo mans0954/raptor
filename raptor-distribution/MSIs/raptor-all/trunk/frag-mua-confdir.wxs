@@ -124,7 +124,7 @@
 
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*'> <!-- Normally NeverOverwrite is yes here, but for v1.1.1 we want to overwrite -->
                     <File Id='filRaptorMuaConfEventRelease' KeyPath='yes' Source='source\mua\conf\event-release.xml'/>
 
                     <!-- Change the trust and keystore locations to Windows style -->
