@@ -1,0 +1,227 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<flow parent="reports" start-state="editRunDecision" xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <!-- <var name="graphWizardModel" class="uk.ac.cardiff.raptorweb.model.wizard.GraphWizardModel" /> -->
+    
+    <input name="savedGraphWizardModel"/>
+    
+    <on-start>
+        <evaluate expression="savedGraphWizardModel.graphWizardModel.setStatisticFunctionTypes(graphService.getStatisticFunctionTypeUnits())" />
+        <evaluate expression="graphWizardService.populateSuggestionValues(savedGraphWizardModel.graphWizardModel)" />
+    </on-start>
+    
+    <decision-state id="editRunDecision">
+        <if test="savedGraphWizardModel.graphWizardModel.runImmediatly==true" then="compileAndInvokeStatisticalUnit" else="dateSelector" />
+    </decision-state>
+    
+
+    <view-state id="dateSelector" view="wizard/date-selector.xhtml" model="savedGraphWizardModel">
+        <on-entry>
+            <evaluate expression="graphWizardService.computeCurrentTimeRange(savedGraphWizardModel.graphWizardModel)" />
+        </on-entry>
+        <transition on="computeCurrentTimeRange">
+            <evaluate expression="graphWizardService.computeCurrentTimeRange(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+
+        <transition on="next" to="eventTypeSelector" />
+        <transition on="back" to="cancelWizard" />
+        <transition on="finish" to="layoutNeeded" />
+        <transition on="cancel" to="cancelWizard" />
+    </view-state>
+
+    <view-state id="eventTypeSelector" view="wizard/event-types-selector.xhtml" model="savedGraphWizardModel">
+    
+    
+        <transition on="addEventType" validate="false">
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.saveEventType()" />
+        </transition>
+
+        <transition on="removeEventType" validate="false">
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.removeEventType()" />
+        </transition>
+
+        <transition on="next" to="graphTypeSelector"/>
+        <transition on="back" to="dateSelector"  validate="false"/>
+        <transition on="cancel" to="cancelWizard" validate="false"/>
+        
+        <transition on="date-selector" to="dateSelector" validate="false"/>
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+    </view-state>
+
+    <view-state id="graphTypeSelector" view="wizard/graph-type-selector.xhtml" model="savedGraphWizardModel">
+    
+         <on-entry>
+            <evaluate expression="graphWizardService.setDefaultGraphFunctions(savedGraphWizardModel.graphWizardModel)" />
+        </on-entry>
+
+        <transition on="lookupStatistic" validate="false">
+            <evaluate expression="graphWizardService.lookupStatisticalUnitInformation(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+        <transition on="next" to="graphSeriesSelector" />
+        <transition on="finish" to="layoutNeeded" />
+        <transition on="back" to="eventTypeSelector" validate="false"/>
+        <transition on="cancel" to="cancelWizard" validate="false"/>
+        
+        <transition on="date-selector" to="dateSelector" />
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+    </view-state>
+
+    <view-state id="graphSeriesSelector" view="wizard/graph-series-selector.xhtml" model="savedGraphWizardModel">
+        <transition on="addSeriesToSelectedStatistic" validate="false">
+            <evaluate expression="graphWizardService.addSeriesToSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
+        </transition>
+        <transition on="addFilterToSelectedSeries" validate="false">
+            <evaluate expression="graphWizardService.addFilterToSelectedSeries(savedGraphWizardModel.graphWizardModel)"></evaluate>
+        </transition>
+        <transition on="removeSeriesFromSelectedStatistic" validate="false">
+            <evaluate expression="graphWizardService.removeSeriesFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+        <transition on="removeSelectedFilterFromSelectedStatistic" validate="false">
+            <evaluate expression="graphWizardService.removeSelectedFilterFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+
+        <transition on="next" to="graphOptionsSelector" />
+        <transition on="finish" to="layoutNeeded" />
+        <transition on="back" to="graphTypeSelector" validate="false" />
+        <transition on="cancel" to="cancelWizard" validate="false"/>
+        
+        <transition on="date-selector" to="dateSelector" validate="false"/>
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+    </view-state>
+
+
+    <view-state id="graphProcessorSelector" view="wizard/graph-processor-selector.xhtml">
+
+        <transition on="removePostProcessorFromSelectedStatistic">
+            <evaluate expression="graphWizardService.removePostProcessorFromSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
+        </transition>
+
+        <transition on="addProcessorToSelectedStatistic">
+            <evaluate expression="graphWizardService.addProcessorToSelectedStatistic(savedGraphWizardModel.graphWizardModel)"></evaluate>
+        </transition>
+
+        <transition on="initialiseNewProcessorAdd">
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.initialiseNewProcessorAdd()" />
+        </transition>
+
+        <transition on="setupProcessorToAdd">
+            <evaluate expression="savedGraphWizardModel.graphWizardModel.setupProcessorToAdd()" />
+        </transition>
+
+        <transition on="next" to="layoutNeeded" />
+        <transition on="back" to="graphOptionsSelector" />
+        <transition on="cancel" to="cancelWizard" />
+        
+        <transition on="date-selector" to="dateSelector" validate="false"/>
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+    </view-state>
+
+
+    <view-state id="graphOptionsSelector" view="wizard/graph-options-selector.xhtml" model="savedGraphWizardModel">
+        <transition on="next" to="graphProcessorSelector" />
+        <transition on="finish" to="layoutNeeded" />
+        <transition on="back" to="graphSeriesSelector" validate="false" />
+        <transition on="cancel" to="cancelWizard" validate="false"/>
+        
+        <transition on="date-selector" to="dateSelector" validate="false"/>
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+    </view-state>
+
+
+    <decision-state id="layoutNeeded">
+        <if test="savedGraphWizardModel.graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="compileAndInvokeStatisticalUnit" />
+    </decision-state>
+
+    <view-state id="graphLayoutSelector" view="wizard/page-layout-selector.xhtml">
+        <transition on="next" to="compileAndInvokeStatisticalUnit" />
+        <transition on="back" to="graphOptionsSelector" />
+        <transition on="cancel" to="cancelWizard" />
+        
+        
+    </view-state>
+
+    <action-state id="compileAndInvokeStatisticalUnit">
+        <evaluate expression="graphWizardService.compileStatisticalUnitInformation(savedGraphWizardModel.graphWizardModel)" />
+        <transition to="graphResultsSelector">
+            <evaluate expression="graphWizardService.invokeStatisticalUnitInformationDynamic(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+    </action-state>
+
+    <decision-state id="layoutNeededBack">
+        <if test="savedGraphWizardModel.graphWizardModel.graphSets.size()>1" then="graphLayoutSelector" else="graphProcessorSelector" />
+    </decision-state>
+
+    <view-state id="graphResultsSelector" view="wizard/graph-wizard-results.xhtml">
+        <on-entry>
+            <evaluate expression="savedGraphWizardModel.setFinishedReport(true)" />
+        </on-entry>   
+    
+        <transition on="generateExcelReport">
+            <evaluate expression="graphWizardService.generateExcelReport(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+
+        <transition on="generateCSVReport">
+            <evaluate expression="graphWizardService.generateCSVReport(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+
+        <transition on="generatePDFReport">
+            <evaluate expression="graphWizardService.generatePDFReport(savedGraphWizardModel.graphWizardModel)" />
+        </transition>
+
+        <transition on="save">
+            <evaluate expression="savedWizardReportsService.save(savedGraphWizardModel,flowScope.websession.user.name)" />
+            <evaluate expression="savedGraphWizardModel.setEdittingReport(true)" />
+        </transition>
+
+        <transition on="date-selector" to="dateSelector" />
+        <transition on="event-type-selector" to="eventTypeSelector" validate="false"/>
+        <transition on="graph-type-selector" to="graphTypeSelector" validate="false"/>
+        <transition on="graph-series-selector" to="graphSeriesSelector" validate="false"/>
+        <transition on="graph-options-selector" to="graphOptionsSelector" validate="false"/>
+        <transition on="graph-post-processors" to="graphProcessorSelector" validate="false"/>
+
+        <transition on="back" to="layoutNeededBack" />
+        <transition on="done" to="cancelWizard" />
+    </view-state>
+
+
+    <end-state id="cancelWizard" />
+
+</flow>
