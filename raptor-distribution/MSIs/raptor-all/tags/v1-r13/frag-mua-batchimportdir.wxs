@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Fragment>
+        <DirectoryRef Id='RAPTORMUADIR'>
+            <Directory Id='dirRaptorMuaBatchImport' Name='batchimport'>
+                <Directory Id='dirRaptorMuaBatchImportShib2' Name='shib2'>
+                    <Component Id='cmpRaptorMuaBatchImportShib2Dir' Guid='715efcb5-0a8e-4cce-8328-cec0ce8605c6'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportShib13' Name='shib13'>
+                    <Component Id='cmpRaptorMuaBatchImportShib13Dir' Guid='56c2054b-6422-4b5b-8446-222f77f30853'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportEzproxy' Name='ezproxy'>
+                    <Component Id='cmpRaptorMuaBatchImportEzproxyDir' Guid='0299abb6-83a5-4393-a655-546f89969fd6'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportShibSpUpToTwoFour' Name='shibsp_upto24'>
+                    <Component Id='cmpRaptorMuaBatchImportShibSpUpToTwoFourDir' Guid='8d2cb1d5-4303-4c80-a682-5d8782fe1fe4'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportOpenAthensLA' Name='openathensla'>
+                    <Component Id='cmpRaptorMuaBatchImportOpenAthensLA' Guid='f55820c7-3f8c-46a7-a780-2535c905d800'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id='cgrRaptorMuaBatchImport'>
+            <ComponentRef Id='cmpRaptorMuaBatchImportShib2Dir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportShib13Dir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportEzproxyDir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportShibSpUpToTwoFourDir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportOpenAthensLA' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
