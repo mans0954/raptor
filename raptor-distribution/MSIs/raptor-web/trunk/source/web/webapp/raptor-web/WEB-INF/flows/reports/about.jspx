@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tr="http://myfaces.apache.org/trinidad">
+
+	<ui:composition template="/templates/raptor/full.xhtml">
+
+		<ui:define name="content">
+
+
+		
+				<br />
+				<center>
+					<h1 style="font-size: 300%">Raptor</h1>
+					<img src="/raptor-web/image/raptor-large.png" />
+				</center>
+
+				<br />
+				<center>
+				<p align="justify" style="padding-left: 140pt; padding-right: 140pt; font-size: 130%">
+					Raptor is a free to use, open source software suite generally
+					designed to enable accounting within event-based systems, and
+					specifically aimed at accounting within systems that handle
+					authentication events such as the Shibboleth IdP, OpenAthens LA,
+					and EZproxy. Raptor was developed by <a style="font-size: 110%"
+						href="http://www.cardiff.ac.uk">Cardiff University</a>'s <a style="font-size: 110%"
+						href="http://www.cardiff.ac.uk/insrv">Information Services</a>
+					Directorate as part of a <a style="font-size: 110%"
+						href="http://www.jisc.ac.uk/whatwedo/programmes/aim/raptor.aspx">JISC
+						funded project</a>. For further information on Raptor, including help
+					and support information, visit <a  style="font-size: 110%" href="http://iam.cf.ac.uk/Raptor">Raptor's
+						Website</a>.
+				</p>
+				</center>
+				<br />				
+
+			<br />
+
+
+		</ui:define>
+	</ui:composition>
+</jsp:root>
