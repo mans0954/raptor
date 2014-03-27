@@ -1,17 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <Fragment>
-        <DirectoryRef Id="RAPTORICADIR">
-            <Directory Id="dirRaptorIcaKeys" Name="keys">
-                <Component Id="cmpRaptorIcaKeysAuthorisedKeys" Guid="*">
-                    <File Id="filRaptorIcaKeysAuthorisedKeys" KeyPath="yes" Source="source\ica\keys\authorised-keys.jks" />
+        <DirectoryRef Id='RAPTORICADIR'>
+            <Directory Id='dirRaptorIcaKeys' Name='keys'>
+                <Component Id='cmpRaptorIcaKeysAuthorisedKeys' NeverOverwrite='yes' Guid='*'>
+                    <File Id='filRaptorIcaKeysAuthorisedKeys' KeyPath='yes' Source='source\ica\keys\authorised-keys.jks' />
                 </Component>
             </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorIcaKeys">
-            <ComponentRef Id="cmpRaptorIcaKeysAuthorisedKeys" />
+        <ComponentGroup Id='cgrRaptorIcaKeys'>
+            <ComponentRef Id='cmpRaptorIcaKeysAuthorisedKeys' />
         </ComponentGroup>
     </Fragment>
 </Wix>
