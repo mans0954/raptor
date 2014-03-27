@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='6feb88ac-b3ca-4193-8f24-73709219e37b'
+    <Product Id='05874fe7-cd62-449a-9637-ca36968d4d29'
       Name='Raptor ICA'
       UpgradeCode='e5f71481-37a7-44ac-b315-7285a97561b4'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.2.0'>
+      Version='1.2.1'>
 
         <Package Id='*'
           Description='Raptor ICA'
-          Comments='Raptor ICA v1.2.0'
+          Comments='Raptor ICA v1.2.1'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -132,13 +132,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor ICA v1.2.0'
+          Title='Raptor ICA v1.2.1'
           Description='The complete package for the Raptor ICA.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
 
-            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.2.0' Description='Raptor ICA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.2.1' Description='Raptor ICA v1.2.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorIcaRoot' />
                 <ComponentGroupRef Id='cgrRaptorIcaBin' />
                 <ComponentGroupRef Id='cgrRaptorIcaConf' />
@@ -167,6 +167,11 @@
         <CustomAction Id='StopIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='stop' />
         <CustomAction Id='RestartIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='restart' />
 
+        <!-- Special actions for Raptor v1.2.1 only -->
+        <CustomAction Id='InstallIcaServiceSpecial' FileKey='filRaptorIcaBinIcaBat' ExeCommand='install' />
+        <CustomAction Id='StartIcaServiceSpecial' FileKey='filRaptorIcaBinIcaBat' ExeCommand='start' />
+
+
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
             <Custom Action='InstallIcaService' After='RunKeytoolExportIcaPublicKey'>INSTALLING</Custom>
@@ -181,7 +186,13 @@
 
         <!-- When upgrading, restart service -->
         <InstallExecuteSequence>
-            <Custom Action='RestartIcaService' After='StartServices'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+            <!-- For Raptor v1.2.1 only, install service and start since previous versions will uninstall stuff incorrectly -->
+            <Custom Action='InstallIcaServiceSpecial' After='InstallFinalize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='StartIcaServiceSpecial' After='InstallIcaServiceSpecial'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+
+
+            <!-- This is what would normally be called - restart only -->
+            <Custom Action='RestartIcaService' After='StartServices'><![CDATA[UPGRADING AND REMOVE="ALL"]]></Custom>
         </InstallExecuteSequence>
 
 
@@ -225,7 +236,7 @@
         <!-- Schedule these CAs to run -->
         <InstallExecuteSequence>
             <Custom Action='SetBackupConfigFiles' Before='CostInitialize'></Custom>
-            <Custom Action='BackupConfigFiles' After='InstallInitialize'></Custom>
+            <Custom Action='BackupConfigFiles' After='InstallInitialize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
         </InstallExecuteSequence>
 
 
