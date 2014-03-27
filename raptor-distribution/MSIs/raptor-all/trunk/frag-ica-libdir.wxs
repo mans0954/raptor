@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="RAPTORICADIR">
@@ -132,6 +132,9 @@
                 <Component Id="cmp87D86BB16AB796F799FA61C9D1479FAB" Guid="*">
                     <File Id="fil07B59CD29F2949A5A3E41076E8979EEB" KeyPath="yes" Source="source\ica\lib\jetty-6.1.23.jar" />
                 </Component>
+                <Component Id="cmp4CA7E54B0643EFAA16F7C11E88E8822F" Guid="*">
+                    <File Id="filBF1B7E306242E6E6D823FB524278C32C" KeyPath="yes" Source="source\ica\lib\jetty-management-6.0.1.jar" />
+                </Component>
                 <Component Id="cmp972DD535C087A1EC20796A75F5C80717" Guid="*">
                     <File Id="fil147EE28D44302BEF13B3C2EAB23B37D6" KeyPath="yes" Source="source\ica\lib\jetty-util-6.1.23.jar" />
                 </Component>
@@ -222,14 +225,14 @@
                 <Component Id="cmp944386478C8DFCB6B3E65989A6E14344" Guid="*">
                     <File Id="filC6ADFA475B56ADA4686C48EB66DD23DA" KeyPath="yes" Source="source\ica\lib\quartz-1.8.0.jar" />
                 </Component>
-                <Component Id="cmpAE7E1F5D5BA8EBAB728D7B298DA3A9FA" Guid="*">
-                    <File Id="filED433C98F453186F447B2064918136C7" KeyPath="yes" Source="source\ica\lib\raptor-client-1.0.1.jar" />
+                <Component Id="cmp2AC7B42CAFD7528F2D500A0355818329" Guid="*">
+                    <File Id="fil8E424E085E57D3E32E4E305E8038C8F0" KeyPath="yes" Source="source\ica\lib\raptor-client-1.1.2.jar" />
                 </Component>
-                <Component Id="cmpFE4A446AD36FB18A406E18535D7B03CC" Guid="*">
-                    <File Id="fil60E332CF4EA3B7D4C58A0470B9307DA4" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.0.1.jar" />
+                <Component Id="cmp9CC40435D6C9EA7B178470C6AE8D4775" Guid="*">
+                    <File Id="fil9C792D570ACD19490764312066BB428C" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.1.2.jar" />
                 </Component>
-                <Component Id="cmpD0BF86E59D3B2FF9EDC380D7A14263F1" Guid="*">
-                    <File Id="filFF76721AE9E570F34D35DF3B814DF530" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.0.1.jar" />
+                <Component Id="cmpE0104DA757288CD43EE21D2635B6A573" Guid="*">
+                    <File Id="fil37F66CBC7F701A47B0B82C5AEDE97CEC" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.1.1.jar" />
                 </Component>
                 <Component Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" Guid="*">
                     <File Id="filF84CE1D564BF641A073A3463A14112F9" KeyPath="yes" Source="source\ica\lib\resolver-2.10.0.jar" />
@@ -399,6 +402,7 @@
             <ComponentRef Id="cmpABCA71FF39401CCB6B7436A7F602B29E" />
             <ComponentRef Id="cmp6D2E0775D0B329B4AC293F2D165D055C" />
             <ComponentRef Id="cmp87D86BB16AB796F799FA61C9D1479FAB" />
+            <ComponentRef Id="cmp4CA7E54B0643EFAA16F7C11E88E8822F" />
             <ComponentRef Id="cmp972DD535C087A1EC20796A75F5C80717" />
             <ComponentRef Id="cmp377A07EF0EBD6777C37F9A098000F71D" />
             <ComponentRef Id="cmp2F046F0837342D831380443C06D41779" />
@@ -429,9 +433,9 @@
             <ComponentRef Id="cmpD4F6B7649CCB75BFF17B64083BFD958D" />
             <ComponentRef Id="cmp0E2501CD4945D223098710C9EE25A00D" />
             <ComponentRef Id="cmp944386478C8DFCB6B3E65989A6E14344" />
-            <ComponentRef Id="cmpAE7E1F5D5BA8EBAB728D7B298DA3A9FA" />
-            <ComponentRef Id="cmpFE4A446AD36FB18A406E18535D7B03CC" />
-            <ComponentRef Id="cmpD0BF86E59D3B2FF9EDC380D7A14263F1" />
+            <ComponentRef Id="cmp2AC7B42CAFD7528F2D500A0355818329" />
+            <ComponentRef Id="cmp9CC40435D6C9EA7B178470C6AE8D4775" />
+            <ComponentRef Id="cmpE0104DA757288CD43EE21D2635B6A573" />
             <ComponentRef Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" />
             <ComponentRef Id="cmp752158F35F65FEF6A6161B006F66C8A1" />
             <ComponentRef Id="cmpD9BE72C2738AA305ED59F178DAA14F17" />

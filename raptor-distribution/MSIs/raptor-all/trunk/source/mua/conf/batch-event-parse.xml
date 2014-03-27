@@ -66,11 +66,14 @@
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                     </property>
                     <property name="LineFilterEngine">
-                        <bean class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                        <bean id="lineFilterEngine" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
                              <property name="includeLineFilters">
                                <list>
-                                   <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
-                                       <property name="includeIfContains"><value>connect?session</value></property>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.RegexContainsLineFilter">
+                                       <property name="includeIfContains"><value>GET[\p{Z}\s][^\p{Z}\s]*login\?url</value></property>
+                                   </bean>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.RegexContainsLineFilter">
+                                       <property name="includeIfContains"><value>GET[\p{Z}\s][^\p{Z}\s]*connect\?session</value></property>
                                    </bean>
                                 </list>
                               </property>
@@ -82,10 +85,47 @@
                                 </list>
                               </property>
                         </bean>
-                    </property>                   
+                    </property>
+                     <property name="exclusionList">
+                           <bean class="uk.ac.cardiff.raptor.parse.filter.ExclusionList">
+                               <property name="exclusionEntries">
+                                   <list>
+                                       <bean class="uk.ac.cardiff.raptor.parse.filter.match.ExactMatchExclusionEntry">
+                                           <property name="fieldName" value="principalName"/>
+                                           <property name="match" value="-"/>
+                                       </bean>
+                                   </list>
+                               </property>
+                           </bean>
+                   </property>                   
                 </bean>
 
+                <bean id="shibbolethSpLFP" class="uk.ac.cardiff.raptor.parse.external.file.LogFileParser">
+                    <property name="enabled" value="true"/>
+                    <property name="eventHandler"><ref bean="memoryEventHandler"></ref></property>
+                    <property name="eventTypeFriendlyName">
+                       <value>Shibboleth SP LT2.4</value>
+                    </property>
+                    <property name="format">
+                        <ref bean="shibSPLogFileFormat" />
+                    </property>
+                    <property name="eventType">
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                    </property>
+                    <property name="printParsingPosition"><value>true</value></property>
 
+                    <property name="LineFilterEngine">
+                        <bean id="lineFilterEngineShibSp" class="uk.ac.cardiff.raptor.parse.filter.LineFilterEngine">
+                             <property name="includeLineFilters">
+                               <list>
+                                   <bean class="uk.ac.cardiff.raptor.parse.filter.ContainsLineFilter">
+                                       <property name="includeIfContains"><value>new session created</value></property>
+                                   </bean>
+                                </list>
+                              </property>                              
+                        </bean>
+                    </property>
+                </bean> 
 
 
 
