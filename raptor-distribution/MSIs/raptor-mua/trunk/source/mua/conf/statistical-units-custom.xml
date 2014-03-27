@@ -20,15 +20,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-	 <bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler">
-        <property name="statisticRegistry"><ref bean="statisticRegistry"/></property>
-    </bean>
     
-    <!-- Handles all statistical units defined-->
-    <bean id="statisticRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.ContextAwareStatisticRegistry">
-        <property name="automaticallyFindStatsiticsToLoad" value="true"/>
-    </bean>
+
+
 
 
 	<!--  actual definitions of statistical units used to process the data within the MUA
@@ -40,6 +34,7 @@
 		endTime - defines the temporal extent over which the statistics is invoked (if no end time is used, the endtime of the last entry is used instead)
 		methodParams - the values you pass into the methodName (see statistics.html for a list of these methods and their values)
 		-->
+		
 
 
 	<bean id="authTimeBuckets" class="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntryPerInterval">
@@ -147,6 +142,31 @@
                     </property>
 			</bean>
 		</property>
+         <property name="attachProcessors">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor</value>
+                    </property>
+                    <property name="methodParameters">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="parameterType" value="VALUE" />
+                                <property name="parameterName" value="Ascending"></property>   
+                                <property name="value">
+                                    <value type="java.lang.Boolean">true</value>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>               
+            </list>
+        </property>
 	</bean>
 
 
@@ -200,11 +220,31 @@
                     </property>
 			</bean>
 		</property>
-		<property name="postprocessor">
-			<list>
-				<ref bean="ShibbolethMetadataNameFormatter"></ref>
-			</list>
-		</property>
+		  <property name="attachProcessors">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor</value>
+                    </property>
+                    <property name="methodParameters">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="parameterType" value="VALUE" />
+                                <property name="parameterName" value="Ascending"></property>   
+                                <property name="value">
+                                    <value type="java.lang.Boolean">true</value>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>               
+            </list>
+        </property>
 	</bean>
 
 	<bean id="authsPerSchool" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
@@ -251,6 +291,26 @@
                     </property>
             </bean>
         </property>
+          <property name="attachProcessors">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor</value>
+                    </property>
+                    <property name="methodParameters">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="parameterType" value="VALUE" />
+                                <property name="parameterName" value="Ascending"></property>   
+                                <property name="value">
+                                    <value type="java.lang.Boolean">true</value>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>               
+            </list>
+        </property>
     </bean>
 
         <bean id="authsPerPersonAffiliation" class="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency">
@@ -287,37 +347,32 @@
                     </property>
             </bean>
         </property>
+       <property name="attachProcessors">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.ProcessorInformation">
+                    <property name="processorClass">
+                        <value>uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor</value>
+                    </property>
+                    <property name="methodParameters">
+                        <list>
+                            <bean class="uk.ac.cardiff.model.wsmodel.MethodParameter">
+                                <property name="parameterType" value="VALUE" />
+                                <property name="parameterName" value="Ascending"></property>   
+                                <property name="value">
+                                    <value type="java.lang.Boolean">true</value>
+                                </property>
+                            </bean>
+                        </list>
+                    </property>
+                </bean>               
+            </list>
+        </property>
     </bean>
 
-	<!--  Support statistical workflows -->
 	
-	<bean id="percentagePost" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.PercentagePostProcessor">
-    </bean>
-    
-    <bean id="groupNameSort" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SortGroupsAlphabeticallyPostProcessor">
-    </bean>
-
-	<bean id="ShibbolethMetadataNameFormatter" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.SamlMetadataNameFormatter">
-		<constructor-arg index="0"><value>/opt/shibboleth-idp/metadata/ukfederation-metadata.xml</value></constructor-arg>
-	</bean>
-
-	<bean id="sortDsc" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor">
-        <property name="ascending"><value>false</value></property>
-    </bean>
-
-    <bean id="sortAsc" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.RowSortPostProcessor">
-        <property name="ascending"><value>true</value></property>
-    </bean>
-
-    <bean id="cut" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.CutRowsPostProcessor">
-        <property name="numberOfRowsToKeep"><value>5</value></property>
-    </bean>
-
-    <bean id="numberFormat" class = "uk.ac.cardiff.raptormua.engine.statistics.processor.NumberFormatterPostProcessor">
-    </bean>
 
 
-	<import resource="statistical-units-system.xml"/>
+	
 
 
 </beans>
