@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Fragment>
+        <DirectoryRef Id='RAPTORMUADIR'>
+            <Directory Id='dirRaptorMuaKeys' Name='keys'>
+                <Component Id='cmpRaptorMuaKeysAuthorisedKeys' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorMuaKeysAuthorisedKeys' KeyPath='yes' Source='source\mua\keys\authorised-keys.jks' />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id='cgrRaptorMuaKeys'>
+            <ComponentRef Id='cmpRaptorMuaKeysAuthorisedKeys' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>

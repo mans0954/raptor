@@ -1,0 +1,364 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+    <Product Id='91e87199-50fc-4a76-a07b-0f3a43cee240'
+      Name='Raptor All Combined Package'
+      UpgradeCode='da8a9725-27af-4917-a6d6-32a4b21b1078'
+      Manufacturer='Cardiff University'
+      Language='1033' 
+      Codepage='1252'
+      Version='1.13.0'>
+
+        <Package Id='*'
+          Description='Raptor All Combined Package'
+          Comments='Raptor All Combined Package v1-r13 (ICA v1.2.0 / MUA v1.2.0 / Web v1.2.0)'
+          Manufacturer='Cardiff University'
+          InstallerVersion='301'
+          SummaryCodepage='1252'
+          AdminImage='yes'
+          InstallPrivileges='elevated'
+          InstallScope='perMachine'
+          Compressed='yes' />
+
+
+
+        <!--
+            #############
+            # MSI options
+            #############
+        -->
+
+        <!-- Allows upgrading of software. Schedule changed from default to not delete configured conf files on upgrade -->
+        <MajorUpgrade
+          Schedule='afterInstallExecute'
+          DowngradeErrorMessage='A later version of [ProductName] is already installed. Setup will now exit.'/>
+
+        <!-- Embeds all source into a single .cab file in the MSI -->
+        <Media Id='1' Cabinet='Product.cab' EmbedCab='yes' />
+
+
+
+        <!--
+            #####################################
+            # Figure out what the MSI is doing...
+            #####################################
+        -->
+
+        <CustomAction Id='SetINSTALLING' Property='INSTALLING' Value='true' /> 
+        <CustomAction Id='SetUPGRADING' Property='UPGRADING' Value='true' /> 
+        <CustomAction Id='SetUNINSTALLING' Property='UNINSTALLING' Value='true' />
+
+        <InstallExecuteSequence> 
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>"" OR UPGRADINGPRODUCTCODE <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorIca,Complete,feaRaptorMua,feaRaptorWeb" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
+        </InstallExecuteSequence>
+
+        <InstallUISequence> 
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>"" OR UPGRADINGPRODUCTCODE <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorIca,Complete,feaRaptorMua,feaRaptorWeb" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
+        </InstallUISequence>
+
+
+
+        <!--
+            #####################
+            # Requirements checks
+            #####################
+        -->
+
+        <!-- Only allow MSI to run if the user is an administrator (required to install/uninstall service through custom action) -->
+        <Property Id='MSIUSEREALADMINDETECTION' Value='1' />
+        <Condition Message='You need to be an administrator to install this product. Setup will now exit.'>Privileged</Condition>
+
+        <!-- Only allow MSI to run if Java is installed and we can get JAVA_HOME -->
+        <Property Id='JAVA_VERSION'>
+            <RegistrySearch Id='JavaVersionSearch' Root='HKLM' Key='SOFTWARE\JavaSoft\Java Runtime Environment' Name='CurrentVersion' Type='raw' />
+        </Property> 
+        <Property Id='JAVA_HOME'>
+            <RegistrySearch Id='JavaHomeSearch' Root='HKLM' Key='SOFTWARE\JavaSoft\Java Runtime Environment\[JAVA_VERSION]' Name='JavaHome' Type='raw' /> 
+        </Property>
+        <Condition Message='You must install a Java JRE/JDK prior to installing this package. Setup will now exit.' ><![CDATA[JAVA_HOME <>""]]></Condition> 
+
+
+
+        <!--
+            ################
+            # File Structure
+            ################
+        -->
+        
+        <!-- Have to define the toplevel bit (do not even try to understand this line. It just always has to be here... -->
+        <Directory Id='TARGETDIR' Name='SourceDir'>
+
+            <!-- Install to the standard Program Files folder -->
+            <Directory Id='ProgramFilesFolder' Name='PFiles'>
+
+                <!-- Everything goes under \Program Files\Raptor -->
+                <Directory Id='RAPTORDIR' Name='Raptor'>
+
+                    <!-- Since this is the ICA, put it in \Program Files\Raptor\ICA -->
+                    <Directory Id='RAPTORICADIR' Name='ICA'>
+
+                        <!-- All files will be installed here! -->
+
+                        <!-- This component will set the Environmental Variables for Raptor -->
+                        <Component Id='cmpRaptorIcaEnvVarHome' Guid='ce1e1a9f-94ec-4d63-88b2-ff255a576d63'>
+                        <CreateFolder />
+                        <Environment Id='SetRaptorIcaEnvVarHome'
+                        Action='set'
+                        Part='all'
+                        Name='RAPTOR_ICA_HOME'
+                        Permanent='no'
+                        System='yes'
+                        Value='[RAPTORICADIR]' />
+                        </Component>
+
+                    </Directory>
+
+                    <!-- Since this is the MUA, put it in \Program Files\Raptor\MUA -->
+                    <Directory Id='RAPTORMUADIR' Name='MUA'>
+
+                        <!-- All files will be installed here! -->
+
+                        <!-- This component will set the Environmental Variables for Raptor -->
+                        <Component Id='cmpRaptorMuaEnvVarHome' Guid='c00a5464-3916-49f6-8e74-919d55ff8557'>
+                        <CreateFolder />
+                        <Environment Id='SetRaptorMuaEnvVarHome'
+                        Action='set'
+                        Part='all'
+                        Name='RAPTOR_MUA_HOME'
+                        Permanent='no'
+                        System='yes'
+                        Value='[RAPTORMUADIR]' />
+                        </Component>
+
+                    </Directory>
+
+                    <!-- Since this is the Web, put it in \Program Files\Raptor\Web -->
+                    <Directory Id='RAPTORWEBDIR' Name='Web'>
+        
+                        <!-- All files will be installed here! -->
+
+                        <!-- This component will set the Environmental Variables for Raptor -->
+                        <Component Id='cmpRaptorWebEnvVarHome' Guid='99df8133-7121-48fb-880b-8b1f1127f274'>
+                            <CreateFolder />
+                            <Environment Id='SetRaptorWebEnvVarHome'
+                              Action='set'
+                              Part='all'
+                              Name='RAPTOR_WEB_HOME'
+                              Permanent='no'
+                              System='yes'
+                              Value='[RAPTORWEBDIR]' />
+                        </Component>
+
+                    </Directory>
+                
+                </Directory>
+        
+            </Directory>
+            
+        </Directory>
+        
+
+        
+        <!--
+            ##########
+            # Features
+            ##########
+        -->
+
+        <Feature Id='Complete'
+          Title='Raptor All Combined Package v1-r12'
+          Description='Raptor Server Combined Package, containing the Raptor ICA, Raptor MUA and Raptor Web components.'
+          Display='expand'
+          Level='1'
+          ConfigurableDirectory='RAPTORDIR'>
+
+            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.2.0' Description='Raptor ICA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+                <ComponentGroupRef Id='cgrRaptorIcaRoot' />
+                <ComponentGroupRef Id='cgrRaptorIcaBin' />
+                <ComponentGroupRef Id='cgrRaptorIcaConf' />
+                <ComponentGroupRef Id='cgrRaptorIcaKeys' />
+                <ComponentGroupRef Id='cgrRaptorIcaLib' />
+                <ComponentGroupRef Id='cgrRaptorIcaLogs' />
+                <ComponentRef Id='cmpRaptorIcaEnvVarHome' />
+            </Feature>
+
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.2.0' Description='Raptor MUA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+                <ComponentGroupRef Id='cgrRaptorMuaRoot' />
+                <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
+                <ComponentGroupRef Id='cgrRaptorMuaBin' />
+                <ComponentGroupRef Id='cgrRaptorMuaConf' />
+                <ComponentGroupRef Id='cgrRaptorMuaKeys' />
+                <ComponentGroupRef Id='cgrRaptorMuaLib' />
+                <ComponentGroupRef Id='cgrRaptorMuaLogs' />
+                <ComponentRef Id='cmpRaptorMuaEnvVarHome' />
+            </Feature>
+
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.0' Description='Raptor Web v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+                <ComponentGroupRef Id='cgrRaptorWebRoot' />
+                <ComponentGroupRef Id='cgrRaptorWebBin' />
+                <ComponentGroupRef Id='cgrRaptorWebConf' />
+                <ComponentGroupRef Id='cgrRaptorWebKeys' />
+                <ComponentGroupRef Id='cgrRaptorWebLib' />
+                <ComponentGroupRef Id='cgrRaptorWebLogs' />
+                <ComponentGroupRef Id='cgrRaptorWebWebapp' />
+                <ComponentRef Id='cmpRaptorWebEnvVarHome' />
+            </Feature>
+
+        </Feature>
+
+
+
+        <!--
+            ###########################################
+            # Custom Actions - Service install/unistall
+            ###########################################
+        -->
+
+        <!-- Run the batch file that installs/uninstalls the service. Cannot use normal WiX thing for this due to use of java wrapper -->
+        <CustomAction Id='InstallIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='install' />
+        <CustomAction Id='UninstallIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='remove' />
+        <CustomAction Id='InstallMuaService' FileKey='filRaptorMuaBinMuaBat' ExeCommand='install' />
+        <CustomAction Id='UninstallMuaService' FileKey='filRaptorMuaBinMuaBat' ExeCommand='remove' />
+        <CustomAction Id='InstallWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='install' />
+        <CustomAction Id='UninstallWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='remove' />
+
+        <!-- Run the same batch file to start/stop/restart the service. -->
+        <CustomAction Id='StartIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='start' />
+        <CustomAction Id='StopIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='stop' />
+        <CustomAction Id='RestartIcaService' FileKey='filRaptorIcaBinIcaBat' ExeCommand='restart' />
+        <CustomAction Id='StartMuaService' FileKey='filRaptorMuaBinMuaBat' ExeCommand='start' />
+        <CustomAction Id='StopMuaService' FileKey='filRaptorMuaBinMuaBat' ExeCommand='stop' />
+        <CustomAction Id='RestartMuaService' FileKey='filRaptorMuaBinMuaBat' ExeCommand='restart' />
+        <CustomAction Id='StartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='start' />
+        <CustomAction Id='StopWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='stop' />
+        <CustomAction Id='RestartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='restart' />
+
+
+        <!-- When installing, install service and start it -->
+        <InstallExecuteSequence>
+            <Custom Action='InstallIcaService' After='RunKeytoolSwapKeysPutWebInMua'>INSTALLING</Custom>
+            <Custom Action='StartIcaService' After='InstallIcaService'>INSTALLING</Custom>
+            <Custom Action='InstallMuaService' After='StartIcaService'>INSTALLING</Custom>
+            <Custom Action='StartMuaService' After='InstallMuaService'>INSTALLING</Custom>
+            <Custom Action='InstallWebService' After='StartMuaService'>INSTALLING</Custom>
+            <Custom Action='StartWebService' After='InstallWebService'>INSTALLING</Custom>
+        </InstallExecuteSequence>
+
+        <!-- When uninstalling, uninstall service (automagically stops it first) -->
+        <InstallExecuteSequence>
+            <Custom Action='StopIcaService' After='UnpublishFeatures'>UNINSTALLING</Custom>
+            <Custom Action='UninstallIcaService' After='StopIcaService'>UNINSTALLING</Custom>
+            <Custom Action='StopMuaService' After='UninstallIcaService'>UNINSTALLING</Custom>
+            <Custom Action='UninstallMuaService' After='StopMuaService'>UNINSTALLING</Custom>
+            <Custom Action='StopWebService' After='UninstallMuaService'>UNINSTALLING</Custom>
+            <Custom Action='UninstallWebService' After='StopWebService'>UNINSTALLING</Custom>
+        </InstallExecuteSequence>
+
+        <!-- When upgrading, restart service -->
+        <InstallExecuteSequence>
+            <Custom Action='RestartIcaService' After='StartServices'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+            <Custom Action='RestartMuaService' After='RestartIcaService'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+            <Custom Action='RestartWebService' After='RestartMuaService'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+        </InstallExecuteSequence>
+
+
+
+        <!--
+            ##############################
+            # Custom Actions - Java keygen
+            ##############################
+        -->
+
+        <!-- Set the path to the JRE keytool exe and how to run it -->
+        <CustomAction Id='SetKeytoolPath' Property='KeytoolPath' Value='[JAVA_HOME]\bin\keytool.exe' />
+
+        <!-- Create the java keystore with private key -->
+        <CustomAction Id='RunKeytoolCreateIcaPrivateKey' Property='KeytoolPath' ExeCommand='-genkey -alias raptorica -keystore "[RAPTORICADIR]keys\raptor-ica.jks" -storepass changeit -keypass changeit -dname "CN=[ComputerName],ou=ICA,o=Raptor" -validity 7300 -keyalg RSA -keysize 2048' Return='check' />
+        <CustomAction Id='RunKeytoolCreateMuaPrivateKey' Property='KeytoolPath' ExeCommand='-genkey -alias raptormua -keystore "[RAPTORMUADIR]keys\raptor-mua.jks" -storepass changeit -keypass changeit -dname "CN=[ComputerName],ou=MUA,o=Raptor" -validity 7300 -keyalg RSA -keysize 2048' Return='check' />
+        <CustomAction Id='RunKeytoolCreateWebPrivateKey' Property='KeytoolPath' ExeCommand='-genkey -alias raptorweb -keystore "[RAPTORWEBDIR]keys\raptor-web.jks" -storepass changeit -keypass changeit -dname "CN=[ComputerName],ou=WEB,o=Raptor" -validity 7300 -keyalg RSA -keysize 2048' Return='check' />
+
+        <!-- Export the public key from the keystore -->
+        <CustomAction Id='RunKeytoolExportIcaPublicKey' Property='KeytoolPath' ExeCommand='-export -alias raptorica -keystore "[RAPTORICADIR]keys\raptor-ica.jks" -storepass changeit -file "[RAPTORICADIR]keys\raptor-ica-public.crt"' Return='check' />
+        <CustomAction Id='RunKeytoolExportMuaPublicKey' Property='KeytoolPath' ExeCommand='-export -alias raptormua -keystore "[RAPTORMUADIR]keys\raptor-mua.jks" -storepass changeit -file "[RAPTORMUADIR]keys\raptor-mua-public.crt"' Return='check' />
+        <CustomAction Id='RunKeytoolExportWebPublicKey' Property='KeytoolPath' ExeCommand='-export -alias raptorweb -keystore "[RAPTORWEBDIR]keys\raptor-web.jks" -storepass changeit -file "[RAPTORWEBDIR]keys\raptor-web-public.crt"' Return='check' />
+
+        <!-- Swap keys between components -->
+        <CustomAction Id='RunKeytoolSwapKeysPutMuaInIca' Property='KeytoolPath' ExeCommand='-import -noprompt -keystore "[RAPTORICADIR]keys\authorised-keys.jks" -storepass changeit -alias raptormua -file "[RAPTORMUADIR]keys\raptor-mua-public.crt"' Return='check' />
+        <CustomAction Id='RunKeytoolSwapKeysPutIcaInMua' Property='KeytoolPath' ExeCommand='-import -noprompt -keystore "[RAPTORMUADIR]keys\authorised-keys.jks" -storepass changeit -alias raptorica -file "[RAPTORICADIR]keys\raptor-ica-public.crt"' Return='check' />
+        <CustomAction Id='RunKeytoolSwapKeysPutMuaInWeb' Property='KeytoolPath' ExeCommand='-import -noprompt -keystore "[RAPTORWEBDIR]keys\authorised-keys.jks" -storepass changeit -alias raptormua -file "[RAPTORMUADIR]keys\raptor-mua-public.crt"' Return='check' />
+        <CustomAction Id='RunKeytoolSwapKeysPutWebInMua' Property='KeytoolPath' ExeCommand='-import -noprompt -keystore "[RAPTORMUADIR]keys\authorised-keys.jks" -storepass changeit -alias raptorweb -file "[RAPTORWEBDIR]keys\raptor-web-public.crt"' Return='check' />
+
+
+        <InstallExecuteSequence>
+            <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
+            <Custom Action='RunKeytoolCreateIcaPrivateKey' After='InstallFinalize'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolCreateMuaPrivateKey' After='RunKeytoolCreateIcaPrivateKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolCreateWebPrivateKey' After='RunKeytoolCreateMuaPrivateKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolExportIcaPublicKey' After='RunKeytoolCreateWebPrivateKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolExportMuaPublicKey' After='RunKeytoolExportIcaPublicKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolExportWebPublicKey' After='RunKeytoolExportMuaPublicKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolSwapKeysPutMuaInIca' After='RunKeytoolExportWebPublicKey'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolSwapKeysPutIcaInMua' After='RunKeytoolSwapKeysPutMuaInIca'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolSwapKeysPutMuaInWeb' After='RunKeytoolSwapKeysPutIcaInMua'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolSwapKeysPutWebInMua' After='RunKeytoolSwapKeysPutMuaInWeb'>JAVA_HOME And INSTALLING</Custom>
+        </InstallExecuteSequence>
+        
+
+
+        <!--
+            ########################
+            # Guess at Config Values
+            ########################
+        -->
+
+        <!-- Metadata values -->
+        <Property Id='ICAENTITYID' Value='https://thisservername.example.com/raptor-ica' />
+        <Property Id='ICAORGANISATIONNAME' Value='Example University' />
+        <Property Id='ICASERVICENAME' Value='Shibboleth IdP' />
+        <Property Id='ICACONTACTEMAIL' Value='someone@example.com' />
+        <Property Id='MUAENTITYID' Value='https://thisservername.example.com/raptor-mua' />
+        <Property Id='MUAORGANISATIONNAME' Value='Example University' />
+        <Property Id='MUASERVICENAME' Value='Raptor MUA' />
+        <Property Id='MUACONTACTEMAIL' Value='someone@example.com' />
+        <Property Id='WEBENTITYID' Value='https://thisservername.example.com/raptor-web' />
+        <Property Id='WEBORGANISATIONNAME' Value='Example University' />
+        <Property Id='WEBSERVICENAME' Value='Raptor Web' />
+        <Property Id='WEBCONTACTEMAIL' Value='someone@example.com' />
+
+
+
+        <!--
+            ################
+            # User Interface
+            ################
+        -->
+  
+        <!-- Add/Remove Programs Stuff -->
+        <Icon Id='Raptor.ico' SourceFile='source\installer\raptor.ico' />
+        <Property Id='ARPPRODUCTICON' Value='Raptor.ico' />
+        <Property Id='ARPHELPLINK' Value='http://iam.cf.ac.uk/Raptor' />
+
+        <!-- Variables for the UI -->
+        <WixVariable Id='WixUILicenseRtf' Value='source\installer\License.rtf' />
+        <WixVariable Id='WixUIBannerBmp' Value='source\installer\raptor-msi-banner.bmp' />
+        <WixVariable Id='WixUIDialogBmp' Value='source\installer\raptor-msi-dialog.bmp' />
+
+        <!-- Change to Mondo style -->
+        <UI Id='RaptorWixUI'>
+            <UIRef Id='WixUI_FeatureTree' />
+            <UIRef Id='WixUI_ErrorProgressText' />
+
+            <DialogRef Id='RaptorMsiDlgIcaMetadata' />
+            <DialogRef Id='RaptorMsiDlgMuaMetadata' />
+            <DialogRef Id='RaptorMsiDlgWebMetadata' />
+
+            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgIcaMetadata'>INSTALLING</Publish>
+            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>INSTALLING</Publish>
+        </UI>
+
+    </Product>
+</Wix>
