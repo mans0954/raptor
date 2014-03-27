@@ -110,7 +110,7 @@
 
 
 						<rich:layoutPanel position="right">
-							<a4j:form id="optionsPanelForm">
+							<h:form id="optionsPanelForm">
 								<rich:panel width="100%" id="optionsPanel">
 									<f:facet name="header">
                                         Options
@@ -130,11 +130,8 @@
 												<h:outputText value="Event Type" style="font-weight: bold;" />
 
 												<rich:inplaceSelect
-													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventTypeString}">
-													<f:selectItem itemLabel="Shibboleth"
-														itemValue="SHIBBOLETH_AUTHENTICATION" />
-													<f:selectItem itemLabel="Ezproxy"
-														itemValue="EZPROXY_AUTHENTICATION" />
+													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.eventType}">
+											         <f:selectItems value="#{eventTypeService.eventTypeList}"/>
 												</rich:inplaceSelect>
 
 												<h:outputText value="Resource Category"
@@ -188,21 +185,16 @@
 
 												<h:outputText value="Graph Title:"
 													style="font-weight: bold;" />
-												<h:inputText style="width:100%;"
+												<h:inputText style="width:100%;" required="true" requiredMessage="Graph Title Value required"
 													value="#{flowScope.websession.graphmodel.selectedStatisticalUnit.statisticalUnitInformation.statisticParameters.presentation.graphTitle}" />
 
 												<f:facet name="footer">
 													<h:panelGroup style="display:block; text-align:center">
-														<a4j:commandButton ajaxSingle="false" value="update"
+														<h:commandButton ajaxSingle="true" value="update" action="updateMUAStatistic"
+                                                                reRender="optionsPanelForm,controlPanelForm, chartForm"
 															onclick="#{rich:component('workingPanel')}.show();">
-															<!--  added the support here, as the command button needs to submit the form properties, which it only does
-													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
-															<a4j:support ajaxSingle="true" event="oncomplete"
-																oncomplete="#{rich:component('workingPanel')}.hide();"
-																action="updateMUAStatistic"
-																reRender="optionsPanelForm,controlPanelForm, chartForm" />
-
-														</a4j:commandButton>
+															
+														</h:commandButton>
 													</h:panelGroup>
 												</f:facet>
 											</h:panelGrid>
@@ -356,7 +348,7 @@
 										</rich:layoutPanel>
 									</rich:layout>
 								</rich:panel>
-							</a4j:form>
+							</h:form>
 						</rich:layoutPanel>
 
 
