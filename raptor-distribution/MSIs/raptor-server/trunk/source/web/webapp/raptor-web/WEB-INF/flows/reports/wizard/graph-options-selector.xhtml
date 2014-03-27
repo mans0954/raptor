@@ -1,0 +1,141 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+
+	<ui:define name="content">
+		<a4j:include viewId="../working-panel.xhtml" />
+
+
+		<rich:layout>
+			<rich:layoutPanel position="center" width="70%">
+				<h:form>
+					<h4 align="left">
+						<h:commandLink value="Date Selection"
+							action="date-selector" />
+						->
+						<h:commandLink value="Select Event Type(s)"
+							action="event-type-selector" />
+						->
+						<h:commandLink value="Graph Type Selector"
+							action="graph-type-selector" />
+						-> <h:commandLink value="Graph Series Selector" action="graph-series-selector"/>
+						-> Step 5. Graph Options Selector
+						<h:outputText rendered="#{savedGraphWizardModel.edittingReport}"
+							style="color:red" value=" [EDIT]" />
+					</h4>
+				</h:form>
+				<center>
+
+					<div class="stepbystep">
+						<h:form id="graphOptionsForm">
+							<h3 align="center">Please Select The Graph Options</h3>
+							<br />
+
+							<h:panelGrid columns="2">
+								<h:outputText value="Graph Title:" style="font-weight: bold;" />
+								<h:inputText style="width:100%;"
+									value="#{savedGraphWizardModel.graphWizardModel.graphTitle}" />
+								<h:outputText value="Chart Type:" />
+								<rich:comboBox selectFirstOnUpdate="false"
+									defaultLabel="Enter some value"
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.graphType}">
+									<f:selectItems
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.graphTypeList}" />
+								</rich:comboBox>
+
+								<h:outputText value="Orientation:" />
+								<rich:comboBox
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.orientation}">
+									<f:selectItems
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.orientationTypeList}" />
+								</rich:comboBox>
+
+								<h:outputText value="Height in pixels:" />
+								<h:inputText
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.imageHeight}" />
+
+								<h:outputText value="Label Position:" />
+								<rich:comboBox selectFirstOnUpdate="false"
+									defaultLabel="Enter some value"
+									value="#{savedGraphWizardModel.graphWizardModel.chartOptions.xLabelPosition}">
+									<f:selectItems
+										value="#{savedGraphWizardModel.graphWizardModel.chartOptions.labelPositionsTypeList}" />
+								</rich:comboBox>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="1" border="0">
+								<h:messages style="color:darkred" id="error_message" />
+							</h:panelGrid>
+
+
+							<h:panelGrid columns="6">
+								<h:commandButton value="Select Post Processors" action="next"
+									onclick="#{rich:component('workingPanel')}.show();" />
+								<rich:spacer width="5px" />
+								<h:commandButton value="back" action="back" />
+								<rich:spacer width="5px" />
+								<h:commandButton value="cancel" action="cancel" />
+								<h:commandButton value="finish" action="finish"
+									onclick="#{rich:component('workingPanel')}.show();" />
+
+							</h:panelGrid>
+						</h:form>
+					</div>
+				</center>
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+				<div class="stepbystepInstructions">
+					<h3 align="center">Instructions</h3>
+
+					The type of graph and its options can be customised. You can
+					change:
+					<ul>
+						<li>The Graph's title (note this is used on the graph itself
+							and as the name the report will be saved as, should you choose to
+							save the report for reuse.</li>
+						<li>Chart Type - Bar chart, Line chart, etc.</li>
+						<li>Orientation - whether you want each data grouping to be
+							presented as columns or rows.</li>
+						<li>Height in pixels - how tall each graph should be.</li>
+						<li>Label Position - the orientation of the data labels for
+							each column.</li>
+					</ul>
+				</div>
+
+			</rich:layoutPanel>
+
+
+		</rich:layout>
+
+
+	</ui:define>
+</ui:composition>

@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='8f2eb450-743c-47f3-86ba-8d60bcc16226'
+    <Product Id='4d79eda3-9d9c-47f0-8b9f-0154bd6d63a0'
       Name='Raptor Server Combined Package'
       UpgradeCode='b5e977e4-8691-42d0-a21f-6243f02cb8a8'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.12.0'>
+      Version='1.13.0'>
 
         <Package Id='*'
           Description='Raptor Server Combined Package'
-          Comments='Raptor Server Combined Package v1-r12 (MUA v1.1.4 / Web v1.1.0)'
+          Comments='Raptor Server Combined Package v1-r13 (MUA v1.2.0 / Web v1.2.0)'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -157,7 +157,7 @@
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.1.4' Description='Raptor MUA v1.1.4' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.2.0' Description='Raptor MUA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
                 <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
@@ -168,7 +168,7 @@
                 <ComponentRef Id='cmpRaptorMuaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.1.0' Description='Raptor Web v1.1.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.0' Description='Raptor Web v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />

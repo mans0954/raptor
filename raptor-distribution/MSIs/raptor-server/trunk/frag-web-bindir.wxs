@@ -7,7 +7,7 @@
                     <File Id='filRaptorWebBinWebBat' KeyPath='yes' Source='source\web\bin\web.bat' />
                 </Component>
                 <Component Id='cmpRaptorWebBinWrapperExe' Guid='*'>
-                    <File Id='filRaptorWebBinWrapperExe' KeyPath='yes' Source='source\web\bin\wrapper-windows-x86-32.exe' />
+                    <File Id='filRaptorWebBinWrapperExe' KeyPath='yes' Source='source\web\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorWebBinWrapperConf' Guid='*'>
                     <File Id='filRaptorWebBinWrapperConf' KeyPath='yes' Source='source\web\bin\wrapper.conf' />

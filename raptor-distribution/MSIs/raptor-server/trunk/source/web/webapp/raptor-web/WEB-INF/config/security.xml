@@ -40,8 +40,8 @@
 		</s:session-management>
 	</s:http>
 
-    
-    <import resource="file:///${configurationFiles}/conf/users.xml" />
+
+    <import resource="file:///${configurationFiles}/conf/users.xml"/>
 
 
 </beans>

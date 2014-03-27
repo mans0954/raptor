@@ -18,7 +18,8 @@
 -->
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
 
     <description>RaptorWeb</description>
 
@@ -44,6 +45,13 @@
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
     </context-param>
+    
+    <!--  so that Jetty picks up the correct faces config -->
+    <listener>
+        <listener-class>
+            com.sun.faces.config.ConfigureListener
+        </listener-class>
+    </listener>
 
 
     <!-- Use xhtml view templates saved as *.xhtml, for use with Facelets -->
@@ -141,7 +149,7 @@
     <!-- Richfaces config -->
     <context-param>
         <param-name>org.richfaces.SKIN</param-name>
-        <param-value>darkX</param-value>
+        <param-value>glassX</param-value>
     </context-param>
 
     <!-- Making the RichFaces skin spread to standard HTML controls -->
