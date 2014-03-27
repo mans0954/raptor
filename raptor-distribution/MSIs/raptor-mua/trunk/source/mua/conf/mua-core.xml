@@ -31,6 +31,38 @@
             <ref bean="MUAProcess"></ref>
         </property>
     </bean>
+    
+    <!-- Types of events supported in this system, removing need for reflection (as this becomes to difficult to manage) -->
+    <bean id="registeredConcreteEventTypes" class="uk.ac.cardiff.raptor.registry.EventTypeRegistry">
+        <property name="registeredEventTypes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class" >uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value></property>
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>                    
+                    <property name="concrete" value="true"/>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value></property>                    
+                    <property name="concrete" value="true"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value></property>                    
+                    <property name="concrete" value="false"/>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType"> <value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>                    
+                    <property name="concrete" value="false"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
     <bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding" scope="prototype" />
     <bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean" scope="prototype">
@@ -47,8 +79,10 @@
                             is a way of dealing with inheritence in CXF and aegis -->
                         <value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
                     </list>
                 </entry>
             </map>
@@ -113,7 +147,10 @@
     <!-- this bean config kicks of the singleton engine instance which is then used by all services of the MUA -->
     <bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
         <property name="eventReleaseClient">
-            <ref bean="eventReleaseClient"></ref>
+            <ref bean="eventReleaseClient"/>
+        </property>
+        <property name="eventTypeRegistry">
+            <ref bean="registeredConcreteEventTypes"/>
         </property>
         <property name="statisticsHandler">
             <ref bean="statisticalUnits" />
@@ -134,8 +171,8 @@
             <ref bean="dataAccessRegister"></ref>
         </property>
         <property name="maxReleaseEventSize">
-            <value>2000</value>
-        </property> <!-- Max Size is 3000 -->
+            <value>5000</value>
+        </property> <!-- Max Size is 10000 -->
     </bean>
 
    <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
@@ -201,8 +238,8 @@
         <property name="jobDetail">
             <ref local="muaReleaseJobDetail" />
         </property>
-        <property name="startDelay" value="10000" />
-        <property name="repeatInterval" value="10000" />
+        <property name="startDelay" value="60000" />
+        <property name="repeatInterval" value="60000" />
     </bean>
 
     <bean id="muaReleaseJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -250,7 +287,7 @@
     <!-- DONE -->
 
     <!-- Create the storage engine and entry handler -->
-    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.EventStorageEngine">
+    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.DefaultEventStorageEngine">
         <property name="eventHandler">
             <ref bean="persistantEventHandler" />
         </property>
