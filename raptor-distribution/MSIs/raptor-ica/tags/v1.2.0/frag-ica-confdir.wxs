@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
+     xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
+    <Fragment>
+
+        <!--
+            ############
+            # The Files!
+            ############
+        -->
+
+        <DirectoryRef Id='RAPTORICADIR'>            
+            <Directory Id='dirRaptorIcaConf' Name='conf'>
+
+
+
+                <!--
+                    ########################
+                    # Dist Files Directory - i.e. the latest, unedited version of each file
+                    ########################
+                -->
+
+                <Directory Id='RaptorIcaConfDistDir' Name='dist'>
+                    <Component Id='cmpRaptorIcaConfEventParseDist' Guid='*'>
+                        <File Id='filRaptorIcaConfEventParseDist' KeyPath='yes' Source='source\ica\conf\event-parse.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfEventParseFormatsCustomDist' Guid='*'>
+                        <File Id='filRaptorIcaConfEventParseFormatsCustomDist' KeyPath='yes' Source='source\ica\conf\event-parse-formats-custom.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfEventParseFormatsSystemDist' Guid='*'>
+                        <File Id='filRaptorIcaConfEventParseFormatsSystemDist' KeyPath='yes' Source='source\ica\conf\event-parse-formats-system.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfEventReleaseDist' Guid='*'>
+                        <File Id='filRaptorIcaConfEventReleaseDist' KeyPath='yes' Source='source\ica\conf\event-release.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfIcaCoreDist' Guid='*'>
+                        <File Id='filRaptorIcaConfIcaCoreDist' KeyPath='yes' Source='source\ica\conf\ica-core.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfLoggingDist' Guid='*'>
+                        <File Id='filRaptorIcaConfLoggingDist' KeyPath='yes' Source='source\ica\conf\logging.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfMetadataDist' Guid='*'>
+                        <File Id='filRaptorIcaConfMetadataDist' KeyPath='yes' Source='source\ica\conf\metadata.xml'/>
+                    </Component>
+                    <Component Id='cmpRaptorIcaConfServerPropertiesDist' Guid='*'>
+                        <File Id='filRaptorIcaConfServerPropertiesDist' KeyPath='yes' Source='source\ica\conf\server.properties'/>
+                    </Component>
+                </Directory>
+
+
+
+                <!--
+                    ########################
+                    # Actual files, but some set not to overwrite existing files
+                    ########################
+                -->
+
+                <Component Id='cmpRaptorIcaConfEventParse' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfEventParse' KeyPath='yes' Source='source\ica\conf\event-parse.xml'/>
+
+                    <!-- Change the location for the Shib IdP log file (using its default) -->
+                    <util:XmlFile Id='ModifyIcaEventParseShib2Location'
+                      File='[#filRaptorIcaConfEventParse]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="dataAccessRegister"[\]]/property[\[]@name="parsingModules"[\]]/list/bean[\[]@id="shibbolethAuditLFP"[\]]/property[\[]@name="logfile"[\]]/value'
+                      Value='file:///C:\Program Files\Internet2\Shib2IdP\logs\idp-audit.log'/>
+
+                    <!-- Change the location for the system to log, and log file location, based on info collected from the UI -->
+                    <!-- TODO -->
+
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfEventParseFormatsCustom' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfEventParseFormatsCustom' KeyPath='yes' Source='source\ica\conf\event-parse-formats-custom.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfEventParseFormatsSystem' Guid='*'>
+                    <File Id='filRaptorIcaConfEventParseFormatsSystem' KeyPath='yes' Source='source\ica\conf\event-parse-formats-system.xml'/>
+                </Component>
+
+
+                <Component Id='cmpRaptorIcaConfEventRelease' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfEventRelease' KeyPath='yes' Source='source\ica\conf\event-release.xml'/>
+
+                    <!-- Change the trust and keystore locations to Windows style -->
+                    <util:XmlFile Id='ModifyIcaEventReleaseTrustStoreLocation'
+                      File='[#filRaptorIcaConfEventRelease]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="serviceEndpointInterface"[\]]/property[\[]@name="tlsParameters"[\]]/bean[\[]@class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters"[\]]/property[\[]@name="trustStoreLocation"[\]]/value'
+                      Value='[RAPTORICADIR]keys\authorised-keys.jks'/>
+                    <util:XmlFile Id='ModifyIcaEventReleaseKeyStoreLocation'
+                      File='[#filRaptorIcaConfEventRelease]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="serviceEndpointInterface"[\]]/property[\[]@name="tlsParameters"[\]]/bean[\[]@class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters"[\]]/property[\[]@name="keyStoreLocation"[\]]/value'
+                      Value='[RAPTORICADIR]keys\raptor-ica.jks'/>
+
+                    <!-- Change the location of the MUA based on info collected from the UI -->
+                    <!-- TODO -->
+
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfIcaCore' Guid='*'>
+                    <File Id='filRaptorIcaConfIcaCore' KeyPath='yes' Source='source\ica\conf\ica-core.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfLogging' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfLogging' KeyPath='yes' Source='source\ica\conf\logging.xml'/>
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfMetadata' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfMetadata' KeyPath='yes' Source='source\ica\conf\metadata.xml'/>
+
+                    <!-- Change the metadata with info collected from the UI -->
+                    <util:XmlFile Id='ModifyIcaEntityId'
+                      File='[#filRaptorIcaConfMetadata]'
+                      Action='setValue'
+                      ElementPath='//beans/bean/property[\[]@name="entityId"[\]]/value'
+                      Value='[ICAENTITYID]'/>
+                    <util:XmlFile Id='ModifyIcaContactEmail'
+                      File='[#filRaptorIcaConfMetadata]'
+                      Action='setValue'
+                      ElementPath='//beans/bean/property[\[]@name="contactEmail"[\]]/value'
+                      Value='[ICACONTACTEMAIL]'/>
+                    <util:XmlFile Id='ModifyIcaServiceName'
+                      File='[#filRaptorIcaConfMetadata]'
+                      Action='setValue'
+                      ElementPath='//beans/bean/property[\[]@name="serviceName"[\]]/value'
+                      Value='[ICASERVICENAME]'/>
+                    <util:XmlFile Id='ModifyIcaOrganisationName'
+                      File='[#filRaptorIcaConfMetadata]'
+                      Action='setValue'
+                      ElementPath='//beans/bean/property[\[]@name="organisationName"[\]]/value'
+                    Value='[ICAORGANISATIONNAME]'/>
+
+                </Component>
+
+                <Component Id='cmpRaptorIcaConfServerProperties' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorIcaConfServerProperties' KeyPath='yes' Source='source\ica\conf\server.properties'/>
+                </Component>
+
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id='cgrRaptorIcaConf'>
+            <ComponentRef Id='cmpRaptorIcaConfEventParseDist' />
+            <ComponentRef Id='cmpRaptorIcaConfEventParseFormatsCustomDist' />
+            <ComponentRef Id='cmpRaptorIcaConfEventParseFormatsSystemDist' />
+            <ComponentRef Id='cmpRaptorIcaConfEventReleaseDist' />
+            <ComponentRef Id='cmpRaptorIcaConfIcaCoreDist' />
+            <ComponentRef Id='cmpRaptorIcaConfLoggingDist' />
+            <ComponentRef Id='cmpRaptorIcaConfMetadataDist' />
+            <ComponentRef Id='cmpRaptorIcaConfServerPropertiesDist' />
+            <ComponentRef Id='cmpRaptorIcaConfEventParse' />
+            <ComponentRef Id='cmpRaptorIcaConfEventParseFormatsCustom' />
+            <ComponentRef Id='cmpRaptorIcaConfEventParseFormatsSystem' />
+            <ComponentRef Id='cmpRaptorIcaConfEventRelease' />
+            <ComponentRef Id='cmpRaptorIcaConfIcaCore' />
+            <ComponentRef Id='cmpRaptorIcaConfLogging' />
+            <ComponentRef Id='cmpRaptorIcaConfMetadata' />
+            <ComponentRef Id='cmpRaptorIcaConfServerProperties' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
