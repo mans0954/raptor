@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk> Licensed under the Apache License, Version 2.0 (the "License"); 
+    you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS 
+    IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language 
+    governing permissions and limitations under the License. -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jaxws="http://cxf.apache.org/jaxws"
+    xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+
+    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+
+    <!-- WEB SERVICE ENDPOINT INTERFACE (SEI) SETUP -->
+    <jaxws:endpoint id="muaEndpoint" implementor="#muaEndpointInterface" address="/MultiUnitAggregator">
+        <jaxws:serviceFactory>
+            <ref bean='jaxws-and-aegis-service-factory' />
+        </jaxws:serviceFactory>
+
+
+    </jaxws:endpoint>
+
+    <bean id="muaEndpointInterface" class="uk.ac.cardiff.raptormua.wsinterface.impl.MultiUnitAggregatorImpl">
+        <property name="processService">
+            <ref bean="MUAProcess"></ref>
+        </property>
+    </bean>
+
+    <!-- Types of events supported in this system, removing need for reflection (as this becomes to difficult to manage) -->
+    <bean id="registeredConcreteEventTypes" class="uk.ac.cardiff.raptor.registry.EventTypeRegistry">
+        <property name="registeredEventTypes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent
+                        </value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="false" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value>
+                    </property>
+                    <property name="concrete" value="false" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="false" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.registry.RegisteredEventType">
+                    <property name="eventType">
+                        <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </property>
+                    <property name="concrete" value="true" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="statisticTypeRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.XmlConfiguredStatisticTypeRegistry">
+        <property name="statisticTypes">
+            <list>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="CountryEntry" />
+                    <property name="description" value="Counts the entries" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.CountEntry" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group By Field" />
+                    <property name="description" value="Groups results by the particular field over the given time interval" />
+                    <property name="statisticClass" value="uk.ac.cardiff.raptormua.engine.statistics.functions.GroupByFrequency" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                            <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.model.wsmodel.StatisticFunctionType">
+                    <property name="friendlyName" value="Group Jusp Aggregate Resources" />
+                    <property name="description" value="Groups Jusp Resources together based on Jr1, Jr1a downloads" />
+                    <property name="statisticClass"
+                    value="uk.ac.cardiff.raptormua.engine.statistics.functions.JuspStatisticalFunction" />
+                    <property name="appliesToEventTypes">
+                        <list>
+                            <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="aegisBean" class="org.apache.cxf.aegis.databinding.AegisDatabinding" scope="prototype" />
+    <bean id="jaxws-and-aegis-service-factory" class="org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean" scope="prototype">
+        <property name="dataBinding" ref="aegisBean" />
+        <property name="properties">
+            <map>
+                <entry key="writeXsiType">
+                    <value type="java.lang.Boolean">true</value>
+                </entry>
+                <entry key="overrideTypesList">
+                    <list>
+                        <!-- THIS LIST IS IMPORTANT, it exposes these classes to the aegis XSD creator so we can output the 
+                            generic Entry class in lists in the Collector Service Endpoint Class but actually output any of its subclasses. Hence, this 
+                            is a way of dealing with inheritence in CXF and aegis -->
+                        <value>uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                        <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                         <value>uk.ac.cardiff.model.event.AggregatedEvent</value>
+                        <value>uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                        <value>uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
+                         <value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- DONE -->
+
+    <bean id="MUAProcess" class="uk.ac.cardiff.raptormua.service.impl.MUAProcessImpl">
+        <property name="engine">
+            <ref bean="MUAEngine"></ref>
+        </property>
+        <property name="fileUploadEngine">
+            <ref bean="fileUploadFromDirectory" />
+        </property>
+    </bean>
+
+    <bean id="fileUploadFromDirectory" class="uk.ac.cardiff.raptormua.upload.FileUploadEngine">
+        <property name="enabled" value="true" />
+        <property name="uploadDirectories">
+            <list>
+                <bean id="shibUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/shib2/" />
+                    <property name="eventType">
+                        <value>SHIBBOLETH2</value>
+                    </property>
+                </bean>
+                <bean id="shib13UploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/shib13/" />
+                    <property name="eventType">
+                        <value>SHIBBOLETH13</value>
+                    </property>
+                </bean>
+                <bean id="shibSp24BelowUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/shibsp_upto24/" />
+                    <property name="eventType">
+                        <value>SHIBBOLETHSP24</value>
+                    </property>
+                </bean>
+                <bean id="ezproxyUploadDirectory" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/ezproxy/" />
+                    <property name="eventType">
+                        <value>EZPROXY</value>
+                    </property>
+                </bean>
+                <bean id="openAthensLa" class="uk.ac.cardiff.raptormua.upload.UploadDirectory">
+                    <property name="allowedFileExtensions">
+                        <list>
+                            <value>txt</value>
+                            <value>log</value>
+                        </list>
+                    </property>
+                    <property name="uploadDirectory" value="/opt/raptor/mua/batchimport/openathensla/" />
+                    <property name="eventType">
+                        <value>OPENATHENSLA</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- this bean config kicks of the singleton engine instance which is then used by all services of the MUA -->
+    <bean id="MUAEngine" class="uk.ac.cardiff.raptormua.engine.MUAEngine">
+        <property name="eventReleaseClient">
+            <ref bean="eventReleaseClient" />
+        </property>
+        <property name="eventTypeRegistry">
+            <ref bean="registeredConcreteEventTypes" />
+        </property>
+        <property name="statisticsHandler">
+            <ref bean="statisticalUnits" />
+        </property>
+        <property name="storageEngine">
+            <ref bean="storageEngine"></ref>
+        </property>
+        <property name="resourceStorageEngine">
+            <ref bean="resourceStorageEngine"></ref>
+        </property>
+        <property name="muaMetadata">
+            <ref bean="MUAMetadata"></ref>
+        </property>
+        <property name="capabilitiesConstructor">
+            <ref bean="capabilitiesConstructor" />
+        </property>
+        <property name="dataAccessRegister">
+            <ref bean="dataAccessRegister"></ref>
+        </property>
+        <property name="maxReleaseEventSize">
+            <value>5000</value>
+        </property> <!-- Max Size is 10000 -->
+    </bean>
+
+    <bean id="capabilitiesConstructor" class="uk.ac.cardiff.raptormua.engine.CapabilitiesConstructor">
+        <property name="statisticsHandler">
+            <ref bean="statisticalUnits" />
+        </property>
+        <property name="storageEngine">
+            <ref bean="storageEngine"></ref>
+        </property>
+        <property name="metadata">
+            <ref bean="MUAMetadata"></ref>
+        </property>
+        <property name="cacheTimeoutMs">
+            <value>1800000</value>
+        </property>
+        <property name="excludeFieldNames">
+            <set>
+                <value>principalName</value>
+                <value>responseId</value>
+                <value>requestId</value>
+                <value>sessionId</value>
+                <value>requesterIp</value>
+                <value>nameIdentifier</value>
+                <value>persistantId</value>
+                <value>eventTime</value>
+                <value>eventId</value>
+                <value>assertionId</value>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="statisticalUnits" class="uk.ac.cardiff.raptormua.engine.statistics.StatisticsHandler">
+        <property name="statisticRegistry">
+            <ref bean="statisticRegistry" />
+        </property>
+        <property name="statisticTypeRegistry">
+            <ref bean="statisticTypeRegistry" />
+        </property>
+    
+    </bean>
+
+    <!-- Handles all statistical units defined -->
+    <bean id="statisticRegistry" class="uk.ac.cardiff.raptormua.engine.statistics.ContextAwareStatisticRegistry">
+        <property name="automaticallyFindStatsiticsToLoad" value="true" />
+        <property name="processorRegistry">
+            <ref bean="processorRegistry" />
+        </property>
+    </bean>
+
+
+
+    <bean id="eventReleaseEngine" class="uk.ac.cardiff.raptor.remoting.client.EventReleaseEngine">
+        <property name="attributeFilterEngine">
+            <ref bean="attributeFilterEngine" />
+        </property>
+        <property name="serviceEndpointInterface">
+            <ref bean="serviceEndpointInterface" />
+        </property>
+    </bean>
+
+    <bean id="attributeFilterEngine" class="uk.ac.cardiff.raptor.attribute.filtering.AttrributeFilterEngine" />
+
+
+    <!-- release trigger setup -->
+    <bean id="muaReleaseQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="muaReleaseJobDetail" />
+        </property>
+        <property name="startDelay" value="60000" />
+        <property name="repeatInterval" value="60000" />
+    </bean>
+
+    <bean id="muaReleaseJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="MUAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>release</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <!-- large file upload trigger -->
+    <bean id="muaFileUploadQuickTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+        <property name="jobDetail">
+            <ref local="muaFileUplaodJobDetail" />
+        </property>
+        <property name="startDelay" value="10000" />
+        <property name="repeatInterval" value="60000" />
+    </bean>
+
+    <bean id="muaFileUplaodJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="MUAProcess" />
+        </property>
+        <property name="targetMethod">
+            <value>uploadFromDirectory</value>
+        </property>
+        <property name="concurrent">
+            <value>false</value>
+        </property>
+    </bean>
+
+    <!-- Trigger setup -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref local="muaReleaseQuickTrigger" />
+                <ref local="muaFileUploadQuickTrigger" />
+            </list>
+        </property>
+    </bean>
+    <!-- DONE -->
+
+    <!-- Create the storage engine and entry handler -->
+    <bean name="storageEngine" class="uk.ac.cardiff.raptor.store.DefaultEventStorageEngine">
+        <property name="eventHandler">
+            <ref bean="persistantEventHandler" />
+        </property>
+        <property name="attributeAssociationEngine">
+            <ref bean="attributeAssociationEngine"></ref>
+        </property>
+    </bean>
+
+    <bean name="resourceStorageEngine" class="uk.ac.cardiff.raptor.store.DefaultResourceStorageEngine">
+        <property name="dataConnection">
+            <ref bean="dataConnectionImpl" />
+        </property>
+    </bean>
+
+
+
+    <bean name="persistantEventHandler" class="uk.ac.cardiff.raptor.store.impl.PersistantEventHandler">
+        <constructor-arg index="0">
+            <ref bean="dataConnectionImpl"></ref>
+        </constructor-arg>
+        <property name="optimiseCountQueries">
+            <value>true</value>
+        </property>
+        <property name="countClassNames">
+            <list>
+                <value>ShibbolethIdpAuthenticationEvent</value>
+                <value>EzproxyAuthenticationEvent</value>
+                <value>ShibbolethSpAuthenticationEvent</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
+        <property name="sessionFactory" ref="muaSessionFactory" />
+    </bean>
+
+    <!-- Load all other bean definitions -->
+
+    <import resource="database.xml" />
+    <import resource="metadata.xml" />
+    <import resource="statistical-units-custom.xml" />
+    <import resource="event-release.xml" />
+    <import resource="users.xml" />
+    <import resource="attribute-association.xml" />
+    <import resource="batch-event-parse.xml" />
+    <import resource="statistical-units-system.xml" />
+    <import resource="statistical-processors.xml" />
+
+</beans>
