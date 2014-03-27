@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <Fragment>
-        <DirectoryRef Id="RAPTORWEBDIR">
-            <Component Id="cmpRaptorWebJar" Guid="*">
-                <File Id="filRaptorWebJar" KeyPath="yes" Source="source\web\raptor-web.jar" />
+        <DirectoryRef Id='RAPTORWEBDIR'>
+            <Component Id='cmpRaptorWebJar' Guid='*'>
+                <File Id='filRaptorWebJar' KeyPath='yes' Source='source\web\raptor-web.jar' />
             </Component>
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorWebRoot">
-            <ComponentRef Id="cmpRaptorWebJar" />
+        <ComponentGroup Id='cgrRaptorWebRoot'>
+            <ComponentRef Id='cmpRaptorWebJar' />
         </ComponentGroup>
     </Fragment>
 </Wix>

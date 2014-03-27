@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <Fragment>
-        <DirectoryRef Id="RAPTORWEBDIR">
-            <Directory Id="dirRaptorWebKeys" Name="keys">
-                <Component Id="cmpRaptorWebKeysAuthorisedKeys" Guid="*">
-                    <File Id="filRaptorWebKeysAuthorisedKeys" KeyPath="yes" Source="source\web\keys\authorised-keys.jks" />
+        <DirectoryRef Id='RAPTORWEBDIR'>
+            <Directory Id='dirRaptorWebKeys' Name='keys'>
+                <Component Id='cmpRaptorWebKeysAuthorisedKeys' Guid='*' NeverOverwrite='yes'>
+                    <File Id='filRaptorWebKeysAuthorisedKeys' KeyPath='yes' Source='source\web\keys\authorised-keys.jks' />
                 </Component>
             </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorWebKeys">
-            <ComponentRef Id="cmpRaptorWebKeysAuthorisedKeys" />
+        <ComponentGroup Id='cgrRaptorWebKeys'>
+            <ComponentRef Id='cmpRaptorWebKeysAuthorisedKeys' />
         </ComponentGroup>
     </Fragment>
 </Wix>
