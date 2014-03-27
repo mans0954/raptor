@@ -1,0 +1,113 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+	<rich:modalPanel id="seriesModalPanel" width="700" height="150"
+		zindex="900">
+		<f:facet name="header">
+			<h:outputText
+				value="Condition [#{flowScope.websession.graphmodel.selectedSeries.seriesLabel}]" />
+		</f:facet>
+		<f:facet name="controls">
+			<h:panelGroup>
+				<h:graphicImage value="/image/icon/onebit_35.png" width="20px"
+					styleClass="hidelink" id="hidelink" />
+				<rich:componentControl for="seriesModalPanel" attachTo="hidelink"
+					operation="hide" event="onclick" />
+			</h:panelGroup>
+		</f:facet>
+		<a4j:form id="filterTableForm">
+			<rich:dataTable id="filterTable"
+				value="#{flowScope.websession.graphmodel.selectedSeries.comparisonPredicate}"
+				bandingInterval="2" banding="row" rows="5" var="series" width="100%"
+				rendered="#{not empty flowScope.websession.graphmodel.selectedSeries.comparisonPredicate}">
+
+				<f:facet name="header">
+					<h:outputText value="Filter Conditions" />
+				</f:facet>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Field" />
+					</f:facet>
+					<rich:comboBox style="width:100%" value="#{series.fieldName}"
+						suggestionValues="#{flowScope.websession.graphmodel.possibleFieldNameValues}">
+						<a4j:support event="onselect" ajaxSingle="true"/>
+					</rich:comboBox>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Operator" />
+					</f:facet>
+					<rich:comboBox value="#{series.compOp}"
+						suggestionValues="#{series.possibleComparisonOperatorValues}">
+					</rich:comboBox>
+				</rich:column>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Value" />
+					</f:facet>
+					<h:inputText id="valueInput" style="width:100%"
+						value="#{series.value}" />
+					<rich:suggestionbox zindex="901" for="valueInput" var="result"
+						suggestionAction="#{flowScope.websession.graphmodel.autocompleteFieldValues}">
+						<h:column>
+							<h:outputText value="#{result}" />
+						</h:column>
+						
+					</rich:suggestionbox>
+				</rich:column>
+				<!--  can not remove or add filters for the v1.0 so this is redundent -->
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Remove" />
+					</f:facet>
+
+					<a4j:commandLink immediate="true"
+						action="removeSelectedFilterFromSelectedStatistic"
+						id="removeFilterLink"
+						reRender="filterTableForm,seriesModalPanel,optionsPanelForm"
+						oncomplete="#{rich:component('seriesModalPanel')}.hide()">
+						<h:graphicImage
+							style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+							value="/image/icon/onebit_33.png" />
+					</a4j:commandLink>
+				</rich:column>
+
+			</rich:dataTable>
+
+
+			<a4j:commandButton value="Save"
+				onclick="#{rich:component('seriesModalPanel')}.hide()" />
+			<!-- return false, after onclick nothing else is done e.g. a form submit -->
+			<a4j:commandButton value="Close"
+				onclick="#{rich:component('seriesModalPanel')}.hide(); return false;" />
+
+		</a4j:form>
+
+	</rich:modalPanel>
+
+</ui:composition>

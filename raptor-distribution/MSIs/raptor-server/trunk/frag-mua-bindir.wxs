@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="RAPTORMUADIR">
+            <Directory Id="dirRaptorMuaBin" Name="bin">
+                <Component Id="cmpRaptorMuaBinMuaBat" Guid="*">
+                    <File Id="filRaptorMuaBinMuaBat" KeyPath="yes" Source="source\mua\bin\mua.bat" />
+                </Component>
+                <Component Id="cmpRaptorMuaBinWrapperExe" Guid="*">
+                    <File Id="filRaptorMuaBinWrapperExe" KeyPath="yes" Source="source\mua\bin\wrapper-windows-x86-32.exe" />
+                </Component>
+                <Component Id="cmpRaptorMuaBinWrapperConf" Guid="*">
+                    <File Id="filRaptorMuaBinWrapperConf" KeyPath="yes" Source="source\mua\bin\wrapper.conf" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="cgrRaptorMuaBin">
+            <ComponentRef Id="cmpRaptorMuaBinMuaBat" />
+            <ComponentRef Id="cmpRaptorMuaBinWrapperExe" />
+            <ComponentRef Id="cmpRaptorMuaBinWrapperConf" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
