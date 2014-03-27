@@ -4,26 +4,6 @@
     <Fragment>
 
         <!--
-            #########################################
-            # Rename all files that we will overwrite
-            #########################################
-        -->
-
-        <CustomAction Id='SetCmdPathMua' Property='CmdPathMua' Value='[SystemFolder]cmd.exe' />
-        <CustomAction Id='RunCmdMoveMuaCore' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\mua-core.xml&quot; mua-core.xml.previousversion-autosaved' />
-        <CustomAction Id='RunCmdMoveMuaStatisticalProcessors' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\statistical-processors.xml&quot; statistical-processors.xml.previousversion-autosaved' />
-        <CustomAction Id='RunCmdMoveMuaBatchEventParseFormatsSystem' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\batch-event-parse-formats-system.xml&quot; batch-event-parse-formats-system.xml.previousversion-autosaved' />
-
-        <InstallExecuteSequence>
-            <Custom Action='SetCmdPathMua' After='SetUNINSTALLING' />
-            <Custom Action='RunCmdMoveMuaCore' After='SetCmdPathMua'>UPGRADING</Custom>
-            <Custom Action='RunCmdMoveMuaStatisticalProcessors' After='SetCmdPathMua'>UPGRADING</Custom>
-            <Custom Action='RunCmdMoveMuaBatchEventParseFormatsSystem' After='SetCmdPathMua'>UPGRADING</Custom>
-        </InstallExecuteSequence>
-
-
-
-        <!--
             ############
             # The Files!
             ############
@@ -124,7 +104,7 @@
 
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*'> <!-- Normally NeverOverwrite is yes here, but for v1.1.1 we want to overwrite -->
+                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*' NeverOverwrite='yes'>
                     <File Id='filRaptorMuaConfEventRelease' KeyPath='yes' Source='source\mua\conf\event-release.xml'/>
 
                     <!-- Change the trust and keystore locations to Windows style -->
@@ -194,7 +174,16 @@
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="ezproxyUploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\ezproxy'/>
-
+                    <util:XmlFile Id='ModifyMuaCoreUploadDirShibSpUpTo24'
+                      File='[#filRaptorMuaConfMuaCore]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="shibSp24BelowUploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
+                      Value='file:///[RAPTORMUADIR]batchimport\shibsp_upto24'/>
+                    <util:XmlFile Id='ModifyMuaCoreUploadDirOpenAthensLa'
+                      File='[#filRaptorMuaConfMuaCore]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="openAthensLa"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
+                      Value='file:///[RAPTORMUADIR]batchimport\openathensla'/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfServerProperties' Guid='*' NeverOverwrite='yes'>
