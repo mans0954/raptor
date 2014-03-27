@@ -24,6 +24,10 @@
 
 	</bean>
     
+    <bean id="juspService" class="uk.ac.cardiff.raptorweb.service.impl.JuspServiceImpl">
+        
+    </bean>
+    
     <bean id="savedWizardReportsService" class="uk.ac.cardiff.raptorweb.service.impl.SavedWizardReportsServiceImpl">
         <property name="marshaller" ref="castorMarshaller" />
         <property name="unmarshaller" ref="castorMarshaller" />
@@ -150,7 +154,7 @@
 			<ref local="SystemStatsJobDetail" />
 		</property>
 		<property name="startDelay" value="5000"/>
-		<property name="repeatInterval" value="1800000"/>
+		<property name="repeatInterval" value="3600000"/>
 	</bean>
 
 	<bean id="SystemStatsJobDetail"
@@ -170,10 +174,12 @@
     <bean id="eventTypesToDisplayMapper" class="uk.ac.cardiff.raptorweb.model.EventTypeDisplayMapper">
         <property name="eventTypeFriendlyNameMap">
             <map>
-                <entry value="OpenAthens LA" key="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent" />
-                <entry value="ShibbolethIdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"/>
+                <entry value="OpenAthens LA IdP" key="uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent" />
+                <entry value="Shibboleth IdP" key="uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent"/>
                 <entry value="EZproxy" key="uk.ac.cardiff.model.event.EzproxyAuthenticationEvent"/>
-                <entry value="ShibbolethSP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent"/>
+                <entry value="Shibboleth SP" key="uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent"/>
+                <entry value="Moonshot IdP" key="uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent" />
+                <entry value="Eduroam IdP" key="uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent" />
             </map>
         </property>
     
