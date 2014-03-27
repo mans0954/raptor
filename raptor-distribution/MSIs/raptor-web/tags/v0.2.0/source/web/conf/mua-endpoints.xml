@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+
+    <bean id="muaRegistry" class="uk.ac.cardiff.raptorweb.engine.MUARegistry">
+        <property name="MUAEntries">
+            <list>
+                <bean id="localMUA" class="uk.ac.cardiff.raptorweb.model.MUAEntry">
+                    <property name="serviceEndpoint">
+                        <value>https://localhost:8111/MUA/MultiUnitAggregator</value>
+                    </property>
+                    <property name="isAttached" value="true"></property>
+                    <property name="publicKey">
+                        <value>/opt/raptor/web/keys/authorised-keys.jks</value>
+                    </property>
+                    <property name="publicKeyPassword">
+                        <value>changeit</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="serviceEndpointClient" class="uk.ac.cardiff.raptorweb.sei.ServiceEndpointClient">
+        <property name="tlsParameters">
+            <bean class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters">
+                <property name="trustStoreLocation">
+                    <value>/opt/raptor/web/keys/authorised-keys.jks</value>
+                </property>
+                <property name="trustStorePassword">
+                    <value>changeit</value>
+                </property>
+                <property name="keyStoreLocation">
+                    <value>/opt/raptor/web/keys/raptor-web.jks</value>
+                </property>
+                <property name="keyStorePassword">
+                    <value>changeit</value>
+                </property>
+            </bean>
+        </property>
+        <property name="connectionTimeout">
+            <value>10000</value>
+        </property>
+        <property name="receiveTimeout">
+            <value>600000</value>
+        </property>
+    </bean>
+
+
+</beans>
