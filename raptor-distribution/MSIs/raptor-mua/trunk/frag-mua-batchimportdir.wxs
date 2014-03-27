@@ -18,6 +18,16 @@
                         <CreateFolder />
                     </Component>
                 </Directory>
+                <Directory Id='dirRaptorMuaBatchImportShibSpUpToTwoFour' Name='shibsp_upto24'>
+                    <Component Id='cmpRaptorMuaBatchImportShibSpUpToTwoFourDir' Guid='8d2cb1d5-4303-4c80-a682-5d8782fe1fe4'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportOpenAthensLA' Name='openathensla'>
+                    <Component Id='cmpRaptorMuaBatchImportOpenAthensLA' Guid='f55820c7-3f8c-46a7-a780-2535c905d800'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
             </Directory>
         </DirectoryRef>
     </Fragment>
@@ -26,6 +36,8 @@
             <ComponentRef Id='cmpRaptorMuaBatchImportShib2Dir' />
             <ComponentRef Id='cmpRaptorMuaBatchImportShib13Dir' />
             <ComponentRef Id='cmpRaptorMuaBatchImportEzproxyDir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportShibSpUpToTwoFourDir' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportOpenAthensLA' />
         </ComponentGroup>
     </Fragment>
 </Wix>

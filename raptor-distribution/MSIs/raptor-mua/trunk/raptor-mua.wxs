@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='1fad241c-1c2c-417d-a26d-3936532dfe2c'
+    <Product Id='e890e500-df6a-49ae-94de-8e2269b8dc98'
       Name='Raptor MUA'
       UpgradeCode='e5bc6976-ce2f-4a02-9332-47c5f7b3ecc7'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.1.4'>
+      Version='1.2.0'>
 
         <Package Id='*'
           Description='Raptor MUA'
-          Comments='Raptor MUA v1.1.4'
+          Comments='Raptor MUA v1.2.0'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -132,13 +132,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor MUA v1.1.4'
+          Title='Raptor MUA v1.2.0'
           Description='The complete package for the Raptor MUA.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.1.4' Description='Raptor MUA v1.1.4' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.2.0' Description='Raptor MUA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
                 <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
@@ -207,6 +207,25 @@
             <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
             <Custom Action='RunKeytoolCreateMuaPrivateKey' After='InstallFinalize'>JAVA_HOME And INSTALLING</Custom>
             <Custom Action='RunKeytoolExportMuaPublicKey' After='RunKeytoolCreateMuaPrivateKey'>JAVA_HOME And INSTALLING</Custom>
+        </InstallExecuteSequence>
+
+
+
+         <!--
+            ##############################
+            # Custom Actions - Backup of files
+            ##############################
+        -->
+
+        <Binary Id='BackupConfigFileSrc' SourceFile='source\installer\raptor_vb_muaconf.vbs' />
+
+        <CustomAction Id='BackupConfigFiles' BinaryKey='BackupConfigFileSrc' VBScriptCall='' Execute='deferred' Impersonate='no' />
+        <CustomAction Id='SetBackupConfigFiles' Property='BackupConfigFiles' Value='[RAPTORMUADIR]' />
+
+        <!-- Schedule these CAs to run -->
+        <InstallExecuteSequence>
+            <Custom Action='SetBackupConfigFiles' Before='CostInitialize'></Custom>
+            <Custom Action='BackupConfigFiles' After='InstallInitialize'></Custom>
         </InstallExecuteSequence>
 
 
