@@ -28,6 +28,82 @@
 		etc IMPORTANT, the headers must be a match for the internal model at
 		the moment
 	-->
+    
+    <bean id="openathenslaFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
+        <property name="headers">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>eventTime</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>0</value>
+                    </property>
+                    <property name="additionalFieldNos">
+                        <list>
+                            <value>1</value>
+                            <value>2</value>
+                        </list>
+                    </property>
+                    <property name="timeZone">
+                        <value>UTC</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>DATE</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="\[" value="" />
+                            <entry key="\]" value="" />
+                        </map>
+                    </property>
+                    <property name="dateTimeFormat">
+                        <value>dd/MMM/yyyyHH:mm:ss.SSSZ</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>requesterIp</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>9</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>principalName</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>10</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                    <property name="regexReplaceAll">
+                        <map>
+                            <entry key="&quot;" value="" />
+                        </map>
+                    </property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.parse.external.file.format.Header">
+                    <property name="fieldName">
+                        <value>resourceId</value>
+                    </property>
+                    <property name="fieldNo">
+                        <value>11</value>
+                    </property>
+                    <property name="fieldType">
+                        <value>STRING</value>
+                    </property>
+                </bean>
+            </list>
+        </property>
+        <property name="delimeter" value=" " />
+    </bean>
+
 
 	<!-- accepted types are DATE, STRING, INTEGER -->
 
@@ -111,9 +187,7 @@
                 </bean>
             </list>
         </property>
-        <property name="delimeter">
-            <value> </value>
-        </property>
+        <property name="delimeter" value=" " />
     </bean>
     <!-- 2.4 and earlier -->
     <bean id="shibSPLogFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
@@ -211,9 +285,7 @@
                 </bean>               
             </list>
         </property>
-        <property name="delimeter">
-            <value> </value>
-        </property>
+        <property name="delimeter" value=" " />
     </bean>
 
 	<bean id="shibIDPAuditFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
@@ -355,9 +427,7 @@
 				</bean>
 			</list>
 		</property>
-		<property name="delimeter">
-			<value>|</value>
-		</property>
+        <property name="delimeter" value="|" />
 	</bean>
 
 	<bean id="ezProxyFileFormat" class="uk.ac.cardiff.raptor.parse.external.file.format.LogFileFormat">
@@ -468,9 +538,7 @@
                 </bean>
             </list>
         </property>
-        <property name="delimeter">
-            <value> </value>
-        </property>
+        <property name="delimeter" value=" " />
 
 
 
