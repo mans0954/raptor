@@ -337,12 +337,6 @@
                                                     <File Id="fil930B5A49465EBC1F08D384F9A41F077B" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\RaptorWebEngine.class" />
                                                 </Component>
                                                 <Directory Id="dir1017B8F1C344AF5C8FBC330B00CC3290" Name="reports">
-                                                    <Component Id="cmp453F95BDFE7ADA2F0E647CF2E22A8877" Guid="*">
-                                                        <File Id="filB8841211C39AC437552FC3464AFA9130" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\BaseReportConstructor$HandledReportTypes.class" />
-                                                    </Component>
-                                                    <Component Id="cmp19FDAC8C78EFD56C29AFA12055E55953" Guid="*">
-                                                        <File Id="filEC20F7825393DCA746A308B18499D4A4" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\BaseReportConstructor.class" />
-                                                    </Component>
                                                     <Component Id="cmpB0477400B378D71A72EE24E99D4C4BCB" Guid="*">
                                                         <File Id="filF5B72F32A4A1C9EF6485CB7F72D4766D" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\CSVReportGenerator.class" />
                                                     </Component>
@@ -351,6 +345,12 @@
                                                     </Component>
                                                     <Component Id="cmp9D881FCCFB116846A229FA995E7F653B" Guid="*">
                                                         <File Id="fil2F8A5C1AA4E917CE660BF8090488A712" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\GraphAndChartPDFReportGenerator.class" />
+                                                    </Component>
+                                                    <Component Id="cmp9927A96AFCCA3F05A0B237A50B9C57BF" Guid="*">
+                                                        <File Id="filFB2B29AADFB311BA1801167630D306AD" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\ReportConstructor$HandledReportTypes.class" />
+                                                    </Component>
+                                                    <Component Id="cmp4DB3EB3C4772FA455BF710F37477BDB4" Guid="*">
+                                                        <File Id="fil368C40DFCF835A9BCB029530DD7CFE0D" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\ReportConstructor.class" />
                                                     </Component>
                                                     <Component Id="cmp349A207F3313E502F366732F671F0D47" Guid="*">
                                                         <File Id="filD1674FC5910F807EC05F6A002CF3E433" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\classes\uk\ac\cardiff\raptorweb\engine\reports\ReportHandler.class" />
@@ -909,11 +909,11 @@
                             <Component Id="cmpDF634B38D124BD7A2E9FDDF856D82E55" Guid="*">
                                 <File Id="filD1C4F11DF0B77F3342080F0B1CC0D81A" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\quartz-1.8.0.jar" />
                             </Component>
-                            <Component Id="cmp27D41EB3A980882725FD88099B72426B" Guid="*">
-                                <File Id="fil764B369894B4F76E4DB55C784472847A" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\raptor-client-1.0.1.jar" />
+                            <Component Id="cmpDDF40F36C963D290397099B430AFB5BB" Guid="*">
+                                <File Id="filC9AF89A4CB5A302876E5132C53397C66" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\raptor-client-1.0.0.jar" />
                             </Component>
-                            <Component Id="cmpC119B7D3CA542B001064CCAA6EC37CD7" Guid="*">
-                                <File Id="fil334EDDE2CE6F677115E87BF458A891B7" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\raptor-information-model-1.0.1.jar" />
+                            <Component Id="cmp622000D75FA7FCD5C2A9DAB9F8DEE9F4" Guid="*">
+                                <File Id="fil5247C3C291CB6B0042DF77A8B4E5A498" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\raptor-information-model-1.0.0.jar" />
                             </Component>
                             <Component Id="cmpED91A7AF81085303FCA60EB95836D92D" Guid="*">
                                 <File Id="fil7773F78EC9D7ED3DEB46F9F7FF377A36" KeyPath="yes" Source="source\web\webapp\raptor-web\WEB-INF\lib\resolver-2.10.0.jar" />
@@ -1150,11 +1150,11 @@
             <ComponentRef Id="cmp77BC5B96265C11D5B21C332A3B9A7498" />
             <ComponentRef Id="cmp63E10F273F2BEE693BCFA2AC67CEEE17" />
             <ComponentRef Id="cmp83FBEDBC5AEFBFB9591971F9ED8E158A" />
-            <ComponentRef Id="cmp453F95BDFE7ADA2F0E647CF2E22A8877" />
-            <ComponentRef Id="cmp19FDAC8C78EFD56C29AFA12055E55953" />
             <ComponentRef Id="cmpB0477400B378D71A72EE24E99D4C4BCB" />
             <ComponentRef Id="cmp2433EA66EFB61DF01B4C597C4E8BB6F3" />
             <ComponentRef Id="cmp9D881FCCFB116846A229FA995E7F653B" />
+            <ComponentRef Id="cmp9927A96AFCCA3F05A0B237A50B9C57BF" />
+            <ComponentRef Id="cmp4DB3EB3C4772FA455BF710F37477BDB4" />
             <ComponentRef Id="cmp349A207F3313E502F366732F671F0D47" />
             <ComponentRef Id="cmp4E5A54CDD5883E43893D5401B77DD44D" />
             <ComponentRef Id="cmp67EFD1E4C2FD6BF45D437580270CF965" />
@@ -1330,8 +1330,8 @@
             <ComponentRef Id="cmp7486483E95204ED144B85EA67880A2F2" />
             <ComponentRef Id="cmp3F59D13A5176526DA6CE5C3C3687565F" />
             <ComponentRef Id="cmpDF634B38D124BD7A2E9FDDF856D82E55" />
-            <ComponentRef Id="cmp27D41EB3A980882725FD88099B72426B" />
-            <ComponentRef Id="cmpC119B7D3CA542B001064CCAA6EC37CD7" />
+            <ComponentRef Id="cmpDDF40F36C963D290397099B430AFB5BB" />
+            <ComponentRef Id="cmp622000D75FA7FCD5C2A9DAB9F8DEE9F4" />
             <ComponentRef Id="cmpED91A7AF81085303FCA60EB95836D92D" />
             <ComponentRef Id="cmp8EE587C74D6C80EC39A7AF3FF0647900" />
             <ComponentRef Id="cmpB1B7D3112481DFED3486D874D51E1F42" />

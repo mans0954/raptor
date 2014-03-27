@@ -31,10 +31,8 @@
 	 <import resource="file:///${configurationFiles}/conf/web-core.xml" />
 
 
-
      <!--  Import the setup of the front page dashboard statistics -->
-     <import resource="file:///${configurationFiles}/conf/dashboard-statistics.xml"/>
-
+  <import resource="file:///${configurationFiles}/conf/dashboard-statistics.xml"/>
 
 
 

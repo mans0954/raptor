@@ -154,7 +154,7 @@
         </transition>
 
         <transition on="sendResourceClassification">
-            <evaluate expression="setupService.sendResourceClassification(flowScope.websession)" />
+            <evaluate expression="setupService.sendResourceClassification()" />
         </transition>
 
 	</view-state>

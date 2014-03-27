@@ -2,29 +2,6 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
      xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
     <Fragment>
-
-        <!--
-            #########################################
-            # Rename all files that we will overwrite
-            #########################################
-        -->
-
-        <CustomAction Id='SetCmdPathWeb' Property='CmdPathWeb' Value='[SystemFolder]cmd.exe' />
-        <!--<CustomAction Id='RunCmdMoveX' Property='CmdPathWeb' ExeCommand='/c ren &quot;[RAPTORWEBDIR]conf\X.xml&quot; X.xml.vx.x.x.autosaved' />-->
-
-        <InstallExecuteSequence>
-            <Custom Action='SetCmdPathWeb' After='SetUNINSTALLING' />
-            <!--<Custom Action='RunCmdMoveX' After='SetCmdPathWeb'>UPGRADING</Custom>-->
-        </InstallExecuteSequence>
-
-
-
-        <!--
-            ############
-            # The Files!
-            ############
-        -->
-
         <DirectoryRef Id='RAPTORWEBDIR'>            
             <Directory Id='dirRaptorWebConf' Name='conf'>
 

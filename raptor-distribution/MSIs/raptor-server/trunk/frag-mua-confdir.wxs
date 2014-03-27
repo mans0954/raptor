@@ -2,33 +2,6 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
      xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
     <Fragment>
-
-        <!--
-            #########################################
-            # Rename all files that we will overwrite
-            #########################################
-        -->
-
-        <CustomAction Id='SetCmdPathMua' Property='CmdPathMua' Value='[SystemFolder]cmd.exe' />
-        <CustomAction Id='RunCmdMoveMuaCore' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\mua-core.xml&quot; mua-core.xml.previousversion-autosaved' />
-        <CustomAction Id='RunCmdMoveMuaStatisticalProcessors' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\statistical-processors.xml&quot; statistical-processors.xml.previousversion-autosaved' />
-        <CustomAction Id='RunCmdMoveMuaBatchEventParseFormatsSystem' Property='CmdPathMua' ExeCommand='/c ren &quot;[RAPTORMUADIR]conf\batch-event-parse-formats-system.xml&quot; batch-event-parse-formats-system.xml.previousversion-autosaved' />
-
-        <InstallExecuteSequence>
-            <Custom Action='SetCmdPathMua' After='SetUNINSTALLING' />
-            <Custom Action='RunCmdMoveMuaCore' After='SetCmdPathMua'>UPGRADING</Custom>
-            <Custom Action='RunCmdMoveMuaStatisticalProcessors' After='SetCmdPathMua'>UPGRADING</Custom>
-            <Custom Action='RunCmdMoveMuaBatchEventParseFormatsSystem' After='SetCmdPathMua'>UPGRADING</Custom>
-        </InstallExecuteSequence>
-
-
-
-        <!--
-            ############
-            # The Files!
-            ############
-        -->
-
         <DirectoryRef Id='RAPTORMUADIR'>            
             <Directory Id='dirRaptorMuaConf' Name='conf'>
 
