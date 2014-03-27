@@ -4,13 +4,13 @@
         <DirectoryRef Id='RAPTORMUADIR'>
             <Directory Id='dirRaptorMuaBin' Name='bin'>
                 <Component Id='cmpRaptorMuaBinMuaBat' Guid='*'>
-                    <File Id='filRaptorMuaBinMuaBat' KeyPath='yes' Source='source\mua\bin\mua.bat' />
+                    <File Id='filRaptorMuaBinMuaBat' KeyPath='yes' Source='source\mua\bin\raptormua.bat' />
                 </Component>
                 <Component Id='cmpRaptorMuaBinWrapperExe' Guid='*'>
                     <File Id='filRaptorMuaBinWrapperExe' KeyPath='yes' Source='source\mua\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorMuaBinWrapperConf' Guid='*'>
-                    <File Id='filRaptorMuaBinWrapperConf' KeyPath='yes' Source='source\mua\bin\wrapper.conf' />
+                    <File Id='filRaptorMuaBinWrapperConf' KeyPath='yes' Source='source\mua\bin\raptormua-wrapper.conf' />
                 </Component>
             </Directory>
         </DirectoryRef>

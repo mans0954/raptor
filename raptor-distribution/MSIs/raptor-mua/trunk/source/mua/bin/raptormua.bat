@@ -63,7 +63,7 @@ rem
 rem Find the wrapper.conf
 rem
 :conf
-set _WRAPPER_CONF="%_REALPATH%wrapper.conf"
+set _WRAPPER_CONF="%_REALPATH%raptormua-wrapper.conf"
 
 rem
 rem Run the application.
