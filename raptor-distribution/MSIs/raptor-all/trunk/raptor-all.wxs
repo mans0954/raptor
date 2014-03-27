@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='1209822c-5c8a-4672-a9b8-1b7ffabe4755'
-      Name='Raptor All'
+    <Product Id='2cd10b72-c6fe-4a7a-bad5-81025a3d7563'
+      Name='Raptor All Combined Package'
       UpgradeCode='da8a9725-27af-4917-a6d6-32a4b21b1078'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='0.2.1.0'>
+      Version='1.5.0'>
 
         <Package Id='*'
-          Description='Raptor All'
-          Comments='Raptor All v0.2.1.0 (ICA v0.2.0 / MUA v0.2.1 / Web v0.2.0)'
+          Description='Raptor All Combined Package'
+          Comments='Raptor All Combined Package v1-r5 (ICA v1.0.0 / MUA v1.0.0 / Web v1.0.0)'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -146,13 +146,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor All v0.2.1.0'
-          Description='The complete package.'
+          Title='Raptor All Combined Package v1-r5'
+          Description='Raptor Server Combined Package, containing the Raptor ICA, Raptor MUA and Raptor Web components.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
 
-            <Feature Id='feaRaptorIca' Title='Raptor ICA v0.2.0' Description='Raptor ICA' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.0.0' Description='Raptor ICA v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorIcaRoot' />
                 <ComponentGroupRef Id='cgrRaptorIcaBin' />
                 <ComponentGroupRef Id='cgrRaptorIcaConf' />
@@ -162,8 +162,9 @@
                 <ComponentRef Id='cmpRaptorIcaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v0.2.1' Description='Raptor MUA' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.0.0' Description='Raptor MUA v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
+                <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
                 <ComponentGroupRef Id='cgrRaptorMuaConf' />
                 <ComponentGroupRef Id='cgrRaptorMuaKeys' />
@@ -172,7 +173,7 @@
                 <ComponentRef Id='cmpRaptorMuaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v0.2.0' Description='Raptor Web' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.0.0' Description='Raptor Web v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />

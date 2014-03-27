@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <Fragment>
-        <DirectoryRef Id="RAPTORWEBDIR">
-            <Directory Id="dirRaptorWebLogs" Name="logs">
+        <DirectoryRef Id='RAPTORWEBDIR'>
+            <Directory Id='dirRaptorWebLogs' Name='logs'>
                 <Component Id='cmpRaptorWebLogsDir' Guid='36d2aba7-d168-422f-8bc8-fa6c68658e55'>
                     <CreateFolder />
                 </Component>
@@ -10,7 +10,7 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorWebLogs">
+        <ComponentGroup Id='cgrRaptorWebLogs'>
             <ComponentRef Id='cmpRaptorWebLogsDir' />
         </ComponentGroup>
     </Fragment>
