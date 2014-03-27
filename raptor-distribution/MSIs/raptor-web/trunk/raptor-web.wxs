@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='fef39322-8a70-4eda-b8a5-85db988ab80e'
+    <Product Id='bf291c4e-6cef-4913-b2b6-03024570005c'
       Name='Raptor Web'
       UpgradeCode='fe94dcab-4c5e-4277-a83d-bdceebc23ee3'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.0.0'>
+      Version='1.0.1'>
 
         <Package Id='*'
           Description='Raptor Web'
-          Comments='Raptor Web v1.0.0'
+          Comments='Raptor Web v1.0.1'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -36,6 +36,29 @@
         <!-- Embeds all source into a single .cab file in the MSI -->
         <Media Id='1' Cabinet='Product.cab' EmbedCab='yes' />
 
+
+
+        <!--
+            #####################################
+            # Figure out what the MSI is doing...
+            #####################################
+        -->
+
+        <CustomAction Id='SetInstalling' Property='Installing' Value='true' /> 
+        <CustomAction Id='SetUpgrading' Property='Upgrading' Value='true' /> 
+        <CustomAction Id='SetUninstalling' Property='Uninstalling' Value='true' />
+
+        <InstallExecuteSequence> 
+            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorWeb,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+        </InstallExecuteSequence>
+
+        <InstallUISequence> 
+            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorWeb,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+        </InstallUISequence>
 
 
         <!--
@@ -108,13 +131,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor Web v1.0.0'
+          Title='Raptor Web v1.0.1'
           Description='The complete package for Raptor Web.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.0.0' Description='Raptor Web v1.0.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.0.1' Description='Raptor Web v1.0.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />
@@ -144,20 +167,26 @@
         <CustomAction Id='StopWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='stop' />
         <CustomAction Id='RestartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='restart' />
 
+        <!-- Horrible hack. When upgrading, the restarting happens twice. So this stops it happening the first time... -->
+        <CustomAction Id='SetAlreadyRun' Property='AlreadyRun' Value='true' /> 
+
+
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
-            <Custom Action='InstallWebService' After='InstallFinalize'>NOT Installed</Custom>
-            <Custom Action='StartWebService' After='InstallFinalize'>NOT Installed</Custom>
+            <Custom Action='InstallWebService' After='RunKeytoolExportWebPublicKey'>Installing</Custom>
+            <Custom Action='StartWebService' After='InstallFinalize'>Installing</Custom>
         </InstallExecuteSequence>
 
         <!-- When uninstalling, uninstall service (automagically stops it first) -->
         <InstallExecuteSequence>
-            <Custom Action='UninstallWebService' Before='UnpublishFeatures'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+            <Custom Action='StopWebService' After='UnpublishFeatures'>Uninstalling</Custom>
+            <Custom Action='UninstallWebService' Before='StopWebService'>Uninstalling</Custom>
         </InstallExecuteSequence>
 
         <!-- When upgrading, restart service -->
         <InstallExecuteSequence>
-            <Custom Action='RestartWebService' Before='UnpublishFeatures'>Installed AND UPGRADINGPRODUCTCODE</Custom>
+            <Custom Action='RestartWebService' After='StartServices'>Upgrading AND AlreadyRun</Custom>
+            <Custom Action='SetAlreadyRun' After='RestartWebService'>Upgrading</Custom>
         </InstallExecuteSequence>
 
 
@@ -179,8 +208,8 @@
 
         <InstallExecuteSequence>
             <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
-            <Custom Action='RunKeytoolCreateWebPrivateKey' After='InstallFinalize'>JAVA_HOME And Not Installed</Custom>
-            <Custom Action='RunKeytoolExportWebPublicKey' After='InstallFinalize'>JAVA_HOME And Not Installed</Custom>
+            <Custom Action='RunKeytoolCreateWebPrivateKey' After='InstallFinalize'>JAVA_HOME And Installing</Custom>
+            <Custom Action='RunKeytoolExportWebPublicKey' After='RunKeytoolCreateWebPrivateKey'>JAVA_HOME And Installing</Custom>
         </InstallExecuteSequence>
         
 
@@ -222,8 +251,8 @@
 
             <DialogRef Id='RaptorMsiDlgWebMetadata' />
 
-            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>1</Publish>
-            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>1</Publish>
+            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>Installing</Publish>
+            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>Installing</Publish>
         </UI>
 
     </Product>
