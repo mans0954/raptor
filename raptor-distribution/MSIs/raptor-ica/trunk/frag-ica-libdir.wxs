@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="RAPTORICADIR">
@@ -225,14 +225,14 @@
                 <Component Id="cmp944386478C8DFCB6B3E65989A6E14344" Guid="*">
                     <File Id="filC6ADFA475B56ADA4686C48EB66DD23DA" KeyPath="yes" Source="source\ica\lib\quartz-1.8.0.jar" />
                 </Component>
-                <Component Id="cmp667FC812916FF2145C0600DAF7F76E19" Guid="*">
-                    <File Id="filCA368D9A6FB09F373AF8811A8322A328" KeyPath="yes" Source="source\ica\lib\raptor-client-1.1.0.jar" />
+                <Component Id="cmp2AC7B42CAFD7528F2D500A0355818329" Guid="*">
+                    <File Id="fil8E424E085E57D3E32E4E305E8038C8F0" KeyPath="yes" Source="source\ica\lib\raptor-client-1.1.2.jar" />
                 </Component>
-                <Component Id="cmpD72F4AE3406FEE83D83A4C8152599EA4" Guid="*">
-                    <File Id="fil36ABB53B7459F16D61E1FC1978356AD6" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.1.0.jar" />
+                <Component Id="cmp9CC40435D6C9EA7B178470C6AE8D4775" Guid="*">
+                    <File Id="fil9C792D570ACD19490764312066BB428C" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.1.2.jar" />
                 </Component>
-                <Component Id="cmpAA00399AE66E369EDBD7AECE81F726EA" Guid="*">
-                    <File Id="fil6A200FCDF5D6831563AED2CDE6ECCF98" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.1.0.jar" />
+                <Component Id="cmpE0104DA757288CD43EE21D2635B6A573" Guid="*">
+                    <File Id="fil37F66CBC7F701A47B0B82C5AEDE97CEC" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.1.1.jar" />
                 </Component>
                 <Component Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" Guid="*">
                     <File Id="filF84CE1D564BF641A073A3463A14112F9" KeyPath="yes" Source="source\ica\lib\resolver-2.10.0.jar" />
@@ -305,6 +305,9 @@
                 </Component>
                 <Component Id="cmp7DB059958FC245B0D719187E499E576A" Guid="*">
                     <File Id="fil9C1A1E8847993A5176A81E202B53758B" KeyPath="yes" Source="source\ica\lib\wagon-provider-api-1.0-beta-2.jar" />
+                </Component>
+                <Component Id="cmp79FFBC564442CEEF1529BD648AB17CDB" Guid="*">
+                    <File Id="filEC8B2F15E24FDDD1A8F054282F40A94F" KeyPath="yes" Source="source\ica\lib\wrapper.jar" />
                 </Component>
                 <Component Id="cmp1EE7EFCD9C74D3F9925992F835D337C9" Guid="*">
                     <File Id="filEC6A252091B0B0BEC17CB8B80AED22E7" KeyPath="yes" Source="source\ica\lib\wsdl4j-1.6.2.jar" />
@@ -430,9 +433,9 @@
             <ComponentRef Id="cmpD4F6B7649CCB75BFF17B64083BFD958D" />
             <ComponentRef Id="cmp0E2501CD4945D223098710C9EE25A00D" />
             <ComponentRef Id="cmp944386478C8DFCB6B3E65989A6E14344" />
-            <ComponentRef Id="cmp667FC812916FF2145C0600DAF7F76E19" />
-            <ComponentRef Id="cmpD72F4AE3406FEE83D83A4C8152599EA4" />
-            <ComponentRef Id="cmpAA00399AE66E369EDBD7AECE81F726EA" />
+            <ComponentRef Id="cmp2AC7B42CAFD7528F2D500A0355818329" />
+            <ComponentRef Id="cmp9CC40435D6C9EA7B178470C6AE8D4775" />
+            <ComponentRef Id="cmpE0104DA757288CD43EE21D2635B6A573" />
             <ComponentRef Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" />
             <ComponentRef Id="cmp752158F35F65FEF6A6161B006F66C8A1" />
             <ComponentRef Id="cmpD9BE72C2738AA305ED59F178DAA14F17" />
@@ -457,6 +460,7 @@
             <ComponentRef Id="cmp300C9B6601F75B6BAB3D807B50BDC65B" />
             <ComponentRef Id="cmpD39DA2558A36B4F447189E7B35692C90" />
             <ComponentRef Id="cmp7DB059958FC245B0D719187E499E576A" />
+            <ComponentRef Id="cmp79FFBC564442CEEF1529BD648AB17CDB" />
             <ComponentRef Id="cmp1EE7EFCD9C74D3F9925992F835D337C9" />
             <ComponentRef Id="cmp2E1AD8CAB2670F3BFE81FB292C2C9F6C" />
             <ComponentRef Id="cmp226813C9470037F7D60813A567D4769B" />
