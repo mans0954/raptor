@@ -39,24 +39,31 @@
                 <Directory Id='RaptorWebConfDistDir' Name='dist'>
                     <Component Id='cmpRaptorWebConfDashboardStatisticsDist' Guid='*'>
                         <File Id='filRaptorWebConfDashboardStatisticsDist' KeyPath='yes' Source='source\web\conf\dashboard-statistics.xml'/>
+                        <RemoveFile Id='filRaptorWebConfDashboardStatisticsDistRem' Name="dashboard-statistics.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfLoggingDist' Guid='*'>
                         <File Id='filRaptorWebConfLoggingDist' KeyPath='yes' Source='source\web\conf\logging.xml'/>
+                        <RemoveFile Id='filRaptorWebConfLoggingDistRem' Name="logging.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfMetadataDist' Guid='*'>
                         <File Id='filRaptorWebConfMetadataDist' KeyPath='yes' Source='source\web\conf\metadata.xml'/>
+                        <RemoveFile Id='filRaptorWebConfMetadataDistRem' Name="metadata.xm" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfMuaEndpointsDist' Guid='*'>
                         <File Id='filRaptorWebConfMuaEndpointsDist' KeyPath='yes' Source='source\web\conf\mua-endpoints.xml'/>
+                        <RemoveFile Id='filRaptorWebConfMuaEndpointsDistRem' Name="mua-endpoints.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfServerPropertiesDist' Guid='*'>
                         <File Id='filRaptorWebConfServerPropertiesDist' KeyPath='yes' Source='source\web\conf\server.properties'/>
+                        <RemoveFile Id='filRaptorWebConfServerPropertiesDistRem' Name="server.properties" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfUsersDist' Guid='*'>
                         <File Id='filRaptorWebConfUsersDist' KeyPath='yes' Source='source\web\conf\users.xml'/>
+                        <RemoveFile Id='filRaptorWebConfUsersDistRem' Name="users.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorWebConfWebCoreDist' Guid='*'>
                         <File Id='filRaptorWebConfWebCoreDist' KeyPath='yes' Source='source\web\conf\web-core.xml'/>
+                        <RemoveFile Id='filRaptorWebConfWebCoreDistRem' Name="web-core.xml" On="install"/>
                     </Component> 
                 </Directory>
 
@@ -70,6 +77,7 @@
 
                 <Component Id='cmpRaptorWebConfDashboardStatistics' Guid='*'>
                     <File Id='filRaptorWebConfDashboardStatistics' KeyPath='yes' Source='source\web\conf\dashboard-statistics.xml'/>
+                    <RemoveFile Id='filRaptorWebConfDashboardStatisticsRem' Name="dashboard-statistics.xml" On="install"/>
                 </Component>
 
                 <Component Id='cmpRaptorWebConfLogging' Guid='*' NeverOverwrite='yes'>
@@ -140,6 +148,7 @@
 
                 <Component Id='cmpRaptorWebConfWebCore' Guid='*'>
                     <File Id='filRaptorWebConfWebCore' KeyPath='yes' Source='source\web\conf\web-core.xml'/>
+                    <RemoveFile Id='filRaptorWebConfWebCoreRem' Name="web-core.xml" On="install"/>
                 </Component>
 
             </Directory>

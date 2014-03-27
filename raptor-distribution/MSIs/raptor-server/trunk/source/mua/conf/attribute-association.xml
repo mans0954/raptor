@@ -15,12 +15,25 @@
             <list>
                 <!--<ref bean="shibPrincipalAttributeAssociationDefinition"/>-->
                 <!--<ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>-->
-                <!--< ref bean="openAthensLaResourceCategoryAttributeAssociationDefinition"/>-->
-                <ref bean="shibResourceCategoryAttributeAssociationDefinition"/> <!--Do NOT disable this-->
+                <!--<ref bean="openAthensLaResourceCategoryAttributeAssociationDefinition"/>-->
+                <!--<ref bean="moonshotRadiusPrincipalAttributeAssociationDefinition"/>-->
+                <!--<ref bean="eduroamRadiusPrincipalAttributeAssociationDefinition"/>-->
+                <ref bean="resourceCategoryAttributeAssociationDefinition"/> <!--Do NOT disable this-->
              </list>
         </property>
     </bean>
-    
+
+    <!-- Association policies to mark resources as internal or external. Do NOT disable this-->
+    <bean id="resourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
+        <property name="definiationName"><value>Resource Category Definition</value></property>
+        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>
+    </bean>
+
+
+    <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->   
+
     <bean id="openAthensLaResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
         <property name="definiationName"><value>OpenAthensLaAssociationDefinition</value></property>
         <property name="subjectPrincipalField"><value>principalName</value></property>
@@ -44,18 +57,6 @@
         </property>
     </bean>
 
-    <!-- Association policies to mark resources as internal or external. Do NOT disable this-->
-    <bean id="shibResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
-        <property name="definiationName"><value>Shib Resource Category Definition</value></property>
-        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
-        <property name="enabled"><value>true</value></property>
-        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>
-        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
-    </bean>
-
-
-    <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->
-    
     <bean id="shibPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
         <property name="definiationName"><value>ShibAssociationDefinition</value></property>
         <property name="subjectPrincipalField"><value>principalName</value></property>
@@ -103,9 +104,55 @@
     </bean>
 
 
+    <bean id="moonshotRadiusPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>MoonshotRadiusAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+        <bean id="eduroamRadiusPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>EduroamRadiusAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
 
 
-        <!-- data connectors.  -->
+
+    <!-- data connectors.  -->
     <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
          <property name="poolMaxIdle"><value>10</value></property>
          <property name="poolInitIdleCapacity"><value>10</value></property>

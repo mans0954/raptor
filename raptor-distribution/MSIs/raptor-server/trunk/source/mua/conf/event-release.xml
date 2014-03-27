@@ -59,7 +59,20 @@
 				</property>
 			</bean>
 		</property>
-	</bean>
+        <property name="allowedClassTypes">
+            <list>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.AggregatedEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.JuspAggregatedEvent</value>
+                <value type="java.lang.Class">uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value>
+            </list>
+        </property>
+    </bean>
 
 
 	<bean id="endpointRegistry" class="uk.ac.cardiff.raptor.registry.EndpointRegistry">
