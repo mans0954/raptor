@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Fragment>
+        <DirectoryRef Id='RAPTORICADIR'>
+            <Directory Id='dirRaptorIcaBin' Name='bin'>
+                <Component Id='cmpRaptorIcaBinIcaBat' Guid='*'>
+                    <File Id='filRaptorIcaBinIcaBat' KeyPath='yes' Source='source\ica\bin\ica.bat' />
+                </Component>
+                <Component Id='cmpRaptorIcaBinWrapperExe' Guid='*'>
+                    <File Id='filRaptorIcaBinWrapperExe' KeyPath='yes' Source='source\ica\bin\wrapper-windows-x86-32.exe' />
+                </Component>
+                <Component Id='cmpRaptorIcaBinWrapperConf' Guid='*'>
+                    <File Id='filRaptorIcaBinWrapperConf' KeyPath='yes' Source='source\ica\bin\wrapper.conf' />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id='cgrRaptorIcaBin'>
+            <ComponentRef Id='cmpRaptorIcaBinIcaBat' />
+            <ComponentRef Id='cmpRaptorIcaBinWrapperExe' />
+            <ComponentRef Id='cmpRaptorIcaBinWrapperConf' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
