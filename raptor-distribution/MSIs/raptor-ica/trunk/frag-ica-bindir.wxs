@@ -4,13 +4,13 @@
         <DirectoryRef Id='RAPTORICADIR'>
             <Directory Id='dirRaptorIcaBin' Name='bin'>
                 <Component Id='cmpRaptorIcaBinIcaBat' Guid='*'>
-                    <File Id='filRaptorIcaBinIcaBat' KeyPath='yes' Source='source\ica\bin\ica.bat' />
+                    <File Id='filRaptorIcaBinIcaBat' KeyPath='yes' Source='source\ica\bin\raptorica.bat' />
                 </Component>
                 <Component Id='cmpRaptorIcaBinWrapperExe' Guid='*'>
                     <File Id='filRaptorIcaBinWrapperExe' KeyPath='yes' Source='source\ica\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorIcaBinWrapperConf' Guid='*'>
-                    <File Id='filRaptorIcaBinWrapperConf' KeyPath='yes' Source='source\ica\bin\wrapper.conf' />
+                    <File Id='filRaptorIcaBinWrapperConf' KeyPath='yes' Source='source\ica\bin\raptorica-wrapper.conf' />
                 </Component>
             </Directory>
         </DirectoryRef>

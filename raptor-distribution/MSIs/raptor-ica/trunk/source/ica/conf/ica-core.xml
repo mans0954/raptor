@@ -17,7 +17,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws"
 	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
 
 	<!-- Polling trigger setup -->
@@ -25,8 +25,8 @@
 		<property name="jobDetail">
 			<ref local="ICAProcessJobDetail" />
 		</property>
-        <property name="startDelay" value="1000" />
-		<property name="repeatInterval" value="30000" />
+        <property name="startDelay" value="5000" />
+		<property name="repeatInterval" value="10000" />
 	</bean>
 
 	<bean id="ICAProcessJobDetail"
@@ -48,7 +48,7 @@
             <ref local="icaReleaseJobDetail" />
         </property>
         <property name="startDelay" value="10000" />
-        <property name="repeatInterval" value="2628000000" />
+        <property name="repeatInterval" value="10000" />
     </bean>
 
     <bean id="icaReleaseJobDetail"
