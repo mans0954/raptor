@@ -59,15 +59,6 @@
 				</property>
 			</bean>
 		</property>
-        <property name="allowedClassTypes">
-            <list>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethSpAuthenticationEvent</value>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.RadiusAuthenticationEvent</value>
-                <value type="java.lang.Class">uk.ac.cardiff.model.event.AuthenticationEvent</value>
-            </list>
-        </property>
 	</bean>
 
 
