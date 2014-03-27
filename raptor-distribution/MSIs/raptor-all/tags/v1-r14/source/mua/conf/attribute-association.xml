@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk> Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS
+    IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
+    governing permissions and limitations under the License. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+        <!--  the attribute association engine -->
+    <bean id="attributeAssociationEngine" class="uk.ac.cardiff.raptor.event.expansion.AttributeAssociationEngine">
+        <property name="attributeAssociationDefinitions">
+            <list>
+                <!--<ref bean="shibPrincipalAttributeAssociationDefinition"/>-->
+                <!--<ref bean="ezproxyPrincipalAttributeAssociationDefinition"/>-->
+                <!--<ref bean="openAthensLaResourceCategoryAttributeAssociationDefinition"/>-->
+                <!--<ref bean="moonshotRadiusPrincipalAttributeAssociationDefinition"/>-->
+                <!--<ref bean="eduroamRadiusPrincipalAttributeAssociationDefinition"/>-->
+                <ref bean="resourceCategoryAttributeAssociationDefinition"/> <!--Do NOT disable this-->
+             </list>
+        </property>
+    </bean>
+
+    <!-- Association policies to mark resources as internal or external. Do NOT disable this-->
+    <bean id="resourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.ResourceCategoryAttributeAssociationDefinition">
+        <property name="definiationName"><value>Resource Category Definition</value></property>
+        <property name="dataConnection"><ref bean="dataConnectionImpl"/></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.Event</value></property>
+    </bean>
+
+
+    <!-- Properties to set. PrincipalInformation only has the attributes [school, affiliation] -->   
+
+    <bean id="openAthensLaResourceCategoryAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>OpenAthensLaAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.OpenathenslaAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="shibPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>ShibAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="ezproxyPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>EzproxyAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EzproxyAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="moonshotRadiusPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>MoonshotRadiusAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.MoonshotRadiusAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+        <bean id="eduroamRadiusPrincipalAttributeAssociationDefinition" class="uk.ac.cardiff.raptor.event.expansion.PrincipalAttributeAssociationDefinition">
+        <property name="definiationName"><value>EduroamRadiusAssociationDefinition</value></property>
+        <property name="subjectPrincipalField"><value>principalName</value></property>
+        <property name="dataConnector"><ref bean="ldapDataConnector"/></property>
+        <!-- add the filter here, where [principal] is replaced by the actual principal value extracted per event -->
+        <property name="searchTemplate"><value>cn=[principal]</value></property>
+        <property name="enabled"><value>true</value></property>
+        <property name="classToAdd"><value type="java.lang.Class">uk.ac.cardiff.model.event.auxiliary.PrincipalInformation</value></property>
+        <property name="associateWithClass"><value>uk.ac.cardiff.model.event.EduroamRadiusAuthenticationEvent</value></property>
+        <property name="lookupAttributes">
+            <list>
+                <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>affiliation</value></property>
+                </bean>
+                 <bean class="uk.ac.cardiff.raptor.event.expansion.AttributeLookup">
+                    <property name="sourceAttributeName"><value>LDAP_ATTRIBUTE_NAME</value></property>
+                    <property name="internalAttributeName"><value>school</value></property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+
+
+    <!-- data connectors.  -->
+    <bean id="ldapDataConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.LdapDataConnector">
+         <property name="poolMaxIdle"><value>10</value></property>
+         <property name="poolInitIdleCapacity"><value>10</value></property>
+         <property name="ldapUrl"><value>LDAP_URL</value></property>
+         <property name="ldapBaseDn"><value>BASE</value></property>
+         <property name="startTls"><value>false</value></property>
+         <property name="principal"><value>PRINCIPAL</value></property>
+         <property name="principalCredential"><value>PASSWORD</value></property>
+         <property name="cacheResults"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>86400000</value></property>
+    </bean>
+    
+    <!--  Example RDBMS Data connectors for postgres. But mysql is also possible. 
+        <bean id="databaseConnector" class="uk.ac.cardiff.raptor.event.expansion.connector.RDBMSDataConnector">         
+         <property name="cacheResults"><value>true</value></property>
+         <property name="cacheTimeoutMs"><value>86400000</value></property>
+         <property name="dataSource">
+            <bean id="dataSourceConnectionProperties" class="org.apache.commons.dbcp.BasicDataSource">
+                <property name="driverClassName" value="org.postgresql.Driver"/>
+                <property name="url"  value="jdbc:postgresql://localhost/identities"/>
+                <property name="username"  value="postgres"/>
+                <property name="password"  value=""/>
+            </bean>
+         </property>
+    </bean>-->
+
+
+</beans>
