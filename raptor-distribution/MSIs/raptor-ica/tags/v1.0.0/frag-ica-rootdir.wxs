@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <Fragment>
+        <DirectoryRef Id='RAPTORICADIR'>
+            <Component Id='cmpRaptorIcaJar' Guid='*'>
+                <File Id='filRaptorIcaJar' KeyPath='yes' Source='source\ica\raptor-ica.jar' />
+            </Component>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id='cgrRaptorIcaRoot'>
+            <ComponentRef Id='cmpRaptorIcaJar' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
