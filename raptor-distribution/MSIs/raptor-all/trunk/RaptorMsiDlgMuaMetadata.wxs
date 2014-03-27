@@ -16,7 +16,7 @@
                 </Control>
                 <Control Id='BannerLine' Type='Line' X='0' Y='44' Width='370' Height='0' />
                 <Control Id='Detail' Type='Text' X='25' Y='58' Width='280' Height='15' Transparent='yes' NoPrefix='yes'>
-                    <Text>Please modify the following suggested values with the correct information:</Text>
+                    <Text>Please modify the following example values with the correct information:</Text>
                 </Control>
 
                 <Control Id='ctrTextEntityID' Type='Text' X='40' Y='85' Width='100' Height='18' TabSkip='no' Text='Entity ID:' />

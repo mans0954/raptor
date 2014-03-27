@@ -111,9 +111,4 @@
     </bean>-->
 
 
-	<bean name="dataConnectionImpl" class="uk.ac.cardiff.raptor.store.dao.DefaultDataConnection">
-		<property name="sessionFactory" ref="muaSessionFactory" />
-	</bean>
-
-
 </beans>
