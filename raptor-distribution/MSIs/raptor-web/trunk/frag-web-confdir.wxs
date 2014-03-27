@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'
      xmlns:util='http://schemas.microsoft.com/wix/UtilExtension'>
     <Fragment>
-        <DirectoryRef Id="RAPTORWEBDIR">            
+        <DirectoryRef Id='RAPTORWEBDIR'>            
             <Directory Id='dirRaptorWebConf' Name='conf'>
 
 
@@ -45,7 +45,7 @@
                     ########################
                 -->
 
-                <Component Id='cmpRaptorWebConfDashboardStatistics' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorWebConfDashboardStatistics' Guid='*'>
                     <File Id='filRaptorWebConfDashboardStatistics' KeyPath='yes' Source='source\web\conf\dashboard-statistics.xml'/>
                 </Component>
 
@@ -115,7 +115,7 @@
                     <File Id='filRaptorWebConfUsers' KeyPath='yes' Source='source\web\conf\users.xml'/>
                 </Component>
 
-                <Component Id='cmpRaptorWebConfWebCore' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorWebConfWebCore' Guid='*'>
                     <File Id='filRaptorWebConfWebCore' KeyPath='yes' Source='source\web\conf\web-core.xml'/>
                 </Component>
 
@@ -123,21 +123,21 @@
         </DirectoryRef>
     </Fragment>
     <Fragment>
-        <ComponentGroup Id="cgrRaptorWebConf">
-            <ComponentRef Id="cmpRaptorWebConfDashboardStatisticsDist" />
-            <ComponentRef Id="cmpRaptorWebConfLoggingDist" />
-            <ComponentRef Id="cmpRaptorWebConfMetadataDist" />
-            <ComponentRef Id="cmpRaptorWebConfMuaEndpointsDist" />
-            <ComponentRef Id="cmpRaptorWebConfServerPropertiesDist" />
-            <ComponentRef Id="cmpRaptorWebConfUsersDist" />
-            <ComponentRef Id="cmpRaptorWebConfWebCoreDist" />
-            <ComponentRef Id="cmpRaptorWebConfDashboardStatistics" />
-            <ComponentRef Id="cmpRaptorWebConfLogging" />
-            <ComponentRef Id="cmpRaptorWebConfMetadata" />
-            <ComponentRef Id="cmpRaptorWebConfMuaEndpoints" />
-            <ComponentRef Id="cmpRaptorWebConfServerProperties" />
-            <ComponentRef Id="cmpRaptorWebConfUsers" />
-            <ComponentRef Id="cmpRaptorWebConfWebCore" />
+        <ComponentGroup Id='cgrRaptorWebConf'>
+            <ComponentRef Id='cmpRaptorWebConfDashboardStatisticsDist' />
+            <ComponentRef Id='cmpRaptorWebConfLoggingDist' />
+            <ComponentRef Id='cmpRaptorWebConfMetadataDist' />
+            <ComponentRef Id='cmpRaptorWebConfMuaEndpointsDist' />
+            <ComponentRef Id='cmpRaptorWebConfServerPropertiesDist' />
+            <ComponentRef Id='cmpRaptorWebConfUsersDist' />
+            <ComponentRef Id='cmpRaptorWebConfWebCoreDist' />
+            <ComponentRef Id='cmpRaptorWebConfDashboardStatistics' />
+            <ComponentRef Id='cmpRaptorWebConfLogging' />
+            <ComponentRef Id='cmpRaptorWebConfMetadata' />
+            <ComponentRef Id='cmpRaptorWebConfMuaEndpoints' />
+            <ComponentRef Id='cmpRaptorWebConfServerProperties' />
+            <ComponentRef Id='cmpRaptorWebConfUsers' />
+            <ComponentRef Id='cmpRaptorWebConfWebCore' />
         </ComponentGroup>
     </Fragment>
 </Wix>

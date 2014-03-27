@@ -15,8 +15,7 @@
     limitations under the License.
 
 -->
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -30,13 +29,14 @@
 	<ui:define name="content">
 		<a4j:include viewId="working-panel.xhtml" />
 		<a4j:include viewId="seriesPanel.xhtml" />
-		<a4j:include viewId="postProcessorPanel.xhtml" />
+		<a4j:include viewId="addPostProcessorPanel.xhtml" />
+		<a4j:include viewId="editPostProcessorPanel.xhtml" />
 
 		<rich:layout>
 
 			<rich:layoutPanel position="top">
-				<a4j:status id="stateStatus" startText="Working..."
-					startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" />
+				<!-- 	<a4j:status id="stateStatus" startText="Working..."
+					startStyle="background-color:#ADDFFF;  font-weight:bold;  position: absolute;  right: 5px;  top: 1px;  width: 80px;" /> -->
 
 				<rich:simpleTogglePanel switchType="server" label="Control Panel"
 					opened="true">
@@ -62,6 +62,8 @@
 											<h:outputText value="Statistic" />
 										</f:facet>
 										<a4j:commandLink ajaxSingle="true"
+											onclick="#{rich:component('workingPanel')}.show();"
+											oncomplete="#{rich:component('workingPanel')}.hide();"
 											value="#{unit.statisticalUnitInformation.statisticParameters.unitName}"
 											action="invokeStatisticalUnit"
 											reRender="chartForm,graphImage,optionsPanel,ControlPanelForm">
@@ -94,6 +96,13 @@
 										<rich:datascroller id="datascrollerStats" />
 									</f:facet>
 								</rich:dataTable>
+								<rich:panel>
+									<h:outputText value="Processing Status:"
+										style="font-weight: bold;" />
+									<h:outputText
+										value="#{flowScope.websession.graphmodel.processingResult}" />
+								</rich:panel>
+
 							</a4j:form>
 						</rich:layoutPanel>
 
@@ -183,10 +192,12 @@
 
 												<f:facet name="footer">
 													<h:panelGroup style="display:block; text-align:center">
-														<a4j:commandButton ajaxSingle="false" value="update">
+														<a4j:commandButton ajaxSingle="false" value="update"
+															onclick="#{rich:component('workingPanel')}.show();">
 															<!--  added the support here, as the command button needs to submit the form properties, which it only does
 													with ajaxSingle="false", then invoke the action, which only happens when ajaxSingle="true" -->
 															<a4j:support ajaxSingle="true" event="oncomplete"
+																oncomplete="#{rich:component('workingPanel')}.hide();"
 																action="updateMUAStatistic"
 																reRender="optionsPanelForm,controlPanelForm, chartForm" />
 
@@ -207,14 +218,26 @@
 													<f:facet name="header">
 														<h:outputText value="Post Processors" />
 													</f:facet>
-													<h:outputText value="#{processor.beanName}"/>
-													<!-- <rich:comboBox value="#{processor.beanName}" width="220px"
-														suggestionValues="#{flowScope.websession.graphmodel.possiblePostProcessorValues}">
-														<a4j:support event="onselect" ajaxSingle="true" />
-													</rich:comboBox> -->
-												</rich:column>
+													<h:outputText value="#{processor.friendlyName}" />
 
-												<!-- <rich:column>
+												</rich:column>
+												
+												<rich:column>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="Edit" />
+                                                    </f:facet>
+                                                    <a4j:commandLink immediate="true" oncomplete="#{rich:component('editPostProcessorPanel')}.show();"                                                      
+                                                        id="editPostProcessorLink" reRender="editProcessorTable">
+                                                        <h:graphicImage
+                                                            style="width:20px; border:0; margin-left: auto;margin-right: auto;"
+                                                            value="/image/icon/onebit_20.png" />
+                                                        <f:setPropertyActionListener value="#{processor}"
+                                                            target="#{flowScope.websession.graphmodel.selectedPostProcessor}" />
+                                                    </a4j:commandLink>
+
+                                                </rich:column>
+
+												<rich:column>
 													<f:facet name="header">
 														<h:outputText value="Remove" />
 													</f:facet>
@@ -229,17 +252,18 @@
 															target="#{flowScope.websession.graphmodel.selectedPostProcessor}" />
 													</a4j:commandLink>
 
-												</rich:column> -->
+												</rich:column>
 
-												<!-- <f:facet name="footer">
+												<f:facet name="footer">
 													<a4j:commandLink immediate="true" id="postProcessorLink"
-														action="addPostProcessorToSelectedStatistic"
-														reRender="optionsPanelForm,postProcessorTable">
+														oncomplete="#{rich:component('addPostProcessorPanel')}.show();"
+														action="initialiseNewProcessorAdd"
+														reRender="addPostProcessorForm">
 														<h:graphicImage id="addPostProcessorImage"
 															style="width:20px;" value="/image/icon/onebit_31.png" />
 													</a4j:commandLink>
 
-												</f:facet> -->
+												</f:facet>
 											</rich:dataTable>
 
 											<rich:spacer height="15px" />
@@ -321,12 +345,11 @@
 												</rich:column>
 
 											</rich:dataTable>
-											<rich:spacer height="10px"/>
+											<rich:spacer height="10px" />
 											<rich:panel>
-												<h:outputText value="Processing Status:"
+												<h:outputText value="Option Errors:"
 													style="font-weight: bold;" />
-												<h:outputText
-													value="#{flowScope.websession.graphmodel.processingResult}" />
+												<h:messages style="font-weight: bold; color:red; font-size:90%" showDetail="#{false}" showSummary="#{true}"/>
 											</rich:panel>
 
 										</rich:layoutPanel>

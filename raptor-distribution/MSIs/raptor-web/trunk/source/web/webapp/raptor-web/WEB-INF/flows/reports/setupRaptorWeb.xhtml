@@ -15,8 +15,7 @@
     limitations under the License.
 
 -->
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
- "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -121,22 +120,8 @@
 					</rich:layoutPanel>
 				</rich:layout>
 
-				<rich:separator />
-				<rich:spacer height="10px" />
-				<center>
-					<h2>Attached Aggregator Information</h2>
-				</center>
-				<rich:spacer height="5px" />
-				<h:panelGrid columns="1">
-					<h:outputText
-						value="Organisation Name: #{setupService.attachedCapabilities.metadata.organisationName}" />
-					<h:outputText
-						value="Contact: #{setupService.attachedCapabilities.metadata.contactEmail}" />
-					<h:outputText
-						value="Endpoint: #{setupService.currentlyAttached.serviceEndpoint}" />
-					<h:outputText
-						value="Stored Events #{setupService.attachedCapabilities.numberOfAuthenticationsStored}" />
-				</h:panelGrid>
+
+
 			</rich:tab>
 			<rich:tab name="resourceClassification"
 				label="Resource Classification">
@@ -145,7 +130,7 @@
 				<rich:spacer height="10px" />
 				<center>
 					<h2>Resource Classification</h2>
-                    <rich:spacer height="15px" />
+					<rich:spacer height="15px" />
 
 					<h:form id="resourceClassificationForm">
 						<rich:scrollableDataTable
@@ -275,9 +260,74 @@
 
 			</rich:tab>
 
-			<!--<rich:tab name="preferencesSetup" label="User Preferences" />
+			<rich:tab name="DatabaseSetup" label="Aggregator Information">
+				<rich:layout>
+					<rich:layoutPanel position="top">
+						<rich:spacer height="15px" />
+						<center>
+							<h2>Attached Aggregator Information</h2>
+							<p>Warning, this information is cached and will refresh
+								periodically</p>
+						</center>
 
-		-->
+					</rich:layoutPanel>
+					<rich:layoutPanel position="left">
+
+
+						<center>
+							<h:panelGrid columns="2"><h:outputText style="font-weight:bold;"
+                                    value="MUA Version: " />
+                                <h:outputText
+                                    value="#{setupService.attachedCapabilities.muaVersion}" />
+								<h:outputText style="font-weight:bold;"
+									value="Organisation Name: " />
+								<h:outputText
+									value="#{setupService.attachedCapabilities.metadata.organisationName}" />
+								<h:outputText style="font-weight:bold;" value="Contact:  " />
+								<h:outputText
+									value="#{setupService.attachedCapabilities.metadata.contactEmail}" />
+								<h:outputText style="font-weight:bold;" value="Endpoint URL: " />
+								<h:outputText
+									value=" #{setupService.currentlyAttached.serviceEndpoint}" />
+								<h:outputText style="font-weight:bold;"
+									value="Total Stored Events: " />
+								<h:outputText
+									value="#{setupService.attachedCapabilities.numberOfAuthenticationsStored}" />
+								<h:outputText style="font-weight:bold;" value="Earilest Event: " />
+								<h:outputText
+									value="#{setupService.attachedCapabilities.earliestEventTime}" />
+								<h:outputText style="font-weight:bold;" value="Latest Event: " />
+								<h:outputText
+									value="#{setupService.attachedCapabilities.latestEventTime}" />
+
+							</h:panelGrid>
+						</center>
+					</rich:layoutPanel>
+
+					<rich:layoutPanel position="right">
+						<center>
+							<rich:dataTable
+								value="#{setupService.attachedCapabilities.eventsPerType}"
+								bandingInterval="2" banding="row" var="eventInfo">
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Event Type" />
+									</f:facet>
+									<h:outputText value="#{eventInfo.eventTypeName}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:outputText value="Event Count" />
+									</f:facet>
+									<h:outputText value="#{eventInfo.noOfEvents}" />
+								</rich:column>
+
+							</rich:dataTable>
+						</center>
+					</rich:layoutPanel>
+				</rich:layout>
+			</rich:tab>
+
 		</rich:tabPanel>
 
 
