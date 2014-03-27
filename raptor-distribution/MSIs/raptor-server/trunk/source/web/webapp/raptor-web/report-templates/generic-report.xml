@@ -53,6 +53,13 @@
                     </textElement>
                     <textFieldExpression><![CDATA[$P{subtitle}]]></textFieldExpression>
                 </textField>
+                <textField>
+                    <reportElement x="20" y="65" width="520" height="20" forecolor="#FFFFFF"/>
+                    <textElement textAlignment="Left">
+                        <font size="9" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$P{query}]]></textFieldExpression>
+                </textField>
             </frame>
             <image scaleImage="RetainShape" hAlign="Center" isUsingCache="true" isLazy="true">
                 <reportElement x="0" y="100" width="500" height="500"/>
