@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='315425a4-46c9-4a18-a8b6-bd23f6beba75'
+    <Product Id='521e3493-8d48-46d3-b92d-3e31891cc1b1'
       Name='Raptor Web'
       UpgradeCode='fe94dcab-4c5e-4277-a83d-bdceebc23ee3'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.1.0'>
+      Version='1.2.0'>
 
         <Package Id='*'
           Description='Raptor Web'
-          Comments='Raptor Web v1.1.0'
+          Comments='Raptor Web v1.2.0'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -131,13 +131,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor Web v1.1.0'
+          Title='Raptor Web v1.2.0'
           Description='The complete package for Raptor Web.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.1.0' Description='Raptor Web v1.1.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.0' Description='Raptor Web v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />
@@ -177,7 +177,7 @@
         <!-- When uninstalling, uninstall service (automagically stops it first) -->
         <InstallExecuteSequence>
             <Custom Action='StopWebService' After='UnpublishFeatures'>UNINSTALLING</Custom>
-            <Custom Action='UninstallWebService' Before='StopWebService'>UNINSTALLING</Custom>
+            <Custom Action='UninstallWebService' After='StopWebService'>UNINSTALLING</Custom>
         </InstallExecuteSequence>
 
         <!-- When upgrading, restart service -->
