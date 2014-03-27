@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='521e3493-8d48-46d3-b92d-3e31891cc1b1'
+    <Product Id='51bdd125-ce44-4212-894f-c35ec6777f75'
       Name='Raptor Web'
       UpgradeCode='fe94dcab-4c5e-4277-a83d-bdceebc23ee3'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.2.0'>
+      Version='1.2.1'>
 
         <Package Id='*'
           Description='Raptor Web'
-          Comments='Raptor Web v1.2.0'
+          Comments='Raptor Web v1.2.1'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -131,13 +131,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor Web v1.2.0'
+          Title='Raptor Web v1.2.1'
           Description='The complete package for Raptor Web.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.0' Description='Raptor Web v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.1' Description='Raptor Web v1.2.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />
@@ -167,6 +167,10 @@
         <CustomAction Id='StopWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='stop' />
         <CustomAction Id='RestartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='restart' />
 
+        <!-- Special actions for Raptor v1.2.1 only -->
+        <CustomAction Id='InstallWebServiceSpecial' FileKey='filRaptorWebBinWebBat' ExeCommand='install' />
+        <CustomAction Id='StartWebServiceSpecial' FileKey='filRaptorWebBinWebBat' ExeCommand='start' />
+
 
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
@@ -182,7 +186,12 @@
 
         <!-- When upgrading, restart service -->
         <InstallExecuteSequence>
-            <Custom Action='RestartWebService' After='StartServices'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+            <!-- For Raptor v1.2.1 only, install service and start since previous versions will uninstall stuff incorrectly -->
+            <Custom Action='InstallWebServiceSpecial' After='InstallFinalize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='StartWebServiceSpecial' After='InstallWebServiceSpecial'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+
+            <!-- This is what would normally be called - restart only -->
+            <Custom Action='RestartWebService' After='StartServices'><![CDATA[UPGRADING AND REMOVE="ALL"]]></Custom>
         </InstallExecuteSequence>
 
 
@@ -208,6 +217,25 @@
             <Custom Action='RunKeytoolExportWebPublicKey' After='RunKeytoolCreateWebPrivateKey'>JAVA_HOME And INSTALLING</Custom>
         </InstallExecuteSequence>
         
+
+
+        <!--
+            ##############################
+            # Custom Actions - Backup of files
+            ##############################
+        -->
+
+        <Binary Id='BackupConfigFileSrc' SourceFile='source\installer\raptor_vb_webconf.vbs' />
+
+        <CustomAction Id='BackupConfigFiles' BinaryKey='BackupConfigFileSrc' VBScriptCall='' Execute='deferred' Impersonate='no' />
+        <CustomAction Id='SetBackupConfigFiles' Property='BackupConfigFiles' Value='[RAPTORWEBDIR]' />
+
+        <!-- Schedule these CAs to run -->
+        <InstallExecuteSequence>
+            <Custom Action='SetBackupConfigFiles' Before='CostInitialize'></Custom>
+            <Custom Action='BackupConfigFiles' After='InstallInitialize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+        </InstallExecuteSequence>
+
 
 
         <!--
