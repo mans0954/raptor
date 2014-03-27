@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="RAPTORICADIR">
@@ -222,14 +222,14 @@
                 <Component Id="cmp944386478C8DFCB6B3E65989A6E14344" Guid="*">
                     <File Id="filC6ADFA475B56ADA4686C48EB66DD23DA" KeyPath="yes" Source="source\ica\lib\quartz-1.8.0.jar" />
                 </Component>
-                <Component Id="cmpAFFB05AFCA4EFEBE073821A9A66EC316" Guid="*">
-                    <File Id="fil08A348553008B3AD572A2D490525F229" KeyPath="yes" Source="source\ica\lib\raptor-client-1.0.0.jar" />
+                <Component Id="cmpAE7E1F5D5BA8EBAB728D7B298DA3A9FA" Guid="*">
+                    <File Id="filED433C98F453186F447B2064918136C7" KeyPath="yes" Source="source\ica\lib\raptor-client-1.0.1.jar" />
                 </Component>
-                <Component Id="cmp43E854E22FB3C09152C735765E8ED11D" Guid="*">
-                    <File Id="fil120F66CCE0E7926C667C84C9E72B1C84" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.0.0.jar" />
+                <Component Id="cmpFE4A446AD36FB18A406E18535D7B03CC" Guid="*">
+                    <File Id="fil60E332CF4EA3B7D4C58A0470B9307DA4" KeyPath="yes" Source="source\ica\lib\raptor-information-model-1.0.1.jar" />
                 </Component>
-                <Component Id="cmp47F4D5C42F54762FAAB490D70CA30713" Guid="*">
-                    <File Id="filF15E190A5F98B4ACBC84731D14E92B62" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.0.0.jar" />
+                <Component Id="cmpD0BF86E59D3B2FF9EDC380D7A14263F1" Guid="*">
+                    <File Id="filFF76721AE9E570F34D35DF3B814DF530" KeyPath="yes" Source="source\ica\lib\raptor-parse-1.0.1.jar" />
                 </Component>
                 <Component Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" Guid="*">
                     <File Id="filF84CE1D564BF641A073A3463A14112F9" KeyPath="yes" Source="source\ica\lib\resolver-2.10.0.jar" />
@@ -429,9 +429,9 @@
             <ComponentRef Id="cmpD4F6B7649CCB75BFF17B64083BFD958D" />
             <ComponentRef Id="cmp0E2501CD4945D223098710C9EE25A00D" />
             <ComponentRef Id="cmp944386478C8DFCB6B3E65989A6E14344" />
-            <ComponentRef Id="cmpAFFB05AFCA4EFEBE073821A9A66EC316" />
-            <ComponentRef Id="cmp43E854E22FB3C09152C735765E8ED11D" />
-            <ComponentRef Id="cmp47F4D5C42F54762FAAB490D70CA30713" />
+            <ComponentRef Id="cmpAE7E1F5D5BA8EBAB728D7B298DA3A9FA" />
+            <ComponentRef Id="cmpFE4A446AD36FB18A406E18535D7B03CC" />
+            <ComponentRef Id="cmpD0BF86E59D3B2FF9EDC380D7A14263F1" />
             <ComponentRef Id="cmp1DCB33D11ECE7FCD8E620951F799DCEA" />
             <ComponentRef Id="cmp752158F35F65FEF6A6161B006F66C8A1" />
             <ComponentRef Id="cmpD9BE72C2738AA305ED59F178DAA14F17" />
