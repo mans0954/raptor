@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='91e87199-50fc-4a76-a07b-0f3a43cee240'
+    <Product Id='348c9e4d-45f1-4ec5-9dce-c39ee0c65b6e'
       Name='Raptor All Combined Package'
       UpgradeCode='da8a9725-27af-4917-a6d6-32a4b21b1078'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.13.0'>
+      Version='1.14.0'>
 
         <Package Id='*'
           Description='Raptor All Combined Package'
-          Comments='Raptor All Combined Package v1-r13 (ICA v1.2.0 / MUA v1.2.0 / Web v1.2.0)'
+          Comments='Raptor All Combined Package v1-r14 (ICA v1.2.1 / MUA v1.2.1 / Web v1.2.1)'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -170,13 +170,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor All Combined Package v1-r12'
+          Title='Raptor All Combined Package v1-r14'
           Description='Raptor Server Combined Package, containing the Raptor ICA, Raptor MUA and Raptor Web components.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
 
-            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.2.0' Description='Raptor ICA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.2.1' Description='Raptor ICA v1.2.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorIcaRoot' />
                 <ComponentGroupRef Id='cgrRaptorIcaBin' />
                 <ComponentGroupRef Id='cgrRaptorIcaConf' />
@@ -186,7 +186,7 @@
                 <ComponentRef Id='cmpRaptorIcaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.2.0' Description='Raptor MUA v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.2.1' Description='Raptor MUA v1.2.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
                 <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
@@ -197,7 +197,7 @@
                 <ComponentRef Id='cmpRaptorMuaEnvVarHome' />
             </Feature>
 
-            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.0' Description='Raptor Web v1.2.0' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.2.1' Description='Raptor Web v1.2.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorWebRoot' />
                 <ComponentGroupRef Id='cgrRaptorWebBin' />
                 <ComponentGroupRef Id='cgrRaptorWebConf' />
@@ -237,6 +237,14 @@
         <CustomAction Id='StopWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='stop' />
         <CustomAction Id='RestartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='restart' />
 
+        <!-- Special actions for Raptor v1.2.1 only -->
+        <CustomAction Id='InstallIcaServiceSpecial' FileKey='filRaptorIcaBinIcaBat' ExeCommand='install' />
+        <CustomAction Id='StartIcaServiceSpecial' FileKey='filRaptorIcaBinIcaBat' ExeCommand='start' />
+        <CustomAction Id='InstallMuaServiceSpecial' FileKey='filRaptorMuaBinMuaBat' ExeCommand='install' />
+        <CustomAction Id='StartMuaServiceSpecial' FileKey='filRaptorMuaBinMuaBat' ExeCommand='start' />
+        <CustomAction Id='InstallWebServiceSpecial' FileKey='filRaptorWebBinWebBat' ExeCommand='install' />
+        <CustomAction Id='StartWebServiceSpecial' FileKey='filRaptorWebBinWebBat' ExeCommand='start' />
+
 
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
@@ -260,9 +268,18 @@
 
         <!-- When upgrading, restart service -->
         <InstallExecuteSequence>
-            <Custom Action='RestartIcaService' After='StartServices'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
-            <Custom Action='RestartMuaService' After='RestartIcaService'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
-            <Custom Action='RestartWebService' After='RestartMuaService'><![CDATA[UPGRADINGPRODUCTCODE <>""]]></Custom>
+            <!-- For Raptor v1.2.1 only, install service and start since previous versions will uninstall stuff incorrectly -->
+            <Custom Action='InstallIcaServiceSpecial' After='InstallFinalize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='StartIcaServiceSpecial' After='InstallIcaServiceSpecial'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='InstallMuaServiceSpecial' After='InstallFinalize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='StartMuaServiceSpecial' After='InstallMuaServiceSpecial'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='InstallWebServiceSpecial' After='InstallFinalize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='StartWebServiceSpecial' After='InstallWebServiceSpecial'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            
+            <!-- This is what would normally be called - restart only -->
+            <Custom Action='RestartIcaService' After='StartServices'><![CDATA[UPGRADING AND REMOVE="ALL"]]></Custom>
+            <Custom Action='RestartMuaService' After='RestartIcaService'><![CDATA[UPGRADING AND REMOVE="ALL"]]></Custom>
+            <Custom Action='RestartWebService' After='RestartMuaService'><![CDATA[UPGRADING AND REMOVE="ALL"]]></Custom>
         </InstallExecuteSequence>
 
 
@@ -307,6 +324,35 @@
             <Custom Action='RunKeytoolSwapKeysPutWebInMua' After='RunKeytoolSwapKeysPutMuaInWeb'>JAVA_HOME And INSTALLING</Custom>
         </InstallExecuteSequence>
         
+
+
+        <!--
+            ##############################
+            # Custom Actions - Backup of files
+            ##############################
+        -->
+
+        <Binary Id='BackupIcaConfigFileSrc' SourceFile='source\installer\raptor_vb_icaconf.vbs' />
+        <Binary Id='BackupMuaConfigFileSrc' SourceFile='source\installer\raptor_vb_muaconf.vbs' />
+        <Binary Id='BackupWebConfigFileSrc' SourceFile='source\installer\raptor_vb_webconf.vbs' />
+
+        <CustomAction Id='BackupIcaConfigFiles' BinaryKey='BackupIcaConfigFileSrc' VBScriptCall='' Execute='deferred' Impersonate='no' />
+        <CustomAction Id='BackupMuaConfigFiles' BinaryKey='BackupMuaConfigFileSrc' VBScriptCall='' Execute='deferred' Impersonate='no' />
+        <CustomAction Id='BackupWebConfigFiles' BinaryKey='BackupWebConfigFileSrc' VBScriptCall='' Execute='deferred' Impersonate='no' />
+        <CustomAction Id='SetBackupIcaConfigFiles' Property='BackupIcaConfigFiles' Value='[RAPTORICADIR]' />
+        <CustomAction Id='SetBackupMuaConfigFiles' Property='BackupMuaConfigFiles' Value='[RAPTORMUADIR]' />
+        <CustomAction Id='SetBackupWebConfigFiles' Property='BackupWebConfigFiles' Value='[RAPTORWEBDIR]' />
+
+        <!-- Schedule these CAs to run -->
+        <InstallExecuteSequence>
+            <Custom Action='SetBackupIcaConfigFiles' Before='CostInitialize'></Custom>
+            <Custom Action='SetBackupMuaConfigFiles' Before='CostInitialize'></Custom>
+            <Custom Action='SetBackupWebConfigFiles' Before='CostInitialize'></Custom>
+            <Custom Action='BackupIcaConfigFiles' After='InstallInitialize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='BackupMuaConfigFiles' After='InstallInitialize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+            <Custom Action='BackupWebConfigFiles' After='InstallInitialize'><![CDATA[UPGRADING AND REMOVE<>"ALL"]]></Custom>
+        </InstallExecuteSequence>
+
 
 
         <!--

@@ -23,27 +23,35 @@
                 <Directory Id='RaptorIcaConfDistDir' Name='dist'>
                     <Component Id='cmpRaptorIcaConfEventParseDist' Guid='*'>
                         <File Id='filRaptorIcaConfEventParseDist' KeyPath='yes' Source='source\ica\conf\event-parse.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfEventParseDistRem' Name="event-parse.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfEventParseFormatsCustomDist' Guid='*'>
                         <File Id='filRaptorIcaConfEventParseFormatsCustomDist' KeyPath='yes' Source='source\ica\conf\event-parse-formats-custom.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfEventParseFormatsCustomDistRem' Name="event-parse-formats-custom.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfEventParseFormatsSystemDist' Guid='*'>
                         <File Id='filRaptorIcaConfEventParseFormatsSystemDist' KeyPath='yes' Source='source\ica\conf\event-parse-formats-system.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfEventParseFormatsSystemDistRem' Name="event-parse-formats-system.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfEventReleaseDist' Guid='*'>
                         <File Id='filRaptorIcaConfEventReleaseDist' KeyPath='yes' Source='source\ica\conf\event-release.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfEventReleaseDistRem' Name="event-release.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfIcaCoreDist' Guid='*'>
                         <File Id='filRaptorIcaConfIcaCoreDist' KeyPath='yes' Source='source\ica\conf\ica-core.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfIcaCoreDistRem' Name="ica-core.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfLoggingDist' Guid='*'>
                         <File Id='filRaptorIcaConfLoggingDist' KeyPath='yes' Source='source\ica\conf\logging.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfLoggingDistRem' Name="logging.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfMetadataDist' Guid='*'>
                         <File Id='filRaptorIcaConfMetadataDist' KeyPath='yes' Source='source\ica\conf\metadata.xml'/>
+                        <RemoveFile Id='filRaptorIcaConfMetadataDistRem' Name="metadata.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorIcaConfServerPropertiesDist' Guid='*'>
                         <File Id='filRaptorIcaConfServerPropertiesDist' KeyPath='yes' Source='source\ica\conf\server.properties'/>
+                        <RemoveFile Id='filRaptorIcaConfServerPropertiesDistRem' Name="server.properties" On="install"/>
                     </Component>
                 </Directory>
 
@@ -76,11 +84,13 @@
 
                 <Component Id='cmpRaptorIcaConfEventParseFormatsSystem' Guid='*'>
                     <File Id='filRaptorIcaConfEventParseFormatsSystem' KeyPath='yes' Source='source\ica\conf\event-parse-formats-system.xml'/>
+                    <RemoveFile Id='filRaptorIcaConfEventParseFormatsSystemRem' Name="event-parse-formats-system.xml" On="install"/>
                 </Component>
 
 
-                <Component Id='cmpRaptorIcaConfEventRelease' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorIcaConfEventRelease' Guid='*'>
                     <File Id='filRaptorIcaConfEventRelease' KeyPath='yes' Source='source\ica\conf\event-release.xml'/>
+                    <RemoveFile Id='filRaptorIcaConfEventReleaseRem' Name="event-release.xml" On="install"/>
 
                     <!-- Change the trust and keystore locations to Windows style -->
                     <util:XmlFile Id='ModifyIcaEventReleaseTrustStoreLocation'
@@ -101,6 +111,7 @@
 
                 <Component Id='cmpRaptorIcaConfIcaCore' Guid='*'>
                     <File Id='filRaptorIcaConfIcaCore' KeyPath='yes' Source='source\ica\conf\ica-core.xml'/>
+                    <RemoveFile Id='filRaptorIcaConfIcaCoreRem' Name="ica-core.xml" On="install"/>
                 </Component>
 
                 <Component Id='cmpRaptorIcaConfLogging' Guid='*' NeverOverwrite='yes'>

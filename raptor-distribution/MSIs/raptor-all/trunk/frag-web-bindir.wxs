@@ -4,13 +4,13 @@
         <DirectoryRef Id='RAPTORWEBDIR'>
             <Directory Id='dirRaptorWebBin' Name='bin'>
                 <Component Id='cmpRaptorWebBinWebBat' Guid='*'>
-                    <File Id='filRaptorWebBinWebBat' KeyPath='yes' Source='source\web\bin\web.bat' />
+                    <File Id='filRaptorWebBinWebBat' KeyPath='yes' Source='source\web\bin\raptorweb.bat' />
                 </Component>
                 <Component Id='cmpRaptorWebBinWrapperExe' Guid='*'>
                     <File Id='filRaptorWebBinWrapperExe' KeyPath='yes' Source='source\web\bin\wrapper.exe' />
                 </Component>
                 <Component Id='cmpRaptorWebBinWrapperConf' Guid='*'>
-                    <File Id='filRaptorWebBinWrapperConf' KeyPath='yes' Source='source\web\bin\wrapper.conf' />
+                    <File Id='filRaptorWebBinWrapperConf' KeyPath='yes' Source='source\web\bin\raptorweb-wrapper.conf' />
                 </Component>
             </Directory>
         </DirectoryRef>
