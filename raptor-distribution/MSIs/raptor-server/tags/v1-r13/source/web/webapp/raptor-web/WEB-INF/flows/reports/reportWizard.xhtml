@@ -1,0 +1,156 @@
+<!--
+
+    Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk>
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/templates/raptor/full.xhtml">
+
+	<ui:define name="content">
+		<a4j:include viewId="working-panel.xhtml" />
+
+		<rich:layout>
+
+			<rich:layoutPanel position="bottom">
+				<h:form id="reportWizard-form">
+					<rich:panel bodyClass="inpanelBody">
+						<f:facet name="header">
+                    Saved Reports
+                </f:facet>
+
+						<rich:dataTable id="reportWizard-savedReports"
+							styleClass="lowerBorderTable"
+							value="#{savedReports.savedWizardModels}" var="report"
+							width="95%" border="1" labelWidth="5%" style="width:100%;">
+
+
+							<rich:column styleClass="lowerBorderTable">
+								<h:panelGrid columns="5">
+									<a4j:commandLink id="runReportQuickImage" action="runReportWizard"
+										onclick="#{rich:component('workingPanel')}.show();">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/pie_chart.png" width="25px" />
+									</a4j:commandLink>
+									<rich:toolTip value="Run Report" for="runReportQuickImage"/>
+									<a4j:commandLink id="editReportImage" action="editReportWizard">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/onebit_20.png" width="20px" />
+									</a4j:commandLink>
+                                    <rich:toolTip value="Edit Report" for="editReportImage"/>
+
+
+									<h:outputText
+										value="Title: #{report.graphWizardModel.graphTitle}" />
+
+
+
+								</h:panelGrid>
+							</rich:column>
+							
+							<rich:column styleClass="lowerBorderTable">
+                                <h:outputText
+                                    value=" created by: #{report.graphWizardModel.createdBy}" />
+
+                            </rich:column>
+
+							<rich:column styleClass="lowerBorderTable">
+								<h:outputText
+									value=" created: #{report.graphWizardModel.dateSavedFormatted}" />
+
+							</rich:column>
+
+							<rich:column styleClass="lowerBorderTable">
+								<h:outputText
+									value="modified: #{report.graphWizardModel.dateModifiedFormatted}" />
+
+							</rich:column>
+
+							<rich:column styleClass="lowerBorderTable">
+								<h:panelGrid columns="1">
+
+									<a4j:commandLink action="removeReportWizard"
+										reRender="reportWizard-savedReports">
+										<f:setPropertyActionListener value="#{report}"
+											target="#{savedReports.selectedReport}" />
+										<h:graphicImage value="/image/icon/trash.png" width="20px" />
+									</a4j:commandLink>
+								</h:panelGrid>
+							</rich:column>
+
+						</rich:dataTable>
+					</rich:panel>
+
+					<h:panelGrid columns="3">
+
+						<h4>
+							Load a report from URL:
+							<h:inputText value="#{savedReports.reportToDownloadUrl}"
+								size="50" />
+							<a4j:commandButton value="download"  action="loadReportFromUrl"
+								reRender="reportWizard-savedReports" />
+						</h4>
+
+
+					</h:panelGrid>
+				</h:form>
+
+			</rich:layoutPanel>
+
+
+			<rich:layoutPanel position="left">
+
+
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="right">
+
+			</rich:layoutPanel>
+
+			<rich:layoutPanel position="top">
+
+				<form>
+					<h:panelGrid columns="2">
+
+						<h3>
+							Click on the icon to create a new report
+							<a4j:commandLink action="startReportWizard">
+								<h:graphicImage value="/image/icon/pie_chart.png" width="50px" />
+							</a4j:commandLink>
+
+						</h3>
+
+					</h:panelGrid>
+
+				</form>
+
+
+
+
+			</rich:layoutPanel>
+
+		</rich:layout>
+
+	</ui:define>
+</ui:composition>
