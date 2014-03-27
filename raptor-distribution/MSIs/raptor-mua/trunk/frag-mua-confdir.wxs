@@ -23,48 +23,63 @@
                 <Directory Id='RaptorMuaConfDistDir' Name='dist'>
                     <Component Id='cmpRaptorMuaConfAttributeAssociationDist' Guid='*'>
                         <File Id='filRaptorMuaConfAttributeAssociationDist' KeyPath='yes' Source='source\mua\conf\attribute-association.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfAttributeAssociationDistRem' Name="attribute-association.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfBatchEventParseDist' Guid='*'>
                         <File Id='filRaptorMuaConfBatchEventParseDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfBatchEventParseDistRem' Name="batch-event-parse.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfBatchEventParseFormatsCustomDist' Guid='*'>
                         <File Id='filRaptorMuaConfBatchEventParseFormatsCustomDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-custom.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfBatchEventParseFormatsCustomDistRem' Name="batch-event-parse-formats-custom.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfBatchEventParseFormatsSystemDist' Guid='*'>
                         <File Id='filRaptorMuaConfBatchEventParseFormatsSystemDist' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-system.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfBatchEventParseFormatsSystemDistRem' Name="batch-event-parse-formats-system.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfDatabaseDist' Guid='*'>
                         <File Id='filRaptorMuaConfDatabaseDist' KeyPath='yes' Source='source\mua\conf\database.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfDatabaseDistRem' Name="database.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfEventReleaseDist' Guid='*'>
                         <File Id='filRaptorMuaConfEventReleaseDist' KeyPath='yes' Source='source\mua\conf\event-release.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfEventReleaseDistRem' Name="event-release.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfLoggingDist' Guid='*'>
                         <File Id='filRaptorMuaConfLoggingDist' KeyPath='yes' Source='source\mua\conf\logging.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfLoggingDistRem' Name="logging.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfMetadataDist' Guid='*'>
                         <File Id='filRaptorMuaConfMetadataDist' KeyPath='yes' Source='source\mua\conf\metadata.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfMetadataDistRem' Name="metadata.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfMuaCoreDist' Guid='*'>
                         <File Id='filRaptorMuaConfMuaCoreDist' KeyPath='yes' Source='source\mua\conf\mua-core.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfMuaCoreDistRem' Name="mua-core.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfServerPropertiesDist' Guid='*'>
                         <File Id='filRaptorMuaConfServerPropertiesDist' KeyPath='yes' Source='source\mua\conf\server.properties'/>
+                        <RemoveFile Id='filRaptorMuaConfServerPropertiesDistRem' Name="server.properties" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfStatisticalUnitsCustomDist' Guid='*'>
                         <File Id='filRaptorMuaConfStatisticalUnitsCustomDist' KeyPath='yes' Source='source\mua\conf\statistical-units-custom.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfStatisticalUnitsCustomDistRem' Name="statistical-units-custom.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfStatisticalUnitsSystemDist' Guid='*'>
                         <File Id='filRaptorMuaConfStatisticalUnitsSystemDist' KeyPath='yes' Source='source\mua\conf\statistical-units-system.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfStatisticalUnitsSystemDistRem' Name="statistical-units-system.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfStatisticalProcessorsDist' Guid='*'>
                         <File Id='filRaptorMuaConfStatisticalProcessorsDist' KeyPath='yes' Source='source\mua\conf\statistical-processors.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfStatisticalProcessorsDistRem' Name="statistical-processors.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfUsersDist' Guid='*'>
                         <File Id='filRaptorMuaConfUsersDist' KeyPath='yes' Source='source\mua\conf\users.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfUsersDistRem' Name="users.xml" On="install"/>
                     </Component>
                     <Component Id='cmpRaptorMuaConfWebDist' Guid='*'>
                         <File Id='filRaptorMuaConfWebDist' KeyPath='yes' Source='source\mua\conf\web.xml'/>
+                        <RemoveFile Id='filRaptorMuaConfWebDistRem' Name="web.xml" On="install"/>
                     </Component>
                 </Directory>
 
@@ -94,6 +109,7 @@
 
                 <Component Id='cmpRaptorMuaConfBatchEventParseFormatsSystem' Guid='*'>
                     <File Id='filRaptorMuaConfBatchEventParseFormatsSystem' KeyPath='yes' Source='source\mua\conf\batch-event-parse-formats-system.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfBatchEventParseFormatsSystemRem' Name="batch-event-parse-formats-system.xml" On="install"/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfDatabase' Guid='*' NeverOverwrite='yes'>
@@ -104,8 +120,9 @@
 
                 </Component>
 
-                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*' NeverOverwrite='yes'>
+                <Component Id='cmpRaptorMuaConfEventRelease' Guid='*'>
                     <File Id='filRaptorMuaConfEventRelease' KeyPath='yes' Source='source\mua\conf\event-release.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfEventReleaseRem' Name="event-release.xml" On="install"/>
 
                     <!-- Change the trust and keystore locations to Windows style -->
                     <util:XmlFile Id='ModifyMuaEventReleaseTrustStoreLocation'
@@ -113,6 +130,7 @@
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="serviceEndpointInterface"[\]]/property[\[]@name="tlsParameters"[\]]/bean[\[]@class="uk.ac.cardiff.raptor.remoting.client.sei.impl.ClientTLSParameters"[\]]/property[\[]@name="trustStoreLocation"[\]]/value'
                       Value='[RAPTORMUADIR]keys\authorised-keys.jks'/>
+
                     <util:XmlFile Id='ModifyMuaEventReleaseKeyStoreLocation'
                       File='[#filRaptorMuaConfEventRelease]'
                       Action='setValue'
@@ -137,16 +155,19 @@
                       Action='setValue'
                       ElementPath='//beans/bean/property[\[]@name="entityId"[\]]/value'
                       Value='[MUAENTITYID]'/>
+
                     <util:XmlFile Id='ModifyMuaContactEmail'
                       File='[#filRaptorMuaConfMetadata]'
                       Action='setValue'
                       ElementPath='//beans/bean/property[\[]@name="contactEmail"[\]]/value'
                       Value='[MUACONTACTEMAIL]'/>
+
                     <util:XmlFile Id='ModifyMuaServiceName'
                       File='[#filRaptorMuaConfMetadata]'
                       Action='setValue'
                       ElementPath='//beans/bean/property[\[]@name="serviceName"[\]]/value'
                       Value='[MUASERVICENAME]'/>
+                      
                     <util:XmlFile Id='ModifyMuaOrganisationName'
                       File='[#filRaptorMuaConfMetadata]'
                       Action='setValue'
@@ -157,6 +178,7 @@
 
                 <Component Id='cmpRaptorMuaConfMuaCore' Guid='*'>
                     <File Id='filRaptorMuaConfMuaCore' KeyPath='yes' Source='source\mua\conf\mua-core.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfMuaCoreRem' Name="mua-core.xml" On="install"/>
 
                     <!-- Change the batchimport directories to Windows style -->
                     <util:XmlFile Id='ModifyMuaCoreUploadDirShibTwo'
@@ -164,26 +186,42 @@
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="shibUploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\shib2'/>
+
                     <util:XmlFile Id='ModifyMuaCoreUploadDirShibOne'
                       File='[#filRaptorMuaConfMuaCore]'
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="shib13UploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\shib13'/>
+
                     <util:XmlFile Id='ModifyMuaCoreUploadDirEzproxy'
                       File='[#filRaptorMuaConfMuaCore]'
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="ezproxyUploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\ezproxy'/>
+
                     <util:XmlFile Id='ModifyMuaCoreUploadDirShibSpUpTo24'
                       File='[#filRaptorMuaConfMuaCore]'
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="shibSp24BelowUploadDirectory"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\shibsp_upto24'/>
+
                     <util:XmlFile Id='ModifyMuaCoreUploadDirOpenAthensLa'
                       File='[#filRaptorMuaConfMuaCore]'
                       Action='setValue'
                       ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="openAthensLa"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
                       Value='file:///[RAPTORMUADIR]batchimport\openathensla'/>
+
+                    <util:XmlFile Id='ModifyMuaCoreUploadDirRadiusMoonshotIdp'
+                      File='[#filRaptorMuaConfMuaCore]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="moonshotRadius"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
+                      Value='file:///[RAPTORMUADIR]batchimport\radius-moonshot-idp'/>
+
+                    <util:XmlFile Id='ModifyMuaCoreUploadDirRadiusEdroamIdp'
+                      File='[#filRaptorMuaConfMuaCore]'
+                      Action='setValue'
+                      ElementPath='//beans/bean[\[]@id="fileUploadFromDirectory"[\]]/property[\[]@name="uploadDirectories"[\]]/list/bean[\[]@id="eduroamRadius"[\]]/property[\[]@name="uploadDirectory"[\]]/@value'
+                      Value='file:///[RAPTORMUADIR]batchimport\radius-eduroam-idp'/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfServerProperties' Guid='*' NeverOverwrite='yes'>
@@ -200,10 +238,12 @@
 
                 <Component Id='cmpRaptorMuaConfStatisticalUnitsSystem' Guid='*'>
                     <File Id='filRaptorMuaConfStatisticalUnitsSystem' KeyPath='yes' Source='source\mua\conf\statistical-units-system.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfStatisticalUnitsSystemRem' Name="statistical-units-system.xml" On="install"/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfStatisticalProcessors' Guid='*'>
                     <File Id='filRaptorMuaConfStatisticalProcessors' KeyPath='yes' Source='source\mua\conf\statistical-processors.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfStatisticalProcessorsRem' Name="statistical-processors.xml" On="install"/>
                 </Component>
 
                 <Component Id='cmpRaptorMuaConfUsers' Guid='*' NeverOverwrite='yes'>
@@ -212,6 +252,7 @@
 
                 <Component Id='cmpRaptorMuaConfWeb' Guid='*'>
                     <File Id='filRaptorMuaConfWeb' KeyPath='yes' Source='source\mua\conf\web.xml'/>
+                    <RemoveFile Id='filRaptorMuaConfWebRem' Name="web.xml" On="install"/>
                 </Component>
 
             </Directory>

@@ -28,7 +28,17 @@
                         <CreateFolder />
                     </Component>
                 </Directory>
-            </Directory>
+                 <Directory Id='dirRaptorMuaBatchImportRadiusMoonshotIdp' Name='radius-moonshot-idp'>
+                    <Component Id='cmpRaptorMuaBatchImportRadiusMoonshotIdp' Guid='9f1219ff-2b0f-4532-b798-95321f5a7bb9'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+                <Directory Id='dirRaptorMuaBatchImportRadiusEdroamIdp' Name='radius-eduroam-idp'>
+                    <Component Id='cmpRaptorMuaBatchImportRadiusEdroamIdp' Guid='64be909d-7a30-4524-b278-d87f3bd942dc'>
+                        <CreateFolder />
+                    </Component>
+                </Directory>
+           </Directory>
         </DirectoryRef>
     </Fragment>
     <Fragment>
@@ -38,6 +48,8 @@
             <ComponentRef Id='cmpRaptorMuaBatchImportEzproxyDir' />
             <ComponentRef Id='cmpRaptorMuaBatchImportShibSpUpToTwoFourDir' />
             <ComponentRef Id='cmpRaptorMuaBatchImportOpenAthensLA' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportRadiusMoonshotIdp' />
+            <ComponentRef Id='cmpRaptorMuaBatchImportRadiusEdroamIdp' />
         </ComponentGroup>
     </Fragment>
 </Wix>
