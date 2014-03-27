@@ -79,8 +79,9 @@
 							</value>
 						</list>
 					</property>
+                    <property name="supportedResourceCategory" value="EXTERNAL"/>
 					<property name="serviceEndpoint">
-						<value>https://raptor.jiscmu.ac.uk:8111/MUA/MultiUnitAggregator</value> 
+						<value>https://raptor-aggr.ja.net:8111/MUA/MultiUnitAggregator</value> 
 					</property>
 					<property name="pushPolicies">
 						<list>
@@ -96,7 +97,7 @@
 		</property>
 	</bean>
 
-	<!--  policy for release of events. Every 5000 events or every 12 hours -->
+	<!--  policy for release of events. Every 5000 events or every 12 hours. Max event push size is < 10,000 records -->
 
 	<bean id="entryNoElapsedTimePushPolicy"
 		class="uk.ac.cardiff.raptor.remoting.policy.EntryNoElapsedTimePushPolicy">
@@ -119,7 +120,7 @@
 			<list>
                 <bean class="uk.ac.cardiff.raptor.attribute.filtering.NullAttributeRule">
                     <property name="attributeId">
-                        <value>assertionId</value>
+                        <value>assertions</value>
                     </property>
                     <property name="eventType">
                         <value type="java.lang.Class">uk.ac.cardiff.model.event.ShibbolethIdpAuthenticationEvent

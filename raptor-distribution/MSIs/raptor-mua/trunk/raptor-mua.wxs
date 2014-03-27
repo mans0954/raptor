@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='65a54353-a655-4347-badf-bbe005fdd3bd'
+    <Product Id='1fad241c-1c2c-417d-a26d-3936532dfe2c'
       Name='Raptor MUA'
       UpgradeCode='e5bc6976-ce2f-4a02-9332-47c5f7b3ecc7'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.0.1'>
+      Version='1.1.1'>
 
         <Package Id='*'
           Description='Raptor MUA'
-          Comments='Raptor MUA v1.0.1'
+          Comments='Raptor MUA v1.1.1'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -44,20 +44,20 @@
             #####################################
         -->
 
-        <CustomAction Id='SetInstalling' Property='Installing' Value='true' /> 
-        <CustomAction Id='SetUpgrading' Property='Upgrading' Value='true' /> 
-        <CustomAction Id='SetUninstalling' Property='Uninstalling' Value='true' />
+        <CustomAction Id='SetINSTALLING' Property='INSTALLING' Value='true' /> 
+        <CustomAction Id='SetUPGRADING' Property='UPGRADING' Value='true' /> 
+        <CustomAction Id='SetUNINSTALLING' Property='UNINSTALLING' Value='true' />
 
         <InstallExecuteSequence> 
-            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorMua,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorMua,Complete" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
         </InstallExecuteSequence>
 
         <InstallUISequence> 
-            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorMua,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorMua,Complete" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
         </InstallUISequence>
 
 
@@ -132,13 +132,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor MUA v1.0.1'
+          Title='Raptor MUA v1.1.1'
           Description='The complete package for the Raptor MUA.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
       
-            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.0.1' Description='Raptor MUA v1.0.1' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorMua' Title='Raptor MUA v1.1.1' Description='Raptor MUA v1.1.1' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorMuaRoot' />
                 <ComponentGroupRef Id='cgrRaptorMuaBatchImport' />
                 <ComponentGroupRef Id='cgrRaptorMuaBin' />
@@ -174,20 +174,20 @@
 
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
-            <Custom Action='InstallMuaService' After='RunKeytoolExportMuaPublicKey'>Installing</Custom>
-            <Custom Action='StartMuaService' After='InstallMuaService'>Installing</Custom>
+            <Custom Action='InstallMuaService' After='RunKeytoolExportMuaPublicKey'>INSTALLING</Custom>
+            <Custom Action='StartMuaService' After='InstallMuaService'>INSTALLING</Custom>
         </InstallExecuteSequence>
 
         <!-- When uninstalling, uninstall service (automagically stops it first) -->
         <InstallExecuteSequence>
-            <Custom Action='StopMuaService' After='UnpublishFeatures'>Uninstalling</Custom>
-            <Custom Action='UninstallMuaService' After='StopMuaService'>Uninstalling</Custom>
+            <Custom Action='StopMuaService' After='UnpublishFeatures'>UNINSTALLING</Custom>
+            <Custom Action='UninstallMuaService' After='StopMuaService'>UNINSTALLING</Custom>
         </InstallExecuteSequence>
 
         <!-- When upgrading, restart service (the second time this part of the IES happens) -->
         <InstallExecuteSequence>
-            <Custom Action='RestartMuaService' After='StartServices'>Upgrading AND AlreadyRun</Custom>
-            <Custom Action='SetAlreadyRun' After='RestartMuaService'>Upgrading</Custom>
+            <Custom Action='RestartMuaService' After='StartServices'>UPGRADING AND AlreadyRun</Custom>
+            <Custom Action='SetAlreadyRun' After='RestartMuaService'>UPGRADING</Custom>
         </InstallExecuteSequence>
 
 
@@ -209,8 +209,8 @@
 
         <InstallExecuteSequence>
             <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
-            <Custom Action='RunKeytoolCreateMuaPrivateKey' After='InstallFinalize'>JAVA_HOME And Installing</Custom>
-            <Custom Action='RunKeytoolExportMuaPublicKey' After='RunKeytoolCreateMuaPrivateKey'>JAVA_HOME And Installing</Custom>
+            <Custom Action='RunKeytoolCreateMuaPrivateKey' After='InstallFinalize'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolExportMuaPublicKey' After='RunKeytoolCreateMuaPrivateKey'>JAVA_HOME And INSTALLING</Custom>
         </InstallExecuteSequence>
 
 
@@ -252,8 +252,8 @@
 
             <DialogRef Id='RaptorMsiDlgMuaMetadata' />
 
-            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgMuaMetadata'>Installing</Publish>
-            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgMuaMetadata'>Installing</Publish>
+            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgMuaMetadata'>INSTALLING</Publish>
+            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgMuaMetadata'>INSTALLING</Publish>
         </UI>
 
     </Product>
