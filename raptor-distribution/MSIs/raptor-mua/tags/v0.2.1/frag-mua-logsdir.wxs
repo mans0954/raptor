@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="RAPTORMUADIR">
+            <Directory Id="dirRaptorMuaLogs" Name="logs">
+                <Component Id='cmpRaptorMuaLogsDir' Guid='10c12c31-853f-4180-bbf1-b7cb89d98a3e'>
+                    <CreateFolder />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="cgrRaptorMuaLogs">
+            <ComponentRef Id='cmpRaptorMuaLogsDir' />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
