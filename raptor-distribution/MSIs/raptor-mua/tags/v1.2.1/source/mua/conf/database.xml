@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2010 Cardiff University, Wales <smartp@cf.ac.uk> Licensed
+	under the Apache License, Version 2.0 (the "License"); you may not use this
+	file except in compliance with the License. You may obtain a copy of the
+	License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+	applicable law or agreed to in writing, software distributed under the License
+	is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+	KIND, either express or implied. See the License for the specific language
+	governing permissions and limitations under the License. -->
+
+    <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+       <!-- HIBERNATE DAO -->
+        <bean id="muaSessionFactory"
+          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+            <property name="dataSource">
+                <!-- Choose the type of database you are using by altering the name below to match the config at the bottom of this file, i.e. one of:
+                     * muac3p0DataSourceHSQLDB
+                     * muac3p0DataSourceMySQL
+                     * muac3p0DataSourceOracle
+                     * muac3p0DataSourcePostgres
+                 -->
+                <ref bean="muac3p0DataSourceHSQLDB" />
+            </property>
+            <property name="hibernateProperties">
+                <props>
+                    <!-- All of these hibernate.dialect properties should be commented out apart from the one you want to use -->
+                    <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop>
+                    <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</prop>-->
+                    <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.OracleDialect</prop> -->
+                    <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>-->
+                    
+                    <prop key="hibernate.show_sql">false</prop>
+                    <prop key="hibernate.hbm2ddl.auto">update</prop>
+                </props>
+            </property>
+    
+            <!-- OR mapping files. -->
+            <property name="mappingResources">
+                <list>
+                    <!-- event.hbm.xml means that full table names are used, event-name-limit.hbm.xml means abbreviated names are used for databases with problems with such long names.
+                         Note that we've changed the default in v1.2.1, so if you have an existing database and are using this updated file, you might need to change it back. -->
+
+                    <!--<value>uk/ac/cardiff/model/event/event.hbm.xml</value>-->
+                    <value>uk/ac/cardiff/model/event/event-name-limit.hbm.xml</value>
+
+                    <value>uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml</value>
+                    <value>uk/ac/cardiff/raptor/registry/releaseInformation.hbm.xml</value>
+                </list>
+            </property>
+        </bean>
+
+
+
+    <!-- IF HSQLDB is chosen, the following database connection properties are used -->
+    <bean id="muac3p0DataSourceHSQLDB" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>org.hsqldb.jdbcDriver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:hsqldb:file:data/raptor-mua-db;hsqldb.default_table_type=cached</value>
+        </property>
+        <property name="user">
+            <value>sa</value>
+        </property>
+        <property name="password">
+            <value></value>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.acquire_increment">5</prop>
+                <prop key="c3p0.idle_test_period">100</prop>
+                <prop key="c3p0.max_size">100</prop>
+                <prop key="c3p0.max_statements">0</prop>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="user">sa</prop>
+                <prop key="password"></prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--  Users of MySQL can use the following c3p0 configuration as a template -->    
+    <bean id="muac3p0DataSourceMySQL" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        destroy-method="close">
+        <property name="driverClass">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:mysql://localhost/mua</value>
+        </property>
+        <property name="user">
+            <value>root</value>
+        </property>
+        <property name="password">
+            <value></value>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.acquire_increment">5</prop>
+                <prop key="c3p0.idle_test_period">100</prop>
+                <prop key="c3p0.max_size">100</prop>
+                <prop key="c3p0.max_statements">0</prop>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="user">root</prop>
+                <prop key="password"></prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--  Users of Oracle can use the following c3p0 configuration as a template -->  
+    <bean id="muac3p0DataSourceOracle" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>oracle.jdbc.driver.OracleDriver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:oracle:thin:@host:1521:schema</value>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.acquire_increment">5</prop>
+                <prop key="c3p0.idle_test_period">100</prop>
+                <prop key="c3p0.max_size">10</prop>
+                <prop key="c3p0.max_statements">0</prop>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="user">username</prop>
+                <prop key="password">password</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--  Users of Postgres can use the following c3p0 configuration as a template -->    
+    <bean id="muac3p0DataSourcePostgres" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>org.postgresql.Driver</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>jdbc:postgresql://localhost/mua</value>
+        </property>
+        <property name="properties">
+            <props>
+                <prop key="c3p0.acquire_increment">5</prop>
+                <prop key="c3p0.idle_test_period">100</prop>
+                <prop key="c3p0.max_size">100</prop>
+                <prop key="c3p0.max_statements">0</prop>
+                <prop key="c3p0.min_size">10</prop>
+                <prop key="user">postgres</prop>
+                <prop key="password"></prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+
+</beans>
