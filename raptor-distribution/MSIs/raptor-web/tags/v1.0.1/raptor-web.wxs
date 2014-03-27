@@ -1,0 +1,259 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+    <Product Id='bf291c4e-6cef-4913-b2b6-03024570005c'
+      Name='Raptor Web'
+      UpgradeCode='fe94dcab-4c5e-4277-a83d-bdceebc23ee3'
+      Manufacturer='Cardiff University'
+      Language='1033' 
+      Codepage='1252'
+      Version='1.0.1'>
+
+        <Package Id='*'
+          Description='Raptor Web'
+          Comments='Raptor Web v1.0.1'
+          Manufacturer='Cardiff University'
+          InstallerVersion='301'
+          SummaryCodepage='1252'
+          AdminImage='yes'
+          InstallPrivileges='elevated'
+          InstallScope='perMachine'
+          Compressed='yes' />
+
+
+
+        <!--
+            #############
+            # MSI options
+            #############
+        -->
+
+        <!-- Allows upgrading of software. Schedule changed from default to not delete configured conf files on upgrade -->
+        <MajorUpgrade
+          Schedule='afterInstallExecute'
+          DowngradeErrorMessage='A later version of [ProductName] is already installed. Setup will now exit.'/>
+
+        <!-- Embeds all source into a single .cab file in the MSI -->
+        <Media Id='1' Cabinet='Product.cab' EmbedCab='yes' />
+
+
+
+        <!--
+            #####################################
+            # Figure out what the MSI is doing...
+            #####################################
+        -->
+
+        <CustomAction Id='SetInstalling' Property='Installing' Value='true' /> 
+        <CustomAction Id='SetUpgrading' Property='Upgrading' Value='true' /> 
+        <CustomAction Id='SetUninstalling' Property='Uninstalling' Value='true' />
+
+        <InstallExecuteSequence> 
+            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorWeb,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+        </InstallExecuteSequence>
+
+        <InstallUISequence> 
+            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorWeb,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+        </InstallUISequence>
+
+
+        <!--
+            #####################
+            # Requirements checks
+            #####################
+        -->
+
+        <!-- Only allow MSI to run if the user is an administrator (required to install/uninstall service through custom action) -->
+        <Property Id='MSIUSEREALADMINDETECTION' Value='1' />
+        <Condition Message='You need to be an administrator to install this product. Setup will now exit.'>Privileged</Condition>
+
+        <!-- Only allow MSI to run if Java is installed and we can get JAVA_HOME -->
+        <Property Id='JAVA_VERSION'>
+            <RegistrySearch Id='JavaVersionSearch' Root='HKLM' Key='SOFTWARE\JavaSoft\Java Runtime Environment' Name='CurrentVersion' Type='raw' />
+        </Property> 
+        <Property Id='JAVA_HOME'>
+            <RegistrySearch Id='JavaHomeSearch' Root='HKLM' Key='SOFTWARE\JavaSoft\Java Runtime Environment\[JAVA_VERSION]' Name='JavaHome' Type='raw' /> 
+        </Property>
+        <Condition Message='You must install a Java JRE/JDK prior to installing this package. Setup will now exit.' ><![CDATA[JAVA_HOME <>""]]></Condition> 
+
+
+
+        <!--
+            ################
+            # File Structure
+            ################
+        -->
+        
+        <!-- Have to define the toplevel bit (do not even try to understand this line. It just always has to be here... -->
+        <Directory Id='TARGETDIR' Name='SourceDir'>
+
+            <!-- Install to the standard Program Files folder -->
+            <Directory Id='ProgramFilesFolder' Name='PFiles'>
+
+                <!-- Everything goes under \Program Files\Raptor -->
+                <Directory Id='RAPTORDIR' Name='Raptor'>
+
+                    <!-- Since this is the Web, put it in \Program Files\Raptor\Web -->
+                    <Directory Id='RAPTORWEBDIR' Name='Web'>
+    
+                        <!-- All files will be installed here! -->
+
+                        <!-- This component will set the Environmental Variables for Raptor -->
+                        <Component Id='cmpRaptorWebEnvVarHome' Guid='99df8133-7121-48fb-880b-8b1f1127f274'>
+                            <CreateFolder />
+                            <Environment Id='SetRaptorWebEnvVarHome'
+                              Action='set'
+                              Part='all'
+                              Name='RAPTOR_WEB_HOME'
+                              Permanent='no'
+                              System='yes'
+                              Value='[RAPTORWEBDIR]' />
+                        </Component>
+
+                    </Directory>
+                
+                </Directory>
+        
+            </Directory>
+            
+        </Directory>
+        
+
+        
+        <!--
+            ##########
+            # Features
+            ##########
+        -->
+
+        <Feature Id='Complete'
+          Title='Raptor Web v1.0.1'
+          Description='The complete package for Raptor Web.'
+          Display='expand'
+          Level='1'
+          ConfigurableDirectory='RAPTORDIR'>
+      
+            <Feature Id='feaRaptorWeb' Title='Raptor Web v1.0.1' Description='Raptor Web v1.0.1' Level='1' AllowAdvertise='no' Absent='disallow'>
+                <ComponentGroupRef Id='cgrRaptorWebRoot' />
+                <ComponentGroupRef Id='cgrRaptorWebBin' />
+                <ComponentGroupRef Id='cgrRaptorWebConf' />
+                <ComponentGroupRef Id='cgrRaptorWebKeys' />
+                <ComponentGroupRef Id='cgrRaptorWebLib' />
+                <ComponentGroupRef Id='cgrRaptorWebLogs' />
+                <ComponentGroupRef Id='cgrRaptorWebWebapp' />
+                <ComponentRef Id='cmpRaptorWebEnvVarHome' />
+            </Feature>
+
+        </Feature>
+
+
+
+        <!--
+            ###########################################
+            # Custom Actions - Service install/unistall
+            ###########################################
+        -->
+
+        <!-- Run the batch file that installs/uninstalls the service. Cannot use normal WiX thing for this due to use of java wrapper -->
+        <CustomAction Id='InstallWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='install' />
+        <CustomAction Id='UninstallWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='remove' />
+
+        <!-- Run the same batch file to start/stop/restart the service. -->
+        <CustomAction Id='StartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='start' />
+        <CustomAction Id='StopWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='stop' />
+        <CustomAction Id='RestartWebService' FileKey='filRaptorWebBinWebBat' ExeCommand='restart' />
+
+        <!-- Horrible hack. When upgrading, the restarting happens twice. So this stops it happening the first time... -->
+        <CustomAction Id='SetAlreadyRun' Property='AlreadyRun' Value='true' /> 
+
+
+        <!-- When installing, install service and start it -->
+        <InstallExecuteSequence>
+            <Custom Action='InstallWebService' After='RunKeytoolExportWebPublicKey'>Installing</Custom>
+            <Custom Action='StartWebService' After='InstallFinalize'>Installing</Custom>
+        </InstallExecuteSequence>
+
+        <!-- When uninstalling, uninstall service (automagically stops it first) -->
+        <InstallExecuteSequence>
+            <Custom Action='StopWebService' After='UnpublishFeatures'>Uninstalling</Custom>
+            <Custom Action='UninstallWebService' Before='StopWebService'>Uninstalling</Custom>
+        </InstallExecuteSequence>
+
+        <!-- When upgrading, restart service -->
+        <InstallExecuteSequence>
+            <Custom Action='RestartWebService' After='StartServices'>Upgrading AND AlreadyRun</Custom>
+            <Custom Action='SetAlreadyRun' After='RestartWebService'>Upgrading</Custom>
+        </InstallExecuteSequence>
+
+
+
+        <!--
+            ##############################
+            # Custom Actions - Java keygen
+            ##############################
+        -->
+
+        <!-- Set the path to the JRE keytool exe and how to run it -->
+        <CustomAction Id='SetKeytoolPath' Property='KeytoolPath' Value='[JAVA_HOME]\bin\keytool.exe' />
+
+        <!-- Create the java keystore with private key -->
+        <CustomAction Id='RunKeytoolCreateWebPrivateKey' Property='KeytoolPath' ExeCommand='-genkey -alias raptorweb -keystore "[RAPTORWEBDIR]keys\raptor-web.jks" -storepass changeit -keypass changeit -dname "CN=[ComputerName],ou=WEB,o=Raptor" -validity 7300 -keyalg RSA -keysize 2048' Return='check' />
+
+        <!-- Export the public key from the keystore -->
+        <CustomAction Id='RunKeytoolExportWebPublicKey' Property='KeytoolPath' ExeCommand='-export -alias raptorweb -keystore "[RAPTORWEBDIR]keys\raptor-web.jks" -storepass changeit -file "[RAPTORWEBDIR]keys\raptor-web-public.crt"' Return='check' />
+
+        <InstallExecuteSequence>
+            <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
+            <Custom Action='RunKeytoolCreateWebPrivateKey' After='InstallFinalize'>JAVA_HOME And Installing</Custom>
+            <Custom Action='RunKeytoolExportWebPublicKey' After='RunKeytoolCreateWebPrivateKey'>JAVA_HOME And Installing</Custom>
+        </InstallExecuteSequence>
+        
+
+
+        <!--
+            ########################
+            # Guess at Config Values
+            ########################
+        -->
+
+        <!-- Metadata values -->
+        <Property Id='WEBENTITYID' Value='https://thisservername.example.com/raptor-web' />
+        <Property Id='WEBORGANISATIONNAME' Value='Example University' />
+        <Property Id='WEBSERVICENAME' Value='Raptor Web' />
+        <Property Id='WEBCONTACTEMAIL' Value='someone@example.com' />
+
+
+
+        <!--
+            ################
+            # User Interface
+            ################
+        -->
+  
+        <!-- Add/Remove Programs Stuff -->
+        <Icon Id='Raptor.ico' SourceFile='source\installer\raptor.ico' />
+        <Property Id='ARPPRODUCTICON' Value='Raptor.ico' />
+        <Property Id='ARPHELPLINK' Value='http://iam.cf.ac.uk/Raptor' />
+
+        <!-- Variables for the UI -->
+        <WixVariable Id='WixUILicenseRtf' Value='source\installer\License.rtf' />
+        <WixVariable Id='WixUIBannerBmp' Value='source\installer\raptor-msi-banner.bmp' />
+        <WixVariable Id='WixUIDialogBmp' Value='source\installer\raptor-msi-dialog.bmp' />
+
+        <!-- Change to Mondo style -->
+        <UI Id='RaptorWixUI'>
+            <UIRef Id='WixUI_FeatureTree' />
+            <UIRef Id='WixUI_ErrorProgressText' />
+
+            <DialogRef Id='RaptorMsiDlgWebMetadata' />
+
+            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>Installing</Publish>
+            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgWebMetadata'>Installing</Publish>
+        </UI>
+
+    </Product>
+</Wix>
