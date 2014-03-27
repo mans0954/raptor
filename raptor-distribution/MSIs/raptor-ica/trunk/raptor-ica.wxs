@@ -1,17 +1,17 @@
 <?xml version='1.0'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-    <Product Id='ba27b0d6-ad54-4755-866f-395b17eb2a91'
+    <Product Id='ae11422f-57a8-43e4-a12f-dd6838311631'
       Name='Raptor ICA'
       UpgradeCode='e5f71481-37a7-44ac-b315-7285a97561b4'
       Manufacturer='Cardiff University'
       Language='1033' 
       Codepage='1252'
-      Version='1.0.1'>
+      Version='1.1.0'>
 
         <Package Id='*'
           Description='Raptor ICA'
-          Comments='Raptor ICA v1.0.1'
+          Comments='Raptor ICA v1.1.0'
           Manufacturer='Cardiff University'
           InstallerVersion='301'
           SummaryCodepage='1252'
@@ -44,20 +44,20 @@
             #####################################
         -->
 
-        <CustomAction Id='SetInstalling' Property='Installing' Value='true' /> 
-        <CustomAction Id='SetUpgrading' Property='Upgrading' Value='true' /> 
-        <CustomAction Id='SetUninstalling' Property='Uninstalling' Value='true' />
+        <CustomAction Id='SetINSTALLING' Property='INSTALLING' Value='true' /> 
+        <CustomAction Id='SetUPGRADING' Property='UPGRADING' Value='true' /> 
+        <CustomAction Id='SetUNINSTALLING' Property='UNINSTALLING' Value='true' />
 
         <InstallExecuteSequence>
-            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorIca,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorIca,Complete" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
         </InstallExecuteSequence>
 
         <InstallUISequence> 
-            <Custom Action='SetInstalling' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUpgrading' After='SetInstalling'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
-            <Custom Action='SetUninstalling' After='SetUpgrading'><![CDATA[(REMOVE="feaRaptorIca,Complete" OR REMOVE="ALL") AND NOT Upgrading]]></Custom>
+            <Custom Action='SetINSTALLING' After='FindRelatedProducts'><![CDATA[NOT Installed AND NOT WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUPGRADING' After='SetINSTALLING'><![CDATA[WIX_UPGRADE_DETECTED <>""]]></Custom> 
+            <Custom Action='SetUNINSTALLING' After='SetUPGRADING'><![CDATA[(REMOVE="feaRaptorIca,Complete" OR REMOVE="ALL") AND NOT UPGRADING]]></Custom>
         </InstallUISequence>
 
 
@@ -132,13 +132,13 @@
         -->
 
         <Feature Id='Complete'
-          Title='Raptor ICA v1.0.1'
+          Title='Raptor ICA v1.1.0'
           Description='The complete package for the Raptor ICA.'
           Display='expand'
           Level='1'
           ConfigurableDirectory='RAPTORDIR'>
 
-            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.0.1' Description='Raptor ICA v1.0.1' Level='1' AllowAdvertise='no' Absent='disallow'>
+            <Feature Id='feaRaptorIca' Title='Raptor ICA v1.1.0' Description='Raptor ICA v1.1.0' Level='1' AllowAdvertise='no' Absent='disallow'>
                 <ComponentGroupRef Id='cgrRaptorIcaRoot' />
                 <ComponentGroupRef Id='cgrRaptorIcaBin' />
                 <ComponentGroupRef Id='cgrRaptorIcaConf' />
@@ -173,20 +173,20 @@
 
         <!-- When installing, install service and start it -->
         <InstallExecuteSequence>
-            <Custom Action='InstallIcaService' After='RunKeytoolExportIcaPublicKey'>Installing</Custom>
-            <Custom Action='StartIcaService' After='InstallIcaService'>Installing</Custom>
+            <Custom Action='InstallIcaService' After='RunKeytoolExportIcaPublicKey'>INSTALLING</Custom>
+            <Custom Action='StartIcaService' After='InstallIcaService'>INSTALLING</Custom>
         </InstallExecuteSequence>
 
         <!-- When uninstalling, uninstall service (automagically stops it first) -->
         <InstallExecuteSequence>
-            <Custom Action='StopIcaService' After='UnpublishFeatures'>Uninstalling</Custom>
-            <Custom Action='UninstallIcaService' After='StopIcaService'>Uninstalling</Custom>
+            <Custom Action='StopIcaService' After='UnpublishFeatures'>UNINSTALLING</Custom>
+            <Custom Action='UninstallIcaService' After='StopIcaService'>UNINSTALLING</Custom>
         </InstallExecuteSequence>
 
         <!-- When upgrading, restart service -->
         <InstallExecuteSequence>
-            <Custom Action='RestartIcaService' After='StartServices'>Upgrading AND AlreadyRun</Custom>
-            <Custom Action='SetAlreadyRun' After='RestartIcaService'>Upgrading</Custom>
+            <Custom Action='RestartIcaService' After='StartServices'>UPGRADING AND AlreadyRun</Custom>
+            <Custom Action='SetAlreadyRun' After='RestartIcaService'>UPGRADING</Custom>
         </InstallExecuteSequence>
 
 
@@ -210,8 +210,8 @@
         <!-- Schedule these CAs to run -->
         <InstallExecuteSequence>
             <Custom Action='SetKeytoolPath' After='AppSearch'>JAVA_HOME</Custom>
-            <Custom Action='RunKeytoolCreateIcaPrivateKey' After='InstallFinalize'>JAVA_HOME And Installing</Custom>
-            <Custom Action='RunKeytoolExportIcaPublicKey' After='RunKeytoolCreateIcaPrivateKey'>JAVA_HOME And Installing</Custom>
+            <Custom Action='RunKeytoolCreateIcaPrivateKey' After='InstallFinalize'>JAVA_HOME And INSTALLING</Custom>
+            <Custom Action='RunKeytoolExportIcaPublicKey' After='RunKeytoolCreateIcaPrivateKey'>JAVA_HOME And INSTALLING</Custom>
         </InstallExecuteSequence>
 
 
@@ -253,8 +253,8 @@
 
             <DialogRef Id='RaptorMsiDlgIcaMetadata' />
 
-            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgIcaMetadata'>Installing</Publish>
-            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgIcaMetadata'>Installing</Publish>
+            <Publish Dialog='CustomizeDlg' Control='Next' Event='NewDialog' Value='RaptorMsiDlgIcaMetadata'>INSTALLING</Publish>
+            <Publish Dialog='VerifyReadyDlg' Control='Back' Event='NewDialog' Value='RaptorMsiDlgIcaMetadata'>INSTALLING</Publish>
         </UI>
 
     </Product>
