@@ -112,7 +112,7 @@ public class MUAProcessImpl implements MUAProcess {
             try {
                 engine.release();
             } catch (Exception e) {
-                log.error("Error trying to release events, write lock in operation, reason = [{}]", e.getMessage());
+                log.error("Error trying to release events, reason = [{}]", e);
             } finally {
                 writeLock.unlock();
             }

@@ -37,6 +37,7 @@ import uk.ac.cardiff.model.wsmodel.StatisticalUnitInformation;
 import uk.ac.cardiff.model.wsmodel.SuggestionValues;
 import uk.ac.cardiff.raptor.runtimeutils.ReflectionHelper;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
+import uk.ac.cardiff.raptormua.engine.BaseCapabilitiesContructor.ItemsToCompute;
 import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticProcessorRegistry;
@@ -65,17 +66,26 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
     private final ServiceMetadata metadata;
 
     private Capabilities capabilities;
+    
+    private Capabilities oldCachedCapabilities;
+    
+    /**
+     * Which aspects of the cache should be recomputed.
+     */
+    private ItemsToCompute toCompute;
 
     /** Set containing the names of fields that should not be included in the list of possible field values */
     private Set<String> excludeFieldNames;
 
     public CapabilitiesConstructorTask(CallbackInterface<Capabilities> callbackInterface,
             StatisticHandler statisticsHandlerToUse, EventStorageEngine storageEngineToUse,
-            ServiceMetadata metadataToUse) {
+            ServiceMetadata metadataToUse, ItemsToCompute toCompute, Capabilities oldCachedCapabilities) {
         callback = callbackInterface;
         statisticsHandler = statisticsHandlerToUse;
         storageEngine = storageEngineToUse;
         metadata = metadataToUse;
+        this.toCompute = toCompute;
+        this.oldCachedCapabilities = oldCachedCapabilities;
     }
 
     @Override
@@ -88,10 +98,9 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
         callback.returnResult(capabilities);
         return null;
     }
-
-    private void doConstructCapabilities() {
-        long startTime = System.currentTimeMillis();
-        capabilities = new Capabilities();
+    
+    private void doFullCapabilitiesConstruction(){
+    	capabilities = new Capabilities();
         capabilities.setMetadata(metadata);
         addStatisticInformation();
         addStatisticTypeInformation();
@@ -99,6 +108,33 @@ public final class CapabilitiesConstructorTask implements Callable<Boolean> {
         addEventTotals();
         addEventDateInformation();
         addResourceInformation();
+    }
+    
+    private void doStatisticalInformationCapabilitiesConstruction(){
+    	capabilities = new Capabilities();
+        capabilities.setMetadata(metadata);
+        addStatisticInformation();
+        addStatisticTypeInformation();
+        //of note, a reference to the existing object is fine here - we want the old one.
+        capabilities.setSuggestionValues(oldCachedCapabilities.getSuggestionValues());
+        capabilities.setEventsPerType(oldCachedCapabilities.getEventsPerType());
+        capabilities.setLatestEventTime(oldCachedCapabilities.getLatestEventTime());
+        capabilities.setEarliestEventTime(oldCachedCapabilities.getEarliestEventTime());
+        capabilities.setResourceMetadata(oldCachedCapabilities.getResourceMetadata());
+
+    }
+
+    private void doConstructCapabilities() {
+        long startTime = System.currentTimeMillis();
+        
+        if (toCompute==ItemsToCompute.ALL){
+        	log.info("Computing ALL aspects of this MUAs capabilities");
+        	doFullCapabilitiesConstruction();
+        }else if (toCompute==ItemsToCompute.STATISTICS){
+        	log.info("Computing only the statistical information aspects of this MUAs capabilities");
+        	doStatisticalInformationCapabilitiesConstruction();
+        }
+        
         try {
             String version =
                     Version.getMajorVersion() + "." + Version.getMinorVersion() + "." + Version.getMicroVersion();

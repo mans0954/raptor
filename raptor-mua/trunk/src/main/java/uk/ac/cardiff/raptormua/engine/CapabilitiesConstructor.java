@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.cardiff.model.ServiceMetadata;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
+import uk.ac.cardiff.raptormua.engine.BaseCapabilitiesContructor.ItemsToCompute;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 
 /**
@@ -93,7 +94,7 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
                         - (System.currentTimeMillis() - cacheResetTimeMs));
                 if ((System.currentTimeMillis() - cacheResetTimeMs) > cacheTimeoutMs) {
                     log.info("Capabilities cache was cleared, timeout reached");
-                    queueCapabilitiesConstruction();
+                    queueCapabilitiesConstruction(ItemsToCompute.ALL);
                 }
             }
         }, cacheTimeoutMs, cacheTimeoutMs);
@@ -115,17 +116,17 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
      * Queues to create the initial <code>cachedCapabilities</code>.
      */
     public void initialiseCapabilities() {
-        queueCapabilitiesConstruction();
+        queueCapabilitiesConstruction(ItemsToCompute.ALL);
     }
 
-    private void queueCapabilitiesConstruction() {
+    private void queueCapabilitiesConstruction(final ItemsToCompute items) {
         log.info("Capabilities constructor called, adding request to thread queue, with {} currently active",
                 capabilitiesConstructionService.getActiveCount());
 
         if (capabilitiesConstructionService.getActiveCount() == 0) {
             if (statisticsHandler != null && storageEngine != null && metadata != null) {
                 CapabilitiesConstructorTask constructor =
-                        new CapabilitiesConstructorTask(this, statisticsHandler, storageEngine, metadata);
+                        new CapabilitiesConstructorTask(this, statisticsHandler, storageEngine, metadata, items, cachedCapabilities);
                 constructor.setExcludeFieldNames(excludeFieldNames);
                 capabilitiesConstructionService.submit(constructor);
             } else {
@@ -155,8 +156,8 @@ public class CapabilitiesConstructor extends BaseCapabilitiesContructor implemen
     /**
      * If called, cache timeout is reset, and a call to construct new capabilities is placed on the queue.
      */
-    public void invalidateCache() {
-        queueCapabilitiesConstruction();
+    public void invalidateCache(ItemsToCompute items) {
+        queueCapabilitiesConstruction(items);
         cacheResetTimeMs = System.currentTimeMillis();
     }
 

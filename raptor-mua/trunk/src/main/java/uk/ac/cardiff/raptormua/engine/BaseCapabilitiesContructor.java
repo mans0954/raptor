@@ -19,11 +19,27 @@ package uk.ac.cardiff.raptormua.engine;
 import uk.ac.cardiff.model.wsmodel.Capabilities;
 
 public abstract class BaseCapabilitiesContructor {
+	
+	/**
+	 * 
+	 * When building the cache, should it be whole or part recomputed.
+	 *
+	 */
+	public enum ItemsToCompute{
+		/**
+		 * Compute ALL aspects of the cache.
+		 */
+		ALL,
+		/**
+		 * Compute only the statistical units.
+		 */
+		STATISTICS
+	}
 
     public abstract Capabilities getCapabilities();
 
     /** If things have changed, the cache should be invalidated immediately. */
-    public abstract void invalidateCache();
+    public abstract void invalidateCache(ItemsToCompute items);
 
     /** called to initialise this capabiliies constructor. If needed. */
     public abstract void initialiseCapabilities();
