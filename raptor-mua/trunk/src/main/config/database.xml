@@ -12,16 +12,16 @@
     <!-- HIBERNATE DAO -->
     <bean id="muaSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource">
-            <ref bean="muac3p0DataSource" />
+            <ref bean="muac3p0DataSourceHSQLDB" />
         </property>
         <property name="hibernateProperties">
             <props>
-                 <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop>
-                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> -->
+                <!--  <prop key="hibernate.dialect"> org.hibernate.dialect.PostgreSQLDialect</prop> -->
+                  <prop key="hibernate.dialect"> org.hibernate.dialect.HSQLDialect</prop> 
                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.MySQLDialect</prop> -->
                 <!-- <prop key="hibernate.dialect"> org.hibernate.dialect.OracleDialect</prop> -->
                 <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
         <!-- OR mapping files. -->
@@ -49,6 +49,7 @@
                 <prop key="c3p0.max_size">100</prop>
                 <prop key="c3p0.max_statements">0</prop>
                 <prop key="c3p0.min_size">10</prop>
+                <prop key="c3p0.timeout">100</prop>
                 <prop key="user">postgres</prop>
                 <prop key="password"></prop>
             </props>

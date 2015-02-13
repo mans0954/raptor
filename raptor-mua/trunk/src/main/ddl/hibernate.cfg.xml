@@ -33,7 +33,7 @@
     <!-- this will show us all sql statements -->
     <property name="hibernate.show_sql">true</property>
 	<!-- mapping files -->
-	<mapping resource="uk/ac/cardiff/model/event/event.hbm.xml" />
+	<mapping resource="uk/ac/cardiff/model/event/event-name-limit.hbm.xml" />
     <mapping resource="uk/ac/cardiff/model/resource/resourcemetadata.hbm.xml"/>
     <mapping resource="uk/ac/cardiff/raptor/registry/releaseInformation.hbm.xml"/>
 </session-factory>

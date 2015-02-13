@@ -52,6 +52,7 @@ import uk.ac.cardiff.raptor.remoting.client.ReleaseFailureException;
 import uk.ac.cardiff.raptor.store.EventStorageEngine;
 import uk.ac.cardiff.raptor.store.ResourceStorageEngine;
 import uk.ac.cardiff.raptor.store.TransactionInProgressException;
+import uk.ac.cardiff.raptormua.engine.BaseCapabilitiesContructor.ItemsToCompute;
 import uk.ac.cardiff.raptormua.engine.statistics.BaseStatistic;
 import uk.ac.cardiff.raptormua.engine.statistics.StatisticHandler;
 import uk.ac.cardiff.raptormua.upload.BatchFile;
@@ -316,7 +317,7 @@ public final class MUAEngine implements InitializingBean {
                 .getStatisticParameters().getStartTimeAsJavaDate(), statisticalUnitInformation.getStatisticParameters()
                 .getEndTimeAsJavaDate());
         statisticsHandler.updateStatisticalUnit(statisticalUnitInformation);
-        capabilitiesConstructor.invalidateCache();
+        capabilitiesConstructor.invalidateCache(ItemsToCompute.STATISTICS);
 
     }
 
